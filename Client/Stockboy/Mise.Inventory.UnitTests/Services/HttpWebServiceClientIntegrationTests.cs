@@ -127,13 +127,13 @@ namespace Mise.Inventory.UnitTests.Services
         }
 
         [Test]
-        public async Task GetInventoriesByRestaurantShouldReturn()
+        public async Task GetInventoriesByRestaurantShouldReturnEmpty()
         {
             var client = CreateClient();
 
             var results = await client.GetInventoriesForRestaurant(_testRestaurantID);
 
-            Assert.True(results.Any());
+            Assert.False(results.Any());
         }
 
         [Test]

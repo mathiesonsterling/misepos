@@ -349,7 +349,7 @@ namespace Mise.Inventory.UnitTests.Services
 		}
 
 		[Test]
-		public Task ROsAreOnlyCountedAgainstPOIfAfterLastInventoryDate(){
+		public void ROsAreOnlyCountedAgainstPOIfAfterLastInventoryDate(){
 			throw new NotImplementedException ();
 		}
 	}

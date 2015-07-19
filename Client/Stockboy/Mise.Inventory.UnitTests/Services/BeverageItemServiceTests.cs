@@ -78,8 +78,8 @@ namespace Mise.Inventory.UnitTests.Services
 			});
 
 			var mockVendorRepos = new Mock<IVendorRepository> ();
-			mockVendorRepos.Setup (r => r.GetVendorsAssociatedWithRestaurant (It.IsAny<Guid> ()))
-				.Returns (Task.FromResult(new List<IVendor>{vendor1.Object, vendor2.Object }.AsEnumerable()));
+			mockVendorRepos.Setup (r => r.GetAll())
+				.Returns (new List<IVendor>{vendor1.Object, vendor2.Object }.AsEnumerable());
 			mockVendorRepos.Setup(r => r.GetVendorsNotAssociatedWithRestaurantWithinRadius(It.IsAny<Guid>(), It.IsAny<Location>(), It.IsAny<int>()))
 				.Returns(Task.FromResult(new List<IVendor>{vendor3.Object}.AsEnumerable()));
 
@@ -188,10 +188,10 @@ namespace Mise.Inventory.UnitTests.Services
 			});
 
 			var mockVendorRepos = new Mock<IVendorRepository> ();
-			mockVendorRepos.Setup (r => r.GetVendorsAssociatedWithRestaurant (It.IsAny<Guid> ()))
-				.Returns (Task.Run(() => new List<IVendor>{vendor1.Object}.AsEnumerable()));
+			mockVendorRepos.Setup (r => r.GetAll())
+				.Returns (new List<IVendor>{vendor1.Object}.AsEnumerable());
 			mockVendorRepos.Setup(r => r.GetVendorsNotAssociatedWithRestaurantWithinRadius(It.IsAny<Guid>(), It.IsAny<Location>(), It.IsAny<int>()))
-				.Returns(Task.Run(() => new List<IVendor>{vendor3.Object}.AsEnumerable()));
+				.Returns(Task.FromResult(new List<IVendor>{vendor3.Object}.AsEnumerable()));
 
 			//one item in inventory will match the item in the vendor 3
 			var currentInv = new Mock<IInventory> ();
@@ -294,8 +294,8 @@ namespace Mise.Inventory.UnitTests.Services
 			});
 
 			var mockVendorRepos = new Mock<IVendorRepository> ();
-			mockVendorRepos.Setup (r => r.GetVendorsAssociatedWithRestaurant (It.IsAny<Guid> ()))
-				.Returns (Task.FromResult(new List<IVendor>{vendor1.Object}.AsEnumerable()));
+			mockVendorRepos.Setup (r => r.GetAll())
+				.Returns (new List<IVendor>{vendor1.Object}.AsEnumerable());
 			mockVendorRepos.Setup(r => r.GetVendorsNotAssociatedWithRestaurantWithinRadius(It.IsAny<Guid>(), It.IsAny<Location>(), It.IsAny<int>()))
 				.Returns(Task.FromResult(new List<IVendor>{vendor3.Object}.AsEnumerable()));
 
@@ -445,7 +445,7 @@ namespace Mise.Inventory.UnitTests.Services
 			Assert.NotNull(res);
 			Assert.IsFalse (res.Any ());
 
-			mockVendorRepos.Verify (r => r.GetVendorsAssociatedWithRestaurant (It.IsAny<Guid> ()), Times.Once());
+			mockVendorRepos.Verify (r => r.GetAll(), Times.Once());
 			//mockVendorRepos.Verify(r => r.GetVendorsNotAssociatedWithRestaurantWithinRadius(It.IsAny<Guid>(), It.IsAny<Location>()), Times.Once());
 			mockInventoryRepos.Verify (r => r.GetAll(), Times.Once());
 			mockPARRepos.Verify(r => r.GetAll(), Times.Once());
