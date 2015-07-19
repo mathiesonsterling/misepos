@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="MisePOSTerminal.OrderOnCheck"
+	Title = "Order On Check"
+	BackgroundColor = "#464646"
+>
+		<Grid>
+			<Grid.RowDefinitions>
+			  <RowDefinition Height="50"/>
+		      <RowDefinition Height="*" />
+		      <RowDefinition Height="75"/>
+		    </Grid.RowDefinitions>
+
+		    <Grid.ColumnDefinitions>
+		      <ColumnDefinition Width="350" />
+		      <ColumnDefinition Width="*" />
+		      <ColumnDefinition Width="160" />
+		    </Grid.ColumnDefinitions>
+
+		    <!-- Change this to be editable when clicked on -->
+		    <StackLayout
+		        Grid.Row = "0"
+		    	Grid.Column = "0"
+		    	BackgroundColor="#EBEBEB"
+		    >
+			    <Label 
+			    	x:Name="lblOrderTop"
+			    	Font="36"
+			    	TextColor = "#232323"
+			    	Text = "{Binding OrderTopText}"
+			    	HorizontalOptions = "CenterAndExpand"
+			    />
+		    </StackLayout>	
+
+		    <StackLayout
+		    	Grid.Row = "1"
+		    	Grid.Column = "0"
+		    	BackgroundColor="#EBEBEB"
+		    >
+		    	<ScrollView>
+		    		<StackLayout
+		    			x:Name = "pnlOrderItems"
+		    		>
+		    		</StackLayout>
+		    	</ScrollView>
+		    	<!-- total -->
+		    </StackLayout>
+
+		    <StackLayout
+		    		Grid.Row="0"
+			    	Grid.Column="1"
+			    	BackgroundColor="#232323"
+		    >
+			    <Label
+			    	Font="36"
+			    	Text="{Binding SelectedCategoryName}"
+			    	HorizontalOptions = "CenterAndExpand"
+			    />
+		    </StackLayout>
+
+		    <Button
+		    	BackgroundColor="#333333"
+		    	TextColor="White"
+		    	Grid.Row="0"
+		    	Grid.Column="2"
+		    	Font="24"
+		    	Text="Home"
+		    	Command = "{Binding CategoryHome}"
+		    />
+
+		    <!-- holder for menu items and the like -->
+		    <ScrollView 
+		    	Grid.Row="1" 
+		    	Grid.Column="1"
+		    	IsVisible = "{Binding OrderMode}"
+		    >
+		    	<StackLayout
+		    		x:Name = "pnlMenuItems"
+		    	>
+			    	<StackLayout
+			    		x:Name = "pnlHotItems"
+			    		Padding = "0"
+			    		Spacing = "48"
+			    		Orientation = "Horizontal"
+			    		HeightRequest = "72"
+			    	></StackLayout>
+
+			    	<Grid
+			    		x:Name = "grdMiseItems"
+			    		RowSpacing = "48"
+			    		ColumnSpacing = "48"
+			    		IsVisible = "{Binding MiseIsVisible}"
+			    	>
+			    			    <Grid.ColumnDefinitions>
+							      <ColumnDefinition Width="*" />
+							      <ColumnDefinition Width="*" />
+							      <ColumnDefinition Width="*" />
+							    </Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="72"/>
+									<RowDefinition Height="72"/>
+									<RowDefinition Height="72"/>
+									<RowDefinition Height="72"/>
+									<RowDefinition Height="72"/>
+								</Grid.RowDefinitions>
+			    	</Grid>
+			    	<StackLayout
+			    		x:Name = "grdCategory"
+			    		Padding = "0"
+			    		Spacing = "0"
+			    		IsVisible = "{Binding CategoryIsShowing}"
+			    	>
+			    		<!--- button to go up one level -->
+			    		<!--- grid for our items in the main category -->
+
+			    		<!-- stack of items for subcategories -->
+			    	</StackLayout>
+		    	</StackLayout>
+		    </ScrollView>
+
+		    <ScrollView Grid.Row="1" Grid.Column="2">
+		    	<StackLayout 
+		    		x:Name="pnlCategories"
+		    		Padding = "0"
+		    		Spacing = "1"
+		    		BackgroundColor = "#EBEBEB"
+		    	>
+		    	</StackLayout>
+		    </ScrollView>
+
+		    <!--- commands on bottom -->
+		    <StackLayout 
+		    	Orientation="Horizontal"
+		    	Grid.Row="2"
+		    	Grid.Column="0"
+		    	Grid.ColumnSpan = "2"
+		    	Padding="0"
+		    	Spacing = "0"
+		    >
+		    	<Button
+		    		WidthRequest = "210"
+		    		BackgroundColor = "#41A9F2"
+		    		Text = "Send"
+		    		BorderRadius="0"
+		    		HorizontalOptions = "FillAndExpand"
+		    		Font = "24"
+		    		Command = "{Binding Send}"
+		    	/>
+				<Button
+		    		WidthRequest = "210"
+		    		BackgroundColor = "#D43251"
+		    		Text = "Cancel"
+		    		BorderRadius="0"
+		    		HorizontalOptions = "FillAndExpand"
+		    		Font = "24"
+		    		Command = "{Binding Cancel}"
+		    	/>
+				<Button
+					WidthRequest = "210"
+					BackgroundColor = "#9D46CF"
+					Text = "Close"
+					BorderRadius = "0"
+					HorizontalOptions = "FillAndExpand"
+		    		Font = "24"
+					Command = "{Binding Close}"
+				/>
+				<Button
+					WidthRequest = "210"
+					BackgroundColor = "#3FDA6B"
+					Text = "Fast Cash"
+					BorderRadius = "0"
+					HorizontalOptions = "FillAndExpand"
+		    		Font = "24"
+					Command = "{Binding FastCash}"
+				/>
+				<Button
+					WidthRequest = "210"
+					BackgroundColor = "#E2D038"
+					Text = "+"
+					BorderRadius = "0"
+					HorizontalOptions = "FillAndExpand"
+					Font = "24"
+					Command = "{Binding Extras}"
+				/>
+		    </StackLayout>
+		</Grid>
+</ContentPage>

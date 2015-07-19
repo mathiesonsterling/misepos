@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.SectionSelectPage"
+	BindingContext="{x:Static local:App.SectionSelectViewModel}"
+	Title="Select Section">
+
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<!---<Label Text="Select Section" Style="{DynamicResource TitleStyle}"/>-->
+			<ActivityIndicator IsVisible="{Binding Processing}"/>
+			<StackLayout VerticalOptions="FillAndExpand" Padding="50" x:Name="slOther">
+			</StackLayout>
+			<Button Text="Add New Section" Command="{Binding AddSectionCommand}" 
+				HorizontalOptions="FillAndExpand"/>
+			<Button Text="Complete Inventory" Command="{Binding CompleteInventoryCommand}" 
+				HorizontalOptions="FillAndExpand" IsEnabled="{Binding NotProcessing}"/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

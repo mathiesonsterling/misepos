@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{53FD6B41-CD49-4355-B78D-C2355069E2FC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mise.Core.Server</RootNamespace>
+    <AssemblyName>Mise.Core.Server</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\..\Mise.Core.Common\Mise.Core.Common.csproj">
+      <Project>{bc3bd128-1d20-4c41-83b0-3fc37e5c5f5e}</Project>
+      <Name>Mise.Core.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Mise.Core\Mise.Core.csproj">
+      <Project>{085e418a-7cc9-4ab6-b38a-fc6cabe373d6}</Project>
+      <Name>Mise.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IConfig.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\BaseRestaurantServerRepository.cs" />
+    <Compile Include="Repositories\EmployeeRestaurantServerRepository.cs" />
+    <Compile Include="Repositories\MenuRestaurantServerRepository.cs" />
+    <Compile Include="Repositories\MenuRulesRestaurantServerRepository.cs" />
+    <Compile Include="Repositories\RestaurantRestaurantServerRepository.cs" />
+    <Compile Include="Services\DAL\IEntityDAL.cs" />
+    <Compile Include="Services\DAL\IEventStorageDAL.cs" />
+    <Compile Include="Services\IMiseAdminServer.cs" />
+    <Compile Include="Repositories\CheckRestaurantServerRepository.cs" />
+    <Compile Include="Services\Implementation\FakeInventoryServiceDAL.cs" />
+    <Compile Include="Services\Implementation\FakeMiseAdminServer.cs" />
+    <Compile Include="Services\DAL\IReportingServerDAL.cs" />
+    <Compile Include="Services\Implementation\MemoryRestaurantServerDAL.cs" />
+    <Compile Include="Services\IWebHostingEnvironment.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

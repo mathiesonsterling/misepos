@@ -1,0 +1,113 @@
+﻿<Page x:Class="MiseWPFPOSClient.BarOrderingView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="OrderOnTab" Loaded="PageLoaded">
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!-- categories -->
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="2" Grid.Column="0" Grid.Row="0">
+            <ItemsControl Name="icAdminItems">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" ItemHeight="75" ItemWidth="140"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button HorizontalAlignment="Center" Height="75" Width="140" Style="{DynamicResource AdminButton}"
+                                Content="{Binding Path=Name}" CommandParameter="{Binding}" Click="MenuItemOrdered"
+                                VerticalAlignment="Top">
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="2" Grid.Column="0" Grid.Row="1">
+            <ItemsControl Name="icHotItems">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" ItemHeight="75" ItemWidth="140"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button HorizontalAlignment="Center" Height="75" Width="140" Style="{DynamicResource HotItemButton}"
+                                Content="{Binding Path=Name}" CommandParameter="{Binding}" Click="MenuItemOrdered"
+                                VerticalAlignment="Top">
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+
+        <ItemsControl Name="icCategories" Grid.Row="2" Grid.Column="0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" ItemHeight="75" ItemWidth="200"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button HorizontalAlignment="Center" Height="75" Width="200" Style="{DynamicResource CategoryButton}"
+                                Content="{Binding Path=Name}" CommandParameter="{Binding Path=Name}" Click="CategoryClicked"
+                                VerticalAlignment="Top">
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- order panel-->
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="2" Grid.Column="1" Grid.Row="0" >
+            <StackPanel>
+                <TextBlock Name="txtName" Style="{StaticResource DefaultText}" HorizontalAlignment="Center"/>
+                <TextBlock Name="txtTotal" Style="{StaticResource DefaultText}" HorizontalAlignment="Right"></TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="2" Grid.RowSpan="2" Grid.Column="1" Grid.Row="1">
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Name="scrOrders">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding}" Name="icOrderedItems">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{DynamicResource InvisibleButton}" Focusable="False" Click="MenuItemClicked" HorizontalAlignment="Stretch" CommandParameter="{Binding}">
+                                    <TextBlock Text="{Binding Path=Name}" Style="{StaticResource DefaultText}" HorizontalAlignment="Left" TextAlignment="Left"></TextBlock>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- cash/tab-->
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="2" Grid.RowSpan="3" Grid.Column="1" Grid.Row="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="1*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button Name="Clear" Grid.Column="0" Grid.Row="0" Style="{StaticResource RoundButton}" Click="ClearClick1">Clear</Button>
+                <Button Name="Tab" Grid.Column="1" Grid.Row="0" Style="{StaticResource RoundButton}" Click="TabClick1">Tab</Button>
+
+                <Button Name="Cash" Grid.Column="0" Grid.Row="1" Style="{StaticResource RoundButton}" Click="CashClick1">Cash</Button>
+                <Button Name="Credit" Grid.Column="1" Grid.Row="1" Style="{StaticResource RoundButton}">Credit</Button>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

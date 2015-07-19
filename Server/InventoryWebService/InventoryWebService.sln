@@ -1,0 +1,113 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiseInventoryService", "MiseInventoryService\MiseInventoryService.csproj", "{9FAC431A-D7EF-41F2-B37B-9476E5785866}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Server", "..\Mise.Core.Server\Mise.Core.Server.csproj", "{53FD6B41-CD49-4355-B78D-C2355069E2FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Database.Neo4J.IntegrationTests", "..\Databases\Mise.Database.Neo4J.IntegrationTests\Mise.Database.Neo4J.IntegrationTests.csproj", "{5114B6FF-BA00-41AD-86A3-E4DE2DCDD8C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.InventoryWebService.ServiceInterface", "Mise.InventoryWebService.ServiceInterface\Mise.InventoryWebService.ServiceInterface.csproj", "{9AA146FB-6CF8-4E5E-A400-EE6E62F83BBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core", "..\..\Mise.Core\Mise.Core.csproj", "{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common", "..\..\Mise.Core.Common\Mise.Core.Common.csproj", "{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common.UnitTests", "..\..\Mise.Core.Common.UnitTests\Mise.Core.Common.UnitTests.csproj", "{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{DEF5B3AB-5DAC-4D19-81A6-5192FAF54760}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Database.Azure", "..\Databases\Mise.Azure\Mise.Database.Azure.csproj", "{B21E13CA-F2D8-433C-8FE7-929A27172396}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Database.Azure.IntegrationTests", "..\Databases\Mise.Azure.IntegrationTests\Mise.Database.Azure.IntegrationTests.csproj", "{668AB0EF-11DD-49BC-A5A8-16C580DC2672}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Database.Neo4J", "..\Databases\Mise.Database.Neo4J\Mise.Database.Neo4J.csproj", "{80851891-179E-408A-A3CB-08143A0A4F4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Database.StorableEntities", "..\Databases\Mise.Database.StorableEntities\Mise.Database.StorableEntities.csproj", "{0D2AECDF-FC4D-43FF-A18B-B4FC436D1823}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.InventoryWebService.ServiceModelPortable", "Mise.InventoryWebService.ServiceModelPortable\Mise.InventoryWebService.ServiceModelPortable.csproj", "{9BA4713A-F2EF-46BE-9F86-31637A2217B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{C8ED0F10-67CB-4015-ACE9-CEAC4274BFF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeveloperTools", "..\..\DeveloperTools\DeveloperTools.csproj", "{CD8350E4-61EF-4DA4-84CF-F2C55A5078AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.VendorManagement", "..\Mise.VendorManagement\Mise.VendorManagement.csproj", "{E9C01193-A119-4AB7-BCC8-54531759A971}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9FAC431A-D7EF-41F2-B37B-9476E5785866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FAC431A-D7EF-41F2-B37B-9476E5785866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FAC431A-D7EF-41F2-B37B-9476E5785866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FAC431A-D7EF-41F2-B37B-9476E5785866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53FD6B41-CD49-4355-B78D-C2355069E2FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53FD6B41-CD49-4355-B78D-C2355069E2FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53FD6B41-CD49-4355-B78D-C2355069E2FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53FD6B41-CD49-4355-B78D-C2355069E2FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5114B6FF-BA00-41AD-86A3-E4DE2DCDD8C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5114B6FF-BA00-41AD-86A3-E4DE2DCDD8C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5114B6FF-BA00-41AD-86A3-E4DE2DCDD8C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5114B6FF-BA00-41AD-86A3-E4DE2DCDD8C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA146FB-6CF8-4E5E-A400-EE6E62F83BBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA146FB-6CF8-4E5E-A400-EE6E62F83BBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA146FB-6CF8-4E5E-A400-EE6E62F83BBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA146FB-6CF8-4E5E-A400-EE6E62F83BBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B21E13CA-F2D8-433C-8FE7-929A27172396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B21E13CA-F2D8-433C-8FE7-929A27172396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B21E13CA-F2D8-433C-8FE7-929A27172396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B21E13CA-F2D8-433C-8FE7-929A27172396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{668AB0EF-11DD-49BC-A5A8-16C580DC2672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{668AB0EF-11DD-49BC-A5A8-16C580DC2672}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{668AB0EF-11DD-49BC-A5A8-16C580DC2672}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{668AB0EF-11DD-49BC-A5A8-16C580DC2672}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80851891-179E-408A-A3CB-08143A0A4F4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80851891-179E-408A-A3CB-08143A0A4F4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80851891-179E-408A-A3CB-08143A0A4F4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80851891-179E-408A-A3CB-08143A0A4F4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D2AECDF-FC4D-43FF-A18B-B4FC436D1823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D2AECDF-FC4D-43FF-A18B-B4FC436D1823}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D2AECDF-FC4D-43FF-A18B-B4FC436D1823}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D2AECDF-FC4D-43FF-A18B-B4FC436D1823}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BA4713A-F2EF-46BE-9F86-31637A2217B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA4713A-F2EF-46BE-9F86-31637A2217B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA4713A-F2EF-46BE-9F86-31637A2217B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BA4713A-F2EF-46BE-9F86-31637A2217B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD8350E4-61EF-4DA4-84CF-F2C55A5078AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD8350E4-61EF-4DA4-84CF-F2C55A5078AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD8350E4-61EF-4DA4-84CF-F2C55A5078AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD8350E4-61EF-4DA4-84CF-F2C55A5078AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9C01193-A119-4AB7-BCC8-54531759A971}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9C01193-A119-4AB7-BCC8-54531759A971}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9C01193-A119-4AB7-BCC8-54531759A971}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9C01193-A119-4AB7-BCC8-54531759A971}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5114B6FF-BA00-41AD-86A3-E4DE2DCDD8C4} = {DEF5B3AB-5DAC-4D19-81A6-5192FAF54760}
+		{B21E13CA-F2D8-433C-8FE7-929A27172396} = {DEF5B3AB-5DAC-4D19-81A6-5192FAF54760}
+		{668AB0EF-11DD-49BC-A5A8-16C580DC2672} = {DEF5B3AB-5DAC-4D19-81A6-5192FAF54760}
+		{80851891-179E-408A-A3CB-08143A0A4F4C} = {DEF5B3AB-5DAC-4D19-81A6-5192FAF54760}
+		{0D2AECDF-FC4D-43FF-A18B-B4FC436D1823} = {DEF5B3AB-5DAC-4D19-81A6-5192FAF54760}
+		{CD8350E4-61EF-4DA4-84CF-F2C55A5078AE} = {C8ED0F10-67CB-4015-ACE9-CEAC4274BFF1}
+		{E9C01193-A119-4AB7-BCC8-54531759A971} = {C8ED0F10-67CB-4015-ACE9-CEAC4274BFF1}
+	EndGlobalSection
+EndGlobal

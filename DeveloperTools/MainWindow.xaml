@@ -1,0 +1,90 @@
+﻿<Window x:Class="DeveloperTools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="650" Width="725"
+        Loaded="MainWindow_OnLoaded">
+    <StackPanel>
+        <TabControl  Height="550">
+            <TabItem Header="Inventory Dev DB">
+                <Grid Margin="0,0,-256,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="11*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="946*"/>
+                        <ColumnDefinition Width="21"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="30"></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Grid.ColumnSpan="3">Neo4J Database location:</Label>
+                    <ComboBox x:Name="cmbInvDBURL" HorizontalAlignment="Left" Height="23" Margin="15,69,0,0" VerticalAlignment="Top" Width="663" Grid.Column="2" Grid.Row="0"
+                              DisplayMemberPath="Key" SelectedValuePath="Value"/>
+                    <Button x:Name="BtnCreateInvDB" Content="Populate Graph DB" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="173" Height="41" Grid.Row="1" Click="BtnCreateInvDB_Click" Grid.Column="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Import file to Vendor">
+                <!-- todo wrap this in a panel to create a wizard -->
+                <Grid Width="725">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100*"></ColumnDefinition>
+                        <ColumnDefinition Width="250*"/>
+                        <ColumnDefinition Width="100*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="66"></RowDefinition>
+                        <RowDefinition Height="66"></RowDefinition>
+                        <RowDefinition Height="66"></RowDefinition>
+                        <RowDefinition Height="66"></RowDefinition>
+                        <RowDefinition Height="66"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0">CSV file to import:</Label>
+                    <TextBox Grid.Column="1" Grid.Row="0" x:Name="TxtFileName"></TextBox>
+                    <Button Grid.Column="2" Grid.Row="0" x:Name="BtnFindFile" Click="BtnFindFile_OnClick">Browse...</Button>
+                    
+                    <Label Grid.Column="0" Grid.Row="1">Vendor name:</Label>
+                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="TxtVendorName">Twin Liquor</TextBox>
+                    
+                    <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">Neo4J Database location:</Label>
+                    <ComboBox x:Name="CmbVendorDestDB" HorizontalAlignment="Left" Height="23" Margin="15,2,0,0" VerticalAlignment="Top" Width="663" 
+                              Grid.Column="1" Grid.Row="3"
+                              DisplayMemberPath="Key" SelectedValuePath="Value" />
+                    <Button x:Name="BtnImportVendor" Content="Import file" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="173" Height="41" 
+                            Grid.Row="4" Click="BtnImportVendor_Click" Grid.Column="1" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="JSON">
+                <StackPanel Margin="0,6,0,0">
+                    <Label>File path to export</Label>
+                    <TextBox x:Name="txtJSONExportFile" Height="23" TextWrapping="Wrap" Text=""/>
+                    <Button x:Name="BtnGenJson" Content="Generate JSON from demo restauarant" HorizontalAlignment="Left" Margin="36,24,0,0" VerticalAlignment="Top" Width="263" Height="41"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="GraphDB">
+                <Grid Margin="0,0,-256,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="11*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="946*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Grid.ColumnSpan="3">Neo4J Database location:</Label>
+                    <TextBox x:Name="txtDBURL" HorizontalAlignment="Left" Height="23" Margin="15,69,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="663" Grid.Column="2"/>
+                    <Button x:Name="BtnCreateDB" Content="Populate Graph DB" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="173" Height="41" Grid.Row="1" Click="BtnCreateDB_Click" Grid.Column="2"/>
+                    <Button x:Name="BtnGetRestaurant" Content="Get Restaurant" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="173" Height="41" Grid.Row="2" Click="BtnGetRestaurant_Click" Grid.Column="2"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <ProgressBar x:Name="PgBar" Minimum="0" Maximum="100" Value="0" Height="20"/>
+        <Label x:Name="LblStatus" Height="30">Status</Label>
+    </StackPanel>
+</Window>

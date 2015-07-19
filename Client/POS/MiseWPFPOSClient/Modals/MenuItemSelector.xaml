@@ -1,0 +1,44 @@
+﻿<Window x:Class="MiseWPFPOSClient.Modals.MenuItemSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CategorySelector" Height="500" Width="610"
+        ResizeMode="NoResize" 
+        WindowStartupLocation="CenterOwner"
+        Loaded="WindowLoaded"
+        WindowStyle="None" BorderBrush="{StaticResource BorderBrush}" BorderThickness="2"
+        ShowInTaskbar="false"
+         >
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="2" Grid.Row="0">
+            <Grid Background="{StaticResource BackgroundBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <!--<Button Style="{DynamicResource RoundButton}" Click="ToggleLock" Content="Lock" Grid.Column="0" Name="btnToggleLock"></Button>-->
+                <Button Style="{DynamicResource CloseButton}" Click="CloseClicked" Name="btnClose" Grid.Column="1">X</Button>
+            </Grid>
+        </Border>
+
+        <ItemsControl Name="icMenuItems" Grid.Row="1">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button HorizontalAlignment="Center" Height="75" Width="200" Style="{DynamicResource CategoryButton}"
+                                Content="{Binding Path=Name}" CommandParameter="{Binding}" Click="MenuItemClicked"
+                                VerticalAlignment="Top">
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</Window>

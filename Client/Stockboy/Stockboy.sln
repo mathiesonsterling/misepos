@@ -1,0 +1,77 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Inventory", "Mise.Inventory\Mise.Inventory.csproj", "{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Inventory.iOS", "Mise.Inventory.iOS\Mise.Inventory.iOS.csproj", "{227F3218-83B1-47F7-9195-82F5D3583A94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Inventory.Android", "Mise.Inventory.Android\Mise.Inventory.Android.csproj", "{EA2E8452-389E-46AF-BA29-5450F4048989}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core", "..\..\Mise.Core\Mise.Core.csproj", "{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common", "..\..\Mise.Core.Common\Mise.Core.Common.csproj", "{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common.UnitTests", "..\..\Mise.Core.Common.UnitTests\Mise.Core.Common.UnitTests.csproj", "{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Client", "..\Mise.Core.Client\Mise.Core.Client.csproj", "{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Client.UnitTests", "..\Mise.Core.Client.UnitTests\Mise.Core.Client.UnitTests.csproj", "{65484BB2-7664-4D22-BCB9-45CBB2543F93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Inventory.UITests", "Mise.Inventory.UITests\Mise.Inventory.UITests.csproj", "{773C9CF6-FAC8-4171-89C9-7BEA1B1C8C7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Inventory.UnitTests", "Mise.Inventory.UnitTests\Mise.Inventory.UnitTests.csproj", "{A8F4A4FE-4519-480D-896A-8986F885ED13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.InventoryWebService.ServiceModelPortable", "..\..\Server\InventoryWebService\Mise.InventoryWebService.ServiceModelPortable\Mise.InventoryWebService.ServiceModelPortable.csproj", "{9BA4713A-F2EF-46BE-9F86-31637A2217B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{227F3218-83B1-47F7-9195-82F5D3583A94}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{227F3218-83B1-47F7-9195-82F5D3583A94}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{227F3218-83B1-47F7-9195-82F5D3583A94}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{227F3218-83B1-47F7-9195-82F5D3583A94}.Release|Any CPU.Build.0 = Release|iPhoneSimulator
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65484BB2-7664-4D22-BCB9-45CBB2543F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65484BB2-7664-4D22-BCB9-45CBB2543F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65484BB2-7664-4D22-BCB9-45CBB2543F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65484BB2-7664-4D22-BCB9-45CBB2543F93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{773C9CF6-FAC8-4171-89C9-7BEA1B1C8C7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{773C9CF6-FAC8-4171-89C9-7BEA1B1C8C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{773C9CF6-FAC8-4171-89C9-7BEA1B1C8C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{773C9CF6-FAC8-4171-89C9-7BEA1B1C8C7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BA4713A-F2EF-46BE-9F86-31637A2217B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA4713A-F2EF-46BE-9F86-31637A2217B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA4713A-F2EF-46BE-9F86-31637A2217B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BA4713A-F2EF-46BE-9F86-31637A2217B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8F4A4FE-4519-480D-896A-8986F885ED13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8F4A4FE-4519-480D-896A-8986F885ED13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8F4A4FE-4519-480D-896A-8986F885ED13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8F4A4FE-4519-480D-896A-8986F885ED13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA2E8452-389E-46AF-BA29-5450F4048989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA2E8452-389E-46AF-BA29-5450F4048989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA2E8452-389E-46AF-BA29-5450F4048989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA2E8452-389E-46AF-BA29-5450F4048989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

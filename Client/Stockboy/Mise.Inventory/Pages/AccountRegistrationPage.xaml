@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Mise.Inventory.AccountRegistrationPage">
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<ScrollView>
+				<StackLayout VerticalOptions="FillAndExpand">
+					<Entry Placeholder="Credit Card Number" Text="{Binding CardNumber}" Keyboard="Numeric"/>
+					<Entry Placeholder="Exp Month" Text="{Binding BillingMonth}" Keyboard="Numeric"/>
+					<Entry Placeholder="Exp Year" Text="{Binding BillingYear}" Keyboard="Numeric"/>
+					<Entry Placeholder="CSV" Text="{Binding CSV}" Keyboard="Numeric"/>
+					<Entry Placeholder="Billing Zip Code" Text="{Binding BillingZip}" Keyboard="Numeric"/>
+					<Entry Placeholder="Card First Name" Text="{Binding FirstName}"/>
+					<Entry Placeholder="Card First Name" Text="{Binding LastName}"/>
+				</StackLayout>
+			</ScrollView>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button 
+				Text="Register Account" 
+				Command="{Binding RegisterAccountCommand}"
+				IsEnabled="{Binding CanRegister}"
+			/>
+			<Button
+				Text="Register Later"
+				Command = "{Binding DelayRegistrationCommand}"
+			/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

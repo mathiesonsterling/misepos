@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="MisePOSTerminal.ViewChecksMVVM">
+	<ContentPage.Content>
+<Grid x:Name="_mainGrid" BackgroundColor = "#464646">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="125" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="250" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="250" />
+    </Grid.ColumnDefinitions>
+
+    <StackLayout Padding = "10" Grid.Row="0" Grid.Column = "0">
+	    <Button
+	    	x:Name = "_btnClockIn"
+	    	Text = "Clock In"
+	    	TextColor = "White"
+	    	HeightRequest = "125"
+	    	BackgroundColor = "#464646"
+	    	BorderRadius = "0"
+	    	Font = "24"
+	    	IsVisible = "{Binding NotEnteringAnything}"
+	    	Command = "{Binding ClockinStart}"
+	    />
+		<StackLayout 
+            x:Name = "_clockInProgressStack"
+		    Padding="10"
+		    IsVisible = "{Binding EnteringClockinPasscode}">
+		    <Entry 
+		    	x:Name = "_entryClockinPasscode" 
+		    	IsPassword = "true"
+		    	Placeholder = "passcode"
+		    	Keyboard = "Numeric"
+		    	IsVisible = "{Binding EnteringClockinPasscode}"
+		    	Text = "{Binding Passcode}"
+		    />
+			<Button
+				x:Name = "_btnClockInCancel"
+				Text = "Cancel"
+				TextColor = "White"
+				HeightRequest = "125"
+				BackgroundColor = "#D43251"
+				BorderRadius = "0"
+				Font = "24"
+				IsVisible = "{Binding EnteringClockinPasscode}"
+				Command = "{Binding CancelEntry}"
+			/>
+		</StackLayout>
+	</StackLayout>
+    	
+    <StackLayout x:Name="_empStack" 
+    	Padding="10"  
+    	Grid.Row="1" 
+    	Grid.Column="0" 
+    	IsVisible = "{Binding NotEnteringAnything}"
+    >
+    </StackLayout>
+		
+	<ScrollView Grid.RowSpan="2" Grid.Row="0" Grid.Column="1" IsVisible = "{Binding NotEnteringAnything}">
+		<Grid x:Name="_checksGrid" Padding="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="250"/>
+				<ColumnDefinition Width="250"/>
+				<ColumnDefinition Width="250"/>
+			</Grid.ColumnDefinitions>
+	    </Grid>
+    </ScrollView>
+
+    <StackLayout Grid.Column="2" Grid.RowSpan="2" Orientation="Vertical">
+	    <StackLayout 
+	    	x:Name = "_commandsPanel"
+	    	Orientation="Vertical" 
+
+	    	Padding = "10"
+	    	IsVisible = "{Binding NotEnteringAnything}"
+	    >
+		    <Button 
+		       Text="New Check"
+		       x:Name = "_btnNewCheck"
+	           HeightRequest = "125"
+	           BackgroundColor="#3FDA6B"
+	           BorderRadius = "0"
+	           Font = "24"
+	           Command = "{Binding NewCheckStart}"
+			/>
+			<Button 
+				Text="No Sale"
+				x:Name = "_btnNoSale"
+				HeightRequest = "125"
+				BorderRadius = "0"
+				Font = "24"
+				BackgroundColor = "#E2D038"
+				Command = "{Binding NoSaleStart}"
+			/>
+			<Button 
+				Text = "Closed Checks"
+				HeightRequest = "125"
+				BorderRadius = "0"
+				Font = "24"
+				BackgroundColor = "#3FDA6B"
+				Command = "{Binding ClosedChecks}"
+			/>
+		    <Button 
+		       Text="Fast Cash"
+	           HeightRequest = "125"
+	           BackgroundColor="#3FDA6B"
+	           BorderRadius = "0"
+	           Font = "24"
+	           Command = "{Binding FastCash}"
+			/>
+			<Button 
+				Text="Clock Out"
+				x:Name = "_btnClockOut"
+				HeightRequest = "125"
+				BorderRadius = "0"
+				Font = "24"
+				BackgroundColor = "#D43251"
+				Command = "{Binding ClockoutStart}"
+			/>
+	    </StackLayout> <!-- end command panel -->
+	    <StackLayout
+				Padding = "10"
+				IsVisible = "{Binding EnteringNewCheck}"
+		>
+			<Entry 
+			   x:Name = "_entryNewCheckName" 
+			   Placeholder = "customer name"
+			   Keyboard = "Text"
+			   Text = "{Binding CustomerName}"
+			/>
+			<Button
+				Text = "Cancel"
+				TextColor = "White"
+				HeightRequest = "125"
+				BackgroundColor = "#D43251"
+				BorderRadius = "0"
+				Command = "{Binding CancelEntry}"
+			/>
+		</StackLayout> <!--- end new check -->
+		<StackLayout
+				Padding = "10"
+				IsVisible = "{Binding EnteringNoSalePasscode}"
+		>
+			<Entry 
+			   x:Name = "_entryNoSalePasscode" 
+			   Placeholder = "passcode"
+			   Keyboard = "Numeric"
+			   IsPassword = "true"
+			   Text = "{Binding Passcode}"
+			/>
+			<Button
+				Text = "Cancel"
+				TextColor = "White"
+				HeightRequest = "125"
+				BackgroundColor = "#D43251"
+				BorderRadius = "0"
+				Command = "{Binding CancelEntry}"
+			/>
+		</StackLayout>
+		<StackLayout
+			Padding = "10"
+			IsVisible = "{Binding EnteringClockoutPasscode}"
+		>
+			<Entry
+				x:Name = "_entryClockoutPasscode"
+				Placeholder = "passcode"
+				Keyboard = "Numeric"
+				Text = "{Binding Passcode}"
+				IsPassword = "true"
+			/>
+			<Button
+				Text = "Cancel"
+				TextColor = "White"
+				HeightRequest = "125"
+				BackgroundColor = "#D43251"
+				BorderRadius = "0"
+				Command = "{Binding CancelEntry}"
+			/>
+		</StackLayout>
+	</StackLayout>         
+  </Grid>
+	</ContentPage.Content>
+</ContentPage>

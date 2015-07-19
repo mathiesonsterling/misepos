@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.POSTerminal.Converters;assembly=Mise.POSTerminal"
+	xmlns:controls="clr-namespace:Mise.POSTerminal.Controls;assembly=Mise.POSTerminal"
+	x:Class="Mise.POSTerminal.Pages.ClockInPage"
+	Title="Clock In"
+	Padding="10, 40, 10, 10"
+	>
+	<ContentPage.Padding>
+    	<OnPlatform x:TypeArguments="Thickness"
+        	        iOS="10, 60, 10, 10" />
+  	</ContentPage.Padding>
+
+  	<ContentPage.Resources>
+    	<ResourceDictionary>
+    		<local:NotConverter x:Key="notConverter"/>
+
+    		<Color x:Key="buttonBackgroundColor">Black</Color>
+    		<Color x:Key="buttonBackgroundColorDisabled">Gray</Color>
+    		<Color x:Key="textColor">White</Color>
+
+	      	<x:Int32 x:Key="borderRadius">0</x:Int32>
+			<x:Int32 x:Key="buttonHeight">100</x:Int32>
+	      	<x:Int32 x:Key="buttonWidth">200</x:Int32>
+	    </ResourceDictionary>
+	</ContentPage.Resources>
+
+	<controls:Keypad x:Name="Keypad" EnterClicked="OnKeypadEnterClicked"></controls:Keypad>
+</ContentPage>

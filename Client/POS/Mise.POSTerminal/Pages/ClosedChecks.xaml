@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	x:Class="Mise.POSTerminal.Pages.ClosedChecks">
+	<ContentPage.Content>
+		<Grid>
+		    <Grid.RowDefinitions>
+			  <RowDefinition Height="125" />
+			  <RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<Grid.ColumnDefinitions>
+			  <ColumnDefinition Width="250" />
+			  <ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<Button
+				Grid.Column = "0"
+				Grid.Row = "0"
+				Text = "Open Checks"
+				TextColor = "White"
+				Command = "{Binding ReturnToViewChecks}"
+				BorderRadius = "0"
+			/>
+
+			<!-- column headers -->
+			<StackLayout
+				Orientation = "Horizontal"
+				Grid.Row = "0"
+				Grid.Column = "1"
+			>
+				<Button
+					Text = "Name"
+					TextColor = "White"
+					Command = "{Binding Sort}"
+					CommandParameter = "CustomerName"
+					HeightRequest = "125"
+					WidthRequest = "250"
+					BorderRadius = "0"
+				/>	
+				<Button
+					Text = "Status"
+					TextColor = "White"
+					Command = "{Binding Sort}"
+					CommandParameter = "PaymentStatus"
+					HeightRequest = "125"
+					WidthRequest = "250"
+					BorderRadius = "0"
+				/>	
+			</StackLayout>
+			<!-- check grids -->
+			<Grid 
+				x:Name = "grdClosedChecks"
+				Grid.Row = "1"
+				Grid.Column = "1"
+			>
+			  	<Grid.ColumnDefinitions>
+			  		<ColumnDefinition Width="250" />
+			  		<ColumnDefinition Width="*" />
+			  		<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+			</Grid>
+		</Grid>
+	</ContentPage.Content>
+</ContentPage>

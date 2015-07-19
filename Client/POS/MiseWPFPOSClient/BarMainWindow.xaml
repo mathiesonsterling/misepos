@@ -1,0 +1,30 @@
+﻿<Page x:Class="MiseWPFPOSClient.BarMainWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+	Title="MisePOS" Height="768" Width="1024"
+      Loaded="PageLoaded">
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Frame Grid.Column="0" Grid.Row="0" Name="mainFrame">
+            
+        </Frame>
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="1*"></ColumnDefinition>
+                   <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Content="Tabs" Style="{DynamicResource RoundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    Click="HomeClicked" Name="btnHome" Grid.Column="0"></Button>
+            <Button Content="Order" Style="{DynamicResource RoundButton}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    Click="OrderClicked" Name="btnOrder" Grid.Column="1"></Button>
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,113 @@
+﻿using System;
+using System.Linq;
+using Mise.Core.Common.Events.ApplicationInvitations;
+using Mise.Core.Entities.People;
+using Mise.Core.Entities.Restaurant.Events;
+using Mise.Core.Services;
+using Mise.Core.Services.WebServices;
+using Mise.Core.Common.Services;
+using Mise.Core.Common.Entities;
+using Mise.Core.Common;
+using Mise.Core.Entities.Base;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Mise.Core.Repositories;
+using Mise.Core.ValueItems;
+
+namespace Mise.Core.Client.Repositories
+{
+	public class ClientApplicationInvitationRepository 
+		: BaseEventSourcedClientRepository<IApplicationInvitation, IApplicationInvitationEvent>, IApplicationInvitationRepository
+	{
+		readonly IApplicationInvitationWebService _webService;
+		public ClientApplicationInvitationRepository(ILogger logger, IClientDAL dal, 
+			IApplicationInvitationWebService webService) : base(logger, dal, webService)
+		{
+			_webService = webService;
+		}
+
+		#region implemented abstract members of BaseEventSourcedRepository
+
+		protected override IApplicationInvitation CreateNewEntity ()
+		{
+			return new ApplicationInvitation ();
+		}
+
+		protected override bool IsEventACreation (IEntityEventBase ev)
+		{
+			return ev is EmployeeInvitedToApplicationEvent;
+		}
+
+	    public override Guid GetEntityID(IApplicationInvitationEvent ev)
+	    {
+	        return ev.InvitationID;
+	    }
+
+	    #endregion
+
+		#region implemented abstract members of BaseEventSourcedClientRepository
+
+		public override async Task Load (Guid? restaurantID)
+		{
+		    Loading = true;
+			IEnumerable<IApplicationInvitation> items = null;
+			try{
+			    if (restaurantID.HasValue)
+			    {
+			        items = await _webService.GetInvitationsForRestaurant(restaurantID.Value);
+			    }
+			} catch(Exception e){
+				Logger.HandleException (e);
+			}
+
+		    if (items == null)
+		    {
+		        try
+		        {
+		            items = await DAL.GetEntitiesAsync<IApplicationInvitation>();
+		        }
+		        catch (Exception e)
+		        {
+		            Logger.HandleException(e);
+		        }
+		    }
+			if(items != null){
+				Cache.UpdateCache (items);
+			}
+		    Loading = false;
+		}
+
+		public async Task Load (EmailAddress email)
+		{
+			try{
+                Loading = true;
+				var items = (await _webService.GetInvitationsForEmail (email)).ToList();
+
+				if(items.Any()){
+					Cache.UpdateCache (items);
+				}
+			    Loading = false;
+			} catch(Exception e){
+				Logger.HandleException (e);
+			}
+				
+		}
+
+		#endregion
+
+	    public Task<IEnumerable<IApplicationInvitation>> GetOpenInvitesForEmail(EmailAddress address)
+	    {
+	        var items = GetAll().Where(ai => ai.Status == InvitationStatus.Created || ai.Status == InvitationStatus.Sent)
+	            .Where(ai => ai.DestinationEmail.Equals(address));
+
+	        return Task.FromResult(items);
+	    }
+
+	    public Task<IEnumerable<IApplicationInvitation>> GetInvitesForRestaurant(Guid restaurantID)
+	    {
+	        var items = GetAll().Where(ai => ai.RestaurantID == restaurantID);
+	        return Task.FromResult(items);
+	    }
+	}
+}
+

@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}</ProjectGuid>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mise.Core</RootNamespace>
+    <AssemblyName>Mise.Core</AssemblyName>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Entities\Accounts\IAccount.cs" />
+    <Compile Include="Entities\Accounts\IAccountCharge.cs" />
+    <Compile Include="Entities\Accounts\IAccountEvent.cs" />
+    <Compile Include="Entities\Accounts\IAccountPayment.cs" />
+    <Compile Include="Entities\Base\ICloneableEntity.cs" />
+    <Compile Include="Entities\Base\IEntityBase.cs" />
+    <Compile Include="Entities\Base\IEventStoreEntityBase.cs" />
+    <Compile Include="Entities\Check\Events\ICheckEvent.cs" />
+    <Compile Include="Entities\Inventory\Events\IPAREvent.cs" />
+    <Compile Include="Entities\Inventory\IBaseBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\IInventoryBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\IInventorySection.cs" />
+    <Compile Include="Entities\Inventory\IPAR.cs" />
+    <Compile Include="Entities\Inventory\IParBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\IPurchaseOrderLineItem.cs" />
+    <Compile Include="Entities\Inventory\IInventory.cs" />
+    <Compile Include="Entities\Inventory\IReceivingOrderLineItem.cs" />
+    <Compile Include="Entities\Inventory\IRestaurantInventorySection.cs" />
+    <Compile Include="Entities\Menu\Menu.cs" />
+    <Compile Include="Entities\Menu\MenuItem.cs" />
+    <Compile Include="Entities\Menu\MenuItemCategory.cs" />
+    <Compile Include="Entities\Menu\MenuItemModifier.cs" />
+    <Compile Include="Entities\Menu\MenuItemModifierGroup.cs" />
+    <Compile Include="Entities\Menu\MenuRule.cs" />
+    <Compile Include="Entities\MiseEventTypes.cs" />
+    <Compile Include="Entities\Restaurant\Events\IApplicationInvitationEvent.cs" />
+    <Compile Include="Entities\Restaurant\Events\IRestaurantEvent.cs" />
+    <Compile Include="Entities\Vendors\Events\IReceivingOrderEvent.cs" />
+    <Compile Include="Entities\Vendors\Events\IVendorEvent.cs" />
+    <Compile Include="Entities\Vendors\IVendor.cs" />
+    <Compile Include="Entities\Vendors\IVendorBeverageLineItem.cs" />
+    <Compile Include="Repositories\IAccountRepository.cs" />
+    <Compile Include="Repositories\IEventSourcedEntityRepository.cs" />
+    <Compile Include="Repositories\IPARRepository.cs" />
+    <Compile Include="Repositories\IReceivingOrderRepository.cs" />
+    <Compile Include="Repositories\IPurchaseOrderRepository.cs" />
+    <Compile Include="Repositories\IInventoryRepository.cs" />
+    <Compile Include="Repositories\IVendorRepository.cs" />
+    <Compile Include="Services\IPrinterService.cs" />
+    <Compile Include="Services\WebServices\IAccountWebService.cs" />
+    <Compile Include="Services\WebServices\IEventStoreWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryRestaurantWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryWebService.cs" />
+    <Compile Include="Services\WebServices\IPARWebService.cs" />
+    <Compile Include="Services\WebServices\IReceivingOrderWebService.cs" />
+    <Compile Include="Services\WebServices\IVendorWebService.cs" />
+    <Compile Include="ValueItems\Beacon.cs" />
+    <Compile Include="ValueItems\CommitResult.cs" />
+    <Compile Include="ValueItems\CreditCardProcessorToken.cs" />
+    <Compile Include="ValueItems\Distance.cs" />
+    <Compile Include="ValueItems\Inventory\LiquidAmountUnits.cs" />
+    <Compile Include="ValueItems\Inventory\MeasurementMethods.cs" />
+    <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />
+    <Compile Include="ValueItems\Inventory\PurchaseOrderStatus.cs" />
+    <Compile Include="ValueItems\Inventory\ReceivingOrderStatus.cs" />
+    <Compile Include="ValueItems\Location.cs" />
+    <Compile Include="ValueItems\MiseAccountStatus.cs" />
+    <Compile Include="ValueItems\MiseAccountTypes.cs" />
+    <Compile Include="ValueItems\OrderDestination.cs" />
+    <Compile Include="Entities\Check\OrderItem.cs" />
+    <Compile Include="Entities\Payments\BasePayment.cs" />
+    <Compile Include="Entities\Payments\CashPayment.cs" />
+    <Compile Include="Entities\Payments\CompAmountPayment.cs" />
+    <Compile Include="Entities\Payments\CompItemPayment.cs" />
+    <Compile Include="Entities\Payments\CreditCardPayment.cs" />
+    <Compile Include="Entities\Payments\DiscountAmount.cs" />
+    <Compile Include="Entities\Payments\DiscountPercentage.cs" />
+    <Compile Include="Entities\Payments\DiscountPercentageAfterMinimumCashTotal.cs" />
+    <Compile Include="Entities\People\Customer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Entities\IIngredient.cs" />
+    <Compile Include="Entities\IIngredientCost.cs" />
+    <Compile Include="Entities\Restaurant\IRestaurant.cs" />
+    <Compile Include="Entities\Base\ICanOrderItems.cs" />
+    <Compile Include="Entities\Base\ICanTakeModifier.cs" />
+    <Compile Include="Entities\Base\IRestaurantEntityBase.cs" />
+    <Compile Include="Entities\Base\IEntityEventBase.cs" />
+    <Compile Include="Entities\Check\ICheck.cs" />
+    <Compile Include="Entities\People\IEmployee.cs" />
+    <Compile Include="Repositories\ICheckRepository.cs" />
+    <Compile Include="Repositories\IEmployeeRepository.cs" />
+    <Compile Include="Repositories\IMenuRepository.cs" />
+    <Compile Include="Repositories\IMenuRulesRepository.cs" />
+    <Compile Include="Repositories\IRestaurantRepository.cs" />
+    <Compile Include="Services\ILogger.cs" />
+    <Compile Include="Services\ICashDrawerService.cs" />
+    <Compile Include="Services\UtilityServices\IJSONSerializer.cs" />
+    <Compile Include="Services\UtilityServices\IPhotoService.cs" />
+    <Compile Include="Services\WebServices\IRestaurantTerminalService.cs" />
+    <Compile Include="ValueItems\EventID.cs" />
+    <Compile Include="ValueItems\Money.cs" />
+    <Compile Include="Entities\People\Events\IEmployeeEvent.cs" />
+    <Compile Include="ValueItems\OrderItemStatus.cs" />
+    <Compile Include="Services\ISalesTaxCalculatorService.cs" />
+    <Compile Include="ValueItems\PersonName.cs" />
+    <Compile Include="ValueItems\ReferralCode.cs" />
+    <Compile Include="ValueItems\RestaurantName.cs" />
+    <Compile Include="ValueItems\StreetAddress.cs" />
+    <Compile Include="ValueItems\PhoneNumber.cs" />
+    <Compile Include="ValueItems\EmailAddress.cs" />
+    <Compile Include="ValueItems\ItemCacheStatus.cs" />
+    <Compile Include="Services\ICreditCardProcessorService.cs" />
+    <Compile Include="ValueItems\CheckPaymentStatus.cs" />
+    <Compile Include="ValueItems\CreditCard.cs" />
+    <Compile Include="Entities\Payments\IPayment.cs" />
+    <Compile Include="Entities\Payments\ICashPayment.cs" />
+    <Compile Include="Entities\Payments\ICreditCardPayment.cs" />
+    <Compile Include="Entities\Payments\ICompPayment.cs" />
+    <Compile Include="ValueItems\CreditCardAuthorizationCode.cs" />
+    <Compile Include="ValueItems\PaymentType.cs" />
+    <Compile Include="Entities\Payments\IProcessingPayment.cs" />
+    <Compile Include="ValueItems\PaymentProcessingStatus.cs" />
+    <Compile Include="Entities\Check\Events\PaymentEvents\CreditCards\ICreditCardEvent.cs" />
+    <Compile Include="Repositories\IUnitOfWork.cs" />
+    <Compile Include="Entities\Check\Events\ICheckEffectingInventoryEvent.cs" />
+    <Compile Include="Entities\Payments\IDiscount.cs" />
+    <Compile Include="ValueItems\Inventory\LiquidAmount.cs" />
+    <Compile Include="Entities\IMiseTerminalDevice.cs" />
+    <Compile Include="Entities\ZReports\IZTerminalClosing.cs" />
+    <Compile Include="Entities\Check\Events\PaymentEvents\Comps\IItemCompedEvent.cs" />
+    <Compile Include="ValueItems\CreditCardReaderType.cs" />
+    <Compile Include="ValueItems\Weight.cs" />
+    <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\Inventory\IPurchaseOrder.cs" />
+    <Compile Include="Entities\Inventory\IReceivingOrder.cs" />
+    <Compile Include="Entities\Inventory\Events\IPurchaseOrderEvent.cs" />
+    <Compile Include="Entities\Inventory\Events\IInventoryEvent.cs" />
+    <Compile Include="ValueItems\Password.cs" />
+    <Compile Include="Services\WebServices\IInventoryEmployeeWebService.cs" />
+    <Compile Include="Entities\Vendors\IVendorShippingCost.cs" />
+    <Compile Include="Entities\IMobileDevice.cs" />
+    <Compile Include="ValueItems\MobileDeviceTypes.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Services\WebServices\IPurchaseOrderWebService.cs" />
+    <Compile Include="ITextSearchable.cs" />
+    <Compile Include="ITaggable.cs" />
+    <Compile Include="ValueItems\Tag.cs" />
+    <Compile Include="Entities\Base\RestaurantEntityBase.cs" />
+    <Compile Include="Entities\Base\BaseTaggableRestaurantEntity.cs" />
+    <Compile Include="Entities\Inventory\IPurchaseOrderPerVendor.cs" />
+    <Compile Include="Entities\MiseAppTypes.cs" />
+    <Compile Include="Entities\People\IApplicationInvitation.cs" />
+    <Compile Include="Repositories\IApplicationInvitationRepository.cs" />
+    <Compile Include="Services\WebServices\IApplicationInvitationWebService.cs" />
+    <Compile Include="Entities\Inventory\ICategory.cs" />
+    <Compile Include="Services\ICategoriesService.cs" />
+    <Compile Include="Services\UtilityServices\Cryptography.cs" />
+    <Compile Include="ValueItems\CreditCardNumber.cs" />
+    <Compile Include="Services\WebServices\IInventoryApplicationWebService.cs" />
+    <Compile Include="Services\WebServices\SendErrors.cs" />
+    <Compile Include="Services\WebServices\SendEventsException.cs" />
+    <Compile Include="Services\WebServices\ServerNotReadyException.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="Validation">
+      <HintPath>..\Client\Stockboy\packages\Validation.2.0.6.15003\lib\portable-net40+sl50+win+wpa81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLCrypto">
+      <HintPath>..\Client\Stockboy\packages\PCLCrypto.1.0.2.15130\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\PCLCrypto.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

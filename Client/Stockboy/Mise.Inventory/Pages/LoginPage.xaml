@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.LoginPage"
+	BindingContext="{x:Static local:App.LoginViewModel}"
+	Title="Login">
+
+	<!--- scroll view will keep our target on in iOS -->
+	<ScrollView>
+	  	<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+		  	<Image Source="mise.png" />
+		  	<Label Text="{Binding BuildLevel}" IsVisible="{Binding NotProduction}"/>
+		  	<ScrollView>
+		  		<StackLayout>
+				    <Entry 
+				    	x:Name = "entEmail"
+				    	Text ="{Binding Username}"
+					    Placeholder ="Email"
+					    HorizontalOptions="FillAndExpand"
+					    Keyboard="Email">
+				    </Entry>
+
+				    <Entry 
+				    	x:Name = "entPassword"
+				    	Text ="{Binding Password}"
+				 	  	IsPassword="true"
+				        Placeholder ="Password"
+				      	HorizontalOptions="FillAndExpand">
+				    </Entry>
+			    </StackLayout>
+		    </ScrollView>
+		    <ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+
+		    <Button Text="Login" Command="{Binding LoginCommand}" IsEnabled="{Binding CanLogin}"/>
+
+		    <Button Text="Forgot Password?" IsVisible="false"/>
+
+		    <Button Text="Register" Command="{Binding RegisterCommand}"/>
+
+	  	</StackLayout>
+  	</ScrollView>
+ </ContentPage>

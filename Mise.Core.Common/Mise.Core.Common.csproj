@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mise.Core.Common</RootNamespace>
+    <AssemblyName>Mise.Core.Common</AssemblyName>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Entities\Accounts\AccountCharge.cs" />
+    <Compile Include="Entities\Accounts\AccountCredit.cs" />
+    <Compile Include="Entities\Accounts\AccountCreditCardPayment.cs" />
+    <Compile Include="Entities\Accounts\MiseEmployeeAccount.cs" />
+    <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
+    <Compile Include="Entities\DTOs\IEntityDataTransportObjectFactory.cs" />
+    <Compile Include="Entities\Inventory\InventoryBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\InventorySection.cs" />
+    <Compile Include="Entities\Inventory\PAR.cs" />
+    <Compile Include="Entities\Inventory\PARBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\PurchaseOrderLineItem.cs" />
+    <Compile Include="Entities\Inventory\Inventory.cs" />
+    <Compile Include="Entities\Inventory\ReceivingOrderLineItem.cs" />
+    <Compile Include="Entities\Inventory\RestaurantInventorySection.cs" />
+    <Compile Include="Entities\DTOs\RestaurantEntityDataTransportObject.cs" />
+    <Compile Include="Entities\DTOs\EntityDataTransportObjectFactory.cs" />
+    <Compile Include="Events\Accounts\AccountRegisteredFromMobileDeviceEvent.cs" />
+    <Compile Include="Events\Accounts\BaseAccountEvent.cs" />
+    <Compile Include="Events\ApplicationInvitations\BaseInvitationEvent.cs" />
+    <Compile Include="Events\ApplicationInvitations\EmployeeAcceptsInvitationEvent.cs" />
+    <Compile Include="Events\ApplicationInvitations\EmployeeInvitedToApplicationEvent.cs" />
+    <Compile Include="Events\ApplicationInvitations\EmployeeRejectsInvitationEvent.cs" />
+    <Compile Include="Events\Checks\CheckCreatedWithCreditCardEvent.cs" />
+    <Compile Include="Events\DTOs\EventDataTransportObject.cs" />
+    <Compile Include="Events\DTOs\EventDataTransportObjectFactory.cs" />
+    <Compile Include="Events\Employee\EmployeeCreatedEvent.cs" />
+    <Compile Include="Events\Employee\EmployeeLoggedOutOfInventoryAppEvent.cs" />
+    <Compile Include="Events\ICreateLineItemEvent.cs" />
+    <Compile Include="Events\IInventoryAppEventFactory.cs" />
+    <Compile Include="Events\Inventory\BaseInventoryEvent.cs" />
+    <Compile Include="Events\Inventory\BasePurchaseOrderEvent.cs" />
+    <Compile Include="Events\Inventory\InventoryLineItemAddedEvent.cs" />
+    <Compile Include="Events\Inventory\InventoryMadeCurrentEvent.cs" />
+    <Compile Include="Events\Inventory\PARCreatedEvent.cs" />
+    <Compile Include="Events\Inventory\PurchaseOrderCreatedEvent.cs" />
+    <Compile Include="Events\Inventory\PurchaseOrderSentToVendorEvent.cs" />
+    <Compile Include="Events\Inventory\InventoryCompletedEvent.cs" />
+    <Compile Include="Events\Inventory\InventoryCreatedEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\CreditCardAuthorizationStartedEvent.cs" />
+    <Compile Include="Events\Restaurant\BaseRestaurantEvent.cs" />
+    <Compile Include="Events\Restaurant\InventorySectionAddedToRestaurantEvent.cs" />
+    <Compile Include="Events\Restaurant\NewRestaurantRegisteredOnAppEvent.cs" />
+    <Compile Include="Events\Restaurant\PlaceholderRestaurantCreatedEvent.cs" />
+    <Compile Include="Events\Vendors\BaseVendorEvent.cs" />
+    <Compile Include="Events\Vendors\RestaurantAssociatedWithVendorEvent.cs" />
+    <Compile Include="Events\Vendors\VendorAddressUpdatedEvent.cs" />
+    <Compile Include="Events\Vendors\VendorCreatedEvent.cs" />
+    <Compile Include="Events\Vendors\VendorPhoneNumberUpdatedEvent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Entities\MiseTerminalDevice.cs" />
+    <Compile Include="Entities\Employee.cs" />
+    <Compile Include="Entities\MenuItems\WineMenuItem.cs" />
+    <Compile Include="Entities\Restaurant.cs" />
+    <Compile Include="Repositories\Base\BaseEventSourcedRepository.cs" />
+    <Compile Include="Events\Employee\BadLoginAttemptEvent.cs" />
+    <Compile Include="Events\Checks\BaseCheckEvent.cs" />
+    <Compile Include="Events\Employee\BaseEmployeeEvent.cs" />
+    <Compile Include="Events\Checks\CheckCreatedEvent.cs" />
+    <Compile Include="Events\Checks\CheckReopenedEvent.cs" />
+    <Compile Include="Events\Checks\CustomerAssignedToCheckEvent.cs" />
+    <Compile Include="Events\Employee\EmployeeClockedInEvent.cs" />
+    <Compile Include="Events\Employee\EmployeeClockedOutEvent.cs" />
+    <Compile Include="Events\Employee\NoSaleEvent.cs" />
+    <Compile Include="Events\Checks\OrderedOnCheckEvent.cs" />
+    <Compile Include="Events\Checks\OrderItemDeletedEvent.cs" />
+    <Compile Include="Events\Checks\OrderItemModifiedEvent.cs" />
+    <Compile Include="Events\Checks\OrderItemSetMemoEvent.cs" />
+    <Compile Include="Events\Checks\OrderItemVoidedEvent.cs" />
+    <Compile Include="Events\Payments\CashPaidOnCheckEvent.cs" />
+    <Compile Include="Events\Payments\ItemCompedGeneralEvent.cs" />
+    <Compile Include="Events\Payments\CompPaidOnCheckEvent.cs" />
+    <Compile Include="Events\Payments\MarkCheckAsPaidEvent.cs" />
+    <Compile Include="Events\Checks\CheckSentEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\BaseCreditCardEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\CreditCardAuthorizedEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\CreditCardAddedForPaymentEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\CreditCardFailedAuthorizationEvent.cs" />
+    <Compile Include="Events\Payments\DiscountAppliedToCheckEvent.cs" />
+    <Compile Include="Events\Payments\DiscountRemovedFromCheckEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\CreditCardChargeCompletedEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\CreditCardCloseRequestedEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\CreditCardAuthorizationCancelledEvent.cs" />
+    <Compile Include="Services\Implementation\DummyLogger.cs" />
+    <Compile Include="Services\Implementation\Serialization\DataContractSerializer.cs" />
+    <Compile Include="Services\Implementation\Serialization\JsonNetSerializer.cs" />
+    <Compile Include="Services\Implementation\FakeDomineesRestaurantServiceClient.cs" />
+    <Compile Include="Services\Implementation\FakeNYCSalesTaxService.cs" />
+    <Compile Include="Services\IDAL.cs" />
+    <Compile Include="Services\IClientDAL.cs" />
+    <Compile Include="Repositories\Base\BaseRepository.cs" />
+    <Compile Include="Services\Implementation\DAL\MemoryClientDAL.cs" />
+    <Compile Include="Services\Implementation\DAL\DatabaseEntityItem.cs" />
+    <Compile Include="Services\Implementation\DAL\DatabaseEventItem.cs" />
+    <Compile Include="Events\Checks\OrderItemWastedEvent.cs" />
+    <Compile Include="Repositories\Base\RepositoryCache.cs" />
+    <Compile Include="Events\Employee\InsufficientPermissionsEvent.cs" />
+    <Compile Include="Events\Payments\CreditCards\CreditCardTipAddedToChargeEvent.cs" />
+    <Compile Include="Services\IRestaurantServerDAL.cs" />
+    <Compile Include="Events\Payments\ItemUncompedEvent.cs" />
+    <Compile Include="Entities\RestaurantCheck.cs" />
+    <Compile Include="Entities\Vendors\Vendor.cs" />
+    <Compile Include="Entities\Vendors\VendorBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\PurchaseOrder.cs" />
+    <Compile Include="Entities\Inventory\ReceivingOrder.cs" />
+    <Compile Include="Events\Employee\EmployeeLoggedIntoInventoryAppEvent.cs" />
+    <Compile Include="Events\Employee\EmployeeRegisteredForInventoryAppEvent.cs" />
+    <Compile Include="Events\POSEventFactory.cs" />
+    <Compile Include="Events\InventoryAppEventFactory.cs" />
+    <Compile Include="Entities\MobileDevice.cs" />
+    <Compile Include="Events\Inventory\ReceivingOrderCreatedEvent.cs" />
+    <Compile Include="Events\Inventory\ReceivingOrderCompletedEvent.cs" />
+    <Compile Include="Events\Inventory\BaseReceivingOrderEvent.cs" />
+    <Compile Include="Events\Inventory\ReceivingOrderNoteAddedEvent.cs" />
+    <Compile Include="Events\Inventory\ReceivingOrderLineItemAdded.cs" />
+    <Compile Include="Events\Inventory\InventorySectionCompletedEvent.cs" />
+    <Compile Include="Events\Inventory\PARLineItemAddedEvent.cs" />
+    <Compile Include="Events\Inventory\BasePAREvent.cs" />
+    <Compile Include="Events\Inventory\InventoryLiquidItemMeasuredEvent.cs" />
+    <Compile Include="Events\Inventory\PurchaseOrderLineItemAddedFromInventoryCalculationEvent.cs" />
+    <Compile Include="Events\Inventory\PARLineItemQuantityUpdatedEvent.cs" />
+    <Compile Include="Events\Inventory\InventoryNewSectionAddedEvent.cs" />
+    <Compile Include="Events\Inventory\ReceivingOrderLineItemQuantityUpdatedEvent.cs" />
+    <Compile Include="Events\Vendors\VendorAddNewLineItemEvent.cs" />
+    <Compile Include="Entities\Inventory\PurchaseOrderPerVendor.cs" />
+    <Compile Include="Services\Implementation\FakeServices\FakeInventoryWebService.cs" />
+    <Compile Include="Entities\ApplicationInvitation.cs" />
+    <Compile Include="BeverageLineItemEquator.cs" />
+    <Compile Include="Entities\Inventory\ItemCategory.cs" />
+    <Compile Include="Services\Implementation\CategoriesService.cs" />
+    <Compile Include="Events\Inventory\PurchaseOrderRecievedFromVendorEvent.cs" />
+    <Compile Include="Events\Vendors\VendorRestaurantSetsPriceForReceivedItemEvent.cs" />
+    <Compile Include="Events\Inventory\ReceivingOrderLineItemZeroedOutEvent.cs" />
+    <Compile Include="Events\Inventory\ReceivingOrderAssociatedWithPOEvent.cs" />
+    <Compile Include="Events\Restaurant\UserSelectedRestaurant.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Mise.Core\Mise.Core.csproj">
+      <Project>{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}</Project>
+      <Name>Mise.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Requests\" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Client\Stockboy\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

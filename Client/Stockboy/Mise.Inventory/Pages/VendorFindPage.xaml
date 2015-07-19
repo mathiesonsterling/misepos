@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.VendorFindPage"
+	BindingContext="{x:Static local:App.VendorFindViewModel}"
+	Title="Find Vendor">
+
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<ScrollView>
+				<StackLayout>
+					<SearchBar 
+						x:Name="searchEntry"
+						Placeholder="Search" 
+						Text="{Binding SearchString}" />
+					<ScrollView VerticalOptions="FillAndExpand">
+						<StackLayout x:Name="stckVendors"/>
+					</ScrollView>
+				</StackLayout>
+			</ScrollView>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button Text="Add New Vendor" Command="{Binding AddNewVendorCommand}" 
+				IsEnabled="{Binding CanAdd}" HorizontalOptions="FillAndExpand"/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

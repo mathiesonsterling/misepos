@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.MainMenuPage"
+	BindingContext="{x:Static local:App.MainMenuViewModel}"
+	Title="{Binding RestaurantName}">
+
+	<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+		<ScrollView>
+			<StackLayout>
+				<Button 
+					Text="Manage Par" 
+					Command="{Binding PARCommand}"
+				/>
+		    	<Button Text="Start Count" Command="{Binding SectionSelectCommand}" />
+			    <Button Text="Receive Shipment" Command="{Binding ReceivingOrderCommand}" />
+			    <Button Text="Create Purchase Order" Command="{Binding CreatePurchaseOrderCommand}" />
+			    <Button Text="Reports" Command="{Binding ReportsCommand}"/>
+			    <Button Text="Invite Staff" Command="{Binding ManageEmployeesCommand}" />
+			    <Button Text="Logout" Command="{Binding LogoutCommand}"/>
+	    	</StackLayout>
+	    </ScrollView>
+	    <ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+  	</StackLayout>
+
+</ContentPage>

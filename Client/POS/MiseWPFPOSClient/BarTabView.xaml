@@ -1,0 +1,60 @@
+﻿<Page x:Class="MiseWPFPOSClient.BarTabView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tabs"
+        Loaded="WindowLoaded">
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="6*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="2" Grid.Column="0" Grid.Row="0">
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding}" Name="icEmployees">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button HorizontalAlignment="Stretch" Height="100" Click="EmployeeSelected"
+                                    CommandParameter="{Binding Path=EmployeeID}" Content="{Binding Path=Name}" 
+                                    Style="{DynamicResource RoundButton}" Focusable="False">
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="2" Grid.Column="0" Grid.Row="1">
+            <WrapPanel>
+                <ItemsControl ItemsSource="{Binding}" Name="icNotifications">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Message}" Style="{StaticResource DefaultText}" TextWrapping="WrapWithOverflow"></TextBlock>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </WrapPanel>
+        </Border>
+        <DockPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <ItemsControl ItemsSource="{Binding}" Name="icChecks">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button HorizontalAlignment="Center" Height="75" Width="200" Style="{DynamicResource RoundButton}"
+                                Content="{Binding Path=DisplayName}" CommandParameter="{Binding}" Click="CheckClicked">
+
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+    </Grid>
+</Page>

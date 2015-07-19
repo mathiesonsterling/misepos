@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.RestaurantSelectPage"
+	BindingContext="{x:Static local:App.RestaurantSelectViewModel}"
+	Title="Restaurants">
+
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<ScrollView>
+				<StackLayout x:Name="stckMain">
+				</StackLayout>
+			</ScrollView>
+			<ActivityIndicator 
+				IsRunning="{Binding Processing}" 
+				Color="{Binding ActivityColor}" 
+				IsEnabled="{Binding NotProcessing}"
+			/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

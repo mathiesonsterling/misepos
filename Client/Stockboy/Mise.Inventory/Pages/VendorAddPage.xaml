@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.VendorAddPage"
+	BindingContext="{x:Static local:App.VendorAddViewModel}"
+	Title="Add Vendor">
+
+	<ContentPage.Content>
+		<StackLayout>
+			<ScrollView>
+				<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+					<Label Text="Add Vendor" Style="{DynamicResource TitleStyle}"/>
+					<Entry Placeholder="Name" Text="{Binding Name}"/>
+          <StackLayout Orientation="Horizontal">
+						<Entry Placeholder="Area" Keyboard="Telephone" Text="{Binding PhoneAreaCode}"/>
+						<Entry Placeholder="Number" Keyboard="Telephone" Text="{Binding PhoneNumberVal}"/>
+					</StackLayout>
+          <Entry Placeholder="Email for Orders" Text="{Binding Email}"/>
+					<Entry Placeholder="Street Number" Text="{Binding StreetAddressNumber}" Keyboard="Numeric"/>
+					<Entry Placeholder="Street" Text="{Binding StreetName}"/>
+					<Entry Placeholder="City" Text="{Binding City}"/>
+					<Entry Placeholder="State" Text="{Binding State}"/>
+					<Entry Placeholder="Zip Code" Keyboard="Numeric" Text="{Binding Zip}"/>
+				</StackLayout>
+			</ScrollView>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button Text="Add Vendor" Command="{Binding AddVendorCommand}" IsEnabled="{Binding CanAdd}"
+				HorizontalOptions="FillAndExpand"/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

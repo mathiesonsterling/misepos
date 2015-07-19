@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:MisePOSTerminal.Converters;assembly=MisePOSTerminal"
+	x:Class="MisePOSTerminal.Pages.ClockInPage"
+	Title="Clock In"
+	Padding="10, 40, 10, 10"
+	>
+
+	<ContentPage.Padding>
+    	<OnPlatform x:TypeArguments="Thickness"
+        	        iOS="10, 60, 10, 10" />
+  	</ContentPage.Padding>
+
+  	<ContentPage.Resources>
+    	<ResourceDictionary>
+    		<local:NotConverter x:Key="notConverter"/>
+    		<Color x:Key="buttonBackgroundColor">Black</Color>
+    		<Color x:Key="buttonBackgroundColorDisabled">Gray</Color>
+    		<Color x:Key="textColor">White</Color>
+
+	      	<x:Int32 x:Key="borderRadius">0</x:Int32>
+			<x:Int32 x:Key="buttonHeight">100</x:Int32>
+	      	<x:Int32 x:Key="buttonWidth">200</x:Int32>
+	    </ResourceDictionary>
+	</ContentPage.Resources>
+
+	<Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+		<Grid.RowDefinitions>
+	      <RowDefinition Height="*" />
+	      <RowDefinition Height="100" />
+	    </Grid.RowDefinitions>
+
+	    <Grid.ColumnDefinitions>
+	      <ColumnDefinition Width="*" />
+	    </Grid.ColumnDefinitions>
+
+	    <ListView
+			Grid.Column="0" Grid.Row="0"
+			ItemsSource="{Binding CurrentEmployees}"
+			IsVisible="{Binding InPasscodeMode, Converter={StaticResource notConverter}}"
+			SelectedItem="{Binding SelectEmployee, Mode=TwoWay}">
+
+			<ListView.ItemTemplate>
+		      <DataTemplate>
+		        <ViewCell>
+		            <Label Text="{Binding DisplayName}" />
+		        </ViewCell>
+		      </DataTemplate>
+		    </ListView.ItemTemplate>
+		</ListView>
+
+		<StackLayout
+			Grid.Column="0" Grid.Row="1"
+			IsVisible="{Binding InPasscodeMode, Converter={StaticResource notConverter}}"
+			Orientation="Horizontal">
+			<Button
+				BackgroundColor="{StaticResource buttonBackgroundColor}"
+				BorderRadius="{StaticResource borderRadius}"
+				Clicked="OnClockInOut"
+				Command="{Binding ClockInOut}"
+				HorizontalOptions="EndAndExpand"
+				Text="Clock in/out"
+				TextColor="{StaticResource textColor}"/>
+		</StackLayout>
+	
+		<StackLayout
+			Grid.Column="0" Grid.Row="0">
+
+			<Entry x:Name="PasscodeEntry"
+				IsPassword="true"
+				IsVisible="{Binding InPasscodeMode}"
+				Placeholder="Passcode"
+				Text="{Binding Path=Passcode}" />
+		</StackLayout>
+		
+		<StackLayout
+			Grid.Column="0" Grid.Row="1"
+			IsVisible="{Binding InPasscodeMode}"
+			Orientation="Horizontal">
+
+			<Button
+				BackgroundColor="{StaticResource buttonBackgroundColor}"
+				BorderRadius="{StaticResource borderRadius}"
+				Command="{Binding CancelClockInOut}"
+				Text="Cancel"
+				TextColor="{StaticResource textColor}"/>
+
+			<StackLayout
+				Orientation="Horizontal"
+	        	HorizontalOptions="EndAndExpand">
+
+				<Button
+					BackgroundColor="{StaticResource buttonBackgroundColor}"
+					BorderRadius="{StaticResource borderRadius}"
+					Command="{Binding ClockOut}"
+					IsVisible="{Binding CanLogInOut}"
+					Text="Clock out"
+					TextColor="{StaticResource textColor}"/>
+
+				<Button
+					BackgroundColor="{StaticResource buttonBackgroundColor}"
+					BorderRadius="{StaticResource borderRadius}"
+					Command="{Binding ClockIn}"
+					IsVisible="{Binding CanLogInOut}"
+					Text="Clock in"
+					TextColor="{StaticResource textColor}"/>
+			</StackLayout>
+		</StackLayout>
+	</Grid>
+</ContentPage>

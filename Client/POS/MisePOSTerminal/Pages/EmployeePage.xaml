@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	x:Class="MisePOSTerminal.Pages.EmployeePage"
+	Title="Employee"
+	Padding="10, 40, 10, 10">
+
+	<ContentPage.Padding>
+    	<OnPlatform x:TypeArguments="Thickness"
+        	        iOS="10, 60, 10, 10" />
+  	</ContentPage.Padding>
+
+  	<ContentPage.Resources>
+    	<ResourceDictionary>
+    		<Color x:Key="buttonBackgroundColor">Black</Color>
+    		<Color x:Key="buttonBackgroundColorDisabled">Gray</Color>
+    		<Color x:Key="textColor">White</Color>
+
+	      	<x:Int32 x:Key="borderRadius">0</x:Int32>
+			<x:Int32 x:Key="buttonHeight">100</x:Int32>
+	      	<x:Int32 x:Key="buttonWidth">250</x:Int32>
+	    </ResourceDictionary>
+	</ContentPage.Resources>
+
+	<Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+		<Grid.RowDefinitions>
+	      <RowDefinition Height="*" />
+	      <RowDefinition Height="100" />
+	    </Grid.RowDefinitions>
+
+	    <Grid.ColumnDefinitions>
+	      <ColumnDefinition Width="*" />
+	      <ColumnDefinition Width="150"/>
+	    </Grid.ColumnDefinitions>
+
+	    <ScrollView
+			Grid.Column="0" Grid.Row="0">
+	    	<Label Text="{Binding DisplayName}"/>
+
+<!--		    <ListView
+				ItemsSource="{Binding OpenChecks}"
+				SelectedItem="{Binding SelectCheck, Mode=TwoWay}">
+
+				<ListView.ItemTemplate>
+			      <DataTemplate>
+			        <ViewCell>
+			            <Label Text="{Binding DisplayName}" />
+			        </ViewCell>
+			      </DataTemplate>
+			    </ListView.ItemTemplate>
+			</ListView>-->
+	    </ScrollView>
+
+	    <StackLayout
+	    	Grid.Column="1" Grid.Row="0">
+	    	<Button
+	    		BackgroundColor="{StaticResource buttonBackgroundColor}"
+				BorderRadius="{StaticResource borderRadius}"
+				HeightRequest="{StaticResource buttonHeight}"
+				Text="New Check"/>
+	    	<Button
+	    		BackgroundColor="{StaticResource buttonBackgroundColor}"
+				BorderRadius="{StaticResource borderRadius}"
+				HeightRequest="{StaticResource buttonHeight}"
+	    		Text="No Sale"/>
+	    	<Button
+	    		BackgroundColor="{StaticResource buttonBackgroundColor}"
+				BorderRadius="{StaticResource borderRadius}"
+				HeightRequest="{StaticResource buttonHeight}"
+	    		Text="Fast Cash"/>
+	    </StackLayout>
+
+		<StackLayout
+			Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+			Orientation="Horizontal">
+
+			<Button
+				BackgroundColor="{StaticResource buttonBackgroundColor}"
+				BorderRadius="{StaticResource borderRadius}"
+				Command = "{Binding Cancel}"
+				Text="Cancel"
+				TextColor="{StaticResource textColor}"
+				WidthRequest="{StaticResource buttonWidth}"/>
+			
+			<StackLayout Orientation="Horizontal"></StackLayout>
+		</StackLayout>
+	</Grid>
+</ContentPage>
