@@ -231,7 +231,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 				AmountContained = new LiquidAmount{ Milliliters = 118 }
 			};
 
-            //TODO replace these with standard sizes from LiquidContainer!
+            //TODO replace these with standard sizes from LiquidContainer instead of creating them everywhere
 			var oz30 = new LiquidContainer { DisplayName = "30 oz",AmountContained = new LiquidAmount{ Milliliters = 887.206M } };
 			var ml375 = new LiquidContainer { AmountContained = new LiquidAmount{ Milliliters = 375 } };
 			var ml20 = new LiquidContainer { AmountContained = new LiquidAmount{ Milliliters = 20 } };
