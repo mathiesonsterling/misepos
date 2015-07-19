@@ -143,7 +143,7 @@
       <Project>{80851891-179e-408a-a3cb-08143a0a4f4c}</Project>
       <Name>Mise.Database.Neo4J</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MiseInventory\MiseInventoryServerOnly\Mise.VendorManagement\Mise.VendorManagement.csproj">
+    <ProjectReference Include="..\Server\Mise.VendorManagement\Mise.VendorManagement.csproj">
       <Project>{e9c01193-a119-4ab7-bcc8-54531759a971}</Project>
       <Name>Mise.VendorManagement</Name>
     </ProjectReference>
