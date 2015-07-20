@@ -99,7 +99,10 @@ namespace Mise.Inventory.Services.Implementation
 							events.Add (ev);
 						}
 					}
-					SelectedInventory = _inventoryRepository.ApplyEvents (events);
+
+					if(events.Any()){
+						SelectedInventory = _inventoryRepository.ApplyEvents (events);
+					}
 				} catch(Exception e){
 					_logger.HandleException (e);
 					throw;
