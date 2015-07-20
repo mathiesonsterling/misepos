@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Mise.Inventory.Pages.InventoryVisuallyMeasureWithGesturesPage">
+	<ContentPage.Content>
+		<StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
+			<!-- single item here -->
+				<!---<ScrollView VerticalOptions="FillAndExpand">-->
+				<StackLayout VerticalOptions="FillAndExpand" MinimumHeightRequest="450" x:Name="stckItem">
+					<Label Text="{Binding DisplayName}" Style="{DynamicResource TitleStyle}" MinimumHeightRequest="450"></Label>
+					<!-- total here -->
+					<Label HorizontalOptions="Center" Text="Total:"/>
+					<Label Text="{Binding Total}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center"></Label>
+
+					<Label Text="Number of Full:"/>
+						<StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+							<Entry x:Name="editNum" Text="{Binding NumFullBottles}" Keyboard="Numeric" WidthRequest="100"> </Entry>
+							<Stepper x:Name="stpFull" Value="{Binding NumFullBottles, Mode=TwoWay}" Maximum="10000"></Stepper>
+						</StackLayout>
+
+					<StackLayout x:Name="stckMeasure" 
+						HorizontalOptions="CenterAndExpand"
+						VerticalOptions="FillAndExpand"
+						Padding = "0"
+					>
+					</StackLayout>
+				</StackLayout>
+				<!---</ScrollView>-->
+			<!--- end single item -->
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button Command="{Binding AddPartialCommand}" Text="Add Partial Bottle" IsEnabled="{Binding AddPartialEnabled}" 
+						HorizontalOptions="FillAndExpand"/>
+			<Button Command="{Binding MeasureCommand}" Text="Measure" 
+				HorizontalOptions="FillAndExpand"/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

@@ -16,8 +16,7 @@ namespace Mise.Inventory.Services
 			case Pages.Inventory:
 				return new InventoryPage();
 			case Pages.InventoryVisuallyMeasure:
-				return new InventoryVisuallyMesasuredImprovedPage();
-				//return new Mise.Inventory.Pages.InventoryVisuallyMeasurePageNew();
+				return new InventoryVisuallyMeasureWithGesturesPage();
 			case Pages.ItemAdd:
 				return new ItemAddPage();
 			case Pages.ItemFind:

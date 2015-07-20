@@ -53,7 +53,7 @@ namespace Mise.Inventory
 
 		public static BuildLevel GetBuildLevel(){
 			#if DEBUG
-			return BuildLevel.Development;
+			return BuildLevel.Demo;
 			#else
 			return BuildLevel.QA;
 			#endif
@@ -172,8 +172,8 @@ namespace Mise.Inventory
 			cb.RegisterType<SectionSelectViewModel>().SingleInstance();
 			cb.RegisterType<VendorAddViewModel>().SingleInstance();
 			cb.RegisterType<VendorFindViewModel>().SingleInstance();
-			cb.RegisterType<InventoryVisuallyMeasureItemViewModel> ().SingleInstance ();
 			cb.RegisterType<InventoryVisuallyMeasureItemImprovedViewModel> ().SingleInstance ();
+			cb.RegisterType<InventoryVisuallyMeasureBottleViewModel>().SingleInstance ();
 			cb.RegisterType<UpdateQuantityViewModel>().SingleInstance ();
 			cb.RegisterType<PurchaseOrderReviewViewModel> ().SingleInstance ();
 			cb.RegisterType<UserRegistrationViewModel>().SingleInstance();
