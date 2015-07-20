@@ -223,19 +223,18 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			};
 		}
 
-		List<IVendor> CreateVendors(Guid restID, Guid marketingID){
-			var ml750 = new LiquidContainer {
-				AmountContained = new LiquidAmount{ Milliliters = 750 },
-			};
+		List<IVendor> CreateVendors(Guid restID, Guid marketingID)
+		{
+		    var ml750 = LiquidContainer.Bottle750ML;
 			var ml118 = new LiquidContainer {
 				AmountContained = new LiquidAmount{ Milliliters = 118 }
 			};
 
             //TODO replace these with standard sizes from LiquidContainer instead of creating them everywhere
 			var oz30 = new LiquidContainer { DisplayName = "30 oz",AmountContained = new LiquidAmount{ Milliliters = 887.206M } };
-			var ml375 = new LiquidContainer { AmountContained = new LiquidAmount{ Milliliters = 375 } };
+		    var ml375 = LiquidContainer.Bottle375ML;
 			var ml20 = new LiquidContainer { AmountContained = new LiquidAmount{ Milliliters = 20 } };
-			var l175 = new LiquidContainer { DisplayName = "1.75 L", AmountContained = new LiquidAmount{ Milliliters = 1750 } };
+		    var l175 = LiquidContainer.Bottle1_75ML;
 
 		    var favoriteID = Guid.NewGuid();
 			var vendors =  new List<Vendor>
@@ -414,8 +413,9 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 		    return vendors.ToList<IVendor>();
 		}
 			
-		List<IPAR> CreatePars(Guid restID, Guid empID){
-			var container = new LiquidContainer { AmountContained = new LiquidAmount{ Milliliters = 750 } };
+		List<IPAR> CreatePars(Guid restID, Guid empID)
+		{
+		    var container = LiquidContainer.Bottle750ML;
 			var lis750 = new Dictionary<string, string> {
 
 				{"Ayelsbury Duck","1"},

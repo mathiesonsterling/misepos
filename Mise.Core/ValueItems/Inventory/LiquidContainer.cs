@@ -20,6 +20,20 @@ namespace Mise.Core.ValueItems.Inventory
             get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 1000 }, DisplayName = "1L Bottle" }; }
         }
 
+        /// <summary>
+        /// Handle of booze
+        /// </summary>
+        public static LiquidContainer Bottle1_75ML
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 1750M},
+                    DisplayName = "1.75L Bottle"
+                };
+            }
+        }
         public static LiquidContainer Bottle375ML
         {
             get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 375 }, DisplayName = "375ml Bottle" }; }
@@ -53,6 +67,18 @@ namespace Mise.Core.ValueItems.Inventory
                 };
             }
         }
+
+        public static LiquidContainer Can250ml
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 250M},
+                    DisplayName = "250ml Can"
+                };
+            }
+        }
         public static LiquidContainer Bottle12oz
         {
             get
@@ -61,6 +87,18 @@ namespace Mise.Core.ValueItems.Inventory
                 {
                     AmountContained = LiquidAmount.FromLiquidOunces(12.0M),
                     DisplayName = "12oz Bottle"
+                };
+            }
+        }
+
+        public static LiquidContainer Bottle16oz
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
+                    DisplayName = "16oz Bottle"
                 };
             }
         }
@@ -77,6 +115,17 @@ namespace Mise.Core.ValueItems.Inventory
             }
         }
 
+        public static LiquidContainer Bottle40oz
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = LiquidAmount.FromLiquidOunces(40M),
+                    DisplayName = "40oz Bottle"
+                };
+            }
+        }
         public static LiquidContainer Bottle330ml
         {
             get
@@ -100,6 +149,30 @@ namespace Mise.Core.ValueItems.Inventory
                 };
             }
         }
+
+        public static LiquidContainer Keg
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 58673.8827M},
+                    DisplayName = "Keg"
+                };
+            }
+        }
+
+        public static LiquidContainer HalfKeg
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 29336.94135M},
+                    DisplayName = "Half Keg"
+                };
+            }
+        }
         public static IEnumerable<LiquidContainer> GetStandardBarSizes()
         {
             return new List<LiquidContainer>
@@ -108,11 +181,19 @@ namespace Mise.Core.ValueItems.Inventory
                 Bottle375ML,
                 Bottle330ml,
                 Bottle1L,
+                Bottle1_75ML,
                 Bottle500ml,
                 Bottle1L,
                 Bottle12oz,
                 Can12oz,
+                Bottle16oz,
                 Bottle7oz,
+                Can16oz,
+                Can10oz,
+                Bottle40oz,
+                Keg,
+                HalfKeg,
+                Can250ml
             };
         }
         #endregion

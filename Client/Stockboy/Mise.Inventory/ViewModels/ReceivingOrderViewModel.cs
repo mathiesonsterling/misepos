@@ -57,11 +57,13 @@ namespace Mise.Inventory.ViewModels
 	{
 		readonly IVendorService _vendorService;
 		readonly IReceivingOrderService _roService;
+	    private readonly IInsightsService _insights;
 		public ReceivingOrderViewModel(ILogger logger, IAppNavigation appNavigation,
-			IReceivingOrderService roService, IVendorService vendorService) : base(appNavigation, logger)
+			IReceivingOrderService roService, IVendorService vendorService, IInsightsService insights) : base(appNavigation, logger)
 		{
 			_vendorService = vendorService;
 			_roService = roService;
+		    _insights = insights;
 			_itemSettingQuantity = null;
 
 		    PropertyChanged += (sender, args) =>
@@ -106,15 +108,24 @@ namespace Mise.Inventory.ViewModels
 		async void Save()
 		{
 			try{
-				Processing = true;
-				CanSave = false;
-				var res = await _roService.CompleteReceivingOrderForSelectedVendor (Notes, InvoiceID);
-				PurchaseOrderStatus status;
-				status = res ? PurchaseOrderStatus.ReceivedTotally : PurchaseOrderStatus.ReceivedWithAlterations; 
-				await _roService.CommitCompletedOrder (status);
-				Processing = false;
-				CanSave = true;
-			    await Navigation.CloseReceivingOrder();
+			    using (_insights.TrackTime("Save RO time"))
+			    {
+			        Processing = true;
+			        CanSave = false;
+                    PurchaseOrderStatus status;
+			        using (_insights.TrackTime("Completing receiving order"))
+			        {
+			            var res = await _roService.CompleteReceivingOrderForSelectedVendor(Notes, InvoiceID);
+			            status = res ? PurchaseOrderStatus.ReceivedTotally : PurchaseOrderStatus.ReceivedWithAlterations;
+			        }
+                    using(_insights.TrackTime("Committing receiving order"))
+			        {
+			            await _roService.CommitCompletedOrder(status);
+			        }
+			        Processing = false;
+			        CanSave = true;
+			        await Navigation.CloseReceivingOrder();
+			    }
 			} catch(Exception e){
 				HandleException (e);
 			}

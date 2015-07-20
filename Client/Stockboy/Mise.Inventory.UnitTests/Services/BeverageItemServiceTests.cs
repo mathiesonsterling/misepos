@@ -36,7 +36,7 @@ namespace Mise.Inventory.UnitTests.Services
 			// one and 2 are associated with our restaurant
 			var allVendorItem = new VendorBeverageLineItem{
 				MiseName = "allVendorsCarryThis",
-				Container = new LiquidContainer{AmountContained = new LiquidAmount{Milliliters = 750}},
+				Container = LiquidContainer.Bottle750ML,
 				DisplayName = "allVendors"
 			};
 			var oneOnly = new VendorBeverageLineItem{
@@ -47,7 +47,7 @@ namespace Mise.Inventory.UnitTests.Services
 			};
 			var threeOnly = new VendorBeverageLineItem {
 				MiseName = "vendor3CurrentInv",
-				Container = new LiquidContainer{AmountContained = new LiquidAmount{Milliliters = 1000}},
+				Container = LiquidContainer.Bottle1L,
 				DisplayName = "vendor3Only"
 			};
 			var oneAndTwo = new VendorBeverageLineItem {
