@@ -157,7 +157,7 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = new LiquidAmount {Milliliters = 58673.8827M},
-                    DisplayName = "Keg"
+					DisplayName = "Keg (Half Barrel)"
                 };
             }
         }
@@ -169,10 +169,28 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = new LiquidAmount {Milliliters = 29336.94135M},
-                    DisplayName = "Half Keg"
+					DisplayName = "Pony Keg (Quarter Barrel)"
                 };
             }
         }
+
+		public static LiquidContainer TorpedoKeg{
+			get{
+				return new LiquidContainer {
+					AmountContained = new LiquidAmount{ Milliliters = 19800M },
+					DisplayName = "Sixth Barrel"
+				};
+			}
+		}
+
+		public static LiquidContainer ImportKeg
+		{
+			get{return new LiquidContainer {
+					AmountContained = new LiquidAmount{Milliliters = 50000M},
+					DisplayName = "Import Keg (50L)"
+				};
+			}
+		}
         public static IEnumerable<LiquidContainer> GetStandardBarSizes()
         {
             return new List<LiquidContainer>
@@ -193,6 +211,8 @@ namespace Mise.Core.ValueItems.Inventory
                 Bottle40oz,
                 Keg,
                 HalfKeg,
+				ImportKeg,
+				TorpedoKeg,
                 Can250ml
             };
         }
