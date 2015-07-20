@@ -83,7 +83,7 @@ namespace Mise.Inventory.ViewModels
 		/// <summary>
 		/// If set, we wish to create a par item for this as well
 		/// </summary>
-		/// <value>The par number.</value>
+		/// <value>The par number.</valu>e
 		public int ParNumber{
 			get{return GetValue<int> ();}
 			set{ SetValue (value); }

@@ -102,6 +102,7 @@ namespace Mise.Inventory.Services.Implementation
 					SelectedInventory = _inventoryRepository.ApplyEvents (events);
 				} catch(Exception e){
 					_logger.HandleException (e);
+					throw;
 				}
 			}
 			try{
