@@ -28,13 +28,13 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     ID = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
-                    Container = new LiquidContainer {DisplayName = "12oz Can", AmountContained = LiquidAmount.FromLiquidOunces(12.0M )}
+                    Container = LiquidContainer.Can12oz
                 },
                 new ReceivingOrderLineItem
                 {
                     ID = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
-                    Container = new LiquidContainer{AmountContained = new LiquidAmount{Milliliters = 750}}
+                    Container = LiquidContainer.Bottle750ML
                 }
             };
 
@@ -49,8 +49,8 @@ namespace Mise.Inventory.UnitTests.ViewModels
             roService.Setup(rs => rs.GetCurrentReceivingOrder())
                 .Returns(Task.FromResult(ro as IReceivingOrder));
 
-
-            var underTest = new ReceivingOrderViewModel(logger.Object, appNav.Object, roService.Object, null);
+            var insights = new Mock<IInsightsService>();
+            var underTest = new ReceivingOrderViewModel(logger.Object, appNav.Object, roService.Object, null, insights.Object);
 
             //ACT
             underTest.SearchString = "bu d";
@@ -72,7 +72,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     ID = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
-                    Container = new LiquidContainer {DisplayName = "12oz Can", AmountContained = LiquidAmount.FromLiquidOunces(12.0M )},
+                    Container = LiquidContainer.Can12oz,
                     Categories = new List<ItemCategory>
                     {
                         CategoriesService.Beer
@@ -82,7 +82,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 {
                     ID = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
-                    Container = new LiquidContainer{AmountContained = new LiquidAmount{Milliliters = 750}},
+                    Container = LiquidContainer.Bottle750ML,
                     Categories = new List<ItemCategory>
                     {
                         CategoriesService.WhiskeyWorld
@@ -101,11 +101,63 @@ namespace Mise.Inventory.UnitTests.ViewModels
             roService.Setup(rs => rs.GetCurrentReceivingOrder())
                 .Returns(Task.FromResult(ro as IReceivingOrder));
 
-
-            var underTest = new ReceivingOrderViewModel(logger.Object, appNav.Object, roService.Object, null);
+            var insights = new Mock<IInsightsService>();
+            var underTest = new ReceivingOrderViewModel(logger.Object, appNav.Object, roService.Object, null, insights.Object);
 
             //ACT
             underTest.SearchString = "beer";
+
+            //ASSERT
+            var shownLineItems = underTest.LineItems.ToList();
+
+            Assert.AreEqual(1, shownLineItems.Count);
+            Assert.AreEqual("Budweiser", shownLineItems.First().DisplayName);
+        }
+
+        [Test]
+        public void SearchShouldWorkOnContainers()
+        {
+            var lineItems = new List<ReceivingOrderLineItem>
+            {
+                new ReceivingOrderLineItem
+                {
+                    ID = Guid.NewGuid(),
+                    MiseName = "Budweiser",
+                    DisplayName = "Budweiser",
+                    Container = LiquidContainer.Can12oz,
+                    Categories = new List<ItemCategory>
+                    {
+                        CategoriesService.Beer
+                    }
+                },
+                new ReceivingOrderLineItem
+                {
+                    ID = Guid.NewGuid(),
+                    DisplayName = "Powers Irish Whiskey",
+                    Container = LiquidContainer.Bottle750ML,
+                    Categories = new List<ItemCategory>
+                    {
+                        CategoriesService.WhiskeyWorld
+                    }
+                }
+            };
+
+            var ro = new ReceivingOrder
+            {
+                LineItems = lineItems
+            };
+
+            var appNav = new Mock<IAppNavigation>();
+            var logger = new Mock<ILogger>();
+            var roService = new Mock<IReceivingOrderService>();
+            roService.Setup(rs => rs.GetCurrentReceivingOrder())
+                .Returns(Task.FromResult(ro as IReceivingOrder));
+
+            var insights = new Mock<IInsightsService>();
+            var underTest = new ReceivingOrderViewModel(logger.Object, appNav.Object, roService.Object, null, insights.Object);
+
+            //ACT
+            underTest.SearchString = "can";
 
             //ASSERT
             var shownLineItems = underTest.LineItems.ToList();

@@ -153,13 +153,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 RestaurantInventorySectionID = sectionID,
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    Container = new LiquidContainer
-                    {
-                        AmountContained = new LiquidAmount
-                        {
-                            Milliliters = 750
-                        }
-                    },
+                    Container = LiquidContainer.Bottle750ML,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
 					NumFullBottles = 10,
                     PricePaid = new Money(10.0M),
@@ -196,13 +190,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 RestaurantInventorySectionID = sectionID,
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    Container = new LiquidContainer
-                    {
-                        AmountContained = new LiquidAmount
-                        {
-                            Milliliters = 750
-                        }
-                    },
+                    Container = LiquidContainer.Bottle750ML,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 10,
                     PricePaid = new Money(10.0M),
@@ -255,13 +243,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 NumFullBottlesMeasured = 10,
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    Container = new LiquidContainer
-                    {
-                        AmountContained = new LiquidAmount
-                        {
-                            Milliliters = 750
-                        }
-                    },
+                    Container = LiquidContainer.Bottle750ML,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 0,
                     PricePaid = new Money(10.0M),

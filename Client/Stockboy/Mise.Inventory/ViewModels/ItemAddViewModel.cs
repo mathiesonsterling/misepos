@@ -83,7 +83,7 @@ namespace Mise.Inventory.ViewModels
 		/// <summary>
 		/// If set, we wish to create a par item for this as well
 		/// </summary>
-		/// <value>The par number.</value>
+		/// <value>The par number.</valu>e
 		public int ParNumber{
 			get{return GetValue<int> ();}
 			set{ SetValue (value); }
@@ -95,14 +95,14 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public bool AddToParEnabled{
-			get{return CurrentAddType == AddLineItemType.Inventory || CurrentAddType == AddLineItemType.ReceivingOrder;}
+			get{return true;}
 		}
 		public IEnumerable<string> PossibleContainerNames{ get; set;}
 
 		public IEnumerable<string> PossibleCategoryNames{get;set;}
 		#endregion
 
-		#region Commands
+		#region Commandsk
 
 		public ICommand ScanCommand {
 			get { return new SimpleCommand(Scan); }
@@ -141,7 +141,7 @@ namespace Mise.Inventory.ViewModels
 					// TODO go to quantity
 						break;
 				case AddLineItemType.PAR:
-						await _parService.AddLineItemToCurrentPAR (Name, category, null, 0, CaseSize, container);
+						await _parService.AddLineItemToCurrentPAR (Name, category, null, ParNumber, CaseSize, container);
 					//TODO go to quantity
 						break;
 					default:

@@ -121,7 +121,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 {
                     ID = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
-                    Container = new LiquidContainer{AmountContained = new LiquidAmount{Milliliters = 750}}
+                    Container = LiquidContainer.Bottle750ML
                 }
             };
 

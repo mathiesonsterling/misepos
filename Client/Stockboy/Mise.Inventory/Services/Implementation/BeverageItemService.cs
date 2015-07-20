@@ -68,30 +68,16 @@ namespace Mise.Inventory
 		/// Gets our most typical containers
 		/// </summary>
 		/// <returns>The default containers.</returns>
-		private Dictionary<string, ContainerAndTimes> GetDefaultContainers(){
-			var containers = new Dictionary<string, ContainerAndTimes> ();
+		private Dictionary<string, ContainerAndTimes> GetDefaultContainers()
+		{
+		    var defaults = LiquidContainer.GetStandardBarSizes();
 
-			containers.Add ("750 ml", new ContainerAndTimes(
-				new LiquidContainer {
-						AmountContained = new LiquidAmount{ Milliliters = 750 }},
-						0)
-			 );
-
-			containers.Add("1 L", new ContainerAndTimes(
-				new LiquidContainer{
-				AmountContained = new LiquidAmount{Milliliters = 1000},
-				DisplayName = "1 L"
-					}, 0)
-			);
-
-			containers.Add("12oz bottle", 
-				new ContainerAndTimes(
-				new LiquidContainer{
-				AmountContained = new LiquidAmount{Milliliters = 355},
-				DisplayName = "12oz bottle"
-					}, 0)
-			);
-			return containers;
+		    var res = new Dictionary<string, ContainerAndTimes>();
+		    foreach (var d in defaults.Where(d => res.ContainsKey(d.DisplayName) == false))
+		    {
+		        res.Add(d.DisplayName, new ContainerAndTimes(d, 0));
+		    }
+		    return res;
 		}
 		#region IBeverageItemService implementation
 
