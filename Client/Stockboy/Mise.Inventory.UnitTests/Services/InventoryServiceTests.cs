@@ -85,10 +85,9 @@ namespace Mise.Inventory.UnitTests.Services
 			await loginService.LoginAsync(new EmailAddress(), new Password());
 			await loginService.SelectRestaurantForLoggedInEmployee (rest.ID);
 
-			var res = await underTest.AddNewSection("testSection", false, false);
+			await underTest.AddNewSection("testSection", false, false);
 
 			//ASSERT
-			Assert.IsTrue(res);
 			var sections = currentInventory.GetSections ().ToList();
 			Assert.AreEqual (1, sections.Count);
 		}

@@ -255,9 +255,9 @@ namespace Mise.Inventory.Services.Implementation
 			SelectedLineItem = null;
 		}
 
-		public async Task<bool> AddNewSection (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
+		public async Task AddNewSection (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
 		{
-			var res = await _loginService.AddNewSectionToRestaurant (sectionName, hasPartialBottles, isDefaultInventorySection);
+			await _loginService.AddNewSectionToRestaurant (sectionName, hasPartialBottles, isDefaultInventorySection);
 
 			//do we have an inventory that needs to get the new section added?
 			if(SelectedInventory != null){
@@ -275,8 +275,7 @@ namespace Mise.Inventory.Services.Implementation
 					}
 				}
 			}
-
-			return res;
+				
 		}
 
 		public Task<IInventory> GetSelectedInventory ()

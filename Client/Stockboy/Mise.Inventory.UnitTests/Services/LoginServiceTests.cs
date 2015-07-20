@@ -17,7 +17,7 @@ using Mise.Core.ValueItems;
 using Mise.Core.Common.Entities;
 using Mise.Core.Entities;
 using Mise.Core.Client.Services;
-
+using Mise.Core.Common.Entities.Inventory;
 
 namespace Mise.Inventory.UnitTests.Services
 {
@@ -183,6 +183,51 @@ namespace Mise.Inventory.UnitTests.Services
             Assert.NotNull(givenRest);
             Assert.AreEqual(myRest, givenRest);
 	    }
+
+		[Test]
+		public async Task AddNewSectionWithSameNameThrowsCaseInsensitive(){
+			var restID = Guid.NewGuid ();
+			var restaurant = new Restaurant {
+				ID = restID,
+				InventorySections = new List<RestaurantInventorySection>{
+					new RestaurantInventorySection {
+						ID = Guid.NewGuid (),
+						Name = "TestSection"
+					}
+				}
+			};
+			var restRepos = new Mock<IRestaurantRepository> ();
+			restRepos.Setup (rr => rr.GetByID (restID))
+				.Returns (restaurant);
+			
+			var evFactory = new InventoryAppEventFactory ("testDevice", MiseAppTypes.UnitTests);
+			evFactory.SetRestaurant (restaurant);
+
+			var logger = new Mock<ILogger> ();
+
+			var reposLoader = new Mock<IRepositoryLoader> ();
+			reposLoader.Setup (rl => rl.LoadRepositories (restID))
+				.Returns (Task.FromResult (true));
+			
+			var underTest = new LoginService (null, restRepos.Object, null, null, evFactory, null, 
+				logger.Object, reposLoader.Object);
+			underTest.SetCurrentRestaurant (restaurant);
+
+			//ACT
+			var threw = false;
+			try{
+				await underTest.AddNewSectionToRestaurant ("TESTSECTION", true, false);
+			} catch(ArgumentException e){
+				threw = true;
+			}
+
+			var selRest = await underTest.GetCurrentRestaurant ();
+			//ASSERT
+			Assert.True (threw);
+
+			Assert.NotNull (selRest);
+			Assert.AreEqual (1, selRest.GetInventorySections ().Count(), "count is still 1");
+		}
 	}
 }
 

@@ -71,6 +71,18 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
+		/// <summary>
+		/// Sets the current employee.  Used only for testing!
+		/// </summary>
+		/// <param name="emp">Emp.</param>
+		public void SetCurrentEmployee(IEmployee emp){
+			_currentEmployee = emp;
+		}
+
+		public void SetCurrentRestaurant(IRestaurant rest){
+			_currentRestaurant = rest;
+		}
+
 		public async Task<IEmployee> LoginAsync(EmailAddress email, Password password)
 		{
 			var emp = await _employeeRepository.GetByEmailAndPassword (email, password);
@@ -186,20 +198,29 @@ namespace Mise.Inventory.Services.Implementation
 			//ensure section and restaurant match!
 		}
 
-		public async Task<bool> AddNewSectionToRestaurant (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
+		public async Task AddNewSectionToRestaurant (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
 		{
 			try{
 				if (_currentRestaurant == null) {
 					throw new InvalidOperationException ("Do not have a restaurant to add a section to!");
 				}
 
+				var existing = _currentRestaurant.GetInventorySections ()
+					.Select (s => s.Name)
+					.Where(n => string.IsNullOrEmpty (n) == false)
+					.Select (n => n.ToUpper ());
+				if(existing.Contains (sectionName.ToUpper ())){
+					throw new ArgumentException ("Section " + sectionName + " already exists in restaurant");
+				}
 				var secEvent = 
 					_eventFactory.CreateInventorySectionAddedToRestaurantEvent(_currentEmployee, sectionName, 
 						isDefaultInventorySection, hasPartialBottles);
 
 				_currentRestaurant = _restaurantRepository.ApplyEvent(secEvent);
 				var res = await _restaurantRepository.Commit (_currentRestaurant.ID);
-				return res != CommitResult.Error;
+				if(res == CommitResult.Error){
+					throw new Exception ("Error committing new section!");
+				}
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;

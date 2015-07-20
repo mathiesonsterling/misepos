@@ -43,18 +43,15 @@ namespace Mise.Inventory.ViewModels
 		{
 			//TODO - if we've got a working UI element, show here!
 			try{
-				var added = await _inventoryService.AddNewSection (SectionName, SectionHasPartialBottles, IsDefaultInventorySection);
-				if (added) {
-					SectionName = string.Empty;
-					SectionHasPartialBottles = true;
-					IsDefaultInventorySection = false;
+				Processing = true;
+				await _inventoryService.AddNewSection (SectionName, SectionHasPartialBottles, IsDefaultInventorySection);
+			
+				SectionName = string.Empty;
+				SectionHasPartialBottles = true;
+				IsDefaultInventorySection = false;
 
-					await Navigation.ShowSectionSelect ();
-				} else {
-					Logger.Error ("Error while adding section to restaurant!");
-					//display error to user as well?
-					await Navigation.DisplayAlert ("Error", "Error while adding section to restaurant!");
-				}
+				Processing = false;
+				await Navigation.ShowSectionSelect ();
 			} catch(Exception e){
 				HandleException (e);
 			}

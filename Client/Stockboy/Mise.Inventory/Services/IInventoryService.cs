@@ -57,7 +57,7 @@ namespace Mise.Inventory.Services
 		/// <returns>The inventory as complete.</returns>
 		Task MarkInventoryAsComplete();
 
-		Task<bool> AddNewSection (string sectionName, bool hasPartialBottles, 
+		Task AddNewSection (string sectionName, bool hasPartialBottles, 
 			bool isDefaultInventorySection);
 
 	}
