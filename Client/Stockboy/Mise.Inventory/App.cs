@@ -83,7 +83,7 @@ namespace Mise.Inventory
 
 		public static EmployeesManageViewModel EmployeesManageViewModel { get { return Resolve<EmployeesManageViewModel>(); } }
 
-		public static PARViewModel PARViewModel { get { return Resolve<PARViewModel>(); } }
+		public static ParViewModel PARViewModel { get { return Resolve<ParViewModel>(); } }
 
 		public static ReceivingOrderViewModel ReceivingOrderViewModel { get { return Resolve<ReceivingOrderViewModel>(); } }
 

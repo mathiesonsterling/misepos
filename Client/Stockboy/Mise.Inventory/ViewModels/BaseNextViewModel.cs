@@ -38,8 +38,7 @@ namespace Mise.Inventory.ViewModels
             {
                 throw new Exception("No items found for this screen");
             }
-            CurrentItem = Items.First();
-            NextItem = GetNextItem();
+			SetCurrent (Items.First ());
         }
 
         public ICommand MoveNextCommand { get{return new SimpleCommand(MoveNext, CanMoveNext);}}
@@ -66,6 +65,9 @@ namespace Mise.Inventory.ViewModels
 
         private async void MoveNext()
         {
+			if (CanMoveNext() == false) {
+				return;
+			}
             Processing = true;
             await BeforeMoveNext(CurrentItem);
 

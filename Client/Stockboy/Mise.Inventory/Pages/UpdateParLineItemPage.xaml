@@ -17,9 +17,15 @@
 				</StackLayout>
 			</ScrollView>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button
+				x:Name = "btnNext"
+				Text = "{Binding NextItemName}"
+				Command = "{Binding MoveNextCommand}"
+				HorizontalOptions = "FillAndExpand"
+			/>
 			<Button 
 				x:Name = "btnUpdateQuantity"
-				Text="{Binding Title}" 
+				Text="Update" 
 				Command="{Binding UpdateQuantityCommand}" 
 				HorizontalOptions="FillAndExpand"/>
 		</StackLayout>

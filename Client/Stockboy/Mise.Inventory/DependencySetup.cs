@@ -164,7 +164,7 @@ namespace Mise.Inventory
 			cb.RegisterType<LoginViewModel>().SingleInstance();
 			cb.RegisterType<MainMenuViewModel>().SingleInstance();
 			cb.RegisterType<EmployeesManageViewModel>().SingleInstance();
-			cb.RegisterType<PARViewModel>().SingleInstance();
+			cb.RegisterType<ParViewModel>().SingleInstance();
 			cb.RegisterType<ReceivingOrderViewModel>().SingleInstance();
 			cb.RegisterType<ReportsViewModel>().SingleInstance();
 			cb.RegisterType<RestaurantSelectViewModel>().SingleInstance();
@@ -175,6 +175,7 @@ namespace Mise.Inventory
 			cb.RegisterType<InventoryVisuallyMeasureItemImprovedViewModel> ().SingleInstance ();
 			cb.RegisterType<InventoryVisuallyMeasureBottleViewModel>().SingleInstance ();
 			cb.RegisterType<UpdateQuantityViewModel>().SingleInstance ();
+			cb.RegisterType<UpdateParLineItemViewModel> ().SingleInstance ();
 			cb.RegisterType<PurchaseOrderReviewViewModel> ().SingleInstance ();
 			cb.RegisterType<UserRegistrationViewModel>().SingleInstance();
 			cb.RegisterType<InvitationViewModel>().SingleInstance();

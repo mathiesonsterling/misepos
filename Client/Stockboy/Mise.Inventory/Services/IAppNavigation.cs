@@ -101,5 +101,6 @@ namespace Mise.Inventory.Services
         /// <returns></returns>
 	    Task CloseReceivingOrder();
 
+	    Task ShowUpdateParLineItem();
 	}
 }

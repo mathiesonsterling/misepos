@@ -27,8 +27,10 @@ namespace Mise.Inventory.Services
 				return new LoginPage();
 			case Pages.MainMenu:
 				return new MainMenuPage();
-			case Pages.PAR:
+			case Pages.Par:
 				return new PARPage();
+            case Pages.UpdateParLineItem:
+                return new UpdateParLineItemPage();
 			case Pages.PurchaseOrderReview:
 				return new PurchaseOrderReviewPage ();
 			case Pages.ReceivingOrder:

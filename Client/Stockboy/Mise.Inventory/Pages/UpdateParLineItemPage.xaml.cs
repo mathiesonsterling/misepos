@@ -20,6 +20,8 @@ namespace Mise.Inventory
 			var vm = BindingContext as UpdateParLineItemViewModel;
 			if (vm != null) {
 				await vm.OnAppearing();
+
+				btnNext.IsEnabled = vm.MoveNextCommand.CanExecute (null);
 			}
 		}
 	}

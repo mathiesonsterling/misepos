@@ -21,6 +21,11 @@ namespace Mise.Inventory.ViewModels
 
 			PropertyChanged += (sender, e) => {
 				if(e.PropertyName == "UnitPrice"){
+				    if (justAdjustedTotal)
+				    {
+				        justAdjustedTotal = false;
+				        return;
+				    }
 					var calcTotal = UnitPrice * CurrentQuantity;
 					calcTotal = Math.Round(calcTotal, 2);
 					if(calcTotal != TotalPrice){

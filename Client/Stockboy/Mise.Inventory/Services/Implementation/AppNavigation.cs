@@ -198,7 +198,7 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			try
 			{
-			    const Pages PAGE = Pages.PAR;
+			    const Pages PAGE = Pages.Par;
 
 			    if (replaceCurrentPage) {
 					await ReplacePage(PAGE);
@@ -339,6 +339,19 @@ namespace Mise.Inventory.Services.Implementation
 				return Task.FromResult (false);
 			}
 		}
+
+	    public Task ShowUpdateParLineItem()
+	    {
+	        try
+	        {
+	            return _navi.PushAsync(_pages.GetPage(Pages.UpdateParLineItem));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+	            return Task.FromResult(false);
+	        }
+	    }
 
 		public Task ShowUpdateQuantity (int quantity, string itemName, Action<int, decimal> quantCallback, 
 			Action zeroOutCallback, Money price, bool addPrices = false, string title = "Update Quantity")
