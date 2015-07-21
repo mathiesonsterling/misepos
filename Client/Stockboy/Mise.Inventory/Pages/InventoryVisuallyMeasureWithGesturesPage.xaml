@@ -3,7 +3,7 @@
 	<ContentPage.Content>
 		<StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
 			<!-- single item here -->
-				<!---<ScrollView VerticalOptions="FillAndExpand">-->
+				<ScrollView VerticalOptions="FillAndExpand">
 				<StackLayout VerticalOptions="FillAndExpand" MinimumHeightRequest="450" x:Name="stckItem">
 					<Label Text="{Binding DisplayName}" Style="{DynamicResource TitleStyle}" MinimumHeightRequest="450"></Label>
 					<!-- total here -->
@@ -23,7 +23,7 @@
 					>
 					</StackLayout>
 				</StackLayout>
-				<!---</ScrollView>-->
+				</ScrollView>
 			<!--- end single item -->
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 			<Button Command="{Binding AddPartialCommand}" Text="Add Partial Bottle" IsEnabled="{Binding AddPartialEnabled}" 
