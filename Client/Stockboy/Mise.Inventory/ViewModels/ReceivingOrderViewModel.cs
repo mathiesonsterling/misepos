@@ -6,7 +6,6 @@ using Mise.Core.Entities.Inventory;
 using Mise.Inventory.MVVM;
 using Mise.Inventory.Services;
 using System.Threading.Tasks;
-using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Services;
 using Xamarin.Forms;
@@ -64,7 +63,6 @@ namespace Mise.Inventory.ViewModels
 			_vendorService = vendorService;
 			_roService = roService;
 		    _insights = insights;
-			_itemSettingQuantity = null;
 
 		    PropertyChanged += (sender, args) =>
 		    {
@@ -77,9 +75,52 @@ namespace Mise.Inventory.ViewModels
 		        }
 		    };
 		}
-			
-			
-		IReceivingOrderLineItem _itemSettingQuantity;
+
+		public override async Task OnAppearing ()
+		{
+			try{
+				Processing = true;
+				await base.OnAppearing ();
+				var vendor = await _vendorService.GetSelectedVendor ();
+				VendorName = vendor.Name;
+				var ro = await _roService.GetCurrentReceivingOrder ();
+				if (ro != null)
+				{
+					InvoiceID = ro.InvoiceID;
+
+					if (ro.PurchaseOrderDate.HasValue)
+					{
+						Title = "Order from " + VendorName + " for PO";
+					}
+					else
+					{
+						Title = "Receive from " + VendorName;
+					}
+
+					//debug
+					CanSave = true;
+					foreach(var li in ro.GetBeverageLineItems()){
+						if(li.ZeroedOut == false){
+							var hasPrice = li.UnitPrice != null && li.UnitPrice.HasValue && li.Quantity > 0;
+							if(hasPrice == false){
+								CanSave = false;
+								break;
+							}
+						}
+					}
+					//CanSave = ro.GetBeverageLineItems().All(li => li.ZeroedOut || (li.UnitPrice != null && li.UnitPrice.HasValue && li.Quantity > 0));
+				}
+				else
+				{
+					Title = "Receive from " + VendorName;
+					InvoiceID = string.Empty;
+					CanSave = false;
+				}
+				Processing = false;
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
 
 		public string Title{get{return GetValue<string> ();}private set{ SetValue (value); }}
 		public string VendorName{ get { return GetValue<string> (); } private set { SetValue (value); } }
@@ -133,41 +174,11 @@ namespace Mise.Inventory.ViewModels
 
 		public override async Task SelectLineItem(ReceivingOrderDisplayLine lineItem){
 			try{
-				var roLineItem = lineItem.Source;
-				_itemSettingQuantity = roLineItem;
-				await Navigation.ShowUpdateQuantity (roLineItem.Quantity, roLineItem.DisplayName, 
-					QuantitySetCallback, ZeroOutCallback, roLineItem.LineItemPrice, true, "Receive Item");
+			    await _roService.SetCurrentLineItem(lineItem.Source);
+			    await Navigation.ShowUpdateReceivingOrderLineItem();
 			} catch(Exception e){
 				HandleException (e);
 			}
-		}
-
-		async void ZeroOutCallback(){
-			if(_itemSettingQuantity != null){
-				Processing = true;
-				await _roService.ZeroOutLineItem (_itemSettingQuantity);
-				Processing = false;
-			}
-
-			await LoadItems ();
-		}
-
-		async void QuantitySetCallback(int newQuant, decimal price){
-			if(_itemSettingQuantity != null)
-			{
-				var rawPerBottle = price;
-				var priceMoney = new Money (rawPerBottle);
-				if(_itemSettingQuantity.Quantity != newQuant || 
-					(
-						priceMoney.HasValue && (_itemSettingQuantity.LineItemPrice == null ||( _itemSettingQuantity.LineItemPrice.Equals(priceMoney) == false))
-					)
-				){
-					await _roService.UpdateQuantityOfLineItem (_itemSettingQuantity, newQuant, priceMoney);
-				}
-			}
-
-			_itemSettingQuantity = null;
-			await LoadItems ();
 		}
 
 		protected override async Task<ICollection<ReceivingOrderDisplayLine>> LoadItems(){
@@ -184,39 +195,6 @@ namespace Mise.Inventory.ViewModels
 				HandleException (e);
 			}
 			return items.OrderBy (li => li.DisplayName).Select (li => new ReceivingOrderDisplayLine (li)).ToList ();
-		}
-
-		public override async Task OnAppearing ()
-		{
-			try{
-				Processing = true;
-				await base.OnAppearing ();
-				var vendor = await _vendorService.GetSelectedVendor ();
-				VendorName = vendor.Name;
-				var ro = await _roService.GetCurrentReceivingOrder ();
-			    if (ro != null)
-			    {
-			        InvoiceID = ro.InvoiceID;
-			        var items = ro.GetBeverageLineItems().ToList();
-
-			        if (ro.PurchaseOrderDate.HasValue)
-			        {
-			            Title = "Order from " + VendorName + " for PO";
-			        }
-			        else
-			        {
-			            Title = "Receive from " + VendorName;
-			        }
-			    }
-			    else
-			    {
-                    Title = "Receive from " + VendorName;
-			        InvoiceID = string.Empty;
-			    }
-				Processing = false;
-			} catch(Exception e){
-				HandleException (e);
-			}
 		}
 			
 		protected override void AfterSearchDone ()

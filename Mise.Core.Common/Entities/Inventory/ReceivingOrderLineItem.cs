@@ -13,6 +13,8 @@ namespace Mise.Core.Common.Entities.Inventory
     {
 		public ReceivingOrderLineItem(){
 			Categories = new List<ItemCategory> ();
+			LineItemPrice = Money.None;
+			UnitPrice = Money.None;
 		}
 
         public string DisplayName { get; set; }

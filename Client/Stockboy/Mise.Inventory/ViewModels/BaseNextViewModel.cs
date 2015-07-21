@@ -28,18 +28,21 @@ namespace Mise.Inventory.ViewModels
 
         public TItemType CurrentItem { get { return GetValue<TItemType>(); } private set { SetValue(value); } }
         public TItemType NextItem { get { return GetValue<TItemType>(); } private set { SetValue(value);} }
-		public bool CanMoveToNext{ get { return GetValue<bool> (); } private set { SetValue (value); } }
+		public virtual bool CanMoveToNext{ get { return GetValue<bool> (); } private set { SetValue (value); } }
 
         protected IList<TItemType> Items { get; private set; }
 
         public override async Task OnAppearing()
         {
+            Processing = true;
             Items = await LoadItems();
             if (Items.Any() == false)
             {
+                Processing = false;
                 throw new Exception("No items found for this screen");
             }
 			SetCurrent (Items.First ());
+            Processing = false;
         }
 
         public ICommand MoveNextCommand { get{return new SimpleCommand(MoveNext, CanMoveNext);}}

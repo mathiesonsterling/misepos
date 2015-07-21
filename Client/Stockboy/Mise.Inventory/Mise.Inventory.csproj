@@ -64,6 +64,7 @@
     <Compile Include="Pages\ReportsPage.xaml.cs">
       <DependentUpon>ReportsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\UpdateReceivingOrderLineItemViewModel.cs" />
     <Compile Include="ViewModels\VendorFindViewModel.cs" />
     <Compile Include="ViewModels\VendorAddViewModel.cs" />
     <Compile Include="Pages\VendorAddPage.xaml.cs">
@@ -140,10 +141,6 @@
     <Compile Include="Services\Implementation\PurchaseOrderService.cs" />
     <Compile Include="CustomCells\LineItemWithEditableQuantityCell.cs" />
     <Compile Include="CustomCells\LineItemsWithEditableQuantityControl.cs" />
-    <Compile Include="Pages\UpdateQuantityPage.xaml.cs">
-      <DependentUpon>UpdateQuantityPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\UpdateQuantityViewModel.cs" />
     <Compile Include="Pages\PurchaseOrderReviewPage.xaml.cs">
       <DependentUpon>PurchaseOrderReviewPage.xaml</DependentUpon>
     </Compile>
@@ -181,6 +178,9 @@
       <DependentUpon>UpdateParLineItemPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\UpdateParLineItemViewModel.cs" />
+    <Compile Include="Pages\UpdateReceivingOrderLineItem.xaml.cs">
+      <DependentUpon>UpdateReceivingOrderLineItem.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -308,9 +308,6 @@
     <EmbeddedResource Include="Pages\InventoryVisuallyMesasuredImprovedPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pages\UpdateQuantityPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="Pages\PurchaseOrderReviewPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -333,6 +330,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\UpdateParLineItemPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\UpdateReceivingOrderLineItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

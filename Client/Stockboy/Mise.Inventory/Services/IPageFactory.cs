@@ -25,7 +25,7 @@ namespace Mise.Inventory.Services
 		SectionSelect,
 		VendorAdd,
 		VendorFind,
-		UpdateQuantity,
+        UpdateRecievingOrderLineItem,
         UpdateParLineItem,
 		RegisterUser,
 		Invitations,

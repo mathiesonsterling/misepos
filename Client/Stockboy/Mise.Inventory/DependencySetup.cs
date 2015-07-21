@@ -166,15 +166,14 @@ namespace Mise.Inventory
 			cb.RegisterType<EmployeesManageViewModel>().SingleInstance();
 			cb.RegisterType<ParViewModel>().SingleInstance();
 			cb.RegisterType<ReceivingOrderViewModel>().SingleInstance();
+		    cb.RegisterType<UpdateReceivingOrderLineItemViewModel>().SingleInstance();
 			cb.RegisterType<ReportsViewModel>().SingleInstance();
 			cb.RegisterType<RestaurantSelectViewModel>().SingleInstance();
 			cb.RegisterType<SectionAddViewModel>().SingleInstance();
 			cb.RegisterType<SectionSelectViewModel>().SingleInstance();
 			cb.RegisterType<VendorAddViewModel>().SingleInstance();
 			cb.RegisterType<VendorFindViewModel>().SingleInstance();
-			cb.RegisterType<InventoryVisuallyMeasureItemImprovedViewModel> ().SingleInstance ();
 			cb.RegisterType<InventoryVisuallyMeasureBottleViewModel>().SingleInstance ();
-			cb.RegisterType<UpdateQuantityViewModel>().SingleInstance ();
 			cb.RegisterType<UpdateParLineItemViewModel> ().SingleInstance ();
 			cb.RegisterType<PurchaseOrderReviewViewModel> ().SingleInstance ();
 			cb.RegisterType<UserRegistrationViewModel>().SingleInstance();

@@ -21,6 +21,7 @@ namespace Mise.Inventory.Services.Implementation
 	public class ReceivingOrderService : IReceivingOrderService
 	{
 		private IReceivingOrder _currentRO;
+	    private IReceivingOrderLineItem _currentLineItem;
 
 		readonly IReceivingOrderRepository _receivingOrderRepository;
 		readonly IInventoryService _inventoryService;
@@ -146,7 +147,7 @@ namespace Mise.Inventory.Services.Implementation
 				//get all the line items, tell the inventory and vendors about them
 				var lineItems = _roToComplete.GetBeverageLineItems().ToList();
 
-				var validItems = lineItems.Where (li => li.ZeroedOut == false);
+				var validItems = lineItems.Where (li => li.ZeroedOut == false).ToList();
 				if (validItems.Any ()) {
 					await _vendorService.AddLineItemsToVendorIfDontExist (_roToComplete.VendorID, validItems).ConfigureAwait (false);
 				}
@@ -232,7 +233,18 @@ namespace Mise.Inventory.Services.Implementation
 			_currentRO = _receivingOrderRepository.ApplyEvent (ev);
 		}
 
-		async Task<IEmployee> GetCurrentEmployee(){
+	    public Task SetCurrentLineItem(IReceivingOrderLineItem lineItem)
+	    {
+	        _currentLineItem = lineItem;
+	        return Task.FromResult(true);
+	    }
+
+	    public Task<IReceivingOrderLineItem> GetCurrentLineItem()
+	    {
+	        return Task.FromResult(_currentLineItem);
+	    }
+
+	    async Task<IEmployee> GetCurrentEmployee(){
 			var emp = await _loginService.GetCurrentEmployee ();
 			if (emp == null) {
 				throw new InvalidOperationException ("Current employee not set");

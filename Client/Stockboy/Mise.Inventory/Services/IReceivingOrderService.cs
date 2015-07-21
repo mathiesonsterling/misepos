@@ -26,5 +26,8 @@ namespace Mise.Inventory.Services{
 			int quantity, int caseSize, LiquidContainer container);
 		Task UpdateQuantityOfLineItem(IReceivingOrderLineItem li, int newQuantity, Money price);
 		Task ZeroOutLineItem (IReceivingOrderLineItem li);
+
+	    Task SetCurrentLineItem(IReceivingOrderLineItem lineItem);
+	    Task<IReceivingOrderLineItem> GetCurrentLineItem();
 	}
 }
