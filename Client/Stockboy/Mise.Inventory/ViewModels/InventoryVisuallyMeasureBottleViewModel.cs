@@ -58,7 +58,7 @@ namespace Mise.Inventory.ViewModels
             SetCurrentLineItem();
 
 			DisplayName = CurrentItem.DisplayName;
-			NextItemName = NextItem != null ? NextItem.DisplayName : string.Empty;
+			NextItemName = NextItem != null ? NextItem.DisplayName + " >>" : string.Empty;
         }
 
 		public LiquidContainerShape Shape{

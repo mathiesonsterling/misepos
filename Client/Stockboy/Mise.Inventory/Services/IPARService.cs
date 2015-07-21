@@ -17,6 +17,9 @@ namespace Mise.Inventory.Services
 		Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, int newQuantity);
 
 		Task SaveCurrentPAR();
+
+		Task SetCurrentLineItem (IPARBeverageLineItem li);
+		Task<IPARBeverageLineItem> GetCurrentLineItem ();
 	}
 }
 

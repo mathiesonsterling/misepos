@@ -90,6 +90,7 @@ namespace Mise.Inventory.ViewModels
 		public override async Task SelectLineItem(PARLineItemDisplay displayLineItem){
 			var lineItem = displayLineItem.Source;
 			_itemSettingQuantity = lineItem;
+			await _parService.SetCurrentLineItem (lineItem);
 			await Navigation.ShowUpdateQuantity (lineItem.Quantity, lineItem.DisplayName, QuantitySetCallback,
 				null, null, false, "Set Par for Item");
 		}
