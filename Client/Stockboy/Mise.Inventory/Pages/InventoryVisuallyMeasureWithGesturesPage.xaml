@@ -30,7 +30,11 @@
 			<Button Command="{Binding AddPartialCommand}" Text="Add Partial Bottle" IsEnabled="{Binding AddPartialEnabled}" 
 						HorizontalOptions="FillAndExpand"/>
 			<Button x:Name="btnMoveNext"
-				Command="{Binding MoveNextCommand}" Text="{Binding NextItemName}" HorizontalOptions="FillAndExpand"/>
+				Command="{Binding MoveNextCommand}" 
+				Text="{Binding NextItemName}"
+				 HorizontalOptions="FillAndExpand"
+				 IsVisible = "{Binding CanMoveToNext}"
+		    />
 			<Button Command="{Binding MeasureCommand}" Text="Measure" 
 				HorizontalOptions="FillAndExpand"/>
 		</StackLayout>

@@ -21,6 +21,7 @@
 				x:Name = "btnNext"
 				Text = "{Binding NextItemName}"
 				Command = "{Binding MoveNextCommand}"
+				IsVisible = "{Binding CanMoveToNext}"
 				HorizontalOptions = "FillAndExpand"
 			/>
 			<Button 

@@ -28,6 +28,7 @@ namespace Mise.Inventory.ViewModels
 
         public TItemType CurrentItem { get { return GetValue<TItemType>(); } private set { SetValue(value); } }
         public TItemType NextItem { get { return GetValue<TItemType>(); } private set { SetValue(value);} }
+		public bool CanMoveToNext{ get { return GetValue<bool> (); } private set { SetValue (value); } }
 
         protected IList<TItemType> Items { get; private set; }
 
@@ -47,6 +48,7 @@ namespace Mise.Inventory.ViewModels
         {
             CurrentItem = item;
             NextItem = GetNextItem();
+			CanMoveToNext = NextItem != null;
         }
 
         private bool CanMoveNext()

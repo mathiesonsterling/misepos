@@ -60,6 +60,7 @@ namespace Mise.Inventory.ViewModels
 			
 		 
 		public string Title{get{ return GetValue<string> (); } private set{ SetValue (value); }}
+		public bool IsInventoryEmpty{get{ return GetValue<bool> (); }private set{SetValue (value);}}
 
         public InventoryLineItemDisplayLine FirstUnmeasuredItem { get { return GetValue<InventoryLineItemDisplayLine>(); } private set { SetValue(value);} }
 
@@ -114,6 +115,7 @@ namespace Mise.Inventory.ViewModels
             //find the first unmeasured
 		    FirstUnmeasuredItem = itemsList.FirstOrDefault(li => li.Source.HasBeenMeasured == false);
 
+			IsInventoryEmpty = itemsList.Any () == false;
 			//we can complete if we have items, and all are measured
 			return itemsList;
 		}
