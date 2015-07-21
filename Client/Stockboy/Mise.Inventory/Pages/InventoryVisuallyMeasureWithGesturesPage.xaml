@@ -31,6 +31,8 @@
 						HorizontalOptions="FillAndExpand"/>
 			<Button Command="{Binding MeasureCommand}" Text="Measure" 
 				HorizontalOptions="FillAndExpand"/>
+			<Button x:Name="btnMoveNext"
+				Command="{Binding MoveNextCommand}" Text="{Binding NextItemName}" HorizontalOptions="FillAndExpand"/>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

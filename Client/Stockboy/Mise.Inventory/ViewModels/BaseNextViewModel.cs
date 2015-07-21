@@ -43,7 +43,7 @@ namespace Mise.Inventory.ViewModels
         }
 
         public ICommand MoveNextCommand { get{return new SimpleCommand(MoveNext, CanMoveNext);}}
-
+	
         protected void SetCurrent(TItemType item)
         {
             CurrentItem = item;
@@ -52,6 +52,9 @@ namespace Mise.Inventory.ViewModels
 
         private bool CanMoveNext()
         {
+			if (Items == null) {
+				return false;
+			}
             if (Items.Contains(CurrentItem) == false)
             {
                 Logger.Error("Error, item is not found in collection for BaseNextViewModel");

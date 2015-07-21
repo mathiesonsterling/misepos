@@ -76,6 +76,8 @@ namespace Mise.Inventory.Pages
 					_shape = vm.Shape;
 					CreateMeasureBottleStack (stckMeasure, _shape);
 				}
+
+				btnMoveNext.IsEnabled = vm.MoveNextCommand.CanExecute (null);
 			}
 		}
 

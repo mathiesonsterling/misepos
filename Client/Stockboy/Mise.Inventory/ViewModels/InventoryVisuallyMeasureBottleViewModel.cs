@@ -131,6 +131,8 @@ namespace Mise.Inventory.ViewModels
 
 		async void MeasureEv(){
 			await Measure();
+			//we have to load here, otherwise the values won't update
+			await Navigation.CloseInventoryVisuallyMeasureItem ();
 		}
 
 		async Task Measure(){
@@ -139,9 +141,6 @@ namespace Mise.Inventory.ViewModels
 				AddPartial ();
 				await _inventoryService.MeasureCurrentLineItemVisually (NumFullBottles, PartialAmounts);
 				NumFullBottles = 0;
-
-				//we have to load here, otherwise the values won't update
-				await Navigation.CloseInventoryVisuallyMeasureItem ();
 			} catch(Exception e){
 				HandleException (e);
 			}
