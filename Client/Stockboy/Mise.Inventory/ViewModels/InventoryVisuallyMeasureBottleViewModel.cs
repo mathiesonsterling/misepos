@@ -38,31 +38,27 @@ namespace Mise.Inventory.ViewModels
 		}
 
         /// <summary>
-        /// Fired to let us get the view model setup
+        /// Fired when screen launched, or we move items
         /// </summary>
-        public override Task OnAppearing()
+        public override async Task OnAppearing()
         {
+			await base.OnAppearing ();
             //zero out every time
             PartialTotal = 0;
             PartialAmounts = new List<decimal>();
             CurrentPartial = 0;
             NumFullBottles = 0;
+			DisplayTotal = 0;
             if (ResetMarkers != null)
             {
                 ResetMarkers();
             }
             AddPartialEnabled = false;
             UpdateTotal();
-
             SetCurrentLineItem();
 
-            PartialAmounts = new List<decimal>();
-            if (ResetMarkers != null)
-            {
-                ResetMarkers.Invoke();
-            }
-
-            return Task.FromResult(false);
+			DisplayName = CurrentItem.DisplayName;
+			NextItemName = NextItem != null ? NextItem.DisplayName : string.Empty;
         }
 
 		public LiquidContainerShape Shape{
@@ -74,7 +70,7 @@ namespace Mise.Inventory.ViewModels
 				return LiquidContainerShape.DefaultBottleShape;
 			}
 		}
-		public string DisplayName{ get { return CurrentItem.DisplayName; }}
+		public string DisplayName{ get { return GetValue<string> (); } private set { SetValue (value); } }
 
 		public string NextItemName{ get { return GetValue<string> (); } private set { SetValue (value); } }
 
@@ -129,7 +125,6 @@ namespace Mise.Inventory.ViewModels
 
 	    protected override async Task AfterMoveNext(IInventoryBeverageLineItem newItem)
 	    {
-			NextItemName = NextItem != null ? NextItem.DisplayName : string.Empty;
 	        await _inventoryService.MarkLineItemForMeasurement(newItem);
 	        await OnAppearing();
 	    }
