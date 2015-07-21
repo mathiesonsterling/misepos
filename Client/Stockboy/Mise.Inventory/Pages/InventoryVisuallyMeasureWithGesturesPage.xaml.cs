@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-
+using Mise.Core.ValueItems.Inventory;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using XLabs.Platform.Device;
@@ -10,42 +10,55 @@ namespace Mise.Inventory.Pages
 {
 	public partial class InventoryVisuallyMeasureWithGesturesPage : ContentPage
 	{
-		private List<MeasureButton> MeasureButtons;
-		private double measureHeight = 300;
-		private bool loading = false;
+		private List<MeasureButton> _measureButtons;
+		private double _oldHeight = DEFAULT_HEIGHT;
+	    private const double DEFAULT_HEIGHT = 200;
+		private bool _loading = false;
+	    private LiquidContainerShape _shape = LiquidContainerShape.DefaultBeerBottleShape;
 		public InventoryVisuallyMeasureWithGesturesPage ()
 		{
 			var vm = App.InventoryVisuallyMeasureBottleViewModel;
 			this.BindingContext = vm;
-
 			InitializeComponent ();
+            vm.ResetMarkers = () =>
+            {
+                if (_measureButtons == null) return;
+                foreach (var mb in _measureButtons)
+                {
+                    mb.SetOff();
+                }
+            };
 
 			using(Insights.TrackTime("Time to create measure bottle")){
 				stckMeasure.Children.Clear ();
-				CreateMeasureBottle (vm, measureHeight);
+				CreateMeasureBottle (stckMeasure);
 			}
 
 			stckMeasure.SizeChanged += (sender, e) => {
 				var updated = sender as VisualElement;
 				if(updated != null){
 					//we can get our height now!
-					if(updated.Height > 0 && Math.Abs (updated.Height - measureHeight) > 50){
-						measureHeight = updated.Height;
+					//only update if we're a significant amount changed, to avoid constant redraws
+					if(updated.Height > 0 && Math.Abs (updated.Height - _oldHeight) > 50){
+						_oldHeight = updated.Height;
 
-						var ratio = measureHeight * (1.0/300);
+						var levelHeight = updated.Height/_shape.WidthsAsPercentageOfHeight.Count;
 						foreach(var c in stckMeasure.Children){
 							var container = c as AbsoluteLayout;
 							if(container != null){
 								foreach(var containerChild in container.Children){
 									var mb = containerChild as MeasureButton;
-									if(mb != null){
-										mb.HeightRequest = 25 * ratio;
+									if(mb != null)
+									{
+                                        //recalc the height based upon the ratio of the real height to the default
+									    mb.HeightRequest = levelHeight;
+									    //TODO reset the width as well?
+										mb.WidthRequest = updated.Height * mb.WidthAsPercentageOfContainerHeight;
 									}
 								}
 							}
 						}
 					}
-					//TODO update our controls with the new height
 				}
 			};
 		}
@@ -55,92 +68,95 @@ namespace Mise.Inventory.Pages
 			Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "InventoryVisuallyMeasuredImprovedPage"}});
 
 			var vm = BindingContext as InventoryVisuallyMeasureBottleViewModel;
+            //TODO get our shape from the line item
 			if(vm != null){
 				await vm.OnAppearing ();
+
+				//_shape = vm.CurrentLineItem.Container
 			}
 		}
 
-		private void CreateMeasureBottle(InventoryVisuallyMeasureBottleViewModel vm, double height){
-			if(loading){
+		private void CreateMeasureBottle(IViewContainer<View> destLayout){
+			if(_loading){
 				return;
 			}
-			loading = true;
-			MeasureButtons = new List<MeasureButton> ();
-
-			var device = App.Resolve<IDevice> ();
+			_loading = true;
+			_measureButtons = new List<MeasureButton> ();
 
 			//determine the max height, and make the level hieght off of that
-			double levelSize = 25;
-			double bottleWidth = 100;
-			double baseHeight = 300;
-			double scaleHeight = height * (1.0 / baseHeight);
-				
-			levelSize = levelSize * scaleHeight;
-			bottleWidth = bottleWidth * scaleHeight;
 
-			//TODO change this to create, and separately set sizes.  Then set sizes on SizeChanged event
-			var profileWidths = new []{ 90, 100, 100, 100, 100, 100, 90, 50, 25, 25 };
-			for (int i = 0; i < 10; i++) {
-				var width = profileWidths [i] * bottleWidth / 100;
-				var button = new MeasureButton (i){WidthRequest = width, HeightRequest = levelSize};
-				MeasureButtons.Add (button);
-				button.Clicked += (sender, e) => {
-					//get our position
-					var mb = sender as MeasureButton;
-					if(mb != null){
-						var position = mb.Position;
-						foreach(var mBOther in MeasureButtons){
-							if(mBOther.Position <= position){
-								mBOther.SetOn();
-							} else {
-								mBOther.SetOff();
-							}
-						}
+            //TODO get this from the line item
+		    var levelHeight = DEFAULT_HEIGHT/_shape.WidthsAsPercentageOfHeight.Count;
+			const double defaultWidth = DEFAULT_HEIGHT / 2;
+		    var i = 0;
+		    foreach (var percentage in _shape.WidthsAsPercentageOfHeight)
+		    {
+				var width = DEFAULT_HEIGHT * percentage;
+		        var button = new MeasureButton(i++, percentage) {HeightRequest = levelHeight, WidthRequest = width};
+                button.Clicked += MeasureButtonClicked;
+                _measureButtons.Add(button);
+		    }
 
-						var posActual = (decimal)position + 1;
-						var val = Math.Round(posActual/10.0M, 1);
-						vm.CurrentPartial = val;
-					}
-				};
-			}
+			_measureButtons.Reverse ();
 
-			MeasureButtons.Reverse ();
+			var centerPoint = defaultWidth / 2;
 
-			var centerPoint = bottleWidth / 2;
-
-			var container = new AbsoluteLayout {HeightRequest = height};
-			stckMeasure.Children.Add (container);
+			var container = new AbsoluteLayout {HeightRequest = DEFAULT_HEIGHT, WidthRequest = defaultWidth/2};
+			destLayout.Children.Add (container);
 
 			//add the top empty one
 			var addPoint = new Point (centerPoint, 0);
 
-			foreach (var mB in MeasureButtons) {
+			foreach (var mB in _measureButtons) {
 				mB.HorizontalOptions = LayoutOptions.Center;
 				addPoint.X = centerPoint - mB.WidthRequest / 2;
 				container.Children.Add (mB, addPoint);
-				addPoint.Y += levelSize;
+				addPoint.Y += levelHeight;
 			}
 
-			Action resetMarkers = () => {
-				if(MeasureButtons != null){
-					foreach(var mb in MeasureButtons){
-						mb.SetOff();
-					}
-				}
-			};
-			vm.ResetMarkers = resetMarkers;
-			loading = false;
+			_loading = false;
 		}
 
-		public class MeasureButton : Button{
+	    private void MeasureButtonClicked(object sender, EventArgs eventArgs)
+	    {
+            //get our position
+            var mb = sender as MeasureButton;
+            if (mb != null)
+            {
+                var position = mb.Position;
+                foreach (var mBOther in _measureButtons)
+                {
+                    if (mBOther.Position <= position)
+                    {
+                        mBOther.SetOn();
+                    }
+                    else
+                    {
+                        mBOther.SetOff();
+                    }
+                }
+
+                //TODO change this to use the shape
+                var percentage = _shape.GetPercentageContainedAt(position);
+                var vm = BindingContext as InventoryVisuallyMeasureBottleViewModel;
+                if (vm != null)
+                {
+					vm.CurrentPartial = Math.Round ((decimal)percentage, 1);
+                }
+            }
+	    }
+
+	    public class MeasureButton : Button{
 			public static Color OffColor = Color.Gray;
 			public static Color OnColor = Color.Navy;
 
-			public MeasureButton(int position) : base(){
+            public double WidthAsPercentageOfContainerHeight { get; private set; }
+
+			public MeasureButton(int position, double widthAsPercentageOfContainerHeight) : base(){
 				BackgroundColor = OffColor;
 				On = false;
 				Position = position;
-				WidthRequest = 25;
+			    WidthAsPercentageOfContainerHeight = widthAsPercentageOfContainerHeight;
 			}
 
 			public bool On{get;private set;}
