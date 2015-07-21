@@ -89,7 +89,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 
 			//ACT
-			invRepository.Load (restaurant.ID);
+			await invRepository.Load (restaurant.ID);
 
 			await underTest.StartNewInventory ();
 
@@ -167,7 +167,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 
 			//ACT
-			invRepository.Load (restaurant.ID);
+			await invRepository.Load (restaurant.ID);
 
 			await underTest.StartNewInventory ();
 
