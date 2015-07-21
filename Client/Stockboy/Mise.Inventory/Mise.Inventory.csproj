@@ -37,6 +37,7 @@
     <Compile Include="Services\IInsightsService.cs" />
     <Compile Include="Services\Implementation\XamarinInsightsService.cs" />
     <Compile Include="ViewModels\BaseLineItemDisplayLine.cs" />
+    <Compile Include="ViewModels\BaseNextViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="MVVM\SimpleCommand.cs" />

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using Mise.Inventory.ViewModels;
 using Mise.Core.Entities.Inventory;
 using System.Windows.Input;
 using Mise.Inventory.MVVM;
@@ -13,29 +12,21 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Inventory.ViewModels
 {
-	public class InventoryVisuallyMeasureBottleViewModel : BaseViewModel
+	public class InventoryVisuallyMeasureBottleViewModel : BaseNextViewModel<IInventoryBeverageLineItem>
 	{
 
 		readonly IInventoryService _inventoryService;
-		readonly ILoginService _loginService;
-		private IList<IInventoryBeverageLineItem> _lineItems;
+
 		public InventoryVisuallyMeasureBottleViewModel(IAppNavigation navi,
 			IInventoryService inventoryService, 
-			ILoginService loginService, 
 			ILogger logger) : base(navi, logger){
 
 			_inventoryService = inventoryService;
-			_loginService = loginService;
 
-			_lineItems = new List<IInventoryBeverageLineItem>();
+			SetCurrentLineItem();
 
-			PartialAmounts = new List<decimal> ();
-			if (ResetMarkers != null) {
-				ResetMarkers.Invoke ();
-			}
+			PartialAmounts = new List<decimal>();
 
-			LoadLineItem ();
-			DisplayName = CurrentLineItem.DisplayName;
 			PropertyChanged += (sender, e) => {
 				if (e.PropertyName == "CurrentPartial" || e.PropertyName == "NumFullBottles") {
 					UpdateTotal ();
@@ -45,33 +36,57 @@ namespace Mise.Inventory.ViewModels
 
 			};
 		}
-			
-		public IInventoryBeverageLineItem CurrentLineItem{
-			get{ return GetValue<IInventoryBeverageLineItem> ();}
-			private set{ SetValue (value);}
-		}
+
+        /// <summary>
+        /// Fired to let us get the view model setup
+        /// </summary>
+        public override Task OnAppearing()
+        {
+            //zero out every time
+            PartialTotal = 0;
+            PartialAmounts = new List<decimal>();
+            CurrentPartial = 0;
+            NumFullBottles = 0;
+            if (ResetMarkers != null)
+            {
+                ResetMarkers();
+            }
+            AddPartialEnabled = false;
+            UpdateTotal();
+
+            SetCurrentLineItem();
+
+            PartialAmounts = new List<decimal>();
+            if (ResetMarkers != null)
+            {
+                ResetMarkers.Invoke();
+            }
+
+            return Task.FromResult(false);
+        }
 
 		public LiquidContainerShape Shape{
 			get { 
-				if (CurrentLineItem != null) {
-					return CurrentLineItem.Shape;
+				if (CurrentItem != null) {
+					return CurrentItem.Shape;
 				}
 
 				return LiquidContainerShape.DefaultBottleShape;
 			}
 		}
+		public string DisplayName{ get { return CurrentItem.DisplayName; }}
 
-		public string DisplayName{ get{return GetValue<string> ();}set{ SetValue(value); }}
+		public string NextItemName{ get { return GetValue<string> (); } private set { SetValue (value); } }
 
 		public decimal Total{get{ return GetValue<decimal> (); }private set{ SetValue (value); }}
 		public decimal DisplayTotal{ get{ return GetValue<decimal> (); }private set{SetValue (value);} }
 
 		public int NumFullBottles{	get { return GetValue<int>(); }
-			set { SetValue<int>(value); }}
+			set { SetValue(value); }}
 
 		public decimal CurrentPartial{get{return GetValue<decimal>();} set{SetValue(value);}}
 
-		public bool AddPartialEnabled{ get { return GetValue<bool> (); } private set { SetValue<bool> (value); } }
+		public bool AddPartialEnabled{ get { return GetValue<bool> (); } private set { SetValue (value); } }
 
 		public decimal PartialTotal{
 			get{return GetValue<decimal>();}
@@ -90,28 +105,14 @@ namespace Mise.Inventory.ViewModels
 			Total = NumFullBottles + PartialTotal;
 		}
 			
-		/// <summary>
-		/// Fired to let us get the view model setup
-		/// </summary>
-		public override async Task OnAppearing(){
-			//zero out every time
-			PartialTotal = 0;
-			PartialAmounts = new List<decimal> ();
-			CurrentPartial = 0;
-			NumFullBottles = 0;
-			if (ResetMarkers != null) {
-				ResetMarkers ();
-			}
-			AddPartialEnabled = false;
-			UpdateTotal ();
 
-			_lineItems = (await _inventoryService.GetLineItemsForCurrentSection ())
-				.OrderBy(li => li.InventoryPosition).ToList();
-			LoadLineItem ();
-			DisplayName = CurrentLineItem.DisplayName;
-		}
+	    protected override async Task<IList<IInventoryBeverageLineItem>> LoadItems()
+	    {
+            return (await _inventoryService.GetLineItemsForCurrentSection())
+                .OrderBy(li => li.InventoryPosition).ToList();
+	    }
 
-		#region Commands
+	    #region Commands
 		public ICommand MeasureCommand{get{ return new SimpleCommand (MeasureEv);
 			}}
 
@@ -119,36 +120,19 @@ namespace Mise.Inventory.ViewModels
 
 		public ICommand CancelCommand{get{return new SimpleCommand (Cancel);}}
 
-		public ICommand MoveNextCommand{ get { return new SimpleCommand (MoveNext, CanMoveNext); } }
 		#endregion
 
-		async void MoveNext(){
-			if(_lineItems.Contains(CurrentLineItem)){
-				//get the index
-				var index = _lineItems.IndexOf (CurrentLineItem);
-				var nextIndex = index + 1;
-				//get the next
-				if(_lineItems.Count > nextIndex + 1){
-					//set in on service
-					var nextItem = _lineItems[nextIndex];
+	    protected override async Task BeforeMoveNext(IInventoryBeverageLineItem currentItem)
+	    {
+	        await Measure();
+	    }
 
-					//save the current!
-					Processing = true;
-					await Measure();
-
-					await _inventoryService.MarkLineItemForMeasurement(nextItem);
-					CurrentLineItem = nextItem;
-
-					//reload view
-					await OnAppearing ();
-					Processing = false;
-				}
-			}
-		}
-
-		bool CanMoveNext(){
-			return _lineItems.Any() && CurrentLineItem != _lineItems.Last ();
-		}
+	    protected override async Task AfterMoveNext(IInventoryBeverageLineItem newItem)
+	    {
+			NextItemName = NextItem != null ? NextItem.DisplayName : string.Empty;
+	        await _inventoryService.MarkLineItemForMeasurement(newItem);
+	        await OnAppearing();
+	    }
 
 		async void MeasureEv(){
 			await Measure();
@@ -200,15 +184,19 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		async void LoadLineItem ()
+		async void SetCurrentLineItem ()
 		{
 			try{
 				//load the line item here, or assume it's loaded elsewhere?
-				CurrentLineItem = await _inventoryService.GetLineItemToMeasure ();
-				if (CurrentLineItem == null) {
-					await Navigation.CloseInventoryVisuallyMeasureItem ();
-				}
-				DisplayName = CurrentLineItem.DisplayName;
+				var item = await _inventoryService.GetLineItemToMeasure ();
+			    if (item == null)
+			    {
+			        await Navigation.CloseInventoryVisuallyMeasureItem();
+			    }
+			    else
+			    {
+			        SetCurrent(item);
+			    }
 			} catch(Exception e){
 				HandleException (e);
 			}
