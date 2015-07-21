@@ -14,16 +14,14 @@ namespace Mise.Core.ValueItems.Inventory
         {
             get { return new LiquidContainer { 
 					AmountContained = new LiquidAmount { Milliliters = 750 }, 
-					DisplayName = "750ml Bottle",
-					Shape = LiquidContainerShape.DefaultBottleShape
+					DisplayName = "750ml Bottle"
 				}; }
         }
 
         public static LiquidContainer Bottle1L
         {
             get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 1000 }, 
-					DisplayName = "1L Bottle",
-					Shape = LiquidContainerShape.DefaultBottleShape
+					DisplayName = "1L Bottle"
 				}; 
 			}
         }
@@ -38,18 +36,20 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = new LiquidAmount {Milliliters = 1750M},
-                    DisplayName = "1.75L Bottle",
-					Shape = LiquidContainerShape.DefaultBottleShape
+                    DisplayName = "1.75L Bottle"
                 };
             }
         }
         public static LiquidContainer Bottle375ML
         {
-            get { return new LiquidContainer { 
-					AmountContained = new LiquidAmount { Milliliters = 375 }, 
-					DisplayName = "375ml Bottle",
-					Shape = LiquidContainerShape.DefaultBottleShape}; 
-			}
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 375},
+                    DisplayName = "375ml Bottle"
+                };
+            }
         }
 
         public static LiquidContainer Can12oz
@@ -158,8 +158,7 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = new LiquidAmount { Milliliters = 330 },
-                    DisplayName = "330ml Bottle",
-					Shape = LiquidContainerShape.DefaultBottleShape
+                    DisplayName = "330ml Bottle"
                 };
             }
         }
@@ -171,8 +170,7 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = new LiquidAmount { Milliliters = 500 },
-                    DisplayName = "500ml Bottle",
-					Shape = LiquidContainerShape.DefaultBottleShape
+                    DisplayName = "500ml Bottle"
                 };
             }
         }
