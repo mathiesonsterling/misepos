@@ -166,18 +166,21 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
+		public void Empty(){
+			CurrentPartial = 0;
+			if (ResetMarkers != null) {
+				ResetMarkers ();
+			}
+		}
+
 		void AddPartial(){
 			try{
 				//see how many of our markers are set
 				if (CurrentPartial > 0) {
 					PartialAmounts.Add (CurrentPartial);
 					PartialTotal += CurrentPartial;
-					CurrentPartial = 0;
-
-					if (ResetMarkers != null) {
-						ResetMarkers.Invoke ();
-					}
 				}
+				Empty();
 			} catch(Exception e){
 				HandleException (e);
 			}
