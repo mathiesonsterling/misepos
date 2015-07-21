@@ -9,7 +9,7 @@ namespace Mise.Core.ValueItems.Inventory
     /// <summary>
     /// Describes the shape of a container of liquid, especially how to render and calculate the value for it
     /// </summary>
-    public class LiquidContainerShape : IEquatable<LiquidContainerShape>
+	public class LiquidContainerShape : IEquatable<LiquidContainerShape>, ITextSearchable
     {
         public LiquidContainerShape()
         {
@@ -80,7 +80,16 @@ namespace Mise.Core.ValueItems.Inventory
             return false == WidthsAsPercentageOfHeight.Where((t, i) => Math.Abs (WidthsAsPercentageOfHeight [0] - other.WidthsAsPercentageOfHeight [i]) > .01).Any();
         }
 
+		#region ITextSearchable implementation
 
+		public bool ContainsSearchString (string searchString)
+		{
+			return string.IsNullOrEmpty (Name) == false && Name.ToUpper ().Contains (searchString.ToUpper ());
+		}
+
+		#endregion
+
+		#region Defaults
         public static LiquidContainerShape DefaultBottleShape
         {
             get
@@ -139,8 +148,23 @@ namespace Mise.Core.ValueItems.Inventory
                 };
             }
         }
-		public static IEnumerable<LiquidContainerShape> GetDefaultShapes(){
-			return new List<LiquidContainerShape>{ DefaultBottleShape, DefaultCanShape };
+
+		public static LiquidContainerShape Box{
+			get{
+				return new LiquidContainerShape {
+					Name = "Box",
+					WidthsAsPercentageOfHeight = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+				};
+			}
 		}
+		public static IEnumerable<LiquidContainerShape> GetDefaultShapes(){
+			return new List<LiquidContainerShape>{ 
+				DefaultBottleShape, 
+				DefaultCanShape, 
+				WineBottleShape, 
+				DefaultKegShape, 
+				DefaultBeerBottleShape };
+		}
+		#endregion
     }
 }

@@ -13,8 +13,8 @@ namespace Mise.Inventory.Pages
 		private List<MeasureButton> _measureButtons;
 		private double _oldHeight = DEFAULT_HEIGHT;
 	    private const double DEFAULT_HEIGHT = 200;
+		private LiquidContainerShape _shape;
 		private bool _loading = false;
-	    private LiquidContainerShape _shape = LiquidContainerShape.DefaultBeerBottleShape;
 		public InventoryVisuallyMeasureWithGesturesPage ()
 		{
 			var vm = App.InventoryVisuallyMeasureBottleViewModel;
@@ -31,6 +31,7 @@ namespace Mise.Inventory.Pages
 
 			using(Insights.TrackTime("Time to create measure bottle")){
 				stckMeasure.Children.Clear ();
+				_shape = vm.Shape;
 				CreateMeasureBottle (stckMeasure);
 			}
 
@@ -62,7 +63,7 @@ namespace Mise.Inventory.Pages
 				}
 			};
 		}
-
+		 
 		protected override async void OnAppearing ()
 		{
 			Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "InventoryVisuallyMeasuredImprovedPage"}});
@@ -71,8 +72,10 @@ namespace Mise.Inventory.Pages
             //TODO get our shape from the line item
 			if(vm != null){
 				await vm.OnAppearing ();
-
-				//_shape = vm.CurrentLineItem.Container
+				//TODO - do we need to update this shape and recreate controls?
+				if (vm.Shape.Equals (_shape) == false) {
+					_shape = vm.Shape;
+				}
 			}
 		}
 
@@ -157,6 +160,9 @@ namespace Mise.Inventory.Pages
 				On = false;
 				Position = position;
 			    WidthAsPercentageOfContainerHeight = widthAsPercentageOfContainerHeight;
+				base.BorderRadius = 0;
+				base.HorizontalOptions = LayoutOptions.Center;
+				base.VerticalOptions = LayoutOptions.Center;
 			}
 
 			public bool On{get;private set;}

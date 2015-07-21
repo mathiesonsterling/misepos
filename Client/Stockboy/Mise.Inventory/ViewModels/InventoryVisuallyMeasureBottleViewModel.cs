@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +7,8 @@ using Mise.Core.Entities.Inventory;
 using System.Windows.Input;
 using Mise.Inventory.MVVM;
 using Mise.Inventory.Services;
-using Xamarin.Forms;
 using Mise.Core.Services;
-using System.Runtime.InteropServices;
-
-
-using System.Runtime.InteropServices;
-using Mise.Core.ValueItems;
-
-
-using System.Runtime.InteropServices;
+using Mise.Core.ValueItems.Inventory;
 
 
 namespace Mise.Inventory.ViewModels
@@ -58,7 +49,17 @@ namespace Mise.Inventory.ViewModels
 			get{ return GetValue<IInventoryBeverageLineItem> ();}
 			private set{ SetValue (value);}
 		}
-			
+
+		public LiquidContainerShape Shape{
+			get { 
+				if (CurrentLineItem != null) {
+					return CurrentLineItem.Shape;
+				}
+
+				return LiquidContainerShape.DefaultBottleShape;
+			}
+		}
+
 		public string DisplayName{ get{return GetValue<string> ();}set{ SetValue(value); }}
 
 		public decimal Total{get{ return GetValue<decimal> (); }private set{ SetValue (value); }}

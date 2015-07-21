@@ -14,6 +14,9 @@ namespace Mise.Inventory.ViewModels
 	{
 		int _originalQuantity;
 		decimal _originalTotalPrice;
+
+		bool justAdjustedUnit = false;
+		bool justAdjustedTotal = false;
 		public UpdateQuantityViewModel(IAppNavigation appNavigation, ILogger logger) : base(appNavigation, logger){
 
 			PropertyChanged += (sender, e) => {
@@ -25,13 +28,32 @@ namespace Mise.Inventory.ViewModels
 					}
 				}
 
+				if(e.PropertyName == "TotalPrice"){
+					if(justAdjustedUnit){
+						justAdjustedUnit = false;
+						return;
+					}
+
+					//adjust the unit
+					justAdjustedTotal = true;
+					if(CurrentQuantity > 0)
+					{
+						var unitPrice = TotalPrice / CurrentQuantity;
+						UnitPrice = Math.Round(unitPrice);
+					} else{
+						UnitPrice = 0;
+					}
+				}
+
+				if(e.PropertyName == "CurrentQuantity"){
+				}
 				if(e.PropertyName == "CurrentQuantity" || e.PropertyName == "TotalPrice"){
 					if(DoPrices){
 						if(CurrentQuantity > 0){
 							var calcPrice = Math.Round(TotalPrice / CurrentQuantity, 2);
 							if(calcPrice != UnitPrice){
 								UnitPrice = calcPrice;
-							}
+							} 
 						} else {
 							UnitPrice = 0;
 						}
@@ -52,7 +74,7 @@ namespace Mise.Inventory.ViewModels
 
 		public int CurrentQuantity{get{return GetValue<int>();}set{ SetValue (value); }}
 		public string ItemName{get{return GetValue<string> ();}set{SetValue (value);}}
-		public bool IsUpdateEnabled{get{return GetValue<bool> ();}set{ SetValue (value); }}
+		public bool IsUpdateEnabled{ get; set;}
 
 		public decimal TotalPrice{get{return GetValue<decimal> ();}set{ SetValue (value); }}
 		public decimal UnitPrice{get{return GetValue<decimal> ();}set{ SetValue (value); }}
@@ -64,10 +86,15 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 		public ICommand CancelCommand{get{return new SimpleCommand (Cancel);}}
 
-		public ICommand UpdateQuantityCommand{get{return new SimpleCommand (UpdateQuantity);}}
+		public ICommand UpdateQuantityCommand{get{return new SimpleCommand (UpdateQuantity, () => IsUpdateEnabled);}}
 
 		public ICommand ZeroOutCommand{get{return new SimpleCommand (ZeroOut);}}
 		#endregion
+
+		public override Task OnAppearing()
+		{
+			return Task.FromResult(false);
+		}
 		/// <summary>
 		/// Sets the quantity for this screen before it's displayed
 		/// </summary>
@@ -112,11 +139,6 @@ namespace Mise.Inventory.ViewModels
 				HandleException (e);
 			}
 		}
-
-        public override Task OnAppearing()
-        {
-            return Task.FromResult(false);
-        }
 	}
 }
 
