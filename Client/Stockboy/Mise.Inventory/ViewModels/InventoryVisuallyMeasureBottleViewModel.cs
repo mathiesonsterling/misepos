@@ -39,6 +39,7 @@ namespace Mise.Inventory.ViewModels
 			PropertyChanged += (sender, e) => {
 				if (e.PropertyName == "CurrentPartial" || e.PropertyName == "NumFullBottles") {
 					UpdateTotal ();
+					DisplayTotal = Total + CurrentPartial;
 					AddPartialEnabled = CurrentPartial > 0;
 				}
 
@@ -63,6 +64,7 @@ namespace Mise.Inventory.ViewModels
 		public string DisplayName{ get{return GetValue<string> ();}set{ SetValue(value); }}
 
 		public decimal Total{get{ return GetValue<decimal> (); }private set{ SetValue (value); }}
+		public decimal DisplayTotal{ get{ return GetValue<decimal> (); }private set{SetValue (value);} }
 
 		public int NumFullBottles{	get { return GetValue<int>(); }
 			set { SetValue<int>(value); }}
@@ -87,7 +89,7 @@ namespace Mise.Inventory.ViewModels
 		void UpdateTotal(){
 			Total = NumFullBottles + PartialTotal;
 		}
-
+			
 		/// <summary>
 		/// Fired to let us get the view model setup
 		/// </summary>

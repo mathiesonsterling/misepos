@@ -159,7 +159,8 @@ namespace Mise.Inventory.Pages
 	    }
 
 		public class ZeroButton : Button{
-			public ZeroButton(double height) : base(){
+			public ZeroButton(double height)
+			{
 				//BackgroundColor = Color.Gray;
 				HeightRequest = height;
 				Text = "Empty";
