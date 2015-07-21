@@ -77,7 +77,14 @@ namespace Mise.Core.ValueItems.Inventory
                 return false;
             }
 
-            return false == WidthsAsPercentageOfHeight.Where((t, i) => Math.Abs (WidthsAsPercentageOfHeight [0] - other.WidthsAsPercentageOfHeight [i]) > .01).Any();
+            for (int i = 0; i < WidthsAsPercentageOfHeight.Count; i++)
+            {
+                if (Math.Abs(WidthsAsPercentageOfHeight[i] - other.WidthsAsPercentageOfHeight[i]) > .1)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
 		#region ITextSearchable implementation
