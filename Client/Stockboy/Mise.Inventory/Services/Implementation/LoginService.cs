@@ -32,8 +32,14 @@ namespace Mise.Inventory.Services.Implementation
 		IRestaurantInventorySection _currentSection;
 
 		public class MiseLoginRecord{
-			public Guid EmployeeID{get;set;}
+			public EmailAddress Email{get;set;}
+			public string Hash{get;set;}
 			public DateTime Time{get;set;}
+		}
+
+		public class RestaurantSelectRecord
+		{
+			public Guid RestaurantID{ get; set;}
 		}
 
 		public LoginService(IEmployeeRepository employeeRepository,
@@ -56,18 +62,53 @@ namespace Mise.Inventory.Services.Implementation
 		    _repositoryLoader = repositoryLoader;
 		}
 
-		const string LOGGED_IN_EMPLOYEE_ID_KEY = "LoggedInEmployee";
+		const string LOGGED_IN_EMPLOYEE_KEY = "LoggedInEmployee";
+		const string LAST_RESTAURANT_ID_KEY = "LastRestaurantID";
+
 		public void OnAppStarting(){
 			try{
 				//if we have an employee that logged in, less than 7 days ago, then mark it
-				var login = _keyValStorage.GetValue<MiseLoginRecord> (LOGGED_IN_EMPLOYEE_ID_KEY);
+				var login = _keyValStorage.GetValue<MiseLoginRecord> (LOGGED_IN_EMPLOYEE_KEY);
 				if(login != null){
-					if (login.Time > DateTime.UtcNow.AddDays (-7)) {
-						_currentEmployee = _employeeRepository.GetByID (login.EmployeeID);
-					}
+					LoadLoggedInEmployee(login);
 				}
 			} catch(Exception e){
+				try{
+					_keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);
+				} catch(Exception ex){
+					_logger.HandleException (ex);
+				}
 				_logger.HandleException (e, LogLevel.Warn);
+			}
+		}
+
+		private async void LoadLoggedInEmployee(MiseLoginRecord login){
+			if (login.Time > DateTime.UtcNow.AddDays (-7)) {
+				var password = new Password{ HashValue = login.Hash };
+				try {
+					_currentEmployee = await _employeeRepository.GetByEmailAndPassword (login.Email, password);
+
+					//we need to also get our restaurants - if there's only one, pick that!
+					var rests = (await GetPossibleRestaurantsForLoggedInEmployee()).ToList();
+					if(rests.Count() == 1){
+						_currentRestaurant = rests.First();
+					} else {
+						//did we store the last restuarant?
+						var lastRestRecord = _keyValStorage.GetValue<RestaurantSelectRecord>(LAST_RESTAURANT_ID_KEY);
+						if(lastRestRecord != null){
+							var rest = _restaurantRepository.GetByID(lastRestRecord.RestaurantID);
+							if(rest != null){
+								_currentRestaurant = rest;
+							} else {
+								_currentEmployee = null;
+							}
+						} else{
+							_currentEmployee = null;
+						}
+					}
+				} catch (Exception e) {
+					_logger.HandleException (e);
+				}
 			}
 		}
 
@@ -101,10 +142,11 @@ namespace Mise.Inventory.Services.Implementation
 
 			try{
 				var loginRec = new MiseLoginRecord {
-					EmployeeID = _currentEmployee.ID,
+					Email = _currentEmployee.PrimaryEmail,
+					Hash = _currentEmployee.Password.HashValue,
 					Time = DateTime.UtcNow
 				};
-				_keyValStorage.SetValue (LOGGED_IN_EMPLOYEE_ID_KEY, loginRec);
+				await _keyValStorage.SetValue (LOGGED_IN_EMPLOYEE_KEY, loginRec);
 			} catch(Exception e){
 				_logger.HandleException (e, LogLevel.Warn);
 			}
@@ -127,7 +169,8 @@ namespace Mise.Inventory.Services.Implementation
 		    await _repositoryLoader.LoadRepositories(null);
 
 			//remove our stored employee from our local settings
-			_keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_ID_KEY);				
+			_keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);	
+			_keyValStorage.DeleteValue (LAST_RESTAURANT_ID_KEY);
 		}
 
 		public async Task<IEnumerable<IRestaurant>> GetPossibleRestaurantsForLoggedInEmployee ()
@@ -171,6 +214,10 @@ namespace Mise.Inventory.Services.Implementation
 				_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
 				await _restaurantRepository.Commit (_currentRestaurant.ID);
 				_logger.Debug ("User selected restaurant event committed");
+
+				//store it in the DB
+				var restRecord = new RestaurantSelectRecord{RestaurantID = _currentRestaurant.ID};
+				await _keyValStorage.SetValue (LAST_RESTAURANT_ID_KEY, restRecord);
 			} else{
 				_logger.Error("Current restaurant is null!");
 			}

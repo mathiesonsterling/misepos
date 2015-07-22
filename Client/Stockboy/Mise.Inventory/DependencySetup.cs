@@ -99,7 +99,7 @@ namespace Mise.Inventory
 			var serial = new JsonNetSerializer ();
 			cb.RegisterInstance (serial).As<IJSONSerializer>();
 
-			cb.RegisterType<CrossSettingsClientKeyValueStorage> ().As<IClientKeyValueStorage> ().SingleInstance ();
+			cb.RegisterType<XamarinFormsSimpleKeyValueStorage> ().As<IClientKeyValueStorage> ().SingleInstance ();
 
 			// Logger
 			if(Logger == null){

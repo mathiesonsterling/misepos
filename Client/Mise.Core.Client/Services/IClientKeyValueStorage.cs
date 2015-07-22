@@ -7,7 +7,7 @@ namespace Mise.Core.Client.Services
 	/// </summary>
 	public interface IClientKeyValueStorage
 	{
-		void SetValue<T>(string key, T value) where T:class;
+		Task SetValue<T>(string key, T value) where T:class;
 		T GetValue<T>(string key) where T:class;
 		void DeleteValue(string key);
 	}

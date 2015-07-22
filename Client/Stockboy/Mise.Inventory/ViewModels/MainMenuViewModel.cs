@@ -23,7 +23,7 @@ namespace Mise.Inventory.ViewModels
 				if(emp == null){
 					await Navigation.ShowLogin ();
 				}
-
+					
 				var rest = await _loginService.GetCurrentRestaurant ();
 				if (rest == null) {
 					RestaurantName = "ERROR NO RESTAURANT";

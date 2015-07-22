@@ -168,7 +168,6 @@
     <Compile Include="Pages\AccountRegistrationPage.xaml.cs">
       <DependentUpon>AccountRegistrationPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\Implementation\CrossSettingsClientKeyValueStorage.cs" />
     <Compile Include="BuildLevel.cs" />
     <Compile Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml.cs">
       <DependentUpon>InventoryVisuallyMeasureWithGesturesPage.xaml</DependentUpon>
@@ -181,6 +180,7 @@
     <Compile Include="Pages\UpdateReceivingOrderLineItem.xaml.cs">
       <DependentUpon>UpdateReceivingOrderLineItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\Implementation\XamarinFormsSimpleKeyValueStorage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
