@@ -195,8 +195,16 @@ namespace DeveloperTools
                 var noMessageLogger = new DummyLogger();
                 var cmd = new ImportVendorPriceListCommand(noMessageLogger, dbUri, TxtFileName.Text, TxtVendorName.Text, email,
                     address, progress);
-                await cmd.Execute();
+                try
+                {
+                    await cmd.Execute();
 
+                    MessageBox.Show("File was imported");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error " + ex.Message);
+                }
                 BtnImportVendor.IsEnabled = true;
             }
         }
