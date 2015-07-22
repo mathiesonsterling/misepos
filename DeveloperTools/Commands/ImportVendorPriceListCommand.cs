@@ -114,7 +114,7 @@ namespace DeveloperTools.Commands
             {
                 _logger.Error("Vendor " + vendor.Name + " already exists!");
                 Finish();
-                return;
+                throw new Exception("Vendor already exists");
             }
 
             //save the vendor
