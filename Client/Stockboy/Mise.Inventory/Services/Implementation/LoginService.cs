@@ -91,14 +91,14 @@ namespace Mise.Inventory.Services.Implementation
 					//we need to also get our restaurants - if there's only one, pick that!
 					var rests = (await GetPossibleRestaurantsForLoggedInEmployee()).ToList();
 					if(rests.Count() == 1){
-						_currentRestaurant = rests.First();
+						await SelectRestaurantForLoggedInEmployee(rests.First().ID);
 					} else {
 						//did we store the last restuarant?
 						var lastRestRecord = _keyValStorage.GetValue<RestaurantSelectRecord>(LAST_RESTAURANT_ID_KEY);
 						if(lastRestRecord != null){
 							var rest = _restaurantRepository.GetByID(lastRestRecord.RestaurantID);
 							if(rest != null){
-								_currentRestaurant = rest;
+								await SelectRestaurantForLoggedInEmployee(rest.ID);
 							} else {
 								_currentEmployee = null;
 							}
@@ -120,6 +120,10 @@ namespace Mise.Inventory.Services.Implementation
 			_currentEmployee = emp;
 		}
 
+		/// <summary>
+		/// Used only for debugging!
+		/// </summary>
+		/// <param name="rest">Rest.</param>
 		public void SetCurrentRestaurant(IRestaurant rest){
 			_currentRestaurant = rest;
 		}
