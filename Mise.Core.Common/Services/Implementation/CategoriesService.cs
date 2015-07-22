@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.ValueItems.Inventory;
 using Newtonsoft.Json.Serialization;
 using System.Dynamic;
 
@@ -135,7 +136,59 @@ namespace Mise.Core.Common
 				};
 			}}
 
-		public static ItemCategory Unknown{get{ return new ItemCategory {
+	    public static ItemCategory WineWhite
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "White Wine",
+	                ParentCategoryID = Wine.ID,
+	                ID = Guid.Parse("750f9746-5d15-4aa9-9fb3-990d347f009e")
+	            };
+	        }
+	    }
+
+	    public static ItemCategory WineRed
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	                {
+	                    Name = "Red Wine",
+	                    ParentCategoryID = Wine.ID,
+	                    ID = Guid.Parse("9b47488d-396e-4289-9a67-20dbbaa605e8")
+	                };
+	        }
+	    }
+
+	    public static ItemCategory WineSparkling
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "Sparkling Wine",
+	                ParentCategoryID = Wine.ID,
+	                ID = Guid.Parse("f998f845-f2d1-4504-8621-47ca46f1d0ee")
+	            };
+	        }
+	    }
+
+	    public static ItemCategory WineRose
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "Rosé",
+	                ParentCategoryID = Wine.ID,
+	                ID = Guid.Parse("8d7c893f-07af-4d2a-b6a7-ca13af6ca876")
+	            };
+	        }
+	    }
+
+	    public static ItemCategory Unknown{get{ return new ItemCategory {
 				Name = "None",
 				ID = Guid.Parse ("7e05f222-9aaf-47d0-a51b-3146f2060c55")
 			};
@@ -156,60 +209,83 @@ namespace Mise.Core.Common
 			    };
             } 
         }
+
+	    public static ItemCategory BeerPackage
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "Package Beer",
+	                ParentCategoryID = Beer.ID,
+	                ID = Guid.Parse("3043c1f3-4718-4419-893a-697d6c16a5c6")
+	            };
+	        }
+	    }
+
+	    public static ItemCategory BeerDraft
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "Draft Beer",
+	                ParentCategoryID = Beer.ID,
+	                ID = Guid.Parse("b6fc4aca-0f9b-431a-a231-d1c55bb7dab6")
+	            };
+	        }
+	    }
+
+	    public static ItemCategory Food
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "Food",
+	                ID = Guid.Parse("76eff069-0340-42a7-815c-ef0ef1242635")
+	            };
+	        }
+	    }
 		#endregion
 		#region ICategoriesService implementation
 		public IEnumerable<ICategory> GetIABIngredientCategories ()
 		{
-			var res = new List<ICategory>{Whiskey, WhiskeyWorld, WhiskeyAmerican, WhiskeyScotch, Vodka, Gin, Rum, RumDark, Agave,
-			AgaveTequila, AgaveMezcal, Brandy, Liquer, LiquerAmaro, Wine, WineFortified};
-
-			var redWine = new ItemCategory {
-				Name = "Red Wine",
-				ParentCategoryID = Wine.ID,
-				ID = Guid.Parse ("9b47488d-396e-4289-9a67-20dbbaa605e8")
-			};
-			res.Add (redWine);
-
-			var whiteWine = new ItemCategory {
-				Name = "White Wine",
-				ParentCategoryID = Wine.ID,
-				ID = Guid.Parse ("750f9746-5d15-4aa9-9fb3-990d347f009e")
-			};
-			res.Add (whiteWine);
-
-			var sparkling = new ItemCategory {
-				Name = "Sparkling Wine",
-				ParentCategoryID = Wine.ID,
-				ID = Guid.Parse ("f998f845-f2d1-4504-8621-47ca46f1d0ee")
-			};
-			res.Add (sparkling);
-			var rose = new ItemCategory {
-				Name = "Rosé",
-				ParentCategoryID = Wine.ID,
-				ID = Guid.Parse ("8d7c893f-07af-4d2a-b6a7-ca13af6ca876")
-			};
-			res.Add (rose);		
-
-
-			res.Add (Beer);
-
-			res.Add (new ItemCategory {
-				Name = "Package Beer",
-				ParentCategoryID = Beer.ID,
-				ID = Guid.Parse ("3043c1f3-4718-4419-893a-697d6c16a5c6")
-			});
-			res.Add (new ItemCategory {
-				Name = "Draft Beer",
-				ParentCategoryID = Beer.ID,
-				ID = Guid.Parse ("b6fc4aca-0f9b-431a-a231-d1c55bb7dab6")
-			});
-		
-			res.Add (new ItemCategory {
-				Name = "Food",
-				ID = Guid.Parse ("76eff069-0340-42a7-815c-ef0ef1242635")
-			});
-
-			res.Add (Unknown);
+			var res = new List<ICategory>
+            {
+                Whiskey, 
+                WhiskeyWorld, 
+                WhiskeyAmerican, 
+                WhiskeyScotch, 
+                
+                Vodka, 
+                Gin, 
+                
+                Rum, 
+                RumDark, 
+                
+                Agave,
+			    AgaveTequila, 
+                AgaveMezcal, 
+                
+                Brandy, 
+                Liquer, 
+                LiquerAmaro, 
+                
+                Wine, 
+                WineFortified, 
+                WineWhite, 
+                WineRed, 
+                WineRose, 
+                WineSparkling, 
+                
+                Beer, 
+                BeerPackage, 
+                BeerDraft,
+            
+                Food,
+                Unknown
+            };
 			return res;
 		}
 
@@ -217,6 +293,41 @@ namespace Mise.Core.Common
 		{
 			return new List<ICategory> ();
 		}
+
+	    public LiquidContainerShape GetShapeForCategory(ICategory cat)
+	    {
+	        if (cat == null)
+	        {
+	            return LiquidContainerShape.DefaultBottleShape;
+	        }
+
+	        if (cat.ID == Wine.ID
+	            || cat.ID == WineFortified.ID
+	            || cat.ID == WineRed.ID
+	            || cat.ID == WineRose.ID
+	            || cat.ID == WineSparkling.ID
+	            || cat.ID == WineWhite.ID)
+	        {
+	            return LiquidContainerShape.WineBottleShape;
+	        }
+
+	        if (cat.ID == BeerDraft.ID)
+	        {
+	            return LiquidContainerShape.DefaultKegShape;
+	        }
+
+	        if (cat.ID == Beer.ID)
+	        {
+	            return LiquidContainerShape.DefaultBeerBottleShape;
+	        }
+
+	        if (cat.ID == Food.ID || cat.ID == BeerPackage.ID)
+	        {
+	            return LiquidContainerShape.Box;
+	        }
+
+	        return LiquidContainerShape.DefaultBottleShape;
+	    }
 		#endregion
 	}
 }

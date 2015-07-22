@@ -87,8 +87,8 @@ namespace Mise.Inventory.Services
 		/// <returns>The invitations.</returns>
 		Task ShowInvitations();
 
-		Task ShowUpdateQuantity(int quantity, string itemName, Action<int, decimal> updateQuantCallback, Action zeroOutCallback,
-			Money currentPrice, bool addPrices = false, string title = "Update Quantity");
+	    Task ShowUpdateReceivingOrderLineItem();
+
 		Task CloseUpdateQuantity();
 		Task CloseItemScan();
 		Task CloseVendorAdd();
@@ -101,5 +101,6 @@ namespace Mise.Inventory.Services
         /// <returns></returns>
 	    Task CloseReceivingOrder();
 
+	    Task ShowUpdateParLineItem();
 	}
 }

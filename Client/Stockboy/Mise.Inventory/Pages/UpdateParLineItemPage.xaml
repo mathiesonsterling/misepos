@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="Mise.Inventory.UpdateParLineItemPage"
+	Title="{Binding ItemName}"
+>
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<ScrollView VerticalOptions="FillAndExpand">
+				<StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand">
+					<Label Text="Quantity" Style="{DynamicResource CaptionStyle}"/>
+					<StackLayout Orientation="Horizontal">
+						<Entry x:Name="entNumber" Text="{Binding CurrentQuantity}" Keyboard="Numeric" WidthRequest="100"/>
+						<Stepper x:Name="stp" Value="{Binding CurrentQuantity, Mode=TwoWay}" Maximum="10000"/>
+					</StackLayout>
+				</StackLayout>
+			</ScrollView>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button
+				x:Name = "btnNext"
+				Text = "{Binding NextItemName}"
+				Command = "{Binding MoveNextCommand}"
+				IsVisible = "{Binding CanMoveToNext}"
+				HorizontalOptions = "FillAndExpand"
+			/>
+			<Button 
+				x:Name = "btnUpdateQuantity"
+				Text="Update" 
+				Command="{Binding UpdateQuantityCommand}" 
+				HorizontalOptions="FillAndExpand"/>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

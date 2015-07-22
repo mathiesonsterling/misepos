@@ -57,7 +57,7 @@ namespace Mise.Inventory.Services.Implementation
 
 			var invSection = inv.GetSections ().FirstOrDefault (invS => invS.RestaurantInventorySectionID == section.ID);
 			if(invSection != null){
-				return invSection.GetInventoryBeverageLineItemsInSection ();
+				return invSection.GetInventoryBeverageLineItemsInSection ().OrderBy(li => li.InventoryPosition);
 			}
 
 			return new List<IInventoryBeverageLineItem> ();

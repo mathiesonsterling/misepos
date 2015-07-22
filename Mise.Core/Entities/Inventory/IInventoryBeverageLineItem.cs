@@ -20,6 +20,8 @@ namespace Mise.Core.Entities.Inventory
         /// </summary>
         LiquidAmount CurrentAmount { get; }
 
+        LiquidContainerShape Shape { get; }
+
         /// <summary>
         /// Flagged enum showing how we got the current amount
         /// </summary>
@@ -33,6 +35,7 @@ namespace Mise.Core.Entities.Inventory
 		/// </summary>
 		/// <value>The partial bottle percentages.</value>
 		IEnumerable<decimal> PartialBottlePercentages{get;}
+
 		int NumFullBottles{get;}
 
 		decimal Quantity{ get;}

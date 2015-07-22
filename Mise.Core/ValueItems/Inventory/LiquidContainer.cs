@@ -12,12 +12,18 @@ namespace Mise.Core.ValueItems.Inventory
 
         public static LiquidContainer Bottle750ML
         {
-            get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 750 }, DisplayName = "750ml Bottle" }; }
+            get { return new LiquidContainer { 
+					AmountContained = new LiquidAmount { Milliliters = 750 }, 
+					DisplayName = "750ml Bottle"
+				}; }
         }
 
         public static LiquidContainer Bottle1L
         {
-            get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 1000 }, DisplayName = "1L Bottle" }; }
+            get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 1000 }, 
+					DisplayName = "1L Bottle"
+				}; 
+			}
         }
 
         /// <summary>
@@ -36,12 +42,24 @@ namespace Mise.Core.ValueItems.Inventory
         }
         public static LiquidContainer Bottle375ML
         {
-            get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 375 }, DisplayName = "375ml Bottle" }; }
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 375},
+                    DisplayName = "375ml Bottle"
+                };
+            }
         }
 
         public static LiquidContainer Can12oz
         {
-            get { return new LiquidContainer { AmountContained = LiquidAmount.FromLiquidOunces(12.0M), DisplayName = "12oz Can" }; }
+            get { return new LiquidContainer { 
+					AmountContained = LiquidAmount.FromLiquidOunces(12.0M), 
+					DisplayName = "12oz Can",
+					Shape = LiquidContainerShape.DefaultCanShape
+				}; 
+			}
         }
 
         public static LiquidContainer Can16oz
@@ -51,7 +69,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
-                    DisplayName = "16oz Can"
+                    DisplayName = "16oz Can",
+					Shape = LiquidContainerShape.DefaultCanShape
                 };
             }
         }
@@ -63,7 +82,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = LiquidAmount.FromLiquidOunces(10.0M),
-                    DisplayName = "10oz Bottle"
+                    DisplayName = "10oz Bottle",
+					Shape = LiquidContainerShape.DefaultCanShape
                 };
             }
         }
@@ -75,7 +95,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = new LiquidAmount {Milliliters = 250M},
-                    DisplayName = "250ml Can"
+                    DisplayName = "250ml Can",
+					Shape = LiquidContainerShape.DefaultCanShape
                 };
             }
         }
@@ -86,7 +107,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = LiquidAmount.FromLiquidOunces(12.0M),
-                    DisplayName = "12oz Bottle"
+                    DisplayName = "12oz Bottle",
+					Shape = LiquidContainerShape.DefaultBeerBottleShape	
                 };
             }
         }
@@ -98,7 +120,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
-                    DisplayName = "16oz Bottle"
+                    DisplayName = "16oz Bottle",
+					Shape = LiquidContainerShape.DefaultBeerBottleShape	
                 };
             }
         }
@@ -110,7 +133,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = LiquidAmount.FromLiquidOunces(7.0M),
-                    DisplayName = "7oz Bottle"
+                    DisplayName = "7oz Bottle",
+					Shape = LiquidContainerShape.DefaultBeerBottleShape	
                 };
             }
         }
@@ -122,7 +146,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = LiquidAmount.FromLiquidOunces(40M),
-                    DisplayName = "40oz Bottle"
+                    DisplayName = "40oz Bottle",
+					Shape = LiquidContainerShape.DefaultBeerBottleShape	
                 };
             }
         }
@@ -157,7 +182,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = new LiquidAmount {Milliliters = 58673.8827M},
-					DisplayName = "Keg (Half Barrel)"
+					DisplayName = "Keg (Half Barrel)",
+					Shape = LiquidContainerShape.DefaultKegShape
                 };
             }
         }
@@ -169,7 +195,8 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainer
                 {
                     AmountContained = new LiquidAmount {Milliliters = 29336.94135M},
-					DisplayName = "Pony Keg (Quarter Barrel)"
+					DisplayName = "Pony Keg (Quarter Barrel)",
+					Shape = LiquidContainerShape.DefaultKegShape
                 };
             }
         }
@@ -178,7 +205,8 @@ namespace Mise.Core.ValueItems.Inventory
 			get{
 				return new LiquidContainer {
 					AmountContained = new LiquidAmount{ Milliliters = 19800M },
-					DisplayName = "Sixth Barrel"
+					DisplayName = "Sixth Barrel",
+					Shape = LiquidContainerShape.DefaultKegShape
 				};
 			}
 		}
@@ -187,7 +215,8 @@ namespace Mise.Core.ValueItems.Inventory
 		{
 			get{return new LiquidContainer {
 					AmountContained = new LiquidAmount{Milliliters = 50000M},
-					DisplayName = "Import Keg (50L)"
+					DisplayName = "Import Keg (50L)",
+					Shape = LiquidContainerShape.DefaultKegShape
 				};
 			}
 		}
@@ -250,6 +279,12 @@ namespace Mise.Core.ValueItems.Inventory
         /// </summary>
         public Weight WeightFull { get; set; }
 
+		/// <summary>
+		/// If set, the container shape we use for this container
+		/// </summary>
+		/// <value>The shape.</value>
+		public LiquidContainerShape Shape{get;set;}
+
         public bool Equals(LiquidContainer other)
         {
             if (string.IsNullOrEmpty(_displayName) == false)
@@ -285,6 +320,13 @@ namespace Mise.Core.ValueItems.Inventory
                 return false;
             }
 
+			if ((Shape != null && other.Shape == null) || (other.Shape != null && Shape == null)) {
+				return false;
+			}
+
+			if (Shape != null && other.Shape != null && Shape.Equals (other.Shape) == false) {
+				return false;
+			}
             return true;
         }
 
@@ -326,8 +368,9 @@ namespace Mise.Core.ValueItems.Inventory
 
         public bool ContainsSearchString(string searchString)
         {
-            return (AmountContained != null && AmountContained.Milliliters.ToString().Contains(searchString))
-                || (DisplayName != null && DisplayName.ToUpper().Contains(searchString.ToUpper()));
+			return (AmountContained != null && AmountContained.Milliliters.ToString ().Contains (searchString))
+			|| (DisplayName != null && DisplayName.ToUpper ().Contains (searchString.ToUpper ()))
+			|| (Shape != null && Shape.ContainsSearchString (searchString));
         }
 
         #endregion

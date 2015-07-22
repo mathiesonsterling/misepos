@@ -14,6 +14,7 @@ namespace Mise.Inventory.Services.Implementation
 	public class PARService : IPARService
 	{
 		private IPAR _currentPar;
+		IPARBeverageLineItem _lineItem;
 
 		readonly IPARRepository _parRepository;
 		readonly ILoginService _loginService;
@@ -101,6 +102,17 @@ namespace Mise.Inventory.Services.Implementation
 
 			var updateEv = _eventFactory.CreatePARLineItemQuantityUpdatedEvent (emp, par, lineItem.ID, newQuantity);
 			_currentPar = _parRepository.ApplyEvent (updateEv);
+		}
+
+		public Task SetCurrentLineItem (IPARBeverageLineItem li)
+		{
+			_lineItem = li;
+			return Task.FromResult (true);
+		}
+
+		public Task<IPARBeverageLineItem> GetCurrentLineItem ()
+		{
+			return Task.FromResult (_lineItem);
 		}
 		#endregion
 

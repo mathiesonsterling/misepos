@@ -43,11 +43,11 @@ namespace Mise.Inventory.ViewModels
 		#endregion
 	}
 
-	public class PARViewModel : BaseSearchableViewModel<PARLineItemDisplay>
+	public class ParViewModel : BaseSearchableViewModel<PARLineItemDisplay>
 	{
 		readonly IPARService _parService;
 		IPARBeverageLineItem _itemSettingQuantity;
-		public PARViewModel(ILogger logger, IAppNavigation appNavigation, IPARService parService)
+		public ParViewModel(ILogger logger, IAppNavigation appNavigation, IPARService parService)
 		:base(appNavigation, logger)
 		{
 			_parService = parService;
@@ -90,8 +90,8 @@ namespace Mise.Inventory.ViewModels
 		public override async Task SelectLineItem(PARLineItemDisplay displayLineItem){
 			var lineItem = displayLineItem.Source;
 			_itemSettingQuantity = lineItem;
-			await Navigation.ShowUpdateQuantity (lineItem.Quantity, lineItem.DisplayName, QuantitySetCallback,
-				null, null, false, "Set Par for Item");
+			await _parService.SetCurrentLineItem (lineItem);
+		    await Navigation.ShowUpdateParLineItem();
 		}
 
 		async void QuantitySetCallback(int newQuant, decimal ignore){

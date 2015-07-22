@@ -20,21 +20,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Deploy</OutputPath>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="IRepositoryLoader.cs" />
@@ -45,6 +37,7 @@
     <Compile Include="Services\IInsightsService.cs" />
     <Compile Include="Services\Implementation\XamarinInsightsService.cs" />
     <Compile Include="ViewModels\BaseLineItemDisplayLine.cs" />
+    <Compile Include="ViewModels\BaseNextViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="MVVM\SimpleCommand.cs" />
@@ -71,6 +64,7 @@
     <Compile Include="Pages\ReportsPage.xaml.cs">
       <DependentUpon>ReportsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\UpdateReceivingOrderLineItemViewModel.cs" />
     <Compile Include="ViewModels\VendorFindViewModel.cs" />
     <Compile Include="ViewModels\VendorAddViewModel.cs" />
     <Compile Include="Pages\VendorAddPage.xaml.cs">
@@ -147,10 +141,6 @@
     <Compile Include="Services\Implementation\PurchaseOrderService.cs" />
     <Compile Include="CustomCells\LineItemWithEditableQuantityCell.cs" />
     <Compile Include="CustomCells\LineItemsWithEditableQuantityControl.cs" />
-    <Compile Include="Pages\UpdateQuantityPage.xaml.cs">
-      <DependentUpon>UpdateQuantityPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\UpdateQuantityViewModel.cs" />
     <Compile Include="Pages\PurchaseOrderReviewPage.xaml.cs">
       <DependentUpon>PurchaseOrderReviewPage.xaml</DependentUpon>
     </Compile>
@@ -180,6 +170,17 @@
     </Compile>
     <Compile Include="Services\Implementation\CrossSettingsClientKeyValueStorage.cs" />
     <Compile Include="BuildLevel.cs" />
+    <Compile Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml.cs">
+      <DependentUpon>InventoryVisuallyMeasureWithGesturesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\InventoryVisuallyMeasureBottleViewModel.cs" />
+    <Compile Include="Pages\UpdateParLineItemPage.xaml.cs">
+      <DependentUpon>UpdateParLineItemPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\UpdateParLineItemViewModel.cs" />
+    <Compile Include="Pages\UpdateReceivingOrderLineItem.xaml.cs">
+      <DependentUpon>UpdateReceivingOrderLineItem.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -307,9 +308,6 @@
     <EmbeddedResource Include="Pages\InventoryVisuallyMesasuredImprovedPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pages\UpdateQuantityPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="Pages\PurchaseOrderReviewPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -326,6 +324,15 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\AccountRegistrationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\UpdateParLineItemPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\UpdateReceivingOrderLineItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

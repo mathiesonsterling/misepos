@@ -21,7 +21,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -30,7 +29,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -89,6 +87,7 @@
     <Compile Include="ValueItems\CreditCardProcessorToken.cs" />
     <Compile Include="ValueItems\Distance.cs" />
     <Compile Include="ValueItems\Inventory\LiquidAmountUnits.cs" />
+    <Compile Include="ValueItems\Inventory\LiquidContainerShape.cs" />
     <Compile Include="ValueItems\Inventory\MeasurementMethods.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />
     <Compile Include="ValueItems\Inventory\PurchaseOrderStatus.cs" />

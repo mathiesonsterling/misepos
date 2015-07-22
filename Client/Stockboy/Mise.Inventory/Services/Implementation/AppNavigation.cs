@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Services;
-using Mise.Core.ValueItems;
 using Mise.Inventory.Pages;
 using Mise.Inventory.ViewModels;
 
@@ -198,7 +197,7 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			try
 			{
-			    const Pages PAGE = Pages.PAR;
+			    const Pages PAGE = Pages.Par;
 
 			    if (replaceCurrentPage) {
 					await ReplacePage(PAGE);
@@ -340,28 +339,29 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public Task ShowUpdateQuantity (int quantity, string itemName, Action<int, decimal> quantCallback, 
-			Action zeroOutCallback, Money price, bool addPrices = false, string title = "Update Quantity")
-		{
-			try{
-				var destinationViewModel = App.UpdateQuantityViewModel;
-				destinationViewModel.DoPrices = addPrices;
-				destinationViewModel.OnUpdatedCallback = quantCallback;
-				destinationViewModel.ZeroedOutCallback = zeroOutCallback;
-				destinationViewModel.Title = title;
-				destinationViewModel.SetQuantity (quantity, itemName, price);
-				return _navi.PushAsync (_pages.GetPage (Pages.UpdateQuantity));
-			} catch(Exception e){
-				HandleException(e);
-				return Task.FromResult (false);
-			}
-		}
+	    public Task ShowUpdateParLineItem()
+	    {
+	        try
+	        {
+	            return _navi.PushAsync(_pages.GetPage(Pages.UpdateParLineItem));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+	            return Task.FromResult(false);
+	        }
+	    }
 
 		public async Task ShowInvitations(){
 			await _navi.PushAsync (_pages.GetPage (Pages.Invitations));	
 		}
 
-		public Task ShowRestaurantRegistration ()
+	    public Task ShowUpdateReceivingOrderLineItem()
+	    {
+	        return _navi.PushAsync(_pages.GetPage(Pages.UpdateRecievingOrderLineItem));
+	    }
+
+	    public Task ShowRestaurantRegistration ()
 		{
 			return _navi.PushAsync (_pages.GetPage (Pages.RegisterRestaurant));
 		}
@@ -379,14 +379,13 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public Task CloseInventoryVisuallyMeasureItem ()
+		public async Task CloseInventoryVisuallyMeasureItem ()
 		{
 			try{
-				App.InventoryViewModel.OnAppearing ();
-				return _navi.PopAsync ();
+				await App.InventoryViewModel.OnAppearing ();
+				await _navi.PopAsync ();
 			} catch(Exception e){
 				HandleException(e);
-				return Task.FromResult (false);
 			}
 		}
 
