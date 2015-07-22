@@ -46,7 +46,8 @@ namespace Mise.Inventory.Pages
 					ItemsSource = vm.LineItems,
 					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
 					RowHeight = 50,
-					HasUnevenRows = true
+					HasUnevenRows = true,
+					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
 				_customVL.ItemTapped += async (sender, e) =>  {
 					//mark it as the item being measured

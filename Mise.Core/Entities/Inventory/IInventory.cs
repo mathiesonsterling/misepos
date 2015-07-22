@@ -7,7 +7,7 @@ namespace Mise.Core.Entities.Inventory
     /// <summary>
     /// Represents an invetory the restaurant holds, or measured
     /// </summary>
-    public interface IInventory : IRestaurantEntityBase, IEventStoreEntityBase<IInventoryEvent>, ICloneableEntity
+    public interface IInventory : IRestaurantEntityBase, IEventStoreEntityBase<IInventoryEvent>, ITextSearchable
     {
         /// <summary>
         /// Gets all beverage line items in this inventory

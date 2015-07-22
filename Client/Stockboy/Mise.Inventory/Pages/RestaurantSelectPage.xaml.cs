@@ -26,7 +26,8 @@ namespace Mise.Inventory.Pages
 				template.SetBinding (TextCell.TextProperty, "FullName");
 				var lv = new ListView {
 					ItemsSource = vm.PossibleRestaurantNames,
-					ItemTemplate = template
+					ItemTemplate = template,
+					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
 
 				lv.ItemTapped += async (sender, e) => {

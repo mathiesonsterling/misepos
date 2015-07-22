@@ -28,6 +28,7 @@ namespace Mise.Inventory.Pages
 			var lv = new ListView {
 				ItemsSource = vm.Sections,
 				ItemTemplate = template,
+				HorizontalOptions = LayoutOptions.FillAndExpand
 			};
 
 			lv.ItemTapped += async (sender, e) => {

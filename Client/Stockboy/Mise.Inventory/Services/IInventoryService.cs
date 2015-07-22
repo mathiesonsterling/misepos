@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Inventory;
@@ -59,6 +58,8 @@ namespace Mise.Inventory.Services
 
 		Task AddNewSection (string sectionName, bool hasPartialBottles, 
 			bool isDefaultInventorySection);
+
+	    Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant();
 
 	}
 }

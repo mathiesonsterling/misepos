@@ -47,7 +47,7 @@ namespace Mise.Inventory
 	        var needsReload = false;
 			try{
 				await restRepos.Load (restaurantID);
-			} catch(ServerNotReadyException e){
+			} catch(ServerNotReadyException){
 				//was it the service starting up?  if so, wait a second then reload
 			    needsReload = true;
 			}

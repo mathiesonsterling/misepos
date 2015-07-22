@@ -10,7 +10,7 @@ namespace Mise.Core.Entities.Inventory
     /// <summary>
     /// Represents a section in the Inventory, that matches a restaurant section
     /// </summary>
-    public interface IInventorySection : IRestaurantEntityBase, ICloneableEntity
+    public interface IInventorySection : IRestaurantEntityBase, ICloneableEntity, ITextSearchable
     {
         string Name { get; }
 

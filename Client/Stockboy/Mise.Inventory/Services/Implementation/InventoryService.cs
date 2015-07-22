@@ -62,11 +62,9 @@ namespace Mise.Inventory.Services.Implementation
 			var invSection = inv.GetSections ().FirstOrDefault (invS => invS.RestaurantInventorySectionID == section.ID);
 			if (invSection != null) {
 				return invSection.GetInventoryBeverageLineItemsInSection ().OrderBy (li => li.InventoryPosition);
-			} else {
-				throw new InvalidOperationException ("No matching inventory section for " + section.Name);
 			}
 
-			return new List<IInventoryBeverageLineItem> ();
+		    throw new InvalidOperationException ("No matching inventory section for " + section.Name);
 		}
 
 		public async Task StartNewInventory ()
@@ -287,7 +285,21 @@ namespace Mise.Inventory.Services.Implementation
 				
 		}
 
-		public Task<IInventory> GetSelectedInventory ()
+	    public async Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant()
+	    {
+	        var currentRestaurant = await _loginService.GetCurrentRestaurant();
+	        if (currentRestaurant == null)
+	        {
+	            throw new InvalidOperationException("No current restaurant");
+	        }
+
+	        var items =
+	            _inventoryRepository.GetAll()
+	                .Where(i => i.DateCompleted.HasValue && i.RestaurantID == currentRestaurant.ID);
+	        return items;
+	    }
+
+	    public Task<IInventory> GetSelectedInventory ()
 		{
 			return Task.FromResult (SelectedInventory);
 		}

@@ -5,10 +5,12 @@ using Autofac;
 using Mise.Core.Common.Events;
 using Mise.Core.Repositories;
 using Mise.Inventory.Services.Implementation;
+using Mise.Inventory.ViewModels.Reports;
 using Xamarin.Forms;
 
 using Mise.Inventory.Services;
 using Mise.Inventory.ViewModels;
+using Mise.Inventory.ViewModels.Reports;
 using Mise.Core.Services;
 
 namespace Mise.Inventory
@@ -87,8 +89,6 @@ namespace Mise.Inventory
 
         public static ReceivingOrderViewModel ReceivingOrderViewModel { get { return Resolve<ReceivingOrderViewModel>(); } }
 
-        public static ReportsViewModel ReportsViewModel { get { return Resolve<ReportsViewModel>(); } }
-
         public static RestaurantSelectViewModel RestaurantSelectViewModel { get { return Resolve<RestaurantSelectViewModel>(); } }
 
         public static SectionAddViewModel SectionAddViewModel { get { return Resolve<SectionAddViewModel>(); } }
@@ -116,6 +116,10 @@ namespace Mise.Inventory
         public static RestaurantRegistrationViewModel RestaurantRegistrationViewModel { get { return Resolve<RestaurantRegistrationViewModel>(); } }
         public static PurchaseOrderSelectViewModel PurchaseOrderSelectViewModel { get { return Resolve<PurchaseOrderSelectViewModel>(); } }
         public static AccountRegistrationViewModel AccountRegistrationViewModel { get { return Resolve<AccountRegistrationViewModel>(); } }
+
+		public static ReportsViewModel ReportsViewModel { get { return Resolve<ReportsViewModel>(); } }
+		public static SelectCompletedInventoryViewModel SelectCompletedInventoryViewModel{ get { return Resolve<SelectCompletedInventoryViewModel> (); } }
+		public static ReportResultsViewModel ReportResultsViewModel{ get { return Resolve<ReportResultsViewModel> (); } }
         #endregion
 
         public static T Resolve<T>()

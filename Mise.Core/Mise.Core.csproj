@@ -133,6 +133,10 @@
     <Compile Include="Services\ISalesTaxCalculatorService.cs" />
     <Compile Include="ValueItems\PersonName.cs" />
     <Compile Include="ValueItems\ReferralCode.cs" />
+    <Compile Include="ValueItems\Reports\ReportRequest.cs" />
+    <Compile Include="ValueItems\Reports\ReportResult.cs" />
+    <Compile Include="ValueItems\Reports\ReportResultLineItem.cs" />
+    <Compile Include="ValueItems\Reports\ReportTypes.cs" />
     <Compile Include="ValueItems\RestaurantName.cs" />
     <Compile Include="ValueItems\StreetAddress.cs" />
     <Compile Include="ValueItems\PhoneNumber.cs" />
@@ -202,4 +206,5 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
 </Project>
