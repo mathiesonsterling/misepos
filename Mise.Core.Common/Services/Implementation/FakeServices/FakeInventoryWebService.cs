@@ -35,7 +35,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 
 	    private readonly List<IApplicationInvitation> _invitations; 
 
-	    #region IInventoryEmployeeWebService implementation
+	    #region Creation
 		public FakeInventoryWebService(){
 		    var restID = Guid.Empty;
             var townsendID = Guid.Parse("c7c61794-03db-4e20-a87e-8483f4960286");
@@ -241,7 +241,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			{
 				new Vendor
 				{
-					ID = Guid.NewGuid(),
+					ID = Guid.Empty,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 					Name = "Bob's Liquor Barn",
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>(),

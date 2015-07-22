@@ -57,14 +57,36 @@ namespace Mise.Inventory.ViewModels
 			_inventoryService = inventoryService;
 			_loginService = loginService;
 		}
-			
-		 
+
+        public override async Task OnAppearing()
+        {
+            try
+            {
+                if (CameFromAdd)
+                {
+                    CameFromAdd = false;
+                }
+                await base.OnAppearing();
+                var section = await _loginService.GetCurrentSection();
+                if (section != null)
+                {
+                    Title = "Count for " + section.Name;
+                }
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
+        }
+
 		public string Title{get{ return GetValue<string> (); } private set{ SetValue (value); }}
 		public bool IsInventoryEmpty{get{ return GetValue<bool> (); }private set{SetValue (value);}}
 
         public InventoryLineItemDisplayLine FirstUnmeasuredItem { get { return GetValue<InventoryLineItemDisplayLine>(); } private set { SetValue(value);} }
 
 		public bool CanComplete{ get { return GetValue<bool> (); } private set { SetValue (value); } }
+
+        public bool CameFromAdd { get; private set; }
 
 		#region Commands
 
@@ -101,6 +123,7 @@ namespace Mise.Inventory.ViewModels
 
 		async void AddNewItem()
 		{
+		    CameFromAdd = true;
 			await Navigation.ShowInventoryItemFind ();
 		}
 
@@ -118,19 +141,6 @@ namespace Mise.Inventory.ViewModels
 			IsInventoryEmpty = itemsList.Any () == false;
 			//we can complete if we have items, and all are measured
 			return itemsList;
-		}
-
-		public override async Task OnAppearing ()
-		{
-			try{
-				await base.OnAppearing ();
-				var section = await _loginService.GetCurrentSection ();
-				if(section != null){
-					Title = "Count for " + section.Name;
-				}
-			}catch(Exception e){
-				HandleException (e);
-			}
 		}
 
 		async void FinishSection(){
