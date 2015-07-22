@@ -16,7 +16,7 @@ namespace Mise.Inventory.ViewModels
 	{
 		readonly ILoginService _loginService;
 		readonly IInventoryService _inventoryService;
-		public ObservableCollection<IRestaurantInventorySection> Sections { get; set; }
+		public IEnumerable<IRestaurantInventorySection> Sections { get; set; }
 
 		public SectionSelectViewModel(IAppNavigation appNavigation, ILogger logger, ILoginService loginService, 
 			IInventoryService inventoryService) : base(appNavigation, logger)
@@ -61,7 +61,7 @@ namespace Mise.Inventory.ViewModels
 			var rest = await loginService.GetCurrentRestaurant();
 			if (rest != null) {
 				var secs = rest.GetInventorySections();
-				Sections = new ObservableCollection<IRestaurantInventorySection> (secs);
+				Sections = secs;
 			}
 
 			//do we need to create an inventory?

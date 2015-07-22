@@ -41,7 +41,7 @@ namespace Mise.Inventory.ViewModels
 						}
 					}
 				}
-				LineItems = new ObservableCollection<TLineItemType>(items);
+				LineItems = items;
 				if(LoadItemsOnView  != null){
 					LoadItemsOnView();
 				}
@@ -51,7 +51,7 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		public ObservableCollection<TLineItemType> LineItems{ get; private set;}
+		public IEnumerable<TLineItemType> LineItems{ get; private set;}
 
 		protected string LastSearchString{ get; private set;}
 		public string SearchString {

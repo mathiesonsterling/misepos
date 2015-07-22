@@ -111,21 +111,18 @@ namespace Mise.Inventory.ViewModels
 
 				var newItem = new VendorAndItems {
 					VendorName = vendor != null ? vendor.Name : "No Vendor",
-					POLineItems = new ObservableCollection<PODisplayLineItem>(
-						poByV.GetLineItems ().Select(p => new PODisplayLineItem (p))
-					)
+					POLineItems = poByV.GetLineItems ().Select(p => new PODisplayLineItem (p))
 				};
 				res.Add (newItem);
 			}
 
 			var ordered = res.OrderBy (v => v.VendorName == "No Vendor")
 				.ThenBy (v => v.VendorName);
-			var list = new ObservableCollection<VendorAndItems> (ordered);
-			VendorsAndPOs = list;
+			VendorsAndPOs = ordered;
 
 		}
 
-		public ObservableCollection<VendorAndItems> VendorsAndPOs{ get; private set;}
+		public IEnumerable<VendorAndItems> VendorsAndPOs{ get; private set;}
 
 
 		public ICommand SubmitPOCommand{get{return new SimpleCommand (SubmitPO);}}
@@ -144,7 +141,7 @@ namespace Mise.Inventory.ViewModels
 
 		public class VendorAndItems{
 			public string VendorName{get;set;}
-			public ObservableCollection<PODisplayLineItem> POLineItems{get;set;}
+			public IEnumerable<PODisplayLineItem> POLineItems{get;set;}
 		}
 	}
 }
