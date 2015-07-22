@@ -55,7 +55,7 @@ namespace DeveloperTools.Commands
 
 
             //restaurants
-            var rests = (await fakeService.GetRestaurantsAsync()).ToList();
+            var rests = (await fakeService.GetRestaurantsAsync()).Where(r => r.ID != Guid.Empty).ToList();
 
             foreach (var rest in rests)
             {
@@ -65,7 +65,7 @@ namespace DeveloperTools.Commands
             Report("Added "+rests.Count+" Restaurants");
 
             var vendors = await fakeService.GetVendorsAsync();
-            foreach (var v in vendors)
+            foreach (var v in vendors.Where(v => v.ID != Guid.Empty))
             {
                 if (v.ID == Guid.Empty)
                 {
@@ -144,7 +144,7 @@ namespace DeveloperTools.Commands
 
             }
             var invites = await fakeService.GetApplicationInvitations();
-            foreach (var invite in invites)
+            foreach (var invite in invites.Where(i => i.RestaurantID != Guid.Empty))
             {
                 await graphDAL.AddApplicationInvitiation(invite);
             }
