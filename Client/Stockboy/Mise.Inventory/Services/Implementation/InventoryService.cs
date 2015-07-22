@@ -285,7 +285,7 @@ namespace Mise.Inventory.Services.Implementation
 				
 		}
 
-	    public async Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant()
+	    public async Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant(DateTimeOffset? start, DateTimeOffset? end)
 	    {
 	        var currentRestaurant = await _loginService.GetCurrentRestaurant();
 	        if (currentRestaurant == null)
@@ -295,7 +295,16 @@ namespace Mise.Inventory.Services.Implementation
 
 	        var items =
 	            _inventoryRepository.GetAll()
-	                .Where(i => i.DateCompleted.HasValue && i.RestaurantID == currentRestaurant.ID);
+	                .Where(i => i.DateCompleted.HasValue && i.RestaurantID == currentRestaurant.ID)
+					.ToList();
+
+			if (start.HasValue) {
+				items = items.Where (i => i.DateCompleted.Value >= start.Value).ToList();
+			}
+
+			if (end.HasValue) {
+				items = items.Where (i => i.DateCompleted.Value <= end.Value).ToList();
+			}
 	        return items;
 	    }
 

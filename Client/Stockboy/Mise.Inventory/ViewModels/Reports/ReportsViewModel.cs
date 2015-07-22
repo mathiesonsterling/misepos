@@ -17,7 +17,7 @@ namespace Mise.Inventory.ViewModels.Reports
 			_logger = logger;
 		    _reportsService = reportsService;
 		    StartDate = new DateTime(2015, 1, 1);
-		    EndDate = DateTime.Now;
+			EndDate = DateTime.Now.AddDays(1);
 		}
 
         public override Task OnAppearing()
