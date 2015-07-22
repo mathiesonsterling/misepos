@@ -19,6 +19,7 @@
 					<StackLayout x:Name="stckMeasure" 
 						HorizontalOptions="CenterAndExpand"
 						VerticalOptions="FillAndExpand"
+						HeightRequest = "250"
 						Padding = "0"
 						Spacing = "0"
 					>

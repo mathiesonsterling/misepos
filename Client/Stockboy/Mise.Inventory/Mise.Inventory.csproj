@@ -134,9 +134,6 @@
     <Compile Include="CustomCells\LineItemWithQuantityCell.cs" />
     <Compile Include="ViewModels\InventoryVisuallyMeasureItemViewModel.cs" />
     <Compile Include="ViewModels\InventoryVisuallyMeasureItemImprovedViewModel.cs" />
-    <Compile Include="Pages\InventoryVisuallyMesasuredImprovedPage.xaml.cs">
-      <DependentUpon>InventoryVisuallyMesasuredImprovedPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Services\IPurchaseOrderService.cs" />
     <Compile Include="Services\Implementation\PurchaseOrderService.cs" />
     <Compile Include="CustomCells\LineItemWithEditableQuantityCell.cs" />
@@ -303,9 +300,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\InventoryPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\InventoryVisuallyMesasuredImprovedPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\PurchaseOrderReviewPage.xaml">
