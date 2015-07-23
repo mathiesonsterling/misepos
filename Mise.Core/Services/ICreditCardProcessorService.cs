@@ -12,11 +12,6 @@ namespace Mise.Core.Services
 	public interface ICreditCardProcessorService
 	{
 		/// <summary>
-		/// The logger.
-		/// </summary>
-		ILogger Logger{ get; set; }
-
-		/// <summary>
 		/// Charge the card with the final amount, close the payment
 		/// </summary>
 		/// <param name = "payment">Payment that is storing this</param>
@@ -37,11 +32,12 @@ namespace Mise.Core.Services
 		                   Action<ICreditCardPayment, CreditCardAuthorizationCode> authCallback);
 
 		/// <summary>
-		/// Send the card to the processor, and get a clean version with the token populated
+		/// Setup our credit card processer to register someone
 		/// </summary>
-		/// <returns>The card.</returns>
-		/// <param name="card">Card.</param>
-		Task<CreditCard> AuthorizeCard(CreditCardNumber card);
+		/// <returns>The payment I.</returns>
+		Task<string> SetPaymentID();
+
+		Task<CreditCard> GetCardAfterAuthorization ();
 	}
 }
 

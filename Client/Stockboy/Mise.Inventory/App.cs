@@ -10,7 +10,6 @@ using Xamarin.Forms;
 
 using Mise.Inventory.Services;
 using Mise.Inventory.ViewModels;
-using Mise.Inventory.ViewModels.Reports;
 using Mise.Core.Services;
 
 namespace Mise.Inventory
@@ -120,6 +119,11 @@ namespace Mise.Inventory
 		public static ReportsViewModel ReportsViewModel { get { return Resolve<ReportsViewModel>(); } }
 		public static SelectCompletedInventoryViewModel SelectCompletedInventoryViewModel{ get { return Resolve<SelectCompletedInventoryViewModel> (); } }
 		public static ReportResultsViewModel ReportResultsViewModel{ get { return Resolve<ReportResultsViewModel> (); } }
+
+        public static AuthorizeCreditCardViewModel AuthorizeCreditCardViewModel { get
+        {
+            return Resolve<AuthorizeCreditCardViewModel>();
+        } }
         #endregion
 
         public static T Resolve<T>()

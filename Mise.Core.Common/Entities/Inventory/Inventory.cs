@@ -105,7 +105,7 @@ namespace Mise.Core.Common.Entities.Inventory
             }
 
             //calc the current amount
-            var currentAmount = LiquidAmount.Empty;
+            var currentAmount = LiquidAmount.None;
             if (entityEvent.Container != null)
             {
                 currentAmount = entityEvent.Container.AmountContained.Multiply(entityEvent.Quantity);

@@ -423,16 +423,39 @@ namespace Mise.Inventory.Services.Implementation
 				await _restaurantRepository.Load(_currentRestaurant.ID);
 			}
 		}
-			
-	    public async Task<IAccount> RegisterAccount(CreditCard card, ReferralCode code, PersonName name, MiseAppTypes app)
+
+		private class RegisterAccountInfo{
+			public EmailAddress Email;
+			public ReferralCode Referral;
+			public PersonName AccountName;
+			public MiseAppTypes App;
+		}
+
+		private RegisterAccountInfo _currentRegistrationInProcess;
+		public Task StartRegisterAccount(EmailAddress email, ReferralCode code, PersonName accountName, MiseAppTypes app){
+			//just store this information, and return a checksum
+			var storedInfo = new RegisterAccountInfo {
+				Email = email,
+				Referral = code,
+				AccountName = accountName,
+				App = app,
+			};
+
+			_currentRegistrationInProcess = storedInfo;
+			return Task.FromResult(storedInfo.GetHashCode ());
+		}
+
+		public async Task<IAccount> CompleteRegisterAccount(CreditCard card)
 	    {
+			if (_currentRegistrationInProcess == null) {
+				throw new InvalidOperationException ("No registration currently in process!");
+			}
+
 			try{
-				//send our credit card, to get the token
-
-
 				//commit account registry
 				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, 
-					_currentEmployee.PrimaryEmail, _currentRestaurant.PhoneNumber, card, code, app, name);
+					_currentRegistrationInProcess.Email, _currentRestaurant.PhoneNumber, card, _currentRegistrationInProcess.Referral, 
+					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName);
 
 				var acct = _accountRepository.ApplyEvent (ev);
 				await _accountRepository.CommitOnlyImmediately (acct.ID);

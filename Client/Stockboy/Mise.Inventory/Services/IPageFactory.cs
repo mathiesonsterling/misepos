@@ -30,7 +30,7 @@ namespace Mise.Inventory.Services
 		Invitations,
 		PurchaseOrderSelect,
 		AccountRegistration,
-
+		AuthorizeCreditCard,
         Reports,
 	    CompletedInventoriesSelect,
 	    ReportResults,

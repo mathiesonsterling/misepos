@@ -96,6 +96,24 @@ namespace Mise.Core.Common.UnitTests.Tools
 		{
 			throw new NotImplementedException ();
 		}
+
+		/// <summary>
+		/// Gets the payment ID we'll send to be given back a token after we register
+		/// </summary>
+		/// <returns>The payment I.</returns>
+		public Task<string> SetPaymentID(){
+			return Task.FromResult ("testPaymentID");
+		}
+
+		public Task<CreditCard> GetCardAfterAuthorization (){
+			return Task.FromResult(
+				new CreditCard{ 
+					ProcessorToken = new CreditCardProcessorToken{
+						Processor = CreditCardProcessors.FakeProcessor,
+						Token = "testProcessorToken"
+					}
+			});
+		}
 	}
 }
 
