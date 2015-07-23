@@ -26,7 +26,7 @@
 			/>
 			<Button 
 				x:Name = "btnUpdateQuantity"
-				Text="Update" 
+				Text="Set Par" 
 				Command="{Binding UpdateQuantityCommand}" 
 				HorizontalOptions="FillAndExpand"/>
 		</StackLayout>

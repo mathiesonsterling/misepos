@@ -19,7 +19,6 @@ namespace Mise.Inventory.Services
 		Par,
 		PurchaseOrderReview,
 		ReceivingOrder,
-		Reports,
 		RestaurantSelect,
 		SectionAdd,
 		SectionSelect,
@@ -31,6 +30,10 @@ namespace Mise.Inventory.Services
 		Invitations,
 		PurchaseOrderSelect,
 		AccountRegistration,
+
+        Reports,
+	    CompletedInventoriesSelect,
+	    ReportResults,
 	}
 
 	public interface IPageFactory

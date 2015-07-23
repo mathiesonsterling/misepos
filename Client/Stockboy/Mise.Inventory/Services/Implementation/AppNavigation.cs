@@ -129,16 +129,11 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		/// <summary>
-		/// Shows the reports.
-		/// </summary>
-		/// <returns>The reports.</returns>
 		public async Task ShowCreatePurchaseOrder()
 		{
 			try{
 			//until we have more stuff, go to review
 			await _navi.PushAsync (_pages.GetPage (Pages.PurchaseOrderReview));
-			//await _navi.PushAsync(_pages.GetPage(Pages.Reports));
 			} catch(Exception e){
 				HandleException(e);
 			}
@@ -151,11 +146,6 @@ namespace Mise.Inventory.Services.Implementation
 			} catch(Exception e){
 				HandleException (e);
 			}
-		}
-
-		public Task ShowReports()
-		{
-			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -358,10 +348,18 @@ namespace Mise.Inventory.Services.Implementation
 
 	    public Task ShowUpdateReceivingOrderLineItem()
 	    {
-	        return _navi.PushAsync(_pages.GetPage(Pages.UpdateRecievingOrderLineItem));
+	        try
+	        {
+	            return _navi.PushAsync(_pages.GetPage(Pages.UpdateRecievingOrderLineItem));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+                return Task.FromResult(false);
+	        }
 	    }
 
-	    public Task ShowRestaurantRegistration ()
+        public Task ShowRestaurantRegistration ()
 		{
 			return _navi.PushAsync (_pages.GetPage (Pages.RegisterRestaurant));
 		}
@@ -389,7 +387,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public async Task CloseUpdateQuantity ()
+	    public async Task CloseUpdateQuantity ()
 		{
 			#if __ANDROID__
 				//reload the items prior to us going there
@@ -457,7 +455,47 @@ namespace Mise.Inventory.Services.Implementation
 	            HandleException(e);
 	        }
 	    }
-			
+
+        #region Reports
+
+	    public async Task ShowReports()
+	    {
+	        try
+	        {
+	            await _navi.PushAsync(_pages.GetPage(Pages.Reports));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+	        }
+
+	    }
+
+	    public Task ShowSelectCompletedInventory()
+        {
+            try
+            {
+                return _navi.PushAsync(_pages.GetPage(Pages.CompletedInventoriesSelect));
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return Task.FromResult(false);
+            }
+        }
+
+        public async Task ShowReportResults()
+	    {
+	        try
+	        {
+	            await _navi.PushAsync(_pages.GetPage(Pages.ReportResults));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+	        }
+	    }
+        #endregion	
 
 	    public async void HandleException(Exception e){
 			try{

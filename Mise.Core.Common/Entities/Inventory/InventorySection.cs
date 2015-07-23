@@ -23,6 +23,12 @@ namespace Mise.Core.Common.Entities.Inventory
 			set;
 		}
 
+	    public bool ContainsSearchString(string searchString)
+	    {
+	        return (string.IsNullOrWhiteSpace(Name) == false && String.Equals(Name, searchString, StringComparison.CurrentCultureIgnoreCase))
+	               || (LineItems.Any(li => li.ContainsSearchString(searchString)));
+	    }
+
         public Guid RestaurantInventorySectionID { get; set; }
 
         public List<InventoryBeverageLineItem> LineItems { get; set; }

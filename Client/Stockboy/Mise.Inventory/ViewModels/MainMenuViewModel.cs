@@ -188,7 +188,7 @@ namespace Mise.Inventory.ViewModels
 		/// <returns><c>true</c> if this instance is current user admin; otherwise, <c>false</c>.</returns>
 		static bool IsCurrentUserAdmin()
 		{
-			return false;
+			return true;
 		}
 	}
 }

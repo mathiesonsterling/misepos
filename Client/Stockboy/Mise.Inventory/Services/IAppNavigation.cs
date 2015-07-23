@@ -89,7 +89,13 @@ namespace Mise.Inventory.Services
 
 	    Task ShowUpdateReceivingOrderLineItem();
 
-		Task CloseUpdateQuantity();
+        #region Reports
+
+	    Task ShowSelectCompletedInventory();
+	    Task ShowReportResults();
+        #endregion
+
+        Task CloseUpdateQuantity();
 		Task CloseItemScan();
 		Task CloseVendorAdd();
 		Task CloseItemAdd();

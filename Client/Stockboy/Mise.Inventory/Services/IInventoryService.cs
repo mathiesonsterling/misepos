@@ -60,6 +60,8 @@ namespace Mise.Inventory.Services
 		Task AddNewSection (string sectionName, bool hasPartialBottles, 
 			bool isDefaultInventorySection);
 
+	    Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant(DateTimeOffset? start, DateTimeOffset? end);
+
 	}
 }
 

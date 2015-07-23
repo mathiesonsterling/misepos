@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 
-namespace Mise.Inventory.Pages
+namespace Mise.Inventory.Pages.Reports
 {
 	public partial class ReportsPage : ContentPage
 	{
 		public ReportsPage()
 		{
+			BindingContext = App.ReportsViewModel;
 			InitializeComponent();
 		}
 

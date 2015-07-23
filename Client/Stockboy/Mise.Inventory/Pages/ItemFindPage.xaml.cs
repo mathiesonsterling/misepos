@@ -39,7 +39,8 @@ namespace Mise.Inventory.Pages
 				template.SetBinding (TextCell.DetailProperty, "DetailDisplay");
 				var lv = new ListView {
 					ItemsSource = vm.LineItems,
-					ItemTemplate = template
+					ItemTemplate = template,
+					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
 				lv.ItemSelected += async (sender, e) => {
 					//fire the command

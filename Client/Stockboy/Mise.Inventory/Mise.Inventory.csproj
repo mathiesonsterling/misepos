@@ -34,8 +34,13 @@
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reports\AmountUsedInTimeReport.cs" />
+    <Compile Include="Reports\BaseReport.cs" />
+    <Compile Include="Reports\CompletedInventoryReport.cs" />
     <Compile Include="Services\IInsightsService.cs" />
+    <Compile Include="Services\Implementation\ReportsService.cs" />
     <Compile Include="Services\Implementation\XamarinInsightsService.cs" />
+    <Compile Include="Services\IReportsService.cs" />
     <Compile Include="ViewModels\BaseLineItemDisplayLine.cs" />
     <Compile Include="ViewModels\BaseNextViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -57,13 +62,11 @@
     <Compile Include="Services\Implementation\RegistrationService.cs" />
     <Compile Include="App.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
-    <Compile Include="ViewModels\ReportsViewModel.cs" />
     <Compile Include="Pages\MainMenuPage.xaml.cs">
       <DependentUpon>MainMenuPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ReportsPage.xaml.cs">
-      <DependentUpon>ReportsPage.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\Reports\ReportsViewModel.cs" />
+    <Compile Include="ViewModels\Reports\SelectCompletedInventoryViewModel.cs" />
     <Compile Include="ViewModels\UpdateReceivingOrderLineItemViewModel.cs" />
     <Compile Include="ViewModels\VendorFindViewModel.cs" />
     <Compile Include="ViewModels\VendorAddViewModel.cs" />
@@ -178,6 +181,16 @@
       <DependentUpon>UpdateReceivingOrderLineItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\Implementation\XamarinFormsSimpleKeyValueStorage.cs" />
+    <Compile Include="Pages\Reports\SelectCompletedInventoriesPage.xaml.cs">
+      <DependentUpon>SelectCompletedInventoriesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\ReportsPage.xaml.cs">
+      <DependentUpon>ReportsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\ReportResultsPage.xaml.cs">
+      <DependentUpon>ReportResultsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Reports\ReportResultsViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -263,9 +276,6 @@
     <EmbeddedResource Include="Pages\MainMenuPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pages\ReportsPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="Pages\VendorAddPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -329,6 +339,15 @@
     <EmbeddedResource Include="Pages\UpdateReceivingOrderLineItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Reports\SelectCompletedInventoriesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Reports\ReportsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Reports\ReportResultsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Mise.Core\Mise.Core.csproj">
@@ -348,4 +367,6 @@
       <Name>Mise.InventoryWebService.ServiceModelPortable</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
 </Project>

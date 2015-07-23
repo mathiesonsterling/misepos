@@ -3,7 +3,7 @@
 using Xamarin.Forms;
 
 using Mise.Inventory.Pages;
-
+using Mise.Inventory.Pages.Reports;
 namespace Mise.Inventory.Services
 {
     public class PageFactory : IPageFactory
@@ -38,8 +38,6 @@ namespace Mise.Inventory.Services
                     return new ReceivingOrderPage();
                 case Pages.UpdateRecievingOrderLineItem:
                     return new UpdateReceivingOrderLineItem();
-                case Pages.Reports:
-                    return new ReportsPage();
                 case Pages.RestaurantSelect:
                     return new RestaurantSelectPage();
                 case Pages.SectionAdd:
@@ -60,8 +58,14 @@ namespace Mise.Inventory.Services
                     return new PurchaseOrderSelectPage();
                 case Pages.AccountRegistration:
                     return new AccountRegistrationPage();
+
+                case Pages.Reports:
+                    return new ReportsPage();
+                case Pages.CompletedInventoriesSelect:
+                    return new SelectCompletedInventoriesPage();
+                case Pages.ReportResults:
+                    return new ReportResultsPage();
                 default:
-                    //TODO this needs xamarin insights and an error page!
                     throw new ArgumentException(string.Format("Unknown page type {0}", page));
             }
         }

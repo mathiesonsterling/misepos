@@ -44,6 +44,14 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public bool IsCurrent { get; set; }
 
+        public bool ContainsSearchString(string searchString)
+        {
+            return
+                (DateCompleted != null && DateCompleted.ToString().ToUpper().Contains(searchString.ToUpper()))
+                || (searchString.ToUpper() == "CURRENT" && IsCurrent)
+                || (Sections != null && Sections.Any(s => s.ContainsSearchString(searchString)));
+        }
+
         public void When(IInventoryEvent entityEvent)
         {
             LastUpdatedDate = entityEvent.CreatedDate;

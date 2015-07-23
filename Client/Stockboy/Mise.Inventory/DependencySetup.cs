@@ -27,6 +27,7 @@ using Mise.Core.Common.Services.Implementation;
 using System.ServiceModel;
 using Mise.Core.Entities;
 using Mise.Core.Common;
+using Mise.Inventory.ViewModels.Reports;
 
 
 namespace Mise.Inventory
@@ -53,7 +54,7 @@ namespace Mise.Inventory
 
 		public static BuildLevel GetBuildLevel(){
 			#if DEBUG
-			return BuildLevel.Development;
+			return BuildLevel.Demo;
 			#else
 			return BuildLevel.QA;
 			#endif
@@ -154,6 +155,7 @@ namespace Mise.Inventory
 			cb.RegisterType<DummyDeviceLocationService>().As<IDeviceLocationService>().SingleInstance();
 			cb.RegisterType<PurchaseOrderService> ().As<IPurchaseOrderService> ().SingleInstance ();
 			cb.RegisterType<CategoriesService> ().As<ICategoriesService> ().SingleInstance ();
+			cb.RegisterType<ReportsService> ().As<IReportsService> ().SingleInstance ();
 
 			// View Models
 			cb.RegisterType<AboutViewModel>().SingleInstance();
@@ -181,6 +183,8 @@ namespace Mise.Inventory
 			cb.RegisterType<RestaurantRegistrationViewModel> ().SingleInstance ();
 			cb.RegisterType<PurchaseOrderSelectViewModel>().SingleInstance();
 			cb.RegisterType<AccountRegistrationViewModel> ().SingleInstance ();
+			cb.RegisterType<ReportResultsViewModel> ().SingleInstance ();
+			cb.RegisterType<SelectCompletedInventoryViewModel> ().SingleInstance ();
 		}
 	}
 }

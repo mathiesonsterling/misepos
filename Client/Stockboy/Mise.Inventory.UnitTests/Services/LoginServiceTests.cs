@@ -217,7 +217,7 @@ namespace Mise.Inventory.UnitTests.Services
 			var threw = false;
 			try{
 				await underTest.AddNewSectionToRestaurant ("TESTSECTION", true, false);
-			} catch(ArgumentException e){
+			} catch(ArgumentException){
 				threw = true;
 			}
 
