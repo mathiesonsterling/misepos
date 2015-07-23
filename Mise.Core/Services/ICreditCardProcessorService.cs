@@ -7,7 +7,7 @@ namespace Mise.Core.Services
 {
 
 	/// <summary>
-	/// Represents the payment provider for integrated credit cards
+	/// Represents any third party credit card processor
 	/// </summary>
 	public interface ICreditCardProcessorService
 	{
@@ -37,6 +37,10 @@ namespace Mise.Core.Services
 		/// <returns>The payment I.</returns>
 		Task<string> SetPaymentID(Guid accountID, PersonName name, Money authorizationAmount);
 
+		/// <summary>
+		/// Polls the processor for the card, then returns it
+		/// </summary>
+		/// <returns>The card after authorization.</returns>
 		Task<CreditCard> GetCardAfterAuthorization ();
 	}
 }
