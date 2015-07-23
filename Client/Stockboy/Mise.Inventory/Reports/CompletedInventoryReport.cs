@@ -25,6 +25,11 @@ namespace Mise.Inventory.Reports
             _inventory = inventory;
         }
 
+        public override ReportTypes ReportType
+        {
+            get { return ReportTypes.CompletedInventory; }
+        }
+
         public override ReportResult RunReport()
         {
             var dic = new Dictionary<string, ReportResultLineItem>();
@@ -33,7 +38,7 @@ namespace Mise.Inventory.Reports
             foreach (var li in _inventory.GetBeverageLineItems())
             {
                 //make our key
-                var key = li.DisplayName + "|" + li.MiseName + "|" + li.Container.DisplayName;
+                var key = GetListItemKey(li);
                 if (dic.ContainsKey(key) == false)
                 {
                     var newItem = new ReportResultLineItem(li.DisplayName, li.Container.DisplayName, li.Quantity,

@@ -34,6 +34,7 @@
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reports\AmountUsedInTimeReport.cs" />
     <Compile Include="Reports\BaseReport.cs" />
     <Compile Include="Reports\CompletedInventoryReport.cs" />
     <Compile Include="Services\IInsightsService.cs" />

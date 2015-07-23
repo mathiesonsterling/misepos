@@ -33,7 +33,7 @@ namespace Mise.Inventory
 					HasUnevenRows = true,
 					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
-				_customVL.ItemTapped += async (sender, e) =>  {
+				_customVL.ItemTapped += (sender, e) =>  {
 					//just disable highlights for now
 					((ListView)sender).SelectedItem = null;
 				};
