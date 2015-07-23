@@ -119,6 +119,7 @@
     <Compile Include="Events\Payments\CreditCards\CreditCardCloseRequestedEvent.cs" />
     <Compile Include="Events\Payments\CreditCards\CreditCardAuthorizationCancelledEvent.cs" />
     <Compile Include="Services\Implementation\DummyLogger.cs" />
+    <Compile Include="Services\Implementation\MercuryCreditCardPaymentProviderService.cs" />
     <Compile Include="Services\Implementation\Serialization\DataContractSerializer.cs" />
     <Compile Include="Services\Implementation\Serialization\JsonNetSerializer.cs" />
     <Compile Include="Services\Implementation\FakeDomineesRestaurantServiceClient.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Mise.Core.Services;
+using Mise.Core.ValueItems;
 using Mise.Inventory.Services;
 
 namespace Mise.Inventory.ViewModels
@@ -30,9 +31,27 @@ namespace Mise.Inventory.ViewModels
 
 	    public override async Task OnAppearing()
 	    {
-	        Processing = true;
-	        await _creditCardProcessorService.SetPaymentID();
-	        Processing = false;
+	        try
+	        {
+	            Processing = true;
+	            PersonName name = null;
+	            var emp = await _loginService.GetCurrentEmployee();
+	            if (emp != null)
+	            {
+	                name = emp.Name;
+	            }
+	            var accountID = await _loginService.GetRegisteringAccountID();
+	            if (accountID.HasValue == false)
+	            {
+	                throw new InvalidOperationException("No account currently set to register");
+	            }
+	            await _creditCardProcessorService.SetPaymentID(accountID.Value, name, Money.MiseMonthlyFee);
+	            Processing = false;
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+	        }
 	    }
 
         /// <summary>

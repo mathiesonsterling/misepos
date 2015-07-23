@@ -38,7 +38,7 @@ namespace Mise.Core.Common
 		/// Gets the payment ID we'll send to be given back a token after we register
 		/// </summary>
 		/// <returns>The payment I.</returns>
-		public Task<string> SetPaymentID(){
+		public Task<string> SetPaymentID(Guid accountID, PersonName name, Money amount){
 			return Task.FromResult ("testPaymentID");
 		}
 

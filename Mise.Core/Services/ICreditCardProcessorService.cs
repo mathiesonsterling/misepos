@@ -35,7 +35,7 @@ namespace Mise.Core.Services
 		/// Setup our credit card processer to register someone
 		/// </summary>
 		/// <returns>The payment I.</returns>
-		Task<string> SetPaymentID();
+		Task<string> SetPaymentID(Guid accountID, PersonName name, Money authorizationAmount);
 
 		Task<CreditCard> GetCardAfterAuthorization ();
 	}

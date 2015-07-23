@@ -95,7 +95,7 @@ namespace Mise.Core.Common.Events
             StreetAddress address, PhoneNumber phone);
 		UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID);
 
-		AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, EmailAddress email, 
+		AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, Guid accountID, EmailAddress email, 
 			PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name);
         #endregion
 

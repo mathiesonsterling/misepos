@@ -79,6 +79,11 @@ namespace Mise.Core.ValueItems
 				return new Money (0.0M);
 			}
 		}
+
+	    public static Money MiseMonthlyFee
+	    {
+	        get { return new Money(12.99M); }
+	    }
 	}
 }
 

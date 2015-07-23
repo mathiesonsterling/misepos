@@ -76,6 +76,7 @@
     <Compile Include="Repositories\IVendorRepository.cs" />
     <Compile Include="Services\IPrinterService.cs" />
     <Compile Include="Services\WebServices\IAccountWebService.cs" />
+    <Compile Include="Services\WebServices\ICreditCardWebService.cs" />
     <Compile Include="Services\WebServices\IEventStoreWebService.cs" />
     <Compile Include="Services\WebServices\IInventoryRestaurantWebService.cs" />
     <Compile Include="Services\WebServices\IInventoryWebService.cs" />

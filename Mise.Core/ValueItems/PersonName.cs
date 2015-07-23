@@ -33,6 +33,16 @@ namespace Mise.Core.ValueItems
             return FirstName + "|" + MiddleName + "|" + LastName;
         }
 
+        public string ToSingleString()
+        {
+            if (string.IsNullOrWhiteSpace(MiddleName))
+            {
+                return FirstName + " " + LastName;
+            }
+
+            return FirstName + " " + MiddleName + " " + LastName;
+        }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }

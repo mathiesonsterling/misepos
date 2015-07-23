@@ -437,6 +437,7 @@ namespace Mise.Inventory.Services.Implementation
 			public ReferralCode Referral;
 			public PersonName AccountName;
 			public MiseAppTypes App;
+		    public Guid AccountID;
 		}
 
 		private RegisterAccountInfo _currentRegistrationInProcess;
@@ -447,13 +448,21 @@ namespace Mise.Inventory.Services.Implementation
 				Referral = code,
 				AccountName = accountName,
 				App = app,
+                AccountID = Guid.NewGuid()
 			};
 
 			_currentRegistrationInProcess = storedInfo;
 			return Task.FromResult(storedInfo.GetHashCode ());
 		}
 
-		public async Task<IAccount> CompleteRegisterAccount(CreditCard card)
+	    public Task<Guid?> GetRegisteringAccountID()
+	    {
+	        var accountID = _currentRegistrationInProcess != null ? (Guid?)_currentRegistrationInProcess.AccountID : null;
+
+	        return Task.FromResult(accountID);
+	    }
+
+	    public async Task<IAccount> CompleteRegisterAccount(CreditCard card)
 	    {
 			if (_currentRegistrationInProcess == null) {
 				throw new InvalidOperationException ("No registration currently in process!");
@@ -461,7 +470,7 @@ namespace Mise.Inventory.Services.Implementation
 
 			try{
 				//commit account registry
-				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, 
+				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, _currentRegistrationInProcess.AccountID,
 					_currentRegistrationInProcess.Email, _currentRestaurant.PhoneNumber, card, _currentRegistrationInProcess.Referral, 
 					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName);
 

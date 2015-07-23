@@ -69,6 +69,8 @@ namespace Mise.Inventory.Services
 		/// <param name = "app"></param>
 		Task StartRegisterAccount(EmailAddress email, ReferralCode code, PersonName accountName, MiseAppTypes app);
 
+	    Task<Guid?> GetRegisteringAccountID();
+
 		/// <summary>
 		/// Finishes registering the account, once we've got the card info ready!
 		/// </summary>
