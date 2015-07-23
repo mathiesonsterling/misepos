@@ -19,13 +19,13 @@ namespace Mise.Inventory.ViewModels
 
 	    public string StartUrl
 	    {
-	        get { return "https://hc.mercurydev.net/mobile/mCheckout.aspx"; }
+	        get { return "http://google.com"; }
 	    }
 
         //The URL we want to see as proof we're done on mercury's page
 	    public string TargetUrl
 	    {
-            get { return "http://google.com"; }
+            get { return "http://mise.in"; }
 	    }
 
 	    public override async Task OnAppearing()

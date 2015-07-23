@@ -36,6 +36,22 @@ namespace Mise.Inventory.ViewModels
 			};
 		}
 
+		public override async Task OnAppearing()
+		{
+			Processing = true;
+			var emp = await _loginService.GetCurrentEmployee ();
+			if (emp != null ) {
+				if (emp.PrimaryEmail != null) {
+					Email = emp.PrimaryEmail.Value;
+				}
+				if (emp.Name != null) {
+					FirstName = emp.Name.FirstName;
+					LastName = emp.Name.LastName;
+				}
+			}
+			Processing = false;
+		}
+
 		bool IsFormValid(){
 			var res = EmailAddress.IsValid (Email);
 			res = res && string.IsNullOrEmpty (FirstName) == false;
@@ -88,11 +104,6 @@ namespace Mise.Inventory.ViewModels
 				HandleException (e);
 			}
 		}
-
-	    public override Task OnAppearing()
-	    {
-	        return Task.FromResult(false);
-	    }
 	}
 }
 
