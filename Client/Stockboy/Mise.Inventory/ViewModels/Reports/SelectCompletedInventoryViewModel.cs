@@ -30,7 +30,7 @@ namespace Mise.Inventory.ViewModels.Reports
             {
                 return
                     _source.DateCompleted.HasValue
-                    ? _source.DateCompleted.Value.DateTime.ToString("MM/dd/YY") :
+                    ? _source.DateCompleted.Value.DateTime.ToString() :
                     string.Empty;
             }
         }

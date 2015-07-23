@@ -51,7 +51,8 @@ namespace Mise.Inventory.Reports
             //make the title
             var title = "Inventory ran " + _inventory.DateCompleted;
 
-            return new ReportResult(ReportTypes.CompletedInventory, title, dic.Values);
+            var checkSum = dic.Values.Where(i => i.Quantity.HasValue).Sum(i => i.Quantity.Value);
+            return new ReportResult(ReportTypes.CompletedInventory, title, dic.Values, checkSum);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Mise.Core.Services;
 using Mise.Core.ValueItems.Reports;
 using Mise.Inventory.Reports;
-
+using Mise.Core.Repositories;
 namespace Mise.Inventory.Services.Implementation
 {
     public class ReportsService : IReportsService
@@ -14,11 +14,11 @@ namespace Mise.Inventory.Services.Implementation
         private ReportRequest _currentRequest;
        
         private readonly ILogger _logger;
-        private readonly IInventoryService _inventoryService;
-        public ReportsService(ILogger logger, IInventoryService inventoryService)
+		private readonly IInventoryRepository _inventoryRepository;
+        public ReportsService(ILogger logger, IInventoryRepository inventoryRepos)
         {
             _logger = logger;
-            _inventoryService = inventoryService;
+			_inventoryRepository = inventoryRepos;
         }
 
         public Task SetCurrentReportRequest(ReportRequest request)
@@ -41,8 +41,11 @@ namespace Mise.Inventory.Services.Implementation
 
             switch (_currentRequest.Type)
             {
-                case ReportTypes.CompletedInventory:
-                    var invToReport = await _inventoryService.GetSelectedInventory();
+			case ReportTypes.CompletedInventory:
+					if (_currentRequest.EntityID.HasValue == false) {
+						throw new InvalidOperationException ("ID is not set for which inventory to report on!");
+					}
+					var invToReport = _inventoryRepository.GetByID (_currentRequest.EntityID.Value);
                     var report = new CompletedInventoryReport(invToReport);
                     return report.RunReport();
                 default:
