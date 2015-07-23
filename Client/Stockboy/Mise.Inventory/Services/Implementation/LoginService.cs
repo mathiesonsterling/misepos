@@ -66,6 +66,7 @@ namespace Mise.Inventory.Services.Implementation
 		const string LAST_RESTAURANT_ID_KEY = "LastRestaurantID";
 
 		public void OnAppStarting(){
+			bool needsDelete = false;
 			try{
 				//if we have an employee that logged in, less than 7 days ago, then mark it
 				var login = _keyValStorage.GetValue<MiseLoginRecord> (LOGGED_IN_EMPLOYEE_KEY);
@@ -73,15 +74,22 @@ namespace Mise.Inventory.Services.Implementation
 					LoadLoggedInEmployee(login);
 				}
 			} catch(Exception e){
-				try{
-					_keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);
-				} catch(Exception ex){
-					_logger.HandleException (ex);
-				}
+				needsDelete = true;
 				_logger.HandleException (e, LogLevel.Warn);
+			}
+
+			if (needsDelete) {
+				try{
+					DeleteKey();
+				} catch(Exception e){
+					_logger.HandleException (e);
+				}
 			}
 		}
 
+		private async void DeleteKey(){
+			await _keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);
+		}
 		private async void LoadLoggedInEmployee(MiseLoginRecord login){
 			if (login.Time > DateTime.UtcNow.AddDays (-7)) {
 				var password = new Password{ HashValue = login.Hash };
@@ -173,8 +181,8 @@ namespace Mise.Inventory.Services.Implementation
 		    await _repositoryLoader.LoadRepositories(null);
 
 			//remove our stored employee from our local settings
-			_keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);	
-			_keyValStorage.DeleteValue (LAST_RESTAURANT_ID_KEY);
+			await _keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);	
+			await _keyValStorage.DeleteValue (LAST_RESTAURANT_ID_KEY);
 		}
 
 		public async Task<IEnumerable<IRestaurant>> GetPossibleRestaurantsForLoggedInEmployee ()
@@ -423,16 +431,39 @@ namespace Mise.Inventory.Services.Implementation
 				await _restaurantRepository.Load(_currentRestaurant.ID);
 			}
 		}
-			
-	    public async Task<IAccount> RegisterAccount(CreditCard card, ReferralCode code, PersonName name, MiseAppTypes app)
+
+		private class RegisterAccountInfo{
+			public EmailAddress Email;
+			public ReferralCode Referral;
+			public PersonName AccountName;
+			public MiseAppTypes App;
+		}
+
+		private RegisterAccountInfo _currentRegistrationInProcess;
+		public Task StartRegisterAccount(EmailAddress email, ReferralCode code, PersonName accountName, MiseAppTypes app){
+			//just store this information, and return a checksum
+			var storedInfo = new RegisterAccountInfo {
+				Email = email,
+				Referral = code,
+				AccountName = accountName,
+				App = app,
+			};
+
+			_currentRegistrationInProcess = storedInfo;
+			return Task.FromResult(storedInfo.GetHashCode ());
+		}
+
+		public async Task<IAccount> CompleteRegisterAccount(CreditCard card)
 	    {
+			if (_currentRegistrationInProcess == null) {
+				throw new InvalidOperationException ("No registration currently in process!");
+			}
+
 			try{
-				//send our credit card, to get the token
-
-
 				//commit account registry
 				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, 
-					_currentEmployee.PrimaryEmail, _currentRestaurant.PhoneNumber, card, code, app, name);
+					_currentRegistrationInProcess.Email, _currentRestaurant.PhoneNumber, card, _currentRegistrationInProcess.Referral, 
+					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName);
 
 				var acct = _accountRepository.ApplyEvent (ev);
 				await _accountRepository.CommitOnlyImmediately (acct.ID);

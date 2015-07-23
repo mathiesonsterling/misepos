@@ -30,7 +30,8 @@ namespace Mise.Inventory.Reports
             get { return ReportTypes.CompletedInventory; }
         }
 
-        public override ReportResult RunReport()
+
+        protected override ReportResult CreateReport()
         {
             var dic = new Dictionary<string, ReportResultLineItem>();
 

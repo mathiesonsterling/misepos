@@ -12,7 +12,12 @@ namespace Mise.Inventory.Reports
     {
         public abstract ReportTypes ReportType { get; }
 
-        public abstract ReportResult RunReport();
+        protected abstract ReportResult CreateReport();
+
+        public Task<ReportResult> RunReportAsync()
+        {
+            return Task.Run(() => CreateReport());
+        }
 
         /// <summary>
         /// Give a list item, get a string key that is unique to it

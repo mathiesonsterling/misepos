@@ -170,6 +170,7 @@
     <Compile Include="Events\Inventory\ReceivingOrderLineItemZeroedOutEvent.cs" />
     <Compile Include="Events\Inventory\ReceivingOrderAssociatedWithPOEvent.cs" />
     <Compile Include="Events\Restaurant\UserSelectedRestaurant.cs" />
+    <Compile Include="Services\Implementation\FakeServices\FakeCreditCardService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

@@ -34,9 +34,14 @@ namespace Mise.Inventory.ViewModels
 			};
 		}
 
-        public override Task OnAppearing()
+        public override async Task OnAppearing()
         {
-            return Task.FromResult(false);
+			Processing = true;
+			var emp = await _login.GetCurrentEmployee ();
+			if (emp != null && emp.PrimaryEmail != null) {
+				EmailToGetReportsAt = emp.PrimaryEmail.Value;
+			}
+			Processing = false;
         }
 
 		#region Fields
@@ -51,6 +56,8 @@ namespace Mise.Inventory.ViewModels
 
 		public string PhoneAreaCode{get{return GetValue<string> ();}set{ SetValue (value); }}
 		public string PhoneNumberVal{get{return GetValue<string> ();}set{ SetValue (value); }}
+
+		public string EmailToGetReportsAt{get{ return GetValue<string> (); }set{SetValue(value);}}
 
 		public IEnumerable<State> States{get{return Mise.Core.ValueItems.State.GetUSStates ();}}
 		#endregion

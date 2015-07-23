@@ -4,13 +4,10 @@
 		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
 			<ScrollView>
 				<StackLayout VerticalOptions="FillAndExpand">
-					<Entry Placeholder="Credit Card Number" Text="{Binding CardNumber}" Keyboard="Numeric"/>
-					<Entry Placeholder="Exp Month" Text="{Binding BillingMonth}" Keyboard="Numeric"/>
-					<Entry Placeholder="Exp Year" Text="{Binding BillingYear}" Keyboard="Numeric"/>
-					<Entry Placeholder="CSV" Text="{Binding CSV}" Keyboard="Numeric"/>
-					<Entry Placeholder="Billing Zip Code" Text="{Binding BillingZip}" Keyboard="Numeric"/>
-					<Entry Placeholder="Card First Name" Text="{Binding FirstName}"/>
-					<Entry Placeholder="Card First Name" Text="{Binding LastName}"/>
+					<Entry Placeholder="Account Email" Text="{Binding Email}"/>
+					<Entry Placeholder="First Name" Text="{Binding FirstName}"/>
+					<Entry Placeholder="Last Name" Text="{Binding LastName}"/>
+					<Entry Placeholder="Referral Code" Text="{Binding ReferralCode}"/>
 				</StackLayout>
 			</ScrollView>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>

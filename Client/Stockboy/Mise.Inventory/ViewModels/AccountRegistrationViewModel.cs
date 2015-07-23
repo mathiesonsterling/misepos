@@ -17,14 +17,13 @@ namespace Mise.Inventory.ViewModels
 	{
 		readonly ILoginService _loginService;
 		readonly IInsightsService _insights;
-		readonly ICreditCardProcessorService _ccProcessor;
 		public AccountRegistrationViewModel(ILogger logger, ILoginService loginService, IAppNavigation appNav, 
-			IInsightsService insights, ICreditCardProcessorService ccProcessor)
+			IInsightsService insights)
 			:base(appNav, logger)
 		{
 			_loginService = loginService;
 			_insights = insights;
-			_ccProcessor = ccProcessor;
+
 			PropertyChanged += (sender, e) => {
 				try{
 					if(e.PropertyName != "CanRegister"){
@@ -37,43 +36,33 @@ namespace Mise.Inventory.ViewModels
 			};
 		}
 
-		bool IsFormValid(){
-			var res = CreditCard.CardNumberIsValid (CardNumber);
-
-			int month;
-			int year;
-			if(int.TryParse (BillingMonth, out month))
-			{
-				if(int.TryParse (BillingYear, out year)){
-					res = res && month > 0 && month < 13 && year > 0;
-				} else {
-					return false;
+		public override async Task OnAppearing()
+		{
+			Processing = true;
+			var emp = await _loginService.GetCurrentEmployee ();
+			if (emp != null ) {
+				if (emp.PrimaryEmail != null) {
+					Email = emp.PrimaryEmail.Value;
 				}
-			} else {
-				return false;
+				if (emp.Name != null) {
+					FirstName = emp.Name.FirstName;
+					LastName = emp.Name.LastName;
+				}
 			}
-			res = res && ZipCode.IsValid (BillingZip);
-			int csv;
-			if (int.TryParse (CSV, out csv)) {
-				res = res && csv > 100 && csv < 1000;
-			} else {
-				return false;
-			}
+			Processing = false;
+		}
+
+		bool IsFormValid(){
+			var res = EmailAddress.IsValid (Email);
 			res = res && string.IsNullOrEmpty (FirstName) == false;
 			res = res && string.IsNullOrEmpty (LastName) == false;
 
 			return res;
 		}
 
-		public string CardNumber{get{return GetValue<string> ();}set{ SetValue (value); }}
-		public string BillingMonth{get{return GetValue<string> ();}set{ SetValue (value); }}
-		public string BillingYear{get{return GetValue<string> ();}set{ SetValue (value); }}
-		public string CSV{get{return GetValue<string> ();}set{ SetValue (value); }}
-		public string BillingZip{get{return GetValue<string> ();}set{ SetValue (value); }}
-
 		public string FirstName{get{return GetValue<string> ();}set{ SetValue (value); }}
 		public string LastName{get{return GetValue<string>();}set{ SetValue (value); }}
-
+		public string Email{get{ return GetValue<string> (); }set{SetValue(value);}}
 		public string ReferralCode{get{return GetValue<string> ();}set{SetValue(value);}}
 		public bool CanRegister{get{return GetValue<bool> ();}set{ SetValue (value); }}
 
@@ -83,28 +72,21 @@ namespace Mise.Inventory.ViewModels
 		private async void RegisterAccount(){
 			try{
 				var name = new PersonName (FirstName, LastName);
-				var zip = new ZipCode { Value = BillingZip };
+				var email = new EmailAddress(Email);
 				ReferralCode refCode = null;
 				if(string.IsNullOrEmpty (ReferralCode) == false){
-					refCode = new Mise.Core.ValueItems.ReferralCode (ReferralCode);
+					refCode = new ReferralCode (ReferralCode);
 				}
 
 				Processing = true;
-				//get the token from billing service
-				var ccNumber = new CreditCardNumber(CardNumber, int.Parse(CSV), int.Parse(BillingZip));
-				var processedCard = await _ccProcessor.AuthorizeCard (ccNumber);
-				if(processedCard == null){
-					Processing = false;
-					await Navigation.DisplayAlert ("Error","Credit card could not be authorized");
-					this.CardNumber= string.Empty;
-					CSV = string.Empty;
-					return;
-				}
-				var acct = await _loginService.RegisterAccount (processedCard, refCode, name, MiseAppTypes.StockboyMobile);
-				if(acct != null){
-					_insights.Track ("User Registered", "User ID", acct.ID.ToString ());
-				}
+				//store our info here, we'll complete it once the webpage returns
+				await _loginService.StartRegisterAccount(email, refCode, name, MiseAppTypes.StockboyMobile);
+				_insights.Track ("User Began Registration", "Email", email.Value);
 				Processing = false;
+
+				//go to the webpage
+				await Navigation.ShowAuthorizeCreditCard();
+
 			} catch(Exception e){
 				HandleException (e);
 			}
@@ -122,11 +104,6 @@ namespace Mise.Inventory.ViewModels
 				HandleException (e);
 			}
 		}
-
-	    public override Task OnAppearing()
-	    {
-	        return Task.FromResult(false);
-	    }
 	}
 }
 

@@ -369,6 +369,16 @@ namespace Mise.Inventory.Services.Implementation
 			return _navi.PushAsync (_pages.GetPage (Pages.AccountRegistration));
 		}
 
+		public Task ShowAuthorizeCreditCard ()
+		{
+			try{
+				return _navi.PushAsync(_pages.GetPage(Pages.AuthorizeCreditCard));
+			} catch(Exception e){
+				HandleException (e);
+				return Task.FromResult (false);
+			}
+		}
+
 		public async Task ShowUserRegistration(){
 			try{
 				await _navi.PushAsync (_pages.GetPage (Pages.RegisterUser));

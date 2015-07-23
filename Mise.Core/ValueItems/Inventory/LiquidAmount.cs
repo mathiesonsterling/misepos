@@ -7,10 +7,11 @@ namespace Mise.Core.ValueItems.Inventory
 	/// </summary>
 	public class LiquidAmount : IEquatable<LiquidAmount>
 	{
-	    public static LiquidAmount Empty
+	    public static LiquidAmount None
 	    {
 	        get { return new LiquidAmount {Milliliters = 0, SpecificGravity = null}; }
 	    }
+
 
 	    /// <summary>
         /// Only this is actually stored, but we should use the methods.  Interface it.
@@ -34,6 +35,22 @@ namespace Mise.Core.ValueItems.Inventory
                 Milliliters = Milliliters*arg
             };
         }
+
+	    public LiquidAmount Add(LiquidAmount other)
+	    {
+	        return new LiquidAmount
+	        {
+	            Milliliters = Milliliters + other.Milliliters
+	        };
+	    }
+
+	    public LiquidAmount Subtract(LiquidAmount other)
+	    {
+	        return new LiquidAmount
+	        {
+	            Milliliters = Milliliters - other.Milliliters
+	        };
+	    }
         /// <summary>
         /// Lets us know if this is a zero amount of liquid
         /// </summary>

@@ -35,10 +35,11 @@ namespace Mise.Inventory
 			return _serializer.Deserialize<T> (json);
 		}
 
-		public void DeleteValue (string key)
+		public async Task DeleteValue (string key)
 		{
 			if (Application.Current.Properties.ContainsKey (key)) {
 				Application.Current.Properties.Remove (key);
+				await Application.Current.SavePropertiesAsync ();
 			}
 		}
 

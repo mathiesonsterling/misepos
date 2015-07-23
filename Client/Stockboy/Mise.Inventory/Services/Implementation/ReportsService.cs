@@ -47,7 +47,7 @@ namespace Mise.Inventory.Services.Implementation
 					}
 					var invToReport = _inventoryRepository.GetByID (_currentRequest.EntityID.Value);
                     var report = new CompletedInventoryReport(invToReport);
-                    return report.RunReport();
+                    return await report.RunReportAsync();
                 default:
                     throw new InvalidOperationException("Cant run report type " + _currentRequest.Type);
             }
