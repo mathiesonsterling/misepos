@@ -98,7 +98,6 @@ namespace Mise.Inventory
 
         public static VendorFindViewModel VendorFindViewModel { get { return Resolve<VendorFindViewModel>(); } }
 
-        public static InventoryVisuallyMeasureItemImprovedViewModel InventoryVisuallyMeasureItemImprovedViewModel { get { return Resolve<InventoryVisuallyMeasureItemImprovedViewModel>(); } }
         public static InventoryVisuallyMeasureBottleViewModel InventoryVisuallyMeasureBottleViewModel { get { return Resolve<InventoryVisuallyMeasureBottleViewModel>(); } }
         public static UpdateParLineItemViewModel UpdateParLineItemViewModel { get { return Resolve<UpdateParLineItemViewModel>(); } }
         public static UpdateReceivingOrderLineItemViewModel UpdateReceivingOrderLineItemViewModel

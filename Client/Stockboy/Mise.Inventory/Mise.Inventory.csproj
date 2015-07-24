@@ -135,8 +135,6 @@
     <Compile Include="Services\Implementation\PARService.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="CustomCells\LineItemWithQuantityCell.cs" />
-    <Compile Include="ViewModels\InventoryVisuallyMeasureItemViewModel.cs" />
-    <Compile Include="ViewModels\InventoryVisuallyMeasureItemImprovedViewModel.cs" />
     <Compile Include="Services\IPurchaseOrderService.cs" />
     <Compile Include="Services\Implementation\PurchaseOrderService.cs" />
     <Compile Include="CustomCells\LineItemWithEditableQuantityCell.cs" />
