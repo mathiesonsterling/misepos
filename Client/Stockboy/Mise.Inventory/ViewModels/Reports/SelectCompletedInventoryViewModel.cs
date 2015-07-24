@@ -10,6 +10,7 @@ using Mise.Core.Services;
 using Mise.Inventory.Services;
 using Mise.Core.Repositories;
 using Mise.Core.ValueItems.Reports;
+using Mise.Core.ValueItems;
 
 namespace Mise.Inventory.ViewModels.Reports
 {
@@ -30,8 +31,8 @@ namespace Mise.Inventory.ViewModels.Reports
             {
                 return
                     _source.DateCompleted.HasValue
-                    ? _source.DateCompleted.Value.DateTime.ToString() :
-                    string.Empty;
+					? _source.DateCompleted.Value.TimeAgo()
+                    :"No date found";
             }
         }
 
@@ -94,7 +95,7 @@ namespace Mise.Inventory.ViewModels.Reports
                 inventories.Select(i => new {Inventory = i, Emp = _empRepos.GetByID(i.CreatedByEmployeeID)});
 
             var displayItems = invsAndEmps.Select(ie => new InventoryDisplayLine(ie.Inventory, ie.Emp));
-            return displayItems.ToList();
+			return displayItems.OrderByDescending (i => i.DateCompleted).ToList();
         }
 
         protected override void AfterSearchDone()

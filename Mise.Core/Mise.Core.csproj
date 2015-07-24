@@ -194,6 +194,7 @@
     <Compile Include="Services\WebServices\SendErrors.cs" />
     <Compile Include="Services\WebServices\SendEventsException.cs" />
     <Compile Include="Services\WebServices\ServerNotReadyException.cs" />
+    <Compile Include="ValueItems\DateTimeOffsetExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
