@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Inventory.UnitTests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.InventoryWebService.ServiceModelPortable", "..\..\Server\InventoryWebService\Mise.InventoryWebService.ServiceModelPortable\Mise.InventoryWebService.ServiceModelPortable.csproj", "{9BA4713A-F2EF-46BE-9F86-31637A2217B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.MercuryPaymentProcessor", "..\..\PaymentProcessors\Mise.MercuryPaymentProcessor\Mise.MercuryPaymentProcessor.csproj", "{1C077355-EA71-47B5-93B5-F88E8A041010}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,12 +36,6 @@ Global
 		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.DeployQA|Any CPU.Build.0 = Release|Any CPU
 		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C077355-EA71-47B5-93B5-F88E8A041010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C077355-EA71-47B5-93B5-F88E8A041010}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C077355-EA71-47B5-93B5-F88E8A041010}.DeployQA|Any CPU.ActiveCfg = Release|Any CPU
-		{1C077355-EA71-47B5-93B5-F88E8A041010}.DeployQA|Any CPU.Build.0 = Release|Any CPU
-		{1C077355-EA71-47B5-93B5-F88E8A041010}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C077355-EA71-47B5-93B5-F88E8A041010}.Release|Any CPU.Build.0 = Release|Any CPU
 		{227F3218-83B1-47F7-9195-82F5D3583A94}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
 		{227F3218-83B1-47F7-9195-82F5D3583A94}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
 		{227F3218-83B1-47F7-9195-82F5D3583A94}.DeployQA|Any CPU.ActiveCfg = Release|iPhone

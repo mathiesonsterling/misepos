@@ -2,6 +2,7 @@
 using Autofac;
 using Mise.Core.Services;
 using XLabs.Platform.Device;
+using Mise.Inventory.iOS.Services;
 
 namespace Mise.Inventory.iOS
 {
@@ -12,6 +13,7 @@ namespace Mise.Inventory.iOS
 			Logger = new IOSLogger ();
 			cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
 			base.RegisterDepenencies (cb);
+			cb.RegisterType<MercuryPaymentProcessorService ().As<ICreditCardProcessorService>();
 		}
 	}
 }

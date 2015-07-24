@@ -373,10 +373,6 @@
       <Project>{9BA4713A-F2EF-46BE-9F86-31637A2217B6}</Project>
       <Name>Mise.InventoryWebService.ServiceModelPortable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\PaymentProcessors\Mise.MercuryPaymentProcessor\Mise.MercuryPaymentProcessor.csproj">
-      <Project>{1C077355-EA71-47B5-93B5-F88E8A041010}</Project>
-      <Name>Mise.MercuryPaymentProcessor</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
