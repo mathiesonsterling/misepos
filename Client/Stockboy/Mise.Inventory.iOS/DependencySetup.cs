@@ -12,8 +12,9 @@ namespace Mise.Inventory.iOS
 		{
 			Logger = new IOSLogger ();
 			cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
+			var processor = new MercuryPaymentProcessorService (Logger);
+			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();
 			base.RegisterDepenencies (cb);
-			cb.RegisterType<MercuryPaymentProcessorService ().As<ICreditCardProcessorService>();
 		}
 	}
 }

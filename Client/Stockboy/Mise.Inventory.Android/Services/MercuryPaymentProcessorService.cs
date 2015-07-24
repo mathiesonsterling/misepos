@@ -1,20 +1,18 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Payments;
 using Mise.Core.Services;
-
-using Mise.Inventory.iOS.MercuryWebService;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
 
+using Mise.Inventory.Android.MercuryWebService;
 
-namespace Mise.Inventory.iOS.Services
+
+namespace Mise.Inventory.Android.Services
 {
-	/// <summary>
-	/// Must be declared here, since we cannot consume ASMX services in a PCL!
-	/// </summary>
 	public class MercuryPaymentProcessorService : ICreditCardProcessorService
 	{
 		private readonly ILogger _logger;
@@ -51,7 +49,8 @@ namespace Mise.Inventory.iOS.Services
 		}
 
 		private string SetPaymentIDWorker(Guid accountID, PersonName name, Money authorizationAmount){
-			
+			//create our request object
+
 			var request = new InitPaymentRequest();
 			request.MerchantID = _requestSettings.MerchantID;
 			request.Password = _requestSettings.Password;
@@ -75,11 +74,11 @@ namespace Mise.Inventory.iOS.Services
 				if(result.ResponseCode == 0){
 					return result.PaymentID;
 				} else{
-					throw new Exception (result.Message);
+					throw new System.Exception (result.Message);
 				}
 			}
 
-			throw new Exception ("Null return from Mercury!");
+			throw new System.Exception ("Null return from Mercury!");
 		}
 
 
@@ -89,7 +88,7 @@ namespace Mise.Inventory.iOS.Services
 			var maxTime = DateTimeOffset.UtcNow.AddMilliseconds (_requestSettings.MaxWaitTimeForResponseInMS);
 			var sleepTime = _requestSettings.StartWaitTimeForResponseInMS;
 			var lastSleepTime = 0;
-
+	
 			while(DateTimeOffset.UtcNow < maxTime){
 				var cc = GetCreditCardFromMercury (paymentID);
 				if(cc == null){
@@ -117,7 +116,7 @@ namespace Mise.Inventory.iOS.Services
 
 			if(result.ResponseCode != 0){
 				_logger.Error ("Error processing message responseCode:" + result.ResponseCode
-					+ " status " + result.Status + " message:" + result.StatusMessage);
+				+ " status " + result.Status + " message:" + result.StatusMessage);
 				throw new System.Exception ("Error processing credit card " + result.DisplayMessage);
 			}
 

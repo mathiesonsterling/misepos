@@ -41,7 +41,7 @@ namespace Mise.Core.Services
 		/// Polls the processor for the card, then returns it
 		/// </summary>
 		/// <returns>The card after authorization.</returns>
-		Task<CreditCard> GetCardAfterAuthorization ();
+		Task<CreditCard> GetCardAfterAuthorization (string paymentID);
 	}
 }
 

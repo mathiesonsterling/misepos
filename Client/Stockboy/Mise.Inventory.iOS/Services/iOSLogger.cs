@@ -1,7 +1,7 @@
 ﻿using System;
 using Mise.Core.Services;
 using Xamarin;
-namespace Mise.Inventory.iOS
+namespace Mise.Inventory.iOS.Services
 {
 	public class IOSLogger : ILogger
 	{

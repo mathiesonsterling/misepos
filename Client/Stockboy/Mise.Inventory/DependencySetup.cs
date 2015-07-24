@@ -156,7 +156,6 @@ namespace Mise.Inventory
 			cb.RegisterType<PurchaseOrderService> ().As<IPurchaseOrderService> ().SingleInstance ();
 			cb.RegisterType<CategoriesService> ().As<ICategoriesService> ().SingleInstance ();
 			cb.RegisterType<ReportsService> ().As<IReportsService> ().SingleInstance ();
-			cb.RegisterType<FakeCreditCardService> ().As<ICreditCardProcessorService> ().SingleInstance ();
 
 			// View Models
 			cb.RegisterType<AboutViewModel>().SingleInstance();

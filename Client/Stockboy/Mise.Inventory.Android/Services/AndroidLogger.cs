@@ -3,7 +3,7 @@
 using Mise.Core.Services;
 using AndroidOS = Android.Util;
 using Xamarin;
-namespace Mise.Inventory.Android
+namespace Mise.Inventory.Android.Services
 {
 	public class AndroidLogger : ILogger
 	{

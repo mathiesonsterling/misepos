@@ -42,7 +42,7 @@ namespace Mise.Core.Common
 			return Task.FromResult ("testPaymentID");
 		}
 
-		public Task<CreditCard> GetCardAfterAuthorization (){
+		public Task<CreditCard> GetCardAfterAuthorization (string paymentID){
 			return Task.FromResult (
 				new CreditCard {
 					ProcessorToken = new CreditCardProcessorToken {
