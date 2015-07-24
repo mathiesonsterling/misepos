@@ -1,0 +1,600 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s0="http://www.mercurypay.com/" xmlns:tns="http://www.mercurypay.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://www.mercurypay.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://www.mercurypay.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="InitializePayment">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:InitPaymentRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="InitPaymentRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MerchantID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Password" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Invoice" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TotalAmount" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxAmount" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AVSAddress" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AVSZip" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TranType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardHolderName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Frequency" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomerCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Memo" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ProcessCompleteUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReturnUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DisplayStyle" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="BackgroundColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FontColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FontFamily" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FontSize" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LogoUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PageTitle" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SecurityLogo" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OrderTotal" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SubmitButtonText" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CancelButtonText" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="VoiceAuthCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Keypad" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DefaultSwipe" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AVSFields" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PartialAuth" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OperatorID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TerminalName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ButtonTextColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ButtonBackgroundColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="JCB" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Diners" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardEntryMethod" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SubmitButtonDefaultImageUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SubmitButtonHoverImageUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CancelButtonDefaultImageUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CancelButtonHoverImageUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PageTimeoutDuration" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PageTimeoutIndicator" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CancelButton" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TotalAmountBackgroundColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CVV" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ForceManualTablet" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LaneID" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="InitializePaymentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="InitializePaymentResult" type="tns:InitPaymentResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="InitPaymentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ResponseCode" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PaymentID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="VerifyPayment">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:PaymentInfoRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="PaymentInfoRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MerchantID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Password" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PaymentID" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="VerifyPaymentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="VerifyPaymentResult" type="tns:PaymentInfoResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="PaymentInfoResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ResponseCode" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Status" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StatusMessage" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DisplayMessage" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AvsResult" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CvvResult" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AuthCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Token" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="RefNo" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Invoice" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AcqRefData" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MaskedAccount" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Amount" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TaxAmount" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TransPostTime" type="xs:dateTime" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardholderName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AVSAddress" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AVSZip" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TranType" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PaymentIDExpired" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CustomerCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Memo" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AuthAmount" type="xs:double" />
+          <xs:element minOccurs="0" maxOccurs="1" name="VoiceAuthCode" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ProcessData" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OperatorID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TerminalName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ExpDate" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="AcknowledgePayment">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:PaymentInfoRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AcknowledgePaymentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="1" name="AcknowledgePaymentResult" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="InitializeCardInfo">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:InitCardInfoRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="InitCardInfoRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MerchantID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Password" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Frequency" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ProcessCompleteUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ReturnUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DisplayStyle" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="BackgroundColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FontColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FontFamily" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="FontSize" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LogoUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PageTitle" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SecurityLogo" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SubmitButtonText" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CancelButtonText" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Keypad" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DefaultSwipe" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardHolderName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OperatorID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ButtonBackgroundColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ButtonTextColor" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="JCB" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Diners" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardEntryMethod" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SubmitButtonDefaultImageUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SubmitButtonHoverImageUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CancelButtonDefaultImageUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CancelButtonHoverImageUrl" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PageTimeoutDuration" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CancelButton" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ForceManualTablet" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="LaneID" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="InitializeCardInfoResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="InitializeCardInfoResult" type="tns:InitCardInfoResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="InitCardInfoResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ResponseCode" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="VerifyCardInfo">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:CardInfoRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CardInfoRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MerchantID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Password" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardID" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="VerifyCardInfoResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="VerifyCardInfoResult" type="tns:CardInfoResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CardInfoResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ResponseCode" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Status" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StatusMessage" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="DisplayMessage" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Token" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="MaskedAccount" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="TranType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardUsage" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CardIDExpired" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="1" name="CardHolderName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="OperatorID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ExpDate" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="AcknowledgeCardInfo">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:CardInfoRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AcknowledgeCardInfoResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="1" name="AcknowledgeCardInfoResult" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="UploadCSS">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:CssUploadRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CssUploadRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MerchantID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Password" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Css" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="UploadCSSResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="UploadCSSResult" type="tns:CssAdminResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CssAdminResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ResponseCode" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="DownloadCSS">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:CssDownloadRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CssDownloadRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MerchantID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Password" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Formatting" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="DownloadCSSResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="DownloadCSSResult" type="tns:CssDownloadResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CssDownloadResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ResponseCode" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Message" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Css" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="RemoveCSS">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="request" type="tns:CssRemoveRequest" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="CssRemoveRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="MerchantID" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Password" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="RemoveCSSResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="RemoveCSSResult" type="tns:CssAdminResponse" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </types>
+  <message name="InitializePaymentSoapIn">
+    <part name="parameters" element="tns:InitializePayment" />
+  </message>
+  <message name="InitializePaymentSoapOut">
+    <part name="parameters" element="tns:InitializePaymentResponse" />
+  </message>
+  <message name="VerifyPaymentSoapIn">
+    <part name="parameters" element="tns:VerifyPayment" />
+  </message>
+  <message name="VerifyPaymentSoapOut">
+    <part name="parameters" element="tns:VerifyPaymentResponse" />
+  </message>
+  <message name="AcknowledgePaymentSoapIn">
+    <part name="parameters" element="tns:AcknowledgePayment" />
+  </message>
+  <message name="AcknowledgePaymentSoapOut">
+    <part name="parameters" element="tns:AcknowledgePaymentResponse" />
+  </message>
+  <message name="InitializeCardInfoSoapIn">
+    <part name="parameters" element="tns:InitializeCardInfo" />
+  </message>
+  <message name="InitializeCardInfoSoapOut">
+    <part name="parameters" element="tns:InitializeCardInfoResponse" />
+  </message>
+  <message name="VerifyCardInfoSoapIn">
+    <part name="parameters" element="tns:VerifyCardInfo" />
+  </message>
+  <message name="VerifyCardInfoSoapOut">
+    <part name="parameters" element="tns:VerifyCardInfoResponse" />
+  </message>
+  <message name="AcknowledgeCardInfoSoapIn">
+    <part name="parameters" element="tns:AcknowledgeCardInfo" />
+  </message>
+  <message name="AcknowledgeCardInfoSoapOut">
+    <part name="parameters" element="tns:AcknowledgeCardInfoResponse" />
+  </message>
+  <message name="UploadCSSSoapIn">
+    <part name="parameters" element="tns:UploadCSS" />
+  </message>
+  <message name="UploadCSSSoapOut">
+    <part name="parameters" element="tns:UploadCSSResponse" />
+  </message>
+  <message name="DownloadCSSSoapIn">
+    <part name="parameters" element="tns:DownloadCSS" />
+  </message>
+  <message name="DownloadCSSSoapOut">
+    <part name="parameters" element="tns:DownloadCSSResponse" />
+  </message>
+  <message name="RemoveCSSSoapIn">
+    <part name="parameters" element="tns:RemoveCSS" />
+  </message>
+  <message name="RemoveCSSSoapOut">
+    <part name="parameters" element="tns:RemoveCSSResponse" />
+  </message>
+  <portType name="HCServiceSoap">
+    <operation name="InitializePayment">
+      <input message="tns:InitializePaymentSoapIn" />
+      <output message="tns:InitializePaymentSoapOut" />
+    </operation>
+    <operation name="VerifyPayment">
+      <input message="tns:VerifyPaymentSoapIn" />
+      <output message="tns:VerifyPaymentSoapOut" />
+    </operation>
+    <operation name="AcknowledgePayment">
+      <input message="tns:AcknowledgePaymentSoapIn" />
+      <output message="tns:AcknowledgePaymentSoapOut" />
+    </operation>
+    <operation name="InitializeCardInfo">
+      <input message="tns:InitializeCardInfoSoapIn" />
+      <output message="tns:InitializeCardInfoSoapOut" />
+    </operation>
+    <operation name="VerifyCardInfo">
+      <input message="tns:VerifyCardInfoSoapIn" />
+      <output message="tns:VerifyCardInfoSoapOut" />
+    </operation>
+    <operation name="AcknowledgeCardInfo">
+      <input message="tns:AcknowledgeCardInfoSoapIn" />
+      <output message="tns:AcknowledgeCardInfoSoapOut" />
+    </operation>
+    <operation name="UploadCSS">
+      <input message="tns:UploadCSSSoapIn" />
+      <output message="tns:UploadCSSSoapOut" />
+    </operation>
+    <operation name="DownloadCSS">
+      <input message="tns:DownloadCSSSoapIn" />
+      <output message="tns:DownloadCSSSoapOut" />
+    </operation>
+    <operation name="RemoveCSS">
+      <input message="tns:RemoveCSSSoapIn" />
+      <output message="tns:RemoveCSSSoapOut" />
+    </operation>
+  </portType>
+  <binding name="HCServiceSoap" type="tns:HCServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="InitializePayment">
+      <soap:operation soapAction="http://www.mercurypay.com/InitializePayment" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="VerifyPayment">
+      <soap:operation soapAction="http://www.mercurypay.com/VerifyPayment" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="AcknowledgePayment">
+      <soap:operation soapAction="http://www.mercurypay.com/AcknowledgePayment" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="InitializeCardInfo">
+      <soap:operation soapAction="http://www.mercurypay.com/InitializeCardInfo" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="VerifyCardInfo">
+      <soap:operation soapAction="http://www.mercurypay.com/VerifyCardInfo" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="AcknowledgeCardInfo">
+      <soap:operation soapAction="http://www.mercurypay.com/AcknowledgeCardInfo" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="UploadCSS">
+      <soap:operation soapAction="http://www.mercurypay.com/UploadCSS" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="DownloadCSS">
+      <soap:operation soapAction="http://www.mercurypay.com/DownloadCSS" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="RemoveCSS">
+      <soap:operation soapAction="http://www.mercurypay.com/RemoveCSS" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <binding name="HCServiceSoap12" type="tns:HCServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="InitializePayment">
+      <soap12:operation soapAction="http://www.mercurypay.com/InitializePayment" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="VerifyPayment">
+      <soap12:operation soapAction="http://www.mercurypay.com/VerifyPayment" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="AcknowledgePayment">
+      <soap12:operation soapAction="http://www.mercurypay.com/AcknowledgePayment" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="InitializeCardInfo">
+      <soap12:operation soapAction="http://www.mercurypay.com/InitializeCardInfo" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="VerifyCardInfo">
+      <soap12:operation soapAction="http://www.mercurypay.com/VerifyCardInfo" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="AcknowledgeCardInfo">
+      <soap12:operation soapAction="http://www.mercurypay.com/AcknowledgeCardInfo" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="UploadCSS">
+      <soap12:operation soapAction="http://www.mercurypay.com/UploadCSS" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="DownloadCSS">
+      <soap12:operation soapAction="http://www.mercurypay.com/DownloadCSS" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+    <operation name="RemoveCSS">
+      <soap12:operation soapAction="http://www.mercurypay.com/RemoveCSS" style="document" />
+      <input>
+        <soap12:body use="literal" />
+      </input>
+      <output>
+        <soap12:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="HCService">
+    <port name="HCServiceSoap" binding="tns:HCServiceSoap">
+      <soap:address location="https://hc.mercurydev.net/hcws/hcservice.asmx" />
+    </port>
+    <port name="HCServiceSoap12" binding="tns:HCServiceSoap12">
+      <soap12:address location="https://hc.mercurydev.net/hcws/hcservice.asmx" />
+    </port>
+  </service>
+</definitions>

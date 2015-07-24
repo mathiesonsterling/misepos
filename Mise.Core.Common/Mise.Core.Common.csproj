@@ -171,6 +171,7 @@
     <Compile Include="Events\Inventory\ReceivingOrderAssociatedWithPOEvent.cs" />
     <Compile Include="Events\Restaurant\UserSelectedRestaurant.cs" />
     <Compile Include="Services\Implementation\FakeServices\FakeCreditCardService.cs" />
+    <Compile Include="Services\Implementation\MercuryPaymentProviderSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

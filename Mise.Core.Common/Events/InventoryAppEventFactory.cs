@@ -677,7 +677,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, 
-			EmailAddress email, PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name)
+			Guid accountID, EmailAddress email, PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name)
 		{
 			return new AccountRegisteredFromMobileDeviceEvent {
 				ID = Guid.NewGuid (),
@@ -686,7 +686,7 @@ namespace Mise.Core.Common.Events
 				EventOrderingID = GetNextEventID (),
 
 				CausedByID = emp.ID,
-				AccountID = Guid.NewGuid (),
+				AccountID = accountID,
 				Email = email,
 				ReferralCode = code,
 				PhoneNumber = phone,

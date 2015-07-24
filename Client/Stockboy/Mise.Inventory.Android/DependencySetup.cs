@@ -5,7 +5,7 @@ using Mise.Core.Services;
 
 using XLabs.Platform;
 using XLabs.Platform.Device;
-
+using Mise.Inventory.Android.Services;
 
 namespace Mise.Inventory.Android
 {
@@ -17,6 +17,8 @@ namespace Mise.Inventory.Android
 			var device = AndroidDevice.CurrentDevice;
 			cb.RegisterInstance<IDevice> (device).SingleInstance ();
 
+			var processor = new MercuryPaymentProcessorService (Logger);
+			cb.RegisterInstance<ICreditCardProcessorService>(processor);
 			base.RegisterDepenencies(cb);
 		}
 	}
