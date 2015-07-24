@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Mise.Inventory.AuthorizeCreditCardPage">
 	<ContentPage.Content>
+			<StackLayout>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 			<WebView 
 				x:Name="wvMain"  
-				Source="{Binding StartUrl}"
 				HorizontalOptions = "FillAndExpand"
 				VerticalOptions="FillAndExpand"
 			/>
+			</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

@@ -20,19 +20,19 @@ namespace Mise.Core.Common.Services.Implementation
 		public string MercuryCheckoutPageUrl{
 			get{
 				return _isDevelopment 
-					? "https://hc.mercurydev.net/mobile/mCheckout.aspx"
-						: "https://hc.mercurypay.com/mobile/mCheckout.aspx";
+					? "https://hc.mercurydev.net/CheckoutiFrame.aspx"
+						: "https://hc.mercurypay.com/CheckoutiFrame.aspx";
 			}
 		}
 		public string MerchantID{
 			get{
-				return _isDevelopment ? 013163015566916.ToString () : "-1";
+				return _isDevelopment ? "013163015566916" : "-1";
 			}
 		}
 
 		public string Password{
 			get{
-				return _isDevelopment ? "passwordDemo" : "password";
+				return _isDevelopment ? "ypBj@f@zt3fJRX,k" : "password";
 			}
 		}
 			
@@ -52,6 +52,14 @@ namespace Mise.Core.Common.Services.Implementation
 			get{
 				return "http://mise.in/images/logo.png";
 			}
+		}
+
+		public string OrderTotal {
+			get{ return "off"; }
+		}
+
+		public string SubmitText{
+			get{return "Save Card";}
 		}
 
 		public string ProcessCompleteUrl{

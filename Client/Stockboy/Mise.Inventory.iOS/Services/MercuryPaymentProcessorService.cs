@@ -23,7 +23,7 @@ namespace Mise.Inventory.iOS.Services
 		{
 			_logger = logger;
 
-			var isDevelopment = Mise.Inventory.DependencySetup.GetBuildLevel () == BuildLevel.Production;
+			var isDevelopment = Mise.Inventory.DependencySetup.GetBuildLevel () != BuildLevel.Production;
 
 			_requestSettings = new MercuryPaymentProviderSettings (isDevelopment);
 		}
@@ -65,6 +65,8 @@ namespace Mise.Inventory.iOS.Services
 			request.ProcessCompleteUrl = _requestSettings.ProcessCompleteUrl;
 			request.ReturnUrl = _requestSettings.ReturnUrl;
 			request.LogoUrl = _requestSettings.LogoUrl;
+			request.OrderTotal = _requestSettings.OrderTotal;
+			request.SubmitButtonText = _requestSettings.SubmitText;
 
 			//send it
 			var service = new HCService();

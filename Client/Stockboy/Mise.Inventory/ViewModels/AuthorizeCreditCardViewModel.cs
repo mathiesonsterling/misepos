@@ -26,7 +26,7 @@ namespace Mise.Inventory.ViewModels
 
 	    public string StartUrl
 	    {
-	        get { return _mercurySettings.MercuryCheckoutPageUrl; }
+	        get { return _mercurySettings.MercuryCheckoutPageUrl + "?pid=" + _paymentID; }
 	    }
 
 	    public override async Task OnAppearing()

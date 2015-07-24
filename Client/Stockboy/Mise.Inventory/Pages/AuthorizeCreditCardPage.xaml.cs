@@ -21,6 +21,9 @@ namespace Mise.Inventory
 	        if (vm != null)
 	        {
 	            await vm.OnAppearing();
+
+				//we need the source after processed
+				wvMain.Source = vm.StartUrl;
 	        }
 	    }
 	}

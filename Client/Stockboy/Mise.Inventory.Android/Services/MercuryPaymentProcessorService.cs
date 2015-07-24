@@ -21,7 +21,7 @@ namespace Mise.Inventory.Android.Services
 		{
 			_logger = logger;
 
-			var isDevelopment = Mise.Inventory.DependencySetup.GetBuildLevel () == BuildLevel.Production;
+			var isDevelopment = Mise.Inventory.DependencySetup.GetBuildLevel () != BuildLevel.Production;
 
 			_requestSettings = new MercuryPaymentProviderSettings (isDevelopment);
 		}
@@ -57,13 +57,15 @@ namespace Mise.Inventory.Android.Services
 			request.TranType = _requestSettings.TranType;
 			request.TotalAmount = (double)authorizationAmount.Dollars;
 			request.Frequency = _requestSettings.Frequency;
-			request.Invoice = "Mise Account " + accountID.ToString ();
+			request.Invoice = accountID.ToString ().Substring (0, 15);
 			request.Memo = "Mise " + MiseAppTypes.StockboyMobile;
 			request.TaxAmount = 0;
 			request.CardHolderName = name.ToSingleString ();
 			request.ProcessCompleteUrl = _requestSettings.ProcessCompleteUrl;
 			request.ReturnUrl = _requestSettings.ReturnUrl;
 			request.LogoUrl = _requestSettings.LogoUrl;
+			request.OrderTotal = _requestSettings.OrderTotal;
+			request.SubmitButtonText = _requestSettings.SubmitText;
 
 			//send it
 			var service = new HCService();
