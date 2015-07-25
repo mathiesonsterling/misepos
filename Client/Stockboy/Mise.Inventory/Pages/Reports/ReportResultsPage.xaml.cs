@@ -13,11 +13,11 @@ namespace Mise.Inventory
 			InitializeComponent ();
 		}
 
-		protected override void OnAppearing ()
+		protected override async void OnAppearing ()
 		{
 			var vm = BindingContext as ReportResultsViewModel;
 			if (vm != null) {
-				vm.OnAppearing ();
+				await vm.OnAppearing ();
 				LoadItems ();
 			}
 		}
@@ -26,18 +26,18 @@ namespace Mise.Inventory
 			stckItems.Children.Clear ();
 			var vm = BindingContext as ReportResultsViewModel;
 			if (vm != null) {
-				var _customVL = new ListView {
+				var customVl = new ListView {
 					ItemsSource = vm.LineItems,
 					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
 					RowHeight = 50,
 					HasUnevenRows = true,
 					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
-				_customVL.ItemTapped += (sender, e) =>  {
+				customVl.ItemTapped += (sender, e) =>  {
 					//just disable highlights for now
 					((ListView)sender).SelectedItem = null;
 				};
-				stckItems.Children.Add (_customVL);
+				stckItems.Children.Add (customVl);
 			}
 		}
 	}
