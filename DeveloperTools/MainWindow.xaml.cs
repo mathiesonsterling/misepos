@@ -146,11 +146,20 @@ namespace DeveloperTools
 
                 var progress = new Progress<ProgressReport>(ReportProgress);
                 var silentLogger = new DummyLogger();
-                var populateInventoryCommand = new PopulateInventoryDatabaseCommand(silentLogger, uri, progress);
-                await populateInventoryCommand.Execute();
+
+                try
+                {
+                    var populateInventoryCommand = new PopulateInventoryDatabaseCommand(silentLogger, uri, progress,
+                        selItem.Key.ToUpper() == "DEV");
+                    await populateInventoryCommand.Execute();
+                    MessageBox.Show("GraphDB is now populated!");
+                }
+                catch (Exception ex)
+                {
+                    _logger.HandleException(ex);
+                }
 
 
-                MessageBox.Show("GraphDB is now populated!");
                 BtnCreateInvDB.IsEnabled = true;
             }
         }

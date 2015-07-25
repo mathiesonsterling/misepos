@@ -14,15 +14,17 @@ namespace DeveloperTools.Commands
     {
         private readonly ILogger _logger;
         private readonly Uri _uri;
-        public PopulateInventoryDatabaseCommand(ILogger logger, Uri uri, IProgress<ProgressReport> progress) : base(progress)
+        private readonly bool _addDemo;
+        public PopulateInventoryDatabaseCommand(ILogger logger, Uri uri, IProgress<ProgressReport> progress, bool addDemo) : base(progress)
         {
             _logger = logger;
             _uri = uri;
+            _addDemo = addDemo;
         }
 
         public override int NumSteps
         {
-            get { return 31; }
+            get { return 33; }
         }
 
         public override async Task Execute()
@@ -33,8 +35,9 @@ namespace DeveloperTools.Commands
             Report("Reset database");
             graphDAL.ResetDatabase();
 
-            Report("Populated states in DB");
+            Report("Populating US states");
             await PopulateStates(graphDAL);
+            Report("Populated states in DB");
 
             Report("Creating Categories");
             var categoriesService = new CategoriesService();
@@ -45,6 +48,7 @@ namespace DeveloperTools.Commands
             //get the fake service, and populate all parts of it!
             var fakeService = new FakeInventoryServiceDAL();
 
+            Report("Populating accounts");
             //accounts
             var accts = (await fakeService.GetAccountsAsync()).ToList();
             foreach (var acct in accts)
@@ -55,8 +59,11 @@ namespace DeveloperTools.Commands
 
 
             //restaurants
-            var rests = (await fakeService.GetRestaurantsAsync()).Where(r => r.ID != Guid.Empty).ToList();
-
+            var rests = (await fakeService.GetRestaurantsAsync()).ToList();
+            if (_addDemo == false)
+            {
+                rests = rests.Where(r => r.ID != Guid.Empty).ToList();
+            }
             foreach (var rest in rests)
             {
                 await graphDAL.AddRestaurantAsync(rest);
@@ -65,12 +72,12 @@ namespace DeveloperTools.Commands
             Report("Added "+rests.Count+" Restaurants");
 
             var vendors = await fakeService.GetVendorsAsync();
-            foreach (var v in vendors.Where(v => v.ID != Guid.Empty))
+            if (_addDemo == false)
             {
-                if (v.ID == Guid.Empty)
-                {
-                    throw new Exception("Vendor does not have ID");
-                }
+                vendors = vendors.Where(v => v.ID != Guid.Empty);
+            }
+            foreach (var v in vendors)
+            {
                 await graphDAL.AddVendorAsync(v);
             }
             Report("Added Vendors");
@@ -144,7 +151,11 @@ namespace DeveloperTools.Commands
 
             }
             var invites = await fakeService.GetApplicationInvitations();
-            foreach (var invite in invites.Where(i => i.RestaurantID != Guid.Empty))
+            if (_addDemo == false)
+            {
+                invites = invites.Where(i => i.RestaurantID != Guid.Empty);
+            }
+            foreach (var invite in invites)
             {
                 await graphDAL.AddApplicationInvitiation(invite);
             }

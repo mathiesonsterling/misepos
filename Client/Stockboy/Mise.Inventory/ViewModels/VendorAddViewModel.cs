@@ -97,7 +97,7 @@ namespace Mise.Inventory.ViewModels
                 && (string.IsNullOrWhiteSpace(Zip) == false))
             {
                 return new StreetAddress(StreetAddressNumber, "", StreetName, City, State,
-                    "United States of America", Zip);
+                    Country.UnitedStates.Name, Zip);
             }
             return null;
         }
@@ -106,8 +106,7 @@ namespace Mise.Inventory.ViewModels
         {
             if ((string.IsNullOrEmpty(PhoneAreaCode) == false)
                && (string.IsNullOrEmpty(PhoneNumberVal) == false)
-                && PhoneAreaCode.Length >= 3
-                && PhoneNumberVal.Length >= 7
+                && PhoneNumber.IsValid(PhoneAreaCode, PhoneNumberVal)
             )
             {
                 return new PhoneNumber(PhoneAreaCode, PhoneNumberVal);

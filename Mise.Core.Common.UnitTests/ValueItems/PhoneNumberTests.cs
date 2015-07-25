@@ -32,5 +32,32 @@ namespace Mise.Core.Common.UnitTests.ValueItems
             //ASSERT
             Assert.IsTrue(res, "are equal!");
         }
+
+        [Test]
+        public void IsValidWithJustNumbers()
+        {
+            var res = PhoneNumber.IsValid("602", "2656111");
+
+            Assert.IsTrue(res);
+        }
+
+        [Test]
+        public void IsValidWithFormatting()
+        {
+            var res = PhoneNumber.IsValid("(602)", "265 - 6111");
+
+            Assert.IsTrue(res);
+        }
+
+        [Test]
+        public void ShouldCreateWithEmptyValues()
+        {
+            //ACT
+            var phone = new PhoneNumber("", "");
+
+            //ASSERT
+            Assert.AreEqual("", phone.AreaCode);
+            Assert.AreEqual("", phone.Number);
+        }
     }
 }

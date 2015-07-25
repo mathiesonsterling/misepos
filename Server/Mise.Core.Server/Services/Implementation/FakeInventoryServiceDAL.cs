@@ -76,11 +76,11 @@ namespace Mise.Core.Server.Services.Implementation
         {
             var accounts = new List<IAccount>
             {
-                MakeEmployeeAccount(new PersonName("Justin", "Elliott"), new EmailAddress("justin.elliott@misepos.com"), new ReferralCode("TAKEMONDAYOFF"), new PhoneNumber("", "")),
+                MakeEmployeeAccount(new PersonName("Justin", "Elliott"), new EmailAddress("justin.elliott@misepos.com"), new ReferralCode("TAKEMONDAYOFF"), new PhoneNumber()),
                 MakeEmployeeAccount(new PersonName("Mathieson", "Sterling"), new EmailAddress("mathieson@misepos.com"), new ReferralCode("DRANKWITHMATTY"), new PhoneNumber("718", "7152945")),
-                MakeEmployeeAccount(new PersonName("Dave", "Stewart"), new EmailAddress("dave@misepos.com"), new ReferralCode("WHIZK3Y"), new PhoneNumber("", "")),
-                MakeEmployeeAccount(new PersonName("Andrew", "Siegler"), new EmailAddress("andrew@misepos.com"), new ReferralCode("CANNEDHEATBLUES"), new PhoneNumber("", "")),
-                MakeEmployeeAccount(new PersonName("Emily", "Perkins"), new EmailAddress("emily@misepos.com"), new ReferralCode("SHIFTDRINK"), new PhoneNumber("", ""))
+                MakeEmployeeAccount(new PersonName("Dave", "Stewart"), new EmailAddress("dave@misepos.com"), new ReferralCode("WHIZK3Y"), new PhoneNumber()),
+                MakeEmployeeAccount(new PersonName("Andrew", "Siegler"), new EmailAddress("andrew@misepos.com"), new ReferralCode("CANNEDHEATBLUES"), new PhoneNumber()),
+                MakeEmployeeAccount(new PersonName("Emily", "Perkins"), new EmailAddress("emily@misepos.com"), new ReferralCode("SHIFTDRINK"), new PhoneNumber())
             };
             return Task.FromResult(accounts.AsEnumerable());
         }

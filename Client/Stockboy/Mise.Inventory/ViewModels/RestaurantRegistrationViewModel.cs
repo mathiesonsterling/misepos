@@ -21,15 +21,16 @@ namespace Mise.Inventory.ViewModels
 			PropertyChanged += (sender, e) => {
 				if(e.PropertyName !=  "CanAdd"){
 					//don't need street direction
-					CanAdd = 
-						string.IsNullOrEmpty (Name) == false
-						&& string.IsNullOrEmpty (StreetAddressNumber) == false
-						&& string.IsNullOrEmpty (StreetName) == false
-						&& string.IsNullOrEmpty (City) == false
-						&& string.IsNullOrEmpty (State) == false
-						&& string.IsNullOrEmpty (Zip) == false
-						&& string.IsNullOrEmpty (PhoneAreaCode) == false
-						&& string.IsNullOrEmpty (PhoneNumberVal) == false;
+				    CanAdd =
+				        string.IsNullOrEmpty(Name) == false
+				        && string.IsNullOrEmpty(StreetAddressNumber) == false
+				        && string.IsNullOrEmpty(StreetName) == false
+				        && string.IsNullOrEmpty(City) == false
+				        && string.IsNullOrEmpty(State) == false
+				        && string.IsNullOrEmpty(Zip) == false
+				        && string.IsNullOrEmpty(PhoneAreaCode) == false
+				        && string.IsNullOrEmpty(PhoneNumberVal) == false
+				        && PhoneNumber.IsValid(PhoneAreaCode, PhoneNumberVal);
 				}
 			};
 		}
