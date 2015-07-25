@@ -37,7 +37,7 @@ namespace Mise.Core.Common.Events
 			IBaseBeverageLineItem source, int quantity, IReceivingOrder ro);
 		ReceivingOrderLineItemAddedEvent CreateReceivingOrderLineItemAddedEvent(IEmployee emp, string name, 
 			string upc, IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity, IReceivingOrder ro);
-		ReceivingOrderCompletedEvent CreateReceivingOrderCompletedEvent(IEmployee emp, IReceivingOrder ro, string notes, string invoiceID);
+		ReceivingOrderCompletedEvent CreateReceivingOrderCompletedEvent(IEmployee emp, IReceivingOrder ro, DateTimeOffset dateReceived, string notes, string invoiceID);
 		ReceivingOrderLineItemQuantityUpdatedEvent CreateROLineItemUpdateQuantityEvent(IEmployee emp, 
 			IReceivingOrder ro, Guid lineItemID, int quantity, Money pricePerBottle);
 		ReceivingOrderLineItemZeroedOutEvent CreateReceivingOrderLineItemZeroedOutEvent(IEmployee emp, IReceivingOrder ro, Guid lineItemID);

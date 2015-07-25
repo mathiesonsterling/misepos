@@ -136,7 +136,8 @@ namespace Mise.Inventory.Services.Implementation
 		}
 
 		private IReceivingOrder _roToComplete;
-		public async Task<bool> CompleteReceivingOrderForSelectedVendor(string notes, string invoiceID)
+		public async Task<bool> CompleteReceivingOrderForSelectedVendor(DateTimeOffset dateReceived, 
+			string notes, string invoiceID)
 		{
 			try{
 				var emp = await GetCurrentEmployee();
@@ -155,7 +156,7 @@ namespace Mise.Inventory.Services.Implementation
 			    var res = true;
 
 				//mark the RO as closed
-				var compEvent = _eventFactory.CreateReceivingOrderCompletedEvent(emp, _roToComplete, notes, invoiceID);
+				var compEvent = _eventFactory.CreateReceivingOrderCompletedEvent(emp, _roToComplete, dateReceived, notes, invoiceID);
 				var updatedOrder = _receivingOrderRepository.ApplyEvent (compEvent);
 			    if (updatedOrder.Status == ReceivingOrderStatus.Completed)
 			    {

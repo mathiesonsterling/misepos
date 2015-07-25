@@ -14,6 +14,8 @@ namespace Mise.Core.Common.Entities.Inventory
 {
 	public class ReceivingOrder : RestaurantEntityBase, IReceivingOrder
 	{
+		public DateTimeOffset DateReceived{ get; set;}
+
         /// <summary>
         /// If set, the purchase order this RO is associated with
         /// </summary>
@@ -162,6 +164,7 @@ namespace Mise.Core.Common.Entities.Inventory
 			Status = ReceivingOrderStatus.Completed;
 			Notes = entityEvent.Notes;
 			InvoiceID = entityEvent.InvoiceID;
+			DateReceived = entityEvent.DateReceived;
 		}
 
 		protected virtual void WhenNoteAddedToReceivingOrder(ReceivingOrderNoteAddedEvent noteEvent){

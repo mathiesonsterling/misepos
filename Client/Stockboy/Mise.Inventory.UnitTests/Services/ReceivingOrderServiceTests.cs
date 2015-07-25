@@ -320,7 +320,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
 			var poRes = await underTest.StartReceivingOrderForSelectedVendor ();
-			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(string.Empty, string.Empty);
+			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(DateTimeOffset.UtcNow, string.Empty, string.Empty);
 
             var current = await underTest.GetCurrentReceivingOrder();
 
@@ -383,7 +383,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
             var poRes = await underTest.StartReceivingOrder(po);
-			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(string.Empty, string.Empty);
+			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(DateTimeOffset.UtcNow, string.Empty, string.Empty);
 
             var current = await underTest.GetCurrentReceivingOrder();
 
@@ -446,7 +446,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
             var poRes = await underTest.StartReceivingOrder(po);
-			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(string.Empty, string.Empty);
+			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(DateTimeOffset.UtcNow, string.Empty, string.Empty);
 
             var current = await underTest.GetCurrentReceivingOrder();
             await underTest.CommitCompletedOrder(status);
@@ -516,7 +516,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
 			var poRes = await underTest.StartReceivingOrderForSelectedVendor();
-			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor("this is a test note", string.Empty);
+			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(DateTimeOffset.UtcNow, "this is a test note", string.Empty);
 
             var current = await underTest.GetCurrentReceivingOrder();
 

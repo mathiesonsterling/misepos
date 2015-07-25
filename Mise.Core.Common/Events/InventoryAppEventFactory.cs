@@ -265,7 +265,7 @@ namespace Mise.Core.Common.Events
 		}
 			
 		public ReceivingOrderCompletedEvent CreateReceivingOrderCompletedEvent(IEmployee emp, IReceivingOrder ro, 
-			string notes, string invoiceID){
+			DateTimeOffset dateReceived, string notes, string invoiceID){
 			return new ReceivingOrderCompletedEvent {
 				CausedByID = emp.ID,
 				ReceivingOrderID = ro.ID,
@@ -276,7 +276,8 @@ namespace Mise.Core.Common.Events
 				RestaurantID = _restaurant.ID,
 
 				Notes = notes,
-				InvoiceID = invoiceID
+				InvoiceID = invoiceID,
+				DateReceived = dateReceived
 			};
 		}
 

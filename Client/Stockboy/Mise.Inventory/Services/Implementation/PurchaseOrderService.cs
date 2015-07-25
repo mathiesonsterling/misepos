@@ -60,7 +60,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 
 			//get all the ROs after the last inventory
-			var ros = _roRepository.GetAll().Where(ro => ro.CreatedDate > inventory.DateCompleted.Value);
+			var ros = _roRepository.GetAll().Where(ro => ro.DateReceived > inventory.DateCompleted.Value);
 			var roItems = ros.SelectMany (ro => ro.GetBeverageLineItems ()).ToList ();
 
 			//create the PO

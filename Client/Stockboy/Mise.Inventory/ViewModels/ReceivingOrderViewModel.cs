@@ -64,6 +64,8 @@ namespace Mise.Inventory.ViewModels
 			_roService = roService;
 		    _insights = insights;
 
+			DateReceived = DateTime.Now;
+
 		    PropertyChanged += (sender, args) =>
 		    {
 		        if (args.PropertyName != "CanSave")
@@ -80,6 +82,7 @@ namespace Mise.Inventory.ViewModels
 		{
 			try{
 				Processing = true;
+				DateReceived = DateTime.Now;
 				await base.OnAppearing ();
 				var vendor = await _vendorService.GetSelectedVendor ();
 				VendorName = vendor.Name;
@@ -118,6 +121,7 @@ namespace Mise.Inventory.ViewModels
 				HandleException (e);
 			}
 		}
+		public DateTime DateReceived{get{return GetValue<DateTime> ();}set{ SetValue (value); }}
 
 		public string Title{get{return GetValue<string> ();}private set{ SetValue (value); }}
 		public string VendorName{ get { return GetValue<string> (); } private set { SetValue (value); } }
@@ -153,7 +157,7 @@ namespace Mise.Inventory.ViewModels
                     PurchaseOrderStatus status;
 			        using (_insights.TrackTime("Completing receiving order"))
 			        {
-			            var res = await _roService.CompleteReceivingOrderForSelectedVendor(Notes, InvoiceID);
+			            var res = await _roService.CompleteReceivingOrderForSelectedVendor(DateReceived, Notes, InvoiceID);
 			            status = res ? PurchaseOrderStatus.ReceivedTotally : PurchaseOrderStatus.ReceivedWithAlterations;
 			        }
                     using(_insights.TrackTime("Committing receiving order"))
@@ -163,6 +167,7 @@ namespace Mise.Inventory.ViewModels
 			        Processing = false;
 			        CanSave = true;
 					InvoiceID = string.Empty;
+					DateReceived = DateTime.Now;
 			        await Navigation.CloseReceivingOrder();
 			    }
 			} catch(Exception e){

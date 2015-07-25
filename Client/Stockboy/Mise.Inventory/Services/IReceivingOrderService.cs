@@ -13,7 +13,7 @@ namespace Mise.Inventory.Services{
 		Task<IReceivingOrder> StartReceivingOrderForSelectedVendor();
 		Task<IReceivingOrder> StartReceivingOrder(IPurchaseOrder po);
 		Task<IReceivingOrder> GetCurrentReceivingOrder();
-		Task<bool> CompleteReceivingOrderForSelectedVendor(string notes, string invoiceID);
+		Task<bool> CompleteReceivingOrderForSelectedVendor(DateTimeOffset dateReceived, string notes, string invoiceID);
 		/// <summary>
 		/// Final commit to mark a RO as done
 		/// </summary>
