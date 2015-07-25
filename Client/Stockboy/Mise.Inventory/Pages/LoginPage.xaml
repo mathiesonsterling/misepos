@@ -19,7 +19,8 @@
 				    	Text ="{Binding Username}"
 					    Placeholder ="Email"
 					    HorizontalOptions="FillAndExpand"
-					    Keyboard="Email">
+					    Keyboard="Email"
+					    StyleId="Email">
 				    </Entry>
 
 				    <Entry 
@@ -27,17 +28,18 @@
 				    	Text ="{Binding Password}"
 				 	  	IsPassword="true"
 				        Placeholder ="Password"
-				      	HorizontalOptions="FillAndExpand">
+				      	HorizontalOptions="FillAndExpand"
+				      	StyleId="Password">
 				    </Entry>
 			    </StackLayout>
 		    </ScrollView>
 		    <ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 
-		    <Button Text="Login" Command="{Binding LoginCommand}" IsEnabled="{Binding CanLogin}"/>
+		    <Button Text="Login" Command="{Binding LoginCommand}" IsEnabled="{Binding CanLogin}" StyleId="Login"/>
 
 		    <Button Text="Forgot Password?" IsVisible="false"/>
 
-		    <Button Text="Register" Command="{Binding RegisterCommand}"/>
+		    <Button Text="Register" Command="{Binding RegisterCommand}" StyleId="Register"/>
 
 	  	</StackLayout>
   	</ScrollView>

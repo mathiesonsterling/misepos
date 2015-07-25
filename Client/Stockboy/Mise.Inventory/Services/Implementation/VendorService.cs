@@ -121,27 +121,34 @@ namespace Mise.Inventory.Services.Implementation
 		/// <returns>The line item to vendor if doesnt exist.</returns>
 		/// <param name="vendorID">Vendor I.</param>
 		/// <param name="lis">Li.</param>
-		public async Task AddLineItemsToVendorIfDontExist (Guid vendorID, IEnumerable<IReceivingOrderLineItem> lis)
+		public async Task AddLineItemsToVendorIfDontExist (Guid vendorID, IEnumerable<IReceivingOrderLineItem> lineItems)
 		{
 			var vendor = _vendorRepository.GetByID (vendorID);
 			if(vendor != null){
 				var emp = await _loginService.GetCurrentEmployee ();
 
+				var lis = lineItems.Where (li => li.ZeroedOut == false)
+					.OrderBy (li => li.DisplayName)
+					.ToList();
 				//TODO only take verified events in the future
-				foreach(var li in lis.Where(li => li.ZeroedOut == false)){
-					var item = vendor.GetItemsVendorSells ().FirstOrDefault (vLI => BeverageLineItemEquator.AreSameBeverageLineItem(vLI, li));
+				foreach(var lineItem in lis){
+					var item = vendor.GetItemsVendorSells ()
+						.OrderBy(li => li.DisplayName)
+						.FirstOrDefault (vLI => BeverageLineItemEquator.AreSameBeverageLineItem(vLI, lineItem));
 
 					if (item == null) {
-						var newLIEv = _eventFactory.CreateVendorLineItemAddedEvent (emp, li, vendor);
+						var newLIEv = _eventFactory.CreateVendorLineItemAddedEvent (emp, lineItem, vendor);
 						var updatedVendor = _vendorRepository.ApplyEvent (newLIEv);
-					    item = updatedVendor.GetItemsVendorSells ().FirstOrDefault (vLI => BeverageLineItemEquator.AreSameBeverageLineItem(vLI, li));
+						item = updatedVendor.GetItemsVendorSells ()
+							.Where(li => li.DisplayName == lineItem.DisplayName)
+							.FirstOrDefault (vLI => BeverageLineItemEquator.AreSameBeverageLineItem(vLI, lineItem));
 					}
 
 					if (item == null) {
-						_logger.Error ("Unable to resolve line item " + li.DisplayName + " id " + li.ID);
+						_logger.Error ("Unable to resolve line item " + lineItem.DisplayName + " id " + lineItem.ID);
 					} else {
 						//TODO - if we've got a price being reported that is GREATER than the public price, there's a problem!
-						var priceEv = _eventFactory.CreateRestaurantSetPriceEvent (emp, item, vendor, li.UnitPrice);
+						var priceEv = _eventFactory.CreateRestaurantSetPriceEvent (emp, item, vendor, lineItem.UnitPrice);
 						vendor = _vendorRepository.ApplyEvent (priceEv);
 					}
 				}
