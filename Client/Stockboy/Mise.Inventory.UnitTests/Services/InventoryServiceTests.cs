@@ -337,6 +337,8 @@ namespace Mise.Inventory.UnitTests.Services
             reposLoader.Setup(rl => rl.LoadRepositories(It.IsAny<Guid?>())).Returns(Task.FromResult(false));
             var loginService = new LoginService(empRepos.Object, restRepos, inviteRepos.Object, null, 
 				eventFact, null, logger.Object, reposLoader.Object);
+			loginService.SetCurrentEmployee (currentEmp);
+			loginService.SetCurrentRestaurant (rest);
 
 		    var insights = new Mock<IInsightsService>();
             await inventoryRepos.Load(rest.ID);
@@ -344,8 +346,6 @@ namespace Mise.Inventory.UnitTests.Services
 			var underTest = new InventoryService (logger.Object, loginService, inventoryRepos, eventFact, insights.Object);
 
 			//ACT
-			await loginService.LoginAsync(new EmailAddress(), new Password());
-			await loginService.SelectRestaurantForLoggedInEmployee (rest.ID);
 
 			await underTest.AddNewSection("testSection", false, false);
 
