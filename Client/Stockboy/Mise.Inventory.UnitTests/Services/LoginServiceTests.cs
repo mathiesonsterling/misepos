@@ -172,7 +172,11 @@ namespace Mise.Inventory.UnitTests.Services
             reposLoader.Setup(rl => rl.LoadRepositories(It.IsAny<Guid?>())).Returns(Task.FromResult(false));
 
 	        var logger = new Mock<ILogger>();
-	        var underTest = new LoginService(null, moqRestaurantRepos.Object, null, null, moqEventFactory.Object, null, logger.Object, reposLoader.Object);
+
+			var keyValStorage = new Mock<IClientKeyValueStorage> ();
+			keyValStorage.Setup (s => s.SetValue (It.IsAny<string> (), It.IsAny<LoginService.RestaurantSelectRecord> ()))
+				.Returns (Task.FromResult (true));
+	        var underTest = new LoginService(null, moqRestaurantRepos.Object, null, null, moqEventFactory.Object, keyValStorage.Object, logger.Object, reposLoader.Object);
 
             //ACT
 	        await underTest.SelectRestaurantForLoggedInEmployee(restID);
