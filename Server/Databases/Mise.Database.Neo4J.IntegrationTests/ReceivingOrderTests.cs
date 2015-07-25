@@ -56,6 +56,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
                 VendorID = vendor.ID,
                 InvoiceID = "firstInvoiceID",
                 Notes = "testing how we make notes!",
+                DateReceived = new DateTime(2015, 01, 01),
                 LineItems = new List<ReceivingOrderLineItem>
                 {
                     new ReceivingOrderLineItem
@@ -93,6 +94,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
             Assert.AreEqual(ro.VendorID, gotRes.VendorID, "VendorID");
             Assert.AreEqual(ro.Notes, gotRes.Notes, "Notes");
             Assert.AreEqual(ro.InvoiceID, gotRes.InvoiceID, "InvoiceID");
+            Assert.AreEqual(ro.DateReceived, new DateTime(2015, 01, 01));
             //test line items and their container
             var lis = gotRes.GetBeverageLineItems().ToList();
             Assert.AreEqual(1, lis.Count);
@@ -106,7 +108,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
             Assert.NotNull(aiContainer, "Container");
             Assert.NotNull(aiContainer.AmountContained, "AmountContainer is null");
             Assert.AreEqual(375, aiContainer.AmountContained.Milliliters);
-
+          
             var firstCategories = li.GetCategories().ToList();
             Assert.IsTrue(firstCategories.Select(c => c.ID).Contains(CategoriesService.Unknown.ID));
             Assert.IsTrue(firstCategories.Select(c => c.ID).Contains(CategoriesService.NonAlcoholic.ID));
