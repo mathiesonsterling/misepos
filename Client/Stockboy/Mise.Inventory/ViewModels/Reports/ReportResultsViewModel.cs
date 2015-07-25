@@ -15,21 +15,19 @@ namespace Mise.Inventory.ViewModels.Reports
         /// <summary>
         /// Matches the LineItemWithQuantity item fields for binding
         /// </summary>
-        public class LineItemDisplayAdapter
+        public class LineItemDisplayAdapter : BaseDisplayLine<ReportResultLineItem>
         {
-            private readonly ReportResultLineItem _source;
-            public LineItemDisplayAdapter(ReportResultLineItem source)
+			public LineItemDisplayAdapter(ReportResultLineItem source) : base(source)
             {
-                _source = source;
             }
-            public string DisplayName { get { return _source.MainText; } }
-            public Color TextColor { get { return _source.IsErrored ? Color.Accent : Color.Default; } }
-            public string DetailDisplay { get { return _source.DetailText; } }
+            public override string DisplayName { get { return Source.MainText; } }
+            public Color TextColor { get { return Source.IsErrored ? Color.Accent : Color.Default; } }
+            public override string DetailDisplay { get { return Source.DetailText; } }
             public string Quantity
             {
                 get
                 {
-                    return _source.Quantity.HasValue ? _source.Quantity.Value.ToString() : "None";
+                    return Source.Quantity.HasValue ? Source.Quantity.Value.ToString() : "None";
                 }
             }
         }

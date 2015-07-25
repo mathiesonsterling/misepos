@@ -22,8 +22,6 @@ namespace Mise.Core.Entities.Inventory
         /// </summary>
         Guid CreatedByEmployeeID { get; }
 
-		string DisplayName{get;}
-		string DetailDisplay{get;}
         string CreatedByName { get; set; }
 
         IEnumerable<IPurchaseOrderLineItem> GetPurchaseOrderLineItems();

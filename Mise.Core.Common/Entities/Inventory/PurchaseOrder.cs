@@ -30,19 +30,9 @@ namespace Mise.Core.Common.Entities.Inventory
 		{
 			return PurchaseOrdersPerVendor;
 		}
-			
-		public string DisplayName {
-			get {
-				return CreatedDate.ToString ("dd/MM/yy");
-			}
-		}
 
 		public string CreatedByName{ get; set;}
-		public string DetailDisplay {
-			get {
-				return "Sent by " + CreatedByName;
-			}
-		}
+
 
 	    public Guid CreatedByEmployeeID { get; set; }
         public ICloneableEntity Clone()

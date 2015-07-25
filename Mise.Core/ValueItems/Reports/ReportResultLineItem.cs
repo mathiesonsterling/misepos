@@ -9,7 +9,7 @@ namespace Mise.Core.ValueItems.Reports
     /// <summary>
     /// Single line of a report
     /// </summary>
-    public class ReportResultLineItem : IEquatable<ReportResultLineItem>
+	public class ReportResultLineItem : IEquatable<ReportResultLineItem>, ITextSearchable
     {
         public ReportResultLineItem(string mainText, string detailText, decimal? quantity, bool isErrored)
         {
@@ -27,6 +27,17 @@ namespace Mise.Core.ValueItems.Reports
         public bool IsErrored { get; set; }
 
         public decimal? Quantity { get; set; }
+
+		#region ITextSearchable implementation
+
+		public bool ContainsSearchString (string searchString)
+		{
+			return MainText.ToUpper ().Contains (searchString.ToUpper ())
+			|| DetailText.ToUpper ().Contains (searchString.ToUpper ())
+			|| Quantity.ToString ().Contains (searchString);
+		}
+
+		#endregion
 
         public bool Equals(ReportResultLineItem other)
         {

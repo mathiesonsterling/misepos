@@ -24,9 +24,9 @@ namespace Mise.Inventory.ViewModels
 	        {
 	        }
 
-	        public override decimal Quantity
+	        public override string Quantity
 	        {
-                get { return Source.Quantity; }
+				get { return Source.Quantity.ToString(); }
 	        }
 
 	        public override Color TextColor

@@ -6,40 +6,51 @@ using System.Threading.Tasks;
 using Mise.Core;
 using Mise.Core.Entities.Inventory;
 using Xamarin.Forms;
+using XLabs.Platform.Services;
 
 namespace Mise.Inventory.ViewModels
 {
+	/// <summary>
+	/// Simple class for anything that wants to use our custom cells
+	/// </summary>
+	public abstract class BaseDisplayLine<T> : ITextSearchable where T:ITextSearchable
+	{
+		public T Source{ get; private set;}
+
+		protected BaseDisplayLine(T source){
+			Source = source;
+		}
+
+
+		public bool ContainsSearchString(string searchString)
+		{
+			return Source.ContainsSearchString(searchString);
+		}
+			
+		public abstract string DetailDisplay {get;}
+		public abstract string DisplayName{get;}
+	}
+
     /// <summary>
     /// Information needed to display a line item, including quantity
     /// </summary>
-    public abstract class BaseLineItemDisplayLine<T> : ITextSearchable where T:IBaseBeverageLineItem
+    public abstract class BaseLineItemDisplayLine<T> : BaseDisplayLine<T> where T:IBaseBeverageLineItem
     {
-        private readonly T _source;
-
-        protected BaseLineItemDisplayLine(T source)
+		protected BaseLineItemDisplayLine(T source) : base(source)
         {
-            _source = source;
         }
 
-        public abstract Color TextColor { get; }
-        public abstract decimal Quantity { get; }
-		public abstract string DetailDisplay {get;}
-
-        public T Source { get { return _source; } }
+		public abstract Color TextColor { get; }
+		public abstract string Quantity { get; }
 
         //TODO remove display name from other items!
-        public string DisplayName
+        public override string DisplayName
         {
-            get { return _source.DisplayName; }
+            get { return Source.DisplayName; }
         }
 
 
-        public Guid ID { get { return _source.ID; } }
+        public Guid ID { get { return Source.ID; } }
 
-
-        public bool ContainsSearchString(string searchString)
-        {
-            return _source.ContainsSearchString(searchString);
-        }
     }
 }

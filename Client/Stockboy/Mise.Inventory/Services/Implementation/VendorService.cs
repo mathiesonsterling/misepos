@@ -63,13 +63,18 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 
-			//TODO - check we don't get any name conflicts
-
 			//make the create event
 			var create = _eventFactory.CreateVendorCreatedEvent(emp, name, address, phoneNumber, email);
 
 			_selectedVendor = _vendorRepository.ApplyEvent (create);
 
+			//TODO - check we don't get any name conflicts
+			var alreadyExists = _vendorRepository.GetAll().Any(v => v.IsSameVendor(_selectedVendor));
+			if(alreadyExists){
+				_vendorRepository.CancelTransaction (_selectedVendor.ID);
+				_selectedVendor = null;
+				throw new ArgumentException ("This vendor already exists!");
+			}
 			await _vendorRepository.Commit (_selectedVendor.ID);
 
 			return _selectedVendor;

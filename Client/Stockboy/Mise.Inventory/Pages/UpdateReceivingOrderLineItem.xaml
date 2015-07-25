@@ -35,7 +35,7 @@
 				Command="{Binding ZeroOutCommand}"
 				HorizontalOptions ="FillAndExpand"/>
 			<Button 
-				Text="Update" 
+				Text="Set Price and Quantity" 
 				Command="{Binding UpdateQuantityCommand}" 
 				IsEnabled="{Binding IsUpdateEnabled}"
 				HorizontalOptions="FillAndExpand"/>
