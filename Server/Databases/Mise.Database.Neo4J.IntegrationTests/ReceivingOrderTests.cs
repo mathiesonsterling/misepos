@@ -94,7 +94,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
             Assert.AreEqual(ro.VendorID, gotRes.VendorID, "VendorID");
             Assert.AreEqual(ro.Notes, gotRes.Notes, "Notes");
             Assert.AreEqual(ro.InvoiceID, gotRes.InvoiceID, "InvoiceID");
-            Assert.AreEqual(ro.DateReceived, new DateTime(2015, 01, 01));
+            Assert.AreEqual(ro.DateReceived, new DateTimeOffset(new DateTime(2015, 01, 01)));
             //test line items and their container
             var lis = gotRes.GetBeverageLineItems().ToList();
             Assert.AreEqual(1, lis.Count);

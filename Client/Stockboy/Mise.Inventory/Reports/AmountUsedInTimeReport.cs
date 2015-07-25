@@ -67,8 +67,8 @@ namespace Mise.Inventory.Reports
                 var rosInPeriod =
                     _receivingOrdersInTime.Where(
                         ro =>
-                            ro.CreatedDate < thisInventory.DateCompleted &&
-                            (priorInv == null || ro.CreatedDate > priorInv.DateCompleted));
+                            ro.DateReceived < thisInventory.DateCompleted &&
+                            (priorInv == null || ro.DateReceived > priorInv.DateCompleted));
 
                 var allROInPeriodLineItems = rosInPeriod.SelectMany(ro => ro.GetBeverageLineItems()).ToList();
 

@@ -55,7 +55,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 
 			var inventory = await _inventoryService.GetLastCompletedInventory ();
-			if (inventory == null) {
+			if (inventory == null || inventory.DateCompleted.HasValue == false) {
 				throw new InvalidOperationException ("You haven't finished an inventory yet, can't create a purchase order");
 			}
 
