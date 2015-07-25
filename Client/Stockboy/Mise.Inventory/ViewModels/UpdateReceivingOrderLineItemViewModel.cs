@@ -130,7 +130,7 @@ namespace Mise.Inventory.ViewModels
 				var newQuant = CurrentQuantity;
 				var newPrice = new Money (TotalPrice);
 
-				res = oldQuant != newQuant && (oldTotal.Equals (newPrice) == false);
+				res = newQuant > 0 && (oldQuant != newQuant || (oldTotal.Equals (newPrice) == false));
 			}
 				
 			UpdateAndMoveToNext = res && NextItem != null;
@@ -144,6 +144,7 @@ namespace Mise.Inventory.ViewModels
             Processing = true;
             await _receivingOrderService.ZeroOutLineItem(CurrentItem);
             Processing = false;
+			await Navigation.CloseUpdateQuantity ();
         }
 
         #endregion

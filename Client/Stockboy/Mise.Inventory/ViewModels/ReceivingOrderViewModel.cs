@@ -86,8 +86,6 @@ namespace Mise.Inventory.ViewModels
 				var ro = await _roService.GetCurrentReceivingOrder ();
 				if (ro != null)
 				{
-					InvoiceID = ro.InvoiceID;
-
 					if (ro.PurchaseOrderDate.HasValue)
 					{
 						Title = "Order from " + VendorName + " for PO";
@@ -113,7 +111,6 @@ namespace Mise.Inventory.ViewModels
 				else
 				{
 					Title = "Receive from " + VendorName;
-					InvoiceID = string.Empty;
 					CanSave = false;
 				}
 				Processing = false;
@@ -165,6 +162,7 @@ namespace Mise.Inventory.ViewModels
 			        }
 			        Processing = false;
 			        CanSave = true;
+					InvoiceID = string.Empty;
 			        await Navigation.CloseReceivingOrder();
 			    }
 			} catch(Exception e){
