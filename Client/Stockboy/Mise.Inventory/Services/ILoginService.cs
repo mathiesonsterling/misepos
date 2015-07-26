@@ -15,7 +15,7 @@ namespace Mise.Inventory.Services
 	/// </summary>
 	public interface ILoginService
 	{
-		void OnAppStarting ();
+		Task<bool> LoadSavedEmployee();
 
 		Task<IEmployee> LoginAsync(EmailAddress email, Password password);
 

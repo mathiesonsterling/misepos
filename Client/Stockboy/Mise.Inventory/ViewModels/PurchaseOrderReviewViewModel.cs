@@ -125,7 +125,7 @@ namespace Mise.Inventory.ViewModels
 		public IEnumerable<VendorAndItems> VendorsAndPOs{ get; private set;}
 
 
-		public ICommand SubmitPOCommand{get{return new SimpleCommand (SubmitPO);}}
+		public ICommand SubmitPOCommand{get{return new SimpleCommand (SubmitPO, () => NotProcessing);}}
 
 		async void SubmitPO(){
 			try{

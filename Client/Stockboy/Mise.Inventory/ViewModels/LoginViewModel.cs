@@ -12,6 +12,8 @@ using Mise.Core.Client.Services;
 using Mise.Core.Entities.People;
 using System.Net.Http;
 using Xamarin;
+using ServiceStack;
+using System.Net;
 
 
 namespace Mise.Inventory.ViewModels
@@ -38,7 +40,8 @@ namespace Mise.Inventory.ViewModels
 	        {
 	            if (args.PropertyName != "CanLogin")
 	            {
-	                CanLogin = EmailAddress.IsValid(Username) && Core.ValueItems.Password.IsValid(Password);
+	                CanLogin = NotProcessing && EmailAddress.IsValid(Username) 
+						&& Core.ValueItems.Password.IsValid(Password);
 	            }
 	        };
 		}
@@ -57,11 +60,11 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The login command.</value>
 		public ICommand LoginCommand {
-			get { return new SimpleCommand(LoginWrapper); }
+			get { return new SimpleCommand(LoginWrapper, () => CanLogin); }
 		}
 
 		public ICommand RegisterCommand{
-			get{return new SimpleCommand (Register);}
+			get{return new SimpleCommand (Register, () => NotProcessing);}
 		}
 
 	    public bool NotProduction
@@ -189,7 +192,16 @@ namespace Mise.Inventory.ViewModels
 			            }
 			        }
 			    }
-			} catch(Exception e){
+			} 
+			catch(WebException we){
+				_insightsService.ReportException (we, LogLevel.Warn);
+				Logger.HandleException (we);
+				if(we.Message.Contains ("NameResolutionFailure")){
+					await Navigation.DisplayAlert ("Connection problem", "Cannot connect to server, are you online?");
+					shownErrorMessage = true;
+				} 
+			}
+			catch(Exception e){
 				_insightsService.ReportException (e, LogLevel.Warn);
 				Logger.HandleException (e);
 			}

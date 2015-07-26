@@ -40,11 +40,11 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand ConfirmCommand {
-			get { return new SimpleCommand(Confirm); }
+			get { return new SimpleCommand(Confirm, () => CanConfirm); }
 		}
 
 		public ICommand CancelCommand{
-			get{return new SimpleCommand (Cancel);}
+			get{return new SimpleCommand (Cancel, () => NotProcessing);}
 		}
 		#endregion
 

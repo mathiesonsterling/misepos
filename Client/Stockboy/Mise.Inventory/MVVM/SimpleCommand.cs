@@ -8,11 +8,6 @@ namespace Mise.Inventory.MVVM
 	{
 		readonly Func<bool> _canExecute;
 		readonly Action _execute;
-
-		public SimpleCommand(Action execute)
-			: this(execute, null)
-		{
-		}
 			
 		public SimpleCommand(Action execute, Func<bool> canExecute)
 		{

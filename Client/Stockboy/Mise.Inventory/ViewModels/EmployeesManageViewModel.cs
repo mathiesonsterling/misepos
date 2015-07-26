@@ -42,7 +42,7 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand InviteCommand {
-			get { return new SimpleCommand(Invite); }
+			get { return new SimpleCommand(Invite, () => InviteEnabled); }
 		}
 
 		#endregion

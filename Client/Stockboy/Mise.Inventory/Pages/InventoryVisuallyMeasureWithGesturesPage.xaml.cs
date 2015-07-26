@@ -1,20 +1,50 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Mise.Core.ValueItems.Inventory;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
-using XLabs.Platform.Device;
 using Xamarin;
+using MR.Gestures;
+using Mise.Inventory.Themes;
+
 namespace Mise.Inventory.Pages
 {
-	public partial class InventoryVisuallyMeasureWithGesturesPage : ContentPage
+	public partial class InventoryVisuallyMeasureWithGesturesPage : MR.Gestures.ContentPage
 	{
 		private List<MeasureButton> _measureButtons;
 		private double _oldHeight = DEFAULT_HEIGHT;
 	    private const double DEFAULT_HEIGHT = 200;
 		private LiquidContainerShape _shape;
 		private bool _loading = false;
+
+		bool swipeInProgress = false;
+
+		private void OnSwiped(object sender, SwipeEventArgs e){
+			if(swipeInProgress){
+				return;
+			}
+			var vm = BindingContext as InventoryVisuallyMeasureBottleViewModel;
+
+			if(vm != null){
+				swipeInProgress = true;
+				switch (e.Direction) {
+				case Direction.Right:
+					if (vm.MovePreviousCommand.CanExecute (null)) {
+						vm.MovePreviousCommand.Execute (null);
+					}
+					break;
+				case Direction.Left:
+				case Direction.NotClear:
+					if (vm.MoveNextCommand.CanExecute (null)) {
+						vm.MoveNextCommand.Execute (null);
+					}
+					break;
+				}
+				swipeInProgress = false;
+			}
+		}
+
 		public InventoryVisuallyMeasureWithGesturesPage ()
 		{
 			var vm = App.InventoryVisuallyMeasureBottleViewModel;
@@ -28,6 +58,16 @@ namespace Mise.Inventory.Pages
                     mb.SetOff();
                 }
             };
+			vm.MovePreviousAnimation = async () => 
+				await this.TranslateTo (this.Width, 0, MiseTheme.SwipeAnimationDuration);
+
+			vm.MoveNextAnimation = async () => 
+				await this.TranslateTo (this.Width * -1, 0, MiseTheme.SwipeAnimationDuration);
+
+			vm.ResetViewAnimation = () => {
+				this.TranslationX = 0;
+				return Task.FromResult (true);
+			};
 
 			using(Insights.TrackTime("Time to create measure bottle")){
 				_shape = vm.Shape;
@@ -160,7 +200,7 @@ namespace Mise.Inventory.Pages
             }
 	    }
 
-		public class ZeroButton : Button{
+		public class ZeroButton : Xamarin.Forms.Button{
 			public ZeroButton(double height)
 			{
 				//BackgroundColor = Color.Gray;
@@ -170,7 +210,7 @@ namespace Mise.Inventory.Pages
 			}
 		}
 
-	    public class MeasureButton : Button{
+		public class MeasureButton : Xamarin.Forms.Button{
 			public static Color OffColor = Color.Gray;
 			public static Color OnColor = Color.Navy;
 

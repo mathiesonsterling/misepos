@@ -58,12 +58,8 @@ namespace Mise.Inventory
             LoadRepositoriesVoid();
 
             //if we've got a stored login, load it up
-            var loginService = _container.Resolve<ILoginService>();
-            if (loginService != null)
-            {
-                loginService.OnAppStarting();
-            }
-            appNavigation.ShowLogin();
+			AttemptToLoginSavedEmployee (appNavigation);
+            
         }
 
         #region View Models
@@ -146,7 +142,22 @@ namespace Mise.Inventory
             }
         }
 
-        public async void LoadRepositoriesVoid()
+		public async void AttemptToLoginSavedEmployee(IAppNavigation appNavigation)
+		{
+			var loginService = _container.Resolve<ILoginService>();
+			if (loginService != null) {
+				var hasSaved = await loginService.LoadSavedEmployee ();
+				if(hasSaved){
+					await MainMenuViewModel.OnAppearing ();
+					await appNavigation.ShowMainMenu ();
+				} 
+				else{
+					await appNavigation.ShowLogin();
+				}
+			}
+		}        
+
+		public async void LoadRepositoriesVoid()
         {
             await LoadRepositories();
         }

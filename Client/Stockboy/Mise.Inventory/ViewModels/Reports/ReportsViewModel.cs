@@ -31,7 +31,9 @@ namespace Mise.Inventory.ViewModels.Reports
         #endregion
 
         #region Commands
-        public ICommand CompletedInventoriesCommand { get { return new SimpleCommand(CompletedInventories);} }
+		public ICommand CompletedInventoriesCommand { 
+			get { return new SimpleCommand(CompletedInventories, () => NotProcessing);}
+		}
 
 	    private async void CompletedInventories()
 	    {

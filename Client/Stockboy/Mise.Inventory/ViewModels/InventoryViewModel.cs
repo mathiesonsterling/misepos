@@ -91,15 +91,15 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddNewLineItemCommand {
-			get { return new SimpleCommand(AddNewItem); }
+			get { return new SimpleCommand(AddNewItem, () => NotProcessing); }
 		}
 
 		public ICommand ScanCommand {
-			get { return new SimpleCommand(Scan); }
+			get { return new SimpleCommand(Scan, () => NotProcessing); }
 		}
 
 		public ICommand FinishSectionCommand{
-			get{return new SimpleCommand (FinishSection);}
+			get{return new SimpleCommand (FinishSection, () => CanComplete);}
 		}
 		#endregion
 

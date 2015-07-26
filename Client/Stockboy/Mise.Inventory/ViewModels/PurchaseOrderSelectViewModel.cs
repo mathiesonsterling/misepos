@@ -55,7 +55,9 @@ namespace Mise.Inventory.ViewModels
             _vendorService = vendorService;
         }
 
-        public ICommand StartBlankReceivingOrderCommand { get { return new SimpleCommand(StartBlankReceivingOrder); } }
+        public ICommand StartBlankReceivingOrderCommand { 
+			get { return new SimpleCommand(StartBlankReceivingOrder, () => NotProcessing); } 
+		}
 
 
         #region implemented abstract members of BaseSearchableViewModel

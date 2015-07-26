@@ -40,7 +40,7 @@ namespace Mise.Inventory.ViewModels
 
 
 		public ICommand AddNewVendorCommand {
-			get { return new SimpleCommand(AddNewVendor); }	
+			get { return new SimpleCommand(AddNewVendor, () => CanAdd); }	
 		}
 			
 		#endregion

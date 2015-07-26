@@ -8,6 +8,7 @@ using Mise.Core;
 using Mise.Core.Services;
 using Mise.Inventory.MVVM;
 using Mise.Inventory.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -22,13 +23,19 @@ namespace Mise.Inventory.ViewModels
 
         protected abstract Task<IList<TItemType>> LoadItems();
 
-        protected abstract Task BeforeMoveNext(TItemType currentItem);
+        protected abstract Task BeforeMove(TItemType currentItem);
+        protected abstract Task AfterMove(TItemType newItem);
 
-        protected abstract Task AfterMoveNext(TItemType newItem);
+		public Func<Task> MoveNextAnimation{ get; set;}
+		public Func<Task> ResetViewAnimation{ get; set;}
+		public Func<Task> MovePreviousAnimation{get;set;}
 
         public TItemType CurrentItem { get { return GetValue<TItemType>(); } private set { SetValue(value); } }
         public TItemType NextItem { get { return GetValue<TItemType>(); } private set { SetValue(value);} }
-		public virtual bool CanMoveToNext{ get { return GetValue<bool> (); } private set { SetValue (value); } }
+		public TItemType PreviousItem{get{return GetValue<TItemType> ();}private set{ SetValue (value); }}
+
+		public bool CanMoveToNext{ get { return GetValue<bool> (); } private set { SetValue (value); } }
+		public bool CanMoveToPrevious{get{ return GetValue<bool> (); }private set{ SetValue (value); }}
 
         protected IList<TItemType> Items { get; private set; }
 
@@ -46,12 +53,15 @@ namespace Mise.Inventory.ViewModels
         }
 
         public ICommand MoveNextCommand { get{return new SimpleCommand(MoveNext, CanMoveNext);}}
-	
+		public ICommand MovePreviousCommand{get{return new SimpleCommand (MovePrevious, CanMovePrevious);}}
+
         protected void SetCurrent(TItemType item)
         {
             CurrentItem = item;
             NextItem = GetNextItem();
-			CanMoveToNext = NextItem != null;
+			CanMoveToNext = NotProcessing && NextItem != null;
+			PreviousItem = GetPreviousItem ();
+			CanMoveToPrevious = NotProcessing && PreviousItem != null;
         }
 
         private bool CanMoveNext()
@@ -68,21 +78,61 @@ namespace Mise.Inventory.ViewModels
             return GetNextItem() != null;
         }
 
+		bool CanMovePrevious(){
+			if(Items == null){
+				return false;
+			}
+
+			if (Items.Contains(CurrentItem) == false)
+			{
+				Logger.Error("Error, item is not found in collection for BaseNextViewModel");
+				return false;
+			}
+
+			return GetPreviousItem () != null;
+		}
+
         private async void MoveNext()
         {
 			if (CanMoveNext() == false) {
 				return;
 			}
+			if(MoveNextAnimation != null){
+				await MoveNextAnimation ();
+			}
             Processing = true;
-            await BeforeMoveNext(CurrentItem);
+            await BeforeMove(CurrentItem);
 
             //get the next item
             var item = GetNextItem();
             SetCurrent(item);
 
-            await AfterMoveNext(CurrentItem);
+            await AfterMove(CurrentItem);
+			if(ResetViewAnimation != null){
+				await ResetViewAnimation ();
+			}
             Processing = false;
         }
+
+		private async void MovePrevious(){
+			if(CanMovePrevious () == false){
+				return;
+			}
+			if(MovePreviousAnimation != null){
+				await MovePreviousAnimation ();
+			}
+			Processing = true;
+			await BeforeMove (CurrentItem);
+
+			var item = GetPreviousItem ();
+			SetCurrent (item);
+
+			await AfterMove (CurrentItem);
+			if(ResetViewAnimation != null){
+				await ResetViewAnimation ();
+			}
+			Processing = false;
+		}
 
         private TItemType GetNextItem()
         {
@@ -103,5 +153,27 @@ namespace Mise.Inventory.ViewModels
             var nextIndex = currentIndex + 1;
             return Items[nextIndex];
         }
+
+		private TItemType GetPreviousItem(){
+			//could be loading
+			if (Items == null) {
+				return null;
+			}
+			if (Items.Contains(CurrentItem) == false)
+			{
+				Logger.Error("Current item is not found in Items");
+			}
+
+			if(CurrentItem == Items.First ()){
+				return null;
+			}
+
+			var currentIndex = Items.IndexOf(CurrentItem);
+			if(currentIndex == 0){
+				return null;
+			}
+			var nextIndex = currentIndex - 1;
+			return Items[nextIndex];
+		}
     }
 }

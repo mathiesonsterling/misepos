@@ -35,7 +35,9 @@
 		    </ScrollView>
 		    <ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 
-		    <Button Text="Login" Command="{Binding LoginCommand}" IsEnabled="{Binding CanLogin}" StyleId="Login"/>
+		    <Button Text="Login" Command="{Binding LoginCommand}" 
+		    	IsEnabled="{Binding CanLogin}" 
+		    	StyleId="Login"/>
 
 		    <Button Text="Forgot Password?" IsVisible="false"/>
 

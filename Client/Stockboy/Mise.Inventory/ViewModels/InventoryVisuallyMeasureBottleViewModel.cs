@@ -109,21 +109,21 @@ namespace Mise.Inventory.ViewModels
 	    }
 
 	    #region Commands
-		public ICommand MeasureCommand{get{ return new SimpleCommand (MeasureEv);
+		public ICommand MeasureCommand{get{ return new SimpleCommand (MeasureEv, () => NotProcessing);
 			}}
 
 		public ICommand AddPartialCommand{get{ return new SimpleCommand (AddPartial, () => AddPartialEnabled);}}
 
-		public ICommand CancelCommand{get{return new SimpleCommand (Cancel);}}
+		public ICommand CancelCommand{get{return new SimpleCommand (Cancel, () => NotProcessing);}}
 
 		#endregion
 
-	    protected override async Task BeforeMoveNext(IInventoryBeverageLineItem currentItem)
+	    protected override async Task BeforeMove(IInventoryBeverageLineItem currentItem)
 	    {
 	        await Measure();
 	    }
 
-	    protected override async Task AfterMoveNext(IInventoryBeverageLineItem newItem)
+	    protected override async Task AfterMove(IInventoryBeverageLineItem newItem)
 	    {
 	        await _inventoryService.MarkLineItemForMeasurement(newItem);
 	        await OnAppearing();
