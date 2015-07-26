@@ -5,6 +5,7 @@ using Mise.Core.Services;
 using Mise.Core.ValueItems.Reports;
 using Mise.Inventory.MVVM;
 using Mise.Inventory.Services;
+using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Inventory.ViewModels.Reports
 {
@@ -18,6 +19,7 @@ namespace Mise.Inventory.ViewModels.Reports
 		    _reportsService = reportsService;
 		    StartDate = new DateTime(2015, 1, 1);
 			EndDate = DateTime.Now.AddDays(1);
+			LiquidUnit = LiquidAmountUnits.Milliliters.ToString ();
 		}
 
         public override Task OnAppearing()
@@ -28,11 +30,16 @@ namespace Mise.Inventory.ViewModels.Reports
         #region Fields
         public DateTime StartDate { get { return GetValue<DateTime>(); } set { SetValue(value);} }
         public DateTime EndDate { get { return GetValue<DateTime>(); } set { SetValue(value);} }
+		public string LiquidUnit{get{return GetValue<string> ();}set{ SetValue (value); }}
         #endregion
 
         #region Commands
 		public ICommand CompletedInventoriesCommand { 
 			get { return new SimpleCommand(CompletedInventories, () => NotProcessing);}
+		}
+
+		public ICommand AmountUsedCommand{
+			get{return new SimpleCommand (AmountUsed, () => NotProcessing);}
 		}
 
 	    private async void CompletedInventories()
@@ -41,6 +48,7 @@ namespace Mise.Inventory.ViewModels.Reports
 	        {
 	            Processing = true;
                 //set our request to limit dates
+				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
 	            var request = new ReportRequest(ReportTypes.CompletedInventory, StartDate, EndDate, null, null);
 	            await _reportsService.SetCurrentReportRequest(request);
 	            Processing = false;
@@ -52,7 +60,27 @@ namespace Mise.Inventory.ViewModels.Reports
 	        }
 	    }
 
+		private async void AmountUsed(){
+			await DoGenericRequestFor (ReportTypes.AmountUsed);
+		}
+
 	    #endregion
+
+		private async Task DoGenericRequestFor(ReportTypes type){
+			try{
+				Processing = true;
+				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
+		
+				var request = new ReportRequest (type, StartDate, EndDate, null, null, unit);
+				await _reportsService.SetCurrentReportRequest (request);
+				Processing = false;
+				await Navigation.ShowReportResults ();
+			}
+			catch (Exception e)
+			{
+				HandleException(e);
+			}
+		}
 	}
 }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace Mise.Inventory
+namespace Mise.Inventory.CustomCells
 {
 	public class LineItemWithQuantityCell : ViewCell
 	{
@@ -22,7 +22,7 @@ namespace Mise.Inventory
 				VerticalOptions = LayoutOptions.FillAndExpand,
 				ColumnDefinitions =
 				{
-					new ColumnDefinition { Width = new GridLength(200, GridUnitType.Star) },
+					new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
 					new ColumnDefinition{ Width = new GridLength(50, GridUnitType.Absolute)}, 
 				},
 				RowDefinitions = {

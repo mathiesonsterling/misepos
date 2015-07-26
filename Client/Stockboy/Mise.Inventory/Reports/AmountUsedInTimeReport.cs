@@ -28,6 +28,9 @@ namespace Mise.Inventory.Reports
             }
 
             var tempInv = inventoriesInTime.OrderBy(i => i.DateCompleted).ToList();
+			if(tempInv.Any() == false){
+				throw new ArgumentException ("There are no inventories in the selected time period, cannot run!");
+			}
             if (tempInv.Any(i => i.DateCompleted.HasValue == false))
             {
                 throw new ArgumentException("All inventories must be complete");
