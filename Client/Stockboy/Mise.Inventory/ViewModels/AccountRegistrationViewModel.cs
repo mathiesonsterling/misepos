@@ -66,8 +66,12 @@ namespace Mise.Inventory.ViewModels
 		public string ReferralCode{get{return GetValue<string> ();}set{SetValue(value);}}
 		public bool CanRegister{get{return GetValue<bool> ();}set{ SetValue (value); }}
 
-		public ICommand RegisterAccountCommand{get{return new SimpleCommand (RegisterAccount);}}
-		public ICommand DelayRegistrationCommand{get{return new SimpleCommand (DelayRegistration);}}
+		public ICommand RegisterAccountCommand{
+			get{return new SimpleCommand (RegisterAccount, () => CanRegister);}
+		}
+		public ICommand DelayRegistrationCommand{
+			get{return new SimpleCommand (DelayRegistration, () => NotProcessing);}
+		}
 
 		private async void RegisterAccount(){
 			try{

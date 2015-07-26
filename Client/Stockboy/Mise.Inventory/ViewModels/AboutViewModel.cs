@@ -23,7 +23,7 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The login command.</value>
 		public ICommand LogoutCommand {
-			get { return new SimpleCommand(Logout); }
+			get { return new SimpleCommand(Logout, () => NotProcessing); }
 		}
 
 		/// <summary>

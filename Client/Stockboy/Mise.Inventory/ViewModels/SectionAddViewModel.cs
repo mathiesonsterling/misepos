@@ -34,7 +34,7 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddCommand {
-			get { return new SimpleCommand(AddSection); }
+			get { return new SimpleCommand(AddSection, () => NotProcessing); }
 		}
 
 		#endregion

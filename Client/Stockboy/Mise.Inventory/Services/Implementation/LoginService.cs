@@ -65,13 +65,13 @@ namespace Mise.Inventory.Services.Implementation
 		const string LOGGED_IN_EMPLOYEE_KEY = "LoggedInEmployee";
 		const string LAST_RESTAURANT_ID_KEY = "LastRestaurantID";
 
-		public void OnAppStarting(){
+		public async Task<bool> LoadSavedEmployee(){
 			bool needsDelete = false;
 			try{
 				//if we have an employee that logged in, less than 7 days ago, then mark it
 				var login = _keyValStorage.GetValue<MiseLoginRecord> (LOGGED_IN_EMPLOYEE_KEY);
 				if(login != null){
-					LoadLoggedInEmployee(login);
+					return await LoadLoggedInEmployee(login);
 				}
 			} catch(Exception e){
 				needsDelete = true;
@@ -80,17 +80,16 @@ namespace Mise.Inventory.Services.Implementation
 
 			if (needsDelete) {
 				try{
-					DeleteKey();
+					await _keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);
 				} catch(Exception e){
 					_logger.HandleException (e);
 				}
 			}
+
+			return false;
 		}
 
-		private async void DeleteKey(){
-			await _keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);
-		}
-		private async void LoadLoggedInEmployee(MiseLoginRecord login){
+		private async Task<bool> LoadLoggedInEmployee(MiseLoginRecord login){
 			if (login.Time > DateTime.UtcNow.AddDays (-7)) {
 				var password = new Password{ HashValue = login.Hash };
 				try {
@@ -118,6 +117,8 @@ namespace Mise.Inventory.Services.Implementation
 					_logger.HandleException (e);
 				}
 			}
+
+			return _currentEmployee != null;
 		}
 
 		/// <summary>

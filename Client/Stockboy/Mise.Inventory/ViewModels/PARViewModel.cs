@@ -57,7 +57,7 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddNewItemCommand {
-			get { return new SimpleCommand(AddNewItem); }
+			get { return new SimpleCommand(AddNewItem, () => NotProcessing); }
 		}
 
 		public ICommand SaveCommand {

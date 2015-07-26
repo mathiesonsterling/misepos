@@ -59,9 +59,9 @@ namespace Mise.Inventory.ViewModels
         {
             CurrentItem = item;
             NextItem = GetNextItem();
-			CanMoveToNext = NextItem != null;
+			CanMoveToNext = NotProcessing && NextItem != null;
 			PreviousItem = GetPreviousItem ();
-			CanMoveToPrevious = PreviousItem != null;
+			CanMoveToPrevious = NotProcessing && PreviousItem != null;
         }
 
         private bool CanMoveNext()

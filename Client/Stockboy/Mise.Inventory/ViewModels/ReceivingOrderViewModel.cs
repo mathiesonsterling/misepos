@@ -138,11 +138,11 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddNewItemCommand {
-			get { return new SimpleCommand(AddNewLineItem); }
+			get { return new SimpleCommand(AddNewLineItem, () => NotProcessing); }
 		}
 
 		public ICommand SaveCommand {
-			get { return new SimpleCommand(Save); }
+			get { return new SimpleCommand(Save, () => CanSave); }
 		}
 
 		#endregion
@@ -155,10 +155,10 @@ namespace Mise.Inventory.ViewModels
 		async void Save()
 		{
 			try{
+				Processing = true;
+				CanSave = false;
 			    using (_insights.TrackTime("Save RO time"))
 			    {
-			        Processing = true;
-			        CanSave = false;
                     PurchaseOrderStatus status;
 			        using (_insights.TrackTime("Completing receiving order"))
 			        {
@@ -169,10 +169,10 @@ namespace Mise.Inventory.ViewModels
 			        {
 			            await _roService.CommitCompletedOrder(status);
 			        }
-			        Processing = false;
 			        CanSave = true;
 					InvoiceID = string.Empty;
 					DateReceived = DateTime.Now;
+					Processing = false;
 			        await Navigation.CloseReceivingOrder();
 			    }
 			} catch(Exception e){

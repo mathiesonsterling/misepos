@@ -41,7 +41,7 @@ namespace Mise.Inventory
 			}
 		}
 
-		private async void OnSwiped(object sender, SwipeEventArgs e){
+		private void OnSwiped(object sender, SwipeEventArgs e){
 			if(swipeInProgress){
 				return;
 			}

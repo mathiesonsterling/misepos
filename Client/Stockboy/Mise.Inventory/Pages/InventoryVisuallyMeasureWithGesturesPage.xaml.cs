@@ -20,7 +20,7 @@ namespace Mise.Inventory.Pages
 
 		bool swipeInProgress = false;
 
-		private async void OnSwiped(object sender, SwipeEventArgs e){
+		private void OnSwiped(object sender, SwipeEventArgs e){
 			if(swipeInProgress){
 				return;
 			}

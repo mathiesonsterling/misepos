@@ -137,7 +137,7 @@ namespace Mise.Inventory.ViewModels
 			IsUpdateEnabled = res;
         }
 
-        public ICommand ZeroOutCommand { get { return new SimpleCommand(ZeroOut); } }
+		public ICommand ZeroOutCommand { get { return new SimpleCommand(ZeroOut, () => NotProcessing); } }
 
         private async void ZeroOut()
         {

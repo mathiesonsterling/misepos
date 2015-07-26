@@ -60,7 +60,7 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand ReceivingOrderCommand {
-			get{ return new SimpleCommand(ReceivingOrder); }
+			get{ return new SimpleCommand(ReceivingOrder, () => NotProcessing); }
 		}
 
 		/// <summary>
@@ -68,19 +68,19 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The inventories command.</value>
 		public ICommand SectionSelectCommand {
-			get { return new SimpleCommand(SectionSelect); }
+			get { return new SimpleCommand(SectionSelect, () => NotProcessing); }
 		}
 			
 		public ICommand PARCommand {
-			get { return new SimpleCommand(PAR); }
+			get { return new SimpleCommand(PAR, () => NotProcessing); }
 		}
 
 		public ICommand ManageEmployeesCommand {
-			get { return new SimpleCommand(ManageEmployees); }
+			get { return new SimpleCommand(ManageEmployees, () => NotProcessing); }
 		}
 
 		public ICommand CreatePurchaseOrderCommand{
-			get{return new SimpleCommand (CreatePurchaseOrder);}
+			get{return new SimpleCommand (CreatePurchaseOrder, () => NotProcessing);}
 		}
 		/// <summary>
 		/// Gets the reports command.
@@ -91,7 +91,7 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public ICommand LogoutCommand {
-			get { return new SimpleCommand(Logout); }
+			get { return new SimpleCommand(Logout, () => NotProcessing); }
 		}
 
 		#endregion
@@ -186,9 +186,9 @@ namespace Mise.Inventory.ViewModels
 		/// If this is true, our current user is an admin, and can access our admin stuff
 		/// </summary>
 		/// <returns><c>true</c> if this instance is current user admin; otherwise, <c>false</c>.</returns>
-		static bool IsCurrentUserAdmin()
+		bool IsCurrentUserAdmin()
 		{
-			return true;
+			return NotProcessing;
 		}
 	}
 }

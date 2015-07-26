@@ -109,12 +109,12 @@ namespace Mise.Inventory.ViewModels
 	    }
 
 	    #region Commands
-		public ICommand MeasureCommand{get{ return new SimpleCommand (MeasureEv);
+		public ICommand MeasureCommand{get{ return new SimpleCommand (MeasureEv, () => NotProcessing);
 			}}
 
 		public ICommand AddPartialCommand{get{ return new SimpleCommand (AddPartial, () => AddPartialEnabled);}}
 
-		public ICommand CancelCommand{get{return new SimpleCommand (Cancel);}}
+		public ICommand CancelCommand{get{return new SimpleCommand (Cancel, () => NotProcessing);}}
 
 		#endregion
 

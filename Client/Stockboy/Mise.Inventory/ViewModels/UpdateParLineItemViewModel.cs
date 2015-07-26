@@ -13,7 +13,8 @@ namespace Mise.Inventory.ViewModels
 	public class UpdateParLineItemViewModel : BaseNextViewModel<IPARBeverageLineItem>
 	{
 		readonly IPARService _parService;
-		public UpdateParLineItemViewModel(IAppNavigation appNav, ILogger logger, IPARService parService) : base(appNav, logger){
+		public UpdateParLineItemViewModel(IAppNavigation appNav, ILogger logger, IPARService parService) 
+			: base(appNav, logger){
 			_parService = parService;
 		}
 
@@ -42,7 +43,9 @@ namespace Mise.Inventory.ViewModels
 		#endregion
 
         #region Commands
-        public ICommand UpdateQuantityCommand { get { return new SimpleCommand(UpdateQuantity);} }
+		public ICommand UpdateQuantityCommand { 
+			get { return new SimpleCommand(UpdateQuantity, () => NotProcessing);} 
+		}
 
 	    private async void UpdateQuantity()
 	    {

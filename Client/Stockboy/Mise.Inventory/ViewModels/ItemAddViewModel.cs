@@ -83,7 +83,7 @@ namespace Mise.Inventory.ViewModels
 		/// <summary>
 		/// If set, we wish to create a par item for this as well
 		/// </summary>
-		/// <value>The par number.</valu>e
+		/// <value>The par number.</value>
 		public int ParNumber{
 			get{return GetValue<int> ();}
 			set{ SetValue (value); }
@@ -105,11 +105,11 @@ namespace Mise.Inventory.ViewModels
 		#region Commandsk
 
 		public ICommand ScanCommand {
-			get { return new SimpleCommand(Scan); }
+			get { return new SimpleCommand(Scan, ()=>NotProcessing); }
 		}
 
 		public ICommand AddCommand {
-			get { return new SimpleCommand(Add); }
+			get { return new SimpleCommand(Add, () => CreateEnabled); }
 		}
 			
 		#endregion
