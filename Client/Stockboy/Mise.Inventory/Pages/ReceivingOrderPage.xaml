@@ -12,10 +12,12 @@
 			<Label Text="Date Received" Style="{DynamicResource CaptionStyle}"/>
 			<DatePicker Date="{Binding DateReceived}"/>
 			<Entry Placeholder="Invoice #" Text="{Binding InvoiceID}"/>
-			<Label Text="Notes" Style="{DynamicResource CaptionStyle}"/>
-			<ScrollView>
-					<Editor Text="{Binding Notes}"/>
-			</ScrollView>
+			<StackLayout x:Name="stckNotes">
+				<Label Text="Notes" Style="{DynamicResource CaptionStyle}"/>
+				<ScrollView>
+						<Editor Text="{Binding Notes}"/>
+				</ScrollView>
+			</StackLayout>
 			<StackLayout VerticalOptions="FillAndExpand">
 				<SearchBar x:Name="searchEntry" Placeholder="Filter" Text="{Binding SearchString}"/>
 				<StackLayout x:Name="lineItems" VerticalOptions="FillAndExpand"/>

@@ -20,6 +20,7 @@ namespace Mise.Inventory.Pages
 		protected override async void OnAppearing ()
 		{
 			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "ReceivingOrderPage"}});
+			stckNotes.IsVisible = Device.Idiom != TargetIdiom.Phone;
 			var vm = BindingContext as ReceivingOrderViewModel;
 		    if (vm != null)
 		    {
