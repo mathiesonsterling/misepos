@@ -156,14 +156,14 @@ namespace Mise.Inventory.ViewModels
             return current.GetBeverageLineItems().ToList();
         }
 
-        protected override async Task BeforeMoveNext(IReceivingOrderLineItem currentItem)
+        protected override async Task BeforeMove(IReceivingOrderLineItem currentItem)
         {
             //update the service with our new quantity
             var totalPrice = new Money(TotalPrice);
             await _receivingOrderService.UpdateQuantityOfLineItem(CurrentItem, CurrentQuantity, totalPrice);
         }
 
-        protected override async Task AfterMoveNext(IReceivingOrderLineItem newItem)
+        protected override async Task AfterMove(IReceivingOrderLineItem newItem)
         {
 			CurrentQuantity = newItem.Quantity;
 			TotalPrice = newItem.LineItemPrice.Dollars;

@@ -1,8 +1,19 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Mise.Inventory.Pages.InventoryVisuallyMeasureWithGesturesPage">
+<mr:ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures" 
+	x:Class="Mise.Inventory.Pages.InventoryVisuallyMeasureWithGesturesPage"
+	Title="Measure Item"
+	Swiped="OnSwiped"
+>
 	<ContentPage.Content>
 		<ScrollView>
-		<StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="FillAndExpand">
+		<mr:StackLayout 
+			x:Name="stckMain"
+			HorizontalOptions="CenterAndExpand" 
+			VerticalOptions="FillAndExpand"
+		>
 			<!-- single item here -->
 				<StackLayout VerticalOptions="FillAndExpand" MinimumHeightRequest="450" x:Name="stckItem">
 					<Label Text="{Binding DisplayName}" Style="{DynamicResource TitleStyle}" MinimumHeightRequest="450"></Label>
@@ -37,7 +48,7 @@
 		    />
 			<Button Command="{Binding MeasureCommand}" Text="Measure" 
 				HorizontalOptions="FillAndExpand"/>
-		</StackLayout>
+		</mr:StackLayout>
 		</ScrollView>
 	</ContentPage.Content>
-</ContentPage>
+</mr:ContentPage>

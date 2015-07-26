@@ -174,6 +174,12 @@
     <Reference Include="XLabs.Forms">
       <HintPath>..\packages\XLabs.Forms.2.0.5679\lib\Xamarin.iOS10\XLabs.Forms.dll</HintPath>
     </Reference>
+    <Reference Include="MR.Gestures.iOS">
+      <HintPath>..\packages\MR.Gestures.1.2.1\lib\Xamarin.iOS10\MR.Gestures.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="MR.Gestures">
+      <HintPath>..\packages\MR.Gestures.1.2.1\lib\Xamarin.iOS10\MR.Gestures.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mise.Inventory\Mise.Inventory.csproj">

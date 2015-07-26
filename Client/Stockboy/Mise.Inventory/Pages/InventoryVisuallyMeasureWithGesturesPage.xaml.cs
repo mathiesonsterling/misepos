@@ -6,15 +6,49 @@ using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using XLabs.Platform.Device;
 using Xamarin;
+using Mise.Core.Services.WebServices;
+using XLabs.Forms.Behaviors;
+using MR.Gestures;
+
+
 namespace Mise.Inventory.Pages
 {
-	public partial class InventoryVisuallyMeasureWithGesturesPage : ContentPage
+	public partial class InventoryVisuallyMeasureWithGesturesPage : MR.Gestures.ContentPage
 	{
 		private List<MeasureButton> _measureButtons;
 		private double _oldHeight = DEFAULT_HEIGHT;
 	    private const double DEFAULT_HEIGHT = 200;
 		private LiquidContainerShape _shape;
 		private bool _loading = false;
+
+		bool swipeInProgress = false;
+
+		private void OnSwiped(object sender, SwipeEventArgs e){
+			if(swipeInProgress){
+				return;
+			}
+			var vm = BindingContext as InventoryVisuallyMeasureBottleViewModel;
+
+			if(vm != null){
+				swipeInProgress = true;
+				switch(e.Direction){
+				case Direction.Left:
+					if (vm.MovePreviousCommand.CanExecute (null)) {
+						vm.MovePreviousCommand.Execute (null);
+					}
+					break;
+				case Direction.Right:
+				case Direction.NotClear:
+				default:
+					if (vm.MoveNextCommand.CanExecute (null)) {
+						vm.MoveNextCommand.Execute (null);
+					}
+					break;
+				}
+				swipeInProgress = false;
+			}
+		}
+
 		public InventoryVisuallyMeasureWithGesturesPage ()
 		{
 			var vm = App.InventoryVisuallyMeasureBottleViewModel;
@@ -28,6 +62,7 @@ namespace Mise.Inventory.Pages
                     mb.SetOff();
                 }
             };
+
 
 			using(Insights.TrackTime("Time to create measure bottle")){
 				_shape = vm.Shape;
@@ -160,7 +195,7 @@ namespace Mise.Inventory.Pages
             }
 	    }
 
-		public class ZeroButton : Button{
+		public class ZeroButton : Xamarin.Forms.Button{
 			public ZeroButton(double height)
 			{
 				//BackgroundColor = Color.Gray;
@@ -170,7 +205,7 @@ namespace Mise.Inventory.Pages
 			}
 		}
 
-	    public class MeasureButton : Button{
+		public class MeasureButton : Xamarin.Forms.Button{
 			public static Color OffColor = Color.Gray;
 			public static Color OnColor = Color.Navy;
 

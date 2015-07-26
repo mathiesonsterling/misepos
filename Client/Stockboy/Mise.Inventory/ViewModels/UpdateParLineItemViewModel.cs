@@ -60,7 +60,7 @@ namespace Mise.Inventory.ViewModels
 			return currentPar.GetBeverageLineItems().OrderBy(li => li.DisplayName).ToList();
 		}
 
-		protected override async Task BeforeMoveNext (IPARBeverageLineItem currentItem)
+		protected override async Task BeforeMove(IPARBeverageLineItem currentItem)
 		{
 			//update the current one
 		    if (CurrentItem != null && CurrentItem.Quantity != CurrentQuantity)
@@ -69,7 +69,7 @@ namespace Mise.Inventory.ViewModels
 		    }
 		}
 
-		protected override async Task AfterMoveNext (IPARBeverageLineItem newItem)
+		protected override async Task AfterMove (IPARBeverageLineItem newItem)
 		{
 			await _parService.SetCurrentLineItem (newItem);
 		    await OnAppearing();

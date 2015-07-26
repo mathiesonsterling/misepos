@@ -118,12 +118,12 @@ namespace Mise.Inventory.ViewModels
 
 		#endregion
 
-	    protected override async Task BeforeMoveNext(IInventoryBeverageLineItem currentItem)
+	    protected override async Task BeforeMove(IInventoryBeverageLineItem currentItem)
 	    {
 	        await Measure();
 	    }
 
-	    protected override async Task AfterMoveNext(IInventoryBeverageLineItem newItem)
+	    protected override async Task AfterMove(IInventoryBeverageLineItem newItem)
 	    {
 	        await _inventoryService.MarkLineItemForMeasurement(newItem);
 	        await OnAppearing();
