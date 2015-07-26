@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using Mise.Core.ValueItems.Inventory;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
-using XLabs.Platform.Device;
 using Xamarin;
-using Mise.Core.Services.WebServices;
-using XLabs.Forms.Behaviors;
 using MR.Gestures;
-
+using Mise.Inventory.Themes;
 
 namespace Mise.Inventory.Pages
 {
@@ -23,25 +19,41 @@ namespace Mise.Inventory.Pages
 
 		bool swipeInProgress = false;
 
-		private void OnSwiped(object sender, SwipeEventArgs e){
+		private async void OnSwiped(object sender, SwipeEventArgs e){
 			if(swipeInProgress){
 				return;
 			}
+			var visEl = sender as VisualElement;
 			var vm = BindingContext as InventoryVisuallyMeasureBottleViewModel;
 
 			if(vm != null){
 				swipeInProgress = true;
-				switch(e.Direction){
+				switch (e.Direction) {
 				case Direction.Left:
 					if (vm.MovePreviousCommand.CanExecute (null)) {
+						if (visEl != null) {
+							await visEl.TranslateTo (visEl.Width, 0, MiseTheme.SwipeAnimationDuration);
+						}
 						vm.MovePreviousCommand.Execute (null);
+					
+						if (visEl != null) {
+							visEl.TranslationX = 0;
+						}
 					}
 					break;
 				case Direction.Right:
 				case Direction.NotClear:
-				default:
 					if (vm.MoveNextCommand.CanExecute (null)) {
+						if (visEl != null) {
+							//start animation
+							await visEl.TranslateTo (-1 * visEl.Width, 0, MiseTheme.SwipeAnimationDuration);
+						}
 						vm.MoveNextCommand.Execute (null);
+					
+						if (visEl != null) {
+							//move back, hopefully too quick to see
+							visEl.TranslationX = 0;
+						}
 					}
 					break;
 				}
