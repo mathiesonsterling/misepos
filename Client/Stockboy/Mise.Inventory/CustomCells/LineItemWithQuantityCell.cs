@@ -22,8 +22,8 @@ namespace Mise.Inventory.CustomCells
 				VerticalOptions = LayoutOptions.FillAndExpand,
 				ColumnDefinitions =
 				{
-					new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-					new ColumnDefinition{ Width = new GridLength(50, GridUnitType.Absolute)}, 
+					new ColumnDefinition { Width = new GridLength(6, GridUnitType.Star) },
+					new ColumnDefinition{ Width = new GridLength(1, GridUnitType.Star)}, 
 				},
 				RowDefinitions = {
 					new RowDefinition (),
@@ -48,6 +48,7 @@ namespace Mise.Inventory.CustomCells
 			var quantity = new Label();
 			quantity.SetBinding (Label.TextProperty, "Quantity");
 			quantity.HorizontalOptions = LayoutOptions.FillAndExpand;
+			quantity.XAlign = TextAlignment.End;
 			quantity.FontSize = Device.GetNamedSize (NamedSize.Medium, typeof(Label));
 
 
