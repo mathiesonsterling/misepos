@@ -49,6 +49,10 @@ namespace Mise.Inventory.Pages
 					((ListView)sender).SelectedItem = null;
 				};
 				lineItems.Children.Add (customVL);
+
+				if(vm.FocusOnLineItem != null){
+					customVL.ScrollTo(vm.FocusOnLineItem, ScrollToPosition.MakeVisible, false);
+				}
 			}
 		}
 	}

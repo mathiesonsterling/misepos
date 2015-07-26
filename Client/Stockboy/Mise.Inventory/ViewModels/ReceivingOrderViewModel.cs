@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Services;
 using Xamarin.Forms;
+using Mise.Core.ValueItems;
 namespace Mise.Inventory.ViewModels
 {
 	public class ReceivingOrderDisplayLine : BaseLineItemDisplayLine<IReceivingOrderLineItem>{
@@ -130,6 +131,10 @@ namespace Mise.Inventory.ViewModels
 		public string InvoiceID{get{return GetValue<string> ();}set{SetValue(value);}}
 		public bool CanSave{get{return GetValue<bool> ();}private set{SetValue (value);}}
 
+		public ReceivingOrderDisplayLine FocusOnLineItem{
+			get{return GetValue<ReceivingOrderDisplayLine> ();}
+			private set{ SetValue (value); }
+		}
 		#region Commands
 
 		public ICommand AddNewItemCommand {
@@ -197,7 +202,18 @@ namespace Mise.Inventory.ViewModels
 			} catch(Exception e){
 				HandleException (e);
 			}
-			return items.OrderBy (li => li.DisplayName).Select (li => new ReceivingOrderDisplayLine (li)).ToList ();
+
+			var displayItems = items.OrderBy (li => li.DisplayName)
+				.Select (li => new ReceivingOrderDisplayLine (li)).ToList ();
+			FocusOnLineItem = displayItems.FirstOrDefault(li => 
+				li.Source.ZeroedOut == false 
+				&& (li.Source.LineItemPrice == null || li.Source.LineItemPrice.Equals(Money.None))
+			);
+
+			if(FocusOnLineItem == null){
+				FocusOnLineItem = displayItems.LastOrDefault ();
+			}
+			return displayItems;
 		}
 			
 		protected override void AfterSearchDone ()
