@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using System.Collections.Generic;
 
 using Mise.Core.Repositories;
 using Mise.Inventory.MVVM;
@@ -65,6 +66,7 @@ namespace Mise.Inventory.ViewModels
         public string PhoneNumberVal { get { return GetValue<string>(); } set { SetValue(value); } }
         #endregion
 
+		public IEnumerable<State> States{get{return Mise.Core.ValueItems.State.GetUSStates ();}}
         #region commands
 
         public ICommand AddVendorCommand

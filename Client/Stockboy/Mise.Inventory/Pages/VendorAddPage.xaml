@@ -21,7 +21,10 @@
 					<Entry Placeholder="Street Number" Text="{Binding StreetAddressNumber}" Keyboard="Numeric"/>
 					<Entry Placeholder="Street" Text="{Binding StreetName}"/>
 					<Entry Placeholder="City" Text="{Binding City}"/>
-					<Entry Placeholder="State" Text="{Binding State}"/>
+					<StackLayout Orientation="Horizontal">
+						<Label Text="State" Style="{DynamicResource CaptionStyle}"/>
+						<Picker x:Name="pckState" HorizontalOptions="FillAndExpand"/>
+					</StackLayout>
 					<Entry Placeholder="Zip Code" Keyboard="Numeric" Text="{Binding Zip}"/>
 				</StackLayout>
 			</ScrollView>
