@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Mise.Core.ValueItems.Inventory;
 using Xamarin.Forms;
@@ -23,7 +24,6 @@ namespace Mise.Inventory.Pages
 			if(swipeInProgress){
 				return;
 			}
-			var visEl = sender as VisualElement;
 			var vm = BindingContext as InventoryVisuallyMeasureBottleViewModel;
 
 			if(vm != null){
@@ -31,29 +31,13 @@ namespace Mise.Inventory.Pages
 				switch (e.Direction) {
 				case Direction.Left:
 					if (vm.MovePreviousCommand.CanExecute (null)) {
-						if (visEl != null) {
-							await visEl.TranslateTo (visEl.Width, 0, MiseTheme.SwipeAnimationDuration);
-						}
 						vm.MovePreviousCommand.Execute (null);
-					
-						if (visEl != null) {
-							visEl.TranslationX = 0;
-						}
 					}
 					break;
 				case Direction.Right:
 				case Direction.NotClear:
 					if (vm.MoveNextCommand.CanExecute (null)) {
-						if (visEl != null) {
-							//start animation
-							await visEl.TranslateTo (-1 * visEl.Width, 0, MiseTheme.SwipeAnimationDuration);
-						}
 						vm.MoveNextCommand.Execute (null);
-					
-						if (visEl != null) {
-							//move back, hopefully too quick to see
-							visEl.TranslationX = 0;
-						}
 					}
 					break;
 				}
@@ -74,7 +58,16 @@ namespace Mise.Inventory.Pages
                     mb.SetOff();
                 }
             };
+			vm.MovePreviousAnimation = async () => 
+				await this.TranslateTo (this.Width, 0, MiseTheme.SwipeAnimationDuration);
 
+			vm.MoveNextAnimation = async () => 
+				await this.TranslateTo (this.Width * -1, 0, MiseTheme.SwipeAnimationDuration);
+
+			vm.ResetViewAnimation = () => {
+				this.TranslationX = 0;
+				return Task.FromResult (true);
+			};
 
 			using(Insights.TrackTime("Time to create measure bottle")){
 				_shape = vm.Shape;

@@ -17,6 +17,17 @@ namespace Mise.Inventory
 			var vm = App.UpdateParLineItemViewModel;
 			BindingContext = vm;
 			InitializeComponent ();
+
+			vm.MovePreviousAnimation = async () => 
+				await this.TranslateTo (this.Width, 0, MiseTheme.SwipeAnimationDuration);
+
+			vm.MoveNextAnimation = async () => 
+				await this.TranslateTo (this.Width * -1, 0, MiseTheme.SwipeAnimationDuration);
+
+			vm.ResetViewAnimation = () => {
+				this.TranslationX = 0;
+				return Task.FromResult (true);
+			};
 		}
 
 		protected override async void OnAppearing ()
@@ -37,34 +48,17 @@ namespace Mise.Inventory
 			var vm = BindingContext as UpdateParLineItemViewModel;
 
 			if (vm != null) {
-				var visEl = sender as VisualElement;
 				swipeInProgress = true;
 				switch (e.Direction) {
 				case Direction.Left:
 					if (vm.MovePreviousCommand.CanExecute (null)) {
-						if (visEl != null) {
-							await visEl.TranslateTo (visEl.Width, 0, MiseTheme.SwipeAnimationDuration);
-						}
 						vm.MovePreviousCommand.Execute (null);
-					
-						if (visEl != null) {
-							visEl.TranslationX = 0;
-						}
 					}
 					break;
 				case Direction.Right:
 				case Direction.NotClear:
 					if (vm.MoveNextCommand.CanExecute (null)) {
-						if (visEl != null) {
-							//start animation
-							await visEl.TranslateTo (-1 * visEl.Width, 0, MiseTheme.SwipeAnimationDuration);
-						}
 						vm.MoveNextCommand.Execute (null);
-					
-						if (visEl != null) {
-							//move back, hopefully too quick to see
-							visEl.TranslationX = 0;
-						}
 					}
 					break;
 				}

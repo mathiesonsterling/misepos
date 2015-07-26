@@ -24,8 +24,11 @@ namespace Mise.Inventory.ViewModels
         protected abstract Task<IList<TItemType>> LoadItems();
 
         protected abstract Task BeforeMove(TItemType currentItem);
-
         protected abstract Task AfterMove(TItemType newItem);
+
+		public Func<Task> MoveNextAnimation{ get; set;}
+		public Func<Task> ResetViewAnimation{ get; set;}
+		public Func<Task> MovePreviousAnimation{get;set;}
 
         public TItemType CurrentItem { get { return GetValue<TItemType>(); } private set { SetValue(value); } }
         public TItemType NextItem { get { return GetValue<TItemType>(); } private set { SetValue(value);} }
@@ -94,6 +97,9 @@ namespace Mise.Inventory.ViewModels
 			if (CanMoveNext() == false) {
 				return;
 			}
+			if(MoveNextAnimation != null){
+				await MoveNextAnimation ();
+			}
             Processing = true;
             await BeforeMove(CurrentItem);
 
@@ -102,12 +108,18 @@ namespace Mise.Inventory.ViewModels
             SetCurrent(item);
 
             await AfterMove(CurrentItem);
+			if(ResetViewAnimation != null){
+				await ResetViewAnimation ();
+			}
             Processing = false;
         }
 
 		private async void MovePrevious(){
 			if(CanMovePrevious () == false){
 				return;
+			}
+			if(MovePreviousAnimation != null){
+				await MovePreviousAnimation ();
 			}
 			Processing = true;
 			await BeforeMove (CurrentItem);
@@ -116,6 +128,9 @@ namespace Mise.Inventory.ViewModels
 			SetCurrent (item);
 
 			await AfterMove (CurrentItem);
+			if(ResetViewAnimation != null){
+				await ResetViewAnimation ();
+			}
 			Processing = false;
 		}
 
