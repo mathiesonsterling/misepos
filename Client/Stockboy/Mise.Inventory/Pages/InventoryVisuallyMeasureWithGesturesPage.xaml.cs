@@ -29,12 +29,12 @@ namespace Mise.Inventory.Pages
 			if(vm != null){
 				swipeInProgress = true;
 				switch (e.Direction) {
-				case Direction.Left:
+				case Direction.Right:
 					if (vm.MovePreviousCommand.CanExecute (null)) {
 						vm.MovePreviousCommand.Execute (null);
 					}
 					break;
-				case Direction.Right:
+				case Direction.Left:
 				case Direction.NotClear:
 					if (vm.MoveNextCommand.CanExecute (null)) {
 						vm.MoveNextCommand.Execute (null);

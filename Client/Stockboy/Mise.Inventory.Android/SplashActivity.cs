@@ -8,7 +8,7 @@ namespace Mise.Inventory.Android
 {
 	[Activity(
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-		Label = "Stockboy",
+		Label = "Mise Stockboy",
 		MainLauncher = true,
 		NoHistory = true,
 		Theme = @"@style/Splash.Theme"
