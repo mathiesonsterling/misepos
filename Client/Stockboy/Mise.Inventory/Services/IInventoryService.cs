@@ -62,6 +62,7 @@ namespace Mise.Inventory.Services
 
 	    Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant(DateTimeOffset? start, DateTimeOffset? end);
 
+		Task<bool> HasInventoryPriorToDate (DateTimeOffset date);
 	}
 }
 

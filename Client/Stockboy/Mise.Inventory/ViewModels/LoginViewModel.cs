@@ -199,6 +199,7 @@ namespace Mise.Inventory.ViewModels
 				if(we.Message.Contains ("NameResolutionFailure")){
 					await Navigation.DisplayAlert ("Connection problem", "Cannot connect to server, are you online?");
 					shownErrorMessage = true;
+					Processing = false;
 				} 
 			}
 			catch(Exception e){

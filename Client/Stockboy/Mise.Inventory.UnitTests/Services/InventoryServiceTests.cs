@@ -25,6 +25,8 @@ using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.ValueItems.Inventory;
+using Mise.Core.Common.Entities.Vendors;
+using Mise.Core.Common;
 
 
 namespace Mise.Inventory.UnitTests.Services
@@ -346,12 +348,120 @@ namespace Mise.Inventory.UnitTests.Services
 			var underTest = new InventoryService (logger.Object, loginService, inventoryRepos, eventFact, insights.Object);
 
 			//ACT
-
 			await underTest.AddNewSection("testSection", false, false);
 
 			//ASSERT
 			var sections = currentInventory.GetSections ().ToList();
 			Assert.AreEqual (1, sections.Count);
+		}
+
+		[Test]
+		public async Task AddItemShouldGiveItemPositionInOrderFromVendorAndPar(){
+			var rest = new Restaurant {
+				ID = Guid.NewGuid ()
+			};
+
+			var section = new RestaurantInventorySection{
+				ID = Guid.NewGuid (),
+				Name = "TestSection"
+			};
+			var currentInventory = new Core.Common.Entities.Inventory.Inventory {
+				RestaurantID = rest.ID,
+				IsCurrent = true,
+				Sections = new List<InventorySection>{
+					new InventorySection {
+						ID = Guid.NewGuid (),
+						RestaurantInventorySectionID = section.ID
+					}
+				}
+			};
+
+			var currentEmp = new Employee {
+				RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>{
+					{rest.ID, new List<MiseAppTypes>()}
+				}
+			};
+
+			var logger = new Mock<ILogger> ();
+			var ws = new Mock<IInventoryWebService> ();
+			ws.Setup(w => w.GetInventoriesForRestaurant(It.IsAny<Guid>()))
+				.Returns(Task.FromResult(new List<IInventory>{currentInventory}.AsEnumerable()));
+
+			var dal = new Mock<IClientDAL> ();
+			var inventoryRepos = new ClientInventoryRepository (logger.Object, dal.Object, ws.Object);
+			var eventFact = new InventoryAppEventFactory ("test", MiseAppTypes.UnitTests);
+			eventFact.SetRestaurant (rest);
+
+
+			var reposLoader = new Mock<IRepositoryLoader>();
+			reposLoader.Setup(rl => rl.LoadRepositories(It.IsAny<Guid?>())).Returns(Task.FromResult(false));
+
+			var loginService = new Mock<ILoginService> ();
+			loginService.Setup (ls => ls.GetCurrentEmployee ())
+				.Returns (Task.FromResult (currentEmp as IEmployee));
+			loginService.Setup (ls => ls.GetCurrentSection ())
+				.Returns (Task.FromResult (section as IRestaurantInventorySection));
+
+			var insights = new Mock<IInsightsService>();
+			await inventoryRepos.Load(rest.ID);
+
+			var underTest = new InventoryService (logger.Object, loginService.Object, inventoryRepos, eventFact, insights.Object);
+
+			//ACT
+		
+			var vendorItem1 = new VendorBeverageLineItem {
+				ID = Guid.NewGuid (),
+				Categories = new List<ItemCategory>{
+					CategoriesService.Brandy
+				},
+				DisplayName = "TestBrandy",
+				Container = LiquidContainer.Bottle750ML
+			};
+			await underTest.AddLineItemToCurrentInventory (vendorItem1, 10, Money.None);
+
+			var vendorItem2 = new VendorBeverageLineItem {
+				ID = Guid.NewGuid (),
+				Categories = new List<ItemCategory>{CategoriesService.Rum},
+				DisplayName = "TestRum",
+				Container = LiquidContainer.Bottle375ML
+			};
+			await underTest.AddLineItemToCurrentInventory (vendorItem2, 1, Money.None);
+
+			await underTest.AddLineItemToCurrentInventory ("TestRaw", CategoriesService.AgaveMezcal, "", 10, 10, 
+				LiquidContainer.Bottle1L, Money.None);
+
+
+			var parItem1 = new PARBeverageLineItem {
+				ID = Guid.NewGuid (),
+				Categories = new List<ItemCategory>{ CategoriesService.WhiskeyScotch },
+				DisplayName = "TestScotch",
+				Container = LiquidContainer.Bottle750ML
+			};
+			await underTest.AddLineItemToCurrentInventory (parItem1, 19, Money.None);
+
+			var inventory = await underTest.GetCurrentInventory ();
+
+			//ASSERT
+			var sections = inventory.GetSections ().ToList();
+			Assert.AreEqual (1, sections.Count, "num sections");
+			var retSection = sections.FirstOrDefault ();
+			var testRum = retSection.GetInventoryBeverageLineItemsInSection ()
+				.FirstOrDefault (li => li.DisplayName == "TestRum");
+			var testRaw = retSection.GetInventoryBeverageLineItemsInSection ()
+				.FirstOrDefault (li => li.DisplayName == "TestRaw");
+			var testBrandy = retSection.GetInventoryBeverageLineItemsInSection ()
+				.FirstOrDefault (li => li.DisplayName == "TestBrandy");
+			var testScotch = retSection.GetInventoryBeverageLineItemsInSection ()
+				.FirstOrDefault (li => li.DisplayName == "TestScotch");
+			
+			Assert.NotNull (testBrandy);
+			Assert.NotNull (testRum);
+			Assert.NotNull (testRaw);
+			Assert.NotNull (testScotch);
+
+			Assert.GreaterOrEqual (testRum.InventoryPosition, testBrandy.InventoryPosition, "Rum after brandy");
+			Assert.GreaterOrEqual (testRaw.InventoryPosition, testRum.InventoryPosition, "Raw after rum");
+			Assert.GreaterOrEqual (testScotch.InventoryPosition, testRaw.InventoryPosition, "Scotch after raw");
 		}
 	}
 }

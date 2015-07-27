@@ -11,7 +11,10 @@
 		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
 			<!---<Label Text="Select Section" Style="{DynamicResource TitleStyle}"/>-->
 			<ActivityIndicator IsVisible="{Binding Processing}"/>
-			<StackLayout VerticalOptions="FillAndExpand" Padding="50" x:Name="slOther">
+			<StackLayout 
+				VerticalOptions="FillAndExpand" 
+				x:Name="slOther" 
+				HorizontalOptions="FillAndExpand">
 			</StackLayout>
 			<Button Text="Add New Section" Command="{Binding AddSectionCommand}" 
 				HorizontalOptions="FillAndExpand"/>

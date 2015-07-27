@@ -10,7 +10,7 @@ using Mise.Inventory.Themes;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class InventoryVisuallyMeasureWithGesturesPage : MR.Gestures.ContentPage
+	public partial class InventoryVisuallyMeasureWithGesturesPage : Xamarin.Forms.ContentPage
 	{
 		private List<MeasureButton> _measureButtons;
 		private double _oldHeight = DEFAULT_HEIGHT;
@@ -59,13 +59,13 @@ namespace Mise.Inventory.Pages
                 }
             };
 			vm.MovePreviousAnimation = async () => 
-				await this.TranslateTo (this.Width, 0, MiseTheme.SwipeAnimationDuration);
+				await stckMain.TranslateTo (stckMain.Width, 0, MiseTheme.SwipeAnimationDuration);
 
 			vm.MoveNextAnimation = async () => 
-				await this.TranslateTo (this.Width * -1, 0, MiseTheme.SwipeAnimationDuration);
+				await stckMain.TranslateTo (stckMain.Width * -1, 0, MiseTheme.SwipeAnimationDuration);
 
 			vm.ResetViewAnimation = () => {
-				this.TranslationX = 0;
+				stckMain.TranslationX = 0;
 				return Task.FromResult (true);
 			};
 

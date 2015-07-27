@@ -7,6 +7,7 @@ using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.ValueItems.Reports;
+using XLabs.Ioc;
 
 namespace Mise.Inventory.Reports
 {
@@ -17,8 +18,9 @@ namespace Mise.Inventory.Reports
         private readonly IEnumerable<IReceivingOrder> _receivingOrdersInTime;
         private readonly DateTimeOffset _start;
         private readonly DateTimeOffset _end;
+		private readonly LiquidAmountUnits _unit;
         public AmountUsedInTimeReport(DateTimeOffset start, DateTimeOffset end, IInventory startingInventory, 
-            IEnumerable<IReceivingOrder> receivingOrdersInTime, IEnumerable<IInventory> inventoriesInTime)
+            IEnumerable<IReceivingOrder> receivingOrdersInTime, IEnumerable<IInventory> inventoriesInTime, LiquidAmountUnits unit)
         {
             if (startingInventory != null && startingInventory.DateCompleted.HasValue == false)
             {
@@ -26,6 +28,9 @@ namespace Mise.Inventory.Reports
             }
 
             var tempInv = inventoriesInTime.OrderBy(i => i.DateCompleted).ToList();
+			if(tempInv.Any() == false){
+				throw new ArgumentException ("There are no inventories in the selected time period, cannot run!");
+			}
             if (tempInv.Any(i => i.DateCompleted.HasValue == false))
             {
                 throw new ArgumentException("All inventories must be complete");
@@ -36,6 +41,7 @@ namespace Mise.Inventory.Reports
             _inventoriesInTime = tempInv;
             _start = start;
             _end = end;
+			_unit = unit;
         }
 
         public override ReportTypes ReportType
@@ -43,6 +49,15 @@ namespace Mise.Inventory.Reports
             get { return ReportTypes.AmountUsed; }
         }
 
+		private class LineItemsAndKey : Dictionary<string, IBaseBeverageLineItem>{
+			public void AddIfDoesntExist(Dictionary<string, IBaseBeverageLineItem> keysAndItems){
+				var needsAdds = keysAndItems.Where (i => ContainsKey (i.Key) == false);
+				foreach(var item in needsAdds){
+					Add (item.Key, item.Value);
+				}
+			}
+
+		}
 
         protected override ReportResult CreateReport()
         {
@@ -57,13 +72,24 @@ namespace Mise.Inventory.Reports
 
             var amountsUsedAllPeriods = new List<Dictionary<string, LiquidAmount>>();
 
+			var allItemsAndKeys = new LineItemsAndKey ();
             //for each inventory, we need to get the one previous as our baseline
             foreach (var invInTime in _inventoriesInTime)
             {
                 //find the most prior inventory to this
                 var priorInv =
                     allPossiblePastInventoryies.FirstOrDefault(i => i.DateCompleted < invInTime.DateCompleted);
+				if(priorInv != null){
+					var itemsAndKeys = priorInv.GetBeverageLineItems ()
+						.Select (li => li as IBaseBeverageLineItem)
+						.ToDictionary (li => GetListItemKey (li));
+					allItemsAndKeys.AddIfDoesntExist (itemsAndKeys);
+				}
                 var thisInventory = invInTime;
+				allItemsAndKeys.AddIfDoesntExist (thisInventory.GetBeverageLineItems ()
+					.Select (li => li as IBaseBeverageLineItem)
+					.ToDictionary (li => GetListItemKey (li)));
+
                 var rosInPeriod =
                     _receivingOrdersInTime.Where(
                         ro =>
@@ -71,6 +97,10 @@ namespace Mise.Inventory.Reports
                             (priorInv == null || ro.DateReceived > priorInv.DateCompleted));
 
                 var allROInPeriodLineItems = rosInPeriod.SelectMany(ro => ro.GetBeverageLineItems()).ToList();
+				allItemsAndKeys.AddIfDoesntExist (allROInPeriodLineItems
+					.Select (li => li as IBaseBeverageLineItem)
+					.ToDictionary (li => GetListItemKey (li))
+				);
 
                 var amountsUsedThisPeriod = GetAmountUsedByInventoryPeriod(priorInv, allROInPeriodLineItems,
                     thisInventory);
@@ -79,9 +109,41 @@ namespace Mise.Inventory.Reports
             }
 
             //sum up the amounts for each item
+			var totalAmounts = new Dictionary<string, LiquidAmount> ();
+			foreach(var periodUse in amountsUsedAllPeriods){
+				foreach(var lineItem in periodUse){
+					if(totalAmounts.ContainsKey (lineItem.Key)){
+						//add the amounts
+						totalAmounts[lineItem.Key] = totalAmounts[lineItem.Key].Add(lineItem.Value);
+					} else{
+						totalAmounts.Add (lineItem.Key, lineItem.Value);
+					}
+				}
+			}
 
-            //return the result
-            return null;
+            //transform to result object
+			var res = new List<ReportResultLineItem>();
+			foreach(var amount in totalAmounts){
+				//get the LI this refers to
+				var li = allItemsAndKeys[amount.Key];
+
+				var quantity = _unit == LiquidAmountUnits.OuncesLiquid 
+					? amount.Value.GetInLiquidOunces () 
+					: amount.Value.GetInMilliliters ();
+				var reportLine = new ReportResultLineItem (li.DisplayName, li.Container.DisplayName, quantity, quantity >= 0);
+				res.Add (reportLine);
+			}
+
+			var title = "Amount used in "
+				+ (_unit == LiquidAmountUnits.OuncesLiquid ? "oz" : "ml")
+			            + " between "
+			            + _start.ToLocalTime ().ToString ("d")
+			            + " and "
+			            + _end.ToLocalTime ().ToString ("d");
+
+			var checkSum = (decimal)res.Sum (rl => rl.Quantity);
+			var result = new ReportResult (ReportTypes.AmountUsed, title, res, checkSum);
+			return result;
         }
 
         private Dictionary<string, LiquidAmount> GetAmountUsedByInventoryPeriod(IInventory previousInventory,
