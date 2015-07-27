@@ -157,42 +157,20 @@ namespace Mise.Inventory.Services.Implementation
 			var section = await _loginService.GetCurrentSection ().ConfigureAwait (false);
 			var sectionID = section.ID;
 
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, sectionID, SelectedInventory.GetBeverageLineItems().Count() + 1, SelectedInventory);
+			//get the max, and unique, line item position
+			var inventoryPosition = 0;
+			var invSection = SelectedInventory.GetSections().FirstOrDefault(s => section.ID == s.RestaurantInventorySectionID);
+			if (invSection != null)
+			{
+				inventoryPosition = invSection.GetNextItemPosition();
+			}
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, sectionID, inventoryPosition, SelectedInventory);
 		
 			SelectedInventory = _inventoryRepository.ApplyEvent (addEv);
 
 			return SelectedInventory.GetBeverageLineItems ()
 				.FirstOrDefault (li => BeverageLineItemEquator.AreSameBeverageLineItem (source, li));
 		}
-
-		/*
-		public async Task AddLineItemsFromReceivedOrderToRunningInventory(IEnumerable<IReceivingOrderLineItem> lis, Guid vendorID){
-			//update our current inventory with this RO
-
-			var emp = await _loginService.GetCurrentEmployee ();
-			if(CurrentRunningInventory == null){
-				//TODO - what do we do here?  make a new one?
-				var makeNew = _eventFactory.CreateInventoryCreatedEvent (emp);
-				CurrentRunningInventory = _inventoryRepository.ApplyEvent (makeNew);
-
-				var currentEv = _eventFactory.CreateInventoryMadeCurrentEvent (emp, CurrentRunningInventory);
-				CurrentRunningInventory = _inventoryRepository.ApplyEvent (currentEv);
-			}
-				
-			//also see if our vendor doesn't already have this item
-			var invEvents = new List<IInventoryEvent>();
-			foreach(var li in lis){
-				var invEvent = _eventFactory.CreateInventoryLineItemAddedEvent (emp, li, li.Quantity, li.LineItemPrice, 
-					vendorID, null, CurrentRunningInventory);
-				invEvents.Add (invEvent);
-			}
-
-			if (invEvents.Any ()) {
-				_inventoryRepository.ApplyEvents (invEvents);
-				await _inventoryRepository.Commit (CurrentRunningInventory.ID);
-			}
-
-		}*/
 
 		public async Task MarkSectionAsComplete ()
 		{
@@ -327,6 +305,12 @@ namespace Mise.Inventory.Services.Implementation
 			var section = await _loginService.GetCurrentSection ();
 			var sectionID = section != null ? (Guid?)section.ID : null;
 			return sectionID;
+		}
+
+		public Task<bool> HasInventoryPriorToDate (DateTimeOffset date)
+		{
+			var res = _inventoryRepository.GetAll ().Any (i => i.DateCompleted.HasValue && i.DateCompleted.Value < date);
+			return Task.FromResult (res);
 		}
 		#endregion
 	}

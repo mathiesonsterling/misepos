@@ -12,11 +12,14 @@ namespace Mise.Inventory.ViewModels.Reports
 	public class ReportsViewModel : BaseViewModel
 	{
 	    private readonly IReportsService _reportsService;
+		private readonly IInventoryService _inventoryService;
 		private readonly ILogger _logger;
-		public ReportsViewModel(IAppNavigation navigation, ILogger logger, IReportsService reportsService) : base(navigation, logger)
+		public ReportsViewModel(IAppNavigation navigation, ILogger logger, 
+			IReportsService reportsService, IInventoryService inventoryService) : base(navigation, logger)
 		{
 			_logger = logger;
 		    _reportsService = reportsService;
+			_inventoryService = inventoryService;
 		    StartDate = new DateTime(2015, 1, 1);
 			EndDate = DateTime.Now.AddDays(1);
 			LiquidUnit = LiquidAmountUnits.Milliliters.ToString ();
@@ -61,6 +64,14 @@ namespace Mise.Inventory.ViewModels.Reports
 	    }
 
 		private async void AmountUsed(){
+			var hasPriorInv = await _inventoryService.HasInventoryPriorToDate (StartDate);
+			if(hasPriorInv == false){
+				var userRes = await Navigation.AskUser ("No prior inventory", 
+					              "There's not a starting inventory before the dates you selected.  Your results will only depend on items you received, and might not be accurrate.  Continue?");
+				if(userRes == false){
+					return;
+				}
+			}
 			await DoGenericRequestFor (ReportTypes.AmountUsed);
 		}
 
