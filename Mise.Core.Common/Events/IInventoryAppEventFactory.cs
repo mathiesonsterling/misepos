@@ -21,7 +21,7 @@ namespace Mise.Core.Common.Events
     {
 		void SetLastEventID(IEnumerable<EventID> last);
 
-		Guid RestaurantID{get;}
+		Guid? RestaurantID{get;}
 
 		void SetRestaurant(IRestaurant restaurant);
 

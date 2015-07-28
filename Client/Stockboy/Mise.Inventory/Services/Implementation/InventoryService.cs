@@ -34,16 +34,28 @@ namespace Mise.Inventory.Services.Implementation
 			_loginService = loginService;
 			_eventFactory = eventFactory;
 		    _insights = insightsService;
-
-			SelectedInventory = _inventoryRepository.GetCurrentInventory (_eventFactory.RestaurantID).Result;
-
-			LastCompletedInventory = _inventoryRepository.GetAll ()
-				.Where (i => i.DateCompleted.HasValue)
-				.OrderByDescending (i => i.DateCompleted.Value)
-				.FirstOrDefault ();
 		}
 
 		#region IInventoryService implementation
+
+		public Task LoadLatest(){
+			var restID = _eventFactory.RestaurantID;
+			if (restID.HasValue) {
+				SelectedInventory = _inventoryRepository.GetAll ()
+					.Where (i => i.RestaurantID == restID.Value)
+					.Where (i => i.DateCompleted.HasValue == false)
+					.OrderByDescending (i => i.LastUpdatedDate)
+					.FirstOrDefault ();
+
+				LastCompletedInventory = _inventoryRepository.GetAll ()
+					.Where(i => i.RestaurantID == restID.Value)
+					.Where (i => i.DateCompleted.HasValue)
+					.OrderByDescending (i => i.DateCompleted.Value)
+					.FirstOrDefault ();
+			}
+
+			return Task.FromResult (true);
+		}
 
 		public Task<IInventory> GetCurrentInventory ()
 		{

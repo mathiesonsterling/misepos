@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ namespace Mise.Inventory
         /// <value>The restaurant I.</value>
         private static Guid? RestaurantID { get; set; }
 
+		private IInsightsService _insights;
         /// <summary>
         /// Initializes a new instance of the <see cref="Mise.Inventory.App"/> class.
         /// </summary>
@@ -46,8 +48,8 @@ namespace Mise.Inventory
             {
                 throw new Exception("Cannot resolve navigation service");
             }
-            var insights = Resolve<IInsightsService>();
-            if (insights == null)
+            _insights = Resolve<IInsightsService>();
+            if (_insights == null)
             {
                 throw new Exception("Cannot resolve insights service");
             }
@@ -71,6 +73,9 @@ namespace Mise.Inventory
             //if we have any events still trying to send, give them another try
             try
             {
+				if(_insights != null){
+					_insights.Track("Stockboy put to sleep", new Dictionary<string, string>());
+				}
                 var dal = Resolve<IClientDAL>();
                 var httpClient = Resolve<IResendEventsWebService>();
 

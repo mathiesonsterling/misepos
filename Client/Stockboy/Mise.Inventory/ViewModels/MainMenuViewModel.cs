@@ -53,6 +53,7 @@ namespace Mise.Inventory.ViewModels
 					
 				}
 
+				await _inventoryService.LoadLatest();
 			    var inv = _inventoryService.GetSelectedInventory();
 			    if (inv == null || inv.IsCompleted)
 			    {

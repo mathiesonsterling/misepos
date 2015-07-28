@@ -25,9 +25,12 @@ namespace Mise.Core.Common.Events
 
 		IRestaurant _restaurant;
 
-		public Guid RestaurantID {
+		public Guid? RestaurantID {
 			get {
-				return _restaurant.ID;
+				if (_restaurant != null) {
+					return _restaurant.ID;
+				}
+				return null;
 			}
 		}
 

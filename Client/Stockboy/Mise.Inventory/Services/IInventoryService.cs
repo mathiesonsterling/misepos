@@ -10,6 +10,8 @@ namespace Mise.Inventory.Services
 {
 	public interface IInventoryService
 	{
+		Task LoadLatest ();
+
 		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (string name, ICategory category, string upc, 
 			int quantity, int caseSize, LiquidContainer container, Money pricePaid);
 		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity, 
