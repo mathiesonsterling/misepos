@@ -40,19 +40,25 @@ namespace Mise.Inventory.Services.Implementation
 
 		public Task LoadLatest(){
 			var restID = _eventFactory.RestaurantID;
-			if (restID.HasValue) {
-				SelectedInventory = _inventoryRepository.GetAll ()
-					.Where (i => i.RestaurantID == restID.Value)
-					.Where (i => i.DateCompleted.HasValue == false)
-					.OrderByDescending (i => i.LastUpdatedDate)
-					.FirstOrDefault ();
+		    if (restID.HasValue)
+		    {
+		        SelectedInventory = _inventoryRepository.GetAll()
+		            .Where(i => i.RestaurantID == restID.Value)
+		            .Where(i => i.DateCompleted.HasValue == false)
+		            .OrderByDescending(i => i.LastUpdatedDate)
+		            .FirstOrDefault();
 
-				LastCompletedInventory = _inventoryRepository.GetAll ()
-					.Where(i => i.RestaurantID == restID.Value)
-					.Where (i => i.DateCompleted.HasValue)
-					.OrderByDescending (i => i.DateCompleted.Value)
-					.FirstOrDefault ();
-			}
+		        LastCompletedInventory = _inventoryRepository.GetAll()
+		            .Where(i => i.RestaurantID == restID.Value)
+		            .Where(i => i.DateCompleted.HasValue)
+		            .OrderByDescending(i => i.DateCompleted.Value)
+		            .FirstOrDefault();
+		    }
+		    else
+		    {
+		        SelectedInventory = null;
+		        LastCompletedInventory = null;
+		    }
 
 			return Task.FromResult (true);
 		}

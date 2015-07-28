@@ -207,6 +207,10 @@ namespace Mise.Core.Common.Entities.Inventory
                 throw new ArgumentException("No BeverageItem given with event!");
             }
 
+            if (LiquidAmount.None.GreaterThan(entityEvent.AmountMeasured))
+            {
+                throw new ArgumentException("Cannot measure a negative amount");
+            }
             var lineItem = entityEvent.BeverageLineItem;
             lineItem.MethodsMeasuredLast = MeasurementMethods.VisualEstimate;
 
@@ -221,30 +225,10 @@ namespace Mise.Core.Common.Entities.Inventory
                 throw new ArgumentException("No inventory item of " + lineItem.DisplayName + " exists");
             }
 
-            //check our measurement isn't above our container size
-            if (entityEvent.AmountMeasured.GreaterThan(existingLI.Container.AmountContained))
-            {
-                throw new ArgumentException("Amount measured is greater than the container");
-            }
             section.LineItems.Remove(existingLI);
             section.LineItems.Add(lineItem);
 
         }
 
-        private InventorySection CreateSectionFromRestaurantSection(Guid restSectionID, string sectionName, BaseInventoryEvent restEvent, Guid sectionID)
-        {
-            return new InventorySection
-            {
-                ID = sectionID,
-                Completed = false,
-                LineItems = new List<InventoryBeverageLineItem>(),
-                Name = sectionName,
-                RestaurantInventorySectionID = restSectionID,
-                RestaurantID = restEvent.RestaurantID,
-                CreatedDate = restEvent.CreatedDate,
-                LastUpdatedDate = restEvent.CreatedDate,
-                Revision = restEvent.EventOrderingID
-            };
-        }
     }
 }

@@ -267,7 +267,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
         }
 
         [Test]
-        public void InventoryMeasuredWithInvalidAmountThrows()
+        public void InventoryMeasuredWithNegativeAmountThrows()
         {
             var underTest = new Common.Entities.Inventory.Inventory();
             var liID = Guid.NewGuid();
@@ -287,7 +287,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             var invEvent = new InventoryLiquidItemMeasuredEvent
             {
-				AmountMeasured = new LiquidAmount {Milliliters = 10000},
+				AmountMeasured = new LiquidAmount {Milliliters = -10000},
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
                     ID = liID,
@@ -303,7 +303,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             }
             catch (ArgumentException ae)
             {
-                Assert.IsTrue(ae.Message.Contains("Amount measured is greater than the container"));
+                Assert.IsTrue(ae.Message.Contains("Cannot measure a negative amount"));
                 threw = true;
             }
 
