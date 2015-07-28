@@ -2,7 +2,7 @@
 
 using Xamarin.Forms;
 using Mise.Core.Services;
-
+using Mise.Inventory.Services;
 using XLabs.Platform;
 using XLabs.Platform.Device;
 using Mise.Inventory.Android.Services;
@@ -18,7 +18,12 @@ namespace Mise.Inventory.Android
 			cb.RegisterInstance<IDevice> (device).SingleInstance ();
 
 			var processor = new MercuryPaymentProcessorService (Logger);
-			cb.RegisterInstance<ICreditCardProcessorService>(processor);
+			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance();
+
+			var dbConn = new AndroidSQLite ();
+			SqlLiteConnection = dbConn;
+			cb.RegisterInstance<ISQLite> (dbConn).SingleInstance ();
+
 			base.RegisterDepenencies(cb);
 		}
 	}

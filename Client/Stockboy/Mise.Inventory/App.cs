@@ -53,8 +53,7 @@ namespace Mise.Inventory
             {
                 throw new Exception("Cannot resolve insights service");
             }
-
-            AccentColor = Resolve<IThemer>().AccentColor;
+				
 
             MainPage = new NavigationPage(initialPage);
 
@@ -92,7 +91,7 @@ namespace Mise.Inventory
                     var logger = Resolve<ILogger>();
                     logger.HandleException(e);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //nuke it here
                 }

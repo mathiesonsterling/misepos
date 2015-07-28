@@ -9,7 +9,6 @@ using Mise.Core.Repositories;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Restaurant;
-using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Client.Services;
@@ -29,7 +28,6 @@ namespace Mise.Inventory.Services.Implementation
 
 		IEmployee _currentEmployee;
 		IRestaurant _currentRestaurant;
-		IRestaurantInventorySection _currentSection;
 
 		public class MiseLoginRecord{
 			public EmailAddress Email{get;set;}
