@@ -68,6 +68,21 @@ namespace Mise.Core.Common.Repositories.Base
 
         public bool Dirty { get; protected set; }
 
+        /// <summary>
+        /// Get the number of events that are currently under transaction for a given entity ID
+        /// </summary>
+        /// <param name="entityID"></param>
+        /// <returns></returns>
+        public int GetNumberOfEventsInTransacitonForEntity(Guid entityID)
+        {
+            if (UnderTransaction.ContainsKey(entityID))
+            {
+                return UnderTransaction[entityID].Events.Count;
+            }
+
+            return 0;
+        }
+
         public bool StartTransaction(Guid entityID)
         {
             if (UnderTransaction.ContainsKey(entityID) == false)

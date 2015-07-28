@@ -45,5 +45,6 @@ namespace Mise.Core.Repositories
         /// <value><c>true</c> if dirty; otherwise, <c>false</c>.</value>
         bool Dirty { get; }
 
+        int GetNumberOfEventsInTransacitonForEntity(Guid entityID);
     }
 }
