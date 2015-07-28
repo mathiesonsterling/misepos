@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,18 +39,21 @@ namespace Mise.Core.Client.Repositories
 	        return ev.ParID;
 	    }
 
-	    public override async Task Load(Guid? restaurantID)
+	    protected override Task<IEnumerable<IPAR>> LoadFromWebservice(Guid? restaurantID)
 	    {
-	        Loading = true;
-			if (restaurantID.HasValue == false) {
-				throw new ArgumentException ("Cannot load PARs until restaurant is set!");
-			}
-
-			var pars = await _webService.GetPARsForRestaurant (restaurantID.Value);
-
-	        Cache.UpdateCache(pars);
-	        Loading = false;
+	        if (restaurantID.HasValue == false)
+	        {
+	            throw new ArgumentException("Cannot load PARS until restaurant is set");
+	        }
+	        return _webService.GetPARsForRestaurant(restaurantID.Value);
 	    }
+
+	    protected override async Task<IEnumerable<IPAR>> LoadFromDB(Guid? restaurantID)
+	    {
+	        var items = await DAL.GetEntitiesAsync<PAR>();
+	        return items;
+	    }
+
 
 		public Task<IPAR> GetCurrentPAR (Guid restaurantID)
 		{

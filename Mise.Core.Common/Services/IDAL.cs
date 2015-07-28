@@ -11,7 +11,7 @@ namespace Mise.Core.Common.Services
 	/// </summary>
 	public interface IDAL
 	{
-        Task<IEnumerable<T>> GetEntitiesAsync<T>() where T : class, IEntityBase;
+        Task<IEnumerable<T>> GetEntitiesAsync<T>() where T : class, IEntityBase, new();
 
         /// <summary>
         /// Persist a collection of events in an async manner

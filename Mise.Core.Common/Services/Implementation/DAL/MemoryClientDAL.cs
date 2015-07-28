@@ -7,9 +7,7 @@ using Mise.Core.Common.Entities;
 using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
-using Mise.Core.Entities.Check;
-using Mise.Core.Entities.Menu;
-using Mise.Core.Entities.People;
+using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
@@ -25,22 +23,15 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 		readonly Dictionary<Guid, DatabaseEventItem> _eventDB;
 
         readonly EventDataTransportObjectFactory _dtoFactory;
-		public MemoryClientDAL(IJSONSerializer jsonSerializer)
+	    private readonly ILogger _logger;
+	    private readonly IJSONSerializer _serializer;
+		public MemoryClientDAL(ILogger logger, IJSONSerializer jsonSerializer)
 		{
-			Serializer = jsonSerializer;
-            _dtoFactory = new EventDataTransportObjectFactory(Serializer);
+			_serializer = jsonSerializer;
+		    _logger = logger;
+            _dtoFactory = new EventDataTransportObjectFactory(_serializer);
 			_entityDB = new Dictionary<Guid, DatabaseEntityItem>();
 			_eventDB = new Dictionary<Guid, DatabaseEventItem>();
-		}
-
-		public IJSONSerializer Serializer {
-			get;
-			set;
-		}
-
-		public Core.Services.ILogger Logger {
-			get;
-			set;
 		}
 
 
@@ -104,22 +95,22 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 	    }
 
 
-	    public IEnumerable<T> GetEntities<T>() where T : class, IEntityBase
+	    private IEnumerable<T> GetEntities<T>() where T : class, IEntityBase
 		{
 			return _entityDB.Values.Where(dv => dv.Type == typeof(T))
-				.Select(dv => Serializer.Deserialize<T>(dv.JSON));
+				.Select(dv => _serializer.Deserialize<T>(dv.JSON));
 		}
 
-		public Task<IEnumerable<T>> GetEntitiesAsync<T>() where T : class, IEntityBase
+		public Task<IEnumerable<T>> GetEntitiesAsync<T>() where T : class, IEntityBase, new()
 		{
-			return Task.Factory.StartNew(() => GetEntities<T>());
+		    return Task.Run(() => GetEntities<T>());
 		}
 
-		public T GetEntityByID<T>(Guid id) where T : class, IEntityBase
+		private T GetEntityByID<T>(Guid id) where T : class, IEntityBase
 		{
 			if (_entityDB.ContainsKey(id)) {
 				var ent = _entityDB[id];
-				return Serializer.Deserialize<T>(ent.JSON);
+				return _serializer.Deserialize<T>(ent.JSON);
 			}
 
 			return null;
@@ -164,12 +155,12 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 		}
 
 
-		public bool UpsertEntities(IEnumerable<IEntityBase> entities)
+		private bool UpsertEntities(IEnumerable<IEntityBase> entities)
 		{
 			var dbEnts = entities.Select(ent => new DatabaseEntityItem {
 				ID = ent.ID,
-				Status = ItemCacheStatus.TerminalDB,
-				JSON = Serializer.Serialize(ent),
+				Status = ItemCacheStatus.ClientDB,
+				JSON = _serializer.Serialize(ent),
 				RevisionNumber = ent.Revision,
 				Type = ent.GetType()
 			});
@@ -196,7 +187,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 		public IEnumerable<T> GetAll<T>() where T:class, IEntityBase
 		{
 			var ents = _entityDB.Values.Select(db => db.JSON);
-			return ents.Select(js => Serializer.Deserialize<T>(js));
+			return ents.Select(js => _serializer.Deserialize<T>(js));
 		}
 
 
@@ -204,7 +195,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 		{
 			if (_entityDB.ContainsKey(id)) {
 				var json = _entityDB[id].JSON;
-				return Serializer.Deserialize<T>(json);
+				return _serializer.Deserialize<T>(json);
 			}
 			return null;
 		}

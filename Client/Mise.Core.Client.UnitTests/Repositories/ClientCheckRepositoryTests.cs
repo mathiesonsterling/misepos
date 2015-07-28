@@ -35,7 +35,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		        .Returns(
 		            Task<IEnumerable<ICheck>>.Factory.StartNew(() => new List<ICheck> {barTab})
 		        );
-			service.Setup (s => s.GetChecksAsync()).Returns (Task.Factory.StartNew (() => new List<ICheck>{
+			service.Setup (s => s.GetChecksAsync()).Returns (Task.FromResult(new List<ICheck>{
 				barTab}.AsEnumerable ()
 			));
 
@@ -74,7 +74,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		    service.Setup(s => s.GetChecksAsync()).Throws(new WebException());
 
 			var dal = new Mock<IClientDAL> ();
-			dal.Setup (d => d.GetEntitiesAsync<ICheck> ()).Returns(Task.Factory.StartNew(() => new List<ICheck>{barTab}.AsEnumerable()));
+			dal.Setup (d => d.GetEntitiesAsync<RestaurantCheck> ()).Returns(Task.Factory.StartNew(() => new List<RestaurantCheck>{barTab}.AsEnumerable()));
 
 			var logger = new Mock<ILogger> ();
             var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
@@ -116,7 +116,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
       
 
             var dal = new Mock<IClientDAL>();
-            dal.Setup(d => d.GetEntitiesAsync<ICheck> ()).Returns(Task<IEnumerable<ICheck>>.Factory.StartNew(() => new List<ICheck> { barTab }));
+            dal.Setup(d => d.GetEntitiesAsync<RestaurantCheck> ()).Returns(Task.FromResult(new List<RestaurantCheck> { barTab }.AsEnumerable()));
 
             var logger = new Mock<ILogger>();
             var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);

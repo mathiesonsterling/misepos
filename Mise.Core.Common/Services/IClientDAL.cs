@@ -19,11 +19,6 @@ namespace Mise.Core.Common.Services
 	/// </summary>
 	public interface IClientDAL : IDAL
 	{
-		//Dependencies
-		IJSONSerializer Serializer{ get; set; }
-
-		ILogger Logger{ get; set; }
-
 	    /// <summary>
 	    /// Remove all items and events stored before the time given
 	    /// </summary>

@@ -52,24 +52,28 @@ namespace Mise.Core.Client.Repositories
 		public Distance CurrentMaxRadius{ get; private set; }
 
         private const int MAX_RADIUS_RESULTS = 10;
-        public override async Task Load(Guid? restaurantID)
+
+        protected override async Task<IEnumerable<IVendor>> LoadFromWebservice(Guid? restaurantID)
         {
-            Loading = true;
-            IEnumerable<IVendor> vendors;
             if (restaurantID.HasValue)
             {
-                vendors = await _vendorWebService.GetVendorsAssociatedWithRestaurant(restaurantID.Value);
-            }
-            else
-            {
-                var loc = await _deviceLocationService.GetDeviceLocation();
-                vendors = await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
+                return await _vendorWebService.GetVendorsAssociatedWithRestaurant(restaurantID.Value);
             }
 
-			Cache.UpdateCache (vendors);
-            Loading = false;
+            var loc = await _deviceLocationService.GetDeviceLocation();
+            return await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
         }
 
+
+        protected override async Task<IEnumerable<IVendor>> LoadFromDB(Guid? restaurantID)
+        {
+            var vendors = await DAL.GetEntitiesAsync<Vendor>();
+            if (restaurantID.HasValue)
+            {
+                vendors = vendors.Where(v => v.GetRestaurantIDsAssociatedWithVendor().Contains(restaurantID.Value));
+            }
+            return vendors;
+        }
 
         private async Task<IEnumerable<IVendor>> LoadWithinDistance(Location deviceLocation, Distance radius)
         {

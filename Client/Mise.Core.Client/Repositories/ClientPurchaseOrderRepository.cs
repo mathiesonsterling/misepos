@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
@@ -14,9 +16,11 @@ namespace Mise.Core.Client.Repositories
 {
     public class ClientPurchaseOrderRepository : BaseEventSourcedClientRepository<IPurchaseOrder, IPurchaseOrderEvent>, IPurchaseOrderRepository
     {
+        private readonly IPurchaseOrderWebService _webService;
         public ClientPurchaseOrderRepository(ILogger logger, IClientDAL dal, IPurchaseOrderWebService webService, IResendEventsWebService resend)
             : base(logger, dal, webService, resend)
         {
+            _webService = webService;
         }
 
         protected override IPurchaseOrder CreateNewEntity()
@@ -34,10 +38,21 @@ namespace Mise.Core.Client.Repositories
             return ev.PurchaseOrderID;
         }
 
-        public override Task Load(Guid? restaurantID)
+        protected override async Task<IEnumerable<IPurchaseOrder>> LoadFromDB(Guid? restaurantID)
         {
-            //we don't currently load POS to the client right now
-            return Task.FromResult(false);
+            var items = await DAL.GetEntitiesAsync<PurchaseOrder>();
+            if (restaurantID.HasValue)
+            {
+                items = items.Where(po => po.RestaurantID == restaurantID);
+            }
+            return items;
         }
+
+        protected override Task<IEnumerable<IPurchaseOrder>> LoadFromWebservice(Guid? restaurantID)
+        {
+            //TODO enable returning POs at some point
+            return Task.FromResult(new List<IPurchaseOrder>().AsEnumerable());
+        }
+
     }
 }

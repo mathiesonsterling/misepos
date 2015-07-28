@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
@@ -37,16 +38,22 @@ namespace Mise.Core.Client.Repositories
             return ev.InventoryID;
         }
 
-        public override async Task Load(Guid? restaurantID)
+        protected override async Task<IEnumerable<IInventory>> LoadFromDB(Guid? restaurantID)
         {
-            Loading = true;
+            var items = await DAL.GetEntitiesAsync<Inventory>();
+            return items;
+        }
+
+        protected override Task<IEnumerable<IInventory>> LoadFromWebservice(Guid? restaurantID)
+        {
             if (restaurantID.HasValue)
             {
-				var items = await _inventoryWebService.GetInventoriesForRestaurant (restaurantID.Value);
-				Cache.UpdateCache (items);
+
+                return _inventoryWebService.GetInventoriesForRestaurant(restaurantID.Value);
             }
-            Loading = false;
+            return Task.FromResult(new List<IInventory>().AsEnumerable());
         }
+
 
 		public Task<IInventory> GetCurrentInventory(Guid restaurantID)
 		{

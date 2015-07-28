@@ -4,7 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Employee;
+using Mise.Core.Common.Services.Implementation.DAL;
+using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities.People.Events;
 using Mise.Core.Services.WebServices;
 using NUnit.Framework;
@@ -26,14 +29,14 @@ namespace Mise.Core.Client.UnitTests.Repositories
 	public class ClientEmployeeRepositoryTests
 	{
 		[Test]
-		public void LoadRepositoryStoresWebServiceResultsInDB(){
+		public async Task LoadRepositoryStoresWebServiceResultsInDB(){
 			var service = MockingTools.GetTerminalService ();
 
 			var emp = new Employee
 			{
 				ID = Guid.NewGuid ()
 			};
-			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee>{emp}));
+			service.Setup (s => s.GetEmployeesForRestaurant(It.IsAny<Guid>())).Returns (Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee>{emp}));
 
 			var dal = new Mock<IClientDAL> ();
 			IList<IEntityBase> sentEnts = null;
@@ -45,7 +48,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
             var repos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
-			repos.Load (MockingTools.RestaurantID).Wait();
+			await repos.Load (MockingTools.RestaurantID);
 			var gotten = repos.GetAll ().ToList();
 
 			//ASSERT
@@ -59,28 +62,28 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			Assert.AreEqual (1, gotten.Count());
 			Assert.AreEqual (emp.ID, gotten.First ().ID);
 
-            service.Verify(s => s.GetEmployeesAsync(), Times.Once);
+            service.Verify(s => s.GetEmployeesForRestaurant(MockingTools.RestaurantID), Times.Once);
 		}
 
 		[Test]
-		public void LoadRepositoryLoadsFromDBWhenServiceThrows(){
+		public async Task LoadRepositoryLoadsFromDBWhenServiceThrows(){
 			var service = MockingTools.GetTerminalService ();
 
 			var emp = new Employee
 			{
 				ID = Guid.NewGuid ()
 			};
-			service.Setup (s => s.GetEmployeesAsync ()).Throws (new ArgumentException ());
+			service.Setup (s => s.GetEmployeesForRestaurant(It.IsAny<Guid>())).Throws (new ArgumentException ());
 
 			var dal = new Mock<IClientDAL> ();
-			dal.Setup (d => d.GetEntitiesAsync<IEmployee> ()).Returns(Task.Factory.StartNew(() =>new List<IEmployee>{emp}.AsEnumerable()));
+			dal.Setup (d => d.GetEntitiesAsync<Employee> ()).Returns(Task.FromResult(new List<Employee>{emp}.AsEnumerable()));
 
 			var logger = new Mock<ILogger> ();
 			logger.Setup (l => l.HandleException (It.IsAny<Exception>(), It.IsAny<LogLevel> ()));
             var repos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
-            repos.Load(MockingTools.RestaurantID).Wait();
+            await repos.Load(MockingTools.RestaurantID);
 
 			var gotten = repos.GetAll ().ToList();
 			//ASSERT
@@ -92,7 +95,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		}
 
         [Test]
-        public void LoadRepositoryLoadsFromDBWhenTaskIsFaulted()
+        public async Task LoadRepositoryLoadsFromDBWhenTaskIsFaulted()
         {
             var service = MockingTools.GetTerminalService();
 
@@ -104,14 +107,14 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => { throw new WebException(); }));
 
             var dal = new Mock<IClientDAL>();
-            dal.Setup(d => d.GetEntitiesAsync<IEmployee> ()).Returns(Task.Factory.StartNew(() => new List<IEmployee> { emp }.AsEnumerable()));
+            dal.Setup(d => d.GetEntitiesAsync<Employee> ()).Returns(Task.FromResult(new List<Employee> { emp }.AsEnumerable()));
 
             var logger = new Mock<ILogger>();
             logger.Setup(l => l.HandleException(It.IsAny<Exception>(), It.IsAny<LogLevel>()));
             var repos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
             //ACT
-            repos.Load(MockingTools.RestaurantID).Wait();
+            await repos.Load(null);
 
             var gotten = repos.GetAll().ToList();
             //ASSERT
@@ -161,7 +164,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                     var thrower = new ClientCheckRepositoryTests.Thrower();
                     return thrower.DoIt();
                 }));
-            restaurantService.Setup(rs => rs.GetEmployeesAsync())
+            restaurantService.Setup(rs => rs.GetEmployeesForRestaurant(It.IsAny<Guid>()))
                 .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee> { emp }));
 
 
@@ -196,6 +199,8 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			restaurantService.Verify(r => r.SendEventsAsync(It.IsAny<IEmployee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Once());
             dal.Verify(d => d.AddEventsThatFailedToSend(It.IsAny<IEnumerable<IEntityEventBase>>()), Times.Once, "AddedEventsThat failed to send");
             dal.Verify(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Never);
+
+            //once when we loaded, once when we updated
             dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>>()), Times.Exactly(2));
         }
 
@@ -211,7 +216,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
             var restaurantService = new Mock<IRestaurantTerminalService>();
 			restaurantService.Setup(rs => rs.SendEventsAsync(It.IsAny<IEmployee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()))
                 .Returns(Task<bool>.Factory.StartNew(() => true));
-            restaurantService.Setup(rs => rs.GetEmployeesAsync())
+            restaurantService.Setup(rs => rs.GetEmployeesForRestaurant(It.IsAny<Guid>()))
                 .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee>{emp}));
 
 
@@ -247,6 +252,72 @@ namespace Mise.Core.Client.UnitTests.Repositories
             dal.Verify(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Never());
             dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>>()), Times.Exactly(2));
         }
+
+	    [Test]
+	    public async Task ShouldLoadFromDBWhenCannotConnect()
+	    {
+	        var webService = new Mock<IInventoryEmployeeWebService>();
+	        var restID = Guid.NewGuid();
+	        webService.Setup(ws => ws.GetEmployeesAsync())
+	            .Throws<Exception>();
+
+	        var logger = new Mock<ILogger>();
+
+	        var dal = new MemoryClientDAL(logger.Object, new JsonNetSerializer());
+	        var resendService = new Mock<IResendEventsWebService>();
+
+	        var underTest = new ClientEmployeeRepository(webService.Object, dal, logger.Object, resendService.Object);
+
+	        var emps = new List<IEmployee>
+	        {
+	            new Employee
+	            {
+	                ID = Guid.NewGuid(),
+	                CanCompAmount = true,
+	                CreatedDate = DateTime.UtcNow,
+	                CurrentlyLoggedIntoInventoryApp = false,
+	                DisplayName = "Test employee",
+	                Name = PersonName.TestName,
+	                Emails = new List<EmailAddress> {EmailAddress.TestEmail},
+	                Password = Password.TestPassword,
+	                RestaurantsAndAppsAllowed =
+	                    new Dictionary<Guid, IList<MiseAppTypes>>
+	                    {
+	                        {restID, new[] {MiseAppTypes.StockboyMobile, MiseAppTypes.UnitTests}}
+	                    },
+	                Revision = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101}
+	            }
+	        };
+
+	        //ACT
+	        //load up the DB
+	        var storeRes = await dal.UpsertEntitiesAsync(emps);
+            Assert.True(storeRes);
+
+	        await underTest.Load(null);
+	        var items = underTest.GetAll().ToList();
+
+            //ASSERT
+            Assert.NotNull(items);
+            Assert.AreEqual(1, items.Count());
+
+	        var first = items.First();
+            Assert.AreEqual(first.ID, emps.First().ID);
+            Assert.True(first.CanCompAmount);
+            Assert.False(first.CurrentlyLoggedIntoInventoryApp);
+            Assert.AreEqual("Test employee", first.DisplayName);
+            Assert.IsTrue(emps.First().Name.Equals(first.Name), "Name");
+            Assert.AreEqual(1, first.GetEmailAddresses().Count());
+	        Assert.IsTrue(first.GetEmailAddresses().First().Equals(EmailAddress.TestEmail), "Email");
+            Assert.IsTrue(first.Password.Equals(Password.TestPassword));
+
+	        var apps = first.GetAppsEmployeeCanUse(restID).ToList();
+            Assert.AreEqual(2, apps.Count);
+            Assert.IsTrue(apps.Contains(MiseAppTypes.StockboyMobile));
+            Assert.IsTrue(apps.Contains(MiseAppTypes.UnitTests));
+
+            Assert.NotNull(first.Revision);
+	    }
 	}
 }
 

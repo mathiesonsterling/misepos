@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Repositories.Base;
@@ -25,6 +24,7 @@ namespace Mise.Core.Client.Repositories
         protected readonly IClientDAL DAL;
         private readonly IEventStoreWebService<TEntity, TEventType> _webService;
         private readonly IResendEventsWebService _resendEventsWebService;
+
         protected BaseEventSourcedClientRepository(ILogger logger, 
             IClientDAL dal,
             IEventStoreWebService<TEntity, TEventType> webService,
@@ -36,18 +36,78 @@ namespace Mise.Core.Client.Repositories
             _resendEventsWebService = resendService;
         }
 
+        protected abstract Task<IEnumerable<TEntity>> LoadFromWebservice(Guid? restaurantID);
+        protected abstract Task<IEnumerable<TEntity>> LoadFromDB(Guid? restaurantID);
+
+        protected virtual TimeSpan DelayToReload { get { return new TimeSpan(0, 0, 0, 1); } }
+
+        /// <summary>
+        /// The last restaurantID we got loaded with
+        /// </summary>
+        protected Guid? RestaurantID { get; private set; }
+
+        /// <summary>
+        /// What to do when we've go online when previously we weren't
+        /// </summary>
+        protected virtual async void OnWentOnline()
+        {
+            try
+            {
+                //we want to reload, but do so after a delay
+                await Task.Delay(DelayToReload).ConfigureAwait(false);
+                await Load(RestaurantID).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                Logger.HandleException(e);
+            }
+        }
+
         /// <summary>
         /// Each client repository needs to be able to load, both when attached to a restaurant and when not
         /// </summary>
         /// <param name="restaurantID"></param>
         /// <returns></returns>
-        public abstract Task Load(Guid? restaurantID);
+        public async Task Load(Guid? restaurantID)
+        {
+            Loading = true;
+            RestaurantID = restaurantID;
+            var needsDBLoad = false;
+            try
+            {
+                var items = (await LoadFromWebservice(restaurantID)).ToList();
+                Cache.UpdateCache(items);
+
+                //update our database with these
+                await DAL.UpsertEntitiesAsync(items);
+                Offline = false;
+            }
+            catch (Exception e)
+            {
+                Logger.HandleException(e, LogLevel.Warn);
+                needsDBLoad = true;
+            }
+
+            if (needsDBLoad)
+            {
+                var dbItems = await LoadFromDB(restaurantID);
+                Cache.UpdateCache(dbItems, ItemCacheStatus.ClientDB);
+                Offline = true;
+            }
+            Loading = false;
+        }
+
 
 
         /// <summary>
         /// Whether or not the item is currently loading
         /// </summary>
         public bool Loading { get; protected set; }
+
+        /// <summary>
+        /// If the repository loaded from the DB last pass
+        /// </summary>
+        public bool Offline { get; private set; }
 
         public virtual async Task<CommitResult> CommitOnlyImmediately(Guid entityID)
         {
@@ -62,7 +122,7 @@ namespace Mise.Core.Client.Repositories
             if (bundle.Events == null) return commitRes;
 
             //update our cache, mark us as in memory
-            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.TerminalMemory);
+            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.ClientMemory);
 
             //clear this trans from the queue
             Logger.Log("Ending transaction for " + entityID, LogLevel.Debug);
@@ -78,6 +138,10 @@ namespace Mise.Core.Client.Repositories
                 if (sendRes)
                 {
                     commitRes = CommitResult.SentToServer;
+                    if (Offline)
+                    {
+                        OnWentOnline();
+                    }
                 }
             }
             catch (Exception ex)
@@ -91,7 +155,8 @@ namespace Mise.Core.Client.Repositories
 
             if (entRes)
             {
-                Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.TerminalDB);
+                var status = commitRes == CommitResult.SentToServer ? ItemCacheStatus.Clean : ItemCacheStatus.ClientDB;
+                Cache.UpdateCache(bundle.NewVersion, status);
             }
 
             Dirty = false;
@@ -113,7 +178,7 @@ namespace Mise.Core.Client.Repositories
             var bundle = UnderTransaction[entityID];
             if (bundle.Events == null) return commitRes;
             //update our cache, mark us as in memory
-            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.TerminalMemory);
+            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.ClientMemory);
 
             //clear this trans from the queue
             Logger.Log("Ending transaction for " + entityID, LogLevel.Debug);
@@ -128,6 +193,10 @@ namespace Mise.Core.Client.Repositories
 				var sendRes = await _webService.SendEventsAsync (bundle.NewVersion, toSend).ConfigureAwait (false);
                 if(sendRes){
                     commitRes = CommitResult.SentToServer;
+                    if (Offline)
+                    {
+                        OnWentOnline();
+                    }
                 }
                 else
                 {
@@ -140,7 +209,6 @@ namespace Mise.Core.Client.Repositories
 
             if (needsDBStore)
             {
-                //var storeRes = await DAL.StoreEventsAsync(toSend).ConfigureAwait(false);
                 await DAL.AddEventsThatFailedToSend(toSend);
                 commitRes = CommitResult.StoredInDB;
             }
@@ -150,7 +218,8 @@ namespace Mise.Core.Client.Repositories
               
             if (entRes)
             {
-                Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.TerminalDB);
+                var status = commitRes == CommitResult.SentToServer ? ItemCacheStatus.Clean : ItemCacheStatus.ClientDB;
+                Cache.UpdateCache(bundle.NewVersion, status);
             }
 
             Dirty = false;
@@ -174,7 +243,6 @@ namespace Mise.Core.Client.Repositories
                 try
                 {
                     sent = await _resendEventsWebService.ResendEvents(chunk.ToList());
-
                 }
                 catch (Exception e)
                 {
@@ -205,19 +273,6 @@ namespace Mise.Core.Client.Repositories
             SentSome,
             SentAll,
             Error
-        }
-
-        public async Task<ResendResult> AttemptToResendOfflineEvents()
-        {
-            if (HasEventsToSend == false)
-            {
-                return ResendResult.NoItemsToSend;
-            }
-
-            //get our events
-            var events = await GetOfflineEvents();
-
-            return ResendResult.Error;
         }
 
 

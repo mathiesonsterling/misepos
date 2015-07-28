@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Mise.Core.Client.Services;
 using Mise.Core.Entities.Restaurant;
 using Mise.Inventory.Services;
 using NUnit.Framework;
@@ -332,8 +333,8 @@ namespace Mise.Inventory.UnitTests.Services
 			restaurantWs.Setup (rws => rws.SendEventsAsync (It.IsAny<IRestaurant> (), It.IsAny<IEnumerable<IRestaurantEvent>> ()))
 				.Returns(Task.FromResult(true));
 
-
-            var restRepos = new ClientRestaurantRepository(logger.Object, dal.Object, restaurantWs.Object, TestUtilities.GetResendService().Object);
+		    var loc = new Mock<IDeviceLocationService>();
+            var restRepos = new ClientRestaurantRepository(logger.Object, dal.Object, restaurantWs.Object, TestUtilities.GetResendService().Object, loc.Object);
             await restRepos.Load(rest.ID);
             
 			var inviteRepos = new Mock<IApplicationInvitationRepository> ();

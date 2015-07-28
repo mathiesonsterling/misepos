@@ -97,7 +97,7 @@ namespace Mise.Core.Common.Repositories.Base
             UnderTransaction.Remove(entityID);
             if (bundle.OriginalVersion != null)
             {
-                Cache.UpdateCache(bundle.OriginalVersion, ItemCacheStatus.TerminalMemory);
+                Cache.UpdateCache(bundle.OriginalVersion, ItemCacheStatus.ClientMemory);
             }
             Dirty = false;
         }

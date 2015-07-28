@@ -198,7 +198,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 			Assert.IsNotNull (check);
 			Assert.AreEqual (check, vm.SelectedCheck, "created tab was set as selected");
-			Assert.AreEqual ("test ", check.GetTopOfCheck());
+			Assert.AreEqual (PersonName.TestName.ToSingleString(), check.GetTopOfCheck());
 			Assert.AreEqual (empID, check.CreatedByServerID);
 
 			vm.SendSelectedCheck ();

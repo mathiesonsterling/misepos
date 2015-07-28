@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Client.Services;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Events.Restaurant;
 using Mise.Core.Common.Services;
@@ -23,10 +24,12 @@ namespace Mise.Core.Client.Repositories
 		IRestaurantRepository
 	{
 		readonly IInventoryRestaurantWebService _webService;
-        public ClientRestaurantRepository(ILogger logger, IClientDAL dal, IInventoryRestaurantWebService webService, IResendEventsWebService resend)
+        private readonly IDeviceLocationService _locationService;
+        public ClientRestaurantRepository(ILogger logger, IClientDAL dal, IInventoryRestaurantWebService webService, IResendEventsWebService resend, IDeviceLocationService locationService)
             : base(logger, dal, webService, resend)
         {
 			_webService = webService;
+            _locationService = locationService;
         }
 
 			
@@ -60,23 +63,28 @@ namespace Mise.Core.Client.Repositories
             return ev.RestaurantID;
         }
 
-        public override async Task Load(Guid? restaurantID)
+        protected override async Task<IEnumerable<IRestaurant>> LoadFromWebservice(Guid? restaurantID)
         {
-			try
-			{
-			    Loading = true;
-				if(restaurantID.HasValue){
-					var rest = await _webService.GetRestaurant (restaurantID.Value);
-					Cache.UpdateCache (rest, ItemCacheStatus.Clean);
-					return;
-				}
-					
-				var allRests = await _webService.GetRestaurants (new Location ());
-				Cache.UpdateCache (allRests);
-			    Loading = false;
-			} catch(Exception e){
-				Logger.HandleException (e);
-			}
+            if (restaurantID.HasValue)
+            {
+                var rest = await _webService.GetRestaurant(restaurantID.Value);
+                return new[] {rest};
+            }
+
+            var location = await _locationService.GetDeviceLocation();
+            var items = await _webService.GetRestaurants(location);
+            return items;
+        }
+
+        protected override async Task<IEnumerable<IRestaurant>> LoadFromDB(Guid? restaurantID)
+        {
+            var items = await DAL.GetEntitiesAsync<Restaurant>();
+            if (restaurantID.HasValue)
+            {
+                items = items.Where(r => r.ID == restaurantID);
+            }
+
+            return items;
         }
 	}
 }

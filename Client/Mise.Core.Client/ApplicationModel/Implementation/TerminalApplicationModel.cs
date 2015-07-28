@@ -205,7 +205,8 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                                  ICreditCardProcessorService creditCardProcessorService,
                                  IPrinterService printerService,
                                  ISalesTaxCalculatorService salesTaxService,
-                                 IRestaurantTerminalService terminalService
+                                 IRestaurantTerminalService terminalService,
+                                IDeviceLocationService locationService
         )
         {
 
@@ -233,7 +234,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 _logger.HandleException(e);
                 Online = false;
                 //get our restaraunt stored
-                IRestaurantRepository restaurantRepository = new ClientRestaurantRepository(logger, dal, terminalService, terminalWebService);
+                IRestaurantRepository restaurantRepository = new ClientRestaurantRepository(logger, dal, terminalService, terminalWebService, locationService);
                 _restaurant = restaurantRepository.GetAll().FirstOrDefault();
             }
 				
