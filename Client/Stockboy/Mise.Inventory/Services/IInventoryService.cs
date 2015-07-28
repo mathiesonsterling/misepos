@@ -49,6 +49,9 @@ namespace Mise.Inventory.Services
 		/// <param name="partials">Partials.</param>
 		Task MeasureCurrentLineItemVisually (int fullBottles, ICollection<decimal> partials);
 
+	    Task<IInventorySection> GetCurrentInventorySection();
+	    Task SetCurrentInventorySection(IInventorySection section);
+
 		Task MarkSectionAsComplete ();
 
 		/// <summary>

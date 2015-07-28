@@ -33,9 +33,6 @@ namespace Mise.Inventory.Services
 
 		Task<IRestaurant> GetCurrentRestaurant();
 
-		Task<IRestaurantInventorySection> GetCurrentSection ();
-		Task SelectSection (IRestaurantInventorySection section);
-
 		Task AddNewSectionToRestaurant (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection);
 	
 		Task<IEmployee> RegisterEmployee (EmailAddress email, Password password, PersonName name);

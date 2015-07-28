@@ -103,13 +103,14 @@ namespace Mise.Inventory.UnitTests.Services
 
 		[Test]
 		public async Task StartInventoryWithPreviousInventoryWithItemsShouldAddThoseItems(){
-			var sectionID = Guid.NewGuid ();
+			var restSectionID = Guid.NewGuid ();
+		    var invSectionID = Guid.NewGuid();
 			var restaurant = new Restaurant {
 				ID = Guid.NewGuid (),
 				InventorySections = new List<RestaurantInventorySection>{
 					new RestaurantInventorySection {
 						Name = "testSec",
-						ID = sectionID
+						ID = restSectionID
 					}
 				}
 			};
@@ -130,11 +131,12 @@ namespace Mise.Inventory.UnitTests.Services
 				RestaurantID = restaurant.ID,
 				IsCurrent = true,
 				CreatedDate = DateTime.UtcNow,
+                DateCompleted = DateTime.UtcNow,
 				Sections = new List<InventorySection>{
 					new InventorySection {
 						Name = "testSec",
-						RestaurantInventorySectionID = sectionID,
-						ID = Guid.NewGuid (),
+						RestaurantInventorySectionID = restSectionID,
+						ID = invSectionID,
 						LineItems = new List<InventoryBeverageLineItem>{
 							new InventoryBeverageLineItem {
 								DisplayName = "Item",
@@ -190,14 +192,15 @@ namespace Mise.Inventory.UnitTests.Services
 	    [Test]
 	    public async Task ItemsWithZeroQuantityShouldNotBeCopied()
 	    {
-            var sectionID = Guid.NewGuid();
+            var restSectionID = Guid.NewGuid();
+	        var invSectionID = Guid.NewGuid();
             var restaurant = new Restaurant
             {
                 ID = Guid.NewGuid(),
                 InventorySections = new List<RestaurantInventorySection>{
 					new RestaurantInventorySection {
 						Name = "testSec",
-						ID = sectionID
+						ID = restSectionID
 					}
 				}
             };
@@ -220,11 +223,12 @@ namespace Mise.Inventory.UnitTests.Services
                 RestaurantID = restaurant.ID,
                 IsCurrent = true,
                 CreatedDate = DateTime.UtcNow,
+                DateCompleted = DateTime.UtcNow,
                 Sections = new List<InventorySection>{
 					new InventorySection {
 						Name = "testSec",
-						RestaurantInventorySectionID = sectionID,
-						ID = Guid.NewGuid (),
+						RestaurantInventorySectionID = restSectionID,
+						ID = invSectionID,
 						LineItems = new List<InventoryBeverageLineItem>{
 							new InventoryBeverageLineItem {
 								DisplayName = "Item",

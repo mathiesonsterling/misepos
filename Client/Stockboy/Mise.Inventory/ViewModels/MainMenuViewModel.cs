@@ -11,13 +11,15 @@ namespace Mise.Inventory.ViewModels
 	public class MainMenuViewModel : BaseViewModel
 	{
 		readonly ILoginService _loginService;
-		public MainMenuViewModel(ILogger logger, IAppNavigation navigationService, ILoginService loginService)
+	    private readonly IInventoryService _inventoryService;
+		public MainMenuViewModel(ILogger logger, IAppNavigation navigationService, ILoginService loginService, IInventoryService inventoryService)
 			:base(navigationService, logger)
 		{
-			_loginService = loginService;
+		    _loginService = loginService;
+		    _inventoryService = inventoryService;
 		}
 
-		public override async Task OnAppearing(){
+	    public override async Task OnAppearing(){
 			try{
 				var emp = await _loginService.GetCurrentEmployee ();
 				if(emp == null){
@@ -50,12 +52,26 @@ namespace Mise.Inventory.ViewModels
 				    }
 					
 				}
+
+			    var inv = _inventoryService.GetSelectedInventory();
+			    if (inv == null || inv.IsCompleted)
+			    {
+			        InventoryButtonText = "Start Count";
+			    }
+			    else
+			    {
+			        InventoryButtonText = "Continue Count";
+			    }
 			} catch(Exception e){
 				HandleException (e);
 			}
 		}
 
 		public string RestaurantName{get{ return GetValue<string>(); }set{ SetValue(value); }}
+        public string InventoryButtonText {
+            get { return GetValue<string>(); }
+            set{SetValue(value); }
+        }
 
 		#region Commands
 
@@ -111,6 +127,14 @@ namespace Mise.Inventory.ViewModels
 		async void SectionSelect()
 		{
 			try{
+                Processing = true;
+                var selectedInventory = await _inventoryService.GetSelectedInventory();
+                if (selectedInventory == null)
+                {
+                    //TODO might want to alert the user to this
+                    await _inventoryService.StartNewInventory();
+                }
+			    Processing = false;
 			await Navigation.ShowSectionSelect();
 			} catch(Exception e){
 				HandleException(e);

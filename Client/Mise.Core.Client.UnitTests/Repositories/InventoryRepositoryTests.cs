@@ -42,7 +42,6 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 CreatedDate = DateTime.UtcNow,
                 EventOrderingID = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0},
                 InventoryID = entID,
-                RestaurantSectionsAndSectionIDs = new List<Tuple<RestaurantInventorySection, Guid>>()
             };
      
             //Create
@@ -103,7 +102,6 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 CreatedDate = DateTime.UtcNow,
                 EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0 },
                 InventoryID = entID,
-                RestaurantSectionsAndSectionIDs = new List<Tuple<RestaurantInventorySection, Guid>>()
             };
 
             //Create

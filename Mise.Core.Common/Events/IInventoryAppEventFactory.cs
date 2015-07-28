@@ -44,17 +44,17 @@ namespace Mise.Core.Common.Events
 
 		InventoryCreatedEvent CreateInventoryCreatedEvent(IEmployee emp);
 		InventoryMadeCurrentEvent CreateInventoryMadeCurrentEvent(IEmployee emp, IInventory inventory);
-		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int quantity, Money pricePaid, Guid? vendorID, Guid? sectionID, 
+		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int quantity, Money pricePaid, Guid? vendorID, IInventorySection section, 
            int inventoryPosition, IInventory inventory);
 
 		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, string name, string upc, 
 			IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity, Money pricePaid, 
-			Guid? vendorID, Guid? sectionID, int inventoryPosition, IInventory inventory);
-		InventorySectionCompletedEvent CreateInventorySectionCompletedEvent(IEmployee emp, IInventory inventory, Guid restSectionID);
+			Guid? vendorID, IInventorySection section, int inventoryPosition, IInventory inventory);
+		InventorySectionCompletedEvent CreateInventorySectionCompletedEvent(IEmployee emp, IInventory inventory, IInventorySection section);
 		InventoryLiquidItemMeasuredEvent CreateInventoryLiquidItemMeasuredEvent(IEmployee emp, IInventory inventory, 
-			Guid restSectionID, InventoryBeverageLineItem li, int numFullBottles, IEnumerable<decimal> partialBottlePercentages, LiquidAmount amtMeasured);
+			IInventorySection section, InventoryBeverageLineItem li, int numFullBottles, IEnumerable<decimal> partialBottlePercentages, LiquidAmount amtMeasured);
 		InventoryCompletedEvent CreateInventoryCompletedEvent(IEmployee emp, IInventory inventory);
-		InventoryNewSectionAddedEvent CreateInventoryNewSectionCompletedEvent(IEmployee emp, IInventory inventory, IRestaurantInventorySection restSection);
+		InventoryNewSectionAddedEvent CreateInventoryNewSectionAddedEvent(IEmployee emp, IInventory inventory, IRestaurantInventorySection restSection);
 
 		PARCreatedEvent CreatePARCreatedEvent(IEmployee emp);
 		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int? quantity, IPAR par);

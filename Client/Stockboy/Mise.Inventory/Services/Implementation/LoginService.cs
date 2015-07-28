@@ -246,17 +246,7 @@ namespace Mise.Inventory.Services.Implementation
 			return Task.FromResult (_currentRestaurant);
 		}
 
-		public Task<IRestaurantInventorySection> GetCurrentSection ()
-		{
-			return Task.FromResult (_currentSection);
-		}
 
-		public Task SelectSection (IRestaurantInventorySection section)
-		{
-			_currentSection = section;
-			return Task.FromResult (false);
-			//ensure section and restaurant match!
-		}
 
 		public async Task AddNewSectionToRestaurant (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
 		{
