@@ -350,7 +350,7 @@ namespace Mise.Inventory.UnitTests.Services
 			var underTest = new InventoryService (logger.Object, loginService, inventoryRepos, eventFact, insights.Object);
 
 			//ACT
-
+		    await underTest.LoadLatest();
 			await underTest.AddNewSection("testSection", false, false);
 
 			//ASSERT
