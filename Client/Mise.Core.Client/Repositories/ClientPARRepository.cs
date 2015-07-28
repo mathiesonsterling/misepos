@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,15 +10,15 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Services;
 using Mise.Core.Services.WebServices;
-using Mise.Core.ValueItems;
 using Mise.Core.Repositories;
 
 namespace Mise.Core.Client.Repositories
 {
-	public class ClientPARRepository : BaseEventSourcedClientRepository<IPAR, IPAREvent>, IPARRepository
+	public class ClientParRepository : BaseEventSourcedClientRepository<IPAR, IPAREvent>, IPARRepository
 	{
 	    private readonly IPARWebService _webService;
-	    public ClientPARRepository(ILogger logger, IClientDAL dal, IPARWebService webService) : base(logger, dal, webService)
+        public ClientParRepository(ILogger logger, IClientDAL dal, IPARWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
 	    {
 	        _webService = webService;
 	    }

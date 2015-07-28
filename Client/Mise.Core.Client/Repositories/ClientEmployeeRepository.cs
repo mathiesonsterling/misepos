@@ -21,8 +21,8 @@ namespace Mise.Core.Client.Repositories
         readonly IClientDAL _clientDAL;
 
 
-        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, IClientDAL dal, ILogger logger)
-            : base(logger, dal, webService)
+        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, IClientDAL dal, ILogger logger, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
         {
             _webService = webService;
             _clientDAL = dal;

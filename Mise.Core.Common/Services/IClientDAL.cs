@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Mise.Core.Common.Events.DTOs;
+using Mise.Core.Common.Services.Implementation.DAL;
 using Mise.Core.Entities.Base;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Check;
@@ -31,6 +32,16 @@ namespace Mise.Core.Common.Services
 	    /// <param name="maxNumberEvents"></param>
 	    /// <returns></returns>
 	    Task CleanItemsBefore(DateTimeOffset minDate, int maxNumberEntites = int.MaxValue, int maxNumberEvents = int.MaxValue);
+
+        /// <summary>
+        /// Get any events which are waiting to be resent
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<EventDataTransportObject>> GetUnsentEvents();
+
+	    Task AddEventsThatFailedToSend(IEnumerable<IEntityEventBase> events);
+
+	    Task MarkEventsAsSent(IEnumerable<IEntityEventBase> events);
 	}
 }
 

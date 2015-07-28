@@ -13,7 +13,7 @@ namespace Mise.Inventory.Pages
 			InitializeComponent();
 		}
 
-		protected override async void OnAppearing(){
+		protected override void OnAppearing(){
 			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "VendorAddPage"}});
 
 			var vm = BindingContext as VendorAddViewModel;

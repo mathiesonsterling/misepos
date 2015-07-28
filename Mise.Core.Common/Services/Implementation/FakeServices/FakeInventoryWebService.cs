@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Accounts;
+using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.People.Events;
@@ -836,6 +837,10 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 	        return Task.FromResult(_invitations.Where(i => i.DestinationEmail.Equals(email)));
 	    }
 
+	    public Task<bool> ResendEvents(ICollection<IEntityEventBase> events)
+	    {
+	        return Task.FromResult(true);
+	    }
 	}
 }
 

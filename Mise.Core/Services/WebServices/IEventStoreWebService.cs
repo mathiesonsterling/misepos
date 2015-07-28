@@ -8,13 +8,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Mise.Core.Services.WebServices
 {
-
-
     /// <summary>
     /// Represents a web service that a repository can send events to
     /// </summary>
     /// <typeparam name="TEventType"></typeparam>
-    public interface IEventStoreWebService<TEntityType, in TEventType> where TEventType : IEntityEventBase
+    /// <typeparam name="TEntityType"></typeparam>
+    public interface IEventStoreWebService<in TEntityType, in TEventType> where TEventType : IEntityEventBase
 		where TEntityType : IEventStoreEntityBase<TEventType>
     {
         /// <summary>
@@ -26,5 +25,6 @@ namespace Mise.Core.Services.WebServices
 		/// or basic uploads</param>
         /// <param name="events">Events.</param>
         Task<bool> SendEventsAsync(TEntityType updatedEntity, IEnumerable<TEventType> events);
+
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.UnitTests.Tools;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Services;
 using Mise.Core.Services.WebServices;
@@ -32,7 +33,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Callback<IReceivingOrder, IEnumerable<IReceivingOrderEvent>>((ro, evs) => inventoryEventsPassed.AddRange(evs))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var underTest = new ClientReceivingOrderRepository(logger.Object, dal.Object, service.Object);
+            var underTest = new ClientReceivingOrderRepository(logger.Object, dal.Object, service.Object, MockingTools.GetResendEventsService().Object);
 
             var entID = Guid.NewGuid();
             var creation = new ReceivingOrderCreatedEvent

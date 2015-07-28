@@ -16,7 +16,8 @@ namespace Mise.Core.Client.Repositories
     public class ClientReceivingOrderRepository : BaseEventSourcedClientRepository<IReceivingOrder, IReceivingOrderEvent>, IReceivingOrderRepository
     {
         readonly IReceivingOrderWebService _webService;
-        public ClientReceivingOrderRepository(ILogger logger, IClientDAL dal, IReceivingOrderWebService webService) : base(logger, dal, webService)
+        public ClientReceivingOrderRepository(ILogger logger, IClientDAL dal, IReceivingOrderWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
         {
             _webService = webService;
         }

@@ -16,7 +16,7 @@ namespace Mise.Core.Client.Repositories
     public class ClientRestaurantAccountRepository : BaseEventSourcedClientRepository<IAccount, IAccountEvent>, IAccountRepository
     {
         private IAccountWebService _webService;
-        public ClientRestaurantAccountRepository(ILogger logger, IClientDAL dal, IAccountWebService webService) : base(logger, dal, webService)
+        public ClientRestaurantAccountRepository(ILogger logger, IClientDAL dal, IAccountWebService webService, IResendEventsWebService resend) : base(logger, dal, webService, resend)
         {
             _webService = webService;
         }

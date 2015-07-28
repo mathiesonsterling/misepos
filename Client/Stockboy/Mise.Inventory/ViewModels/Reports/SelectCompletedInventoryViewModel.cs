@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
+using Mise.Core.ExtensionMethods;
 using Mise.Core.Services;
 using Mise.Inventory.Services;
 using Mise.Core.Repositories;
 using Mise.Core.ValueItems.Reports;
-using Mise.Core.ValueItems;
 
 namespace Mise.Inventory.ViewModels.Reports
 {

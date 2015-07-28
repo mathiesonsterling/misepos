@@ -1,17 +1,28 @@
 ﻿using System;
+using Mise.Core.Common.Events.DTOs;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Common.Services.Implementation.DAL
 {
-	public class DatabaseEventItem
+    /// <summary>
+    /// Stores our events 
+    /// </summary>
+	public class DatabaseEventItem : EventDataTransportObject
 	{
-		public Guid ID{ get; set;}
-		public ItemCacheStatus Status{get;set;}
-		public long RevisionNumber{get;set;}
-		public Type Type{get;set;}
-		public string JSON{ get; set;}
+        public DatabaseEventItem()
+        {
+            TimesAttemptedToSend = 0;
+        }
 
-        public DateTimeOffset CreatedOn { get; set; }
+        public DatabaseEventItem(EventDataTransportObject source, bool sent) : base(source)
+        {
+            HasBeenSent = sent;
+            TimesAttemptedToSend = 0;
+
+        }
+
+        public bool HasBeenSent { get; set; }
+        public int TimesAttemptedToSend { get; set; }
 	}
 }
 

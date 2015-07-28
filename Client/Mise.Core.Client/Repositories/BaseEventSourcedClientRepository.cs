@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Repositories.Base;
 using Mise.Core.Common.Services;
 using Mise.Core.Entities.Base;
+using Mise.Core.ExtensionMethods;
 using Mise.Core.Services;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
@@ -23,14 +24,16 @@ namespace Mise.Core.Client.Repositories
     {
         protected readonly IClientDAL DAL;
         private readonly IEventStoreWebService<TEntity, TEventType> _webService;
- 
+        private readonly IResendEventsWebService _resendEventsWebService;
         protected BaseEventSourcedClientRepository(ILogger logger, 
             IClientDAL dal,
-            IEventStoreWebService<TEntity, TEventType> webService 
+            IEventStoreWebService<TEntity, TEventType> webService,
+            IResendEventsWebService resendService
             ) : base(logger)
         {
             DAL = dal;
             _webService = webService;
+            _resendEventsWebService = resendService;
         }
 
         /// <summary>
@@ -98,6 +101,8 @@ namespace Mise.Core.Client.Repositories
 
         public override async Task<CommitResult> Commit(Guid entityID)
         {
+            var startResend = CheckAndSendResends();
+
             if (UnderTransaction.ContainsKey(entityID) == false)
             {
                 var msg = "Error - recieved message to commit entity " + entityID + " but no transaction exists for that";
@@ -135,11 +140,9 @@ namespace Mise.Core.Client.Repositories
 
             if (needsDBStore)
             {
-                var storeRes = await DAL.StoreEventsAsync(toSend).ConfigureAwait(false);
-                if (storeRes)
-                {
-                    commitRes = CommitResult.StoredInDB;
-                }
+                //var storeRes = await DAL.StoreEventsAsync(toSend).ConfigureAwait(false);
+                await DAL.AddEventsThatFailedToSend(toSend);
+                commitRes = CommitResult.StoredInDB;
             }
 
             var entRes = await DAL.UpsertEntitiesAsync(new[] {bundle.NewVersion});
@@ -152,7 +155,42 @@ namespace Mise.Core.Client.Repositories
 
             Dirty = false;
 
+            await startResend.ConfigureAwait(false);
+
             return commitRes;
+        }
+
+        public const int RESEND_CHUNK_SIZE = 10;
+        private async Task CheckAndSendResends()
+        {
+            var toResend = (await DAL.GetUnsentEvents()).ToList();
+
+            var allResends = toResend.Cast<IEntityEventBase>();
+
+            var chunks = allResends.Chunk(RESEND_CHUNK_SIZE);
+            foreach (var chunk in chunks)
+            {
+                bool sent;
+                try
+                {
+                    sent = await _resendEventsWebService.ResendEvents(chunk.ToList());
+
+                }
+                catch (Exception e)
+                {
+                    sent = false;
+                    Logger.HandleException(e);
+                }
+
+                if (sent == false)
+                {
+                    await DAL.AddEventsThatFailedToSend(toResend);
+                }
+                else
+                {
+                    await DAL.MarkEventsAsSent(toResend);
+                }
+            }
         }
 
         /// <summary>

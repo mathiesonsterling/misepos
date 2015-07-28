@@ -69,10 +69,10 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			var logger = new Mock<ILogger> ();
 
 			var dal = MockingTools.GetClientDAL ();
-			var checkRepos = new ClientCheckRepository (service.Object, dal.Object, logger.Object);
+            var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
-			var empRepos = new ClientEmployeeRepository (service.Object, dal.Object, logger.Object);
+            var empRepos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
             await empRepos.Load(MockingTools.RestaurantID);
 
 			var empID = Guid.NewGuid ();
@@ -137,10 +137,10 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 			var dal = MockingTools.GetClientDAL ();
 
-			var checkRepos = new ClientCheckRepository (service.Object, dal.Object, logger.Object);
+            var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
-			var empRepos = new ClientEmployeeRepository (service.Object, dal.Object, logger.Object);
+            var empRepos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 		    await empRepos.Load(MockingTools.RestaurantID);
 
 			var emp = new Employee {
@@ -190,7 +190,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			var empRepos = new Mock<IEmployeeRepository> ();
 			empRepos.Setup (er => er.GetAll ()).Returns (new List<IEmployee>{emp});
 
-			var checkRepos = new ClientCheckRepository (service.Object, dal.Object, logger.Object);
+            var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
 			var vm = ViewModelMockingTools.CreateViewModel (emp, checkRepos, empRepos.Object);
@@ -351,9 +351,9 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			Assert.IsNull(evSent.DeviceID);
 		}
 
-        [Ignore("Still flaky, investigate why!")]
+        //[Ignore("Still flaky, investigate why!")]
 		[Test]
-		public void CancelCheckDumpsAllUnsentEvents()
+		public async Task CancelCheckDumpsAllUnsentEvents()
 		{
 
 		    var miID = Guid.NewGuid();
@@ -364,7 +364,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 				Name = PersonName.TestName,
 				ID = Guid.NewGuid ()
 			};
-			var vm = ViewModelMockingTools.CreateViewModel (emp);
+			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 
 
 		    //ACT
@@ -384,20 +384,17 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 			var checks = vm.OpenChecks.ToList();
 			Assert.IsNotNull (checks, "checks not null");
-			Assert.AreEqual (1, checks.Count (), "one check in tabs");
-
-			var firstCheck = checks.First ();
-			Assert.AreEqual (0, firstCheck.OrderItems.Count(), "order items found");
+			Assert.AreEqual (0, checks.Count (), "no check was created");
 		}
 
 		[Test]
-		public void CancelCheckOnCreateHasTabNotCreated()
+		public async Task CancelCheckOnCreateHasTabNotCreated()
 		{
 			var emp = new Employee {
 				Name = PersonName.TestName,
 				ID = Guid.NewGuid ()
 			};
-			var vm = ViewModelMockingTools.CreateViewModel (emp);
+			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 
 
 		    //ACT
@@ -417,13 +414,13 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		}
 
 		[Test]
-		public void CancelCheckMarksCategoryAsUnSelected()
+		public async Task CancelCheckMarksCategoryAsUnSelected()
 		{
 			var emp = new Employee {
 				Name = PersonName.TestName,
 				ID = Guid.NewGuid ()
 			};
-			var vm = ViewModelMockingTools.CreateViewModel (emp);
+			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 			vm.SelectedCategory = new MenuItemCategory{
 				Name = "TestCategory"
 			};
@@ -461,10 +458,10 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 				
 
 			var logger = new Mock<ILogger> ();
-			var checkRepos = new ClientCheckRepository (service.Object, dal.Object, logger.Object);
+			var checkRepos = new ClientCheckRepository (service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
-			var empRepos = new ClientEmployeeRepository (service.Object, dal.Object, logger.Object);
+            var empRepos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 			await empRepos.Load(MockingTools.RestaurantID);
 
 			var vm = ViewModelMockingTools.CreateViewModel (emp, checkRepos, empRepos, null, service.Object);
@@ -484,15 +481,16 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		}
 
         [Test]
-        public void ItemCompReducesEmployeeCompBudget()
+        public async Task ItemCompReducesEmployeeCompBudget()
         {
             var emp = new Employee
             {
                 ID = Guid.Empty,
                 CompBudget = new Money(20.0M)
             };
-            ICheckRepository checkRepos;
-            var vm = ViewModelMockingTools.CreateViewModel(emp, out checkRepos);
+            var items = await ViewModelMockingTools.CreateViewModel(emp);
+            var vm = items.Item1;
+            
 
             var tab = vm.CreateNewCheck(PersonName.TestName);
 

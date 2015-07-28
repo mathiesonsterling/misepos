@@ -18,8 +18,7 @@ namespace Mise.Core.Common.Services
         /// </summary>
         /// <param name="events"></param>
         /// <returns></returns>
-        Task<bool> StoreEventsAsync(IEnumerable<IEntityEventBase> events);
-
+		Task<bool> StoreEventsAsync(IEnumerable<IEntityEventBase> events);
 
 	    Task<bool> UpsertEntitiesAsync(IEnumerable<IEntityBase> entities);
 

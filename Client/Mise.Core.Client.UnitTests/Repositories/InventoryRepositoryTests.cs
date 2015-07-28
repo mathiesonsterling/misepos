@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.UnitTests.Tools;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory.Events;
@@ -32,7 +33,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Callback<IInventory, IEnumerable<IInventoryEvent>>((inv, events) => inventoryEventsPassed.AddRange(events))
                 .Returns(Task.FromResult(true));
 
-            var underTest = new ClientInventoryRepository(logger.Object, dal.Object, service.Object);
+            var underTest = new ClientInventoryRepository(logger.Object, dal.Object, service.Object, MockingTools.GetResendEventsService().Object);
 
             var entID = Guid.NewGuid();
             var createEvent = new InventoryCreatedEvent
@@ -93,7 +94,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Callback<IInventory, IEnumerable<IInventoryEvent>>((inv, events)=>inventoryEventsPassed.AddRange(events))
                 .Returns(Task.FromResult(true));
 
-            var underTest = new ClientInventoryRepository(logger.Object, dal.Object, service.Object);
+            var underTest = new ClientInventoryRepository(logger.Object, dal.Object, service.Object, MockingTools.GetResendEventsService().Object);
 
             var entID = Guid.NewGuid();
             var createEvent = new InventoryCreatedEvent

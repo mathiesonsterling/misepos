@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +78,7 @@ namespace Mise.Inventory.UnitTests.Services
 			var dal = new Mock<IClientDAL> ();
 			dal.Setup (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<IEntityBase>> ()))
 				.Returns (Task.FromResult (true));
-			var invRepository = new ClientInventoryRepository (logger.Object, dal.Object, ws.Object);
+			var invRepository = new ClientInventoryRepository (logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
 
 			var eventFact = new InventoryAppEventFactory ("test", MiseAppTypes.UnitTests);
 			eventFact.SetRestaurant (restaurant);
@@ -157,7 +156,7 @@ namespace Mise.Inventory.UnitTests.Services
 			var dal = new Mock<IClientDAL> ();
 			dal.Setup (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<IEntityBase>> ()))
 				.Returns (Task.FromResult (true));
-			var invRepository = new ClientInventoryRepository (logger.Object, dal.Object, ws.Object);
+            var invRepository = new ClientInventoryRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
 
 			var eventFact = new InventoryAppEventFactory ("test", MiseAppTypes.UnitTests);
 			eventFact.SetRestaurant (restaurant);
@@ -255,7 +254,7 @@ namespace Mise.Inventory.UnitTests.Services
             var dal = new Mock<IClientDAL>();
             dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>>()))
                 .Returns(Task.FromResult(true));
-            var invRepository = new ClientInventoryRepository(logger.Object, dal.Object, ws.Object);
+            var invRepository = new ClientInventoryRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
 
             var eventFact = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             eventFact.SetRestaurant(restaurant);
@@ -313,7 +312,7 @@ namespace Mise.Inventory.UnitTests.Services
 				.Returns(Task.FromResult(new List<IInventory>{currentInventory}.AsEnumerable()));
 					
 			var dal = new Mock<IClientDAL> ();
-			var inventoryRepos = new ClientInventoryRepository (logger.Object, dal.Object, ws.Object);
+            var inventoryRepos = new ClientInventoryRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
 			var eventFact = new InventoryAppEventFactory ("test", MiseAppTypes.UnitTests);
 			eventFact.SetRestaurant (rest);
 
@@ -329,7 +328,8 @@ namespace Mise.Inventory.UnitTests.Services
 			restaurantWs.Setup (rws => rws.SendEventsAsync (It.IsAny<IRestaurant> (), It.IsAny<IEnumerable<IRestaurantEvent>> ()))
 				.Returns(Task.FromResult(true));
 
-		    var restRepos = new ClientRestaurantRepository(logger.Object, dal.Object, restaurantWs.Object);
+
+            var restRepos = new ClientRestaurantRepository(logger.Object, dal.Object, restaurantWs.Object, TestUtilities.GetResendService().Object);
             await restRepos.Load(rest.ID);
             
 			var inviteRepos = new Mock<IApplicationInvitationRepository> ();

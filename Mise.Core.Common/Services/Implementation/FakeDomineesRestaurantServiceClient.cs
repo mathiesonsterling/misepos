@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
+using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Check;
 using Mise.Core.Entities.Menu;
 using Mise.Core.Entities;
@@ -1643,6 +1644,11 @@ namespace Mise.Core.Common.Services.Implementation
 		{
 			throw new NotImplementedException ();
 		}
+
+	    public Task<bool> ResendEvents(ICollection<IEntityEventBase> events)
+	    {
+	        return Task.FromResult(true);
+	    }
     }
 }
 

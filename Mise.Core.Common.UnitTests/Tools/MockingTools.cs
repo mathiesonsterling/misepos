@@ -118,5 +118,14 @@ namespace Mise.Core.Common.UnitTests.Tools
 
 			return dal;
 		}
+
+        public static Mock<IResendEventsWebService> GetResendEventsService()
+        {
+            var moq = new Mock<IResendEventsWebService>();
+            moq.Setup(s => s.ResendEvents(It.IsAny<ICollection<IEntityEventBase>>()))
+                .Returns(Task.FromResult(true));
+
+            return moq;
+        }
     }
 }

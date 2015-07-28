@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
@@ -17,10 +14,9 @@ namespace Mise.Core.Client.Repositories
 {
     public class ClientPurchaseOrderRepository : BaseEventSourcedClientRepository<IPurchaseOrder, IPurchaseOrderEvent>, IPurchaseOrderRepository
     {
-		private IPurchaseOrderWebService _webService;
-        public ClientPurchaseOrderRepository(ILogger logger, IClientDAL dal, IPurchaseOrderWebService webService) : base(logger, dal, webService)
+        public ClientPurchaseOrderRepository(ILogger logger, IClientDAL dal, IPurchaseOrderWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
         {
-			_webService = webService;
         }
 
         protected override IPurchaseOrder CreateNewEntity()

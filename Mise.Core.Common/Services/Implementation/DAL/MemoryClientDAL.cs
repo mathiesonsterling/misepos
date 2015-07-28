@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Check;
@@ -23,9 +24,11 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 
 		readonly Dictionary<Guid, DatabaseEventItem> _eventDB;
 
+        readonly EventDataTransportObjectFactory _dtoFactory;
 		public MemoryClientDAL(IJSONSerializer jsonSerializer)
 		{
 			Serializer = jsonSerializer;
+            _dtoFactory = new EventDataTransportObjectFactory(Serializer);
 			_entityDB = new Dictionary<Guid, DatabaseEntityItem>();
 			_eventDB = new Dictionary<Guid, DatabaseEventItem>();
 		}
@@ -47,39 +50,61 @@ namespace Mise.Core.Common.Services.Implementation.DAL
         {
             return Task.Run(() =>
             {
-                var eventsToRemove = _eventDB.Values.Where(ev => ev.CreatedOn < minDate).ToList();
+                var eventsToRemove = _eventDB.Values.Where(ev => ev.CreatedDate < minDate).ToList();
 
                 if (eventsToRemove.Count() > maxNumberEntites)
                 {
                     var diff = maxNumberEntites - eventsToRemove.Count();
                     var moreItems =
-                        _eventDB.Values.Where(ev => ev.CreatedOn >= minDate).OrderBy(ev => ev.CreatedOn).Take(diff);
+                        _eventDB.Values.Where(ev => ev.CreatedDate >= minDate).OrderBy(ev => ev.CreatedDate).Take(diff);
                     eventsToRemove.AddRange(moreItems);
                 }
             });
         }
 
-		public bool UpdateEventStatuses(IEnumerable<IEntityEventBase> events, ItemCacheStatus status)
-		{
-			if (events == null)
-				return false;
+	    public Task<IEnumerable<EventDataTransportObject>> GetUnsentEvents()
+	    {
+	        var unsents = _eventDB.Values.Where(dbo => dbo.HasBeenSent == false).Select(dbo => dbo as EventDataTransportObject);
+	        return Task.FromResult(unsents);
+	    }
 
-			foreach (var e in events) {
-				if (_eventDB.ContainsKey(e.ID) == false) {
-					return false;
-				}
-				_eventDB[e.ID].Status = status;
-			}
+	    public Task AddEventsThatFailedToSend(IEnumerable<IEntityEventBase> events)
+	    {
+            //store these as our eventdatatransportobject
+            var dtos = events.Select(ev => _dtoFactory.ToDataTransportObject(ev))
+                .Select(dto => new DatabaseEventItem(dto, false){TimesAttemptedToSend=1});
 
-			return true;
-		}
 
-		public Task<bool> UpdateEventStatusesAsync(IEnumerable<IEntityEventBase> events, ItemCacheStatus status)
-		{
-			return Task.Factory.StartNew(() => UpdateEventStatuses(events, status));
-		}
+            foreach (var e in dtos)
+            {
+                if (_eventDB.ContainsKey(e.ID))
+                {
+                    //overwrite the item, but make sure the times to send stays up to date
+                    var item = _eventDB[e.ID];
+                    e.TimesAttemptedToSend = item.TimesAttemptedToSend++;
+                    _eventDB[e.ID] = e;
+                }
+                else
+                {
+                    _eventDB.Add(e.ID, e);
+                }
+            }
 
-		public IEnumerable<T> GetEntities<T>() where T : class, IEntityBase
+	        return Task.FromResult(true);
+	    }
+
+	    public Task MarkEventsAsSent(IEnumerable<IEntityEventBase> events)
+	    {
+	        foreach (var dbo in from ev in events where _eventDB.ContainsKey(ev.ID) select _eventDB[ev.ID])
+	        {
+	            dbo.HasBeenSent = true;
+	        }
+
+	        return Task.FromResult(true);
+	    }
+
+
+	    public IEnumerable<T> GetEntities<T>() where T : class, IEntityBase
 		{
 			return _entityDB.Values.Where(dv => dv.Type == typeof(T))
 				.Select(dv => Serializer.Deserialize<T>(dv.JSON));
@@ -130,30 +155,12 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 
 		public bool StoreEvents(IEnumerable<IEntityEventBase> events)
 		{
-			var newStuff = events.Select(e => new DatabaseEventItem {
-				ID = e.ID,
-				Status = ItemCacheStatus.TerminalDB,
-				JSON = Serializer.Serialize(e),
-				RevisionNumber = e.EventOrderingID.OrderingID,
-				Type = e.GetType(),
-                CreatedOn = e.CreatedDate
-			});
-
-			foreach (var e in newStuff) {
-				if (_eventDB.ContainsKey (e.ID)) {
-					_eventDB [e.ID] = e;
-				} else {
-					_eventDB.Add (e.ID, e);
-				}
-			}
-
-			return true;
+            throw new NotImplementedException();
 		}
 
 		public Task<bool> StoreEventsAsync(IEnumerable<IEntityEventBase> events)
 		{
-			var res = StoreEvents (events);
-			return Task.FromResult(res);
+		    return Task.Run(() => StoreEvents(events));
 		}
 
 

@@ -105,6 +105,7 @@
     <Compile Include="Services\BeverageItemServiceTests.cs" />
     <Compile Include="RepositoryLoaderTests.cs" />
     <Compile Include="Services\ReceivingOrderServiceTests.cs" />
+    <Compile Include="TestUtilities.cs" />
     <Compile Include="ViewModels\InventoryViewModelTests.cs" />
     <Compile Include="ViewModels\LoginViewModelTests.cs" />
     <Compile Include="ViewModels\ReceivingOrderViewModelTests.cs" />

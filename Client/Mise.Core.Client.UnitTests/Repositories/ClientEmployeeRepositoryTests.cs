@@ -42,7 +42,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Returns(Task.Factory.StartNew(() => true));
 
 			var logger = new Mock<ILogger> ();
-			var repos = new ClientEmployeeRepository (service.Object, dal.Object, logger.Object);
+            var repos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
 			repos.Load (MockingTools.RestaurantID).Wait();
@@ -77,7 +77,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var logger = new Mock<ILogger> ();
 			logger.Setup (l => l.HandleException (It.IsAny<Exception>(), It.IsAny<LogLevel> ()));
-			var repos = new ClientEmployeeRepository (service.Object, dal.Object, logger.Object);
+            var repos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
             repos.Load(MockingTools.RestaurantID).Wait();
@@ -108,7 +108,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
             var logger = new Mock<ILogger>();
             logger.Setup(l => l.HandleException(It.IsAny<Exception>(), It.IsAny<LogLevel>()));
-            var repos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object);
+            var repos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
             //ACT
             repos.Load(MockingTools.RestaurantID).Wait();
@@ -136,7 +136,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var dal = new Mock<IClientDAL> ();
 			var service = MockingTools.GetTerminalService ();
 			var logger = new Mock<ILogger> ();
-			var repository = new ClientEmployeeRepository (service.Object, dal.Object, logger.Object);
+            var repository = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
 			var res = repository.ApplyEvent (blEvent);
@@ -172,7 +172,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
             var logger = new Mock<ILogger>();
 
-            var repository = new ClientEmployeeRepository(restaurantService.Object, dal.Object, logger.Object);
+            var repository = new ClientEmployeeRepository(restaurantService.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
             //ACT
             await repository.Load(MockingTools.RestaurantID);
@@ -194,7 +194,8 @@ namespace Mise.Core.Client.UnitTests.Repositories
             Assert.AreEqual(CommitResult.StoredInDB,res, "res is stored in DB");
             Assert.IsFalse(repository.Dirty, "repository is dirty");
 			restaurantService.Verify(r => r.SendEventsAsync(It.IsAny<IEmployee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Once());
-            dal.Verify(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Once());
+            dal.Verify(d => d.AddEventsThatFailedToSend(It.IsAny<IEnumerable<IEntityEventBase>>()), Times.Once, "AddedEventsThat failed to send");
+            dal.Verify(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Never);
             dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>>()), Times.Exactly(2));
         }
 
@@ -221,7 +222,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
             var logger = new Mock<ILogger>();
 
-            var repository = new ClientEmployeeRepository(restaurantService.Object, dal.Object, logger.Object);
+            var repository = new ClientEmployeeRepository(restaurantService.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
             //ACT
             await repository.Load(MockingTools.RestaurantID);
