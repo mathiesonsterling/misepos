@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Mise.Core.Common.Events;
+using Mise.Core.Common.Services;
+using Mise.Core.Entities.Base;
 using Mise.Core.Repositories;
+using Mise.Core.Services.WebServices;
 using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.ViewModels.Reports;
 using Xamarin.Forms;
@@ -60,6 +64,35 @@ namespace Mise.Inventory
             //if we've got a stored login, load it up
 			AttemptToLoginSavedEmployee (appNavigation);
             
+        }
+
+        protected override async void OnSleep()
+        {
+            //if we have any events still trying to send, give them another try
+            try
+            {
+                var dal = Resolve<IClientDAL>();
+                var httpClient = Resolve<IResendEventsWebService>();
+
+                var resends = (await dal.GetUnsentEvents()).Select(dto => dto as IEntityEventBase).ToList();
+                if (resends.Any())
+                {
+                    await httpClient.ResendEvents(resends);
+                }
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    var logger = Resolve<ILogger>();
+                    logger.HandleException(e);
+                }
+                catch (Exception ex)
+                {
+                    //nuke it here
+                }
+            }
+
         }
 
         #region View Models
@@ -121,7 +154,7 @@ namespace Mise.Inventory
         } }
         #endregion
 
-        public static T Resolve<T>()
+        private static T Resolve<T>()
         {
             try
             {
@@ -142,7 +175,7 @@ namespace Mise.Inventory
             }
         }
 
-		public async void AttemptToLoginSavedEmployee(IAppNavigation appNavigation)
+		private async void AttemptToLoginSavedEmployee(IAppNavigation appNavigation)
 		{
 			var loginService = _container.Resolve<ILoginService>();
 			if (loginService != null) {
@@ -157,7 +190,7 @@ namespace Mise.Inventory
 			}
 		}        
 
-		public async void LoadRepositoriesVoid()
+		private async void LoadRepositoriesVoid()
         {
             await LoadRepositories();
         }
