@@ -12,12 +12,12 @@
 			<ScrollView>
 				<StackLayout VerticalOptions="FillAndExpand" Padding="50">
 					<Label Text="Add Vendor" Style="{DynamicResource TitleStyle}"/>
-					<Entry Placeholder="Name" Text="{Binding Name}"/>
+					<Entry Placeholder="Name" Text="{Binding Name}" Keyboard="Text"/>
           <StackLayout Orientation="Horizontal">
 						<Entry Placeholder="Area" Keyboard="Telephone" Text="{Binding PhoneAreaCode}"/>
 						<Entry Placeholder="Number" Keyboard="Telephone" Text="{Binding PhoneNumberVal}"/>
 					</StackLayout>
-          <Entry Placeholder="Email for Orders" Text="{Binding Email}"/>
+          <Entry Placeholder="Email for Orders" Text="{Binding Email}" Keyboard="Email"/>
 					<Entry Placeholder="Street Number" Text="{Binding StreetAddressNumber}" Keyboard="Numeric"/>
 					<Entry Placeholder="Street" Text="{Binding StreetName}"/>
 					<Entry Placeholder="City" Text="{Binding City}"/>

@@ -57,7 +57,7 @@ namespace Mise.Inventory
 			#if DEBUG
 			return BuildLevel.Development;
 			#else
-			return BuildLevel.Development;
+			return BuildLevel.QA;
 			#endif
 		}
 

@@ -42,14 +42,24 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 {
                     ID = Guid.NewGuid(),
                     InventoryPosition = 2,
-                    DisplayName = "second"
+                    DisplayName = "secondItem"
                 },
                 new InventoryBeverageLineItem
                 {
                     ID = Guid.NewGuid(),
                     InventoryPosition = 1,
-                    DisplayName = "first"
-                }
+                    DisplayName = "firstItem"
+                },
+				new InventoryBeverageLineItem {
+					ID = Guid.NewGuid (),
+					InventoryPosition = 4,
+					DisplayName = "fourthItem"
+				},
+				new InventoryBeverageLineItem {
+					ID = Guid.NewGuid (),
+					InventoryPosition = 3,
+					DisplayName = "thirdItem"
+				}
             };
             invService.Setup(inv => inv.GetLineItemsForCurrentSection())
                 .Returns(Task.FromResult(invItems.AsEnumerable()));
@@ -60,10 +70,68 @@ namespace Mise.Inventory.UnitTests.ViewModels
             await underTest.OnAppearing();
 
             //ASSERT
-            Assert.AreEqual(2, underTest.LineItems.Count());
-            Assert.AreEqual("first", underTest.LineItems.First().DisplayName);
-            Assert.AreEqual("second", underTest.LineItems.Last().DisplayName);
+			var lis = underTest.LineItems.ToList ();
+            Assert.AreEqual(4, lis.Count());
+			Assert.AreEqual("firstItem", lis[0].DisplayName);
+			Assert.AreEqual("secondItem", lis[1].DisplayName);
+			Assert.AreEqual("thirdItem", lis[2].DisplayName);
+			Assert.AreEqual("fourthItem", lis[3].DisplayName);
         }
+
+		[Test]
+		public async Task InventoryLineItemsShouldBeOrderedByInventoryPositionAfterSearch()
+		{
+			var sectionID = Guid.NewGuid();
+			var loginService = new Mock<ILoginService>();
+			loginService.Setup(s => s.GetCurrentEmployee()).Returns(Task.FromResult(new Employee() as IEmployee));
+
+			var appNav = new Mock<IAppNavigation>();
+
+			var invService = new Mock<IInventoryService>();
+
+			//return objects out of order
+			var invItems = new List<IInventoryBeverageLineItem>
+			{
+				new InventoryBeverageLineItem
+				{
+					ID = Guid.NewGuid(),
+					InventoryPosition = 2,
+					DisplayName = "secondItem"
+				},
+				new InventoryBeverageLineItem
+				{
+					ID = Guid.NewGuid(),
+					InventoryPosition = 1,
+					DisplayName = "firstItem"
+				},
+				new InventoryBeverageLineItem {
+					ID = Guid.NewGuid (),
+					InventoryPosition = 4,
+					DisplayName = "fourthItem"
+				},
+				new InventoryBeverageLineItem {
+					ID = Guid.NewGuid (),
+					InventoryPosition = 3,
+					DisplayName = "thirdItem"
+				}
+			};
+			invService.Setup(inv => inv.GetLineItemsForCurrentSection())
+				.Returns(Task.FromResult(invItems.AsEnumerable()));
+
+			var underTest = new InventoryViewModel(appNav.Object, loginService.Object, invService.Object, null);
+
+			//ACT
+			await underTest.OnAppearing();
+			underTest.SearchString = "Item";
+
+			//ASSERT
+			var lis = underTest.LineItems.ToList ();
+			Assert.AreEqual(4, lis.Count());
+			Assert.AreEqual("firstItem", lis[0].DisplayName);
+			Assert.AreEqual("secondItem", lis[1].DisplayName);
+			Assert.AreEqual("thirdItem", lis[2].DisplayName);
+			Assert.AreEqual("fourthItem", lis[3].DisplayName);
+		}
 
         [Test]
         public void SearchTermsShouldTreatASpaceAsAnd()

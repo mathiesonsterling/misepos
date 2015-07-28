@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Mise.Core.ValueItems.Inventory;
 namespace Mise.Core.ValueItems.Reports
 {
     public class ReportRequest : IEquatable<ReportRequest>
     {
         public ReportRequest(ReportTypes type, DateTimeOffset? startDate, DateTimeOffset? endDate, Guid? entityID,
-            int? maxResults)
+            int? maxResults, LiquidAmountUnits unit = LiquidAmountUnits.Milliliters)
         {
             Type = type;
             StartDate = startDate;
             EndDate = endDate;
             EntityID = entityID;
             MaxResults = maxResults;
+			LiquidUnit = unit;
         }
 
         public ReportTypes Type { get; private set; }
@@ -27,6 +28,7 @@ namespace Mise.Core.ValueItems.Reports
         /// </summary>
         public Guid? EntityID { get; private set; }
 
+		public LiquidAmountUnits LiquidUnit{get;private set;}
         /// <summary>
         /// If set, return only this amount of results
         /// </summary>

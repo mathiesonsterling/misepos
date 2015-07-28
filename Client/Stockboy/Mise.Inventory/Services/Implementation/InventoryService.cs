@@ -351,6 +351,14 @@ namespace Mise.Inventory.Services.Implementation
 			return Task.FromResult (_lastCompletedInventory);
 		}
 
+		public Task<bool> HasInventoryPriorToDate (Guid restaurantID, DateTimeOffset date)
+		{
+			var res = _inventoryRepository.GetAll ()
+				.Any(i => i.RestaurantID == restaurantID && i.DateCompleted.HasValue && i.DateCompleted.Value <= date);
+
+			return Task.FromResult (res);
+		}
+
 		#endregion
 
 	    private const int REPORT_NUMBER_OF_EVENTS_THRESHOLD = 50;

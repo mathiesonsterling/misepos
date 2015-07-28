@@ -4,7 +4,7 @@ using System.Linq;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
-using Mise.Core.Entities.Inventory;
+using Mise.Inventory.CustomCells;
 namespace Mise.Inventory.Pages
 {
 	public partial class InventoryPage : ContentPage

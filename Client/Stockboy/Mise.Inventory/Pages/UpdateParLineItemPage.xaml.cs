@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mise.Inventory
 {
-	public partial class UpdateParLineItemPage : MR.Gestures.ContentPage
+	public partial class UpdateParLineItemPage : Xamarin.Forms.ContentPage
 	{
 		bool swipeInProgress;
 		public UpdateParLineItemPage ()
@@ -19,13 +19,13 @@ namespace Mise.Inventory
 			InitializeComponent ();
 
 			vm.MovePreviousAnimation = async () => 
-				await this.TranslateTo (this.Width, 0, MiseTheme.SwipeAnimationDuration);
+				await stckMain.TranslateTo (stckMain.Width, 0, MiseTheme.SwipeAnimationDuration);
 
 			vm.MoveNextAnimation = async () => 
-				await this.TranslateTo (this.Width * -1, 0, MiseTheme.SwipeAnimationDuration);
+				await stckMain.TranslateTo (this.Width * -1, 0, MiseTheme.SwipeAnimationDuration);
 
 			vm.ResetViewAnimation = () => {
-				this.TranslationX = 0;
+				stckMain.TranslationX = 0;
 				return Task.FromResult (true);
 			};
 		}

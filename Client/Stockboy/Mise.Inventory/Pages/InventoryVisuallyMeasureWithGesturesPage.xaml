@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<mr:ContentPage 
+<ContentPage 
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures" 
 	x:Class="Mise.Inventory.Pages.InventoryVisuallyMeasureWithGesturesPage"
 	Title="Measure Item"
-	Swiped="OnSwiped"
 >
 	<ContentPage.Content>
 		<ScrollView>
@@ -13,6 +12,7 @@
 			x:Name="stckMain"
 			HorizontalOptions="CenterAndExpand" 
 			VerticalOptions="FillAndExpand"
+			Swiped="OnSwiped"
 		>
 			<!-- single item here -->
 				<StackLayout VerticalOptions="FillAndExpand" MinimumHeightRequest="450" x:Name="stckItem">
@@ -51,4 +51,4 @@
 		</mr:StackLayout>
 		</ScrollView>
 	</ContentPage.Content>
-</mr:ContentPage>
+</ContentPage>

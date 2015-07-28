@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<mr:ContentPage 
+<ContentPage 
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures" 
 	x:Class="Mise.Inventory.UpdateParLineItemPage"
 	Title="{Binding ItemName}"
-	Swiped="OnSwiped"
 >
 	<ContentPage.Content>
-		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+		<mr:StackLayout VerticalOptions="FillAndExpand" Padding="50" x:Name="stckMain" Swiped="OnSwiped">
 			<ScrollView VerticalOptions="FillAndExpand">
 				<StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand">
 					<Label Text="Quantity" Style="{DynamicResource CaptionStyle}"/>
@@ -31,6 +30,6 @@
 				Text="Set Par" 
 				Command="{Binding UpdateQuantityCommand}" 
 				HorizontalOptions="FillAndExpand"/>
-		</StackLayout>
+		</mr:StackLayout>
 	</ContentPage.Content>
-</mr:ContentPage>
+</ContentPage>

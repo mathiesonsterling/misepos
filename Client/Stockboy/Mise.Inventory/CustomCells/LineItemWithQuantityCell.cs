@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace Mise.Inventory
+namespace Mise.Inventory.CustomCells
 {
 	public class LineItemWithQuantityCell : ViewCell
 	{
@@ -22,8 +22,8 @@ namespace Mise.Inventory
 				VerticalOptions = LayoutOptions.FillAndExpand,
 				ColumnDefinitions =
 				{
-					new ColumnDefinition { Width = new GridLength(200, GridUnitType.Star) },
-					new ColumnDefinition{ Width = new GridLength(50, GridUnitType.Absolute)}, 
+					new ColumnDefinition { Width = new GridLength(6, GridUnitType.Star) },
+					new ColumnDefinition{ Width = new GridLength(1, GridUnitType.Star)}, 
 				},
 				RowDefinitions = {
 					new RowDefinition (),
@@ -48,6 +48,7 @@ namespace Mise.Inventory
 			var quantity = new Label();
 			quantity.SetBinding (Label.TextProperty, "Quantity");
 			quantity.HorizontalOptions = LayoutOptions.FillAndExpand;
+			quantity.XAlign = TextAlignment.End;
 			quantity.FontSize = Device.GetNamedSize (NamedSize.Medium, typeof(Label));
 
 
