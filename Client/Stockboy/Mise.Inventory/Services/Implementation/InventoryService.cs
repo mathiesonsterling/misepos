@@ -97,10 +97,12 @@ namespace Mise.Inventory.Services.Implementation
 			_selectedInventory = _inventoryRepository.ApplyEvent (createEvent);
 
             //create the sections
-		    var sectionEvents =
-		        rest.GetInventorySections()
-		            .Select(rs => _eventFactory.CreateInventoryNewSectionAddedEvent(emp, _selectedInventory, rs));
-		    _selectedInventory = _inventoryRepository.ApplyEvents(sectionEvents);
+			var restaurantSections = rest.GetInventorySections();
+		    var sectionEvents = restaurantSections
+				.Select(rs => _eventFactory.CreateInventoryNewSectionAddedEvent(emp, _selectedInventory, rs)).ToList();
+			if (sectionEvents.Any ()) {
+				_selectedInventory = _inventoryRepository.ApplyEvents (sectionEvents);
+			}
 
 			var currEv = _eventFactory.CreateInventoryMadeCurrentEvent (emp, _selectedInventory);
 
@@ -169,17 +171,10 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 
-            //get our max inventory position
-		    var inventoryPosition = 0;
-		    var invSection = _selectedInventorySection;
-		    if (invSection != null)
-		    {
-		        inventoryPosition = invSection.GetNextItemPosition();
-		    }
 
 			var categories = new []{ category as ItemCategory };
 			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, pricePaid, null, _selectedInventorySection, 
-                inventoryPosition, _selectedInventory);
+				_selectedInventorySection.GetNextItemPosition(), _selectedInventory);
 		
 			_selectedInventory = _inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();
@@ -196,7 +191,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 			var emp = await _loginService.GetCurrentEmployee ();
 
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, _selectedInventorySection, _selectedInventory.GetBeverageLineItems().Count() + 1, _selectedInventory);
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, _selectedInventorySection, _selectedInventorySection.GetNextItemPosition(), _selectedInventory);
 		
 			_selectedInventory = _inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();
