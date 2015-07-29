@@ -66,7 +66,7 @@ namespace MiseInventoryService.Repositories
             var itemExistsAlready = Cache.ContainsItem(entityID);
 
             //update us in memory first
-            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.InMiseDB);
+            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.Clean);
             //todo - put the cache in first, then commit to DB via an update function
             HostingEnvironment.QueueBackgroundWorkItem(async token =>
             {

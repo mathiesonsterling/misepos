@@ -96,7 +96,7 @@ namespace Mise.Azure
             {
                 //make the dto for it
                 var item = new AzureJSONEventStorageItem(e.DTO.RestaurantID, e.DTO.ID, _serializer.Serialize(e.DTO), e.Type,
-                    ItemCacheStatus.InMiseDB);
+                    ItemCacheStatus.Clean);
                 batchOperation.Insert(item);
             }
 
