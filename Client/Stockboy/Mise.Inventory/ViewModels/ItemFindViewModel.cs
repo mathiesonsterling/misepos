@@ -94,6 +94,8 @@ namespace Mise.Inventory.ViewModels
 				//we need to remove the items that are currently already in our item!
 				switch(CurrentType){
 				case AddLineItemType.Inventory:
+					//don't filter the items, we want to be able to add multiple copies of them
+					/*
 					var currInv = await _inventoryService.GetSelectedInventory ();
 					if (currInv != null)
 					{
@@ -102,7 +104,7 @@ namespace Mise.Inventory.ViewModels
 							var existing = invSection.GetInventoryBeverageLineItemsInSection ();
 							bis = ExcludeItems (bis, existing.ToList<IBaseBeverageLineItem>());
 						}
-					}
+					}*/
 					break;
 				case AddLineItemType.PAR:
 					var currPar = await _parService.GetCurrentPAR ();
