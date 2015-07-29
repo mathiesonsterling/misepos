@@ -297,9 +297,19 @@ namespace Mise.Neo4J.Neo4JDAL
                 .ConfigureAwait(false);
         }
 
-        public Task UpdateRestaurantAsync(IRestaurant restaurant)
+        public async Task UpdateRestaurantAsync(IRestaurant restaurant)
         {
-            throw new NotImplementedException();
+            _logger.Warn("Update restaurant, will ONLY update basic fields for now");
+
+            var updateNode = new RestaurantGraphNode(restaurant);
+
+            await _graphClient.Cypher
+                .Match("(r:Restaurant)")
+                .Where((RestaurantGraphNode r) => r.ID == restaurant.ID)
+                .Set("r = {rNode}")
+                .WithParam("rNode", updateNode)
+                .ExecuteWithoutResultsAsync()
+                .ConfigureAwait(false);
         }
         #endregion
 

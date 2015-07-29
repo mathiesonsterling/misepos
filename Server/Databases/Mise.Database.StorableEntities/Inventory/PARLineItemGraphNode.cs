@@ -21,7 +21,7 @@ namespace Mise.Database.StorableEntities.Inventory
             RestaurantID = source.RestaurantID;
             CreatedDate = source.CreatedDate;
             LastUpdatedDate = source.LastUpdatedDate;
-            Revision = source.Revision.ToDatabaseString();
+            Revision = source.Revision != null? source.Revision.ToDatabaseString() : string.Empty;
 
             MiseName = source.MiseName;
             DisplayName = source.DisplayName;
@@ -37,7 +37,7 @@ namespace Mise.Database.StorableEntities.Inventory
             return new PARBeverageLineItem
             {
                 ID = ID,
-                Revision = new EventID(Revision),
+                Revision = string.IsNullOrEmpty(Revision) == false ? new EventID(Revision) : null,
                 CreatedDate = CreatedDate,
                 DisplayName = DisplayName,
                 LastUpdatedDate = LastUpdatedDate,
