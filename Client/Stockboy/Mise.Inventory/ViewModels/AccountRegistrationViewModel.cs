@@ -4,7 +4,7 @@ using Mise.Inventory.ViewModels;
 using Mise.Core.Services;
 using Mise.Inventory.Services;
 using System.Windows.Input;
-using Mise.Inventory.MVVM;
+
 using Mise.Core.ValueItems;
 using Xamarin.Forms;
 using Mise.Core.Entities;
@@ -67,10 +67,10 @@ namespace Mise.Inventory.ViewModels
 		public bool CanRegister{get{return GetValue<bool> ();}set{ SetValue (value); }}
 
 		public ICommand RegisterAccountCommand{
-			get{return new SimpleCommand (RegisterAccount, () => CanRegister);}
+			get{return new Command (RegisterAccount, () => CanRegister);}
 		}
 		public ICommand DelayRegistrationCommand{
-			get{return new SimpleCommand (DelayRegistration, () => NotProcessing);}
+			get{return new Command (DelayRegistration, () => NotProcessing);}
 		}
 
 		private async void RegisterAccount(){

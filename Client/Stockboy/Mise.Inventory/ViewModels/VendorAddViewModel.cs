@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Mise.Core.Repositories;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using System.Threading.Tasks;
 using Mise.Core.ValueItems;
@@ -71,7 +71,7 @@ namespace Mise.Inventory.ViewModels
 
         public ICommand AddVendorCommand
         {
-			get { return new SimpleCommand(AddVendor, () => CanAdd); }
+			get { return new Command(AddVendor, () => CanAdd); }
         }
 
         #endregion

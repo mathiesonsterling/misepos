@@ -5,10 +5,11 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 
 using Mise.Core.Entities.Inventory;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Services;
+using Xamarin.Forms;
 
 
 namespace Mise.Inventory.ViewModels
@@ -37,7 +38,7 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddNewItemCommand {
-			get { return new SimpleCommand(AddNewItem, () => CreateItemEnabled); }
+			get { return new Command(AddNewItem, () => CreateItemEnabled); }
 		}
 			
 		#endregion

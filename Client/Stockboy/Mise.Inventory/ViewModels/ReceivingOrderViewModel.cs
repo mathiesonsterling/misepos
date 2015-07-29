@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using System.Threading.Tasks;
 using Mise.Core.ValueItems.Inventory;
@@ -138,11 +138,11 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddNewItemCommand {
-			get { return new SimpleCommand(AddNewLineItem, () => NotProcessing); }
+			get { return new Command(AddNewLineItem, () => NotProcessing); }
 		}
 
 		public ICommand SaveCommand {
-			get { return new SimpleCommand(Save, () => CanSave); }
+			get { return new Command(Save, () => CanSave); }
 		}
 
 		#endregion

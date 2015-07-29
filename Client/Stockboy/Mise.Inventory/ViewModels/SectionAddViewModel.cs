@@ -2,9 +2,10 @@
 using System.Windows.Input;
 using System.Threading.Tasks;
 
-using Mise.Inventory.MVVM;
 using Mise.Inventory.Services;
 using Mise.Core.Services;
+using Xamarin.Forms;
+
 namespace Mise.Inventory.ViewModels
 {
 	public class SectionAddViewModel : BaseViewModel
@@ -34,7 +35,7 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddCommand {
-			get { return new SimpleCommand(AddSection, () => NotProcessing); }
+			get { return new Command(AddSection, () => NotProcessing); }
 		}
 
 		#endregion

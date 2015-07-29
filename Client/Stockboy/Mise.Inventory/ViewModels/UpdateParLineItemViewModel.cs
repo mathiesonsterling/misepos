@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -44,7 +45,7 @@ namespace Mise.Inventory.ViewModels
 
         #region Commands
 		public ICommand UpdateQuantityCommand { 
-			get { return new SimpleCommand(UpdateQuantity, () => NotProcessing);} 
+			get { return new Command(UpdateQuantity, () => NotProcessing);} 
 		}
 
 	    private async void UpdateQuantity()

@@ -7,8 +7,9 @@ using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ExtensionMethods;
 using Mise.Inventory.Services;
-using Mise.Inventory.MVVM;
+
 using Mise.Core.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -52,7 +53,7 @@ namespace Mise.Inventory.ViewModels
         }
 
         public ICommand StartBlankReceivingOrderCommand { 
-			get { return new SimpleCommand(StartBlankReceivingOrder, () => NotProcessing); } 
+			get { return new Command(StartBlankReceivingOrder, () => NotProcessing); } 
 		}
 
 

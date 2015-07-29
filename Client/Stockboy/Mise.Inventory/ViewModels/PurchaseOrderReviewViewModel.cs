@@ -6,7 +6,7 @@ using Mise.Inventory.Services;
 using System.Collections.Generic;
 using Mise.Core.Entities.Inventory;
 using System.Windows.Input;
-using Mise.Inventory.MVVM;
+
 using System.Collections.ObjectModel;
 using Mise.Core.Entities.Vendors;
 using Xamarin;
@@ -125,7 +125,7 @@ namespace Mise.Inventory.ViewModels
 		public IEnumerable<VendorAndItems> VendorsAndPOs{ get; private set;}
 
 
-		public ICommand SubmitPOCommand{get{return new SimpleCommand (SubmitPO, () => NotProcessing);}}
+		public ICommand SubmitPOCommand{get{return new Command (SubmitPO, () => NotProcessing);}}
 
 		async void SubmitPO(){
 			try{

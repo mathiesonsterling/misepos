@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using Mise.Core.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -77,7 +78,7 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand ReceivingOrderCommand {
-			get{ return new SimpleCommand(ReceivingOrder, () => NotProcessing); }
+			get{ return new Command(ReceivingOrder, () => NotProcessing); }
 		}
 
 		/// <summary>
@@ -85,30 +86,30 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The inventories command.</value>
 		public ICommand SectionSelectCommand {
-			get { return new SimpleCommand(SectionSelect, () => NotProcessing); }
+			get { return new Command(SectionSelect, () => NotProcessing); }
 		}
 			
 		public ICommand PARCommand {
-			get { return new SimpleCommand(PAR, () => NotProcessing); }
+			get { return new Command(PAR, () => NotProcessing); }
 		}
 
 		public ICommand ManageEmployeesCommand {
-			get { return new SimpleCommand(ManageEmployees, () => NotProcessing); }
+			get { return new Command(ManageEmployees, () => NotProcessing); }
 		}
 
 		public ICommand CreatePurchaseOrderCommand{
-			get{return new SimpleCommand (CreatePurchaseOrder, () => NotProcessing);}
+			get{return new Command (CreatePurchaseOrder, () => NotProcessing);}
 		}
 		/// <summary>
 		/// Gets the reports command.
 		/// </summary>
 		/// <value>The reports command.</value>
 		public ICommand ReportsCommand {
-			get { return new SimpleCommand(Reports, IsCurrentUserAdmin); }
+			get { return new Command(Reports, IsCurrentUserAdmin); }
 		}
 
 		public ICommand LogoutCommand {
-			get { return new SimpleCommand(Logout, () => NotProcessing); }
+			get { return new Command(Logout, () => NotProcessing); }
 		}
 
 		#endregion

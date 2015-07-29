@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mise.Core.ValueItems;
 using System.Windows.Input;
-using Mise.Inventory.MVVM;
+
 using Mise.Core.Services;
 using Mise.Inventory.Services;
+using Xamarin.Forms;
 
 
 namespace Mise.Inventory.ViewModels
@@ -63,7 +64,7 @@ namespace Mise.Inventory.ViewModels
 		public IEnumerable<State> States{get{return Mise.Core.ValueItems.State.GetUSStates ();}}
 		#endregion
 
-		public ICommand RegisterRestaurantCommand{get{return new SimpleCommand (Register, () => CanAdd);}}
+		public ICommand RegisterRestaurantCommand{get{return new Command (Register, () => CanAdd);}}
 
 		public async void Register(){
 			try{

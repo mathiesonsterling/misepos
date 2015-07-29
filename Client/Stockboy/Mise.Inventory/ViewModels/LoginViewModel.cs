@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Linq;
 
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Services;
@@ -14,6 +14,7 @@ using System.Net.Http;
 using Xamarin;
 using ServiceStack;
 using System.Net;
+using Xamarin.Forms;
 
 
 namespace Mise.Inventory.ViewModels
@@ -60,11 +61,11 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The login command.</value>
 		public ICommand LoginCommand {
-			get { return new SimpleCommand(LoginWrapper, () => CanLogin); }
+			get { return new Command(LoginWrapper, () => CanLogin); }
 		}
 
 		public ICommand RegisterCommand{
-			get{return new SimpleCommand (Register, () => NotProcessing);}
+			get{return new Command (Register, () => NotProcessing);}
 		}
 
 	    public bool NotProduction
