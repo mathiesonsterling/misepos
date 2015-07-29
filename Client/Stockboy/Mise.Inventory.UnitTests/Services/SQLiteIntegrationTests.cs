@@ -29,8 +29,11 @@ namespace Mise.Inventory.UnitTests.Services
 			};
 
 			var evFactory = new EventDataTransportObjectFactory (new JsonNetSerializer ());
+
+
 			//ACT
-			await underTest.AddEventsThatFailedToSend (new []{ev});
+		    var dto = evFactory.ToDataTransportObject(ev);
+			await underTest.AddEventsThatFailedToSend (new []{dto});
 
 			var pulled = (await underTest.GetUnsentEvents ()).ToList();
 

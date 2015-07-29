@@ -194,7 +194,7 @@ namespace Mise.Inventory.Services.Implementation
 	            {
 	                var eventsList = DowncastEvents(events);
 
-	                foreach (var dbItem in eventsList.Select(ev => new SQLiteDatabaseEventItem(ev, true)))
+	                foreach (var dbItem in eventsList.Select(ev => new SQLiteDatabaseEventItem(ev, false)))
 	                {
 	                    _db.InsertOrReplace(dbItem);
 	                }
