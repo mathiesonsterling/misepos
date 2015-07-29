@@ -49,11 +49,9 @@ namespace Mise.Core.Server.Repositories
 		    return item;
 		}
 
-		public override IEnumerable<TEntity> GetAll ()
+		public override IEnumerable<TEntity> GetAll () 
 		{
-			var items = _dal.GetEntitiesAsync<TEntity> ();
-
-		    return items.Result;
+			throw new NotImplementedException();
 		}
 
 		public async Task<ICollection<TEntity>> CreateAsync(ICollection<TEntity> entities)

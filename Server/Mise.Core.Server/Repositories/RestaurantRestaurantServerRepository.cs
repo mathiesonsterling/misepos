@@ -47,6 +47,10 @@ namespace Mise.Core.Server.Repositories
 	    }
 
 	    public bool Dirty { get; private set; }
+	    public int GetNumberOfEventsInTransacitonForEntity(Guid entityID)
+	    {
+	        throw new NotImplementedException();
+	    }
 
 
 	    public IEnumerable<IRestaurant> GetByName(string name)

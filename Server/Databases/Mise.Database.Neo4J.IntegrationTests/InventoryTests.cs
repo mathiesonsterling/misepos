@@ -408,7 +408,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
                         Revision = TestUtilities.GetEventID(),
                         RestaurantID = restID,
                         Name = "section1",
-                        Completed = true,
+                        LastCompletedBy = Guid.NewGuid(),
                         CreatedDate = DateTime.UtcNow,
                         LineItems = new List<InventoryBeverageLineItem>
                         {
@@ -439,7 +439,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
                     {
                         ID = section2,
                         Revision = TestUtilities.GetEventID(),
-                        Completed = false,
+                        LastCompletedBy = null,
                         Name = "section2",
                         RestaurantID = restID,
                         LineItems = new List<InventoryBeverageLineItem>

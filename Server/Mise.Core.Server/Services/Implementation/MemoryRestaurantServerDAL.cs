@@ -77,7 +77,7 @@ namespace Mise.Core.Server.Services.Implementation
             return _entities.Values.OfType<T>();
         }
 
-        public Task<IEnumerable<T>> GetEntitiesAsync<T>() where T : class, IEntityBase
+        public Task<IEnumerable<T>> GetEntitiesAsync<T>() where T : class, IEntityBase, new()
         {
             return Task.Factory.StartNew(() => _entities.Values.OfType<T>());
         }
