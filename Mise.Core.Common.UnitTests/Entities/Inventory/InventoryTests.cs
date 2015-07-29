@@ -363,6 +363,8 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 IsCurrent = true,
                 Sections = new List<InventorySection>{
                     new InventorySection{
+                        ID = Guid.NewGuid(),
+                        RestaurantInventorySectionID = Guid.NewGuid(),
                         Name = "merg",
                         LineItems = new List<InventoryBeverageLineItem>
                         {
