@@ -100,7 +100,22 @@ namespace Mise.Inventory.ViewModels
         {
             try
             {
+                Processing = true;
+                var emp = await _loginService.GetCurrentEmployee();
+       
+                if (lineItem.Completed && lineItem.LastCompletedBy != emp.ID)
+                {
+                    var userResponse =
+                        await
+                            Navigation.AskUser("Already counted!",
+                                string.Format("This section has been completed by someone else.  Do you want to continue, and discard their count for {0}?", lineItem.Name));
+                    if (userResponse == false)
+                    {
+                        return;
+                    }
+                }
                 await _inventoryService.SetCurrentInventorySection(lineItem);
+                Processing = false;
                 await Navigation.ShowInventory();
             }
             catch (Exception e)

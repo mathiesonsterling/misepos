@@ -41,7 +41,11 @@
 
 		    <Button Text="Forgot Password?" IsVisible="false"/>
 
-		    <Button Text="Register" Command="{Binding RegisterCommand}" StyleId="Register"/>
+		    <Button 
+		    	Text="Register" 
+		    	Command="{Binding RegisterCommand}" 
+		    	StyleId="Register"
+		    	IsEnabled="{Binding NotProcessing}"/>
 
 	  	</StackLayout>
   	</ScrollView>

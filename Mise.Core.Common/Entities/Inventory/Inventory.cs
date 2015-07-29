@@ -160,7 +160,7 @@ namespace Mise.Core.Common.Entities.Inventory
                 throw new ArgumentException("Cannot find section for inventory section " + inventorySectionCompletedEvent.InventorySectionID);
             }
 
-            section.Completed = true;
+            section.LastCompletedBy = inventorySectionCompletedEvent.CausedByID;
         }
 
         protected virtual void WhenCompleted(InventoryCompletedEvent entityEvent)
@@ -169,7 +169,7 @@ namespace Mise.Core.Common.Entities.Inventory
             var undoneSections = GetSections().Where(s => s.Completed == false);
             foreach (var sec in undoneSections)
             {
-                sec.Completed = true;
+                sec.LastCompletedBy = entityEvent.CausedByID;
             }
             DateCompleted = entityEvent.CreatedDate;
             IsCurrent = false;

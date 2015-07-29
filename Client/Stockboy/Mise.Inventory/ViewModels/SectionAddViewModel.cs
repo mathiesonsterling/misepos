@@ -52,7 +52,7 @@ namespace Mise.Inventory.ViewModels
 				IsDefaultInventorySection = false;
 
 				Processing = false;
-				await Navigation.ShowSectionSelect ();
+				await Navigation.CloseSectionAdd();
 			} catch(Exception e){
 				HandleException (e);
 			}

@@ -102,6 +102,7 @@ namespace Mise.Inventory.Services
 		Task CloseVendorAdd();
 		Task CloseItemAdd();
 		Task CloseItemFind ();
+		Task CloseSectionAdd();
 
         /// <summary>
         /// Fired when an RO is done, to update our skipped screen and move us to main menu

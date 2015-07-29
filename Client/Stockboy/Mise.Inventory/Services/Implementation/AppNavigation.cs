@@ -424,6 +424,15 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
+		public async Task CloseSectionAdd ()
+		{
+			try{
+				await _navi.PopAsync();
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+
 		public async Task CloseItemAdd(){
 			try{
 				var findPage = _navi.NavigationStack.FirstOrDefault(p => p is ItemFindPage);

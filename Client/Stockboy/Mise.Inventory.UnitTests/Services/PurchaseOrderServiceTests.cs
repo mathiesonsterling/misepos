@@ -170,7 +170,7 @@ namespace Mise.Inventory.UnitTests.Services
                 Sections = new List<InventorySection>{
 					new InventorySection{
 						RestaurantID = restID,
-						Completed = false,
+						LastCompletedBy = null,
 						LineItems = new List<InventoryBeverageLineItem>{
 							//partially held item
 							new InventoryBeverageLineItem{
@@ -292,7 +292,7 @@ namespace Mise.Inventory.UnitTests.Services
                 Sections = new List<InventorySection>{
 					new InventorySection{
 						RestaurantID = restID,
-						Completed = false,
+						LastCompletedBy = null,
 						LineItems = new List<InventoryBeverageLineItem>{
 							//partially held item
 							new InventoryBeverageLineItem{
@@ -308,7 +308,7 @@ namespace Mise.Inventory.UnitTests.Services
                     },
                     new InventorySection{
                         RestaurantID = restID,
-                        Completed = false,
+                        LastCompletedBy = null,
                         LineItems = new List<InventoryBeverageLineItem>{
 							        //fully held
 							        new InventoryBeverageLineItem{
@@ -415,7 +415,7 @@ namespace Mise.Inventory.UnitTests.Services
                 Sections = new List<InventorySection>{
 					new InventorySection{
 						RestaurantID = restID,
-						Completed = false,
+						LastCompletedBy = null,
 						LineItems = new List<InventoryBeverageLineItem>{
 							//partially held item
 							new InventoryBeverageLineItem{
