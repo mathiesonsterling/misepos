@@ -6,9 +6,10 @@ using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
 using Mise.Inventory.ViewModels;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using System.Collections.ObjectModel;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -27,11 +28,11 @@ namespace Mise.Inventory.ViewModels
 	    #region Commands
 
 		public ICommand AddSectionCommand {
-			get { return new SimpleCommand(AddSection, () => NotProcessing); }
+			get { return new Command(AddSection, () => NotProcessing); }
 		}
 
 		public ICommand CompleteInventoryCommand{
-			get{return new SimpleCommand (CompleteInventory, CanCompleteInventory);}
+			get{return new Command (CompleteInventory, CanCompleteInventory);}
 		}
 
 		async void AddSection()

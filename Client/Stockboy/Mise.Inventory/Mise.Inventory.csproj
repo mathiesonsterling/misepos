@@ -45,7 +45,6 @@
     <Compile Include="ViewModels\BaseNextViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="MVVM\SimpleCommand.cs" />
     <Compile Include="Async\AsyncImageSource.cs" />
     <Compile Include="Async\AsyncLazy.cs" />
     <Compile Include="Async\NotifyTaskCompletion.cs" />
@@ -380,7 +379,5 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Themes\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

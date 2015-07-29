@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using Mise.Core;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using Mise.Core.Entities.Inventory;
 using Xamarin.Forms;
@@ -91,15 +91,15 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddNewLineItemCommand {
-			get { return new SimpleCommand(AddNewItem, () => NotProcessing); }
+			get { return new Command(AddNewItem, () => NotProcessing); }
 		}
 
 		public ICommand ScanCommand {
-			get { return new SimpleCommand(Scan, () => NotProcessing); }
+			get { return new Command(Scan, () => NotProcessing); }
 		}
 
 		public ICommand FinishSectionCommand{
-			get{return new SimpleCommand (FinishSection, () => CanComplete);}
+			get{return new Command (FinishSection, () => CanComplete);}
 		}
 		#endregion
 

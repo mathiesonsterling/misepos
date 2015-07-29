@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Services;
 using Mise.Inventory.Services;
-using System.Collections.Generic;
-using Mise.Core.Entities.Inventory;
-using System.Windows.Input;
-using Mise.Inventory.MVVM;
-using System.Collections.ObjectModel;
 using Mise.Inventory.ViewModels;
 
 using NUnit.Framework;
@@ -18,7 +12,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
 	public class PurchaseOrderReviewViewModelTests
 	{
 		[Test]
-		public void LoadShouldGenerateNewPO(){
+		public async Task LoadShouldGenerateNewPO(){
 			var appNavi = new Mock<IAppNavigation>();
 			var poService = new Mock<IPurchaseOrderService> ();
 			var vendorService = new Mock<IVendorService> ();
@@ -29,10 +23,10 @@ namespace Mise.Inventory.UnitTests.ViewModels
 				loginService.Object, insights.Object);
 
 			//ACT
-			underTest.OnAppearing();
+			await underTest.OnAppearing();
 
 			//ASSERT
-
+            throw new NotImplementedException();
 		}
 	}
 }

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
 using System.Windows.Input;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using Mise.Core.Services;
 using Mise.Core.ValueItems.Inventory;
+using Xamarin.Forms;
 
 
 namespace Mise.Inventory.ViewModels
@@ -109,12 +110,12 @@ namespace Mise.Inventory.ViewModels
 	    }
 
 	    #region Commands
-		public ICommand MeasureCommand{get{ return new SimpleCommand (MeasureEv, () => NotProcessing);
+		public ICommand MeasureCommand{get{ return new Command (MeasureEv, () => NotProcessing);
 			}}
 
-		public ICommand AddPartialCommand{get{ return new SimpleCommand (AddPartial, () => AddPartialEnabled);}}
+		public ICommand AddPartialCommand{get{ return new Command (AddPartial, () => AddPartialEnabled);}}
 
-		public ICommand CancelCommand{get{return new SimpleCommand (Cancel, () => NotProcessing);}}
+		public ICommand CancelCommand{get{return new Command (Cancel, () => NotProcessing);}}
 
 		#endregion
 

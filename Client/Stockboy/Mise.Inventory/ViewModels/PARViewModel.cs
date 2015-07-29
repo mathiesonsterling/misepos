@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 
 using Mise.Core.Entities.Inventory;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using System;
 using System.Collections.ObjectModel;
@@ -57,11 +57,11 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddNewItemCommand {
-			get { return new SimpleCommand(AddNewItem, () => NotProcessing); }
+			get { return new Command(AddNewItem, () => NotProcessing); }
 		}
 
 		public ICommand SaveCommand {
-			get { return new SimpleCommand(Save, () => Processing == false); }
+			get { return new Command(Save, () => Processing == false); }
 		}
 			
 		#endregion

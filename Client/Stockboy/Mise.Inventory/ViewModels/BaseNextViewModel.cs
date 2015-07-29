@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Mise.Core;
 using Mise.Core.Services;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using Xamarin.Forms;
 
@@ -52,8 +52,8 @@ namespace Mise.Inventory.ViewModels
             Processing = false;
         }
 
-        public ICommand MoveNextCommand { get{return new SimpleCommand(MoveNext, CanMoveNext);}}
-		public ICommand MovePreviousCommand{get{return new SimpleCommand (MovePrevious, CanMovePrevious);}}
+        public ICommand MoveNextCommand { get{return new Command(MoveNext, CanMoveNext);}}
+		public ICommand MovePreviousCommand{get{return new Command (MovePrevious, CanMovePrevious);}}
 
         protected void SetCurrent(TItemType item)
         {

@@ -7,8 +7,9 @@ using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -93,7 +94,7 @@ namespace Mise.Inventory.ViewModels
         #endregion
 
         #region Commands
-        public ICommand UpdateQuantityCommand { get { return new SimpleCommand(UpdateQuantity, () => IsUpdateEnabled); } }
+        public ICommand UpdateQuantityCommand { get { return new Command(UpdateQuantity, () => IsUpdateEnabled); } }
 
         private async void UpdateQuantity()
         {
@@ -137,7 +138,7 @@ namespace Mise.Inventory.ViewModels
 			IsUpdateEnabled = res;
         }
 
-		public ICommand ZeroOutCommand { get { return new SimpleCommand(ZeroOut, () => NotProcessing); } }
+		public ICommand ZeroOutCommand { get { return new Command(ZeroOut, () => NotProcessing); } }
 
         private async void ZeroOut()
         {

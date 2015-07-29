@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Mise.Core.Services;
 using Mise.Core.ValueItems.Reports;
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems.Inventory;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels.Reports
 {
@@ -40,11 +41,11 @@ namespace Mise.Inventory.ViewModels.Reports
 
         #region Commands
 		public ICommand CompletedInventoriesCommand { 
-			get { return new SimpleCommand(CompletedInventories, () => NotProcessing);}
+			get { return new Command(CompletedInventories, () => NotProcessing);}
 		}
 
 		public ICommand AmountUsedCommand{
-			get{return new SimpleCommand (AmountUsed, () => NotProcessing);}
+			get{return new Command (AmountUsed, () => NotProcessing);}
 		}
 
 	    private async void CompletedInventories()

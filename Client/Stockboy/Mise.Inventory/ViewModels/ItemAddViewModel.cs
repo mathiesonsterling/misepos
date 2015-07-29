@@ -3,7 +3,7 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using System.Linq;
 
-using Mise.Inventory.MVVM;
+
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems.Inventory;
 using System.Threading.Tasks;
@@ -12,6 +12,7 @@ using Mise.Core;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
 using Mise.Core.Common;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -105,11 +106,11 @@ namespace Mise.Inventory.ViewModels
 		#region Commandsk
 
 		public ICommand ScanCommand {
-			get { return new SimpleCommand(Scan, ()=>NotProcessing); }
+			get { return new Command(Scan, ()=>NotProcessing); }
 		}
 
 		public ICommand AddCommand {
-			get { return new SimpleCommand(Add, () => CreateEnabled); }
+			get { return new Command(Add, () => CreateEnabled); }
 		}
 			
 		#endregion
