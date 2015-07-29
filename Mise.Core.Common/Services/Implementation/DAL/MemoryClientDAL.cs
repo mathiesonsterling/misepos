@@ -200,6 +200,13 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 			return null;
 		}
 
+	    public Task ResetDB()
+	    {
+	        _entityDB.Clear();
+            _eventDB.Clear();
+
+	        return Task.FromResult(true);
+	    }
 		#endregion
 	}
 }

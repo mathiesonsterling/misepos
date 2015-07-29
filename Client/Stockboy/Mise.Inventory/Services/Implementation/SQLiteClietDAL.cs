@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Common.Services.Implementation.DAL;
 using Mise.Core.Entities;
@@ -24,7 +26,7 @@ namespace Mise.Inventory.Services.Implementation
                 TimesAttemptedToSend = 0;
             }
 
-            public SQLiteDatabaseEventItem(EventDataTransportObject dto, bool hasBeenSent)
+            public SQLiteDatabaseEventItem(EventDataTransportObject dto, bool? hasBeenSent)
             {
                 ID = dto.ID;
                 CausedByID = dto.CausedByID;
@@ -47,7 +49,7 @@ namespace Mise.Inventory.Services.Implementation
             /// Transform our DB object back to the generic DTO
             /// </summary>
             /// <returns></returns>
-            public EventDataTransportObject ToDTO()
+            public EventDataTransportObject ToDataTransportObject()
             {
                 return new EventDataTransportObject
                 {
@@ -74,7 +76,6 @@ namespace Mise.Inventory.Services.Implementation
             /// <summary>
             /// Class this event was serailized from
             /// </summary>
-            [MaxLength(1024)]
 
             public string SourceType { get; set; }
 
@@ -106,23 +107,79 @@ namespace Mise.Inventory.Services.Implementation
             /// </summary>
             public string ItemCacheStatus { get; set; }
 
-            public bool HasBeenSent { get; set; }
+            public bool? HasBeenSent { get; set; }
+
             public int TimesAttemptedToSend { get; set; }
             // ReSharper restore MemberCanBePrivate.Local
             #endregion
         }
 
+        [Table("Entities")]
 	    private class SQLiteDatabaseEntityItem
-	    {
-	        
-	    }
+        {
+            public SQLiteDatabaseEntityItem() { }
 
-		private SQLiteConnection _db;
+	        public SQLiteDatabaseEntityItem(RestaurantEntityDataTransportObject dto)
+	        {
+	            CreatedDate = dto.CreatedDate;
+	            LastUpdatedDate = dto.LastUpdatedDate;
+	            ID = dto.ID;
+	            RestaurantID = dto.RestaurantID;
+	            Revision = dto.Revision.ToDatabaseString();
+	            ItemCacheStatus = dto.ItemCacheStatus.ToString();
+	            JSON = dto.JSON;
+	            SourceType = dto.SourceType.ToString();
+	        }
+
+	        public RestaurantEntityDataTransportObject ToDataTransportObject()
+	        {
+	            return new RestaurantEntityDataTransportObject
+	            {
+	                CreatedDate = CreatedDate,
+	                LastUpdatedDate = LastUpdatedDate,
+	                ID = ID,
+	                RestaurantID = RestaurantID,
+	                Revision = new EventID(Revision),
+	                ItemCacheStatus = (ItemCacheStatus) Enum.Parse(typeof (ItemCacheStatus), ItemCacheStatus),
+	                JSON = JSON,
+	                SourceType = Type.GetType(SourceType)
+	            };
+	        }
+
+            #region Fields
+            [PrimaryKey]
+// ReSharper disable MemberCanBePrivate.Local
+            public Guid ID { get; set; }
+
+            public DateTimeOffset CreatedDate { get; set; }
+            public DateTimeOffset LastUpdatedDate { get; set; }
+
+
+            public Guid? RestaurantID { get; set; }
+
+            public string Revision { get; set; }
+
+            /// <summary>
+            /// The status of this object across all layers
+            /// </summary>
+            public string ItemCacheStatus { get; set; }
+
+            /// <summary>
+            /// JSON representation of the item
+            /// </summary>
+            public string JSON { get; set; }
+
+            public string SourceType { get; set; }
+            // ReSharper restore MemberCanBePrivate.Local
+            #endregion
+
+        }
+
+
+		private readonly SQLiteConnection _db;
 		private readonly ILogger _logger;
-        /// <summary>
-        /// We're going to temporarily use the Memory client dal for entity storage
-        /// </summary>
-	    private readonly IClientDAL _tempMemDAL;
+
+	    private readonly EntityDataTransportObjectFactory _entityDtoFactory;
 	    private object _dbLock;
 		public SQLiteClietDAL (ILogger logger, IJSONSerializer serializer, ISQLite sqlLiteConnectorService)
 		{
@@ -130,7 +187,9 @@ namespace Mise.Inventory.Services.Implementation
 		    _db = sqlLiteConnectorService.GetDatabase();
             _dbLock = new object();
 
-            _tempMemDAL = new MemoryClientDAL(logger, serializer);
+
+            //make our entity DTO factory
+            _entityDtoFactory = new EntityDataTransportObjectFactory(serializer);
 
             //create our tables if they don't already exists
             CreateTablesIfNeeded();
@@ -143,51 +202,96 @@ namespace Mise.Inventory.Services.Implementation
 	            var info = _db.GetTableInfo("Events");
 	            if (info.Any() == false)
 	            {
+                    _logger.Debug("Creating Events table");
 	                _db.CreateTable<SQLiteDatabaseEventItem>();
+	            }
+
+	            var entityInfo = _db.GetTableInfo("Entities");
+	            if (entityInfo.Any() == false)
+	            {
+                    _logger.Debug("Creating Entities table");
+	                _db.CreateTable<SQLiteDatabaseEntityItem>();
 	            }
 	        }
 	    }
 
 	    public Task<IEnumerable<T>> GetEntitiesAsync<T>() where T : class, IEntityBase, new()
 	    {
-	        return _tempMemDAL.GetEntitiesAsync<T>();
+	        return Task.Run(() =>
+	        {
+	            var typeString = typeof (T).ToString();
+	            IEnumerable<RestaurantEntityDataTransportObject> dtos;
+	            lock (_dbLock)
+	            {
+	                _logger.Debug("Retrieving items of type " + typeString);
+	                var dtosOfType = _db.Table<SQLiteDatabaseEntityItem>()
+	                    .Where(dbItem => dbItem.SourceType == typeString);
+
+	                var res = new List<RestaurantEntityDataTransportObject>();
+                    //fails when we do LINQ, huh?
+	                foreach (var dbItem in dtosOfType)
+	                {
+	                    var restDTO = dbItem.ToDataTransportObject();
+	                    res.Add(restDTO);
+	                }
+
+	                dtos = res;
+	            }
+
+	            var realItems = dtos.Select(dto => _entityDtoFactory.FromDataStorageObject<T>(dto));
+	            return realItems;
+	        });
 	    }
+
 
 	    public Task<bool> StoreEventsAsync(IEnumerable<IEntityEventBase> events)
 	    {
-	        return _tempMemDAL.StoreEventsAsync(events);
+            throw new NotImplementedException("Not yet implemented to send");
 	    }
 
 	    public Task<bool> UpsertEntitiesAsync(IEnumerable<IEntityBase> entities)
 	    {
-	        return _tempMemDAL.UpsertEntitiesAsync(entities);
+	        return Task.Run(() =>
+	        {
+	            var dtos = entities.Select(ent => _entityDtoFactory.ToDataTransportObject(ent));
+	            var storageItems = dtos.Select(dto => new SQLiteDatabaseEntityItem(dto));
+
+	            lock (_dbLock)
+	            {
+	                foreach (var item in storageItems)
+	                {
+                        _logger.Debug("Upserting entity ID " + item.ID);
+	                    _db.InsertOrReplace(item);
+	                }
+	            }
+
+	            return true;
+	        });
 	    }
 
-	    public Task CleanItemsBefore(DateTimeOffset minDate, int maxNumberEntites = Int32.MaxValue, int maxNumberEvents = Int32.MaxValue)
-	    {
-	        return _tempMemDAL.CleanItemsBefore(minDate, maxNumberEntites, maxNumberEvents);
-	    }
 
 	    public Task<IEnumerable<EventDataTransportObject>> GetUnsentEvents()
 	    {
 	        return Task.Run(() =>
 	        {
+	            IEnumerable<EventDataTransportObject> dtos;
 	            lock (_dbLock)
 	            {
+                    _logger.Debug("Retrieving unsent items from database");
 	                var items = _db.Table<SQLiteDatabaseEventItem>()
 	                    .Where(ev => ev.HasBeenSent == false)
 	                    .OrderBy(ev => ev.LastUpdatedDate)
 	                    .Select(s => s);
 
-	                var dtos = items.AsEnumerable().Select(dbDTO => dbDTO.ToDTO());
-
-	                return dtos;
+	                dtos = items.AsEnumerable().Select(dbObject => dbObject.ToDataTransportObject());
 	            }
+                return dtos;
 	        });
 	    }
 
 	    public Task AddEventsThatFailedToSend(IEnumerable<IEntityEventBase> events)
 	    {
+            //TODO if the items already exists, just add to the num of sends
 	        return Task.Run(() =>
 	        {
 	            lock (_dbLock)
@@ -196,6 +300,7 @@ namespace Mise.Inventory.Services.Implementation
 
 	                foreach (var dbItem in eventsList.Select(ev => new SQLiteDatabaseEventItem(ev, false)))
 	                {
+                        _logger.Debug("Inserting event ID " + dbItem.ID);
 	                    _db.InsertOrReplace(dbItem);
 	                }
 	            }
@@ -217,7 +322,20 @@ namespace Mise.Inventory.Services.Implementation
 	                    dbItem.HasBeenSent = true;
 	                }
 
+                    _logger.Debug("Marking events as sent");
 	                _db.UpdateAll(dbItems);
+	            }
+	        });
+	    }
+
+	    public Task ResetDB()
+	    {
+	        return Task.Run(() =>
+	        {
+	            lock (_db)
+	            {
+	                _db.DeleteAll<SQLiteDatabaseEntityItem>();
+	                _db.DeleteAll<SQLiteDatabaseEventItem>();
 	            }
 	        });
 	    }

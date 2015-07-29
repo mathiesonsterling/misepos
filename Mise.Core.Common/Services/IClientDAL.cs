@@ -19,15 +19,6 @@ namespace Mise.Core.Common.Services
 	/// </summary>
 	public interface IClientDAL : IDAL
 	{
-	    /// <summary>
-	    /// Remove all items and events stored before the time given
-	    /// </summary>
-	    /// <param name="minDate"></param>
-	    /// <param name="maxNumberEntites">If over this number left by the min date, delete older till we'll below</param>
-	    /// <param name="maxNumberEvents"></param>
-	    /// <returns></returns>
-	    Task CleanItemsBefore(DateTimeOffset minDate, int maxNumberEntites = int.MaxValue, int maxNumberEvents = int.MaxValue);
-
         /// <summary>
         /// Get any events which are waiting to be resent
         /// </summary>
@@ -37,6 +28,12 @@ namespace Mise.Core.Common.Services
 	    Task AddEventsThatFailedToSend(IEnumerable<IEntityEventBase> events);
 
 	    Task MarkEventsAsSent(IEnumerable<IEntityEventBase> events);
+
+        /// <summary>
+        /// Clear all items in the database
+        /// </summary>
+        /// <returns></returns>
+	    Task ResetDB();
 	}
 }
 
