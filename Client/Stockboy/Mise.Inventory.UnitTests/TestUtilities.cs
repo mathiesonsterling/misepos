@@ -10,6 +10,11 @@ using Mise.Core.Services.WebServices;
 using Moq;
 using NUnit.Framework;
 
+using Mise.Inventory.Services;
+using System.IO;
+using Mise.Core.Services;
+
+
 namespace Mise.Inventory.UnitTests
 {
     public static class TestUtilities
@@ -30,5 +35,31 @@ namespace Mise.Inventory.UnitTests
                 .Returns(Task.FromResult(new List<EventDataTransportObject>().AsEnumerable()));
             return moq;
         }
+
+		public static IClientDAL GetTestSQLDB(){
+			var connService = new TestingSQLConnection ();
+
+			var logger = new Mock<ILogger> ();
+			var serializer = new Mise.Core.Common.Services.Implementation.Serialization.JsonNetSerializer ();
+			return new Mise.Inventory.Services.Implementation.SQLiteClietDAL (logger.Object, serializer, connService);
+		}
+
+		private class TestingSQLConnection : ISQLite
+		{
+			#region ISQLite implementation
+			public SQLite.SQLiteConnection GetDatabase ()
+			{
+				var file = "TestDB.db";
+				if(File.Exists (file)){
+					File.Delete (file);
+				}
+
+				var db = new SQLite.SQLiteConnection (file);
+
+				return db;
+			}
+			#endregion
+			
+		}
     }
 }
