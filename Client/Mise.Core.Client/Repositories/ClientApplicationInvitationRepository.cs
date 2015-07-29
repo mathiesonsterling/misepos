@@ -20,8 +20,9 @@ namespace Mise.Core.Client.Repositories
 		: BaseEventSourcedClientRepository<IApplicationInvitation, IApplicationInvitationEvent>, IApplicationInvitationRepository
 	{
 		readonly IApplicationInvitationWebService _webService;
-		public ClientApplicationInvitationRepository(ILogger logger, IClientDAL dal, 
-			IApplicationInvitationWebService webService) : base(logger, dal, webService)
+		public ClientApplicationInvitationRepository(ILogger logger, IClientDAL dal,
+            IApplicationInvitationWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
 		{
 			_webService = webService;
 		}
@@ -47,37 +48,27 @@ namespace Mise.Core.Client.Repositories
 
 		#region implemented abstract members of BaseEventSourcedClientRepository
 
-		public override async Task Load (Guid? restaurantID)
-		{
-		    Loading = true;
-			IEnumerable<IApplicationInvitation> items = null;
-			try{
-			    if (restaurantID.HasValue)
-			    {
-			        items = await _webService.GetInvitationsForRestaurant(restaurantID.Value);
-			    }
-			} catch(Exception e){
-				Logger.HandleException (e);
-			}
+	    protected override Task<IEnumerable<IApplicationInvitation>> LoadFromWebservice(Guid? restaurantID)
+	    {
+	        if (restaurantID.HasValue)
+	        {
+	            return _webService.GetInvitationsForRestaurant(restaurantID.Value);
+	        }
 
-		    if (items == null)
-		    {
-		        try
-		        {
-		            items = await DAL.GetEntitiesAsync<IApplicationInvitation>();
-		        }
-		        catch (Exception e)
-		        {
-		            Logger.HandleException(e);
-		        }
-		    }
-			if(items != null){
-				Cache.UpdateCache (items);
-			}
-		    Loading = false;
-		}
+            throw new Exception("Cannot load without a restaurant ID");
+	    }
 
-		public async Task Load (EmailAddress email)
+	    protected override async Task<IEnumerable<IApplicationInvitation>> LoadFromDB(Guid? restaurantID)
+	    {
+	        var items = await DAL.GetEntitiesAsync<ApplicationInvitation>();
+	        if (restaurantID.HasValue)
+	        {
+	            items = items.Where(ai => ai.RestaurantID == restaurantID);
+	        }
+	        return items;
+	    }
+
+	    public async Task Load (EmailAddress email)
 		{
 			try{
                 Loading = true;

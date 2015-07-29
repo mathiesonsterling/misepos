@@ -71,14 +71,14 @@ namespace Mise.Core.Common.Entities.Inventory
                 case MiseEventTypes.InventoryLiquidItemMeasured:
                     WhenInventoryItemMeasured((InventoryLiquidItemMeasuredEvent)entityEvent);
                     break;
-				case MiseEventTypes.InventoryNewSectionAdded:
-					WhenInventoryNewSectionAdded ((InventoryNewSectionAddedEvent)entityEvent);
-					break;
-				case MiseEventTypes.InventorySectionCompleted:
-					WhenInventorySectionCompleted ((InventorySectionCompletedEvent)entityEvent);
-					break;
+                case MiseEventTypes.InventoryNewSectionAdded:
+                    WhenInventoryNewSectionAdded((InventoryNewSectionAddedEvent)entityEvent);
+                    break;
+                case MiseEventTypes.InventorySectionCompleted:
+                    WhenInventorySectionCompleted((InventorySectionCompletedEvent)entityEvent);
+                    break;
                 case MiseEventTypes.InventoryLineItemAdded:
-                    WhenInventoryLineItemAdded((InventoryLineItemAddedEvent) entityEvent);
+                    WhenInventoryLineItemAdded((InventoryLineItemAddedEvent)entityEvent);
                     break;
                 default:
                     throw new ArgumentException("Cannot use event " + entityEvent.EventType);
@@ -87,21 +87,11 @@ namespace Mise.Core.Common.Entities.Inventory
 
         private void WhenInventoryLineItemAdded(InventoryLineItemAddedEvent entityEvent)
         {
-            InventorySection section;
-            if (entityEvent.RestaurantInventorySectionID.HasValue)
+            var section = Sections.FirstOrDefault(s => s.ID == entityEvent.InventorySectionID);
+
+            if (section == null)
             {
-                section = Sections.FirstOrDefault(s => s.RestaurantInventorySectionID == entityEvent.RestaurantInventorySectionID);
-                if (section == null)
-                {
-                    throw new ArgumentException("No section found for ID " + entityEvent.RestaurantInventorySectionID);
-                }
-            }
-            else
-            {
-               //get the most populated one!
-                var mostPopulatedSection =
-                    Sections.OrderByDescending(s => s.GetInventoryBeverageLineItemsInSection().Count()).First();
-                section = mostPopulatedSection;
+                throw new ArgumentException("Invalid section ID in inventory item add");
             }
 
             //calc the current amount
@@ -114,7 +104,7 @@ namespace Mise.Core.Common.Entities.Inventory
             //make our new LI
             var newLI = new InventoryBeverageLineItem
             {
-				NumFullBottles = entityEvent.Quantity,
+                NumFullBottles = entityEvent.Quantity,
                 CurrentAmount = currentAmount,
                 CaseSize = entityEvent.CaseSize,
                 Container = entityEvent.Container,
@@ -129,7 +119,7 @@ namespace Mise.Core.Common.Entities.Inventory
                 Revision = entityEvent.EventOrderingID,
                 UPC = entityEvent.UPC,
                 VendorBoughtFrom = entityEvent.VendorBoughtFrom,
-				Categories = entityEvent.Categories.ToList (),
+                Categories = entityEvent.Categories.ToList(),
                 InventoryPosition = entityEvent.InventoryPosition
             };
 
@@ -142,52 +132,53 @@ namespace Mise.Core.Common.Entities.Inventory
             IsCurrent = true;
         }
 
-		void WhenInventoryNewSectionAdded (InventoryNewSectionAddedEvent inventoryNewSectionAddedEvent)
-		{
-			var existing = GetSections ().Any (s => s.RestaurantInventorySectionID == inventoryNewSectionAddedEvent.RestaurantSectionId);
-			if (existing == false) {
-				var newSec = new InventorySection {
-					LineItems = new List<InventoryBeverageLineItem>(),
-					Name = inventoryNewSectionAddedEvent.Name,
-					RestaurantInventorySectionID = inventoryNewSectionAddedEvent.RestaurantSectionId,
-					RestaurantID = inventoryNewSectionAddedEvent.RestaurantID,
-					ID = inventoryNewSectionAddedEvent.SectionID,
-					Revision = inventoryNewSectionAddedEvent.EventOrderingID,
-					CreatedDate = inventoryNewSectionAddedEvent.CreatedDate,
-					LastUpdatedDate = inventoryNewSectionAddedEvent.CreatedDate,
-				};
-				Sections.Add (newSec);
-			}
-		}
+        void WhenInventoryNewSectionAdded(InventoryNewSectionAddedEvent inventoryNewSectionAddedEvent)
+        {
+            var existing = GetSections().Any(s => s.RestaurantInventorySectionID == inventoryNewSectionAddedEvent.RestaurantSectionId);
+            if (existing == false)
+            {
+                var newSec = new InventorySection
+                {
+                    LineItems = new List<InventoryBeverageLineItem>(),
+                    Name = inventoryNewSectionAddedEvent.Name,
+                    RestaurantInventorySectionID = inventoryNewSectionAddedEvent.RestaurantSectionId,
+                    RestaurantID = inventoryNewSectionAddedEvent.RestaurantID,
+                    ID = inventoryNewSectionAddedEvent.SectionID,
+                    Revision = inventoryNewSectionAddedEvent.EventOrderingID,
+                    CreatedDate = inventoryNewSectionAddedEvent.CreatedDate,
+                    LastUpdatedDate = inventoryNewSectionAddedEvent.CreatedDate,
+                };
+                Sections.Add(newSec);
+            }
+        }
 
-		protected virtual void WhenInventorySectionCompleted (InventorySectionCompletedEvent inventorySectionCompletedEvent)
-		{
-			var section = GetSections ().FirstOrDefault(s => s.RestaurantInventorySectionID == inventorySectionCompletedEvent.RestaurantSectionID);
-			if(section == null){
-				throw new ArgumentException ("Cannot find section for inventory section " + inventorySectionCompletedEvent.RestaurantSectionID);
-			}
+        protected virtual void WhenInventorySectionCompleted(InventorySectionCompletedEvent inventorySectionCompletedEvent)
+        {
+            var section = GetSections().FirstOrDefault(s => s.ID == inventorySectionCompletedEvent.InventorySectionID);
+            if (section == null)
+            {
+                throw new ArgumentException("Cannot find section for inventory section " + inventorySectionCompletedEvent.InventorySectionID);
+            }
 
-			section.Completed = true;
-		}
+            section.Completed = true;
+        }
 
         protected virtual void WhenCompleted(InventoryCompletedEvent entityEvent)
         {
-			//check all sections are completed!
-			var undoneSections = GetSections ().Where(s => s.Completed == false);
-			foreach(var sec in undoneSections){
-				sec.Completed = true;
-			}
+            //check all sections are completed!
+            var undoneSections = GetSections().Where(s => s.Completed == false);
+            foreach (var sec in undoneSections)
+            {
+                sec.Completed = true;
+            }
             DateCompleted = entityEvent.CreatedDate;
             IsCurrent = false;
             //TODO the service should make a copy, and mark that one as current
         }
-			
+
 
         protected virtual void WhenCreated(InventoryCreatedEvent created)
         {
-            var inventorySections = created.RestaurantSectionsAndSectionIDs
-                .Select(ri => CreateSectionFromRestaurantSection(ri.Item1.ID, ri.Item1.Name, created, ri.Item2));
-
             CreatedDate = created.CreatedDate;
             ID = created.InventoryID;
             CreatedByEmployeeID = created.CausedByID;
@@ -196,17 +187,17 @@ namespace Mise.Core.Common.Entities.Inventory
                 RestaurantID = created.RestaurantID;
             }
             DateCompleted = null;
-            Sections = inventorySections.ToList();
-			RestaurantID = created.RestaurantID;
+            Sections = new List<InventorySection>();
+            RestaurantID = created.RestaurantID;
         }
 
         protected virtual void WhenInventoryItemMeasured(InventoryLiquidItemMeasuredEvent entityEvent)
         {
             //find the section
-            var section = Sections.FirstOrDefault(s => s.RestaurantInventorySectionID == entityEvent.RestaurantInventorySectionID);
+            var section = Sections.FirstOrDefault(s => s.ID == entityEvent.InventorySectionID);
             if (section == null)
             {
-                throw new ArgumentException("No section for RestaurantInventoryID " + entityEvent.RestaurantInventorySectionID);
+                throw new ArgumentException("Section specified does not exist in inventory");
             }
 
             //determine how much of the item we should add
@@ -216,35 +207,28 @@ namespace Mise.Core.Common.Entities.Inventory
                 throw new ArgumentException("No BeverageItem given with event!");
             }
 
+            if (LiquidAmount.None.GreaterThan(entityEvent.AmountMeasured))
+            {
+                throw new ArgumentException("Cannot measure a negative amount");
+            }
             var lineItem = entityEvent.BeverageLineItem;
             lineItem.MethodsMeasuredLast = MeasurementMethods.VisualEstimate;
-            lineItem.CurrentAmount = entityEvent.AmountMeasured;
-			lineItem.NumFullBottles = entityEvent.NumFullBottlesMeasured;
-			lineItem.PartialBottleListing = entityEvent.PartialBottles;
 
-            //TODO - if the inventory already has this line item, we should add to it, or overwrite it?
-			var existingLI = section.LineItems.FirstOrDefault (li => li.ID == entityEvent.BeverageLineItem.ID);
-			if(existingLI != null){
-				section.LineItems.Remove (existingLI);
-			}
+            lineItem.CurrentAmount = entityEvent.AmountMeasured;
+            lineItem.NumFullBottles = entityEvent.NumFullBottlesMeasured;
+            lineItem.PartialBottleListing = entityEvent.PartialBottles;
+
+
+            var existingLI = section.LineItems.FirstOrDefault(li => li.ID == entityEvent.BeverageLineItem.ID);
+            if (existingLI == null)
+            {
+                throw new ArgumentException("No inventory item of " + lineItem.DisplayName + " exists");
+            }
+
+            section.LineItems.Remove(existingLI);
             section.LineItems.Add(lineItem);
 
         }
 
-        private InventorySection CreateSectionFromRestaurantSection(Guid restSectionID, string sectionName, BaseInventoryEvent restEvent, Guid sectionID)
-        {
-            return new InventorySection
-            {
-                ID = sectionID,
-                Completed = false,
-                LineItems = new List<InventoryBeverageLineItem>(),
-                Name = sectionName,
-                RestaurantInventorySectionID = restSectionID,
-                RestaurantID = restEvent.RestaurantID,
-                CreatedDate = restEvent.CreatedDate,
-                LastUpdatedDate = restEvent.CreatedDate,
-                Revision = restEvent.EventOrderingID
-            };
-        }
     }
 }

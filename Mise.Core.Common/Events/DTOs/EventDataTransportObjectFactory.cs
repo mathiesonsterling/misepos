@@ -134,6 +134,7 @@ namespace Mise.Core.Common.Events.DTOs
 				CreatedDate = ev.CreatedDate,
 				EventOrderingID = ev.EventOrderingID,
 				EventType = ev.EventType,
+                DeviceID = ev.DeviceID,
 				ID = ev.ID,
 				JSON = json,
 				SourceType = ev.GetType(),

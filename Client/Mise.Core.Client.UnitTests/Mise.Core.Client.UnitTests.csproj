@@ -58,6 +58,7 @@
     <Compile Include="ApplicationModel\TerminalViewModelTestsOrdering.cs" />
     <Compile Include="ApplicationModel\TerminalViewModelTestsPayment.cs" />
     <Compile Include="Repositories\ClientReceivingOrderRepositoryTests.cs" />
+    <Compile Include="Repositories\ClientRestaurantRepositoryTests.cs" />
     <Compile Include="Repositories\PurchaseOrderRepositoryTests.cs" />
     <Compile Include="Repositories\InventoryRepositoryTests.cs" />
     <Compile Include="Tools\ViewModelMockingTools.cs" />

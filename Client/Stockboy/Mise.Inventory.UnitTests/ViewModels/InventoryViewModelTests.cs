@@ -25,12 +25,15 @@ namespace Mise.Inventory.UnitTests.ViewModels
             var sectionID = Guid.NewGuid();
             var loginService = new Mock<ILoginService>();
             loginService.Setup(s => s.GetCurrentEmployee()).Returns(Task.FromResult(new Employee() as IEmployee));
-            loginService.Setup(s => s.GetCurrentSection())
-                .Returns(Task.FromResult(new RestaurantInventorySection{ID = sectionID} as IRestaurantInventorySection));
 
             var appNav = new Mock<IAppNavigation>();
 
             var invService = new Mock<IInventoryService>();
+            invService.Setup(s => s.GetCurrentInventorySection())
+                .Returns(
+                    Task.FromResult(
+                        new InventorySection {RestaurantInventorySectionID = sectionID, ID = Guid.NewGuid()} as
+                            IInventorySection));
 
             //return objects out of order
             var invItems = new List<IInventoryBeverageLineItem>
@@ -81,8 +84,6 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			var sectionID = Guid.NewGuid();
 			var loginService = new Mock<ILoginService>();
 			loginService.Setup(s => s.GetCurrentEmployee()).Returns(Task.FromResult(new Employee() as IEmployee));
-			loginService.Setup(s => s.GetCurrentSection())
-				.Returns(Task.FromResult(new RestaurantInventorySection{ID = sectionID} as IRestaurantInventorySection));
 
 			var appNav = new Mock<IAppNavigation>();
 

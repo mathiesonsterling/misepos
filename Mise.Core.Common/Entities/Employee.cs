@@ -87,7 +87,7 @@ namespace Mise.Core.Common.Entities
             set { _displayName = value; }
         }
 
-	    public DateTime HiredDate { get; set; }
+	    public DateTimeOffset HiredDate { get; set; }
 
 	    public bool CurrentlyClockedInToPOS{ get; set; }
 

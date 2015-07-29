@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Entities.Accounts;
+using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Entities.People;
@@ -72,9 +73,6 @@ namespace Mise.Inventory.Services.Implementation
 
 		#endregion
 
-		/*    [Route("/restaurants/{RestaurantID}/vendors/")]
-    [Route("/vendors")]
-    [Route("/vendors/{Longitude}/{Latitude}/{RadiusInKm}")]*/
 		public async Task<IEnumerable<IVendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
 		{
 			var res = await GetData<VendorResponse> ("vendors/" + currentLocation.Longitude + "/" + currentLocation.Latitude + "/" + radius.Kilometers);
@@ -198,7 +196,22 @@ namespace Mise.Inventory.Services.Implementation
         {
             return SendDTOSAsync(events.Select(e => _dtoFactory.ToDataTransportObject(e)).ToList());
         }
-		#endregion
+
+	    public Task<bool> ResendEvents(ICollection<IEntityEventBase> events)
+	    {
+	        var needTransform = events.Where(ev => ev is EventDataTransportObject == false).ToList();
+	        if (needTransform.Any() == false)
+	        {
+	            var sendPlain = events.Cast<EventDataTransportObject>();
+
+                //do this in chunks
+	            return SendDTOSAsync(sendPlain.ToList());
+	        }
+	        //we'll need to split these up
+	        throw new InvalidOperationException("Currently only can send already transformed events!");
+	    }
+
+	    #endregion
 
 		#region IDisposable implementation
 

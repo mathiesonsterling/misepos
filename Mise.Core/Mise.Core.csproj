@@ -67,6 +67,8 @@
     <Compile Include="Entities\Vendors\Events\IVendorEvent.cs" />
     <Compile Include="Entities\Vendors\IVendor.cs" />
     <Compile Include="Entities\Vendors\IVendorBeverageLineItem.cs" />
+    <Compile Include="ExtensionMethods\DateTimeOffsetExtensions.cs" />
+    <Compile Include="ExtensionMethods\IEnumerableExtensions.cs" />
     <Compile Include="Repositories\IAccountRepository.cs" />
     <Compile Include="Repositories\IEventSourcedEntityRepository.cs" />
     <Compile Include="Repositories\IPARRepository.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Services\WebServices\IInventoryWebService.cs" />
     <Compile Include="Services\WebServices\IPARWebService.cs" />
     <Compile Include="Services\WebServices\IReceivingOrderWebService.cs" />
+    <Compile Include="Services\WebServices\IResendEventsWebService.cs" />
     <Compile Include="Services\WebServices\IVendorWebService.cs" />
     <Compile Include="ValueItems\Beacon.cs" />
     <Compile Include="ValueItems\CommitResult.cs" />
@@ -194,7 +197,6 @@
     <Compile Include="Services\WebServices\SendErrors.cs" />
     <Compile Include="Services\WebServices\SendEventsException.cs" />
     <Compile Include="Services\WebServices\ServerNotReadyException.cs" />
-    <Compile Include="ValueItems\DateTimeOffsetExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

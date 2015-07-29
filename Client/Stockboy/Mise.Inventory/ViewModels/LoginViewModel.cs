@@ -104,6 +104,7 @@ namespace Mise.Inventory.ViewModels
 		{
 		    bool succeeded = false;
 		    bool shownErrorMessage = false;
+		    bool missingServer = false;
 			try{
 				Processing = true;
 				var email = new EmailAddress{ Value = Username.Trim() };
@@ -196,10 +197,9 @@ namespace Mise.Inventory.ViewModels
 			catch(WebException we){
 				_insightsService.ReportException (we, LogLevel.Warn);
 				Logger.HandleException (we);
-				if(we.Message.Contains ("NameResolutionFailure")){
-					await Navigation.DisplayAlert ("Connection problem", "Cannot connect to server, are you online?");
-					shownErrorMessage = true;
-					Processing = false;
+				if(we.Message.Contains ("NameResolutionFailure"))
+				{
+				    missingServer = true;
 				} 
 			}
 			catch(Exception e){
@@ -207,13 +207,18 @@ namespace Mise.Inventory.ViewModels
 				Logger.HandleException (e);
 			}
 
+		    if (missingServer)
+		    {
+                await Navigation.DisplayAlert("Connection problem", "Cannot connect to server, are you online?");
+                shownErrorMessage = true;
+		        Processing = false;
+		    }
 		    if (succeeded == false && shownErrorMessage == false)
 		    {
 		        try
 		        {
 					_insightsService.Track("Login error", new Dictionary<string, string>());
 		            await Navigation.DisplayAlert("Error", "Error logging in");
-		            shownErrorMessage = true;
 					Processing = false;
 		        }
 		        catch (Exception e)

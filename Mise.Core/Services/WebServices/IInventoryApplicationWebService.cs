@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Mise.Core.Entities.Base;
 
 namespace Mise.Core.Services.WebServices
 {
@@ -9,7 +12,7 @@ namespace Mise.Core.Services.WebServices
 	IInventoryRestaurantWebService, IVendorWebService,
 	IPARWebService, IInventoryWebService,
 	IReceivingOrderWebService, IPurchaseOrderWebService,
-	IApplicationInvitationWebService, IAccountWebService
+	IApplicationInvitationWebService, IAccountWebService, IResendEventsWebService
 	{
 	}
 }

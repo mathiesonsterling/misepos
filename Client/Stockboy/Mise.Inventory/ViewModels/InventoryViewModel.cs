@@ -67,7 +67,7 @@ namespace Mise.Inventory.ViewModels
                     CameFromAdd = false;
                 }
                 await base.OnAppearing();
-                var section = await _loginService.GetCurrentSection();
+                var section = await _inventoryService.GetCurrentInventorySection();
                 if (section != null)
                 {
                     Title = "Count for " + section.Name;

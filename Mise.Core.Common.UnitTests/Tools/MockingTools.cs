@@ -94,19 +94,15 @@ namespace Mise.Core.Common.UnitTests.Tools
         }
          
 		public static Mock<IClientDAL> GetClientDAL(){
+            var miseDEv = new MiseTerminalDevice
+            {
+                ID = Guid.Empty
+            };
+            var res = new List<MiseTerminalDevice> { miseDEv };
+
 			var dal = new Mock<IClientDAL> ();
 			dal.Setup (d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>> ()));
-		    dal.Setup(d => d.GetEntitiesAsync<IMiseTerminalDevice>()).Returns(
-		        Task.Factory.StartNew(() =>
-		        {
-		            var miseDEv = new MiseTerminalDevice
-		            {
-		                ID = Guid.Empty
-		            };
-		            var res = new List<IMiseTerminalDevice> {miseDEv};
-		            return res.AsEnumerable();
-		        })
-		        );
+		    dal.Setup(d => d.GetEntitiesAsync<MiseTerminalDevice>()).Returns(Task.FromResult(res.AsEnumerable()));
                                                        
                                                      
 
@@ -118,5 +114,14 @@ namespace Mise.Core.Common.UnitTests.Tools
 
 			return dal;
 		}
+
+        public static Mock<IResendEventsWebService> GetResendEventsService()
+        {
+            var moq = new Mock<IResendEventsWebService>();
+            moq.Setup(s => s.ResendEvents(It.IsAny<ICollection<IEntityEventBase>>()))
+                .Returns(Task.FromResult(true));
+
+            return moq;
+        }
     }
 }

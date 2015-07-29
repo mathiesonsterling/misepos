@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
@@ -16,7 +17,7 @@ namespace Mise.Core.Client.Repositories
     public class ClientRestaurantAccountRepository : BaseEventSourcedClientRepository<IAccount, IAccountEvent>, IAccountRepository
     {
         private IAccountWebService _webService;
-        public ClientRestaurantAccountRepository(ILogger logger, IClientDAL dal, IAccountWebService webService) : base(logger, dal, webService)
+        public ClientRestaurantAccountRepository(ILogger logger, IClientDAL dal, IAccountWebService webService, IResendEventsWebService resend) : base(logger, dal, webService, resend)
         {
             _webService = webService;
         }
@@ -42,10 +43,16 @@ namespace Mise.Core.Client.Repositories
             return Task.FromResult(acct);
         }
 
-        public override Task Load(Guid? restaurantID)
+        protected override Task<IEnumerable<IAccount>> LoadFromWebservice(Guid? restaurantID)
         {
-            //we don't load anything here!  we only go outward on the client for now
-            return Task.FromResult(false);
+            return Task.FromResult(new List<IAccount>().AsEnumerable());
         }
+
+        protected override async Task<IEnumerable<IAccount>> LoadFromDB(Guid? restaurantID)
+        {
+            var items = await DAL.GetEntitiesAsync<RestaurantAccount>();
+            return items;
+        }
+
     }
 }

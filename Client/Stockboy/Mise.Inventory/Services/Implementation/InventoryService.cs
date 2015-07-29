@@ -22,9 +22,11 @@ namespace Mise.Inventory.Services.Implementation
 		readonly ILogger _logger;
 	    readonly IInsightsService _insights;
 
-		IInventoryBeverageLineItem SelectedLineItem{get;set;}
-		IInventory SelectedInventory{get;set;}
-		IInventory LastCompletedInventory{ get; set; }
+	    private IInventoryBeverageLineItem _selectedLineItem;
+	    private IInventory _selectedInventory;
+	    private IInventory _lastCompletedInventory;
+	    private IInventorySection _selectedInventorySection;
+
 		public InventoryService (ILogger logger, ILoginService loginService, 
 			IInventoryRepository inventoryRespository, IInventoryAppEventFactory eventFactory, IInsightsService insightsService)
 		{
@@ -33,25 +35,42 @@ namespace Mise.Inventory.Services.Implementation
 			_loginService = loginService;
 			_eventFactory = eventFactory;
 		    _insights = insightsService;
-
-			SelectedInventory = _inventoryRepository.GetCurrentInventory (_eventFactory.RestaurantID).Result;
-
-			LastCompletedInventory = _inventoryRepository.GetAll ()
-				.Where (i => i.DateCompleted.HasValue)
-				.OrderByDescending (i => i.DateCompleted.Value)
-				.FirstOrDefault ();
 		}
 
 		#region IInventoryService implementation
 
+		public Task LoadLatest(){
+			var restID = _eventFactory.RestaurantID;
+		    if (restID.HasValue)
+		    {
+		        _selectedInventory = _inventoryRepository.GetAll()
+		            .Where(i => i.RestaurantID == restID.Value)
+		            .Where(i => i.DateCompleted.HasValue == false)
+		            .OrderByDescending(i => i.LastUpdatedDate)
+		            .FirstOrDefault();
+
+		        _lastCompletedInventory = _inventoryRepository.GetAll()
+		            .Where(i => i.RestaurantID == restID.Value)
+		            .Where(i => i.DateCompleted.HasValue)
+		            .OrderByDescending(i => i.DateCompleted.Value)
+		            .FirstOrDefault();
+		    }
+		    else
+		    {
+		        _selectedInventory = null;
+		        _lastCompletedInventory = null;
+		    }
+
+			return Task.FromResult (true);
+		}
+
 		public Task<IInventory> GetCurrentInventory ()
 		{
-			return Task.FromResult (SelectedInventory);
+			return Task.FromResult (_selectedInventory);
 		}
 
 		public async Task<IEnumerable<IInventoryBeverageLineItem>> GetLineItemsForCurrentSection ()
 		{
-			var section = await _loginService.GetCurrentSection ();
 			var rest = await _loginService.GetCurrentRestaurant ();
 			var inv = await _inventoryRepository.GetCurrentInventory (rest.ID);
 
@@ -59,12 +78,12 @@ namespace Mise.Inventory.Services.Implementation
 				throw new InvalidOperationException ("No current inventory to get line items for!");
 			}
 
-			var invSection = inv.GetSections ().FirstOrDefault (invS => invS.RestaurantInventorySectionID == section.ID);
+		    var invSection = _selectedInventorySection;
 			if (invSection != null) {
 				return invSection.GetInventoryBeverageLineItemsInSection ().OrderBy (li => li.InventoryPosition);
 			}
 
-		    throw new InvalidOperationException ("No matching inventory section for " + section.Name);
+		    throw new InvalidOperationException ("No current inventory section!");
 		}
 
 		public async Task StartNewInventory ()
@@ -75,45 +94,70 @@ namespace Mise.Inventory.Services.Implementation
 
 			var createEvent = _eventFactory.CreateInventoryCreatedEvent (emp);
 
-			SelectedInventory = _inventoryRepository.ApplyEvent (createEvent);
+			_selectedInventory = _inventoryRepository.ApplyEvent (createEvent);
 
-			var currEv = _eventFactory.CreateInventoryMadeCurrentEvent (emp, SelectedInventory);
+            //create the sections
+		    var sectionEvents =
+		        rest.GetInventorySections()
+		            .Select(rs => _eventFactory.CreateInventoryNewSectionAddedEvent(emp, _selectedInventory, rs));
+		    _selectedInventory = _inventoryRepository.ApplyEvents(sectionEvents);
 
-			SelectedInventory = _inventoryRepository.ApplyEvent (currEv);
+			var currEv = _eventFactory.CreateInventoryMadeCurrentEvent (emp, _selectedInventory);
+
+			_selectedInventory = _inventoryRepository.ApplyEvent (currEv);
 
 			//do we have a previous inventory?  if so, take the LIs from there
 			var previous = _inventoryRepository.GetAll ()
 				.Where(i => i.RestaurantID == rest.ID)
+                .Where(i => i.DateCompleted.HasValue)
 				.OrderByDescending (i => i.CreatedDate)
 				.FirstOrDefault ();
-			if (previous != null) {
-				try{
-					var events = new List<IInventoryEvent> ();
-					var oldSections = previous.GetSections ();
-					var newSectionIDs = SelectedInventory.GetSections ().Select (s => s.RestaurantInventorySectionID).ToList ();
+		    if (previous != null)
+		    {
+		        try
+		        {
+		            var events = new List<IInventoryEvent>();
 
-					var validOldSections = oldSections.Where(s => newSectionIDs.Contains (s.RestaurantInventorySectionID)).ToList();
-					foreach (var section in validOldSections) {
-						var lisInSection = section.GetInventoryBeverageLineItemsInSection ()
-							.Where(li => li.Quantity > 0);
-						foreach (var li in lisInSection) { 
-							var ev = _eventFactory.CreateInventoryLineItemAddedEvent (emp, 
-								         li, 0, li.PricePaid, li.VendorBoughtFrom, 
-								section.RestaurantInventorySectionID, li.InventoryPosition, SelectedInventory);
-							events.Add (ev);
-						}
-					}
+		            //we need to have the restaurant sections that are in both the old, and the new
+		            var oldSections = previous.GetSections();
 
-					if(events.Any()){
-						SelectedInventory = _inventoryRepository.ApplyEvents (events);
-					}
-				} catch(Exception e){
-					_logger.HandleException (e);
-					throw;
-				}
-			}
+		            foreach (var oldInventorySection in oldSections)
+		            {
+		                var newSection =
+		                    _selectedInventory.GetSections()
+		                        .FirstOrDefault(newSec =>
+		                                newSec.RestaurantInventorySectionID == oldInventorySection.RestaurantInventorySectionID);
+		                if (newSection != null)
+		                {
+		                    var lisInSection = oldInventorySection.GetInventoryBeverageLineItemsInSection()
+		                        .Where(li => li.Quantity > 0).ToList();
+		                    if (lisInSection.Any())
+		                    {
+		                        foreach (var li in lisInSection)
+		                        {
+		                            var ev = _eventFactory.CreateInventoryLineItemAddedEvent(emp,
+		                                li, 0, li.PricePaid, li.VendorBoughtFrom,
+		                                newSection, li.InventoryPosition, _selectedInventory);
+		                            events.Add(ev);
+		                        }
+		                    }
+		                }
+		            }
+
+		            if (events.Any())
+		            {
+		                _selectedInventory = _inventoryRepository.ApplyEvents(events);
+                        ReportNumItemsInTransaction();
+		            }
+		        }
+		        catch (Exception e)
+		        {
+		            _logger.HandleException(e);
+		            throw;
+		        }
+		    }
 			try{
-				await _inventoryRepository.Commit (SelectedInventory.ID);
+				await _inventoryRepository.Commit (_selectedInventory.ID);
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;
@@ -123,98 +167,102 @@ namespace Mise.Inventory.Services.Implementation
 		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (string name, ICategory category,
 			string upc, int quantity, int caseSize, LiquidContainer container, Money pricePaid)
 		{
-			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
-            var section = await _loginService.GetCurrentSection().ConfigureAwait(false);
-		    if (section == null)
-		    {
-		        throw new InvalidOperationException("No current section!");
-		    }
+			var emp = await _loginService.GetCurrentEmployee ();
 
             //get our max inventory position
 		    var inventoryPosition = 0;
-            var invSection = SelectedInventory.GetSections().FirstOrDefault(s => section.ID == s.RestaurantInventorySectionID);
+		    var invSection = _selectedInventorySection;
 		    if (invSection != null)
 		    {
 		        inventoryPosition = invSection.GetNextItemPosition();
 		    }
 
 			var categories = new []{ category as ItemCategory };
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, pricePaid, null, section.ID, inventoryPosition, SelectedInventory);
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, pricePaid, null, _selectedInventorySection, 
+                inventoryPosition, _selectedInventory);
 		
-			SelectedInventory = _inventoryRepository.ApplyEvent (addEv);
+			_selectedInventory = _inventoryRepository.ApplyEvent (addEv);
+            ReportNumItemsInTransaction();
 
-			return SelectedInventory.GetBeverageLineItems ().FirstOrDefault (li => 
+			return _selectedInventory.GetBeverageLineItems ().FirstOrDefault (li => 
 				BeverageLineItemEquator.IsItem (li, name, upc)
 			);
 		}
 
 		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity, Money pricePaid)
 		{
-			if(SelectedInventory == null){
+			if(_selectedInventory == null){
 				throw new InvalidOperationException ("Cannot add line item without selected inventory!");
 			}
-			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
-			var section = await _loginService.GetCurrentSection ().ConfigureAwait (false);
-			var sectionID = section.ID;
+			var emp = await _loginService.GetCurrentEmployee ();
 
-			//get the max, and unique, line item position
-			var inventoryPosition = 0;
-			var invSection = SelectedInventory.GetSections().FirstOrDefault(s => section.ID == s.RestaurantInventorySectionID);
-			if (invSection != null)
-			{
-				inventoryPosition = invSection.GetNextItemPosition();
-			}
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, sectionID, inventoryPosition, SelectedInventory);
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, _selectedInventorySection, _selectedInventory.GetBeverageLineItems().Count() + 1, _selectedInventory);
 		
-			SelectedInventory = _inventoryRepository.ApplyEvent (addEv);
+			_selectedInventory = _inventoryRepository.ApplyEvent (addEv);
+            ReportNumItemsInTransaction();
 
-			return SelectedInventory.GetBeverageLineItems ()
+			return _selectedInventory.GetBeverageLineItems ()
 				.FirstOrDefault (li => BeverageLineItemEquator.AreSameBeverageLineItem (source, li));
 		}
 
-		public async Task MarkSectionAsComplete ()
+	    public Task SetCurrentInventorySection(IInventorySection section)
+	    {
+	        _selectedInventorySection = section;
+	        return Task.FromResult(true);
+	    }
+
+	    public async Task MarkSectionAsComplete ()
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 
-			var section = await _loginService.GetCurrentSection ().ConfigureAwait (false);
-			var compEv = _eventFactory.CreateInventorySectionCompletedEvent (emp, SelectedInventory, section.ID);
+			var compEv = _eventFactory.CreateInventorySectionCompletedEvent (emp, _selectedInventory, _selectedInventorySection);
 
-			SelectedInventory = _inventoryRepository.ApplyEvent (compEv);
+			_selectedInventory = _inventoryRepository.ApplyEvent (compEv);
+
+            //let's commit here to reduce transaction size
+            try
+            {
+                await _inventoryRepository.Commit(_selectedInventory.ID).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                _logger.HandleException(e);
+            }
 		}
 
 		public async Task MarkInventoryAsComplete ()
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
-			var compEv = _eventFactory.CreateInventoryCompletedEvent (emp, SelectedInventory);
+			var compEv = _eventFactory.CreateInventoryCompletedEvent (emp, _selectedInventory);
 
 			_inventoryRepository.ApplyEvent (compEv);
 
 			try{
-				await _inventoryRepository.Commit (SelectedInventory.ID).ConfigureAwait (false);
+				await _inventoryRepository.Commit (_selectedInventory.ID).ConfigureAwait (false);
 			} catch(Exception e){
 				_logger.HandleException (e);
 			}
 
 			//TODO our current should be copied over from here
-			_insights.Track("Completed Inventory", "Inventory ID", SelectedInventory.ID.ToString ());
-			LastCompletedInventory = SelectedInventory;
-			SelectedInventory = null;
+			_insights.Track("Completed Inventory", "Inventory ID", _selectedInventory.ID.ToString ());
+			_lastCompletedInventory = _selectedInventory;
+			_selectedInventory = null;
 		}
 
 		public Task MarkLineItemForMeasurement (IInventoryBeverageLineItem li)
 		{
-			SelectedLineItem = li;
+			_selectedLineItem = li;
 			return Task.FromResult (false);
 		}
 
 		public Task<IInventoryBeverageLineItem> GetLineItemToMeasure ()
 		{
-			return Task.FromResult (SelectedLineItem);
+			return Task.FromResult (_selectedLineItem);
 		}
 
 		public async Task MeasureCurrentLineItemVisually (int fullBottles, ICollection<decimal> partials)
 		{
-			if(SelectedLineItem == null){
+			if(_selectedLineItem == null){
 				throw new InvalidOperationException ("No line item being measured currently!");
 			}
 
@@ -227,35 +275,42 @@ namespace Mise.Inventory.Services.Implementation
 				totalContainers += partials.Sum();
 			}
 
-			var totalAmt = SelectedLineItem.Container.AmountContained.Multiply (totalContainers);
+			var totalAmt = _selectedLineItem.Container.AmountContained.Multiply (totalContainers);
 
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
-			var realLI = SelectedLineItem as InventoryBeverageLineItem;
+			var realLI = _selectedLineItem as InventoryBeverageLineItem;
 
-			var section = await _loginService.GetCurrentSection ().ConfigureAwait (false);
 			//make an event
-			var ev = _eventFactory.CreateInventoryLiquidItemMeasuredEvent(emp, SelectedInventory, section.ID, realLI, fullBottles, partials, totalAmt);
+			var ev = _eventFactory.CreateInventoryLiquidItemMeasuredEvent(emp, _selectedInventory, _selectedInventorySection, realLI, fullBottles, partials, totalAmt);
 
-			SelectedInventory = _inventoryRepository.ApplyEvent (ev);
-			SelectedLineItem = null;
+			_selectedInventory = _inventoryRepository.ApplyEvent (ev);
+
+            ReportNumItemsInTransaction();
+
+			_selectedLineItem = null;
 		}
 
-		public async Task AddNewSection (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
+	    public Task<IInventorySection> GetCurrentInventorySection()
+	    {
+	        return Task.FromResult(_selectedInventorySection);
+	    }
+
+	    public async Task AddNewSection (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
 		{
 			await _loginService.AddNewSectionToRestaurant (sectionName, hasPartialBottles, isDefaultInventorySection);
 
 			//do we have an inventory that needs to get the new section added?
-			if(SelectedInventory != null){
-				var existingSec = SelectedInventory.GetSections ().FirstOrDefault (invS => invS.Name == sectionName);
+			if(_selectedInventory != null){
+				var existingSec = _selectedInventory.GetSections ().FirstOrDefault (invS => invS.Name == sectionName);
 				if(existingSec == null){
 					var rest = await _loginService.GetCurrentRestaurant ();
 					if (rest != null) {
 						var existingRestaurantSec = rest.GetInventorySections ().FirstOrDefault (rs => rs.Name == sectionName);
 						if (existingRestaurantSec != null) {
 							var emp = await _loginService.GetCurrentEmployee ();
-							var invEv = _eventFactory.CreateInventoryNewSectionCompletedEvent (emp, SelectedInventory, existingRestaurantSec);
-							SelectedInventory = _inventoryRepository.ApplyEvent (invEv);
-							await _inventoryRepository.Commit(SelectedInventory.ID);
+							var invEv = _eventFactory.CreateInventoryNewSectionAddedEvent (emp, _selectedInventory, existingRestaurantSec);
+							_selectedInventory = _inventoryRepository.ApplyEvent (invEv);
+							await _inventoryRepository.Commit(_selectedInventory.ID);
 						}
 					}
 				}
@@ -288,31 +343,44 @@ namespace Mise.Inventory.Services.Implementation
 
 	    public Task<IInventory> GetSelectedInventory ()
 		{
-			return Task.FromResult (SelectedInventory);
+			return Task.FromResult (_selectedInventory);
 		}
 
 		public Task<IInventory> GetLastCompletedInventory ()
 		{
-			return Task.FromResult (LastCompletedInventory);
+			return Task.FromResult (_lastCompletedInventory);
 		}
 
-		/// <summary>
-		/// Gets the currently selected section's id value
-		/// </summary>
-		/// <returns>The section I.</returns>
-		async Task<Guid?> GetSectionID ()
+		public Task<bool> HasInventoryPriorToDate (Guid restaurantID, DateTimeOffset date)
 		{
-			var section = await _loginService.GetCurrentSection ();
-			var sectionID = section != null ? (Guid?)section.ID : null;
-			return sectionID;
-		}
+			var res = _inventoryRepository.GetAll ()
+				.Any(i => i.RestaurantID == restaurantID && i.DateCompleted.HasValue && i.DateCompleted.Value <= date);
 
-		public Task<bool> HasInventoryPriorToDate (DateTimeOffset date)
-		{
-			var res = _inventoryRepository.GetAll ().Any (i => i.DateCompleted.HasValue && i.DateCompleted.Value < date);
 			return Task.FromResult (res);
 		}
+
 		#endregion
+
+	    private const int REPORT_NUMBER_OF_EVENTS_THRESHOLD = 50;
+        /// <summary>
+        /// If we have a large number of events waiting for commit, let's mark an event of it.  Later we might do a bleed off
+        /// </summary>
+	    private void ReportNumItemsInTransaction()
+	    {
+	        if (_selectedInventory != null)
+	        {
+	            var numItems = _inventoryRepository.GetNumberOfEventsInTransacitonForEntity(_selectedInventory.ID);
+	            if (numItems > REPORT_NUMBER_OF_EVENTS_THRESHOLD)
+	            {
+	                var insightsParam = new Dictionary<string, string>
+	                {
+	                    {"Repository", "Inventory"},
+	                    {"Number of items", numItems.ToString()}
+	                };
+                    _insights.Track("Large number of events in repository", insightsParam);
+	            }
+	        }
+	    }
 	}
 }
 

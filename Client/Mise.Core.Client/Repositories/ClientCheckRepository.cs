@@ -22,56 +22,24 @@ namespace Mise.Core.Client.Repositories
 	public class ClientCheckRepository : BaseEventSourcedClientRepository<ICheck, ICheckEvent>, ICheckRepository
 	{
 		readonly IRestaurantTerminalService _service;
-		public ClientCheckRepository (IRestaurantTerminalService service, 
-			IClientDAL dal, ILogger logger) : base(logger, dal, service)
+		public ClientCheckRepository (IRestaurantTerminalService service,
+            IClientDAL dal, ILogger logger, IResendEventsWebService resend)
+            : base(logger, dal, service, resend)
 		{
 		    _service = service;
 		}
 
 
-		/// <summary>
-		/// Loads our repository so it matches the current state of the server
-		/// </summary>
-		public override async Task Load(Guid? restaurantID)
-		{
-		    Loading = true;
-			ICollection<ICheck> items = null;
-		    var gotFromService = false;
-				//load them into the DB as well
-			Logger.Log ("Loading from service", LogLevel.Debug); 
-		    try
-		    {
-		        items = (await _service.GetChecksAsync().ConfigureAwait(false)).ToList();
-		        gotFromService = true;
-		    }
-		    catch (Exception e)
-		    {
-		        Logger.HandleException(e);
-		    }
+	    protected override Task<IEnumerable<ICheck>> LoadFromWebservice(Guid? restaurantID)
+	    {
+	        return _service.GetChecksAsync();
+	    }
 
-		    if(items == null)
-		    {
-		        items = (await LoadFromDB()).ToList();
-		    }
-
-		    if (gotFromService)
-		    {
-		        var upserttedSuccess = await DAL.UpsertEntitiesAsync(items).ConfigureAwait(false);
-		        if (upserttedSuccess == false)
-		        {
-                    throw new Exception("Unable to update database with latest version!");
-		        }
-		    }
-
-			Cache.UpdateCache (items);
-		    IsFullyCommitted = true;
-		    Loading = false;
-		}
-
-	    private async Task<IEnumerable<ICheck>> LoadFromDB()
+	    protected override async Task<IEnumerable<ICheck>> LoadFromDB(Guid? restaurantID)
 	    {
             Logger.Log("Loading from DAL");
-			return await DAL.GetEntitiesAsync<ICheck> ();
+			var items = await DAL.GetEntitiesAsync<RestaurantCheck> ();
+	        return items;
 	    }
 
         IEnumerable<ICheck> GetOpenChecks()

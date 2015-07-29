@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ValueItems;
@@ -19,14 +20,16 @@ namespace Mise.Inventory.Services.Implementation
 		readonly IPARRepository _parRepository;
 		readonly ILoginService _loginService;
 		readonly IInventoryAppEventFactory _eventFactory;
+	    private readonly IInsightsService _insights;
 		readonly ILogger _logger;
 		public PARService (ILogger logger, ILoginService loginService, IPARRepository parRespository, 
-			IInventoryAppEventFactory eventFactory)
+			IInventoryAppEventFactory eventFactory, IInsightsService insights)
 		{
 			_parRepository = parRespository;
 			_loginService = loginService;
 			_eventFactory = eventFactory;
 			_logger = logger;
+		    _insights = insights;
 		}
 
 		#region IPARService implementation
@@ -102,6 +105,7 @@ namespace Mise.Inventory.Services.Implementation
 
 			var updateEv = _eventFactory.CreatePARLineItemQuantityUpdatedEvent (emp, par, lineItem.ID, newQuantity);
 			_currentPar = _parRepository.ApplyEvent (updateEv);
+            ReportNumItemsInTransaction();
 		}
 
 		public Task SetCurrentLineItem (IPARBeverageLineItem li)
@@ -116,6 +120,27 @@ namespace Mise.Inventory.Services.Implementation
 		}
 		#endregion
 
+
+        private const int REPORT_NUMBER_OF_EVENTS_THRESHOLD = 50;
+        /// <summary>
+        /// If we have a large number of events waiting for commit, let's mark an event of it.  Later we might do a bleed off
+        /// </summary>
+        private void ReportNumItemsInTransaction()
+        {
+            if (_currentPar != null)
+            {
+                var numItems = _parRepository.GetNumberOfEventsInTransacitonForEntity(_currentPar.ID);
+                if (numItems > REPORT_NUMBER_OF_EVENTS_THRESHOLD)
+                {
+                    var insightsParam = new Dictionary<string, string>
+	                {
+	                    {"Repository", "Par"},
+	                    {"Number of items", numItems.ToString()}
+	                };
+                    _insights.Track("Large number of events in repository", insightsParam);
+                }
+            }
+        }
 	}
 }
 

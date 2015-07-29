@@ -35,6 +35,7 @@ namespace Mise.Inventory
 	public class DependencySetup
 	{
 		public static ILogger Logger{get;protected set;}
+		protected ISQLite SqlLiteConnection{ get; set; }
 
 		/// <summary>
 		/// Creates an instance of the AutoFac container
@@ -109,18 +110,23 @@ namespace Mise.Inventory
 			cb.RegisterInstance (Logger).As<ILogger>().SingleInstance ();
 
 			var webService = GetWebService (serial);
-			cb.RegisterInstance(webService).As<IInventoryEmployeeWebService>();
-			cb.RegisterInstance(webService).As<IInventoryRestaurantWebService>();
-			cb.RegisterInstance(webService).As<IVendorWebService>();
-			cb.RegisterInstance(webService).As<IPARWebService>();
-			cb.RegisterInstance(webService).As<IInventoryWebService>();
-			cb.RegisterInstance(webService).As<IReceivingOrderWebService>();
-			cb.RegisterInstance(webService).As<IPurchaseOrderWebService>();
-			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ();
-			cb.RegisterInstance (webService).As<IAccountWebService> ();
+			cb.RegisterInstance(webService).As<IInventoryEmployeeWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IInventoryRestaurantWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IVendorWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IPARWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IInventoryWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IReceivingOrderWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IPurchaseOrderWebService>().SingleInstance();
+			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance();
+			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance();
+		    cb.RegisterInstance(webService).As<IResendEventsWebService>().SingleInstance();
 
 			// DAL
-			cb.RegisterType<MemoryClientDAL>().As<IClientDAL>().SingleInstance();
+			if (SqlLiteConnection != null) {
+				cb.RegisterType<SQLiteClietDAL> ().As<IClientDAL> ().SingleInstance ();
+			} else {
+				cb.RegisterType<MemoryClientDAL> ().As<IClientDAL> ().SingleInstance ();
+			}
 
 			//Event factory
 			//TODO - do we have a restaurant?  if not, use a fake ID and go to register
@@ -131,7 +137,7 @@ namespace Mise.Inventory
 			cb.RegisterType<ClientEmployeeRepository>().As<IEmployeeRepository>().SingleInstance();
 			cb.RegisterType<ClientVendorRepository>().As<IVendorRepository>().SingleInstance();
 			cb.RegisterType<ClientRestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
-			cb.RegisterType<ClientPARRepository>().As<IPARRepository>().SingleInstance();
+			cb.RegisterType<ClientParRepository>().As<IPARRepository>().SingleInstance();
 			cb.RegisterType<ClientReceivingOrderRepository>().As<IReceivingOrderRepository>().SingleInstance();
 			cb.RegisterType<ClientPurchaseOrderRepository>().As<IPurchaseOrderRepository>().SingleInstance();
 			cb.RegisterType<ClientInventoryRepository>().As<IInventoryRepository>().SingleInstance();
@@ -143,7 +149,6 @@ namespace Mise.Inventory
 
 			// Services
 			cb.RegisterType<AppNavigation>().As<IAppNavigation>().SingleInstance();
-			cb.RegisterType<DefaultThemer>().As<IThemer>().SingleInstance();
 			cb.RegisterType<LoginService>().As<ILoginService>().SingleInstance();
 			cb.RegisterType<NavigationService>().As<INavigationService>().SingleInstance();
 			cb.RegisterType<PageFactory>().As<IPageFactory>().SingleInstance();

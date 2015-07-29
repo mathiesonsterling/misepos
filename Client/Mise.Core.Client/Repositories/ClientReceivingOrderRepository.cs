@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Services;
@@ -16,7 +18,8 @@ namespace Mise.Core.Client.Repositories
     public class ClientReceivingOrderRepository : BaseEventSourcedClientRepository<IReceivingOrder, IReceivingOrderEvent>, IReceivingOrderRepository
     {
         readonly IReceivingOrderWebService _webService;
-        public ClientReceivingOrderRepository(ILogger logger, IClientDAL dal, IReceivingOrderWebService webService) : base(logger, dal, webService)
+        public ClientReceivingOrderRepository(ILogger logger, IClientDAL dal, IReceivingOrderWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
         {
             _webService = webService;
         }
@@ -36,16 +39,23 @@ namespace Mise.Core.Client.Repositories
             return ev.ReceivingOrderID;
         }
 
-        public override async Task Load(Guid? restaurantID)
+        protected override Task<IEnumerable<IReceivingOrder>> LoadFromWebservice(Guid? restaurantID)
         {
-            Loading = true;
+            if (restaurantID.HasValue == false)
+            {
+                throw new ArgumentException("Cannot load ROs without a restaurant");
+            }
+            return _webService.GetReceivingOrdersForRestaurant(restaurantID.Value);
+        }
+
+        protected override async Task<IEnumerable<IReceivingOrder>> LoadFromDB(Guid? restaurantID)
+        {
+            var items = await DAL.GetEntitiesAsync<ReceivingOrder>();
             if (restaurantID.HasValue)
             {
-                var items = await _webService.GetReceivingOrdersForRestaurant(restaurantID.Value);
-
-			    Cache.UpdateCache (items);
+                items = items.Where(ro => ro.RestaurantID == restaurantID);
             }
-            Loading = false;
+            return items;
         }
     }
 }

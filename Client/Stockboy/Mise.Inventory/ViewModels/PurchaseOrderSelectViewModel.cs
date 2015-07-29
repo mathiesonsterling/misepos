@@ -5,14 +5,10 @@ using System.Threading.Tasks;
 
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
-using Mise.Core;
+using Mise.Core.ExtensionMethods;
 using Mise.Inventory.Services;
 using Mise.Inventory.MVVM;
-using Xamarin;
 using Mise.Core.Services;
-using System.Diagnostics.Tracing;
-using Mise.Core.ValueItems;
-using System.Resources;
 
 namespace Mise.Inventory.ViewModels
 {

@@ -42,6 +42,11 @@ namespace Mise.Core.ValueItems
 	               || State.ContainsSearchString(searchString)
 	               || Zip.ContainsSearchString(searchString);
 	    }
+
+	    public static StreetAddress TestStreetAddress
+	    {
+            get { return new StreetAddress("699", "", "Ocean Ave", "Brooklyn", "New York", ValueItems.Country.UnitedStates.Name, "11226");}
+	    }
 	}
 
     public class Street : IEquatable<Street>, ITextSearchable

@@ -10,6 +10,8 @@ namespace Mise.Inventory.Services
 {
 	public interface IInventoryService
 	{
+		Task LoadLatest ();
+
 		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (string name, ICategory category, string upc, 
 			int quantity, int caseSize, LiquidContainer container, Money pricePaid);
 		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity, 
@@ -49,6 +51,9 @@ namespace Mise.Inventory.Services
 		/// <param name="partials">Partials.</param>
 		Task MeasureCurrentLineItemVisually (int fullBottles, ICollection<decimal> partials);
 
+	    Task<IInventorySection> GetCurrentInventorySection();
+	    Task SetCurrentInventorySection(IInventorySection section);
+
 		Task MarkSectionAsComplete ();
 
 		/// <summary>
@@ -62,7 +67,7 @@ namespace Mise.Inventory.Services
 
 	    Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant(DateTimeOffset? start, DateTimeOffset? end);
 
-		Task<bool> HasInventoryPriorToDate (DateTimeOffset date);
+		Task<bool> HasInventoryPriorToDate (Guid restaurantID, DateTimeOffset date);
 	}
 }
 

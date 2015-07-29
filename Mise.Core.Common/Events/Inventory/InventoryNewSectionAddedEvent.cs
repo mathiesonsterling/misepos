@@ -21,6 +21,7 @@ namespace Mise.Core.Common.Events.Inventory
 		/// </summary>
 		/// <value>The name.</value>
 		public string Name{get;set;}
+
 		/// <summary>
 		/// ID of the matching section for the restaurant
 		/// </summary>

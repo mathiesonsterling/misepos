@@ -25,9 +25,12 @@ namespace Mise.Core.Common.Events
 
 		IRestaurant _restaurant;
 
-		public Guid RestaurantID {
+		public Guid? RestaurantID {
 			get {
-				return _restaurant.ID;
+				if (_restaurant != null) {
+					return _restaurant.ID;
+				}
+				return null;
 			}
 		}
 
@@ -113,7 +116,7 @@ namespace Mise.Core.Common.Events
 		}			
 
 		public InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent (IEmployee emp, 
-			IBaseBeverageLineItem source, int quantity, Money pricePaid, Guid? vendorID, Guid? sectionID, int inventoryPosition,  
+			IBaseBeverageLineItem source, int quantity, Money pricePaid, Guid? vendorID, IInventorySection section, int inventoryPosition,  
 			IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
@@ -130,7 +133,8 @@ namespace Mise.Core.Common.Events
 				Quantity = quantity,
 				PricePaid = pricePaid,
 				VendorBoughtFrom = vendorID,
-				RestaurantInventorySectionID = sectionID,
+				RestaurantInventorySectionID = section.RestaurantInventorySectionID,
+                InventorySectionID = section.ID,
 				InventoryID = inventory.ID,
 				Categories = source.GetCategories ().Cast<ItemCategory>(),
                 InventoryPosition =  inventoryPosition,
@@ -209,7 +213,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent (IEmployee emp, string name, string upc,
-			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, Money pricePaid, Guid? vendorID, Guid? sectionID,
+			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, Money pricePaid, Guid? vendorID, IInventorySection section,
 			int inventoryPosisiton, IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
@@ -225,7 +229,8 @@ namespace Mise.Core.Common.Events
 				Quantity = quantity,
 				PricePaid = pricePaid,
 				VendorBoughtFrom = vendorID,
-				RestaurantInventorySectionID = sectionID,
+				RestaurantInventorySectionID = section.RestaurantInventorySectionID,
+                InventorySectionID = section.ID,
 				InventoryID = inventory.ID,
 				Categories = categories,
                 InventoryPosition = inventoryPosisiton,
@@ -352,9 +357,6 @@ namespace Mise.Core.Common.Events
 			var date = DateTimeOffset.UtcNow;
 			var revision = GetNextEventID ();
 
-			var sections = _restaurant.GetInventorySections ();
-			var downCast = sections.Cast<RestaurantInventorySection> ();
-		    var restSectionsAndNewIDs = downCast.Select(restSec => new Tuple<RestaurantInventorySection, Guid>(restSec, Guid.NewGuid())).ToList();
 		    return new InventoryCreatedEvent {
 				ID = Guid.NewGuid(),
 				CreatedDate = date,
@@ -362,12 +364,11 @@ namespace Mise.Core.Common.Events
 				EventOrderingID = revision,
 				CausedByID = emp.ID,
 				RestaurantID = _restaurant.ID,
-				RestaurantSectionsAndSectionIDs = restSectionsAndNewIDs,
 				InventoryID = Guid.NewGuid ()
 			};
 		}
 
-		public InventoryNewSectionAddedEvent CreateInventoryNewSectionCompletedEvent (IEmployee emp, IInventory inventory, IRestaurantInventorySection restSection)
+		public InventoryNewSectionAddedEvent CreateInventoryNewSectionAddedEvent (IEmployee emp, IInventory inventory, IRestaurantInventorySection restSection)
 		{
 			return new InventoryNewSectionAddedEvent {
 				ID = Guid.NewGuid(),
@@ -379,11 +380,12 @@ namespace Mise.Core.Common.Events
 				InventoryID = inventory.ID,
 
 				RestaurantSectionId = restSection.ID,
-				Name = restSection.Name
+				Name = restSection.Name,
+                SectionID = Guid.NewGuid()
 			};
 		}
 
-		public InventorySectionCompletedEvent CreateInventorySectionCompletedEvent (IEmployee emp, IInventory inventory, Guid restSectionID)
+		public InventorySectionCompletedEvent CreateInventorySectionCompletedEvent (IEmployee emp, IInventory inventory, IInventorySection section)
 		{
 			return new InventorySectionCompletedEvent {
 				ID = Guid.NewGuid (),
@@ -393,7 +395,7 @@ namespace Mise.Core.Common.Events
 				CausedByID = emp.ID,
 				RestaurantID = _restaurant.ID,
 				InventoryID = inventory.ID,
-				RestaurantSectionID = restSectionID
+                InventorySectionID = section.ID
 			};
 		}
 
@@ -415,7 +417,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public InventoryLiquidItemMeasuredEvent CreateInventoryLiquidItemMeasuredEvent (IEmployee emp, IInventory inventory, 
-			Guid restSectionID, InventoryBeverageLineItem li, int numFullBottles, IEnumerable<decimal> partialBottlePercentages, LiquidAmount amtMeasured)
+			IInventorySection section, InventoryBeverageLineItem li, int numFullBottles, IEnumerable<decimal> partialBottlePercentages, LiquidAmount amtMeasured)
 		{
 			return new InventoryLiquidItemMeasuredEvent {
 				ID = Guid.NewGuid (),
@@ -425,7 +427,7 @@ namespace Mise.Core.Common.Events
 				EventOrderingID = GetNextEventID (),
 				CausedByID = emp.ID,
 				RestaurantID = _restaurant.ID,
-				RestaurantInventorySectionID = restSectionID,
+				InventorySectionID = section.ID,
 
 				AmountMeasured = amtMeasured,
 				NumFullBottlesMeasured = numFullBottles,

@@ -36,7 +36,7 @@ namespace Mise.Core.Entities.People
         /// <summary>
         /// Date the employee was hired
         /// </summary>
-        DateTime HiredDate { get; }
+        DateTimeOffset HiredDate { get; }
 
 		bool CurrentlyClockedInToPOS{ get; }
 

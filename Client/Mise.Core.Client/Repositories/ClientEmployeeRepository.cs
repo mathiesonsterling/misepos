@@ -21,46 +21,23 @@ namespace Mise.Core.Client.Repositories
         readonly IClientDAL _clientDAL;
 
 
-        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, IClientDAL dal, ILogger logger)
-            : base(logger, dal, webService)
+        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, IClientDAL dal, ILogger logger, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
         {
             _webService = webService;
             _clientDAL = dal;
         }
 
-
-        public override async Task Load(Guid? restaurantID)
+        protected override Task<IEnumerable<IEmployee>> LoadFromWebservice(Guid? restaurantID)
         {
-            Loading = true;
-            IEnumerable<IEmployee> emps = null;
-            Logger.Log("Loading employees from service", LogLevel.Debug);
-
-            var needsDBLoad = true;
-            try
-            {
-                emps = await _webService.GetEmployeesAsync();
-                needsDBLoad = false;
-            }
-            catch (Exception e)
-            {
-                Logger.HandleException(e);
-            }
-
-            if (needsDBLoad)
-            {
-                emps = await LoadFromDB();
-            }
-
-            var loadedEmps = emps.Where(e => e != null).ToList();
-            await _clientDAL.UpsertEntitiesAsync(loadedEmps);
-            Cache.UpdateCache(loadedEmps);
-            Loading = false;
+            return restaurantID.HasValue ? _webService.GetEmployeesForRestaurant(restaurantID.Value) : _webService.GetEmployeesAsync();
         }
 
-        async Task<IEnumerable<IEmployee>> LoadFromDB()
+        protected override async Task<IEnumerable<IEmployee>> LoadFromDB(Guid? restaurantID)
         {
+
             Logger.Log("Could not get employees from web service, pulling from DAL", LogLevel.Debug);
-            var items = await _clientDAL.GetEntitiesAsync<IEmployee>();
+            var items = await _clientDAL.GetEntitiesAsync<Employee>();
             return items.ToList();
         }
 

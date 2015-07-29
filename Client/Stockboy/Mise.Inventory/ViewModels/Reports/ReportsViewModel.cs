@@ -13,11 +13,13 @@ namespace Mise.Inventory.ViewModels.Reports
 	{
 	    private readonly IReportsService _reportsService;
 		private readonly IInventoryService _inventoryService;
+		private readonly ILoginService _loginService;
 		private readonly ILogger _logger;
 		public ReportsViewModel(IAppNavigation navigation, ILogger logger, 
-			IReportsService reportsService, IInventoryService inventoryService) : base(navigation, logger)
+			IReportsService reportsService, IInventoryService inventoryService, ILoginService loginService) : base(navigation, logger)
 		{
 			_logger = logger;
+			_loginService = loginService;
 		    _reportsService = reportsService;
 			_inventoryService = inventoryService;
 		    StartDate = new DateTime(2015, 1, 1);
@@ -64,7 +66,11 @@ namespace Mise.Inventory.ViewModels.Reports
 	    }
 
 		private async void AmountUsed(){
-			var hasPriorInv = await _inventoryService.HasInventoryPriorToDate (StartDate);
+			var rest = await _loginService.GetCurrentRestaurant ();
+			if(rest == null){
+				throw new InvalidOperationException ("Cannot do report without a selected restaurant");
+			}
+			var hasPriorInv = await _inventoryService.HasInventoryPriorToDate (rest.ID, StartDate);
 			if(hasPriorInv == false){
 				var userRes = await Navigation.AskUser ("No prior inventory", 
 					              "There's not a starting inventory before the dates you selected.  Your results will only depend on items you received, and might not be accurrate.  Continue?");

@@ -44,6 +44,8 @@ namespace Mise.Core.Common.Events.Inventory
 
         public Guid? RestaurantInventorySectionID { get; set; }
 
+        public Guid InventorySectionID { get; set; }
+
         public Guid? VendorBoughtFrom { get; set; }
 
 		public IEnumerable<ItemCategory> Categories{get;set;}

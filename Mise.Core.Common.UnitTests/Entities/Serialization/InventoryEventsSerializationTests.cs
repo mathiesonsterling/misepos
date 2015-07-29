@@ -18,14 +18,6 @@ namespace Mise.Core.Common.UnitTests
 			var serializer = SerializerFactory.GetJSONSerializer(type);
 			var ev = new InventoryCreatedEvent {
 				ID = Guid.NewGuid (),
-				RestaurantSectionsAndSectionIDs = new List<Tuple<RestaurantInventorySection, Guid>>
-                 {
-                     new Tuple<RestaurantInventorySection, Guid>(
-					new RestaurantInventorySection {
-						ID = Guid.NewGuid (),
-						Name = "testSection"
-					}, Guid.NewGuid())
-				}
 			};
 
 			//ACT
@@ -35,8 +27,6 @@ namespace Mise.Core.Common.UnitTests
 			var res = serializer.Deserialize<InventoryCreatedEvent> (json);
 			Assert.NotNull (res);
 			Assert.AreEqual (ev.ID, res.ID);
-			Assert.NotNull (res.RestaurantSectionsAndSectionIDs);
-			Assert.AreEqual (1, res.RestaurantSectionsAndSectionIDs.Count());
 		}
 	}
 }

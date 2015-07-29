@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Mise.Core.Common.Events.DTOs;
+using Mise.Core.Common.Services.Implementation.DAL;
 using Mise.Core.Entities.Base;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Check;
@@ -18,19 +19,21 @@ namespace Mise.Core.Common.Services
 	/// </summary>
 	public interface IClientDAL : IDAL
 	{
-		//Dependencies
-		IJSONSerializer Serializer{ get; set; }
+        /// <summary>
+        /// Get any events which are waiting to be resent
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<EventDataTransportObject>> GetUnsentEvents();
 
-		ILogger Logger{ get; set; }
+	    Task AddEventsThatFailedToSend(IEnumerable<IEntityEventBase> events);
 
-	    /// <summary>
-	    /// Remove all items and events stored before the time given
-	    /// </summary>
-	    /// <param name="minDate"></param>
-	    /// <param name="maxNumberEntites">If over this number left by the min date, delete older till we'll below</param>
-	    /// <param name="maxNumberEvents"></param>
-	    /// <returns></returns>
-	    Task CleanItemsBefore(DateTimeOffset minDate, int maxNumberEntites = int.MaxValue, int maxNumberEvents = int.MaxValue);
+	    Task MarkEventsAsSent(IEnumerable<IEntityEventBase> events);
+
+        /// <summary>
+        /// Clear all items in the database
+        /// </summary>
+        /// <returns></returns>
+	    Task ResetDB();
 	}
 }
 

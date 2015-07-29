@@ -180,6 +180,9 @@
     <Reference Include="MR.Gestures">
       <HintPath>..\packages\MR.Gestures.1.2.1\lib\Xamarin.iOS10\MR.Gestures.dll</HintPath>
     </Reference>
+    <Reference Include="SQLite-net">
+      <HintPath>..\packages\sqlite-net-pcl.1.0.11\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mise.Inventory\Mise.Inventory.csproj">
@@ -225,9 +228,11 @@
     </Compile>
     <Compile Include="Services\MercuryPaymentProcessorService.cs" />
     <Compile Include="Services\iOSLogger.cs" />
+    <Compile Include="Services\iOSSQLLite.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  <Import Project="..\packages\SQLitePCL.raw_basic.0.8.0\build\Xamarin.iOS10\SQLitePCL.raw_basic.targets" Condition="Exists('..\packages\SQLitePCL.raw_basic.0.8.0\build\Xamarin.iOS10\SQLitePCL.raw_basic.targets')" />
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons-2.appiconset\Contents.json">
       <InProject>false</InProject>
