@@ -39,6 +39,19 @@ namespace Mise.Database.Neo4J.IntegrationTests
             await TestUtilities.LoadCategories(_underTest);
 
             var rest = TestUtilities.CreateRestaurant();
+            //make sure the restaurant has a section!
+            var restSectionID = Guid.NewGuid();
+            rest.InventorySections.Add(
+                new RestaurantInventorySection
+                {
+                    Name = "test",
+                    ID = restSectionID,
+                    CreatedDate = DateTime.UtcNow,
+                    LastUpdatedDate = DateTime.UtcNow,
+                    RestaurantID = rest.ID,
+                    Revision = new EventID(MiseAppTypes.UnitTests, 10)
+                }
+                );
             await _underTest.AddRestaurantAsync(rest);
 
             var emp = TestUtilities.CreateEmployee();
@@ -62,6 +75,9 @@ namespace Mise.Database.Neo4J.IntegrationTests
                     new InventorySection{
                         Name = "sectionMain",
                         ID = sectionID,
+                        RestaurantInventorySectionID = restSectionID,
+                        CreatedDate = DateTime.UtcNow,
+                        LastUpdatedDate = DateTime.UtcNow,
                         Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1000},
                         LineItems = new List<InventoryBeverageLineItem>
                         {

@@ -70,6 +70,7 @@ namespace MiseInventoryService.Repositories
             //todo - put the cache in first, then commit to DB via an update function
             HostingEnvironment.QueueBackgroundWorkItem(async token =>
             {
+                bool needsRetry = false;
                 try
                 {
                     var upsert = itemExistsAlready
@@ -80,6 +81,21 @@ namespace MiseInventoryService.Repositories
                 catch (Exception e)
                 {
                     Logger.HandleException(e);
+                    needsRetry = true;
+                }
+
+                if (needsRetry == false) return;
+                await Task.Delay(100, token);
+                try
+                {
+                    var upsert = itemExistsAlready
+                        ? updateFunc(bundle.NewVersion)
+                        : addFunc(bundle.NewVersion);
+                    await upsert.ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    Logger.HandleException(e, LogLevel.Fatal);
                 }
             });
 

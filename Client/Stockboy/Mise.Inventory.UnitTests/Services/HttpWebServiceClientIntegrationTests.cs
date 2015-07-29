@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common;
+using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.ApplicationInvitations;
+using Mise.Core.Common.Events.Inventory;
+using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Services.WebServices;
+using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services.Implementation;
 using Moq;
 using NUnit.Framework;
@@ -435,6 +439,104 @@ namespace Mise.Inventory.UnitTests.Services
             Assert.AreEqual(4, updatedItem.Quantity, "quantity is updated");
         }
 
+        #endregion
+
+        #region Inventory
+
+        [Test]
+        public async Task InventoryShouldBeCreatedAndRetreived()
+        {
+            var client = CreateClient();
+
+            var emps = await client.GetEmployeesForRestaurant(_testRestaurantID);
+            var emp = emps.FirstOrDefault(n => n.PrimaryEmail.Value.Contains("test"));
+            Assert.NotNull(emp);
+
+            var invID = Guid.NewGuid();
+            //create an inventory, add a section, set current, add line items, measure them, and complete
+            var create = new InventoryCreatedEvent
+            {
+                CreatedDate = DateTime.UtcNow,
+                CausedByID = emp.ID,
+                DeviceID = "unitTest",
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 1),
+                ID = Guid.NewGuid(),
+                RestaurantID = _testRestaurantID,
+                InventoryID = invID
+            };
+
+            var section = new InventoryNewSectionAddedEvent
+            {
+                CausedByID = emp.ID,
+                CreatedDate = DateTime.UtcNow,
+                DeviceID = "unitTest",
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 2),
+                ID = Guid.NewGuid(),
+                InventoryID = invID,
+                Name = "testSection",
+                RestaurantID = _testRestaurantID,
+                RestaurantSectionId = Guid.NewGuid(),
+                SectionID = Guid.NewGuid()
+            };
+
+            var current = new InventoryMadeCurrentEvent
+            {
+                CausedByID = emp.ID,
+                CreatedDate = DateTime.UtcNow,
+                DeviceID = "unitTest",
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 3),
+                ID = Guid.NewGuid(),
+                InventoryID = invID,
+                RestaurantID = _testRestaurantID
+            };
+
+            //then send
+            var sendRes = await client.SendEventsAsync(null, new IInventoryEvent[] {create, section, current});
+
+            Assert.True(sendRes);
+
+            //get it
+            var get = (await client.GetInventoriesForRestaurant(_testRestaurantID)).ToList();
+
+            Assert.AreEqual(1, get.Count);
+            Assert.AreEqual(invID, get.First().ID, "ID came back!");
+
+            //add line items, measure, complete section, and add
+            var addLI = new InventoryLineItemAddedEvent
+            {
+                CaseSize = 12,
+                CausedByID = emp.ID,
+                CreatedDate = DateTime.UtcNow,
+                RestaurantID = _testRestaurantID,
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 4),
+                DeviceID = "unitTest",
+                UPC = "",
+                Container = LiquidContainer.Bottle750ML,
+                DisplayName = "testLI",
+                MiseName = string.Empty,
+                Quantity = 0,
+                PricePaid = null,
+                VendorBoughtFrom = null,
+                RestaurantInventorySectionID = section.RestaurantSectionId,
+                InventorySectionID = section.SectionID,
+                InventoryID = invID,
+                Categories = new List<ItemCategory>
+                {
+                    CategoriesService.WhiskeyScotch,
+                    CategoriesService.Vodka
+                },
+                InventoryPosition = 1,
+                LineItemID = Guid.NewGuid()
+            };
+
+            var measure = new InventoryLiquidItemMeasuredEvent
+            {
+                AmountMeasured = new LiquidAmount {}
+            };
+
+
+            //retrieve, verify our LIs are there
+        }
         #endregion
 
     }

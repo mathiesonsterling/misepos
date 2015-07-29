@@ -61,7 +61,7 @@ namespace Mise.Neo4J.Neo4JDAL
                     .Match("(i:Inventory)-[:INVENTORY]-(r:Restaurant)")
                     .Where((RestaurantGraphNode r) => r.ID == inventory.RestaurantID)
                     .AndWhere((InventoryGraphNode i) => i.IsCurrent == true)
-                    .Return(i =>  i.As<InventoryGraphNode>())
+                    .Return(i => i.As<InventoryGraphNode>())
                     .ResultsAsync;
 
                 foreach (var currInv in currentInventories)
@@ -123,20 +123,19 @@ namespace Mise.Neo4J.Neo4JDAL
         {
             var invID = inventory.ID;
             //delete connections to line items, but not the lis themselves
-            await _graphClient.Cypher
+            var remQuery = _graphClient.Cypher
                 .Match("(m)-[r2]-(li:InventoryBeverageLineItem)-[rSec:HAS_LINE_ITEM]-(sec:InventorySection)-[r:HAS_SECTION]-(i:Inventory)")
                 .Where((InventoryGraphNode i) => i.ID == invID)
-                .Delete("r2, rSec, li")
-                .ExecuteWithoutResultsAsync()
-                .ConfigureAwait(false);
+                .Delete("r2, li, rSec");
+
+            await remQuery.ExecuteWithoutResultsAsync().ConfigureAwait(false);
 
             //delete all the sections as well
-            var query = _graphClient.Cypher
-                .Match("(s:InventorySection)-[r:HAS_SECTION]-(i:Inventory)")
-                .Where((InventoryGraphNode i) => i.ID == invID)
-                .Delete("s, r");
-
-            await query.ExecuteWithoutResultsAsync()
+            var delSectionQuery = _graphClient.Cypher
+                 .Match("(m)-[oRel]-(s:InventorySection)-[r:HAS_SECTION]-(i:Inventory)")
+                 .Where((InventoryGraphNode i) => i.ID == invID)
+                 .Delete("oRel, s, r");
+            await delSectionQuery.ExecuteWithoutResultsAsync()
                 .ConfigureAwait(false);
 
             await _graphClient.Cypher
@@ -248,10 +247,9 @@ namespace Mise.Neo4J.Neo4JDAL
                 .ExecuteWithoutResultsAsync();
             tasks.Add(restSec);
 
-            foreach (var t in tasks)
-            {
-                await t.ConfigureAwait(false);
-            }
+            await Task.WhenAll(tasks).ConfigureAwait(false);
+
+
         }
 
         private async Task<IEnumerable<InventoryBeverageLineItem>> GetLineItemsForInventorySectionAsync(Guid inventorySectionID)

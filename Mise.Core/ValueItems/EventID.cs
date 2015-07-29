@@ -38,6 +38,12 @@ namespace Mise.Core.ValueItems
             }
         }
 
+        public EventID(MiseAppTypes appCreating, long orderID)
+        {
+            AppInstanceCode = appCreating;
+            OrderingID = orderID;
+        }
+
         public string ToDatabaseString()
         {
             return AppInstanceCode + ":" + OrderingID;

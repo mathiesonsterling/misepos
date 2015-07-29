@@ -57,7 +57,7 @@ namespace MiseInventoryService.Repositories
 
         public Task<IInventory> GetCurrentInventory(Guid restaurantID)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => GetAll().FirstOrDefault(i => i.IsCurrent && i.RestaurantID == restaurantID));
         }
 
         public Task<IInventory> GetCurrentInventory()
