@@ -109,6 +109,11 @@ namespace Mise.Core.Client.Repositories
         /// </summary>
         public bool Offline { get; private set; }
 
+        /// <summary>
+        /// Commit directly to the server, not allowing any caching of items or events.  Usually used when we need an immediate server verificatoin, like in registration
+        /// </summary>
+        /// <param name="entityID"></param>
+        /// <returns></returns>
         public virtual async Task<CommitResult> CommitOnlyImmediately(Guid entityID)
         {
             if (UnderTransaction.ContainsKey(entityID) == false)
