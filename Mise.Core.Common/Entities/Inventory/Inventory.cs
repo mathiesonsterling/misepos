@@ -134,7 +134,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
         void WhenInventoryNewSectionAdded(InventoryNewSectionAddedEvent inventoryNewSectionAddedEvent)
         {
-            var existing = GetSections().Any(s => s.RestaurantInventorySectionID == inventoryNewSectionAddedEvent.RestaurantSectionId);
+            var existing = GetSections().Any(s => s.ID == inventoryNewSectionAddedEvent.SectionID);
             if (existing == false)
             {
                 var newSec = new InventorySection
