@@ -71,6 +71,40 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
         }
 
         [Test]
+        public void AddingExistingSectionIsIgnored()
+        {
+            var underTest = new Common.Entities.Inventory.Inventory
+            {
+                ID = Guid.NewGuid(),
+                Sections = new List<InventorySection>
+                {
+                    new InventorySection
+                    {
+                        ID = Guid.NewGuid(),
+                        Name = "Test section",
+                        LineItems = new List<InventoryBeverageLineItem>()
+                    }
+                }
+            };
+
+            var addEvent = new InventoryNewSectionAddedEvent
+            {
+                ID = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                InventoryID = underTest.ID,
+                Name = "Updated section",
+                SectionID = underTest.Sections.First().ID,
+            };
+
+            //ACT
+            underTest.When(addEvent);
+
+            //ASSERT
+            var sections = underTest.Sections;
+            Assert.AreEqual(1, sections.Count);
+            Assert.AreEqual("Test section", underTest.Sections.First().Name);
+        }
+        [Test]
         public void CreateAddsRestaurantSections()
         {
             var underTest = new Common.Entities.Inventory.Inventory();
