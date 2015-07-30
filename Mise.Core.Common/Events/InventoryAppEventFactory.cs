@@ -620,7 +620,7 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
-		public EmployeeCreatedEvent CreateEmployeeCreatedEvent (EmailAddress email, Password password, PersonName name)
+		public EmployeeCreatedEvent CreateEmployeeCreatedEvent (EmailAddress email, Password password, PersonName name, MiseAppTypes appType)
 		{
 			return new EmployeeCreatedEvent {
 				ID = Guid.NewGuid(),
@@ -630,7 +630,8 @@ namespace Mise.Core.Common.Events
 				EventOrderingID = GetNextEventID(),
 				Email = email,
                 Name = name,
-				Password = password
+				Password = password,
+                AppType = appType,
 			};
 		}
 

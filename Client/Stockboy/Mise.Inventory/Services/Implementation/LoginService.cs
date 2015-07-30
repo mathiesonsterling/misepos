@@ -350,7 +350,7 @@ namespace Mise.Inventory.Services.Implementation
 		public async Task<IEmployee> RegisterEmployee (EmailAddress email, Password password, PersonName name)
 		{
 			try{
-				var ev = _eventFactory.CreateEmployeeCreatedEvent (email, password, name);
+				var ev = _eventFactory.CreateEmployeeCreatedEvent (email, password, name, MiseAppTypes.StockboyMobile);
 
 				_currentEmployee = _employeeRepository.ApplyEvent (ev);
 

@@ -29,7 +29,7 @@ namespace Mise.Core.Common.Events
         EmployeeLoggedIntoInventoryAppEvent CreateEmployeeLoggedIntoInventoryAppEvent(IEmployee emp);
         EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(EmailAddress userName, Password password);
         EmployeeLoggedOutOfInventoryAppEvent CreateEmployeeLoggedOutOfInventoryAppEvent(IEmployee emp);
-		EmployeeCreatedEvent CreateEmployeeCreatedEvent(EmailAddress email, Password password, PersonName name);
+		EmployeeCreatedEvent CreateEmployeeCreatedEvent(EmailAddress email, Password password, PersonName name, MiseAppTypes appType);
 
 		ReceivingOrderCreatedEvent CreateReceivingOrderCreatedEvent(IEmployee emp, IVendor vendor);
 		ReceivingOrderAssociatedWithPOEvent CreateReceivingOrderAssociatedWithPOEvent(IEmployee emp, IReceivingOrder ro, IPurchaseOrder po);

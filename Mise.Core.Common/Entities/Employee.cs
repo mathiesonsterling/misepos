@@ -246,6 +246,8 @@ namespace Mise.Core.Common.Entities
 			PrimaryEmail = ecEV.Email;
 			Revision = ecEV.EventOrderingID;
 			Password = ecEV.Password;
+
+	        RestaurantsAndAppsAllowed[ecEV.RestaurantID] = new[] {ecEV.AppType};
 		}			
 
         protected virtual void WhenEmployeeRegisteredForInventoryAppEvent(EmployeeRegisteredForInventoryAppEvent empEvent)

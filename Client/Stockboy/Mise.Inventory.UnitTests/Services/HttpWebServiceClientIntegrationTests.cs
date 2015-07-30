@@ -32,9 +32,9 @@ namespace Mise.Inventory.UnitTests.Services
     {
         readonly Guid _testRestaurantID = Guid.Empty;
 
-        const string TEST_SERVER_URL = "http://miseinventoryservicedev.azurewebsites.net/";
+        //const string TEST_SERVER_URL = "http://miseinventoryservicedev.azurewebsites.net/";
         //private const string TEST_SERVER_URL = "http://miseinventoryserviceqa.azurewebsites.net/";
-        //const string TEST_SERVER_URL = "http://localhost:43499/";
+        const string TEST_SERVER_URL = "http://localhost:43499/";
         //private const string TEST_SERVER_URL = "http://miseinventoryserviceprod.azurewebsites.net/";
         static HttpWebServiceClient CreateClient()
         {
@@ -539,6 +539,47 @@ namespace Mise.Inventory.UnitTests.Services
         }
         #endregion
 
+        #region Registration
+
+        [Test]
+        public async Task CreateUserShouldReturnSuccess()
+        {
+            var client = CreateClient();
+
+            var guidName = Guid.NewGuid().ToString() + "_test@test.com";
+
+            var email = new EmailAddress(guidName);
+            var password = Password.TestPassword;
+
+            var empID = Guid.NewGuid();
+            var ev = new EmployeeCreatedEvent
+            {
+                CausedByID = empID,
+                CreatedDate = DateTime.UtcNow,
+                DeviceID = "unitTest",
+                Email = email,
+                EmployeeID = empID,
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 1),
+                ID = Guid.NewGuid(),
+                Name = PersonName.TestName,
+                Password = password,
+                RestaurantID = _testRestaurantID,
+                AppType = MiseAppTypes.UnitTests
+            };
+
+            //ACT
+            var sendRes = await client.SendEventsAsync(null, new[] {ev});
+            Assert.True(sendRes);
+
+            var retEmp = await client.GetEmployeeByPrimaryEmailAndPassword(email, password);
+
+            Assert.NotNull(retEmp);
+            Assert.IsTrue(email.Equals(retEmp.PrimaryEmail));
+            Assert.AreEqual(empID, retEmp.ID);
+            Assert.IsTrue(retEmp.GetAppsEmployeeCanUse(_testRestaurantID).Contains(MiseAppTypes.UnitTests));
+        }
+
+        #endregion
     }
 }
 

@@ -14,5 +14,10 @@ namespace Mise.Core.Common.Events.Employee
         public PersonName Name { get; set; }
 
 		public Password Password{get;set;}
+
+        /// <summary>
+        /// The type of app that's creating this employee
+        /// </summary>
+        public MiseAppTypes AppType { get; set; }
     }
 }

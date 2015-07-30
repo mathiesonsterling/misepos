@@ -72,15 +72,14 @@ namespace Mise.Inventory.Android.Services
 			service.Url = _requestSettings.WebServiceUrl;
 			var result = service.InitializePayment (request);
 
-			if(result != null){
-				if(result.ResponseCode == 0){
+			if(result != null) {
+				if (result.ResponseCode == 0) {
 					return result.PaymentID;
-				} else{
-					throw new System.Exception (result.Message);
 				}
+				throw new Exception (result.Message);
 			}
 
-			throw new System.Exception ("Null return from Mercury!");
+			throw new Exception ("Null return from Mercury!");
 		}
 
 
