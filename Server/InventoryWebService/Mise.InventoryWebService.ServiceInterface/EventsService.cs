@@ -8,7 +8,9 @@ using Mise.Core.Repositories;
 using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
+using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
+using Mise.InventoryWebService.ServiceInterface.Exceptions;
 using Mise.InventoryWebService.ServiceModelPortable.Responses;
 using ServiceStack;
 
@@ -94,9 +96,15 @@ namespace Mise.InventoryWebService.ServiceInterface
                 _logger.Log("Unable to store events");
                 _unprocessedEvents.AddRange(events);
             }
-
-            var empRes =
-                await HandleEventsIntoRepository(events, dto => _eventFactory.ToEmployeeEvent(dto), _employeeRepository);
+            bool empRes;
+            try
+            {
+                empRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToEmployeeEvent(dto), _employeeRepository);
+            }
+            catch (EmailAlreadyInUseException e)
+            {
+                throw HttpError.Conflict(e.SendError.ToString());
+            }
 
             var vendorRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToVendorEvent(dto),
                 _vendorRepository);

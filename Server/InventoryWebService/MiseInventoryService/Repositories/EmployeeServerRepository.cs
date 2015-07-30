@@ -10,11 +10,11 @@ using Mise.Core.Entities.Base;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.People.Events;
 using Mise.Core.Repositories;
-using Mise.Core.Server.Repositories;
 using Mise.Core.Server.Services;
 using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
+using Mise.InventoryWebService.ServiceInterface.Exceptions;
 
 namespace MiseInventoryService.Repositories
 {
@@ -57,7 +57,7 @@ namespace MiseInventoryService.Repositories
 
                 if (othersWithEmail)
                 {
-                    throw new ArgumentException("Email is already taken!");
+                    throw new EmailAlreadyInUseException(email);
                 }
             }
         }

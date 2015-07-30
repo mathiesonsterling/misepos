@@ -28,7 +28,7 @@ namespace MiseInventoryService
             //logging
             var logger = new ConsoleLogger();
             container.Register<ILogger>(logger);
-            container.RegisterAutoWiredAs<ConsoleLogger, ILogger>();
+            //container.RegisterAutoWiredAs<ConsoleLogger, ILogger>();
 
             //serializer
             container.RegisterAs<JsonNetSerializer, IJSONSerializer>();

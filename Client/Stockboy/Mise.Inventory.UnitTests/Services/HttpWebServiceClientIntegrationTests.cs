@@ -32,9 +32,9 @@ namespace Mise.Inventory.UnitTests.Services
     {
         readonly Guid _testRestaurantID = Guid.Empty;
 
-        //const string TEST_SERVER_URL = "http://miseinventoryservicedev.azurewebsites.net/";
+        const string TEST_SERVER_URL = "http://miseinventoryservicedev.azurewebsites.net/";
         //private const string TEST_SERVER_URL = "http://miseinventoryserviceqa.azurewebsites.net/";
-        const string TEST_SERVER_URL = "http://localhost:43499/";
+        //const string TEST_SERVER_URL = "http://localhost:43499/";
         //private const string TEST_SERVER_URL = "http://miseinventoryserviceprod.azurewebsites.net/";
         static HttpWebServiceClient CreateClient()
         {
@@ -203,7 +203,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var events = new List<IEmployeeEvent> {recreate};
 
-            bool thrown = false;
+            var thrown = false;
             try
             {
                 await client.SendEventsAsync(null, events);
@@ -498,43 +498,69 @@ namespace Mise.Inventory.UnitTests.Services
             //get it
             var get = (await client.GetInventoriesForRestaurant(_testRestaurantID)).ToList();
 
-            Assert.AreEqual(1, get.Count);
-            Assert.AreEqual(invID, get.First().ID, "ID came back!");
+            Assert.GreaterOrEqual(get.Count, 1, "At least one ID");
+
+            var first = get.FirstOrDefault(i => i.ID == invID);
+            Assert.NotNull(first, "Found inventory with our ID");
 
             //add line items, measure, complete section, and add
+            var li = new InventoryBeverageLineItem
+            {
+                ID = Guid.NewGuid(),
+                CaseSize = 12,
+                UPC = string.Empty,
+                Container = LiquidContainer.Bottle750ML,
+                DisplayName = "testLI",
+                MiseName = string.Empty,
+                                Categories = new List<ItemCategory>
+                {
+                    CategoriesService.WhiskeyScotch,
+                    CategoriesService.Vodka
+                },
+                RestaurantID = _testRestaurantID,
+            };
             var addLI = new InventoryLineItemAddedEvent
             {
-                CaseSize = 12,
+                CaseSize = li.CaseSize,
                 CausedByID = emp.ID,
                 CreatedDate = DateTime.UtcNow,
                 RestaurantID = _testRestaurantID,
                 EventOrderingID = new EventID(MiseAppTypes.UnitTests, 4),
                 DeviceID = "unitTest",
-                UPC = "",
-                Container = LiquidContainer.Bottle750ML,
-                DisplayName = "testLI",
-                MiseName = string.Empty,
+                UPC = li.UPC,
+                Container = li.Container,
+                DisplayName = li.DisplayName,
+                MiseName = li.MiseName,
+
                 Quantity = 0,
                 PricePaid = null,
                 VendorBoughtFrom = null,
                 RestaurantInventorySectionID = section.RestaurantSectionId,
                 InventorySectionID = section.SectionID,
                 InventoryID = invID,
-                Categories = new List<ItemCategory>
-                {
-                    CategoriesService.WhiskeyScotch,
-                    CategoriesService.Vodka
-                },
+                Categories = li.Categories,
                 InventoryPosition = 1,
-                LineItemID = Guid.NewGuid()
+                LineItemID = li.ID,
+  
             };
 
             var measure = new InventoryLiquidItemMeasuredEvent
             {
-                AmountMeasured = new LiquidAmount {}
+                AmountMeasured = new LiquidAmount { Milliliters = 1000},
+                BeverageLineItem = li,
+                CausedByID = emp.ID,
+                CreatedDate = DateTime.UtcNow,
+                DeviceID = "unitTest",
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 100),
+                ID = Guid.NewGuid(),
+                InventoryID = invID,
+                InventorySectionID = section.SectionID,
+                RestaurantID = _testRestaurantID,
+                NumFullBottlesMeasured = 10,
+                PartialBottles = new List<decimal> { .4M, .1M}
             };
 
-
+            var sendAgainRes = await client.SendEventsAsync(null, new IInventoryEvent[] {addLI, measure});
             //retrieve, verify our LIs are there
         }
         #endregion
