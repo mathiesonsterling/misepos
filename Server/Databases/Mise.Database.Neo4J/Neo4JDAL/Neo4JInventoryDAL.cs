@@ -91,32 +91,30 @@ namespace Mise.Neo4J.Neo4JDAL
                 await CreateLiquidContainerIfNotAlreadyPresent(container);
             }
 
-            var tasks = new List<Task>();
-            tasks.AddRange(inventory.GetSections().Select(s => SetSectionForInventoryAsync(s, inventory.ID)));
+            foreach (var section in inventory.GetSections())
+            {
+                await SetSectionForInventoryAsync(section, inventory.ID);
+            }
 
             //associate us with the restaurant
             const string RELATIONSHIP_NAME = "INVENTORY";
-            var restTask = _graphClient.Cypher
+            await _graphClient.Cypher
                 .Match("(r:Restaurant), (inv:Inventory)")
                 .Where((RestaurantGraphNode r) => r.ID == inventory.RestaurantID)
                 .AndWhere((InventoryGraphNode inv) => inv.ID == inventory.ID)
                 .CreateUnique("(r)-[:" + RELATIONSHIP_NAME + "]->(inv)")
-                .ExecuteWithoutResultsAsync();
-            tasks.Add(restTask);
+                .ExecuteWithoutResultsAsync()
+                .ConfigureAwait(false);
 
             //also our employee
-            var empTask = _graphClient.Cypher
+            await _graphClient.Cypher
                 .Match("(e:Employee), (inv:Inventory)")
                 .Where((EmployeeGraphNode e) => e.ID == inventory.CreatedByEmployeeID)
                 .AndWhere((InventoryGraphNode inv) => inv.ID == inventory.ID)
                 .CreateUnique("(e)-[:CREATED]->(inv)")
-                .ExecuteWithoutResultsAsync();
-            tasks.Add(empTask);
+                .ExecuteWithoutResultsAsync()
+                .ConfigureAwait(false);
 
-            foreach (var task in tasks)
-            {
-                await task.ConfigureAwait(false);
-            }
         }
 
         public async Task UpdateInventoryAsync(IInventory inventory)
@@ -219,6 +217,14 @@ namespace Mise.Neo4J.Neo4JDAL
         private async Task SetSectionForInventoryAsync(IInventorySection section, Guid inventoryID)
         {
             //each inventory will carry its own copy of sections
+            //check we don't already have one!
+            await _graphClient.Cypher
+                .Match("(sec:InventorySection)")
+                .Where((InventorySectionGraphNode sec) => sec.ID == section.ID)
+                .Delete("sec")
+                .ExecuteWithoutResultsAsync()
+                .ConfigureAwait(false);
+
             var node = new InventorySectionGraphNode(section);
             await _graphClient.Cypher
                 .Create("(isec:InventorySection {param})")

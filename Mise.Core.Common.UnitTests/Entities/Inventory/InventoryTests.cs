@@ -104,6 +104,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             Assert.AreEqual(1, sections.Count);
             Assert.AreEqual("Test section", underTest.Sections.First().Name);
         }
+
         [Test]
         public void CreateAddsRestaurantSections()
         {
