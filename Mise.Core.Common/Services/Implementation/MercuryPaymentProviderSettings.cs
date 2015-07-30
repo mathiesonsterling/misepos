@@ -72,12 +72,12 @@ namespace Mise.Core.Common.Services.Implementation
 			get{return "http://mise.in";}
 		}
 
-		public int StartWaitTimeForResponseInMS{
-			get{return 100;}
+		public TimeSpan StartWaitTime{
+			get{return new TimeSpan (100);}
 		}
 
-		public int MaxWaitTimeForResponseInMS{
-			get{return 10000;}
+		public TimeSpan MaxWaitTimeForResponse{
+			get{return new TimeSpan(10000);}
 		}
 	}
 

@@ -84,19 +84,21 @@ namespace Mise.Inventory.Android.Services
 		}
 
 
-		public Task<CreditCard> GetCardAfterAuthorization (string paymentID)
+		public async Task<CreditCard> GetCardAfterAuthorization (string paymentID)
 		{
 			//do this until we've got an answer, or we run over time
-			var maxTime = DateTimeOffset.UtcNow.AddMilliseconds (_requestSettings.MaxWaitTimeForResponseInMS);
-			var sleepTime = _requestSettings.StartWaitTimeForResponseInMS;
-			var lastSleepTime = 0;
+			var maxTime = DateTimeOffset.UtcNow.Add(_requestSettings.MaxWaitTimeForResponse);
+			var sleepTime = _requestSettings.StartWaitTime;
+			var lastSleepTime = new TimeSpan ();
 	
 			while(DateTimeOffset.UtcNow < maxTime){
 				var cc = GetCreditCardFromMercury (paymentID);
 				if(cc == null){
-					System.Threading.Thread.Sleep (sleepTime);
+					await Task.Delay (sleepTime);
 					lastSleepTime = sleepTime;
-					sleepTime = sleepTime + lastSleepTime;
+					sleepTime = sleepTime.Add(lastSleepTime);
+				} else {
+					return cc;
 				}
 			}
 
