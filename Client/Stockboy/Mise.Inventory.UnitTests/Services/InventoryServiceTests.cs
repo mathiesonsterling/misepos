@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Client.Services;
 using Mise.Core.Entities.Restaurant;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using NUnit.Framework;
 using Moq;

@@ -9,6 +9,7 @@ using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant.Events;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services.Implementation;

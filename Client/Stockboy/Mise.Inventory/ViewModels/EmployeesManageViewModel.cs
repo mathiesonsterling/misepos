@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Text.RegularExpressions;
 
 using Mise.Core.Entities.People;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Services;

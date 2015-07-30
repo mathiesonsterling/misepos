@@ -2,6 +2,7 @@
 using System.Web;
 using Funq;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.InventoryWebService.ServiceInterface;
 using ServiceStack;
 

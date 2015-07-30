@@ -7,6 +7,7 @@ using Mise.Core.Common;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services;
 using Mise.Inventory.ViewModels;

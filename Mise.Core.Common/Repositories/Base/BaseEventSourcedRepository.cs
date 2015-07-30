@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Base;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Common.Repositories.Base

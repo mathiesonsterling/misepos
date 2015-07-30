@@ -7,6 +7,7 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
 using Mise.Core.ExtensionMethods;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.Repositories;
 using Mise.Core.ValueItems.Reports;

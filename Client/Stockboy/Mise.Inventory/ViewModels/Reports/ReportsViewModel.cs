@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems.Reports;
 
 using Mise.Inventory.Services;
@@ -15,11 +15,9 @@ namespace Mise.Inventory.ViewModels.Reports
 	    private readonly IReportsService _reportsService;
 		private readonly IInventoryService _inventoryService;
 		private readonly ILoginService _loginService;
-		private readonly ILogger _logger;
 		public ReportsViewModel(IAppNavigation navigation, ILogger logger, 
 			IReportsService reportsService, IInventoryService inventoryService, ILoginService loginService) : base(navigation, logger)
 		{
-			_logger = logger;
 			_loginService = loginService;
 		    _reportsService = reportsService;
 			_inventoryService = inventoryService;
@@ -55,7 +53,7 @@ namespace Mise.Inventory.ViewModels.Reports
 	            Processing = true;
                 //set our request to limit dates
 				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
-	            var request = new ReportRequest(ReportTypes.CompletedInventory, StartDate, EndDate, null, null);
+	            var request = new ReportRequest(ReportTypes.CompletedInventory, StartDate, EndDate, null, null, unit);
 	            await _reportsService.SetCurrentReportRequest(request);
 	            Processing = false;
                 await Navigation.ShowSelectCompletedInventory();

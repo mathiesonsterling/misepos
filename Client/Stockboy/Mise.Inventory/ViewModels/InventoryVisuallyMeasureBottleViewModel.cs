@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
 using System.Windows.Input;
-
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.Services;
 using Mise.Core.ValueItems.Inventory;

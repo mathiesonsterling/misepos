@@ -15,6 +15,7 @@ using Mise.Core.Entities.People.Events;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Payments;

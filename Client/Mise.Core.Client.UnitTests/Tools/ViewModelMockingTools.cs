@@ -5,19 +5,16 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Client.Repositories;
-using Mise.Core.Entities.Check;
 using Mise.Core.Entities.People.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Common.UnitTests.Tools;
 using Mise.Core.Client.ApplicationModel.Implementation;
-using Mono.Security.Cryptography;
 using Moq;
 using Mise.Core.Entities.People;
 using Mise.Core.Services.WebServices;
-using Mise.Core.Entities;
 using Mise.Core.Client.Services;
-using NUnit.Framework;
 
 namespace Mise.Core.Client.UnitTests.Tools
 {

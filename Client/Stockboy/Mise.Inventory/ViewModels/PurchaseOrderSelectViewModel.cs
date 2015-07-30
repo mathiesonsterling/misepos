@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ExtensionMethods;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 
 using Mise.Core.Services;

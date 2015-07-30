@@ -9,7 +9,7 @@ using Mise.Core.Common.Services;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Core.Repositories;
 

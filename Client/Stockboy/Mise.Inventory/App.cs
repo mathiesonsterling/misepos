@@ -8,6 +8,7 @@ using Mise.Core.Common.Events;
 using Mise.Core.Common.Services;
 using Mise.Core.Entities.Base;
 using Mise.Core.Repositories;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.ViewModels.Reports;

@@ -12,6 +12,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.InventoryWebService.ServiceInterface.Services;
 using Mise.Neo4J.Neo4JDAL;
 using MiseInventoryService.Repositories;
+using MiseInventoryService.Services;
 
 namespace MiseInventoryService
 {
@@ -24,6 +25,8 @@ namespace MiseInventoryService
         {
             //config - do this to get the connection string to our db
             container.RegisterAutoWiredAs<Config, IConfig>();
+
+            container.RegisterAutoWiredAs<RaygunErrorTracking, IErrorTrackingService>();
 
             //logging
             var logger = new ConsoleLogger();

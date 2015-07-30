@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System;
 using System.Threading.Tasks;
 
-
-namespace Mise.Core.Services
+namespace Mise.Core.Services.UtilityServices
 {
-    public enum LogLevel
-    {
-        Debug,
-        Info,
-        Warn,
-        Error,
-        Fatal
-    }
-
     /// <summary>
     /// Represents any service which allows us to log events
     /// </summary>

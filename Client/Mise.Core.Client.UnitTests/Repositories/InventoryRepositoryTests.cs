@@ -12,13 +12,14 @@ using Mise.Core.Common.UnitTests.Tools;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory.Events;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Moq;
 using NUnit.Framework;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.UnitTests.Repositories
 {

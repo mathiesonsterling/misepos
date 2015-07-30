@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
-
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Xamarin.Forms;
 

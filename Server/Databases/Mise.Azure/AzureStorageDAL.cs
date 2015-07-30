@@ -15,7 +15,7 @@ using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
-using LogLevel = Mise.Core.Services.LogLevel;
+using LogLevel = Mise.Core.Services.UtilityServices.LogLevel;
 
 namespace Mise.Azure
 {

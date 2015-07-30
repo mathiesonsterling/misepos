@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
+using Mise.Core.Services.UtilityServices;
 using Moq;
 using NUnit.Framework;
 

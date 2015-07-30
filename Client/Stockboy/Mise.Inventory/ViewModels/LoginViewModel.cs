@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Linq;
-
-
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Services;
@@ -103,9 +102,9 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		public async Task Login()
 		{
-		    bool succeeded = false;
-		    bool shownErrorMessage = false;
-		    bool missingServer = false;
+		    var succeeded = false;
+		    var shownErrorMessage = false;
+		    var missingServer = false;
 			try{
 				Processing = true;
 				var email = new EmailAddress{ Value = Username.Trim() };
@@ -142,13 +141,7 @@ namespace Mise.Inventory.ViewModels
 			    {
 			        succeeded = true;
 
-			        _insightsService.Identify("Unique user ID", "MiseID", employee.ID.ToString());
-			        _insightsService.Identify("Unique user ID", Insights.Traits.Email, email.Value);
-
-					if(employee.Name != null){
-						_insightsService.Identify ("First Name", Insights.Traits.FirstName, employee.Name.FirstName);
-						_insightsService.Identify ("Last Name", Insights.Traits.LastName, employee.Name.LastName);
-					}
+                    _insightsService.Identify(employee.ID, employee.PrimaryEmail, employee.Name, "", false);
 
 			        //do we have more than one restaurant?
 			        Processing = true;

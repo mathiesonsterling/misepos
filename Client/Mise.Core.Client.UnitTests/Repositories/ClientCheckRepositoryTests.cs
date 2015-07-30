@@ -16,7 +16,7 @@ using Moq;
 using Mise.Core.Common.Services;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Check;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Client.Repositories;
 
 namespace Mise.Core.Client.UnitTests.Repositories

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 
-namespace MiseInventoryService
+namespace MiseInventoryService.Services
 {
     public class ConsoleLogger : ILogger
     {

@@ -6,6 +6,7 @@ using Mise.Core.Common.Repositories.Base;
 using Mise.Core.Common.Services.DAL;
 using Mise.Core.Entities.Base;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Server.Repositories

@@ -15,7 +15,7 @@ using Mise.Core.Common.UnitTests.Tools;
 using Moq;
 using Mise.Core.Common.Services;
 using Mise.Core.Entities.Base;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Entities.People;
 using Mise.Core.Client.Repositories;
 using Mise.Core.ValueItems;

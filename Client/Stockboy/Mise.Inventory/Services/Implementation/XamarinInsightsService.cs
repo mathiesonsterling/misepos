@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Mise.Core.Services;
-
+using Akavache;
+using Mise.Core.Services.UtilityServices;
+using Mise.Core.ValueItems;
 using Xamarin;
 namespace Mise.Inventory.Services.Implementation
 {
 	public class XamarinInsightsService : IInsightsService
     {
-        public void Identify(string tag, string item, string value)
-        {
-            Xamarin.Insights.Identify(tag, item, value);
-        }
-
         public void Track(string evName, Dictionary<string, string> values)
         {
             Insights.Track(evName, values);
@@ -50,5 +42,41 @@ namespace Mise.Inventory.Services.Implementation
 			}
 			Insights.Report (e, severity);
 		}
+
+	    public void Identify(Guid? userID, EmailAddress email, PersonName name, string deviceID, bool isAnonymous)
+	    {
+            var values = new Dictionary<string, string>();
+	        var userIDVal = string.Empty;
+	        if (userID.HasValue)
+	        {
+	            userIDVal = userID.ToString();
+	            values.Add("UserID", userIDVal);
+	        }
+
+	        if (email != null)
+	        {
+	            if (userID.HasValue == false)
+	            {
+	                userIDVal = email.Value;
+	            }
+                values.Add("Email", email.Value);
+	        }
+
+	        if(name != null)
+	        {
+	            values.Add("Name", name.ToSingleString());
+	        }
+
+	        if (string.IsNullOrEmpty(deviceID) == false)
+	        {
+	            values.Add("DeviceID", deviceID);
+	        }
+
+	        if (isAnonymous)
+	        {
+	            values.Add("Anonymous", "True");
+	        }
+	        Insights.Identify(userIDVal, values);
+	    }
     }
 }

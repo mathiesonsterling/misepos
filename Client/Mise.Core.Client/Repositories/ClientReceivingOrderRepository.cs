@@ -11,7 +11,7 @@ using Mise.Core.Services;
 using Mise.Core.Services.WebServices;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Repositories;
-
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.Repositories
 {

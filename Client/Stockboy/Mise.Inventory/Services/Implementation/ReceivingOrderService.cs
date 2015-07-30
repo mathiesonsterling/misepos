@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors.Events;

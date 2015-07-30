@@ -244,8 +244,8 @@ namespace Mise.Inventory.Services.Implementation
 		async Task<T> GetData<T>(string urlSub) where T:class
 		{
 			string url;
-			var serverURL = _serverLocation.AbsoluteUri;
-			if (serverURL.EndsWith ("/", StringComparison.Ordinal) && urlSub.StartsWith ("/", StringComparison.Ordinal)) {
+			var serverUrl = _serverLocation.AbsoluteUri;
+			if (serverUrl.EndsWith ("/", StringComparison.Ordinal) && urlSub.StartsWith ("/", StringComparison.Ordinal)) {
 				url = _serverLocation.AbsoluteUri + urlSub.Substring(1) + "?format=json";
 			} else {
 				url = _serverLocation.AbsoluteUri + urlSub + "?format=json";

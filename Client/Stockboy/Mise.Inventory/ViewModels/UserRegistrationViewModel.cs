@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Mise.Core.Entities.People;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Xamarin;
 using Xamarin.Forms;
@@ -118,13 +119,18 @@ namespace Mise.Inventory.ViewModels
             {
                 var name = new PersonName(FirstName, LastName);
 				Processing = true;
-                IEmployee emp;
                 try
                 {
-                    emp = await _loginService.RegisterEmployee(email, password, name);
-					if(emp != null){
-						_insights.Track ("Registered User", "User Email", email.Value);
-					}
+                    var emp = await _loginService.RegisterEmployee(email, password, name);
+                    if (emp != null)
+                    {
+                        _insights.Track("Registered User", "User Email", email.Value);
+                        _insights.Identify(emp.ID, email, name, "", false);
+                    }
+                    else
+                    {
+                        throw new Exception("Failed to register employee!");
+                    }
                 }
                 catch (SendEventsException se)
                 {
@@ -136,10 +142,6 @@ namespace Mise.Inventory.ViewModels
 					return;
                 }
 					
-                _insights.Identify ("Unique user ID", Insights.Traits.FirstName, FirstName);
-				_insights.Identify ("Unique user ID", Insights.Traits.LastName, LastName);
-				_insights.Identify ("Unique user ID", Insights.Traits.Email, Email);
-				_insights.Identify ("Unique user ID", "MiseID", emp.ID.ToString());
                 //see if we need to display invitations or not
                 var invites = await _loginService.GetInvitationsForCurrentEmployee();
 				Processing = false;

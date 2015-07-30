@@ -4,11 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
-using Mise.Core.Services;
-using Mise.Inventory.ViewModels;
+using Mise.Core.Services.UtilityServices;
 
 using Mise.Inventory.Services;
-using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels

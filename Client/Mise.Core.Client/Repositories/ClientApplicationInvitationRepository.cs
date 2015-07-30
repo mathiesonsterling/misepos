@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Mise.Core.Repositories;
 using Mise.Core.ValueItems;
-
+using Mise.Core.Services.UtilityServices;
 namespace Mise.Core.Client.Repositories
 {
 	public class ClientApplicationInvitationRepository 

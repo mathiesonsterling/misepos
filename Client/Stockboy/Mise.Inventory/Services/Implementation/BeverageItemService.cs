@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
 using Mise.Core.Entities.Inventory;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Client.Services;
 using Mise.Core.Common.Entities.Inventory;

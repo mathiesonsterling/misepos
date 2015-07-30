@@ -15,6 +15,7 @@ using Moq;
 using NUnit.Framework;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory;
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.UnitTests.Repositories
 {

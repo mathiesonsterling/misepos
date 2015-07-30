@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 
 using Mise.Core.Entities.Inventory;
-
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System;
 using System.Collections.ObjectModel;

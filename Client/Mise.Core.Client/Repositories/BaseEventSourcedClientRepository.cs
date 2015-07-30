@@ -6,7 +6,7 @@ using Mise.Core.Common.Repositories.Base;
 using Mise.Core.Common.Services;
 using Mise.Core.Entities.Base;
 using Mise.Core.ExtensionMethods;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 

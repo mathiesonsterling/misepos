@@ -17,6 +17,7 @@ using Mise.Core.Entities.People.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
+using Mise.Core.Services.UtilityServices;
 using Moq;
 using NUnit.Framework;
 

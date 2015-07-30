@@ -5,7 +5,7 @@ using Mise.Core.Client.UnitTests.Tools;
 using Mise.Core.Client.ApplicationModel;
 using Mise.Core.Entities.Menu;
 using Mise.Core.Repositories;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Entities.People;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Common.Entities;

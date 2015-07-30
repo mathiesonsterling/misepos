@@ -6,6 +6,7 @@ using Mise.Core.Common.Entities;
 using Mise.Core.Entities;
 using Mise.Core.Entities.People;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Neo4J.Neo4JDAL;
 using Moq;

@@ -7,6 +7,7 @@ using Mise.Core.Repositories;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Events;
 using Mise.Core.Services;
