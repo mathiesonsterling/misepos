@@ -130,14 +130,13 @@ namespace Mise.Core.Common.Repositories.Base
         /// <returns></returns>
         public virtual TEntity ApplyEvents(IEnumerable<TEventType> events)
         {
-
             var oEvents = events.OrderBy(e => e.CreatedDate)
                 .ThenBy(e => e.EventOrderingID);
 
             var firstEv = oEvents.FirstOrDefault();
             if (firstEv == null)
             {
-                return null;
+                throw new ArgumentException("Events given to apply are null or empty");
             }
             var entityID = GetEntityID(firstEv);
 
