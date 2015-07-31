@@ -189,7 +189,7 @@ namespace Mise.Core.Common.Repositories.Base
             return oEvents;
         }
 
-        public ICollection<TEventType> OrderEvents(IEnumerable<TEventType> events)
+		public ICollection<T> OrderEvents<T>(IEnumerable<T> events) where T:IEntityEventBase
         {
             //get the events that all came from the same application first
             var appGroups = from ev in events
@@ -208,7 +208,7 @@ namespace Mise.Core.Common.Repositories.Base
                 .ThenBy(k => k.DeviceID)
                 .ThenBy(k => k.FirstDate);
 
-            var res = new List<TEventType>();
+            var res = new List<T>();
             foreach (var group in groupsByDate)
             {
                 //we want to get first the aggregate root creation, then any other creations, then the rest by order

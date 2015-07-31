@@ -59,7 +59,7 @@ namespace Mise.Inventory.iOS.Services
 			request.TranType = _requestSettings.TranType;
 			request.TotalAmount = (double)authorizationAmount.Dollars;
 			request.Frequency = _requestSettings.Frequency;
-			request.Invoice = "Mise Account " + accountID.ToString ();
+			request.Invoice = accountID.ToString ().Substring (0, 15);
 			request.Memo = "Mise " + MiseAppTypes.StockboyMobile;
 			request.TaxAmount = 0;
 			request.CardHolderName = name.ToSingleString ();

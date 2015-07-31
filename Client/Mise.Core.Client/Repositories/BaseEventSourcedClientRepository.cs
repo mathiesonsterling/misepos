@@ -259,7 +259,9 @@ namespace Mise.Core.Client.Repositories
 
 			var allResends = toResend.Where (ev => ev != null);
 
-            var chunks = allResends.Chunk(RESEND_CHUNK_SIZE);
+			//order these by their priority, so the first chunk gets the creations
+			var ordered = OrderEvents (allResends);
+            var chunks = ordered.Chunk(RESEND_CHUNK_SIZE);
 			foreach (var chunk in chunks) {
 				if (chunk != null && chunk.Any (ev => ev != null)) {
 					bool sent;
