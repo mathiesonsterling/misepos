@@ -30,6 +30,7 @@ namespace Mise.Inventory.Services
 		/// <returns>The selected inventory.</returns>
 		Task<IInventory> GetSelectedInventory ();
 		Task<IInventory> GetLastCompletedInventory();
+		Task<IInventory> GetFirstCompletedInventory();
 
 		Task<IInventoryBeverageLineItem> GetLineItemToMeasure();
 		Task<IEnumerable<IInventoryBeverageLineItem>> GetLineItemsForCurrentSection();

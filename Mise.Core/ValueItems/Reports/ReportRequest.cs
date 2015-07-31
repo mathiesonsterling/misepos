@@ -11,6 +11,9 @@ namespace Mise.Core.ValueItems.Reports
         public ReportRequest(ReportTypes type, DateTimeOffset? startDate, DateTimeOffset? endDate, Guid? entityID,
             int? maxResults, LiquidAmountUnits unit = LiquidAmountUnits.Milliliters)
         {
+			if (startDate.HasValue && endDate.HasValue && startDate.Value > endDate.Value) {
+				throw new ArgumentException ("Start date is after the End date");
+			}
             Type = type;
             StartDate = startDate;
             EndDate = endDate;

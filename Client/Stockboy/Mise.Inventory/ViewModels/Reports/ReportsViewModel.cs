@@ -26,9 +26,18 @@ namespace Mise.Inventory.ViewModels.Reports
 			LiquidUnit = LiquidAmountUnits.Milliliters.ToString ();
 		}
 
-        public override Task OnAppearing()
+        public override async Task OnAppearing()
         {
-            return Task.FromResult(false);
+            //do we have a first item
+			Processing = true;
+			var firstInventory = await _inventoryService.GetFirstCompletedInventory ();
+			if (firstInventory != null) {
+				StartDate = firstInventory.DateCompleted.Value.AddMinutes (1).LocalDateTime;
+				if (StartDate.AddDays(1) > EndDate) {
+					EndDate = StartDate.AddDays (1);
+				}
+			}
+			Processing = false;
         }
 
         #region Fields

@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using AndroidOS = Android.Util;
 using Xamarin;
 namespace Mise.Inventory.Android.Services

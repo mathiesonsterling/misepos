@@ -26,6 +26,7 @@ namespace Mise.Inventory.Services.Implementation
 	    private IInventoryBeverageLineItem _selectedLineItem;
 	    private IInventory _selectedInventory;
 	    private IInventory _lastCompletedInventory;
+		private IInventory _firstCompletedInventory;
 	    private IInventorySection _selectedInventorySection;
 
 		public InventoryService (ILogger logger, ILoginService loginService, 
@@ -50,11 +51,14 @@ namespace Mise.Inventory.Services.Implementation
 		            .OrderByDescending(i => i.LastUpdatedDate)
 		            .FirstOrDefault();
 
-		        _lastCompletedInventory = _inventoryRepository.GetAll()
-		            .Where(i => i.RestaurantID == restID.Value)
-		            .Where(i => i.DateCompleted.HasValue)
-		            .OrderByDescending(i => i.DateCompleted.Value)
-		            .FirstOrDefault();
+				var completeds = _inventoryRepository.GetAll ()
+					.Where (i => i.DateCompleted.HasValue)
+					.Where (i => i.RestaurantID == restID.Value)
+					.OrderBy (i => i.DateCompleted.Value);
+				
+				_lastCompletedInventory = completeds.LastOrDefault ();
+
+				_firstCompletedInventory = completeds.FirstOrDefault ();
 		    }
 		    else
 		    {
@@ -345,6 +349,11 @@ namespace Mise.Inventory.Services.Implementation
 		public Task<IInventory> GetLastCompletedInventory ()
 		{
 			return Task.FromResult (_lastCompletedInventory);
+		}
+
+		public Task<IInventory> GetFirstCompletedInventory ()
+		{
+			return Task.FromResult (_firstCompletedInventory);
 		}
 
 		public Task<bool> HasInventoryPriorToDate (Guid restaurantID, DateTimeOffset date)
