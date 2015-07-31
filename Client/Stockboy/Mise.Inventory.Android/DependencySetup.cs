@@ -6,6 +6,7 @@ using Mise.Inventory.Services;
 using XLabs.Platform;
 using XLabs.Platform.Device;
 using Mise.Inventory.Android.Services;
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Inventory.Android
 {
@@ -24,6 +25,8 @@ namespace Mise.Inventory.Android
 			SqlLiteConnection = dbConn;
 			cb.RegisterInstance<ISQLite> (dbConn).SingleInstance ();
 
+			var errorService = new AndroidRaygun ();
+			cb.RegisterInstance<IErrorTrackingService> (errorService).SingleInstance ();
 			base.RegisterDepenencies(cb);
 		}
 	}

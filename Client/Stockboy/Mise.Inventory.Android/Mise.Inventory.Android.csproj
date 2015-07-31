@@ -160,6 +160,7 @@
     <Compile Include="Services\MercuryPaymentProcessorService.cs" />
     <Compile Include="Services\AndroidLogger.cs" />
     <Compile Include="Services\AndroidSQLite.cs" />
+    <Compile Include="Services\AndroidRaygun.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

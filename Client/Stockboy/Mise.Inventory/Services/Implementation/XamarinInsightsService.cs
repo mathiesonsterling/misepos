@@ -9,6 +9,10 @@ namespace Mise.Inventory.Services.Implementation
 {
 	public class XamarinInsightsService : IInsightsService
     {
+		private readonly IErrorTrackingService _raygun;
+		public XamarinInsightsService(IErrorTrackingService raygun){
+			_raygun = raygun;
+		}
         public void Track(string evName, Dictionary<string, string> values)
         {
             Insights.Track(evName, values);
@@ -28,6 +32,7 @@ namespace Mise.Inventory.Services.Implementation
 		public void ReportException (Exception e, LogLevel level)
 		{
 			var severity = Insights.Severity.Warning;
+			bool reportToRaygun = false;
 			switch (level) {
 			case LogLevel.Info:
 			case LogLevel.Debug:
@@ -36,12 +41,17 @@ namespace Mise.Inventory.Services.Implementation
 				break;
 			case LogLevel.Error:
 				severity = Insights.Severity.Error;
+				reportToRaygun = true;
 				break;
 			case LogLevel.Fatal:
 				severity = Insights.Severity.Critical;
+				reportToRaygun = true;
 				break;
 			}
 			Insights.Report (e, severity);
+			if(reportToRaygun){
+				_raygun.ReportException (e, level);
+			}
 		}
 
 	    public void Identify(Guid? userID, EmailAddress email, PersonName name, string deviceID, bool isAnonymous)

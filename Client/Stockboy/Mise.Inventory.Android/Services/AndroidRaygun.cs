@@ -1,0 +1,48 @@
+﻿using System;
+using Mise.Core.Services.UtilityServices;
+using Mindscape.Raygun4Net;
+using System.Runtime.InteropServices;
+
+using Mise.Core.ValueItems;
+namespace Mise.Inventory.Android.Services
+{
+	public class AndroidRaygun : IErrorTrackingService
+	{
+		private RaygunClient _raygunClient;
+		public AndroidRaygun ()
+		{
+			_raygunClient = new RaygunClient ("2ZV9A+X5sb5dNz4klhTD8A==");
+		}
+
+		#region IErrorTrackingService implementation
+
+		public void ReportException (Exception e, LogLevel level)
+		{
+			_raygunClient.SendInBackground (e);
+		}
+
+		public void Identify (Guid? userID, EmailAddress email, PersonName name, string deviceID, bool isAnonymous)
+		{
+			var emailString = email != null ? email.Value : string.Empty;
+			_raygunClient.UserInfo = new Mindscape.Raygun4Net.Messages.RaygunIdentifierMessage (emailString) {
+				FullName = name != null ? name.ToSingleString () : string.Empty,
+				FirstName = name != null ? name.FirstName : string.Empty,
+				Identifier = userID.HasValue ? userID.Value .ToString (): string.Empty,
+				IsAnonymous = isAnonymous,
+				UUID = deviceID
+			};
+		}
+
+		public void Identify (Mise.Core.Entities.People.IEmployee employee, string deviceID)
+		{
+			if(employee != null){
+				Identify (employee.ID, employee.PrimaryEmail, employee.Name, deviceID, false);
+			} else {
+				Identify (null, null, null, deviceID, true);
+			}
+		}
+
+		#endregion
+	}
+}
+
