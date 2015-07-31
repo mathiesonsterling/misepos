@@ -100,9 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\miseinventoryservicedev.pubxml" />
-    <None Include="Properties\PublishProfiles\miseinventoryserviceprod - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\MiseInventoryServiceQA.pubxml" />
+    <None Include="Properties\PublishProfiles\Dev.pubxml" />
+    <None Include="Properties\PublishProfiles\Production.pubxml" />
+    <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
