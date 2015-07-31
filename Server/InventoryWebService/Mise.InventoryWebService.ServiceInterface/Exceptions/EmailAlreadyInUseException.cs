@@ -18,7 +18,7 @@ namespace Mise.InventoryWebService.ServiceInterface.Exceptions
         }
 
         public EmailAlreadyInUseException(EmailAddress email)
-            : base("Email " + (email != null ? email.Value : string.Empty) + " is already in use")
+            : base(SendErrors.EmailAlreadyInUse.ToString())
         {
             Email = email;
         }

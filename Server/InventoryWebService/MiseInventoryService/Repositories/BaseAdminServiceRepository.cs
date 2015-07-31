@@ -63,7 +63,18 @@ namespace MiseInventoryService.Repositories
 
         public async Task<CommitResult> CommitBase(Guid entityID, Func<TEntity, Task> updateFunc, Func<TEntity, Task> addFunc)
         {
+            if (UnderTransaction.ContainsKey(entityID) == false)
+            {
+                Logger.Warn("Tried to commit entity " + entityID + " that is not under transaction");
+                return CommitResult.NothingToCommit;
+            }
+
             var bundle = UnderTransaction[entityID];
+            if (bundle.NewVersion == null)
+            {
+                Logger.Warn("Null new version, will not commit");
+                return CommitResult.NothingToCommit;
+            }
             var itemExistsAlready = Cache.ContainsItem(entityID);
 
             //update us in memory first

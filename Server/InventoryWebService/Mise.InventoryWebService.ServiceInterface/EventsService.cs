@@ -37,12 +37,12 @@ namespace Mise.InventoryWebService.ServiceInterface
         private readonly ILogger _logger;
 
         private readonly List<EventDataTransportObject> _unprocessedEvents;
- 
+        private readonly IErrorTrackingService _errorTrackingService;
         public EventsService(IEventStorageDAL dal, IJSONSerializer serializer,
             IInventoryRepository inventoryRepository, IVendorRepository vendorRepository, 
             IPurchaseOrderRepository purchaseOrderRepository, IEmployeeRepository employeeRepository, 
             IPARRepository parRepository, IReceivingOrderRepository receivingOrderRepository, IApplicationInvitationRepository applicationInvitationRepository, 
-            IRestaurantRepository restaurantRepository, IAccountRepository accountRepository, ILogger logger)
+            IRestaurantRepository restaurantRepository, IAccountRepository accountRepository, ILogger logger, IErrorTrackingService errorTracking)
         {
             _eventStorageDAL = dal;
             _eventFactory = new EventDataTransportObjectFactory(serializer);
@@ -57,6 +57,7 @@ namespace Mise.InventoryWebService.ServiceInterface
             _parRepository = parRepository;
 
             _logger = logger;
+            _errorTrackingService = errorTracking;
 
             _unprocessedEvents = new List<EventDataTransportObject>();
         }
@@ -108,6 +109,7 @@ namespace Mise.InventoryWebService.ServiceInterface
                 }
                 catch (EmailAlreadyInUseException e)
                 {
+                    _errorTrackingService.ReportException(e, LogLevel.Warn);
                     throw HttpError.Conflict(e.SendError.ToString());
                 }
 
@@ -171,8 +173,9 @@ namespace Mise.InventoryWebService.ServiceInterface
             catch (Exception e)
             {
                 _logger.HandleException(e);
-                //TODO might want to hide this on production!
-                throw HttpError.Conflict(e.Message + "::" + e.StackTrace);
+                _errorTrackingService.ReportException(e, LogLevel.Fatal);
+
+                throw HttpError.Conflict(e.Message);
             }
         }
 
