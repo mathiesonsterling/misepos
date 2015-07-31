@@ -34,6 +34,11 @@ namespace Mise.Core.Common.Events.DTOs
 
         public EventDataTransportObject ToDataTransportObject(IEntityEventBase baseEvent)
         {
+            if (baseEvent is EventDataTransportObject)
+            {
+                return baseEvent as EventDataTransportObject;
+            }
+
             var checkEv = baseEvent as ICheckEvent;
             if (checkEv != null)
             {

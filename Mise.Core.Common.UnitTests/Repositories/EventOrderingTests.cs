@@ -28,41 +28,47 @@ namespace Mise.Core.Common.UnitTests.Repositories
             {
                 ID = Guid.NewGuid(),
                 CreatedDate = sameDate,
-                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 10)
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 10),
+                DeviceID = "first"
             };
             var startEvent = new InventoryCreatedEvent
             {
                 ID = Guid.NewGuid(),
                 CreatedDate = sameDate,
-                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 1)
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 1),
+                DeviceID = "first"
             };
 
             var measureEvent = new InventoryLiquidItemMeasuredEvent
             {
                 ID = Guid.NewGuid(),
                 CreatedDate = sameDate,
-                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 7)
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 7),
+                DeviceID = "first"
             };
 
             var addLI = new InventoryLineItemAddedEvent
             {
                 ID = Guid.NewGuid(),
                 CreatedDate = sameDate,
-                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 6)
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 6),
+                DeviceID = "first"
             };
 
             var addSection = new InventoryNewSectionAddedEvent
             {
                 ID = Guid.NewGuid(),
                 CreatedDate = sameDate,
-                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 2)
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 2),
+                DeviceID = "first"
             };
 
             var sectionEvent = new InventorySectionCompletedEvent
             {
                 ID = Guid.NewGuid(),
                 CreatedDate = sameDate,
-                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 8)
+                EventOrderingID = new EventID(MiseAppTypes.UnitTests, 8),
+                DeviceID = "first"
             };
 
             var otherAppCreate = new InventoryCreatedEvent
@@ -76,7 +82,7 @@ namespace Mise.Core.Common.UnitTests.Repositories
                 ID = Guid.NewGuid(),
                 CreatedDate = sameDate.AddDays(-1),
                 EventOrderingID = new EventID(MiseAppTypes.UnitTests, 2),
-                DeviceID = "another"
+                DeviceID = "yetanother"
             };
             var events = new List<IInventoryEvent>
             {

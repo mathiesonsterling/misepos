@@ -5,7 +5,6 @@ using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Services;
 using Mise.Core.ValueItems.Inventory;
-using Mono.Security.Cryptography;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Mise.Core.Common.Events.Inventory;
@@ -29,7 +28,7 @@ namespace Mise.Inventory.UnitTests.Services
 	        {
 	            _underTest = TestUtilities.GetTestSQLDB();
 	        }
-	        catch (Exception e)
+	        catch (Exception)
 	        {
 	            tryAgain = true;
 	        }
@@ -59,8 +58,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 
 			//ACT
-		    var dto = evFactory.ToDataTransportObject(ev);
-			await _underTest.AddEventsThatFailedToSend (new []{dto});
+			await _underTest.AddEventsThatFailedToSend (new []{ev});
 
 			var pulled = (await _underTest.GetUnsentEvents ()).ToList();
 
@@ -75,7 +73,6 @@ namespace Mise.Inventory.UnitTests.Services
 			Assert.AreEqual (ev.DeviceID, first.DeviceID, "DeviceID");
 			Assert.True (ev.EventOrderingID.Equals (first.EventOrderingID), "EventOrderingID");
 
-			//TODO transform back to event to check inventory and restaurant
 			var actualItem = evFactory.ToInventoryEvent (first);
 
 			Assert.NotNull (actualItem);
@@ -183,7 +180,7 @@ namespace Mise.Inventory.UnitTests.Services
                     new InventorySection
                     {
                         Name = "emptySec",
-                        LineItems = new List<InventoryBeverageLineItem>{},
+                        LineItems = new List<InventoryBeverageLineItem>(),
                         ID = Guid.NewGuid()
                     }
                 }
