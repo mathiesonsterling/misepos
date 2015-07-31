@@ -18,7 +18,12 @@ namespace Mise.Core.Common.Events.Inventory
 			}
 		}
 
-		#endregion
+	    public override bool IsEntityCreation
+	    {
+	        get { return true; }
+	    }
+
+	    #endregion
 
 	    public Guid LineItemID { get; set; }
 

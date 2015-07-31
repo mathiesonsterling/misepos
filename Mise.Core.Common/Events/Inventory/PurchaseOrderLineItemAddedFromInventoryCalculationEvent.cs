@@ -13,7 +13,12 @@ namespace Mise.Core.Common.Events.Inventory
 			}
 		}
 
-        public Guid LineItemID { get; set; }
+	    public override bool IsEntityCreation
+	    {
+	        get { return true; }
+	    }
+
+	    public Guid LineItemID { get; set; }
 
 		/// <summary>
 		/// The PAR item we're filling for
