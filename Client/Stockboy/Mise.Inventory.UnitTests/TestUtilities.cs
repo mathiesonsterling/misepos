@@ -14,6 +14,7 @@ using NUnit.Framework;
 using Mise.Inventory.Services;
 using System.IO;
 using Mise.Core.Services;
+using SQLite;
 
 
 namespace Mise.Inventory.UnitTests
@@ -37,6 +38,7 @@ namespace Mise.Inventory.UnitTests
             return moq;
         }
 
+
 		public static IClientDAL GetTestSQLDB(){
 			var connService = new TestingSQLConnection ();
 
@@ -45,22 +47,28 @@ namespace Mise.Inventory.UnitTests
 			return new Mise.Inventory.Services.Implementation.SQLiteClietDAL (logger.Object, serializer, connService);
 		}
 
+
 		private class TestingSQLConnection : ISQLite
 		{
-			#region ISQLite implementation
-			public SQLite.SQLiteConnection GetDatabase ()
+		    private static readonly object Locker = new object();
+
+		    #region ISQLite implementation
+			public SQLiteConnection GetDatabase ()
 			{
-				var file = "TestDB.db";
-				if(File.Exists (file)){
-					File.Delete (file);
-				}
+			    lock (Locker)
+			    {
+			        const string FILENAME = "TestDB.db";
+			        if (File.Exists(FILENAME))
+			        {
+			            File.Delete(FILENAME);
+			        }
 
-				var db = new SQLite.SQLiteConnection (file);
+			        var db = new SQLiteConnection(FILENAME);
+                    return db;
+			    }
 
-				return db;
 			}
 			#endregion
-			
 		}
     }
 }

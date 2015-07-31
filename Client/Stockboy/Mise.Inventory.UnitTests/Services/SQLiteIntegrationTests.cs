@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Services;
 using Mise.Core.ValueItems.Inventory;
 using Mono.Security.Cryptography;
 using NUnit.Framework;
@@ -18,9 +19,30 @@ namespace Mise.Inventory.UnitTests.Services
 	[TestFixture]
 	public class SQLiteIntegrationTests
 	{
+	    private IClientDAL _underTest;
+
+	    [SetUp]
+	    public async void Setup()
+	    {
+	        var tryAgain = false;
+	        try
+	        {
+	            _underTest = TestUtilities.GetTestSQLDB();
+	        }
+	        catch (Exception e)
+	        {
+	            tryAgain = true;
+	        }
+
+	        if (tryAgain)
+	        {
+                await Task.Delay(1000);
+	            _underTest = TestUtilities.GetTestSQLDB();
+	        }
+	    }
+
 		[Test]
 		public async Task StoreNotSentEventAndGet(){
-			var underTest = TestUtilities.GetTestSQLDB ();
 
 			var ev = new InventoryCreatedEvent {
 				ID = Guid.NewGuid (),
@@ -38,9 +60,9 @@ namespace Mise.Inventory.UnitTests.Services
 
 			//ACT
 		    var dto = evFactory.ToDataTransportObject(ev);
-			await underTest.AddEventsThatFailedToSend (new []{dto});
+			await _underTest.AddEventsThatFailedToSend (new []{dto});
 
-			var pulled = (await underTest.GetUnsentEvents ()).ToList();
+			var pulled = (await _underTest.GetUnsentEvents ()).ToList();
 
 			//ASSERT
 			Assert.NotNull (pulled);
@@ -71,7 +93,6 @@ namespace Mise.Inventory.UnitTests.Services
 	    [Test]
 	    public async Task StoreAndRetrieveEmployee()
 	    {
-	        var underTest = TestUtilities.GetTestSQLDB();
 
 	        var emp = new Employee
 	        {
@@ -105,8 +126,8 @@ namespace Mise.Inventory.UnitTests.Services
 	        };
 
             //ACT
-	        await underTest.UpsertEntitiesAsync(new[] {emp});
-	        var returned = (await underTest.GetEntitiesAsync<Employee>()).ToList();
+	        await _underTest.UpsertEntitiesAsync(new[] {emp});
+	        var returned = (await _underTest.GetEntitiesAsync<Employee>()).ToList();
 
             //ASSERT
             Assert.NotNull(returned);
@@ -126,7 +147,6 @@ namespace Mise.Inventory.UnitTests.Services
 	    [Test]
 	    public async Task StoreAndRetrieveInventory()
 	    {
-	        var underTest = TestUtilities.GetTestSQLDB();
 
             var inventory = new Core.Common.Entities.Inventory.Inventory
             {
@@ -170,8 +190,8 @@ namespace Mise.Inventory.UnitTests.Services
             };
 
             //ACT
-	        await underTest.UpsertEntitiesAsync(new[] {inventory});
-	        var results = (await underTest.GetEntitiesAsync<Core.Common.Entities.Inventory.Inventory>()).ToList();
+	        await _underTest.UpsertEntitiesAsync(new[] {inventory});
+	        var results = (await _underTest.GetEntitiesAsync<Core.Common.Entities.Inventory.Inventory>()).ToList();
 
             //ASSERT
             Assert.AreEqual(1, results.Count);
@@ -212,7 +232,6 @@ namespace Mise.Inventory.UnitTests.Services
 	    public async Task StoreAndRetrieveRestaurant()
 	    {
 
-	        var underTest = TestUtilities.GetTestSQLDB();
 
             var restID = Guid.NewGuid();
             var rest = new Restaurant
@@ -238,8 +257,8 @@ namespace Mise.Inventory.UnitTests.Services
             };
 
             //ACT
-	        await underTest.UpsertEntitiesAsync(new[] {rest});
-	        var results = (await underTest.GetEntitiesAsync<Restaurant>()).ToList();
+	        await _underTest.UpsertEntitiesAsync(new[] {rest});
+	        var results = (await _underTest.GetEntitiesAsync<Restaurant>()).ToList();
 
             //ASSERT
             Assert.AreEqual(1, results.Count);
