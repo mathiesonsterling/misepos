@@ -72,7 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repositories\InventoryServerRepositoryTests.cs" />
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventsServiceTests.cs" />
     <Compile Include="VendorsServiceTests.cs" />
@@ -86,7 +85,7 @@
       <Project>{bc3bd128-1d20-4c41-83b0-3fc37e5c5f5e}</Project>
       <Name>Mise.Core.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Mise.Core.Server\Mise.Core.Server.csproj">
+    <ProjectReference Include="..\..\Mise.Core.Server\Mise.Core.Server.csproj">
       <Project>{53fd6b41-cd49-4355-b78d-c2355069e2fc}</Project>
       <Name>Mise.Core.Server</Name>
     </ProjectReference>
@@ -94,7 +93,7 @@
       <Project>{085e418a-7cc9-4ab6-b38a-fc6cabe373d6}</Project>
       <Name>Mise.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MiseInventoryServerOnly\MiseInventoryService\MiseInventoryService.csproj">
+    <ProjectReference Include="..\MiseInventoryService\MiseInventoryService.csproj">
       <Project>{9fac431a-d7ef-41f2-b37b-9476e5785866}</Project>
       <Name>MiseInventoryService</Name>
     </ProjectReference>

@@ -15,6 +15,7 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Server.Services;
 using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using MiseInventoryService.Repositories;
@@ -25,60 +26,6 @@ namespace Mise.InventoryService.Tests.Repositories
     [TestFixture]
     public class InventoryServerRepositoryTests
     {
-        /*
-        [Test]
-        public async Task InventoryShouldMarkAllInventoriesInCacheAsNotCurrentWhenNewCurrentComesIn()
-        {
-            var oldInvs = new List<Mise.Core.Entities.Inventory.IInventory>
-            {
-                new Inventory
-                {
-                    ID = Guid.NewGuid(),
-                    IsCurrent = true
-                },
-                new Inventory
-                {
-                    ID = Guid.NewGuid(),
-                    IsCurrent = false
-                }
-            };
-
-            var logger = new Mock<ILogger>();
-            var dal = new TestEntityDAL(oldInvs);
-
-            var webHos = new Mock<IWebHostingEnvironment>();
-
-            var underTest = new InventoryServerRepository(logger.Object, dal, webHos.Object);
-
-            var invID = Guid.NewGuid();
-            var newEvents = new List<IInventoryEvent>
-            {
-                new InventoryCreatedEvent
-                {
-                    InventoryID = invID,
-                    CreatedDate = DateTime.UtcNow.AddMinutes(-1)
-                },
-                new InventoryMadeCurrentEvent
-                {
-                    InventoryID = invID,
-                    CreatedDate = DateTime.UtcNow
-                }
-            };
-
-
-            //ACT
-            await underTest.Load(Guid.Empty);
-            var updated = underTest.ApplyEvents(newEvents);
-            var allInvs = underTest.GetAll().ToList();
-
-            //ASSERT
-            Assert.IsTrue(updated.IsCurrent);
-
-            Assert.AreEqual(3, allInvs.Count);
-            var currents = allInvs.Where(i => i.IsCurrent).ToList();
-
-            Assert.AreEqual(1, currents.Count);
-            Assert.AreEqual(invID, currents.First().ID);
-        }*/
+        
     }
 }

@@ -21,7 +21,7 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Server.Services.DAL;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.InventoryWebService.ServiceInterface;
 using Mise.InventoryWebService.ServiceModelPortable.Responses;
@@ -252,8 +252,10 @@ namespace Mise.InventoryService.Tests
             var appInvite = CreateMockRepository<IApplicationInvitationRepository, IApplicationInvitation, IApplicationInvitationEvent>();
             var logger = new Mock<ILogger>();
 
+            var errorTracker = new Mock<IErrorTrackingService>();
+
             var underTest = new EventsService(moqDAL.Object, serial, inventory.Object, vendor.Object, po.Object,
-                emp.Object, par.Object, receive.Object, appInvite.Object, rest.Object, acct.Object, logger.Object);
+                emp.Object, par.Object, receive.Object, appInvite.Object, rest.Object, acct.Object, logger.Object, errorTracker.Object);
             var dtoFactory = new EventDataTransportObjectFactory(serial);
 
             var entID = Guid.NewGuid();
@@ -399,8 +401,9 @@ namespace Mise.InventoryService.Tests
 
             dtoFactory = new EventDataTransportObjectFactory(serial);
             var logger = new Mock<ILogger>();
+            var errorTracker = new Mock<IErrorTrackingService>();
             var underTest = new EventsService(moqDAL.Object, serial, inventory.Object, vendor.Object, po.Object,
-                emp.Object, par.Object, receive.Object, appInvite.Object, rest.Object, acct.Object, logger.Object);
+                emp.Object, par.Object, receive.Object, appInvite.Object, rest.Object, acct.Object, logger.Object, errorTracker.Object);
             return underTest;
         }
     }

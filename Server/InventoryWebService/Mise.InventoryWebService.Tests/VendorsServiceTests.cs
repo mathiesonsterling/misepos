@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Entities.Vendors;
-using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Repositories;
 using Mise.Core.ValueItems;
 using Mise.InventoryWebService.ServiceInterface;
