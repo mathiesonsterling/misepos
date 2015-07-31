@@ -183,6 +183,9 @@
     <Reference Include="Xamarin.Forms.Platform">
       <HintPath>..\packages\Xamarin.Forms.1.4.4.6392\lib\Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="Mindscape.Raygun4Net.Xamarin.iOS.Unified">
+      <HintPath>..\Components\raygun4net-5.1.0\lib\ios-unified\Mindscape.Raygun4Net.Xamarin.iOS.Unified.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mise.Inventory\Mise.Inventory.csproj">
@@ -267,6 +270,10 @@
   <ItemGroup>
     <XamarinComponentReference Include="irate">
       <Version>1.8.2</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="raygun4net">
+      <Version>5.1.0</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>
