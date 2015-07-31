@@ -141,7 +141,7 @@ namespace Mise.Inventory.ViewModels
 			    {
 			        succeeded = true;
 
-                    _insightsService.Identify(employee.ID, employee.PrimaryEmail, employee.Name, "", false);
+                    _insightsService.Identify(employee, "Stockboy Mobile");
 
 			        //do we have more than one restaurant?
 			        Processing = true;

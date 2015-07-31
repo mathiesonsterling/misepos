@@ -125,7 +125,7 @@ namespace Mise.Inventory.ViewModels
                     if (emp != null)
                     {
                         _insights.Track("Registered User", "User Email", email.Value);
-                        _insights.Identify(emp.ID, email, name, "", false);
+                        _insights.Identify(emp, "Stockboy Mobile");
                     }
                     else
                     {

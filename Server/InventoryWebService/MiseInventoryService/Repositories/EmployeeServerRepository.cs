@@ -21,11 +21,9 @@ namespace MiseInventoryService.Repositories
 {
     public class EmployeeServerRepository : BaseAdminServiceRepository<IEmployee, IEmployeeEvent>, IEmployeeRepository
     {
-        private readonly IErrorTrackingService _errorTrackingService;
-        public EmployeeServerRepository(ILogger logger, IEntityDAL entityDAL, IWebHostingEnvironment host, IErrorTrackingService errorTracking) 
+        public EmployeeServerRepository(ILogger logger, IEntityDAL entityDAL, IWebHostingEnvironment host) 
             : base(logger, entityDAL, host)
         {
-            _errorTrackingService = errorTracking;
         }
 
         public override IEmployee ApplyEvents(IEnumerable<IEmployeeEvent> events)
@@ -38,10 +36,6 @@ namespace MiseInventoryService.Repositories
                 CheckValidEmployeeCreation(createEvent as EmployeeCreatedEvent);
             }
 
-            if (allEvents.Any())
-            {
-                _errorTrackingService.Identify(allEvents.First().EmployeeID, null, null, "server", false);
-            }
             return base.ApplyEvents(allEvents);
         }
 

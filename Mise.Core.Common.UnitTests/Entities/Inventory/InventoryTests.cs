@@ -131,7 +131,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             {
                 CausedByID = empID,
                 CreatedDate = DateTimeOffset.UtcNow,
-                InventoryID =invID,
+                InventoryID = invID,
                 RestaurantID = restID,
             };
 
@@ -142,6 +142,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 InventoryID = invID,
                 RestaurantID = restID,
                 RestaurantSectionId = rs.ID,
+                SectionID = Guid.NewGuid(),
                 Name = rs.Name,
                 ID = Guid.NewGuid()
             });

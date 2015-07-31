@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mindscape.Raygun4Net;
 using Mindscape.Raygun4Net.Messages;
+using Mise.Core.Entities.People;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
@@ -39,6 +36,18 @@ namespace MiseInventoryService.Services
             };
 
             _raygunClient.UserInfo = message;
+        }
+
+        public void Identify(IEmployee employee, string deviceID)
+        {
+            if (employee != null)
+            {
+                Identify(employee.ID, employee.PrimaryEmail, employee.Name, deviceID, false);
+            }
+            else
+            {
+                Identify(null, null, null, deviceID, true);
+            }
         }
     }
 }

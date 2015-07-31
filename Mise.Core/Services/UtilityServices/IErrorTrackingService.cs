@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mise.Core.Entities.People;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Services.UtilityServices
@@ -16,5 +17,7 @@ namespace Mise.Core.Services.UtilityServices
         /// </summary>
 
         void Identify(Guid? userID, EmailAddress email, PersonName name, string deviceID, bool isAnonymous);
+
+        void Identify(IEmployee employee, string deviceID);
     }
 }

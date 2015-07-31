@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Akavache;
+using Mise.Core.Entities.People;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Xamarin;
@@ -78,5 +79,17 @@ namespace Mise.Inventory.Services.Implementation
 	        }
 	        Insights.Identify(userIDVal, values);
 	    }
+
+        public void Identify(IEmployee employee, string deviceID)
+        {
+            if (employee != null)
+            {
+                Identify(employee.ID, employee.PrimaryEmail, employee.Name, deviceID, false);
+            }
+            else
+            {
+                Identify(null, null, null, deviceID, true);
+            }
+        }
     }
 }

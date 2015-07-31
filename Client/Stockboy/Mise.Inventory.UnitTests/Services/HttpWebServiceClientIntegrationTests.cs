@@ -33,9 +33,9 @@ namespace Mise.Inventory.UnitTests.Services
     {
         readonly Guid _testRestaurantID = Guid.Empty;
 
-        //const string TEST_SERVER_URL = "http://miseinventoryservicedev.azurewebsites.net/";
+        const string TEST_SERVER_URL = "http://miseinventoryservicedev.azurewebsites.net/";
         //private const string TEST_SERVER_URL = "http://miseinventoryserviceqa.azurewebsites.net/";
-        const string TEST_SERVER_URL = "http://localhost:43499/";
+        //const string TEST_SERVER_URL = "http://localhost:43499/";
         //private const string TEST_SERVER_URL = "http://miseinventoryserviceprod.azurewebsites.net/";
         static HttpWebServiceClient CreateClient()
         {

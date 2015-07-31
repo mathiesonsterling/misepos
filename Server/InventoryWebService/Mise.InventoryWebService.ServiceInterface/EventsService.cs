@@ -83,7 +83,31 @@ namespace Mise.InventoryWebService.ServiceInterface
                 }
 
                 var events = request.Events.ToList();
-                bool storedEvents = false;
+
+                //identify
+                var userIDs = events.Select(ev => ev.CausedByID).Distinct();
+                foreach (var userID in userIDs)
+                {
+                    try
+                    {
+                        var user = _employeeRepository.GetByID(userID);
+                        if (user != null)
+                        {
+                            _errorTrackingService.Identify(user, "server");
+                        }
+                        else
+                        {
+                            _errorTrackingService.Identify(userID, null, null, "server", false);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _errorTrackingService.Identify(userID, null, null, "server", false);
+                        _errorTrackingService.ReportException(e, LogLevel.Warn);
+                        _logger.HandleException(e, LogLevel.Warn);
+                    }
+                }
+                var storedEvents = false;
                 try
                 {
                     storedEvents = await _eventStorageDAL.StoreEventsAsync(request.Events);

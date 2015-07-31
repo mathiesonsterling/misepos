@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mise.Core.Common;
+using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
@@ -16,6 +20,21 @@ namespace Mise.Inventory.UnitTests.ViewModels
 		public async Task LoadShouldGenerateNewPO(){
 			var appNavi = new Mock<IAppNavigation>();
 			var poService = new Mock<IPurchaseOrderService> ();
+
+		    var po = new PurchaseOrder
+		    {
+		        ID = Guid.NewGuid(),
+                PurchaseOrdersPerVendor = new List<PurchaseOrderPerVendor>
+                {
+                    new PurchaseOrderPerVendor
+                    {
+                        ID = Guid.NewGuid(),
+                    }
+                }
+		    };
+		    poService.Setup(pos => pos.CreatePurchaseOrder())
+		        .Returns(Task.FromResult(po as IPurchaseOrder));
+
 			var vendorService = new Mock<IVendorService> ();
 			var loginService = new Mock<ILoginService> ();
 		    var logger = new Mock<ILogger>();
@@ -27,7 +46,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			await underTest.OnAppearing();
 
 			//ASSERT
-            throw new NotImplementedException();
+            Assert.NotNull(underTest.VendorsAndPOs);
 		}
 	}
 }
