@@ -103,10 +103,6 @@ namespace Mise.Core.Client.Repositories
             return new Vendor();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is VendorCreatedEvent;
-        }
 
         public override Guid GetEntityID(IVendorEvent ev)
         {

@@ -37,11 +37,6 @@ namespace MiseInventoryService.Repositories
             return new Vendor();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is VendorCreatedEvent;
-        }
-
         public override Guid GetEntityID(IVendorEvent ev)
         {
             return ev.VendorID;

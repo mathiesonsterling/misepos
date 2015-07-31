@@ -14,5 +14,15 @@ namespace Mise.Core.Common.Events.Inventory
         {
             get { return MiseEventTypes.InventoryCreated; }
         }
+
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
     }
 }

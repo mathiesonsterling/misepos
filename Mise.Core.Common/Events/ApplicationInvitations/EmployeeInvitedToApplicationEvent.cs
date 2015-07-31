@@ -11,7 +11,18 @@ namespace Mise.Core.Common.Events.ApplicationInvitations
 				return MiseEventTypes.EmployeeInvitedToApplication;
 			}
 		}
-		#endregion
+
+	    public override bool IsEntityCreation
+	    {
+	        get { return true; }
+	    }
+
+	    public override bool IsAggregateRootCreation
+	    {
+	        get { return true; }
+	    }
+
+	    #endregion
 
 		/// <summary>
 		/// Email address we want to invite

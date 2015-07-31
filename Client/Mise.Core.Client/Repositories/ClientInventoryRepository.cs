@@ -29,23 +29,6 @@ namespace Mise.Core.Client.Repositories
             return new Inventory();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is InventoryCreatedEvent;
-        }
-
-        protected override IEnumerable<MiseEventTypes> EventTypesToBeProcessedFirst
-        {
-            get
-            {
-                return new List<MiseEventTypes>
-                {
-                    MiseEventTypes.InventoryCreated,
-                    MiseEventTypes.InventoryLineItemAdded,
-                    MiseEventTypes.InventoryNewSectionAdded
-                };
-            }
-        }
 
         public override Guid GetEntityID(IInventoryEvent ev)
         {

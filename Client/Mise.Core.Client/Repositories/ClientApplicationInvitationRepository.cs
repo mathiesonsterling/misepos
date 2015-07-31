@@ -34,10 +34,6 @@ namespace Mise.Core.Client.Repositories
 			return new ApplicationInvitation ();
 		}
 
-		protected override bool IsEventACreation (IEntityEventBase ev)
-		{
-			return ev is EmployeeInvitedToApplicationEvent;
-		}
 
 	    public override Guid GetEntityID(IApplicationInvitationEvent ev)
 	    {

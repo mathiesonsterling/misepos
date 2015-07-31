@@ -9,6 +9,10 @@ namespace Mise.Core.Common.Events.Inventory
     {
         public Guid PurchaseOrderID { get; set; }
         public abstract MiseEventTypes EventType { get; }
+
+        public virtual bool IsEntityCreation { get { return false; } }
+        public virtual bool IsAggregateRootCreation { get { return false; } }
+
         public Guid ID { get; set; }
         public Guid RestaurantID { get; set; }
         public EventID EventOrderingID { get; set; }

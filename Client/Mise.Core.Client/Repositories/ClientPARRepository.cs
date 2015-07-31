@@ -29,10 +29,6 @@ namespace Mise.Core.Client.Repositories
 	        return new PAR();
 	    }
 
-	    protected override bool IsEventACreation(IEntityEventBase ev)
-	    {
-	        return ev is PARCreatedEvent;
-	    }
 
 	    public override Guid GetEntityID(IPAREvent ev)
 	    {

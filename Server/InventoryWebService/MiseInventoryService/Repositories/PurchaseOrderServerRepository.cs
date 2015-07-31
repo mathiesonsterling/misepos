@@ -31,11 +31,6 @@ namespace MiseInventoryService.Repositories
             return new PurchaseOrder();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is PurchaseOrderCreatedEvent;
-        }
-
         public override Guid GetEntityID(IPurchaseOrderEvent ev)
         {
             return ev.PurchaseOrderID;

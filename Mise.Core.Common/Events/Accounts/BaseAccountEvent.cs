@@ -12,6 +12,9 @@ namespace Mise.Core.Common.Events.Accounts
     public abstract class BaseAccountEvent : IAccountEvent
     {
         public abstract MiseEventTypes EventType { get; }
+        public virtual bool IsEntityCreation { get { return false; } }
+        public virtual bool IsAggregateRootCreation { get { return false; }}
+
         public Guid ID { get; set; }
 
         /// <summary>

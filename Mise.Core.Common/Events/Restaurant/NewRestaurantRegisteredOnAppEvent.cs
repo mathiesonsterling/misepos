@@ -16,7 +16,17 @@ namespace Mise.Core.Common.Events.Restaurant
             get { return MiseEventTypes.NewRestaurantRegisteredOnApp; }
         }
 
-		public Guid EmployeeID {
+	    public override bool IsEntityCreation
+	    {
+	        get { return true; }
+	    }
+
+	    public override bool IsAggregateRootCreation
+	    {
+	        get { return true; }
+	    }
+
+	    public Guid EmployeeID {
 			get;
 			set;
 		}

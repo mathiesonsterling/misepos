@@ -29,10 +29,6 @@ namespace Mise.Core.Client.Repositories
             return new ReceivingOrder();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is ReceivingOrderCreatedEvent;
-        }
 
         public override Guid GetEntityID(IReceivingOrderEvent ev)
         {

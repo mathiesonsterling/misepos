@@ -34,11 +34,6 @@ namespace MiseInventoryService.Repositories
             return new Restaurant();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            //TODO real restaurant here as well!
-            return ev is PlaceholderRestaurantCreatedEvent;
-        }
 
         public override Guid GetEntityID(IRestaurantEvent ev)
         {

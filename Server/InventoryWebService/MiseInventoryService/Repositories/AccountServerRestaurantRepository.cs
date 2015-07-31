@@ -37,11 +37,6 @@ namespace MiseInventoryService.Repositories
             return new RestaurantAccount();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is AccountRegisteredFromMobileDeviceEvent;
-        }
-
         public override Guid GetEntityID(IAccountEvent ev)
         {
             return ev.AccountID;

@@ -86,10 +86,6 @@ namespace MiseInventoryService.Repositories
             return new Employee();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is EmployeeRegisteredForInventoryAppEvent || ev is EmployeeCreatedEvent;
-        }
 
         public override Guid GetEntityID(IEmployeeEvent ev)
         {

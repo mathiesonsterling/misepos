@@ -12,7 +12,8 @@ namespace Mise.Core.Common.Events.Checks
 		/// </summary>
 		/// <value>The type of the event.</value>
 		public abstract MiseEventTypes EventType{ get;}
-
+        public virtual bool IsEntityCreation { get { return false; } }
+        public virtual bool IsAggregateRootCreation { get { return false; } }
 
 		#region ICheckEvent implementation
 		public Guid CheckID {

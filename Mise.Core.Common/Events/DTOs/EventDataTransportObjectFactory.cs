@@ -109,7 +109,9 @@ namespace Mise.Core.Common.Events.DTOs
                 ID = checkEvent.ID,
                 JSON = json,
                 RestaurantID = checkEvent.RestaurantID,
-                SourceType = checkEvent.GetType()
+                SourceType = checkEvent.GetType(),
+                IsAggregateRootCreation = checkEvent.IsAggregateRootCreation,
+                IsEntityCreation = checkEvent.IsEntityCreation
             };
         }
 
@@ -126,7 +128,9 @@ namespace Mise.Core.Common.Events.DTOs
                 ID = empEvent.EmployeeID,
                 JSON = json,
                 RestaurantID = empEvent.RestaurantID,
-                SourceType = empEvent.GetType()
+                SourceType = empEvent.GetType(),
+                IsAggregateRootCreation = empEvent.IsAggregateRootCreation,
+                IsEntityCreation = empEvent.IsEntityCreation
             };
         }
 
@@ -144,7 +148,9 @@ namespace Mise.Core.Common.Events.DTOs
 				JSON = json,
 				SourceType = ev.GetType(),
 				RestaurantID = ev.RestaurantID,
-				EntityID = ev.InventoryID
+				EntityID = ev.InventoryID,
+                IsAggregateRootCreation = ev.IsAggregateRootCreation,
+                IsEntityCreation = ev.IsEntityCreation
 			};
         }
 
@@ -161,7 +167,9 @@ namespace Mise.Core.Common.Events.DTOs
 				JSON = json,
 				SourceType = ev.GetType(),
 				RestaurantID = ev.RestaurantID,
-				EntityID = ev.PurchaseOrderID
+				EntityID = ev.PurchaseOrderID,
+                IsAggregateRootCreation = ev.IsAggregateRootCreation,
+                IsEntityCreation = ev.IsEntityCreation
 			};
         }
 
@@ -177,7 +185,9 @@ namespace Mise.Core.Common.Events.DTOs
 				ID = ev.ID,
 				JSON = json,
 				SourceType = ev.GetType(),
-				EntityID = ev.VendorID
+				EntityID = ev.VendorID,
+                IsAggregateRootCreation = ev.IsAggregateRootCreation,
+                IsEntityCreation = ev.IsEntityCreation
 			};
         }
 
@@ -193,7 +203,9 @@ namespace Mise.Core.Common.Events.DTOs
 				ID = ev.ID,
 				JSON = json,
 				SourceType = ev.GetType(),
-				EntityID = ev.AccountID
+				EntityID = ev.AccountID,
+                IsAggregateRootCreation = ev.IsAggregateRootCreation,
+                IsEntityCreation = ev.IsEntityCreation
 			};
         }
 
@@ -210,7 +222,9 @@ namespace Mise.Core.Common.Events.DTOs
 				JSON = json,
 				SourceType = ev.GetType(),
 				RestaurantID = ev.RestaurantID,
-				EntityID = ev.ReceivingOrderID
+				EntityID = ev.ReceivingOrderID,
+                IsAggregateRootCreation = ev.IsAggregateRootCreation,
+                IsEntityCreation = ev.IsEntityCreation
 			};
         }
 
@@ -227,7 +241,9 @@ namespace Mise.Core.Common.Events.DTOs
 				JSON = json,
 				RestaurantID = ev.RestaurantID,
 				EntityID = ev.ParID,
-				SourceType = ev.GetType()
+				SourceType = ev.GetType(),
+                IsAggregateRootCreation = ev.IsAggregateRootCreation,
+                IsEntityCreation = ev.IsEntityCreation
 			};
         }
 
@@ -244,7 +260,9 @@ namespace Mise.Core.Common.Events.DTOs
 				JSON = json,
 				SourceType = ev.GetType(),
 				RestaurantID = ev.RestaurantID,
-				EntityID = ev.RestaurantID
+				EntityID = ev.RestaurantID,
+                IsAggregateRootCreation = ev.IsAggregateRootCreation,
+                IsEntityCreation = ev.IsEntityCreation
 			};
         }
 
@@ -261,7 +279,9 @@ namespace Mise.Core.Common.Events.DTOs
 				JSON = json,
 				SourceType = ev.GetType(),
 				RestaurantID = ev.RestaurantID,
-				EntityID = ev.InvitationID
+				EntityID = ev.InvitationID,
+                IsAggregateRootCreation = ev.IsAggregateRootCreation,
+                IsEntityCreation = ev.IsEntityCreation
 			};
         }
 

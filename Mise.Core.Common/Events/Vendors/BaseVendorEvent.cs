@@ -12,6 +12,8 @@ namespace Mise.Core.Common.Events.Vendors
     public abstract class BaseVendorEvent : IVendorEvent
     {
         public abstract MiseEventTypes EventType { get; }
+        public virtual bool IsEntityCreation { get { return false; } }
+        public virtual bool IsAggregateRootCreation { get { return false; } }
         public Guid ID { get; set; }
         public Guid RestaurantID { get; set; }
 		public string DeviceID{get;set;}

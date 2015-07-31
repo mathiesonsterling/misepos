@@ -67,10 +67,6 @@ namespace Mise.Core.Client.Repositories
 	        return new RestaurantCheck();
 	    }
 
-	    protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is CheckCreatedEvent;
-        }
 
 	    public override Guid GetEntityID(ICheckEvent ev)
 	    {

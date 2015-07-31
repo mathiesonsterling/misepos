@@ -10,7 +10,17 @@ namespace Mise.Core.Common.Events.Employee
             get { return MiseEventTypes.EmployeeCreatedEvent; }
         }
 
-		public EmailAddress Email{get;set;}
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
+        public EmailAddress Email{get;set;}
         public PersonName Name { get; set; }
 
 		public Password Password{get;set;}

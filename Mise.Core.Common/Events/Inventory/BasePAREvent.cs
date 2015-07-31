@@ -14,6 +14,8 @@ namespace Mise.Core.Common.Events.Inventory
 		public DateTimeOffset CreatedDate { get; set; }
 		public string DeviceID{get;set;}
 		public abstract MiseEventTypes EventType { get; }
+        public virtual bool IsEntityCreation { get { return false; } }
+        public virtual bool IsAggregateRootCreation { get { return false; } }
 	}
 }
 

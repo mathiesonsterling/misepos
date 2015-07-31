@@ -14,6 +14,9 @@ namespace Mise.Core.Common.Events.Restaurant
         public abstract MiseEventTypes EventType { get; }
 
         public Guid ID { get; set; }
+        public virtual bool IsEntityCreation { get { return false; } }
+        public virtual bool IsAggregateRootCreation { get { return false; } }
+
         public Guid RestaurantID { get; set; }
         public EventID EventOrderingID { get; set; }
         public Guid CausedByID { get; set; }

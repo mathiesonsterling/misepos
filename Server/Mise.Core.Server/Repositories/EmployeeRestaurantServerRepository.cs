@@ -39,10 +39,6 @@ namespace Mise.Core.Server.Repositories
 			return new Employee ();
 		}
 
-		protected override bool IsEventACreation (IEntityEventBase ev)
-		{
-			throw new NotImplementedException ();
-		}
 
 	    public override Guid GetEntityID(IEmployeeEvent ev)
 	    {

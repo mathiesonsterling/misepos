@@ -44,6 +44,9 @@ namespace Mise.Core.Common.Events.Employee
 		public Guid ID{get;set;}
 
 	    public abstract MiseEventTypes EventType { get;}
+
+        public virtual bool IsEntityCreation { get { return false; } }
+        public virtual bool IsAggregateRootCreation { get { return false; } }
 		public EventID EventOrderingID {
 			get;
 			set;

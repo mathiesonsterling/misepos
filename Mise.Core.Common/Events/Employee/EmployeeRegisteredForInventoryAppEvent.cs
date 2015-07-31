@@ -12,7 +12,17 @@ namespace Mise.Core.Common.Events.Employee
 			}
 		}
 
-		public EmailAddress EmailAddress{get;set;}
+	    public override bool IsEntityCreation
+	    {
+	        get { return true; }
+	    }
+
+	    public override bool IsAggregateRootCreation
+	    {
+	        get { return true; }
+	    }
+
+	    public EmailAddress EmailAddress{get;set;}
 		public Password Password{get;set;}
 		#endregion
 	}

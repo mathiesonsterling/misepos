@@ -74,11 +74,6 @@ namespace Mise.Core.Client.Repositories
             return new Employee();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is EmployeeCreatedEvent;
-        }
-
         public override Guid GetEntityID(IEmployeeEvent ev)
         {
             return ev.EmployeeID;
@@ -115,7 +110,7 @@ namespace Mise.Core.Client.Repositories
                         {
                             return null;
                         }
-                        if (IsEventACreation(employeeEvent))
+                        if (employeeEvent.IsAggregateRootCreation)
                         {
                             bundle.NewVersion = CreateNewEntity();
                         }

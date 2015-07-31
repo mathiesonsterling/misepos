@@ -58,19 +58,6 @@ namespace Mise.Core.Common.Repositories.Base
         /// </summary>
         /// <returns></returns>
         protected abstract TEntity CreateNewEntity();
-        /// <summary>
-        /// Determines if an event should cause us to create a new entity
-        /// </summary>
-        /// <param name="ev"></param>
-        /// <returns></returns>
-        protected abstract bool IsEventACreation(IEntityEventBase ev);
-
-        /// <summary>
-        /// List out which events we want to see processed before any others.  Allows us to deal with creations of sub types
-        /// </summary>
-        protected virtual IEnumerable<MiseEventTypes> EventTypesToBeProcessedFirst {
-            get { return new List<MiseEventTypes>(); }
-        }
  
         public abstract Guid GetEntityID(TEventType ev);
 
@@ -147,6 +134,10 @@ namespace Mise.Core.Common.Repositories.Base
             }
             var entityID = GetEntityID(firstEv);
 
+            var logString = "Entity ID " + entityID + " processing events ";
+            var eventsInOrder = oEvents.Select(ev => ev.EventType.ToString());
+            logString += string.Join(", ", eventsInOrder);
+            Logger.Debug(logString);
 
             if (UnderTransaction.ContainsKey(entityID) == false)
             {
@@ -160,8 +151,8 @@ namespace Mise.Core.Common.Repositories.Base
                 {
                     var entID = GetEntityID(cEvent);
                     bundle.NewVersion = GetByID(entID);
-                    //if our event isn't a creation, we might have a problem
-                    if (bundle.NewVersion == null && (IsEventACreation(cEvent) == false))
+                    //if our event isn't a creation of the aggregate, we might have a problem
+                    if (bundle.NewVersion == null && (cEvent.IsAggregateRootCreation == false))
                     {
                         throw new EntityForEventNotFoundException(entID);
                     }
@@ -222,8 +213,8 @@ namespace Mise.Core.Common.Repositories.Base
             {
                 //we want to get first the aggregate root creation, then any other creations, then the rest by order
                 var orderedItems = group.Items
-                    .OrderByDescending(IsEventACreation)
-                    .ThenByDescending(ev => EventTypesToBeProcessedFirst.Contains(ev.EventType))
+                    .OrderByDescending(ev => ev.IsAggregateRootCreation)
+                    .ThenByDescending(ev => ev.IsEntityCreation)
                     .ThenBy(ev => ev.EventOrderingID.OrderingID);
                 res.AddRange(orderedItems);
             }
