@@ -88,6 +88,7 @@
     <Compile Include="Entities\RestaurantCheckTests.cs" />
     <Compile Include="Entities\MenuItemTests.cs" />
     <Compile Include="Entities\OrderItemTests.cs" />
+    <Compile Include="Repositories\EventOrderingTests.cs" />
     <Compile Include="Tools\MockingTools.cs" />
     <Compile Include="Tools\SerializerFactory.cs" />
     <Compile Include="Tools\TestingCreditCardService.cs" />
@@ -116,9 +117,7 @@
       <Name>Mise.Core.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>

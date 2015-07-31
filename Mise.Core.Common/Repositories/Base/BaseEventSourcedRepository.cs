@@ -131,8 +131,7 @@ namespace Mise.Core.Common.Repositories.Base
         /// <returns></returns>
         public virtual TEntity ApplyEvents(IEnumerable<TEventType> events)
         {
-            var oEvents = events.OrderBy(e => e.CreatedDate)
-                .ThenBy(e => e.EventOrderingID);
+            var oEvents = OrderEvents(events);
 
             var firstEv = oEvents.FirstOrDefault();
             if (firstEv == null)
@@ -183,6 +182,42 @@ namespace Mise.Core.Common.Repositories.Base
 
             Dirty = true;
             return bundle == null ? null : bundle.NewVersion;
+        }
+
+        public static IEnumerable<TEventType> OrderEventsOld(IEnumerable<TEventType> events)
+        {
+            var oEvents = events.OrderBy(e => e.CreatedDate)
+                .ThenBy(e => e.EventOrderingID);
+            return oEvents;
+        }
+
+        public static IEnumerable<TEventType> OrderEvents(IEnumerable<TEventType> events)
+        {
+            //get the events that all came from the same application first
+            var appGroups = from ev in events
+                            group ev by new {ev.EventOrderingID.AppInstanceCode, ev.DeviceID} into appG
+                            select new
+                            {
+                                AppInstanceCode = appG.Key.AppInstanceCode,
+                                DeviceID = appG.Key.DeviceID,
+                                Items = appG.AsEnumerable(), 
+                                FirstDate = appG.AsEnumerable().Min(g => g.CreatedDate)
+                            };
+
+            //we can now order these by min date
+            //need then by the app type and device ID
+            var groupsByDate = appGroups.OrderBy(k => k.AppInstanceCode)
+                .ThenBy(k => k.DeviceID)
+                .ThenBy(k => k.FirstDate);
+
+            var res = new List<TEventType>();
+            foreach (var group in groupsByDate)
+            {
+                var orderedItems = group.Items.OrderBy(ev => ev.EventOrderingID.OrderingID);
+                res.AddRange(orderedItems);
+            }
+
+            return res;
         }
     }
 }

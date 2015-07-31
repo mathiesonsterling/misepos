@@ -217,6 +217,7 @@ namespace Mise.Core.Common.Events
 			int inventoryPosisiton, IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
+                ID = Guid.NewGuid(),
 				CausedByID = emp.ID,
 				CreatedDate = DateTimeOffset.UtcNow,
 				RestaurantID = _restaurant.ID,
