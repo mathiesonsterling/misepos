@@ -118,6 +118,7 @@
     <Compile Include="Events\Payments\CreditCards\CreditCardChargeCompletedEvent.cs" />
     <Compile Include="Events\Payments\CreditCards\CreditCardCloseRequestedEvent.cs" />
     <Compile Include="Events\Payments\CreditCards\CreditCardAuthorizationCancelledEvent.cs" />
+    <Compile Include="Repositories\Base\EntityForEventNotFoundException.cs" />
     <Compile Include="Services\Implementation\DummyLogger.cs" />
     <Compile Include="Services\Implementation\Serialization\DataContractSerializer.cs" />
     <Compile Include="Services\Implementation\Serialization\JsonNetSerializer.cs" />

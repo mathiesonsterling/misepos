@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
@@ -31,6 +32,19 @@ namespace Mise.Core.Client.Repositories
         protected override bool IsEventACreation(IEntityEventBase ev)
         {
             return ev is InventoryCreatedEvent;
+        }
+
+        protected override IEnumerable<MiseEventTypes> EventTypesToBeProcessedFirst
+        {
+            get
+            {
+                return new List<MiseEventTypes>
+                {
+                    MiseEventTypes.InventoryCreated,
+                    MiseEventTypes.InventoryLineItemAdded,
+                    MiseEventTypes.InventoryNewSectionAdded
+                };
+            }
         }
 
         public override Guid GetEntityID(IInventoryEvent ev)

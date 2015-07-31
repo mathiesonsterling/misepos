@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
-using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Common.Repositories.Base
 {
-    public abstract class BaseEventSourcedRepository<TEntity, TEventType> : BaseRepository<TEntity> 
-        where TEntity:class, IEventStoreEntityBase<TEventType>, ICloneableEntity
+    public abstract class BaseEventSourcedRepository<TEntity, TEventType> : BaseRepository<TEntity>
+        where TEntity : class, IEventStoreEntityBase<TEventType>, ICloneableEntity
         where TEventType : class, IEntityEventBase
     {
         /// <summary>
@@ -31,11 +31,11 @@ namespace Mise.Core.Common.Repositories.Base
         }
 
 
-        protected ILogger Logger{get;private set;}
-		protected readonly IDictionary<Guid, EntityTransactionBundle> UnderTransaction;
-		protected BaseEventSourcedRepository(ILogger logger)
+        protected ILogger Logger { get; private set; }
+        protected readonly IDictionary<Guid, EntityTransactionBundle> UnderTransaction;
+        protected BaseEventSourcedRepository(ILogger logger)
         {
-			Logger = logger;
+            Logger = logger;
             UnderTransaction = new Dictionary<Guid, EntityTransactionBundle>();
         }
 
@@ -65,6 +65,13 @@ namespace Mise.Core.Common.Repositories.Base
         /// <returns></returns>
         protected abstract bool IsEventACreation(IEntityEventBase ev);
 
+        /// <summary>
+        /// List out which events we want to see processed before any others.  Allows us to deal with creations of sub types
+        /// </summary>
+        protected virtual IEnumerable<MiseEventTypes> EventTypesToBeProcessedFirst {
+            get { return new List<MiseEventTypes>(); }
+        }
+ 
         public abstract Guid GetEntityID(TEventType ev);
 
         public bool Dirty { get; protected set; }
@@ -88,7 +95,7 @@ namespace Mise.Core.Common.Repositories.Base
         {
             if (UnderTransaction.ContainsKey(entityID) == false)
             {
-                var newBundle = new EntityTransactionBundle{ EntityID = entityID };
+                var newBundle = new EntityTransactionBundle { EntityID = entityID };
                 var thisCheck = GetByID(entityID);
                 if (thisCheck != null)
                 {
@@ -120,7 +127,7 @@ namespace Mise.Core.Common.Repositories.Base
 
         public virtual TEntity ApplyEvent(TEventType entEvent)
         {
-            return ApplyEvents(new[] {entEvent});
+            return ApplyEvents(new[] { entEvent });
         }
 
 
@@ -141,10 +148,10 @@ namespace Mise.Core.Common.Repositories.Base
             var entityID = GetEntityID(firstEv);
 
 
-                if (UnderTransaction.ContainsKey(entityID) == false)
-                {
-                    StartTransaction(entityID);
-                }
+            if (UnderTransaction.ContainsKey(entityID) == false)
+            {
+                StartTransaction(entityID);
+            }
 
             var bundle = UnderTransaction[entityID];
             foreach (var cEvent in oEvents)
@@ -156,7 +163,7 @@ namespace Mise.Core.Common.Repositories.Base
                     //if our event isn't a creation, we might have a problem
                     if (bundle.NewVersion == null && (IsEventACreation(cEvent) == false))
                     {
-                        throw new ArgumentException("Event specified for entity " + entID + " that can't be found");
+                        throw new EntityForEventNotFoundException(entID);
                     }
                 }
                 if (bundle.NewVersion == null)
@@ -191,16 +198,16 @@ namespace Mise.Core.Common.Repositories.Base
             return oEvents;
         }
 
-        public static IEnumerable<TEventType> OrderEvents(IEnumerable<TEventType> events)
+        public ICollection<TEventType> OrderEvents(IEnumerable<TEventType> events)
         {
             //get the events that all came from the same application first
             var appGroups = from ev in events
-                            group ev by new {ev.EventOrderingID.AppInstanceCode, ev.DeviceID} into appG
+                            group ev by new { ev.EventOrderingID.AppInstanceCode, ev.DeviceID } into appG
                             select new
                             {
                                 AppInstanceCode = appG.Key.AppInstanceCode,
                                 DeviceID = appG.Key.DeviceID,
-                                Items = appG.AsEnumerable(), 
+                                Items = appG.AsEnumerable(),
                                 FirstDate = appG.AsEnumerable().Min(g => g.CreatedDate)
                             };
 
@@ -213,7 +220,11 @@ namespace Mise.Core.Common.Repositories.Base
             var res = new List<TEventType>();
             foreach (var group in groupsByDate)
             {
-                var orderedItems = group.Items.OrderBy(ev => ev.EventOrderingID.OrderingID);
+                //we want to get first the aggregate root creation, then any other creations, then the rest by order
+                var orderedItems = group.Items
+                    .OrderByDescending(IsEventACreation)
+                    .ThenByDescending(ev => EventTypesToBeProcessedFirst.Contains(ev.EventType))
+                    .ThenBy(ev => ev.EventOrderingID.OrderingID);
                 res.AddRange(orderedItems);
             }
 
