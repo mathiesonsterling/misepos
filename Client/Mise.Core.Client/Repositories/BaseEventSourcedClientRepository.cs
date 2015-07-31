@@ -7,8 +7,10 @@ using Mise.Core.Common.Services;
 using Mise.Core.Entities.Base;
 using Mise.Core.ExtensionMethods;
 using Mise.Core.Services.UtilityServices;
+using Mise.Core.Services;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
+using System.Linq.Expressions;
 
 namespace Mise.Core.Client.Repositories
 {
@@ -171,7 +173,12 @@ namespace Mise.Core.Client.Repositories
 
         public override async Task<CommitResult> Commit(Guid entityID)
         {
-            var startResend = CheckAndSendResends();
+			Task startResend = null;
+			try{
+            	startResend = CheckAndSendResends();
+			} catch(Exception e){
+				Logger.HandleException (e, LogLevel.Error);
+			}
 
             if (UnderTransaction.ContainsKey(entityID) == false)
             {
@@ -214,8 +221,13 @@ namespace Mise.Core.Client.Repositories
 
             if (needsDBStore)
             {
+				try{
                 await DAL.AddEventsThatFailedToSend(toSend);
                 commitRes = CommitResult.StoredInDB;
+				} catch(Exception e){
+					Logger.HandleException (e, LogLevel.Fatal);
+					throw;
+				}
             }
 
             var entRes = await DAL.UpsertEntitiesAsync(new[] {bundle.NewVersion});
@@ -229,7 +241,13 @@ namespace Mise.Core.Client.Repositories
 
             Dirty = false;
 
-            await startResend.ConfigureAwait(false);
+			if (startResend != null) {
+				try{
+					await startResend;
+				} catch(Exception e){
+					Logger.HandleException (e);
+				}
+			}
 
             return commitRes;
         }
@@ -239,31 +257,27 @@ namespace Mise.Core.Client.Repositories
         {
             var toResend = (await DAL.GetUnsentEvents()).ToList();
 
-            var allResends = toResend.Cast<IEntityEventBase>();
+			var allResends = toResend.Where (ev => ev != null);
 
             var chunks = allResends.Chunk(RESEND_CHUNK_SIZE);
-            foreach (var chunk in chunks)
-            {
-                bool sent;
-                try
-                {
-                    sent = await _resendEventsWebService.ResendEvents(chunk.ToList());
-                }
-                catch (Exception e)
-                {
-                    sent = false;
-                    Logger.HandleException(e);
-                }
+			foreach (var chunk in chunks) {
+				if (chunk != null && chunk.Any (ev => ev != null)) {
+					bool sent;
+					try {
+						var castItems = chunk.Cast<IEntityEventBase> ().ToList ();
+						sent = await _resendEventsWebService.ResendEvents (castItems);
+					} catch (Exception e) {
+						sent = false;
+						Logger.HandleException (e);
+					}
 
-                if (sent == false)
-                {
-                    await DAL.AddEventsThatFailedToSend(toResend);
-                }
-                else
-                {
-                    await DAL.MarkEventsAsSent(toResend);
-                }
-            }
+					if (sent == false) {
+						await DAL.ReAddFailedSendEvents (chunk);
+					} else {
+						await DAL.MarkEventsAsSent (chunk);
+					}
+				}
+			}
         }
 
         /// <summary>

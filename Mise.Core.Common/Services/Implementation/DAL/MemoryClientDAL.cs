@@ -207,6 +207,11 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 
 	        return Task.FromResult(true);
 	    }
+
+		public Task ReAddFailedSendEvents (IEnumerable<EventDataTransportObject> stillFailing)
+		{
+			return Task.FromResult (false);
+		}
 		#endregion
 	}
 }

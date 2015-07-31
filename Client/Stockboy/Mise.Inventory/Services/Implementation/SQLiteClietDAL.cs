@@ -180,6 +180,7 @@ namespace Mise.Inventory.Services.Implementation
 		private readonly ILogger _logger;
 
 	    private readonly EntityDataTransportObjectFactory _entityDtoFactory;
+		private readonly EventDataTransportObjectFactory _eventDtoFactory;
 	    private object _dbLock;
 		public SQLiteClietDAL (ILogger logger, IJSONSerializer serializer, ISQLite sqlLiteConnectorService)
 		{
@@ -190,6 +191,7 @@ namespace Mise.Inventory.Services.Implementation
 
             //make our entity DTO factory
             _entityDtoFactory = new EntityDataTransportObjectFactory(serializer);
+			_eventDtoFactory = new EventDataTransportObjectFactory (serializer);
 
             //create our tables if they don't already exists
             CreateTablesIfNeeded();
@@ -289,16 +291,34 @@ namespace Mise.Inventory.Services.Implementation
 	        });
 	    }
 
+		public Task ReAddFailedSendEvents (IEnumerable<EventDataTransportObject> stillFailing){
+			return Task.Run (() => {
+				var ids = stillFailing.Select (sf => sf.ID);
+				lock (_dbLock) {
+					var dbItems = _db.Table<SQLiteDatabaseEventItem> ()
+					.Where (dbEv => ids.Contains (dbEv.ID));
+
+					var updated = new List<SQLiteDatabaseEventItem> ();
+					foreach (var dbItem in dbItems) {
+						dbItem.TimesAttemptedToSend = dbItem.TimesAttemptedToSend + 1;
+						dbItem.HasBeenSent = false;
+						updated.Add (dbItem);
+					}
+
+					_db.UpdateAll (updated);
+				}
+			});
+		}
+
 	    public Task AddEventsThatFailedToSend(IEnumerable<IEntityEventBase> events)
 	    {
-            //TODO if the items already exists, just add to the num of sends
 	        return Task.Run(() =>
 	        {
+				var dtos = events.Select (ev => _eventDtoFactory.ToDataTransportObject (ev))
+					.Select (dto => new SQLiteDatabaseEventItem(dto, false));	
 	            lock (_dbLock)
 	            {
-	                var eventsList = DowncastEvents(events);
-
-	                foreach (var dbItem in eventsList.Select(ev => new SQLiteDatabaseEventItem(ev, false)))
+	                foreach (var dbItem in dtos)
 	                {
                         _logger.Debug("Inserting event ID " + dbItem.ID);
 	                    _db.InsertOrReplace(dbItem);
@@ -311,9 +331,12 @@ namespace Mise.Inventory.Services.Implementation
 	    {
 	        return Task.Run(() =>
 	        {
+				if(events == null){
+					return;
+				}
+					var ids = events.Where(ev => ev != null).Select(ev => ev.ID);
 	            lock (_dbLock)
 	            {
-	                var ids = events.Select(ev => ev.ID);
 	                var dbItems = _db.Table<SQLiteDatabaseEventItem>()
 	                    .Where(dbEv => ids.Contains(dbEv.ID));
 
@@ -339,16 +362,7 @@ namespace Mise.Inventory.Services.Implementation
 	            }
 	        });
 	    }
-
-	    private static IEnumerable<EventDataTransportObject> DowncastEvents(IEnumerable<IEntityEventBase> events)
-	    {
-            var eventsList = events.Select(ev => ev as EventDataTransportObject).ToList();
-            if (eventsList.Any(ev => ev == null))
-            {
-                throw new ArgumentException("Items must be of type EventDataTransportObject to be stored");
-            }
-	        return eventsList;
-	    } 
+			
 	}
 }
 

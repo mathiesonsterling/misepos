@@ -27,6 +27,13 @@ namespace Mise.Core.Common.Services
 
 	    Task AddEventsThatFailedToSend(IEnumerable<IEntityEventBase> events);
 
+		/// <summary>
+		/// When we tried to resend, but still fail
+		/// </summary>
+		/// <returns>The add failed send events.</returns>
+		/// <param name="stillFailing">Still failing.</param>
+		Task ReAddFailedSendEvents (IEnumerable<EventDataTransportObject> stillFailing);
+
 	    Task MarkEventsAsSent(IEnumerable<IEntityEventBase> events);
 
         /// <summary>
