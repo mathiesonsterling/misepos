@@ -198,7 +198,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public PARLineItemQuantityUpdatedEvent CreatePARLineItemQuantityUpdatedEvent (IEmployee emp, IPAR par, 
-			Guid lineItemID, int quantity)
+			Guid lineItemID, decimal quantity)
 		{
 			return new PARLineItemQuantityUpdatedEvent {
 				CausedByID = emp.ID,

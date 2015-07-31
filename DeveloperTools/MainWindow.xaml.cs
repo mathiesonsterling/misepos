@@ -137,7 +137,7 @@ namespace DeveloperTools
                 {
                     selItem = (KeyValuePair<string, string>)cmbInvDBURL.SelectedItem;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     BtnCreateInvDB.IsEnabled = true;
                     return;
@@ -187,7 +187,7 @@ namespace DeveloperTools
                 {
                     selItem = (KeyValuePair<string, string>)CmbVendorDestDB.SelectedItem;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     BtnImportVendor.IsEnabled = true;
                     return;

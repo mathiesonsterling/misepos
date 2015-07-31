@@ -127,16 +127,16 @@ namespace Mise.Neo4J.Neo4JDAL
             var lineNodes = await _graphClient.Cypher
                 .Match("(p:PAR)-[:HAS_LINE_ITEM]->(il:PARBeverageLineItem)")
                 .Where((PARGraphNode p) => p.ID == parID)
-                .Return(il => il.As<PARLineItemGraphNode>())
+                .Return(il => il.As<ParLineItemGraphNode>())
                 .ResultsAsync;
 
-            var nodesAndContainers = new List<Tuple<PARLineItemGraphNode, IEnumerable<LiquidContainer>, IEnumerable<ItemCategory>>>();
+            var nodesAndContainers = new List<Tuple<ParLineItemGraphNode, IEnumerable<LiquidContainer>, IEnumerable<ItemCategory>>>();
             foreach (var node in lineNodes.AsParallel())
             {
                 var containers = await GetLiquidContainersForEntityAsync(node.ID);
                 var categories = await GetCategoriesForItem(node.ID);
                 nodesAndContainers.Add(
-                    new Tuple<PARLineItemGraphNode, IEnumerable<LiquidContainer>, IEnumerable<ItemCategory>>(node, containers, categories));
+                    new Tuple<ParLineItemGraphNode, IEnumerable<LiquidContainer>, IEnumerable<ItemCategory>>(node, containers, categories));
             }
             //feed em in
             return nodesAndContainers.Select(nc => nc.Item1.Rehydrate(nc.Item2.FirstOrDefault(), nc.Item3));
@@ -144,7 +144,7 @@ namespace Mise.Neo4J.Neo4JDAL
 
         public async Task UpdatePARLineItemAsync(IPARBeverageLineItem lineItem)
         {
-            var node = new PARLineItemGraphNode(lineItem);
+            var node = new ParLineItemGraphNode(lineItem);
             await _graphClient.Cypher
                 .Match("(li:PARBeverageLineItem)")
                 .Where((InventoryBeverageLineItemGraphNode li) => li.ID == lineItem.ID)
@@ -169,7 +169,7 @@ namespace Mise.Neo4J.Neo4JDAL
 
         public async Task SetLineItemsForPARAsync(IPARBeverageLineItem lineItem, Guid parID)
         {
-            var node = new PARLineItemGraphNode(lineItem);
+            var node = new ParLineItemGraphNode(lineItem);
             await _graphClient.Cypher
                 .Create("(li:PARBeverageLineItem {liParam})")
                 .WithParam("liParam", node)

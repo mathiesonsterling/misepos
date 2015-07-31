@@ -14,7 +14,7 @@ namespace Mise.Inventory.Services
 		Task<IPAR> GetCurrentPAR ();
 
 		Task<IPAR> CreateCurrentPAR();
-		Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, int newQuantity);
+		Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, decimal newQuantity);
 
 		Task SaveCurrentPAR();
 

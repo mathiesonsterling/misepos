@@ -6,7 +6,6 @@ using Mise.Core.Common.Repositories.Base;
 using Mise.Core.Entities.Base;
 using Mise.Core.Server.Services;
 using Mise.Core.Server.Services.DAL;
-using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
@@ -61,19 +60,19 @@ namespace MiseInventoryService.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<CommitResult> CommitBase(Guid entityID, Func<TEntity, Task> updateFunc, Func<TEntity, Task> addFunc)
+        public Task<CommitResult> CommitBase(Guid entityID, Func<TEntity, Task> updateFunc, Func<TEntity, Task> addFunc)
         {
             if (UnderTransaction.ContainsKey(entityID) == false)
             {
                 Logger.Warn("Tried to commit entity " + entityID + " that is not under transaction");
-                return CommitResult.NothingToCommit;
+                return Task.FromResult(CommitResult.NothingToCommit);
             }
 
             var bundle = UnderTransaction[entityID];
             if (bundle.NewVersion == null)
             {
                 Logger.Warn("Null new version, will not commit");
-                return CommitResult.NothingToCommit;
+                return Task.FromResult(CommitResult.NothingToCommit);
             }
             var itemExistsAlready = Cache.ContainsItem(entityID);
 
@@ -111,7 +110,7 @@ namespace MiseInventoryService.Repositories
                 }
             });
 
-            return CommitResult.StoredInDB;
+            return Task.FromResult(CommitResult.StoredInDB);
         }
 
         public DateTimeOffset DefaultCacheTime;

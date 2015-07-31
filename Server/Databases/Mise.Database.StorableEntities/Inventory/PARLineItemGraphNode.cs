@@ -8,14 +8,14 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Database.StorableEntities.Inventory
 {
-    public class PARLineItemGraphNode : IStorableEntityGraphNode
+    public class ParLineItemGraphNode : IStorableEntityGraphNode
     {
-        public PARLineItemGraphNode()
+        public ParLineItemGraphNode()
         {
             
         }
 
-        public PARLineItemGraphNode(IPARBeverageLineItem source)
+        public ParLineItemGraphNode(IPARBeverageLineItem source)
         {
             ID = source.ID;
             RestaurantID = source.RestaurantID;
@@ -57,7 +57,7 @@ namespace Mise.Database.StorableEntities.Inventory
 
         public Guid RestaurantID { get; set; }
 
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
         public string MiseName { get; set; }
 

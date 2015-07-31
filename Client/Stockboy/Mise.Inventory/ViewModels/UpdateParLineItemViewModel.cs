@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
-using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Xamarin.Forms;
@@ -35,8 +33,8 @@ namespace Mise.Inventory.ViewModels
 
 	    #region Fields
 		public string ItemName{ get { return GetValue<string> (); } private set { SetValue(value);} }
-        public int CurrentQuantity {
-            get { return GetValue<int>(); }
+        public decimal CurrentQuantity {
+            get { return GetValue<decimal>(); }
             set{SetValue(value);}
         }
 		public string NextItemName{ get { return GetValue<string> (); } private set { SetValue (value); } }

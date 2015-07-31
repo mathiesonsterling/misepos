@@ -99,7 +99,7 @@ namespace Mise.Inventory.Services.Implementation
 			return _currentPar;
 		}
 
-		public async Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, int newQuantity)
+		public async Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, decimal newQuantity)
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 			var par = await GetCurrentPAR ().ConfigureAwait (false);

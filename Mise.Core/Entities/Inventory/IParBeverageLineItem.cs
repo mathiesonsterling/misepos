@@ -13,6 +13,6 @@ namespace Mise.Core.Entities.Inventory
     /// </summary>
     public interface IPARBeverageLineItem : IBaseBeverageLineItem, ICloneableEntity, IRestaurantEntityBase, IEquatable<IPARBeverageLineItem>
     {
-        int Quantity { get; }
+        decimal Quantity { get; }
     }
 }

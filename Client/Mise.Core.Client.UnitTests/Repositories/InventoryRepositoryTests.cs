@@ -19,7 +19,6 @@ using Mise.Core.ValueItems.Inventory;
 using Moq;
 using NUnit.Framework;
 using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.UnitTests.Repositories
 {

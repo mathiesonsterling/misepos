@@ -44,7 +44,7 @@ namespace Mise.Core.Common.Entities.Inventory
             return newItem;
         }
 
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
 		public List<ItemCategory> Categories{get;set;}
 		public IEnumerable<ICategory> GetCategories(){

@@ -240,11 +240,11 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             }
 				
             var checkRepos = new ClientCheckRepository(terminalWebService, dal, logger, terminalWebService);
-            logger.Log("Loading check repository . . .", LogLevel.Debug);
-            checkRepos.Load(_restaurant.ID);
+
             var employeeRepos = new ClientEmployeeRepository(terminalWebService, dal, logger, terminalWebService);
-            logger.Log("Loading employee repository", LogLevel.Debug);
-            employeeRepos.Load(_restaurant.ID);
+
+            logger.Log("Loading employee and check repository . . .", LogLevel.Debug);
+            LoadRepositories(checkRepos, employeeRepos);
             var menuRepos = new ClientMenuRepository(terminalWebService, dal, logger);
             logger.Log("Loading menu repository", LogLevel.Debug);
             menuRepos.Load();
@@ -254,7 +254,12 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 , checkRepos, employeeRepos, menuRepos);
         }
 
-
+        private async void LoadRepositories(ClientCheckRepository checkRepos,
+            ClientEmployeeRepository employeeRepository)
+        {
+            await checkRepos.Load(_restaurant.ID);
+            await employeeRepository.Load(_restaurant.ID);
+        }
 
         /// <summary>
         /// If true, the employee needs to put their passcode in to order
