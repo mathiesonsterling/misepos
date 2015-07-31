@@ -1,5 +1,6 @@
 ﻿using System;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Xamarin;
 namespace Mise.Inventory.iOS.Services
 {

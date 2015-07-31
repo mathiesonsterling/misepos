@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Payments;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 
 using Mise.Inventory.iOS.MercuryWebService;
 using Mise.Core.Common.Services.Implementation;
