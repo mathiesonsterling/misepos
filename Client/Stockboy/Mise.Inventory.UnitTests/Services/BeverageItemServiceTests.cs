@@ -113,7 +113,7 @@ namespace Mise.Inventory.UnitTests.Services
 			mockInventoryRepos.Setup (r => r.GetAll ())
 				.Returns (new List<IInventory>{ currentInv.Object, oldInv.Object });
 
-			IPAR currentPar = new PAR{ 
+			IPAR currentPar = new Par{ 
 				IsCurrent = true, 
 				RestaurantID = restaurantID,
 				ParLineItems = new List<PARBeverageLineItem>{
@@ -221,7 +221,7 @@ namespace Mise.Inventory.UnitTests.Services
 			mockInventoryRepos.Setup (r => r.GetAll ())
 				.Returns (new List<IInventory>{ currentInv.Object, oldInv.Object });
 
-			IPAR currentPar = new PAR{ IsCurrent = true, ParLineItems = new List<PARBeverageLineItem> {
+			IPAR currentPar = new Par{ IsCurrent = true, ParLineItems = new List<PARBeverageLineItem> {
 					new PARBeverageLineItem {
 						MiseName = "currentPar",
 						Container = new LiquidContainer{AmountContained = new LiquidAmount{Milliliters = 1000}}
@@ -330,7 +330,7 @@ namespace Mise.Inventory.UnitTests.Services
 			mockInventoryRepos.Setup (r => r.GetAll ())
 				.Returns (new List<IInventory>{ currentInv.Object, oldInv.Object });
 
-			IPAR currentPar = new PAR{ IsCurrent = true, ParLineItems = new List<PARBeverageLineItem> {
+			IPAR currentPar = new Par{ IsCurrent = true, ParLineItems = new List<PARBeverageLineItem> {
 					new PARBeverageLineItem {
 						MiseName = "currentPar",
 						Container = new LiquidContainer{AmountContained = new LiquidAmount{Milliliters = 1000}}
@@ -390,7 +390,7 @@ namespace Mise.Inventory.UnitTests.Services
 			mockInventoryRepos.Setup (r => r.GetCurrentInventory (It.IsAny<Guid>()))
 				.Returns (Task.FromResult(currentInv));
 
-			IPAR currentPar = new PAR{ IsCurrent = true };
+			IPAR currentPar = new Par{ IsCurrent = true };
 			var mockPARRepos = new Mock<IPARRepository> ();
 			mockPARRepos.Setup (r => r.GetCurrentPAR (It.IsAny<Guid>()))
 				.Returns (Task.FromResult(currentPar));

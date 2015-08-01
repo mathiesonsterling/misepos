@@ -582,7 +582,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 
 			var pars= new List<IPAR>
 			{
-				new PAR
+				new Par
 				{
 					Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
 					CreatedByEmployeeID = empID,

@@ -26,7 +26,7 @@ namespace Mise.Core.Client.Repositories
 
 	    protected override IPAR CreateNewEntity()
 	    {
-	        return new PAR();
+	        return new Par();
 	    }
 
 
@@ -46,7 +46,7 @@ namespace Mise.Core.Client.Repositories
 
 	    protected override async Task<IEnumerable<IPAR>> LoadFromDB(Guid? restaurantID)
 	    {
-	        var items = await DAL.GetEntitiesAsync<PAR>();
+	        var items = await DAL.GetEntitiesAsync<Par>();
 	        return items;
 	    }
 

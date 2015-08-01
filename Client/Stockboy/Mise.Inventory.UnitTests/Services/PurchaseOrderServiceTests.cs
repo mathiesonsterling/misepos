@@ -51,7 +51,7 @@ namespace Mise.Inventory.UnitTests.Services
                 AmountContained = new LiquidAmount { Milliliters = 100 },
                 DisplayName = "testCont"
             };
-            var par = new PAR
+            var par = new Par
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
@@ -130,7 +130,7 @@ namespace Mise.Inventory.UnitTests.Services
                 AmountContained = new LiquidAmount { Milliliters = 100 },
                 DisplayName = "testCont"
             };
-            var par = new PAR
+            var par = new Par
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
@@ -264,7 +264,7 @@ namespace Mise.Inventory.UnitTests.Services
                 AmountContained = new LiquidAmount { Milliliters = 100 },
                 DisplayName = "testCont"
             };
-            var par = new PAR
+            var par = new Par
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
@@ -387,7 +387,7 @@ namespace Mise.Inventory.UnitTests.Services
                 AmountContained = new LiquidAmount { Milliliters = 100 },
                 DisplayName = "testCont"
             };
-            var par = new PAR
+            var par = new Par
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,

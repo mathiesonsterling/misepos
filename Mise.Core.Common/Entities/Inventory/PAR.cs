@@ -9,15 +9,16 @@ using Mise.Core.Common.Events.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
 {
-    public class PAR : RestaurantEntityBase, IPAR
+    public class Par : RestaurantEntityBase, IPAR
     {
-		public PAR(){
+
+		public Par(){
 			ParLineItems = new List<PARBeverageLineItem> ();
 		}
 
         public ICloneableEntity Clone()
         {
-            var newItem = CloneRestaurantBase(new PAR());
+            var newItem = CloneRestaurantBase(new Par());
             newItem.IsCurrent = IsCurrent;
             newItem.CreatedByEmployeeID = CreatedByEmployeeID;
             newItem.ParLineItems = ParLineItems;
