@@ -93,6 +93,8 @@ namespace Mise.Core.Common.Events
 		PlaceholderRestaurantCreatedEvent CreatePlaceholderRestaurantCreatedEvent(IEmployee emp);
         NewRestaurantRegisteredOnAppEvent CreateNewRestaurantRegisteredOnAppEvent(IEmployee emp, RestaurantName name,
             StreetAddress address, PhoneNumber phone);
+		EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent (IEmployee emp, IRestaurant rest);
+
 		UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID);
 
 		AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, Guid accountID, EmailAddress email, 

@@ -9,7 +9,7 @@ using Mise.Core.Entities.People.Events;
 
 namespace Mise.Core.Common.Events.Restaurant
 {
-	public class NewRestaurantRegisteredOnAppEvent : BaseRestaurantEvent, IEmployeeEvent
+	public class NewRestaurantRegisteredOnAppEvent : BaseRestaurantEvent
     {
         public override MiseEventTypes EventType
         {
@@ -25,11 +25,6 @@ namespace Mise.Core.Common.Events.Restaurant
 	    {
 	        get { return true; }
 	    }
-
-	    public Guid EmployeeID {
-			get;
-			set;
-		}
 
         public MiseAppTypes ApplicationUsed { get; set; }
         public RestaurantName Name { get; set; }

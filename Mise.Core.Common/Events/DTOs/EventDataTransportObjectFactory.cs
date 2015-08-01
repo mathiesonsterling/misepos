@@ -466,6 +466,8 @@ namespace Mise.Core.Common.Events.DTOs
                     return _jsonSerializer.Deserialize<EmployeeAcceptsInvitationEvent>(source.JSON);
                 case MiseEventTypes.EmployeeRejectsInvitation:
                     return _jsonSerializer.Deserialize<EmployeeRejectsInvitationEvent>(source.JSON);
+				case MiseEventTypes.EmployeeRegistersRestaurant:
+					return _jsonSerializer.Deserialize<EmployeeRegistersRestaurantEvent> (source.JSON);
                 default:
                     return null;
 

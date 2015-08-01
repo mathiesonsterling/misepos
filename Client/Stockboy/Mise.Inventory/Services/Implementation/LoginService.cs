@@ -386,7 +386,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public Task<IRestaurant> RegisterRestaurant(RestaurantName name, StreetAddress address, PhoneNumber phone)
+		public async Task<IRestaurant> RegisterRestaurant(RestaurantName name, StreetAddress address, PhoneNumber phone)
 	    {
 			try{
 		        var ev = _eventFactory.CreateNewRestaurantRegisteredOnAppEvent(_currentEmployee, name, address, phone);
@@ -394,15 +394,19 @@ namespace Mise.Inventory.Services.Implementation
 				_currentRestaurant = _restaurantRepository.ApplyEvent (ev);
 
 				//don't commit here - we want to do so only when we register our account, in case there's a problem
-				//await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.ID);
+				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.ID);
 
 				//set our system to use this new restaurant!
 				_eventFactory.SetRestaurant (_currentRestaurant);
 
 				//associate the restaurant with the employee?
-				_currentEmployee = _employeeRepository.ApplyEvent (ev);
+				var empEvent = _eventFactory.CreateEmployeeRegistersRestaurantEvent (_currentEmployee, _currentRestaurant);
 
-				return Task.FromResult(_currentRestaurant);
+				_currentEmployee = _employeeRepository.ApplyEvent (empEvent);
+
+				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.ID);
+
+				return _currentRestaurant;
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;

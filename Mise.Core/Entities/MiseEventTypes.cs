@@ -6,6 +6,8 @@
     /// <remarks>Each of these should have a feature associated with them!</remarks>
     public enum MiseEventTypes
     {
+		EmployeeRegistersRestaurant,
+
         CheckCreated,
         /// <summary>
         /// We created our check by swiping a card to open

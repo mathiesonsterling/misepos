@@ -17,6 +17,9 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Events.Vendors;
 using Mise.Core.Common.Events.Accounts;
+using Mise.Core.Common.Services;
+
+
 namespace Mise.Core.Common.Events
 {
 	public class InventoryAppEventFactory : IInventoryAppEventFactory
@@ -664,9 +667,21 @@ namespace Mise.Core.Common.Events
 	            Name = name,
 	            StreetAddress = address,
 	            PhoneNumber = phone,
-				EmployeeID = emp.ID
 	        };
 	    }
+
+		public EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent(IEmployee emp, IRestaurant rest){
+			return new EmployeeRegistersRestaurantEvent {
+				ID = Guid.NewGuid (),
+				CreatedDate = DateTimeOffset.Now,
+				DeviceID = _deviceID,
+				EventOrderingID = GetNextEventID (),
+
+				CausedByID = emp.ID,
+				RestaurantID = rest.ID,
+				EmployeeID = emp.ID
+			};
+		}
 
 		public UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID)
 		{
