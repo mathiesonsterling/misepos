@@ -7,6 +7,7 @@ using Xamarin.UITest.Queries;
 
 namespace Mise.Inventory.UITests
 {
+	[Ignore]
 	[TestFixture (Platform.Android)]
 	[TestFixture (Platform.iOS)]
 	public class Tests

@@ -9,7 +9,7 @@ namespace Mise.Core.Common.Events.Employee
 	public class EmployeeRegistersRestaurantEvent : BaseEmployeeEvent
 	{
 		#region implemented abstract members of BaseEmployeeEvent
-		public override Mise.Core.Entities.MiseEventTypes EventType {
+		public override MiseEventTypes EventType {
 			get {
 				return MiseEventTypes.EmployeeRegistersRestaurant;
 			}
