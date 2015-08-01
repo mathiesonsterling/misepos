@@ -27,7 +27,7 @@ namespace Mise.Core.Common.Events
 
 		#region Event creations
         EmployeeLoggedIntoInventoryAppEvent CreateEmployeeLoggedIntoInventoryAppEvent(IEmployee emp);
-        EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(EmailAddress userName, Password password);
+        EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(IEmployee emp);
         EmployeeLoggedOutOfInventoryAppEvent CreateEmployeeLoggedOutOfInventoryAppEvent(IEmployee emp);
 		EmployeeCreatedEvent CreateEmployeeCreatedEvent(EmailAddress email, Password password, PersonName name, MiseAppTypes appType);
 

@@ -252,19 +252,11 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenEmployeeRegisteredForInventoryAppEvent(EmployeeRegisteredForInventoryAppEvent empEvent)
 	    {
-	        Password = empEvent.Password;
-            
-	        if (Emails.Contains(empEvent.EmailAddress) == false)
-	        {
-	            Emails.Add(empEvent.EmailAddress);
-	            PrimaryEmail = empEvent.EmailAddress;
-	        }
-            CurrentlyLoggedIntoInventoryApp = true;
             if (RestaurantsAndAppsAllowed.ContainsKey(empEvent.RestaurantID) == false)
             {
 				RestaurantsAndAppsAllowed.Add (empEvent.RestaurantID, new List<MiseAppTypes> ());
             }
-			//RestaurantsAndAppsAllowed [empEvent.RestaurantID].Add (MiseAppTypes.StockboyMobile);
+			RestaurantsAndAppsAllowed [empEvent.RestaurantID].Add (MiseAppTypes.StockboyMobile);
 	    }
 
 		void WhenEmployeeAcceptsInvitation (EmployeeAcceptsInvitationEvent ev)

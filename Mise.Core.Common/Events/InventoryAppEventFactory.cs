@@ -331,16 +331,14 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
-		public EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(EmailAddress emailAddress, Password password)
+		public EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(IEmployee emp)
 		{
 			return new EmployeeRegisteredForInventoryAppEvent {
 				ID = Guid.NewGuid(),
 				EventOrderingID = GetNextEventID(),
 				DeviceID = _deviceID,
-
-				EmailAddress = emailAddress,
-				Password = password,
-				RestaurantID = Guid.Empty
+                CreatedDate = DateTime.UtcNow,
+				EmployeeID = emp.ID
 			};
 		}
 

@@ -354,7 +354,8 @@ namespace Mise.Inventory.Services.Implementation
 				var ev = _eventFactory.CreateEmployeeCreatedEvent (email, password, name, MiseAppTypes.StockboyMobile);
 
 				_currentEmployee = _employeeRepository.ApplyEvent (ev);
-
+			    var registerEvent = _eventFactory.CreateEmployeeRegisteredForInventoryAppEvent(_currentEmployee);
+			    _currentEmployee = _employeeRepository.ApplyEvent(registerEvent);
 
 			    await _employeeRepository.CommitOnlyImmediately(_currentEmployee.ID);
 

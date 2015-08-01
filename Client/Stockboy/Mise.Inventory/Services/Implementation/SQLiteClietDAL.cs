@@ -334,19 +334,14 @@ namespace Mise.Inventory.Services.Implementation
 				if(events == null){
 					return;
 				}
-					var ids = events.Where(ev => ev != null).Select(ev => ev.ID);
+
+				var ids = events.Where(ev => ev != null).Select(ev => ev.ID);
 	            lock (_dbLock)
 	            {
-	                var dbItems = _db.Table<SQLiteDatabaseEventItem>()
-	                    .Where(dbEv => ids.Contains(dbEv.ID));
-
-	                foreach (var dbItem in dbItems)
-	                {
-	                    dbItem.HasBeenSent = true;
-	                }
-
-                    _logger.Debug("Marking events as sent");
-	                _db.UpdateAll(dbItems);
+					foreach(var id in ids){
+						_logger.Debug("Deleting sent event " + id);
+						_db.Delete(id);
+					}
 	            }
 	        });
 	    }
