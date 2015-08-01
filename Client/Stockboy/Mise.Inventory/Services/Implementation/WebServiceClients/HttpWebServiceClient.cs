@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -14,13 +14,13 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
-using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.InventoryWebService.ServiceModelPortable.Responses;
 using ModernHttpClient;
-namespace Mise.Inventory.Services.Implementation
+
+namespace Mise.Inventory.Services.Implementation.WebServiceClients
 {
 	public class HttpWebServiceClient : IInventoryApplicationWebService,
 	IDisposable

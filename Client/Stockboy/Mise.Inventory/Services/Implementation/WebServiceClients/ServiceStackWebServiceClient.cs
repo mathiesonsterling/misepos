@@ -1,24 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
-using Mise.Core.ValueItems;
-using Mise.Core.Services.WebServices;
-using Mise.Core.Entities.People;
-using Mise.Core.Entities.People.Events;
-using Mise.Core.Entities.Restaurant.Events;
-using Mise.Core.Entities.Restaurant;
-using Mise.Core.Entities.Vendors;
-using Mise.Core.Entities.Vendors.Events;
-using Mise.Core.Entities.Inventory;
-using Mise.Core.Entities.Inventory.Events;
-
-
-using Mise.Core.Services.UtilityServices;
-using Mise.Core.Common.Events.DTOs;
-using Mise.Core.Services;
-/*using ServiceStack;
+﻿namespace Mise.Inventory.Services.Implementation.WebServiceClients
+{ /*using ServiceStack;
 namespace Mise.Inventory
 {
 	public class ServiceStackWebServiceClient : IInventoryEmployeeWebService, 
@@ -217,4 +198,4 @@ namespace Mise.Inventory
 		#endregion
 	}
 }*/
-
+}

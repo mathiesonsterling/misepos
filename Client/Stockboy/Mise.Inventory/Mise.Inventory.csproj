@@ -39,6 +39,8 @@
     <Compile Include="Reports\CompletedInventoryReport.cs" />
     <Compile Include="Services\IInsightsService.cs" />
     <Compile Include="Services\Implementation\ReportsService.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\HttpWebServiceClient.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\ServiceStackWebServiceClient.cs" />
     <Compile Include="Services\Implementation\XamarinInsightsService.cs" />
     <Compile Include="Services\IReportsService.cs" />
     <Compile Include="ViewModels\BaseLineItemDisplayLine.cs" />
@@ -90,7 +92,6 @@
     </Compile>
     <Compile Include="Services\Implementation\PageFactory.cs" />
     <Compile Include="Services\Implementation\NavigationService.cs" />
-    <Compile Include="Services\Implementation\ServiceStackWebServiceClient.cs" />
     <Compile Include="Services\Implementation\ServiceStackJSONSerializer.cs" />
     <Compile Include="Pages\SectionSelectPage.xaml.cs">
       <DependentUpon>SectionSelectPage.xaml</DependentUpon>
@@ -139,7 +140,6 @@
     </Compile>
     <Compile Include="ViewModels\PurchaseOrderReviewViewModel.cs" />
     <Compile Include="AkavacheSqliteLinkerOverride.cs" />
-    <Compile Include="Services\Implementation\HttpWebServiceClient.cs" />
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="ViewModels\UserRegistrationViewModel.cs" />
     <Compile Include="Pages\InvitationsPage.xaml.cs">
@@ -276,7 +276,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\Implementation\WebServiceClients\AzureMobileServices\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\LoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>

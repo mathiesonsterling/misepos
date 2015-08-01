@@ -13,6 +13,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services.Implementation;
+using Mise.Inventory.Services.Implementation.WebServiceClients;
 using Moq;
 using NUnit.Framework;
 
