@@ -7,7 +7,10 @@ using XLabs.Platform;
 using XLabs.Platform.Device;
 using Mise.Inventory.Android.Services;
 using Mise.Core.Services.UtilityServices;
-
+using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
+using Mise.Core.Common.Services.Implementation.Serialization;
+using Microsoft.WindowsAzure.MobileServices;
+using Mise.Core.Services.WebServices;
 namespace Mise.Inventory.Android
 {
 	public class DependencySetup : Mise.Inventory.DependencySetup
@@ -21,9 +24,29 @@ namespace Mise.Inventory.Android
 			var processor = new MercuryPaymentProcessorService (Logger);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance();
 
-			var dbConn = new AndroidSQLite ();
+			/*var dbConn = new AndroidSQLite ();
 			SqlLiteConnection = dbConn;
-			cb.RegisterInstance<ISQLite> (dbConn).SingleInstance ();
+			cb.RegisterInstance<ISQLite> (dbConn).SingleInstance ();*/
+
+			//make the web service
+
+			var mobileService = new MobileServiceClient(
+				"https://stockboymobileservice.azure-mobile.net/",
+				"vvECpsmISLzAxntFjNgSxiZEPmQLLG42"
+			);
+			CurrentPlatform.Init ();
+			var webService = new AzureWeakTypeSharedClient(Logger, new JsonNetSerializer(), mobileService, GetBuildLevel());
+	
+			cb.RegisterInstance(webService).As<IInventoryEmployeeWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IInventoryRestaurantWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IVendorWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IPARWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IInventoryWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IReceivingOrderWebService>().SingleInstance();
+			cb.RegisterInstance(webService).As<IPurchaseOrderWebService>().SingleInstance();
+			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance();
+			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance();
+			cb.RegisterInstance(webService).As<IResendEventsWebService>().SingleInstance();
 
 			var errorService = new AndroidRaygun ();
 			cb.RegisterInstance<IErrorTrackingService> (errorService).SingleInstance ();

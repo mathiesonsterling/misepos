@@ -14,6 +14,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public AzureEntityStorage(){}
 
 		public AzureEntityStorage(RestaurantEntityDataTransportObject dto, BuildLevel level){
+			id = EntityID.ToString();
 			BuildLevel = level.ToString ();
 			MiseEntityType = dto.SourceType.ToString ();
 			EntityID = dto.ID;
@@ -32,6 +33,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			};
 		}
 
+		public string id{get;set;}
 		public string BuildLevel{ get; set;}
 		public string MiseEntityType{get;set;}
 		public Guid EntityID{ get; set;}

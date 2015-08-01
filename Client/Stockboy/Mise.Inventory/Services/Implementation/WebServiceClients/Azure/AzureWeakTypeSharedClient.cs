@@ -31,13 +31,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 	/// </summary>
 	public class AzureWeakTypeSharedClient : IInventoryApplicationWebService
 	{
-		private readonly MobileServiceClient _client;
+		private readonly IMobileServiceClient _client;
 		readonly ILogger _logger;
 		private readonly IJSONSerializer _serial;
 		private readonly BuildLevel _level;
 		private readonly EventDataTransportObjectFactory _eventDTOFactory;
 		private readonly EntityDataTransportObjectFactory _entityDTOFactory;
-		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, MobileServiceClient client, BuildLevel level)
+		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client, BuildLevel level)
 		{
 			_logger = logger;
 			_client = client;
@@ -134,7 +134,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<IEnumerable<IApplicationInvitation>> GetInvitationsForEmail (EmailAddress email)
 		{			var type = typeof(IApplicationInvitation);
 
-			var table = _client.GetTable<AzureEntityStorage> ();
+		    var table = GetEntityTable();
 
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type.ToString ())
@@ -207,8 +207,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<IEnumerable<IVendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
 		{
-			
-			var table = _client.GetTable<AzureEntityStorage> ();
+
+		    var table = GetEntityTable();
 
 			var vendType = typeof(Vendor);
 			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToEnumerableAsync ();
@@ -232,7 +232,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<IEnumerable<IVendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
 		{
-			var table = _client.GetTable<AzureEntityStorage> ();
+		    var table = GetEntityTable();
 
 			var vendType = typeof(Vendor);
 			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToEnumerableAsync ();
@@ -265,7 +265,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation, Distance maxDistance)
 		{
 			var restType = typeof(Restaurant).ToString ();
-			var table = _client.GetTable<AzureEntityStorage> ();
+		    var table = GetEntityTable();
 
 			var azureItems = await table.Where (ai => ai.MiseEntityType == restType).ToEnumerableAsync ();
 
@@ -301,7 +301,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		{
 			var empType = typeof(Employee).ToString ();
 
-			var table = _client.GetTable<AzureEntityStorage> ();
+		    var table = GetEntityTable();
 
 			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();
 
@@ -343,7 +343,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 	
 		private async Task<bool> SendEventDTOs(ICollection<EventDataTransportObject> dtos){
 	
-			var table = _client.GetTable<AzureEventStorage> ();
+			var table = GetEventTable ();
 			var existingIDs = await table.Select (ai => ai.EventID).ToCollectionAsync ();
 
 			//get those that exist and those that don't
@@ -379,7 +379,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			var storageItem = new AzureEntityStorage (dto, _level);
 
-			var table = _client.GetTable<AzureEntityStorage>();
+			var table = GetEntityTable();
 
 			//does this exist?
 			var exists = (await table.Where(ai => ai.EntityID == dto.ID).ToEnumerableAsync ()).Any();
@@ -392,11 +392,21 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			return true;
 		}
 
-		private async Task<IEnumerable<T>> GetEntityOfTypeForRestaurant<T>(Guid restaurantID) where T:class, IEntityBase, new()
+	    private IMobileServiceTable<AzureEntityStorage> GetEntityTable() 
+	    {
+	        return _client.GetTable<AzureEntityStorage>();
+	    }
+
+		private IMobileServiceTable<AzureEventStorage> GetEventTable ()
+		{
+			return _client.GetTable<AzureEventStorage> ();
+		}
+
+	    private async Task<IEnumerable<T>> GetEntityOfTypeForRestaurant<T>(Guid restaurantID) where T:class, IEntityBase, new()
 		{
 			var type = typeof(T).ToString ();
 
-			var table = _client.GetTable<AzureEntityStorage> ();
+	        var table = GetEntityTable();
 
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type && si.RestaurantID.HasValue && si.RestaurantID == restaurantID)

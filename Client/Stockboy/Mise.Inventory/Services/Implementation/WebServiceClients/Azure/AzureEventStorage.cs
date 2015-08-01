@@ -11,10 +11,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			BuildLevel = level.ToString ();
 			MiseEventType = dto.EventType.ToString ();
 			EventID = dto.ID;
+			id = dto.ID.ToString();
 			EventDate = dto.CreatedDate;
 			JSON = dto.JSON;
 		}
 
+		public string id{get;set;}
 		public string BuildLevel{get;set;}
 		public string MiseEventType{get;set;}
 		public Guid EventID{get;set;}
