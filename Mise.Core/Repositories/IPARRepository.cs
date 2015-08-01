@@ -8,8 +8,8 @@ using Mise.Core.Entities.Inventory.Events;
 
 namespace Mise.Core.Repositories
 {
-    public interface IPARRepository : IEventSourcedEntityRepository<IPAR, IPAREvent>
+    public interface IPARRepository : IEventSourcedEntityRepository<IPar, IPAREvent>
     {
-		Task<IPAR> GetCurrentPAR(Guid restaurantID);
+		Task<IPar> GetCurrentPAR(Guid restaurantID);
     }
 }

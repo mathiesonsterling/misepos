@@ -57,10 +57,10 @@ namespace Mise.Core.Common.Events
 		InventoryNewSectionAddedEvent CreateInventoryNewSectionAddedEvent(IEmployee emp, IInventory inventory, IRestaurantInventorySection restSection);
 
 		PARCreatedEvent CreatePARCreatedEvent(IEmployee emp);
-		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int? quantity, IPAR par);
+		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int? quantity, IPar par);
 		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, string name, string upc, IEnumerable<ItemCategory> category, 
-			int caseSize, LiquidContainer container, int quantity, IPAR par);
-		PARLineItemQuantityUpdatedEvent CreatePARLineItemQuantityUpdatedEvent(IEmployee emp, IPAR par, Guid lineItemID, decimal quantity);
+			int caseSize, LiquidContainer container, int quantity, IPar par);
+		PARLineItemQuantityUpdatedEvent CreatePARLineItemQuantityUpdatedEvent(IEmployee emp, IPar par, Guid lineItemID, decimal quantity);
 
 		InventorySectionAddedToRestaurantEvent CreateInventorySectionAddedToRestaurantEvent(IEmployee emp, string newSectionName, bool isDefaultSection, bool allowsPartialBottles);
 

@@ -1635,7 +1635,7 @@ namespace Mise.Core.Common.Services.Implementation
 		}
 
 
-		public Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation)
+		public Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation, Distance max)
 		{
 			throw new NotImplementedException ();
 		}

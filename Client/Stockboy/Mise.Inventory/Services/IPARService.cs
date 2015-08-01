@@ -11,9 +11,9 @@ namespace Mise.Inventory.Services
 			LiquidContainer container);
 		Task AddLineItemToCurrentPAR (IBaseBeverageLineItem source, int? quantity);
 
-		Task<IPAR> GetCurrentPAR ();
+		Task<IPar> GetCurrentPAR ();
 
-		Task<IPAR> CreateCurrentPAR();
+		Task<IPar> CreateCurrentPAR();
 		Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, decimal newQuantity);
 
 		Task SaveCurrentPAR();

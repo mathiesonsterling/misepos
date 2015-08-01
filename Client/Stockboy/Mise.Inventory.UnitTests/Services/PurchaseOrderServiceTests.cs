@@ -75,7 +75,7 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var parService = new Mock<IPARService>();
             parService.Setup(ps => ps.GetCurrentPAR())
-                .Returns(Task.FromResult(par as IPAR));
+                .Returns(Task.FromResult(par as IPar));
 
             var inventoryService = new Mock<IInventoryService>();
             IInventory inv = null;
@@ -160,7 +160,7 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var parService = new Mock<IPARService>();
             parService.Setup(ps => ps.GetCurrentPAR())
-                .Returns(Task.FromResult(par as IPAR));
+                .Returns(Task.FromResult(par as IPar));
 
             var inventoryService = new Mock<IInventoryService>();
             IInventory inv = new Mise.Core.Common.Entities.Inventory.Inventory
@@ -282,7 +282,7 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var parService = new Mock<IPARService>();
             parService.Setup(ps => ps.GetCurrentPAR())
-                .Returns(Task.FromResult(par as IPAR));
+                .Returns(Task.FromResult(par as IPar));
 
             var inventoryService = new Mock<IInventoryService>();
             IInventory inv = new Core.Common.Entities.Inventory.Inventory
@@ -405,7 +405,7 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var parService = new Mock<IPARService>();
             parService.Setup(ps => ps.GetCurrentPAR())
-                .Returns(Task.FromResult(par as IPAR));
+                .Returns(Task.FromResult(par as IPar));
 
             var inventoryService = new Mock<IInventoryService>();
             IInventory inv = new Core.Common.Entities.Inventory.Inventory

@@ -15,7 +15,7 @@ using Mise.Core.Repositories;
 
 namespace Mise.Core.Client.Repositories
 {
-	public class ClientParRepository : BaseEventSourcedClientRepository<IPAR, IPAREvent>, IPARRepository
+	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IPAREvent>, IPARRepository
 	{
 	    private readonly IPARWebService _webService;
         public ClientParRepository(ILogger logger, IClientDAL dal, IPARWebService webService, IResendEventsWebService resend)
@@ -24,7 +24,7 @@ namespace Mise.Core.Client.Repositories
 	        _webService = webService;
 	    }
 
-	    protected override IPAR CreateNewEntity()
+	    protected override IPar CreateNewEntity()
 	    {
 	        return new Par();
 	    }
@@ -35,7 +35,7 @@ namespace Mise.Core.Client.Repositories
 	        return ev.ParID;
 	    }
 
-	    protected override Task<IEnumerable<IPAR>> LoadFromWebservice(Guid? restaurantID)
+	    protected override Task<IEnumerable<IPar>> LoadFromWebservice(Guid? restaurantID)
 	    {
 	        if (restaurantID.HasValue == false)
 	        {
@@ -44,14 +44,14 @@ namespace Mise.Core.Client.Repositories
 	        return _webService.GetPARsForRestaurant(restaurantID.Value);
 	    }
 
-	    protected override async Task<IEnumerable<IPAR>> LoadFromDB(Guid? restaurantID)
+	    protected override async Task<IEnumerable<IPar>> LoadFromDB(Guid? restaurantID)
 	    {
 	        var items = await DAL.GetEntitiesAsync<Par>();
 	        return items;
 	    }
 
 
-		public Task<IPAR> GetCurrentPAR (Guid restaurantID)
+		public Task<IPar> GetCurrentPAR (Guid restaurantID)
 		{
 			var par = GetAll ().FirstOrDefault (p => p.IsCurrent && p.RestaurantID == restaurantID);
 			return Task.FromResult (par);

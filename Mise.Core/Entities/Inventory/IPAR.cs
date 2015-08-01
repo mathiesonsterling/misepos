@@ -8,7 +8,7 @@ using Mise.Core.Entities.Inventory.Events;
 
 namespace Mise.Core.Entities.Inventory
 {
-    public interface IPAR : IRestaurantEntityBase, IEventStoreEntityBase<IPAREvent>, ICloneableEntity
+    public interface IPar : IRestaurantEntityBase, IEventStoreEntityBase<IPAREvent>, ICloneableEntity
     {
         Guid CreatedByEmployeeID { get; }
 

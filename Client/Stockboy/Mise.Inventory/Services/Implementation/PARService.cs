@@ -15,7 +15,7 @@ namespace Mise.Inventory.Services.Implementation
 {
 	public class PARService : IPARService
 	{
-		private IPAR _currentPar;
+		private IPar _currentPar;
 		IPARBeverageLineItem _lineItem;
 
 		readonly IPARRepository _parRepository;
@@ -62,7 +62,7 @@ namespace Mise.Inventory.Services.Implementation
 			await _parRepository.Commit (_currentPar.ID);
 		}
 			
-		public async Task<IPAR> GetCurrentPAR ()
+		public async Task<IPar> GetCurrentPAR ()
 		{
 			if (_currentPar == null) {
 				var rest = await _loginService.GetCurrentRestaurant ();
@@ -88,7 +88,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public async Task<IPAR> CreateCurrentPAR ()
+		public async Task<IPar> CreateCurrentPAR ()
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 

@@ -30,7 +30,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 		private readonly List<IEmployee> _emps;
 	    readonly List<IRestaurant> _restaurants;
 	    readonly List<IVendor> _vendors;
-	    readonly List<IPAR> _pars;
+	    readonly List<IPar> _pars;
 	    readonly List<IInventory> _inventories;
 	    readonly List<IReceivingOrder> _receivingOrders;
 
@@ -414,7 +414,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 		    return vendors.ToList<IVendor>();
 		}
 			
-		List<IPAR> CreatePars(Guid restID, Guid empID)
+		List<IPar> CreatePars(Guid restID, Guid empID)
 		{
 		    var container = LiquidContainer.Bottle750ML;
 			var lis750 = new Dictionary<string, string> {
@@ -580,7 +580,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 				});
 
 
-			var pars= new List<IPAR>
+			var pars= new List<IPar>
 			{
 				new Par
 				{
@@ -702,7 +702,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 
 		#endregion
 
-		public Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation)
+		public Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation, Distance max)
 		{
 			return Task.FromResult (_restaurants.AsEnumerable());
 		}
@@ -740,7 +740,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 		{
 			return Task.FromResult (true);
 		}
-		public Task<bool> SendEventsAsync(IPAR par, IEnumerable<IPAREvent> events)
+		public Task<bool> SendEventsAsync(IPar par, IEnumerable<IPAREvent> events)
 		{
 			return Task.FromResult (true);
 		}
@@ -779,12 +779,12 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			return Task.FromResult (res.AsEnumerable ());
 		}
 
-		public Task<IPAR> GetCurrentPAR (Guid restaurantID)
+		public Task<IPar> GetCurrentPAR (Guid restaurantID)
 		{
 			return Task.FromResult (_pars.FirstOrDefault (p => p.RestaurantID == restaurantID && p.IsCurrent));
 		}
 
-		public Task<IEnumerable<IPAR>> GetPARsForRestaurant (Guid restaurantID)
+		public Task<IEnumerable<IPar>> GetPARsForRestaurant (Guid restaurantID)
 		{
 			return Task.FromResult (_pars.Where (p => p.RestaurantID == restaurantID));
 		}

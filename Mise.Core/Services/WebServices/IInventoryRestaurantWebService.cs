@@ -12,7 +12,7 @@ namespace Mise.Core.Services.WebServices
 {
     public interface IInventoryRestaurantWebService : IEventStoreWebService<IRestaurant, IRestaurantEvent>
     {
-		Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation);
+		Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation, Distance maxDistance);
 
 		Task<IRestaurant> GetRestaurant (Guid restaurantID);
     }

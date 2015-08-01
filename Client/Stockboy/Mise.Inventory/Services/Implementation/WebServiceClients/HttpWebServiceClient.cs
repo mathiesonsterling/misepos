@@ -85,7 +85,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients
 			return res.Results;
 		}
 			
-		public async Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation)
+		public async Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation, Distance max)
 		{
 			var res = await GetData<RestaurantResponse>("restaurants");
 			return res.Results;
@@ -97,7 +97,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients
 			return res.Results.FirstOrDefault();
 		}
 
-		public async Task<IPAR> GetCurrentPAR (Guid restaurantID)
+		public async Task<IPar> GetCurrentPAR (Guid restaurantID)
 		{
 			var pars = await GetPARsForRestaurant (restaurantID);
 			return pars.FirstOrDefault (p => p.IsCurrent);
@@ -105,7 +105,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients
 
 		//    [Route("/restaurants/{RestaurantID}/pars/")]
 		//[Route("/restaurants/{RestaurantID}/pars/{PARID}")]
-		public async Task<IEnumerable<IPAR>> GetPARsForRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<IPar>> GetPARsForRestaurant (Guid restaurantID)
 		{
 			var res = await GetData<PARResponse> ("restaurants/" + restaurantID + "/pars");
 			return res.Results;
@@ -170,7 +170,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients
 			return SendDTOSAsync(events.Select(e => _dtoFactory.ToDataTransportObject(e)).ToList());
 		}
 
-		public Task<bool> SendEventsAsync(IPAR par, IEnumerable<IPAREvent> events){
+		public Task<bool> SendEventsAsync(IPar par, IEnumerable<IPAREvent> events){
 			return SendDTOSAsync(events.Select(e => _dtoFactory.ToDataTransportObject(e)).ToList());
 		}
 

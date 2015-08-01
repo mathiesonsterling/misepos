@@ -9,7 +9,7 @@ using Mise.Core.Common.Events.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
 {
-    public class Par : RestaurantEntityBase, IPAR
+    public class Par : RestaurantEntityBase, IPar
     {
 
 		public Par(){

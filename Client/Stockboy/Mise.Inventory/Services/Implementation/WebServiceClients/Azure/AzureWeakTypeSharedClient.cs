@@ -21,14 +21,15 @@ using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Entities.Accounts;
+using Mise.Inventory.ViewModels;
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 {
 	/// <summary>
-	/// Shared portions of the windows azure client
+	/// Azure Mobile Services client - all items are serialized as JSON before going to the server
 	/// </summary>
-	public class AzureSharedClient : IInventoryApplicationWebService
+	public class AzureWeakTypeSharedClient : IInventoryApplicationWebService
 	{
 		private readonly MobileServiceClient _client;
 		readonly ILogger _logger;
@@ -36,7 +37,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private readonly BuildLevel _level;
 		private readonly EventDataTransportObjectFactory _eventDTOFactory;
 		private readonly EntityDataTransportObjectFactory _entityDTOFactory;
-		public AzureSharedClient (ILogger logger, IJSONSerializer serializer, MobileServiceClient client, BuildLevel level)
+		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, MobileServiceClient client, BuildLevel level)
 		{
 			_logger = logger;
 			_client = client;
@@ -174,25 +175,27 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IPARWebService implementation
 
-		public Task<IPAR> GetCurrentPAR (Guid restaurantID)
+		public async Task<IPar> GetCurrentPAR (Guid restaurantID)
 		{
-			throw new NotImplementedException ();
+			var allPars = await GetPARsForRestaurant (restaurantID);
+			return allPars.FirstOrDefault (p => p.IsCurrent);
 		}
 
-		public Task<IEnumerable<IPAR>> GetPARsForRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<IPar>> GetPARsForRestaurant (Guid restaurantID)
 		{
-			throw new NotImplementedException ();
+			var items = await GetEntityOfTypeForRestaurant<Par> (restaurantID);
+			return items.Cast<IPar> ();
 		}
 
 		#endregion
 
 		#region IEventStoreWebService implementation
 
-		public async Task<bool> SendEventsAsync (IPAR updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IPAREvent> events)
+		public async Task<bool> SendEventsAsync (IPar updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IPAREvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<Par, IPAR> (updatedEntity);
+			var entRes = await StoreEntity<Par, IPar> (updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
@@ -202,14 +205,43 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IVendorWebService implementation
 
-		public Task<IEnumerable<IVendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
+		public async Task<IEnumerable<IVendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
 		{
-			throw new NotImplementedException ();
+			
+			var table = _client.GetTable<AzureEntityStorage> ();
+
+			var vendType = typeof(Vendor);
+			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToEnumerableAsync ();
+
+			//todo figure out a better way to do this on the server
+			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto));
+
+			return vendors;
+				/*.Where(v => v.StreetAddress != null && v.StreetAddress.StreetAddressNumber != null)
+				.Select(
+					v => new
+					{
+						DistanceFromPoint = new Distance(currentLocation, v.StreetAddress.StreetAddressNumber),
+						Vendor = v
+					})
+				.Where(vl => radius.GreaterThan(vl.DistanceFromPoint))
+				.OrderBy(vl => vl.DistanceFromPoint)
+				.Select(vl => vl.Vendor);*/
 		}
 
-		public Task<IEnumerable<IVendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<IVendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
 		{
-			throw new NotImplementedException ();
+			var table = _client.GetTable<AzureEntityStorage> ();
+
+			var vendType = typeof(Vendor);
+			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToEnumerableAsync ();
+
+			//todo figure out a better way to do this on the server
+			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto));
+
+			return vendors.Where(v => v.GetRestaurantIDsAssociatedWithVendor ().Contains (restaurantID));
 		}
 
 		#endregion
@@ -230,14 +262,33 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IInventoryRestaurantWebService implementation
 
-		public Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation)
+		public async Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation, Distance maxDistance)
 		{
-			throw new NotImplementedException ();
+			var restType = typeof(Restaurant).ToString ();
+			var table = _client.GetTable<AzureEntityStorage> ();
+
+			var azureItems = await table.Where (ai => ai.MiseEntityType == restType).ToEnumerableAsync ();
+
+			var rests = azureItems.Select (ai => ai.ToRestaurantDTO ())
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Restaurant> (dto));
+
+			return rests;
+				/*.Where(r => r.StreetAddress != null && r.StreetAddress.StreetAddressNumber != null)
+				.Select(
+					v => new
+					{
+						DistanceFromPoint = new Distance(deviceLocation, v.StreetAddress.StreetAddressNumber),
+						Restaurant = v
+					})
+				.Where(vl => maxDistance.GreaterThan(vl.DistanceFromPoint))
+				.OrderBy(vl => vl.DistanceFromPoint)
+				.Select(vl => vl.Restaurant);*/
 		}
 
-		public Task<IRestaurant> GetRestaurant (Guid restaurantID)
+		public async Task<IRestaurant> GetRestaurant (Guid restaurantID)
 		{
-			throw new NotImplementedException ();
+			var items = await GetEntityOfTypeForRestaurant<Restaurant> (restaurantID);
+			return items.FirstOrDefault ();
 		}
 
 		#endregion
@@ -246,9 +297,17 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IInventoryEmployeeWebService implementation
 
-		public Task<IEnumerable<IEmployee>> GetEmployeesAsync ()
+		public async Task<IEnumerable<IEmployee>> GetEmployeesAsync ()
 		{
-			throw new NotImplementedException ();
+			var empType = typeof(Employee).ToString ();
+
+			var table = _client.GetTable<AzureEntityStorage> ();
+
+			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();
+
+			return ais.Select (ai => ai.ToRestaurantDTO ())
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Employee> (dto))
+				.Cast<IEmployee>();
 		}
 
 		public async Task<IEnumerable<IEmployee>> GetEmployeesForRestaurant (Guid restaurantID)
@@ -257,9 +316,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			return items.Cast<IEmployee> ();
 		}
 
-		public Task<IEmployee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
+		public async Task<IEmployee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
-			throw new NotImplementedException ();
+			var items = await GetEmployeesAsync ();
+			return items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
+			&& e.Password != null && e.Password.Equals (password));
 		}
 
 		#endregion
@@ -280,7 +341,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		#endregion
 
 	
-		private async Task<bool> SendEventDTOs(IEnumerable<EventDataTransportObject> dtos){
+		private async Task<bool> SendEventDTOs(ICollection<EventDataTransportObject> dtos){
 	
 			var table = _client.GetTable<AzureEventStorage> ();
 			var existingIDs = await table.Select (ai => ai.EventID).ToCollectionAsync ();
@@ -333,12 +394,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		private async Task<IEnumerable<T>> GetEntityOfTypeForRestaurant<T>(Guid restaurantID) where T:class, IEntityBase, new()
 		{
-			var type = typeof(T);
+			var type = typeof(T).ToString ();
 
 			var table = _client.GetTable<AzureEntityStorage> ();
 
 			var storageItems = await table
-				.Where (si => si.MiseEntityType == type.ToString () && si.RestaurantID.HasValue && si.RestaurantID == restaurantID)
+				.Where (si => si.MiseEntityType == type && si.RestaurantID.HasValue && si.RestaurantID == restaurantID)
 				.ToEnumerableAsync ();
 
 			var realItems = storageItems

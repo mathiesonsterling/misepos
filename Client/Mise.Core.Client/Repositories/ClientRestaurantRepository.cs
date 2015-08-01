@@ -12,6 +12,7 @@ using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
+using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Repositories
 {
@@ -66,7 +67,7 @@ namespace Mise.Core.Client.Repositories
             }
 
             var location = await _locationService.GetDeviceLocation();
-            var items = await _webService.GetRestaurants(location);
+			var items = await _webService.GetRestaurants(location, new Distance{Kilometers = 100});
             return items;
         }
 

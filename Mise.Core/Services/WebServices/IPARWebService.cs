@@ -8,13 +8,13 @@ using Mise.Core.Entities.Inventory.Events;
 
 namespace Mise.Core.Services.WebServices
 {
-    public interface IPARWebService : IEventStoreWebService<IPAR, IPAREvent>
+    public interface IPARWebService : IEventStoreWebService<IPar, IPAREvent>
     {
         /// <summary>
         /// Get the current PAR for this restaurant
         /// </summary>
         /// <returns></returns>
-		Task<IPAR> GetCurrentPAR(Guid restaurantID);
-		Task<IEnumerable<IPAR>> GetPARsForRestaurant(Guid restaurantID);
+		Task<IPar> GetCurrentPAR(Guid restaurantID);
+		Task<IEnumerable<IPar>> GetPARsForRestaurant(Guid restaurantID);
     }
 }
