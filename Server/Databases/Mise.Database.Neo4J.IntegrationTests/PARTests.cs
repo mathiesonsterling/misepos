@@ -45,7 +45,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
             var parID = Guid.NewGuid();
             var liID = Guid.NewGuid();
             var secondLIID = Guid.NewGuid();
-            var par = new PAR
+            var par = new Par
             {
                 CreatedByEmployeeID = emp.ID,
                 CreatedDate = DateTime.UtcNow,
@@ -123,7 +123,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
 
             //update
             //removes a LI, changes IsCurrent
-            var updatedPAR = new PAR
+            var updatedPAR = new Par
             {
                 CreatedByEmployeeID = emp.ID,
                 CreatedDate = DateTime.UtcNow,

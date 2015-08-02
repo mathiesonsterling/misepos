@@ -52,7 +52,7 @@ namespace MiseInventoryService
             container.RegisterAutoWiredAs<PurchaseOrderServerRepository, IPurchaseOrderRepository>();
             container.RegisterAutoWiredAs<EmployeeServerRepository, IEmployeeRepository>();
             container.RegisterAutoWiredAs<ReceivingOrderRepository, IReceivingOrderRepository>();
-            container.RegisterAutoWiredAs<PARServerRepository, IPARRepository>();
+            container.RegisterAutoWiredAs<PARServerRepository, IParRepository>();
             container.RegisterAutoWiredAs<RestaurantRepository, IRestaurantRepository>();
             container.RegisterAutoWiredAs<ApplicationInvitationServerRepository, IApplicationInvitationRepository>();
             container.RegisterAutoWiredAs<AccountServerRestaurantRepository, IAccountRepository>();
@@ -71,7 +71,7 @@ namespace MiseInventoryService
                 container.Resolve<IInventoryRepository>(),
                 container.Resolve<IPurchaseOrderRepository>(),
                 container.Resolve<IReceivingOrderRepository>(),
-                container.Resolve<IPARRepository>(),
+                container.Resolve<IParRepository>(),
                 container.Resolve<IApplicationInvitationRepository>(),
                 container.Resolve<IAccountRepository>()
             };

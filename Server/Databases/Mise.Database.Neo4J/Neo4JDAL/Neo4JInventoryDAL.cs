@@ -282,8 +282,8 @@ namespace Mise.Neo4J.Neo4JDAL
             return _graphClient.Cypher
                 .Match("(li:InventoryBeverageLineItem)")
                 .Where((InventoryBeverageLineItemGraphNode li) => li.ID == lineItem.ID)
-                .Set("li = {liParam}")
-                .WithParam("liParam", node)
+                .Set("li = {lIParam}")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync()
                 .ContinueWith(task => UpdateLiquidContainerAsync(lineItem.Container, lineItem.ID));
         }
@@ -302,8 +302,8 @@ namespace Mise.Neo4J.Neo4JDAL
         {
             var node = new InventoryBeverageLineItemGraphNode(lineItem);
             await _graphClient.Cypher
-                .Create("(li:InventoryBeverageLineItem {liParam})")
-                .WithParam("liParam", node)
+                .Create("(li:InventoryBeverageLineItem {lIParam})")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync()
                 .ConfigureAwait(false);
 

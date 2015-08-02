@@ -29,12 +29,12 @@ namespace Mise.Core.Common.Entities.Inventory
         public bool IsCurrent { get; set; }
 
         public List<PARBeverageLineItem> ParLineItems { get; set; }
-        public IEnumerable<IPARBeverageLineItem> GetBeverageLineItems()
+        public IEnumerable<IParBeverageLineItem> GetBeverageLineItems()
         {
             return ParLineItems;
         }
 
-        public void When(IPAREvent entityEvent)
+        public void When(IParEvent entityEvent)
         {
 			switch(entityEvent.EventType){
 			case MiseEventTypes.PARCreated:

@@ -6,7 +6,7 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
 {
-	public class PARBeverageLineItem : BaseTaggableRestaurantEntity, IPARBeverageLineItem
+	public class PARBeverageLineItem : BaseTaggableRestaurantEntity, IParBeverageLineItem
 	{
 		public PARBeverageLineItem(){
 			Categories = new List<ItemCategory> ();
@@ -65,7 +65,7 @@ namespace Mise.Core.Common.Entities.Inventory
 				|| (Categories != null && Categories.Any(c => c.ContainsSearchString(searchString)));
 		}
 
-	    public bool Equals(IPARBeverageLineItem other)
+	    public bool Equals(IParBeverageLineItem other)
 	    {
 	        if (other == null)
 	        {

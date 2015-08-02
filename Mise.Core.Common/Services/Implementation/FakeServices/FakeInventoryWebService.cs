@@ -740,7 +740,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 		{
 			return Task.FromResult (true);
 		}
-		public Task<bool> SendEventsAsync(IPar par, IEnumerable<IPAREvent> events)
+		public Task<bool> SendEventsAsync(IPar par, IEnumerable<IParEvent> events)
 		{
 			return Task.FromResult (true);
 		}

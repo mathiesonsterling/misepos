@@ -8,7 +8,7 @@ using Mise.Core.Entities.Inventory.Events;
 
 namespace Mise.Core.Services.WebServices
 {
-    public interface IPARWebService : IEventStoreWebService<IPar, IPAREvent>
+    public interface IParWebService : IEventStoreWebService<IPar, IParEvent>
     {
         /// <summary>
         /// Get the current PAR for this restaurant

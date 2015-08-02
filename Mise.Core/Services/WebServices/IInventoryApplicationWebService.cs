@@ -10,7 +10,7 @@ namespace Mise.Core.Services.WebServices
 	/// </summary>
 	public interface IInventoryApplicationWebService : IInventoryEmployeeWebService, 
 	IInventoryRestaurantWebService, IVendorWebService,
-	IPARWebService, IInventoryWebService,
+	IParWebService, IInventoryWebService,
 	IReceivingOrderWebService, IPurchaseOrderWebService,
 	IApplicationInvitationWebService, IAccountWebService, IResendEventsWebService
 	{

@@ -8,7 +8,7 @@ using Mise.Core.Entities.Inventory.Events;
 
 namespace Mise.Core.Entities.Inventory
 {
-    public interface IPar : IRestaurantEntityBase, IEventStoreEntityBase<IPAREvent>, ICloneableEntity
+    public interface IPar : IRestaurantEntityBase, IEventStoreEntityBase<IParEvent>, ICloneableEntity
     {
         Guid CreatedByEmployeeID { get; }
 
@@ -17,6 +17,6 @@ namespace Mise.Core.Entities.Inventory
         /// </summary>
         bool IsCurrent { get; }
 
-        IEnumerable<IPARBeverageLineItem> GetBeverageLineItems();
+        IEnumerable<IParBeverageLineItem> GetBeverageLineItems();
     }
 }

@@ -75,7 +75,7 @@ namespace Mise.Core.Common.Events.DTOs
                 return ToDataTransportObject(vendEv);
             }
 
-            var parEv = baseEvent as IPAREvent;
+            var parEv = baseEvent as IParEvent;
             if (parEv != null)
             {
                 return ToDataTransportObject(parEv);
@@ -228,7 +228,7 @@ namespace Mise.Core.Common.Events.DTOs
 			};
         }
 
-        public EventDataTransportObject ToDataTransportObject(IPAREvent ev)
+        public EventDataTransportObject ToDataTransportObject(IParEvent ev)
         {
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
@@ -576,7 +576,7 @@ namespace Mise.Core.Common.Events.DTOs
             }
         }
 
-        public IPAREvent ToPAREvent(EventDataTransportObject dto)
+        public IParEvent ToPAREvent(EventDataTransportObject dto)
         {
             switch (dto.EventType)
             {

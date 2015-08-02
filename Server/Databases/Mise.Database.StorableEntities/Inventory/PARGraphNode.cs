@@ -14,7 +14,7 @@ namespace Mise.Database.StorableEntities.Inventory
             
         }
 
-        public PARGraphNode(IPAR source)
+        public PARGraphNode(IPar source)
         {
             ID = source.ID;
             RestaurantID = source.RestaurantID;
@@ -27,9 +27,9 @@ namespace Mise.Database.StorableEntities.Inventory
         }
 
 
-        public IPAR Rehydrate(IEnumerable<PARBeverageLineItem> beverageLineItems)
+        public IPar Rehydrate(IEnumerable<PARBeverageLineItem> beverageLineItems)
         {
-            return new PAR
+            return new Par
             {
                 CreatedByEmployeeID = CreatedByEmployeeID,
                 CreatedDate = CreatedDate,

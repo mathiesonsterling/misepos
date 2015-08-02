@@ -35,7 +35,7 @@ namespace Mise.Core.Server.Services.Implementation
         private List<IVendor> _vendors;
         private List<IPurchaseOrder> _purchaseOrders;
         private List<IReceivingOrder> _receivingOrders;
-        private List<IPAR> _pars;
+        private List<IPar> _pars;
         private List<IApplicationInvitation> _invitations; 
         #endregion
 
@@ -45,13 +45,13 @@ namespace Mise.Core.Server.Services.Implementation
         {
             var fakeInventoryWebService = new FakeInventoryWebService();
 
-            _restaurants = (await fakeInventoryWebService.GetRestaurants(new Location())).ToList();
+            _restaurants = (await fakeInventoryWebService.GetRestaurants(new Location(), new Distance{Kilometers = 10000})).ToList();
 
             _employees = new List<IEmployee>();
             _vendors = new List<IVendor>();
             _restaurauntInventories = new List<IInventory>();
             _receivingOrders = new List<IReceivingOrder>();
-            _pars = new List<IPAR>();
+            _pars = new List<IPar>();
             _purchaseOrders = new List<IPurchaseOrder>();
             _invitations = new List<IApplicationInvitation>();
             foreach (var rest in _restaurants)
@@ -310,22 +310,22 @@ namespace Mise.Core.Server.Services.Implementation
             return Task.FromResult( _receivingOrders.Where(ro => ro.VendorID == vendor.ID));
         }
 
-        public Task UpdatePARAsync(IPAR arg)
+        public Task UpdatePARAsync(IPar arg)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddPARAsync(IPAR arg)
+        public Task AddPARAsync(IPar arg)
         {
             return Task.Run(() => _pars.Add(arg));
         }
 
-        public Task<IEnumerable<IPAR>> GetPARsAsync(Guid restaurantID)
+        public Task<IEnumerable<IPar>> GetPARsAsync(Guid restaurantID)
         {
             return Task.FromResult(_pars.Where(p => p.RestaurantID == restaurantID));
         }
 
-        public Task<IEnumerable<IPAR>> GetPARsAsync()
+        public Task<IEnumerable<IPar>> GetPARsAsync()
         {
             return Task.FromResult(_pars.AsEnumerable());
         }
@@ -360,12 +360,12 @@ namespace Mise.Core.Server.Services.Implementation
             return Task.FromResult(true);
         }
 
-        public Task UpdatePARLineItemAsync(IPARBeverageLineItem lineItem)
+        public Task UpdatePARLineItemAsync(IParBeverageLineItem lineItem)
         {
             var par = _pars.FirstOrDefault(p => p.GetBeverageLineItems().Select(pLi => pLi.ID).Contains(lineItem.ID));
             if (par != null)
             {
-                var downCast = par as PAR;
+                var downCast = par as Par;
                 if (downCast == null)
                 {
                     return Task.FromResult(false);
@@ -384,7 +384,7 @@ namespace Mise.Core.Server.Services.Implementation
             throw new NotImplementedException();
         }
 
-        public Task SetLineItemsForPARAsync(IPARBeverageLineItem lineItem, Guid parID)
+        public Task SetLineItemsForPARAsync(IParBeverageLineItem lineItem, Guid parID)
         {
             throw new NotImplementedException();
         }

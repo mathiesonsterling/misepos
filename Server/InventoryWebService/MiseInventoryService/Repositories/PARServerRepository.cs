@@ -18,15 +18,15 @@ using Mise.Core.ValueItems;
 
 namespace MiseInventoryService.Repositories
 {
-    public class PARServerRepository : BaseAdminServiceRepository<IPAR, IPAREvent>, IPARRepository
+    public class PARServerRepository : BaseAdminServiceRepository<IPar, IParEvent>, IParRepository
     {
-        private readonly Dictionary<Guid, IPAR> _oldVersions; 
+        private readonly Dictionary<Guid, IPar> _oldVersions; 
         public PARServerRepository(ILogger logger, IEntityDAL entityDAL, IWebHostingEnvironment host) : base(logger, entityDAL, host)
         {
-            _oldVersions = new Dictionary<Guid, IPAR>();
+            _oldVersions = new Dictionary<Guid, IPar>();
         }
 
-        public override IPAR ApplyEvents(IEnumerable<IPAREvent> events)
+        public override IPar ApplyEvents(IEnumerable<IParEvent> events)
         {
             var evsList = events.ToList();
             var firstEv = evsList.First(ev => ev != null);
@@ -34,19 +34,19 @@ namespace MiseInventoryService.Repositories
             return base.ApplyEvents(evsList);
         }
 
-        public Task<IPAR> GetCurrentPAR(Guid restaurantID)
+        public Task<IPar> GetCurrentPAR(Guid restaurantID)
         {
             var items = GetAll().FirstOrDefault(p => p.RestaurantID == restaurantID && p.IsCurrent);
             return Task.FromResult(items);
         }
 
 
-        protected override IPAR CreateNewEntity()
+        protected override IPar CreateNewEntity()
         {
-            return new PAR(); 
+            return new Par(); 
         }
 
-        public override Guid GetEntityID(IPAREvent ev)
+        public override Guid GetEntityID(IParEvent ev)
         {
             return ev.ParID;
         }

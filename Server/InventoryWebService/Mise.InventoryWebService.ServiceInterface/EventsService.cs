@@ -29,7 +29,7 @@ namespace Mise.InventoryWebService.ServiceInterface
         private readonly IApplicationInvitationRepository _appInviteRepository;
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly IAccountRepository _accountRepository;
-        private readonly IPARRepository _parRepository;
+        private readonly IParRepository _parRepository;
 
         private readonly IEventStorageDAL _eventStorageDAL;
 
@@ -41,7 +41,7 @@ namespace Mise.InventoryWebService.ServiceInterface
         public EventsService(IEventStorageDAL dal, IJSONSerializer serializer,
             IInventoryRepository inventoryRepository, IVendorRepository vendorRepository, 
             IPurchaseOrderRepository purchaseOrderRepository, IEmployeeRepository employeeRepository, 
-            IPARRepository parRepository, IReceivingOrderRepository receivingOrderRepository, IApplicationInvitationRepository applicationInvitationRepository, 
+            IParRepository parRepository, IReceivingOrderRepository receivingOrderRepository, IApplicationInvitationRepository applicationInvitationRepository, 
             IRestaurantRepository restaurantRepository, IAccountRepository accountRepository, ILogger logger, IErrorTrackingService errorTracking)
         {
             _eventStorageDAL = dal;

@@ -15,7 +15,7 @@ namespace Mise.Database.StorableEntities.Inventory
             
         }
 
-        public ParLineItemGraphNode(IPARBeverageLineItem source)
+        public ParLineItemGraphNode(IParBeverageLineItem source)
         {
             ID = source.ID;
             RestaurantID = source.RestaurantID;

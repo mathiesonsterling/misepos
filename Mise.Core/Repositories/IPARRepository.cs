@@ -8,7 +8,7 @@ using Mise.Core.Entities.Inventory.Events;
 
 namespace Mise.Core.Repositories
 {
-    public interface IPARRepository : IEventSourcedEntityRepository<IPar, IPAREvent>
+    public interface IParRepository : IEventSourcedEntityRepository<IPar, IParEvent>
     {
 		Task<IPar> GetCurrentPAR(Guid restaurantID);
     }

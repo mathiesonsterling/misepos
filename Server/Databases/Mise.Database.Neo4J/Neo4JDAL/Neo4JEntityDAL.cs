@@ -938,8 +938,8 @@ namespace Mise.Neo4J.Neo4JDAL
             await  _graphClient.Cypher
                 .Match("(li:PurchaseOrderLineItem)")
                 .Where((PurchaseOrderLineItemGraphNode li) => li.ID == lineItem.ID)
-                .Set("li = {liParam}")
-                .WithParam("liParam", node)
+                .Set("li = {lIParam}")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync();
             await UpdateLiquidContainerAsync(lineItem.Container, lineItem.ID);
             await SetCategoryOnLineItem(lineItem);
@@ -1100,8 +1100,8 @@ namespace Mise.Neo4J.Neo4JDAL
             //TODO add line to restaurant for the private price if it's here
             var node = new ReceivingOrderLineItemGraphNode(lineItem);
             await _graphClient.Cypher
-                .Create("(li:ReceivingOrderBeverageLineItem {liParam})")
-                .WithParam("liParam", node)
+                .Create("(li:ReceivingOrderBeverageLineItem {lIParam})")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync();
 
             var containerTask = SetLiquidContainerAsync(lineItem.Container, lineItem.ID);

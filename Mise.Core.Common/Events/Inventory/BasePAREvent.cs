@@ -4,7 +4,7 @@ using Mise.Core.ValueItems;
 using Mise.Core.Entities;
 namespace Mise.Core.Common.Events.Inventory
 {
-	public abstract class BasePAREvent : IPAREvent
+	public abstract class BasePAREvent : IParEvent
 	{
 		public Guid ParID { get; set; }
 		public Guid ID { get; set; }

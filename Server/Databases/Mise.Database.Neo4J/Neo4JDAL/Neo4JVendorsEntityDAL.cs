@@ -159,8 +159,8 @@ namespace Mise.Neo4J.Neo4JDAL
         {
             var node = new VendorBeverageLineItemGraphNode(lineItem);
             await _graphClient.Cypher
-                .Create("(li:VendorBeverageLineItem {liParam})")
-                .WithParam("liParam", node)
+                .Create("(li:VendorBeverageLineItem {lIParam})")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync()
                 .ConfigureAwait(false);
 

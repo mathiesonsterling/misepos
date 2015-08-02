@@ -27,10 +27,13 @@ namespace stockboymobileserviceService.Models
 
         //public DbSet<TodoItem> TodoItems { get; set; }
 
-        public DbSet<AzureEntityStorage> AzureEntityStorages { get; set; } 
+        public DbSet<AzureEntityStorage> AzureEntityStorages { get; set; }
+
+        public DbSet<AzureEventStorage> AzureEventStorages { get; set; }
+ 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            string schema = ServiceSettingsDictionary.GetSchemaName();
+            string schema = ServiceSettingsDictionary.GetSchemaName(); 
             if (!string.IsNullOrEmpty(schema))
             {
                 modelBuilder.HasDefaultSchema(schema);
