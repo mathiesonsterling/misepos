@@ -15,10 +15,10 @@ using Mise.Core.Repositories;
 
 namespace Mise.Core.Client.Repositories
 {
-	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IPAREvent>, IParRepository
+	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IParEvent>, IParRepository
 	{
-	    private readonly IPARWebService _webService;
-        public ClientParRepository(ILogger logger, IClientDAL dal, IPARWebService webService, IResendEventsWebService resend)
+	    private readonly IParWebService _webService;
+        public ClientParRepository(ILogger logger, IClientDAL dal, IParWebService webService, IResendEventsWebService resend)
             : base(logger, dal, webService, resend)
 	    {
 	        _webService = webService;
@@ -30,7 +30,7 @@ namespace Mise.Core.Client.Repositories
 	    }
 
 
-	    public override Guid GetEntityID(IPAREvent ev)
+	    public override Guid GetEntityID(IParEvent ev)
 	    {
 	        return ev.ParID;
 	    }

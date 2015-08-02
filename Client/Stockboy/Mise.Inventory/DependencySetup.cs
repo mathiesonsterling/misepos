@@ -62,11 +62,11 @@ namespace Mise.Inventory
 			#endif
 		}
 
-		private static IInventoryApplicationWebService GetWebService(IJSONSerializer serial){
+		protected static Uri GetWebServiceLocation(){
 			var level = GetBuildLevel ();
 
 			if(level == BuildLevel.Demo){
-				return new FakeInventoryWebService();
+				return null;
 			}
 
 			Uri uri = null;
@@ -75,20 +75,33 @@ namespace Mise.Inventory
 				uri = new Uri ("http://localhost:43499");
 				break;
 			case BuildLevel.Development:
-				uri = new Uri ("http://miseinventoryservicedev.azurewebsites.net");
+				uri = new Uri ("https://stockboymobileservice.azure-mobile.net/");
 				break;
 			case BuildLevel.QA:
-				uri = new Uri ("http://miseinventoryserviceqa.azurewebsites.net");
+				uri = new Uri ("https://stockboymobileservice.azure-mobile.net/");
 				break;
 			case BuildLevel.Production:
-				uri = new Uri ("http://miseinventoryserviceprod.azurewebsites.net");
+				uri = new Uri ("https://stockboymobileservice.azure-mobile.net/");
 				break;
 			default:
 				throw new ArgumentException ();
 			}
 				
-			var webService = new HttpWebServiceClient (uri, "betaDevice", serial, Logger);
-			return webService;
+			return uri;
+		}
+
+		protected static void RegisterWebService (ContainerBuilder cb, IInventoryWebService webService)
+		{
+			cb.RegisterInstance (webService).As<IInventoryEmployeeWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IInventoryRestaurantWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IVendorWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IParWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IInventoryWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IReceivingOrderWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IPurchaseOrderWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IResendEventsWebService> ().SingleInstance ();
 		}
 
 		/// <summary>

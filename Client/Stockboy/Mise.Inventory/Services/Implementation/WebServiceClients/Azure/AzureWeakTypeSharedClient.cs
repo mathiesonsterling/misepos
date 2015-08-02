@@ -24,6 +24,7 @@ using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.DTOs.AzureTypes;
 using Mise.Core.Common.Events.DTOs.AzureTypes;
 using Mise.Inventory.ViewModels;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
@@ -320,9 +321,19 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<IEmployee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
-			var items = await GetEmployeesAsync ();
-			return items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
+			var items = (await GetEmployeesAsync ()).ToList();
+				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
 			&& e.Password != null && e.Password.Equals (password));
+
+			if(found == null){
+				if(items.Any(e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))){
+					throw new UserNotFoundException (email, false, true);
+				} else{
+					throw new UserNotFoundException (email);
+				}
+			} 
+
+			return found;
 		}
 
 		#endregion

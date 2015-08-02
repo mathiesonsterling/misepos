@@ -29,28 +29,21 @@ namespace Mise.Inventory.Android
 			cb.RegisterInstance<ISQLite> (dbConn).SingleInstance ();*/
 
 			//make the web service
-
-			var mobileService = new MobileServiceClient(
-				"https://stockboymobileservice.azure-mobile.net/",
-				"vvECpsmISLzAxntFjNgSxiZEPmQLLG42"
-			);
-			CurrentPlatform.Init ();
-			var webService = new AzureWeakTypeSharedClient(Logger, new JsonNetSerializer(), mobileService, GetBuildLevel());
+			var wsLocation = GetWebServiceLocation ();
+			if (wsLocation != null) {
+				var mobileService = new MobileServiceClient (
+					                   wsLocation.ToString (),
+					                   "vvECpsmISLzAxntFjNgSxiZEPmQLLG42"
+				                   );
+				CurrentPlatform.Init ();
+				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, GetBuildLevel ());
 	
-			cb.RegisterInstance(webService).As<IInventoryEmployeeWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IInventoryRestaurantWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IVendorWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IPARWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IInventoryWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IReceivingOrderWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IPurchaseOrderWebService>().SingleInstance();
-			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance();
-			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance();
-			cb.RegisterInstance(webService).As<IResendEventsWebService>().SingleInstance();
-
+				RegisterWebService (cb, webService);
+			} 
 			var errorService = new AndroidRaygun ();
 			cb.RegisterInstance<IErrorTrackingService> (errorService).SingleInstance ();
 			base.RegisterDepenencies(cb);
 		}
+			
 	}
 }
