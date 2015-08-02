@@ -41,6 +41,7 @@
     <Compile Include="Entities\Accounts\AccountCreditCardPayment.cs" />
     <Compile Include="Entities\Accounts\MiseEmployeeAccount.cs" />
     <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
+    <Compile Include="Entities\DTOs\AzureTypes\AzureEntityStorage.cs" />
     <Compile Include="Entities\DTOs\IEntityDataTransportObjectFactory.cs" />
     <Compile Include="Entities\Inventory\InventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\InventorySection.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Events\ApplicationInvitations\EmployeeInvitedToApplicationEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\EmployeeRejectsInvitationEvent.cs" />
     <Compile Include="Events\Checks\CheckCreatedWithCreditCardEvent.cs" />
+    <Compile Include="Events\DTOs\AzureTypes\AzureEventStorage.cs" />
     <Compile Include="Events\DTOs\EventDataTransportObject.cs" />
     <Compile Include="Events\DTOs\EventDataTransportObjectFactory.cs" />
     <Compile Include="Events\Employee\EmployeeCreatedEvent.cs" />

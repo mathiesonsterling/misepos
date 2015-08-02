@@ -55,8 +55,8 @@ namespace Mise.Inventory.UnitTests.Services
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
-                ParLineItems = new List<PARBeverageLineItem>{
-					new PARBeverageLineItem{
+                ParLineItems = new List<ParBeverageLineItem>{
+					new ParBeverageLineItem{
 						ID = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
@@ -65,7 +65,7 @@ namespace Mise.Inventory.UnitTests.Services
 						DisplayName = "testPARItem",
 						Quantity = 12
 					},
-					new PARBeverageLineItem{
+					new ParBeverageLineItem{
 						RestaurantID = restID,
 						Container = container,
 						MiseName="itemOnlyInPar",
@@ -134,8 +134,8 @@ namespace Mise.Inventory.UnitTests.Services
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
-                ParLineItems = new List<PARBeverageLineItem>{
-					new PARBeverageLineItem{
+                ParLineItems = new List<ParBeverageLineItem>{
+					new ParBeverageLineItem{
 						ID = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
@@ -144,13 +144,13 @@ namespace Mise.Inventory.UnitTests.Services
 						DisplayName = "testPARItem",
 						Quantity = 12
 					},
-					new PARBeverageLineItem{
+					new ParBeverageLineItem{
 						RestaurantID = restID,
 						Container = container,
 						MiseName="itemOnlyInPar",
 						Quantity = 981
 					},
-					new PARBeverageLineItem{
+					new ParBeverageLineItem{
 						RestaurantID = restID,
 						Container = container,
 						MiseName = "fullyStocked",
@@ -268,8 +268,8 @@ namespace Mise.Inventory.UnitTests.Services
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
-                ParLineItems = new List<PARBeverageLineItem>{
-					new PARBeverageLineItem{
+                ParLineItems = new List<ParBeverageLineItem>{
+					new ParBeverageLineItem{
 						ID = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
@@ -391,8 +391,8 @@ namespace Mise.Inventory.UnitTests.Services
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
-                ParLineItems = new List<PARBeverageLineItem>{
-					new PARBeverageLineItem{
+                ParLineItems = new List<ParBeverageLineItem>{
+					new ParBeverageLineItem{
 						ID = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,

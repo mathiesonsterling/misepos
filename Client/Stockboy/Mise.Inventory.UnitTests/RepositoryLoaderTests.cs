@@ -27,7 +27,7 @@ namespace Mise.Inventory.UnitTests
 			var vendRepos = MakeMockRepository<IVendorRepository> ();
 			var restRepos = MakeMockRepository<IRestaurantRepository> ();
 			var invRepos = MakeMockRepository<IInventoryRepository> ();
-			var parRepos = MakeMockRepository<IPARRepository> ();
+			var parRepos = MakeMockRepository<IParRepository> ();
 			var poRepos = MakeMockRepository<IPurchaseOrderRepository> ();
 			var roRepos = MakeMockRepository<IReceivingOrderRepository> ();
 			var invite = MakeMockRepository<IApplicationInvitationRepository> ();

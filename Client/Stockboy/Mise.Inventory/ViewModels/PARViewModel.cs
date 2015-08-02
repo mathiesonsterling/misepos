@@ -12,8 +12,8 @@ using Mise.Core.Services;
 using Xamarin.Forms;
 namespace Mise.Inventory.ViewModels
 {
-	public class PARLineItemDisplay : BaseLineItemDisplayLine<IPARBeverageLineItem>{
-		public PARLineItemDisplay(IPARBeverageLineItem source) : base(source){}
+	public class PARLineItemDisplay : BaseLineItemDisplayLine<IParBeverageLineItem>{
+		public PARLineItemDisplay(IParBeverageLineItem source) : base(source){}
 
 
 		#region implemented abstract members of BaseLineItemDisplayLine
@@ -46,7 +46,7 @@ namespace Mise.Inventory.ViewModels
 	public class ParViewModel : BaseSearchableViewModel<PARLineItemDisplay>
 	{
 		readonly IPARService _parService;
-		IPARBeverageLineItem _itemSettingQuantity;
+		IParBeverageLineItem _itemSettingQuantity;
 		public ParViewModel(ILogger logger, IAppNavigation appNavigation, IPARService parService)
 		:base(appNavigation, logger)
 		{

@@ -126,7 +126,7 @@ namespace Mise.Inventory
 			cb.RegisterType<ClientEmployeeRepository>().As<IEmployeeRepository>().SingleInstance();
 			cb.RegisterType<ClientVendorRepository>().As<IVendorRepository>().SingleInstance();
 			cb.RegisterType<ClientRestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
-			cb.RegisterType<ClientParRepository>().As<IPARRepository>().SingleInstance();
+			cb.RegisterType<ClientParRepository>().As<IParRepository>().SingleInstance();
 			cb.RegisterType<ClientReceivingOrderRepository>().As<IReceivingOrderRepository>().SingleInstance();
 			cb.RegisterType<ClientPurchaseOrderRepository>().As<IPurchaseOrderRepository>().SingleInstance();
 			cb.RegisterType<ClientInventoryRepository>().As<IInventoryRepository>().SingleInstance();

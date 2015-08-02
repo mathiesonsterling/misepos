@@ -16,14 +16,14 @@ namespace Mise.Inventory.Services.Implementation
 	public class PARService : IPARService
 	{
 		private IPar _currentPar;
-		IPARBeverageLineItem _lineItem;
+		IParBeverageLineItem _lineItem;
 
-		readonly IPARRepository _parRepository;
+		readonly IParRepository _parRepository;
 		readonly ILoginService _loginService;
 		readonly IInventoryAppEventFactory _eventFactory;
 	    private readonly IInsightsService _insights;
 		readonly ILogger _logger;
-		public PARService (ILogger logger, ILoginService loginService, IPARRepository parRespository, 
+		public PARService (ILogger logger, ILoginService loginService, IParRepository parRespository, 
 			IInventoryAppEventFactory eventFactory, IInsightsService insights)
 		{
 			_parRepository = parRespository;
@@ -99,7 +99,7 @@ namespace Mise.Inventory.Services.Implementation
 			return _currentPar;
 		}
 
-		public async Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, decimal newQuantity)
+		public async Task UpdateQuantityOfPARLineItem (IParBeverageLineItem lineItem, decimal newQuantity)
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 			var par = await GetCurrentPAR ().ConfigureAwait (false);
@@ -109,13 +109,13 @@ namespace Mise.Inventory.Services.Implementation
             ReportNumItemsInTransaction();
 		}
 
-		public Task SetCurrentLineItem (IPARBeverageLineItem li)
+		public Task SetCurrentLineItem (IParBeverageLineItem li)
 		{
 			_lineItem = li;
 			return Task.FromResult (true);
 		}
 
-		public Task<IPARBeverageLineItem> GetCurrentLineItem ()
+		public Task<IParBeverageLineItem> GetCurrentLineItem ()
 		{
 			return Task.FromResult (_lineItem);
 		}

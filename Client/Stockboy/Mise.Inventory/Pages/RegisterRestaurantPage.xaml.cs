@@ -16,12 +16,12 @@ namespace Mise.Inventory
 			InitializeComponent ();
 		}
 
-		protected override void OnAppearing(){
+		protected override async void OnAppearing(){
 			Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "RegisterRestaurantPage"}});
 
 			var vm = BindingContext as RestaurantRegistrationViewModel;
 			if(vm != null){
-				vm.OnAppearing ();
+				await vm.OnAppearing ();
 				pckState.Items.Clear ();
 				foreach(var state in vm.States){
 					pckState.Items.Add (state.Abbreviation);

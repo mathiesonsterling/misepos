@@ -14,12 +14,12 @@ namespace Mise.Inventory.Services
 		Task<IPar> GetCurrentPAR ();
 
 		Task<IPar> CreateCurrentPAR();
-		Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, decimal newQuantity);
+		Task UpdateQuantityOfPARLineItem (IParBeverageLineItem lineItem, decimal newQuantity);
 
 		Task SaveCurrentPAR();
 
-		Task SetCurrentLineItem (IPARBeverageLineItem li);
-		Task<IPARBeverageLineItem> GetCurrentLineItem ();
+		Task SetCurrentLineItem (IParBeverageLineItem li);
+		Task<IParBeverageLineItem> GetCurrentLineItem ();
 	}
 }
 

@@ -25,7 +25,7 @@ namespace Mise.Inventory
 		//TODO change this to use services rather that repositories!
 		readonly IVendorRepository _vendorRepository;
 		readonly IInventoryRepository _inventoryRepository;
-		readonly IPARRepository _parRepository;
+		readonly IParRepository _parRepository;
 		readonly IReceivingOrderRepository _roRepository;
    		readonly ILogger _logger;
 		readonly IDeviceLocationService _deviceLocationService;
@@ -49,7 +49,7 @@ namespace Mise.Inventory
 			ILogger logger, 
 			IDeviceLocationService deviceLocationService,
 			IVendorRepository vendorRepository, 
-			IPARRepository parRepository, 
+			IParRepository parRepository, 
 			IInventoryRepository inventoryRepository,
 			IReceivingOrderRepository roRepository,
 			ILoginService loginService

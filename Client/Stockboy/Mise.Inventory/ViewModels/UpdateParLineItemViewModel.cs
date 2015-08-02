@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
-	public class UpdateParLineItemViewModel : BaseNextViewModel<IPARBeverageLineItem>
+	public class UpdateParLineItemViewModel : BaseNextViewModel<IParBeverageLineItem>
 	{
 		readonly IPARService _parService;
 		public UpdateParLineItemViewModel(IAppNavigation appNav, ILogger logger, IPARService parService) 
@@ -56,13 +56,13 @@ namespace Mise.Inventory.ViewModels
 
         #region implemented abstract members of BaseNextViewModel
 
-        protected override async Task<IList<IPARBeverageLineItem>> LoadItems ()
+        protected override async Task<IList<IParBeverageLineItem>> LoadItems ()
 		{
 		    var currentPar = await _parService.GetCurrentPAR();
 			return currentPar.GetBeverageLineItems().OrderBy(li => li.DisplayName).ToList();
 		}
 
-		protected override async Task BeforeMove(IPARBeverageLineItem currentItem)
+		protected override async Task BeforeMove(IParBeverageLineItem currentItem)
 		{
 			//update the current one
 		    if (CurrentItem != null && CurrentItem.Quantity != CurrentQuantity)
@@ -71,7 +71,7 @@ namespace Mise.Inventory.ViewModels
 		    }
 		}
 
-		protected override async Task AfterMove (IPARBeverageLineItem newItem)
+		protected override async Task AfterMove (IParBeverageLineItem newItem)
 		{
 			await _parService.SetCurrentLineItem (newItem);
 		    await OnAppearing();

@@ -11,12 +11,12 @@ using Mise.Neo4J.Neo4JDAL;
 
 namespace DeveloperTools.Commands
 {
-    public class PopulateInventoryDatabaseCommand : BaseProgressReportingCommand
+    public class PopulateInventoryNeo4JDatabaseCommand : BaseProgressReportingCommand
     {
         private readonly ILogger _logger;
         private readonly Uri _uri;
         private readonly bool _addDemo;
-        public PopulateInventoryDatabaseCommand(ILogger logger, Uri uri, IProgress<ProgressReport> progress, bool addDemo) : base(progress)
+        public PopulateInventoryNeo4JDatabaseCommand(ILogger logger, Uri uri, IProgress<ProgressReport> progress, bool addDemo) : base(progress)
         {
             _logger = logger;
             _uri = uri;

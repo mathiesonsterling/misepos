@@ -21,6 +21,8 @@ using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Entities.Accounts;
+using Mise.Core.Common.Entities.DTOs.AzureTypes;
+using Mise.Core.Common.Events.DTOs.AzureTypes;
 using Mise.Inventory.ViewModels;
 
 
@@ -191,7 +193,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IEventStoreWebService implementation
 
-		public async Task<bool> SendEventsAsync (IPar updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IPAREvent> events)
+		public async Task<bool> SendEventsAsync (IPar updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IParEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
@@ -349,11 +351,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			//get those that exist and those that don't
 			var news = dtos.Where (dto => existingIDs.Contains (dto.ID) == false);
 			var createTasks = news
-				.Select(dto => new AzureEventStorage (dto, _level))
+				.Select(dto => new AzureEventStorage (dto))
 				.Select (si => table.InsertAsync (si));
 
 			var existing = dtos.Where (dto => existingIDs.Contains (dto.ID));
-			var updateTasks = existing.Select (dto => new AzureEventStorage (dto, _level))
+			var updateTasks = existing.Select (dto => new AzureEventStorage (dto))
 				.Select (si => table.UpdateAsync (si));
 			
 			try{
@@ -372,12 +374,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			try{
 				concrete = (TRealType)entity;
 			} catch(Exception e){
-				_logger.HandleException (e, LogLevel.Error);
+				_logger.HandleException (e);
 				return false;
 			}
 			var dto = _entityDTOFactory.ToDataTransportObject (concrete);
 
-			var storageItem = new AzureEntityStorage (dto, _level);
+			var storageItem = new AzureEntityStorage (dto);
 
 			var table = GetEntityTable();
 

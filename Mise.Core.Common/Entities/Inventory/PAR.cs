@@ -13,7 +13,7 @@ namespace Mise.Core.Common.Entities.Inventory
     {
 
 		public Par(){
-			ParLineItems = new List<PARBeverageLineItem> ();
+			ParLineItems = new List<ParBeverageLineItem> ();
 		}
 
         public ICloneableEntity Clone()
@@ -28,7 +28,7 @@ namespace Mise.Core.Common.Entities.Inventory
         public Guid CreatedByEmployeeID { get; set; }
         public bool IsCurrent { get; set; }
 
-        public List<PARBeverageLineItem> ParLineItems { get; set; }
+        public List<ParBeverageLineItem> ParLineItems { get; set; }
         public IEnumerable<IParBeverageLineItem> GetBeverageLineItems()
         {
             return ParLineItems;
@@ -66,7 +66,7 @@ namespace Mise.Core.Common.Entities.Inventory
 		void WhenLineItemAdded (PARLineItemAddedEvent pARLineItemAddedEvent)
 		{
 			//make the li
-			var li = new PARBeverageLineItem {
+			var li = new ParBeverageLineItem {
 				ID = pARLineItemAddedEvent.LineItemID,
 				CreatedDate = pARLineItemAddedEvent.CreatedDate,
 				LastUpdatedDate = pARLineItemAddedEvent.CreatedDate,

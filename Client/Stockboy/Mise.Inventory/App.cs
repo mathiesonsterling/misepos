@@ -207,7 +207,7 @@ namespace Mise.Inventory
                 var loader = new RepositoryLoader(_container.Resolve<IEmployeeRepository>(),
                     _container.Resolve<IApplicationInvitationRepository>(), _container.Resolve<IVendorRepository>(),
                     _container.Resolve<IInventoryAppEventFactory>(), _container.Resolve<IRestaurantRepository>(),
-                    _container.Resolve<IPARRepository>(), _container.Resolve<IInventoryRepository>(),
+                    _container.Resolve<IParRepository>(), _container.Resolve<IInventoryRepository>(),
                     _container.Resolve<IReceivingOrderRepository>(), _container.Resolve<IPurchaseOrderRepository>());
                 await loader.LoadRepositories(RestaurantID);
             }

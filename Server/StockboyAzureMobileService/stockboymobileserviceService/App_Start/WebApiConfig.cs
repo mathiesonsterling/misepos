@@ -43,10 +43,10 @@ namespace stockboymobileserviceService
 
     public class stockboymobileserviceInitializer : ClearDatabaseSchemaIfModelChanges<stockboymobileserviceContext>
     {
-        protected override async void Seed(stockboymobileserviceContext context)
+        protected override void Seed(stockboymobileserviceContext context)
         {
             //set our items here!
-            await LoadSeedFromFakeWebservice(context);
+            //await LoadSeedFromFakeWebservice(context);
 
             base.Seed(context);
         }

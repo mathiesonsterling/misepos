@@ -6,9 +6,9 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
 {
-	public class PARBeverageLineItem : BaseTaggableRestaurantEntity, IParBeverageLineItem
+	public class ParBeverageLineItem : BaseTaggableRestaurantEntity, IParBeverageLineItem
 	{
-		public PARBeverageLineItem(){
+		public ParBeverageLineItem(){
 			Categories = new List<ItemCategory> ();
 		}
 
@@ -33,7 +33,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public ICloneableEntity Clone()
         {
-            var newItem = CloneRestaurantBase(new PARBeverageLineItem());
+            var newItem = CloneRestaurantBase(new ParBeverageLineItem());
             newItem.MiseName = MiseName;
             newItem.UPC = UPC;
             newItem.Container = Container;

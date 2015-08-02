@@ -78,7 +78,7 @@ namespace DeveloperTools
 
                 graphDAL.ResetDatabase();
 
-                await PopulateInventoryDatabaseCommand.PopulateStates(graphDAL);
+                await PopulateInventoryNeo4JDatabaseCommand.PopulateStates(graphDAL);
 
                 await graphDAL.AddAccountAsync(account as IAccount);
 
@@ -150,7 +150,7 @@ namespace DeveloperTools
 
                 try
                 {
-                    var populateInventoryCommand = new PopulateInventoryDatabaseCommand(silentLogger, uri, progress,
+                    var populateInventoryCommand = new PopulateInventoryNeo4JDatabaseCommand(silentLogger, uri, progress,
                         selItem.Key.ToUpper() == "DEV");
                     await populateInventoryCommand.Execute();
                     MessageBox.Show("GraphDB is now populated!");

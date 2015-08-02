@@ -565,7 +565,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			};
 				
 			var full750Items = lis750.Keys.Select (key => 
-				new PARBeverageLineItem { 
+				new ParBeverageLineItem { 
 					RestaurantID = restID,
 					CaseSize = null,
 					Container = container,

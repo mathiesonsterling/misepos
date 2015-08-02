@@ -15,7 +15,7 @@ using Mise.Core.Repositories;
 
 namespace Mise.Core.Client.Repositories
 {
-	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IPAREvent>, IPARRepository
+	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IPAREvent>, IParRepository
 	{
 	    private readonly IPARWebService _webService;
         public ClientParRepository(ILogger logger, IClientDAL dal, IPARWebService webService, IResendEventsWebService resend)

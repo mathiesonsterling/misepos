@@ -16,12 +16,12 @@ namespace Mise.Inventory
 	    private readonly IVendorRepository _vendorRepository;
 	    private readonly IInventoryAppEventFactory _inventoryAppEventFactory;
 	    private readonly IRestaurantRepository _restaurantRepository;
-	    private readonly IPARRepository _parRepository;
+	    private readonly IParRepository _parRepository;
 	    private readonly IInventoryRepository _inventoryRepository;
 	    private readonly IReceivingOrderRepository _receivingOrderRepository;
         private readonly IPurchaseOrderRepository _purchaseOrderRepository;
 
-	    public RepositoryLoader(IEmployeeRepository employeeRepository, IApplicationInvitationRepository applicationInvitationRepository, IVendorRepository vendorRepository, IInventoryAppEventFactory inventoryAppEventFactory, IRestaurantRepository restaurantRepository, IPARRepository parRepository, IInventoryRepository inventoryRepository, IReceivingOrderRepository receivingOrderRepository, IPurchaseOrderRepository purchaseOrderRepository)
+	    public RepositoryLoader(IEmployeeRepository employeeRepository, IApplicationInvitationRepository applicationInvitationRepository, IVendorRepository vendorRepository, IInventoryAppEventFactory inventoryAppEventFactory, IRestaurantRepository restaurantRepository, IParRepository parRepository, IInventoryRepository inventoryRepository, IReceivingOrderRepository receivingOrderRepository, IPurchaseOrderRepository purchaseOrderRepository)
 	    {
 	        _employeeRepository = employeeRepository;
 	        _applicationInvitationRepository = applicationInvitationRepository;

@@ -478,7 +478,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public PurchaseOrderLineItemAddedFromInventoryCalculationEvent CreatePOLineItemAddedFromInventoryCalcEvent (IEmployee emp, IPurchaseOrder po, 
-			PARBeverageLineItem baseItem, int? numBottles, LiquidAmount amtDesired, Guid? vendorID)
+			ParBeverageLineItem baseItem, int? numBottles, LiquidAmount amtDesired, Guid? vendorID)
 		{
 			return new PurchaseOrderLineItemAddedFromInventoryCalculationEvent {
 				ID = Guid.NewGuid (),

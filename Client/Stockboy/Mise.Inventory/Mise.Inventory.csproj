@@ -191,8 +191,6 @@
     <Compile Include="Services\Implementation\SQLiteClietDAL.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\HttpWebServiceClient.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\ServiceStackWebServiceClient.cs" />
-    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureEntityStorage.cs" />
-    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureEventStorage.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureWeakTypeSharedClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
@@ -392,9 +390,5 @@
   <ItemGroup />
   <ItemGroup />
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="WebServiceClients\" />
-    <Folder Include="Services\Implementation\WebServiceClients\" />
-    <Folder Include="Services\Implementation\WebServiceClients\Azure\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

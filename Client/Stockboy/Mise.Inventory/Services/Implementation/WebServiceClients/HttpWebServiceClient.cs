@@ -170,7 +170,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients
 			return SendDTOSAsync(events.Select(e => _dtoFactory.ToDataTransportObject(e)).ToList());
 		}
 
-		public Task<bool> SendEventsAsync(IPar par, IEnumerable<IPAREvent> events){
+		public Task<bool> SendEventsAsync(IPar par, IEnumerable<IParEvent> events){
 			return SendDTOSAsync(events.Select(e => _dtoFactory.ToDataTransportObject(e)).ToList());
 		}
 

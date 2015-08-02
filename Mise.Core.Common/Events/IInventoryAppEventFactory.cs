@@ -65,7 +65,7 @@ namespace Mise.Core.Common.Events
 		InventorySectionAddedToRestaurantEvent CreateInventorySectionAddedToRestaurantEvent(IEmployee emp, string newSectionName, bool isDefaultSection, bool allowsPartialBottles);
 
 		PurchaseOrderCreatedEvent CreatePurchaseOrderCreatedEvent(IEmployee emp);
-		PurchaseOrderLineItemAddedFromInventoryCalculationEvent CreatePOLineItemAddedFromInventoryCalcEvent(IEmployee emp, IPurchaseOrder po, PARBeverageLineItem baseItem, int? numBottles, 
+		PurchaseOrderLineItemAddedFromInventoryCalculationEvent CreatePOLineItemAddedFromInventoryCalcEvent(IEmployee emp, IPurchaseOrder po, ParBeverageLineItem baseItem, int? numBottles, 
             LiquidAmount amtDesired, Guid? vendorID);
 		/// <summary>
 		/// Marks when we send items to be purchased form vendor
