@@ -20,7 +20,7 @@ namespace Mise.Core.Common.Services
         /// <returns></returns>
 		Task<bool> StoreEventsAsync(IEnumerable<IEntityEventBase> events);
 
-	    Task<bool> UpsertEntitiesAsync(IEnumerable<IEntityBase> entities);
+	    Task<bool> UpsertEntitiesAsync<T>(IEnumerable<T> entities) where T : class, IEntityBase, new();
 
 	}
 }

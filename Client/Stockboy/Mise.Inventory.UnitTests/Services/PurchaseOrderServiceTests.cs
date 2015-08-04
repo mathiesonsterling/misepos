@@ -18,7 +18,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Services;
 using Mise.Core.Common.Services;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities;
 

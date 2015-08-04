@@ -61,7 +61,9 @@
     <Compile Include="Services\IClientKeyValueStorage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\WebServices\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mise.Core\Mise.Core.csproj">
       <Project>{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}</Project>

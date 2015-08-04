@@ -27,7 +27,7 @@ namespace Mise.Database.StorableEntities.Inventory
         }
 
 
-        public IPar Rehydrate(IEnumerable<PARBeverageLineItem> beverageLineItems)
+        public IPar Rehydrate(IEnumerable<ParBeverageLineItem> beverageLineItems)
         {
             return new Par
             {

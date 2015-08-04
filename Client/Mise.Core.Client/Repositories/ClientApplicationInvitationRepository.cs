@@ -4,20 +4,20 @@ using Mise.Core.Common.Events.ApplicationInvitations;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Common.Services;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common;
 using Mise.Core.Entities.Base;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Repositories;
 using Mise.Core.ValueItems;
 using Mise.Core.Services.UtilityServices;
 namespace Mise.Core.Client.Repositories
 {
 	public class ClientApplicationInvitationRepository 
-		: BaseEventSourcedClientRepository<IApplicationInvitation, IApplicationInvitationEvent>, IApplicationInvitationRepository
+		: BaseEventSourcedClientRepository<IApplicationInvitation, IApplicationInvitationEvent, ApplicationInvitation>, IApplicationInvitationRepository
 	{
 		readonly IApplicationInvitationWebService _webService;
 		public ClientApplicationInvitationRepository(ILogger logger, IClientDAL dal,
@@ -44,17 +44,18 @@ namespace Mise.Core.Client.Repositories
 
 		#region implemented abstract members of BaseEventSourcedClientRepository
 
-	    protected override Task<IEnumerable<IApplicationInvitation>> LoadFromWebservice(Guid? restaurantID)
+	    protected override async Task<IEnumerable<ApplicationInvitation>> LoadFromWebservice(Guid? restaurantID)
 	    {
 	        if (restaurantID.HasValue)
 	        {
-	            return _webService.GetInvitationsForRestaurant(restaurantID.Value);
+	            var items = await _webService.GetInvitationsForRestaurant(restaurantID.Value);
+	            return items.Cast<ApplicationInvitation>();
 	        }
 
             throw new Exception("Cannot load without a restaurant ID");
 	    }
 
-	    protected override async Task<IEnumerable<IApplicationInvitation>> LoadFromDB(Guid? restaurantID)
+	    protected override async Task<IEnumerable<ApplicationInvitation>> LoadFromDB(Guid? restaurantID)
 	    {
 	        var items = await DAL.GetEntitiesAsync<ApplicationInvitation>();
 	        if (restaurantID.HasValue)

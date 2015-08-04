@@ -1,12 +1,8 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Base;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Mise.Core.Services.WebServices
+namespace Mise.Core.Common.Services.WebServices
 {
     /// <summary>
     /// Represents a web service that a repository can send events to
@@ -14,7 +10,7 @@ namespace Mise.Core.Services.WebServices
     /// <typeparam name="TEventType"></typeparam>
     /// <typeparam name="TEntityType"></typeparam>
     public interface IEventStoreWebService<in TEntityType, in TEventType> where TEventType : IEntityEventBase
-		where TEntityType : IEventStoreEntityBase<TEventType>
+		where TEntityType : IEventStoreEntityBase<TEventType>, new()
     {
         /// <summary>
         /// Sends events (in event source sense) the terminal has generated to the server.  Server then 

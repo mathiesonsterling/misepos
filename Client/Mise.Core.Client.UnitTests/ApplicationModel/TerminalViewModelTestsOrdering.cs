@@ -41,7 +41,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			service.Setup(s => s.GetMenusAsync()).Returns(Task<IEnumerable<Menu>>.Factory.StartNew(() => new[]{menu.Object}));
 
 		    service.Setup(s => s.GetEmployeesAsync())
-		        .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee>()));
+		        .Returns(Task<IEnumerable<Employee>>.Factory.StartNew(() => new List<Employee>()));
 
 			var sentDest = new List<OrderDestination>();
 			var sentOI = new List<OrderItem >();
@@ -53,23 +53,25 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             orderItem.AddDestination(new OrderDestination{Name="Kitchen"});
             orderItem.AddDestination(new OrderDestination{Name="Expiditer"});
 
-			var fakeTab1 = new Mock<ICheck> ();
-			fakeTab1.Setup (t => t.OrderItems).Returns (new List<OrderItem >{ orderItem });
-			var checkID = Guid.NewGuid ();
-			fakeTab1.Setup (t => t.ID).Returns (checkID);
+            var fakeTab1 = new RestaurantCheck
+            {
+                OrderItems = new List<OrderItem> {orderItem},
+                ID = Guid.NewGuid()
+            };
+
 
 		    service.Setup(s => s.GetChecksAsync())
-		        .Returns(Task<IEnumerable<ICheck>>.Factory.StartNew(() => new[] {fakeTab1.Object}));
+		        .Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => new[] {fakeTab1}));
 		    
 
-			service.Setup (s => s.SendEventsAsync (It.IsAny<ICheck> (), It.IsAny<IEnumerable<ICheckEvent>> ()))
+			service.Setup (s => s.SendEventsAsync (It.IsAny<RestaurantCheck> (), It.IsAny<IEnumerable<ICheckEvent>> ()))
 				.Returns (Task.Factory.StartNew (()=> true));
-			service.Setup(s => s.SendEventsAsync(It.IsAny<ICheck> (), It.IsAny<IEnumerable<ICheckEvent>>()))
+			service.Setup(s => s.SendEventsAsync(It.IsAny<RestaurantCheck> (), It.IsAny<IEnumerable<ICheckEvent>>()))
 		        .Returns(Task.Factory.StartNew(() => true));
 
 			var logger = new Mock<ILogger> ();
 
-			var dal = MockingTools.GetClientDAL ();
+			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
             var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
@@ -92,7 +94,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		    Assert.AreEqual(OrderItemStatus.Added, orderItem.Status, "Status starts at Added");
 
 			//ACT
-			vm.CheckClicked (fakeTab1.Object);
+			vm.CheckClicked (fakeTab1);
 			vm.SelectOrderItemToModify (orderItem);
 			vm.SendSelectedCheck ();
 
@@ -126,7 +128,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                 Customer = new Customer { Name = PersonName.TestName }
             };
 
-            var service = MockingTools.GetTerminalServiceWithChecks(new List<ICheck>{
+            var service = MockingTools.GetTerminalServiceWithChecks(new List<RestaurantCheck>{
 				tab
 			});
 
@@ -136,7 +138,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                         .Callback<OrderDestination, OrderItem >((dest, oi) => { sentDest.Add(dest); sentOI.Add(oi); });
 			var logger = new Mock<ILogger> ();
 
-			var dal = MockingTools.GetClientDAL ();
+			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 
             var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
@@ -181,12 +183,12 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			/*service.Setup (s => s.GetEmployees ()).Returns (new List<IEmployee>{
 				emp
 			});*/
-		    service.Setup(s => s.GetEmployeesAsync()).Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new[] {emp}));
+		    service.Setup(s => s.GetEmployeesAsync()).Returns(Task<IEnumerable<Employee>>.Factory.StartNew(() => new[] {emp}));
 
-		    service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<ICheck>>.Factory.StartNew(() => new[] {tab}));
+		    service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => new[] {tab}));
 		    
 			var logger = new Mock<ILogger> ();
-			var dal = MockingTools.GetClientDAL ();
+			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 
 			var empRepos = new Mock<IEmployeeRepository> ();
 			empRepos.Setup (er => er.GetAll ()).Returns (new List<IEmployee>{emp});
@@ -217,7 +219,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		    var service = MockingTools.GetTerminalServiceWithMenu();
 
 			var emp = new Employee{ Passcode = "1111", CurrentlyClockedInToPOS = false };
-			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<IEmployee>{
+			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<Employee>{
 				emp}.AsEnumerable ()));
 				
 			var empRepos = new Mock<IEmployeeRepository> ();
@@ -262,7 +264,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		    var mgrID = Guid.NewGuid();
 			var emp = new Employee{ID=serverID, Passcode = "1111", CurrentlyClockedInToPOS = false };
 			var manager = new Employee{ID = mgrID, Passcode = "2222", CurrentlyClockedInToPOS = false, WhenICanVoid = new List<OrderItemStatus>{OrderItemStatus.Added, OrderItemStatus.Sent}};
-			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<IEmployee>{emp}.AsEnumerable ()));
+			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<Employee>{emp}.AsEnumerable ()));
 			service.Setup (s => s.NotifyDestinationOfVoid(It.IsAny<OrderDestination>(), It.IsAny<OrderItem >()));
 
 			var empRepos = new Mock<IEmployeeRepository> ();
@@ -313,7 +315,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 			var emp = new Employee{ Passcode = "1111", CurrentlyClockedInToPOS = false, WhenICanVoid = new List<OrderItemStatus>() };
 			var manager = new Employee{Passcode = "2222", CurrentlyClockedInToPOS = false, WhenICanVoid = new List<OrderItemStatus>{OrderItemStatus.Added, OrderItemStatus.Sent}};
-			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<IEmployee>{
+			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<Employee>{
 				emp
 			}.AsEnumerable ()));
 				
@@ -452,10 +454,10 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			var service = MockingTools.GetTerminalServiceWithMenu();
 
 		    service.Setup(s => s.GetChecksAsync())
-		        .Returns(Task<IEnumerable<ICheck>>.Factory.StartNew(() => new[] {barTab}));
+		        .Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => new[] {barTab}));
 		    
 
-			var dal = MockingTools.GetClientDAL ();
+			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 				
 
 			var logger = new Mock<ILogger> ();

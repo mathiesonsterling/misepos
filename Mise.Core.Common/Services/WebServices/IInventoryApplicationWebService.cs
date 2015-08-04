@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Mise.Core.Entities.Base;
-
-namespace Mise.Core.Services.WebServices
+namespace Mise.Core.Common.Services.WebServices
 {
 	/// <summary>
 	/// Holder for a service which can do all our subservices

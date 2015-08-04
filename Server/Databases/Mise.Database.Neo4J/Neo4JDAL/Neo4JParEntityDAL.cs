@@ -122,7 +122,7 @@ namespace Mise.Neo4J.Neo4JDAL
                 .ConfigureAwait(false);
         }
 
-        private async Task<IEnumerable<PARBeverageLineItem>> GetLineItemsForPARAsync(Guid parID)
+        private async Task<IEnumerable<ParBeverageLineItem>> GetLineItemsForPARAsync(Guid parID)
         {
             var lineNodes = await _graphClient.Cypher
                 .Match("(p:PAR)-[:HAS_LINE_ITEM]->(il:PARBeverageLineItem)")

@@ -1,40 +1,38 @@
-ï»¿using System;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.Accounts;
+using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Entities.Vendors;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;
-using Mise.Core.Entities.Restaurant.Events;
+using Mise.Core.Entities.Inventory;
+using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.People.Events;
-using Mise.Core.ValueItems;
-
-using Mise.Core.Common.Entities;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Entities.Restaurant;
-using Mise.Core.Common.Entities.Vendors;
-using Mise.Core.Entities.Vendors.Events;
-using Mise.Core.Entities.Inventory.Events;
-
+using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Entities.Vendors;
-using Mise.Core.Entities.Inventory;
+using Mise.Core.Entities.Vendors.Events;
+using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
-using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Entities;
 
-namespace Mise.Core.Common.Services.Implementation.FakeServices
+namespace Mise.Core.Common.Services.WebServices.FakeServices
 {
 	public class FakeInventoryWebService: IInventoryApplicationWebService
 	{
 		private const MiseAppTypes FAKE_APP_CODE = MiseAppTypes.DummyData;
-		private readonly List<IEmployee> _emps;
-	    readonly List<IRestaurant> _restaurants;
-	    readonly List<IVendor> _vendors;
-	    readonly List<IPar> _pars;
-	    readonly List<IInventory> _inventories;
-	    readonly List<IReceivingOrder> _receivingOrders;
+		private readonly List<Employee> _emps;
+	    readonly List<Restaurant> _restaurants;
+	    readonly List<Vendor> _vendors;
+	    readonly List<Par> _pars;
+	    readonly List<Inventory> _inventories;
+	    readonly List<ReceivingOrder> _receivingOrders;
 
-	    private readonly List<IApplicationInvitation> _invitations; 
+	    private readonly List<ApplicationInvitation> _invitations; 
 
 	    #region Creation
 		public FakeInventoryWebService(){
@@ -61,9 +59,9 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 		}
 			
 
-	    static List<IRestaurant> CreateRestaurants(Guid restID, Guid accountID, Guid section1ID, 
+	    static List<Restaurant> CreateRestaurants(Guid restID, Guid accountID, Guid section1ID, 
 			Guid townsendID, Guid qaID, Guid marketingID){
-			return new List<IRestaurant>
+			return new List<Restaurant>
 			{
 				new Restaurant
 				{
@@ -141,14 +139,14 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			};
 		}
 
-		static List<IEmployee> CreateEmployees(Guid restID, Guid townsendID, Guid qaID, Guid marketingID)
+		static List<Employee> CreateEmployees(Guid restID, Guid townsendID, Guid qaID, Guid marketingID)
 		{
             //list for our generic test restaurant
 			var testRestaurantList = new Dictionary<Guid, IList<MiseAppTypes>>
 			{
 			    {restID, new List<MiseAppTypes> {MiseAppTypes.StockboyMobile, MiseAppTypes.DummyData}},
 			};
-		    return new List<IEmployee>
+		    return new List<Employee>
 			{
                 new Employee
                 {
@@ -224,7 +222,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			};
 		}
 
-		List<IVendor> CreateVendors(Guid restID, Guid marketingID)
+		List<Vendor> CreateVendors(Guid restID, Guid marketingID)
 		{
 		    var ml750 = LiquidContainer.Bottle750ML;
 			var ml118 = new LiquidContainer {
@@ -411,10 +409,10 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 		        }
 		    }
 
-		    return vendors.ToList<IVendor>();
+		    return vendors;
 		}
 			
-		List<IPar> CreatePars(Guid restID, Guid empID)
+		List<Par> CreatePars(Guid restID, Guid empID)
 		{
 		    var container = LiquidContainer.Bottle750ML;
 			var lis750 = new Dictionary<string, string> {
@@ -525,15 +523,15 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 				{"Metaxa","7"},
 				{"PF Dry Curacao","7"},
 				{"Pimm's","7"},
-				{"R&W CrÃ¨me de Violette","7"},
+				{"R&W Crème de Violette","7"},
 				{"R&W Orchard Apricot","7"},
 				{"R&W Orchard Cherry","7"},
 				{"St. Elizabeth Allspice Dram","7"},
 				{"St. Germain","7"},
-				{"Tempus Fugit CrÃ¨me de Cacao","7"},
-				{"Tempus Fugit CrÃ¨me de Menthe","7"},
-				{"Trenel CrÃ¨me de Cassis","7"},
-				{"Trenel CrÃ¨me de Mure","7"},
+				{"Tempus Fugit Crème de Cacao","7"},
+				{"Tempus Fugit Crème de Menthe","7"},
+				{"Trenel Crème de Cassis","7"},
+				{"Trenel Crème de Mure","7"},
 				{"Trenel Peche","7"},
 				{"Yellow Chartreuse","7"},
 				{"Amaro Montenegro","8"},
@@ -580,7 +578,7 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 				});
 
 
-			var pars= new List<IPar>
+			var pars= new List<Par>
 			{
 				new Par
 				{
@@ -640,8 +638,8 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			};
 		}
 
-		static List<IReceivingOrder> CreateReceivingOrders(Guid restID, Guid empID, Guid? poID){
-			return new List<IReceivingOrder>
+		static List<ReceivingOrder> CreateReceivingOrders(Guid restID, Guid empID, Guid? poID){
+			return new List<ReceivingOrder>
 			{
 				new ReceivingOrder
 				{
@@ -677,24 +675,24 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			};
 		}
 
-		static List<IInventory> CreateInventories(){
-			return new List<IInventory> ();
+		static List<Inventory> CreateInventories(){
+			return new List<Inventory> ();
 		}
 
-		public Task<IEnumerable<IEmployee>> GetEmployeesAsync()
+		public Task<IEnumerable<Employee>> GetEmployeesAsync()
 		{
 			return Task.FromResult(_emps.AsEnumerable());
 		}
 
-		public Task<IEnumerable<IEmployee>> GetEmployeesForRestaurant(Guid restaurantID)
+		public Task<IEnumerable<Employee>> GetEmployeesForRestaurant(Guid restaurantID)
 		{
 			return Task.FromResult(_emps.Where(e => e.GetRestaurantIDs().Contains(restaurantID)));
 		}
 
-		public Task<IEmployee> GetEmployeeByPrimaryEmailAndPassword(EmailAddress email, Password password)
+		public Task<Employee> GetEmployeeByPrimaryEmailAndPassword(EmailAddress email, Password password)
 		{
 			if (password == null || email == null) {
-				return Task.FromResult (null as IEmployee);
+				return Task.FromResult (null as Employee);
 			}
 			var emp = _emps.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Value == email.Value && e.Password != null && password.HashValue == e.Password.HashValue);
 			return Task.FromResult (emp);
@@ -702,73 +700,73 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 
 		#endregion
 
-		public Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation, Distance max)
+		public Task<IEnumerable<Restaurant>> GetRestaurants (Location deviceLocation, Distance max)
 		{
 			return Task.FromResult (_restaurants.AsEnumerable());
 		}
 
-		public Task<IRestaurant> GetRestaurant (Guid restaurantID)
+		public Task<Restaurant> GetRestaurant (Guid restaurantID)
 		{
 			return Task.FromResult (_restaurants.FirstOrDefault (r => r.ID == restaurantID));
 		}
 
 		#region IEventStoreWebService implementation
 
-		public Task<bool> SendEventsAsync(IEmployee emp, IEnumerable<IEmployeeEvent> events)
+		public Task<bool> SendEventsAsync(Employee emp, IEnumerable<IEmployeeEvent> events)
 		{
 			return Task.FromResult (true);
 		}
 
-		public Task<bool> SendEventsAsync(IRestaurant rest, IEnumerable<IRestaurantEvent> events)
+		public Task<bool> SendEventsAsync(Restaurant rest, IEnumerable<IRestaurantEvent> events)
 		{
 			return Task.FromResult (true);
 		}
 
-		public Task<bool> SendEventsAsync(IVendor vendor, IEnumerable<IVendorEvent> events)
+		public Task<bool> SendEventsAsync(Vendor vendor, IEnumerable<IVendorEvent> events)
 		{
 			return Task.FromResult (true);
 		}
-		public Task<bool> SendEventsAsync(IPurchaseOrder po, IEnumerable<IPurchaseOrderEvent> events)
+		public Task<bool> SendEventsAsync(PurchaseOrder po, IEnumerable<IPurchaseOrderEvent> events)
 		{
 			return Task.FromResult (true);
 		}
-		public Task<bool> SendEventsAsync(IInventory inv, IEnumerable<IInventoryEvent> events)
+		public Task<bool> SendEventsAsync(Inventory inv, IEnumerable<IInventoryEvent> events)
 		{
 			return Task.FromResult (true);
 		}
-		public Task<bool> SendEventsAsync(IReceivingOrder ro, IEnumerable<IReceivingOrderEvent> events)
+		public Task<bool> SendEventsAsync(ReceivingOrder ro, IEnumerable<IReceivingOrderEvent> events)
 		{
 			return Task.FromResult (true);
 		}
-		public Task<bool> SendEventsAsync(IPar par, IEnumerable<IParEvent> events)
+		public Task<bool> SendEventsAsync(Par par, IEnumerable<IParEvent> events)
 		{
 			return Task.FromResult (true);
 		}
 
-        public Task<bool> SendEventsAsync(IApplicationInvitation invite, IEnumerable<IApplicationInvitationEvent> events)
+        public Task<bool> SendEventsAsync(ApplicationInvitation invite, IEnumerable<IApplicationInvitationEvent> events)
         {
             return Task.FromResult(true);
         }
 
-		public Task<bool> SendEventsAsync(IAccount account, IEnumerable<IAccountEvent> events)
+		public Task<bool> SendEventsAsync(RestaurantAccount account, IEnumerable<IAccountEvent> events)
         {
             return Task.FromResult(true);
         }
 		#endregion
 
-		public Task<IEnumerable<IVendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
+		public Task<IEnumerable<Vendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
 		{
 			return Task.FromResult (_vendors.AsEnumerable());
 		}
 
-		public Task<IEnumerable<IVendor>> GetVendorsBySearchString (string searchString)
+		public Task<IEnumerable<Vendor>> GetVendorsBySearchString (string searchString)
 		{
 			return Task.FromResult (_vendors.Where (v => v.Name.Contains (searchString)));
 		}
 
-		public Task<IEnumerable<IVendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
+		public Task<IEnumerable<Vendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
 		{
-			var res = new List<IVendor> ();
+			var res = new List<Vendor> ();
 			foreach(var v in _vendors){
 				var restIds = v.GetRestaurantIDsAssociatedWithVendor ();
 				if(restIds.Contains (restaurantID)){
@@ -779,27 +777,27 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
 			return Task.FromResult (res.AsEnumerable ());
 		}
 
-		public Task<IPar> GetCurrentPAR (Guid restaurantID)
+		public Task<Par> GetCurrentPAR (Guid restaurantID)
 		{
 			return Task.FromResult (_pars.FirstOrDefault (p => p.RestaurantID == restaurantID && p.IsCurrent));
 		}
 
-		public Task<IEnumerable<IPar>> GetPARsForRestaurant (Guid restaurantID)
+		public Task<IEnumerable<Par>> GetPARsForRestaurant (Guid restaurantID)
 		{
 			return Task.FromResult (_pars.Where (p => p.RestaurantID == restaurantID));
 		}
 
-		public Task<IEnumerable<IInventory>> GetInventoriesForRestaurant (Guid restaurantID)
+		public Task<IEnumerable<Inventory>> GetInventoriesForRestaurant (Guid restaurantID)
 		{
 			return Task.FromResult (_inventories.Where (i => i.RestaurantID == restaurantID));
 		}
 
-		public Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersForRestaurant (Guid restaurantID)
+		public Task<IEnumerable<ReceivingOrder>> GetReceivingOrdersForRestaurant (Guid restaurantID)
 		{
 			return Task.FromResult (_receivingOrders.Where (ro => ro.RestaurantID == restaurantID));
 		}
 
-        private List<IApplicationInvitation> CreateInvitations()
+        private List<ApplicationInvitation> CreateInvitations()
         {
             var fromEmp = _emps.FirstOrDefault();
 
@@ -817,22 +815,22 @@ namespace Mise.Core.Common.Services.Implementation.FakeServices
                     Application = MiseAppTypes.StockboyMobile,
                     Revision = new EventID { AppInstanceCode = FAKE_APP_CODE, OrderingID = 10203 },
                 };
-                var list = new List<IApplicationInvitation> {
+                var list = new List<ApplicationInvitation> {
 					invite
 				};
 
                 return list;
             }
 
-            return new List<IApplicationInvitation>();
+            return new List<ApplicationInvitation>();
         }
 
-	    public Task<IEnumerable<IApplicationInvitation>> GetInvitationsForRestaurant(Guid restaurantID)
+	    public Task<IEnumerable<ApplicationInvitation>> GetInvitationsForRestaurant(Guid restaurantID)
 	    {
 	        return Task.FromResult(_invitations.Where(i => i.RestaurantID == restaurantID));
 	    }
 
-	    public Task<IEnumerable<IApplicationInvitation>> GetInvitationsForEmail(EmailAddress email)
+	    public Task<IEnumerable<ApplicationInvitation>> GetInvitationsForEmail(EmailAddress email)
 	    {
 	        return Task.FromResult(_invitations.Where(i => i.DestinationEmail.Equals(email)));
 	    }

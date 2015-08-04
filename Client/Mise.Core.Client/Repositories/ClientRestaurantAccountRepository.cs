@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Events.Accounts;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientRestaurantAccountRepository : BaseEventSourcedClientRepository<IAccount, IAccountEvent>, IAccountRepository
+    public class ClientRestaurantAccountRepository : BaseEventSourcedClientRepository<IAccount, IAccountEvent, RestaurantAccount>, IAccountRepository
     {
         private IAccountWebService _webService;
         public ClientRestaurantAccountRepository(ILogger logger, IClientDAL dal, IAccountWebService webService, IResendEventsWebService resend) : base(logger, dal, webService, resend)
@@ -39,12 +39,12 @@ namespace Mise.Core.Client.Repositories
             return Task.FromResult(acct);
         }
 
-        protected override Task<IEnumerable<IAccount>> LoadFromWebservice(Guid? restaurantID)
+        protected override Task<IEnumerable<RestaurantAccount>> LoadFromWebservice(Guid? restaurantID)
         {
-            return Task.FromResult(new List<IAccount>().AsEnumerable());
+            return Task.FromResult(new List<RestaurantAccount>().AsEnumerable());
         }
 
-        protected override async Task<IEnumerable<IAccount>> LoadFromDB(Guid? restaurantID)
+        protected override async Task<IEnumerable<RestaurantAccount>> LoadFromDB(Guid? restaurantID)
         {
             var items = await DAL.GetEntitiesAsync<RestaurantAccount>();
             return items;

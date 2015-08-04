@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Mise.Core.Repositories;
 using Mise.Core.Common.Events;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Common.Services.WebServices;
 
 
 namespace Mise.Inventory

@@ -9,13 +9,13 @@ using Mise.Core.Repositories;
 using Mise.Core.Common.Services;
 using System;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent>, IEmployeeRepository
+    public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent, Employee>, IEmployeeRepository
     {
         readonly IInventoryEmployeeWebService _webService;
         readonly IClientDAL _clientDAL;
@@ -28,12 +28,13 @@ namespace Mise.Core.Client.Repositories
             _clientDAL = dal;
         }
 
-        protected override Task<IEnumerable<IEmployee>> LoadFromWebservice(Guid? restaurantID)
+        protected override async Task<IEnumerable<Employee>> LoadFromWebservice(Guid? restaurantID)
         {
-            return restaurantID.HasValue ? _webService.GetEmployeesForRestaurant(restaurantID.Value) : _webService.GetEmployeesAsync();
+            var items = await (restaurantID.HasValue ? _webService.GetEmployeesForRestaurant(restaurantID.Value) : _webService.GetEmployeesAsync());
+            return items.Cast<Employee>();
         }
 
-        protected override async Task<IEnumerable<IEmployee>> LoadFromDB(Guid? restaurantID)
+        protected override async Task<IEnumerable<Employee>> LoadFromDB(Guid? restaurantID)
         {
 
             Logger.Log("Could not get employees from web service, pulling from DAL", LogLevel.Debug);

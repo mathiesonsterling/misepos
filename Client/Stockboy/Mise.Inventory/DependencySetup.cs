@@ -18,16 +18,15 @@ using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.Services.Implementation.WebServiceClients;
 using Mise.Inventory.ViewModels;
-using Mise.Core.Common.Services.Implementation.FakeServices;
 using Mise.Core.Common.Services.Implementation;
 using System.ServiceModel;
 using Mise.Core.Entities;
 using Mise.Core.Common;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.ViewModels.Reports;
 
 

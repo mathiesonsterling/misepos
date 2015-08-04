@@ -7,7 +7,6 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Core.Entities.Base;
 
 using Microsoft.WindowsAzure.MobileServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Common.Entities.DTOs;
@@ -23,6 +22,7 @@ using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.DTOs.AzureTypes;
 using Mise.Core.Common.Events.DTOs.AzureTypes;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.ViewModels;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 
@@ -65,61 +65,61 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IEventStoreWebService implementation
 
-		public async Task<bool> SendEventsAsync (IAccount updatedEntity, IEnumerable<IAccountEvent> events)
+		public async Task<bool> SendEventsAsync (RestaurantAccount updatedEntity, IEnumerable<IAccountEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<RestaurantAccount, IAccount> (updatedEntity);
+			var entRes = await StoreEntity (updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
 		}
 
-		public async Task<bool> SendEventsAsync (IApplicationInvitation updatedEntity, IEnumerable<Mise.Core.Entities.Restaurant.Events.IApplicationInvitationEvent> events)
+		public async Task<bool> SendEventsAsync (ApplicationInvitation updatedEntity, IEnumerable<Mise.Core.Entities.Restaurant.Events.IApplicationInvitationEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<ApplicationInvitation, IApplicationInvitation> (updatedEntity);
+			var entRes = await StoreEntity(updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
 		}
 
-		public async Task<bool> SendEventsAsync (IPurchaseOrder updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IPurchaseOrderEvent> events)
+		public async Task<bool> SendEventsAsync (PurchaseOrder updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IPurchaseOrderEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<PurchaseOrder, IPurchaseOrder> (updatedEntity);
+			var entRes = await StoreEntity (updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
 		}
 
-		public async Task<bool> SendEventsAsync (IRestaurant updatedEntity, IEnumerable<Mise.Core.Entities.Restaurant.Events.IRestaurantEvent> events)
+		public async Task<bool> SendEventsAsync (Restaurant updatedEntity, IEnumerable<Mise.Core.Entities.Restaurant.Events.IRestaurantEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<Restaurant, IRestaurant> (updatedEntity);
+			var entRes = await StoreEntity(updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
 		}
 
-		public async Task<bool> SendEventsAsync (IReceivingOrder updatedEntity, IEnumerable<Mise.Core.Entities.Vendors.Events.IReceivingOrderEvent> events)
+		public async Task<bool> SendEventsAsync (ReceivingOrder updatedEntity, IEnumerable<Mise.Core.Entities.Vendors.Events.IReceivingOrderEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<ReceivingOrder, IReceivingOrder> (updatedEntity);
+			var entRes = await StoreEntity (updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
 		}
 
-		public async Task<bool> SendEventsAsync (IInventory updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IInventoryEvent> events)
+		public async Task<bool> SendEventsAsync (Core.Common.Entities.Inventory.Inventory updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IInventoryEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<Mise.Core.Common.Entities.Inventory.Inventory, IInventory> (updatedEntity);
+			var entRes = await StoreEntity (updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
@@ -128,14 +128,15 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IApplicationInvitationWebService implementation
 
-		public async Task<IEnumerable<IApplicationInvitation>> GetInvitationsForRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<ApplicationInvitation>> GetInvitationsForRestaurant (Guid restaurantID)
 		{
 			var reals = await GetEntityOfTypeForRestaurant<ApplicationInvitation> (restaurantID);
-			return reals.Cast<IApplicationInvitation> ();
+			return reals;
 		}
 
-		public async Task<IEnumerable<IApplicationInvitation>> GetInvitationsForEmail (EmailAddress email)
-		{			var type = typeof(IApplicationInvitation);
+		public async Task<IEnumerable<ApplicationInvitation>> GetInvitationsForEmail (EmailAddress email)
+		{
+            var type = typeof(ApplicationInvitation);
 
 		    var table = GetEntityTable();
 
@@ -145,7 +146,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			var realItems = storageItems
 				.Select(si => si.ToRestaurantDTO ())
-				.Select (dto => _entityDTOFactory.FromDataStorageObject<IApplicationInvitation> (dto));
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<ApplicationInvitation> (dto));
 			return realItems.Where (ai => ai.DestinationEmail != null && ai.DestinationEmail.Equals (email));
 		}
 
@@ -155,10 +156,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IReceivingOrderWebService implementation
 
-		public async Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersForRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<ReceivingOrder>> GetReceivingOrdersForRestaurant (Guid restaurantID)
 		{
 			var items = await GetEntityOfTypeForRestaurant<ReceivingOrder> (restaurantID);
-			return items.Cast<IReceivingOrder> ();
+		    return items;
 		}
 
 		#endregion
@@ -166,10 +167,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IInventoryWebService implementation
 
-		public async Task<IEnumerable<IInventory>> GetInventoriesForRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<Core.Common.Entities.Inventory.Inventory>> GetInventoriesForRestaurant (Guid restaurantID)
 		{
 			var items = await GetEntityOfTypeForRestaurant<Mise.Core.Common.Entities.Inventory.Inventory> (restaurantID);
-			return items.Cast<IInventory> ();
+		    return items;
 		}
 
 		#endregion
@@ -178,27 +179,27 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IPARWebService implementation
 
-		public async Task<IPar> GetCurrentPAR (Guid restaurantID)
+		public async Task<Par> GetCurrentPAR (Guid restaurantID)
 		{
 			var allPars = await GetPARsForRestaurant (restaurantID);
 			return allPars.FirstOrDefault (p => p.IsCurrent);
 		}
 
-		public async Task<IEnumerable<IPar>> GetPARsForRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<Par>> GetPARsForRestaurant (Guid restaurantID)
 		{
 			var items = await GetEntityOfTypeForRestaurant<Par> (restaurantID);
-			return items.Cast<IPar> ();
+			return items;
 		}
 
 		#endregion
 
 		#region IEventStoreWebService implementation
 
-		public async Task<bool> SendEventsAsync (IPar updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IParEvent> events)
+		public async Task<bool> SendEventsAsync (Par updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IParEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<Par, IPar> (updatedEntity);
+			var entRes = await StoreEntity (updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
@@ -208,7 +209,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IVendorWebService implementation
 
-		public async Task<IEnumerable<IVendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
+		public async Task<IEnumerable<Vendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
 		{
 
 		    var table = GetEntityTable();
@@ -233,7 +234,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				.Select(vl => vl.Vendor);*/
 		}
 
-		public async Task<IEnumerable<IVendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<Vendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
 		{
 		    var table = GetEntityTable();
 
@@ -251,11 +252,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IEventStoreWebService implementation
 
-		public async Task<bool> SendEventsAsync (IVendor updatedEntity, IEnumerable<Mise.Core.Entities.Vendors.Events.IVendorEvent> events)
+		public async Task<bool> SendEventsAsync (Vendor updatedEntity, IEnumerable<Mise.Core.Entities.Vendors.Events.IVendorEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<Vendor, IVendor> (updatedEntity);
+			var entRes = await StoreEntity<Vendor> (updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
@@ -265,7 +266,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IInventoryRestaurantWebService implementation
 
-		public async Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation, Distance maxDistance)
+		public async Task<IEnumerable<Restaurant>> GetRestaurants (Location deviceLocation, Distance maxDistance)
 		{
 			var restType = typeof(Restaurant).ToString ();
 		    var table = GetEntityTable();
@@ -288,7 +289,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				.Select(vl => vl.Restaurant);*/
 		}
 
-		public async Task<IRestaurant> GetRestaurant (Guid restaurantID)
+		public async Task<Restaurant> GetRestaurant (Guid restaurantID)
 		{
 			var items = await GetEntityOfTypeForRestaurant<Restaurant> (restaurantID);
 			return items.FirstOrDefault ();
@@ -300,7 +301,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IInventoryEmployeeWebService implementation
 
-		public async Task<IEnumerable<IEmployee>> GetEmployeesAsync ()
+		public async Task<IEnumerable<Employee>> GetEmployeesAsync ()
 		{
 			var empType = typeof(Employee).ToString ();
 
@@ -309,17 +310,16 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();
 
 			return ais.Select (ai => ai.ToRestaurantDTO ())
-				.Select (dto => _entityDTOFactory.FromDataStorageObject<Employee> (dto))
-				.Cast<IEmployee>();
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Employee> (dto));
 		}
 
-		public async Task<IEnumerable<IEmployee>> GetEmployeesForRestaurant (Guid restaurantID)
+		public async Task<IEnumerable<Employee>> GetEmployeesForRestaurant (Guid restaurantID)
 		{
 			var items = await GetEntityOfTypeForRestaurant<Employee> (restaurantID);
-			return items.Cast<IEmployee> ();
+			return items;
 		}
 
-		public async Task<IEmployee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
+		public async Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
 			var items = (await GetEmployeesAsync ()).ToList();
 				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
@@ -340,11 +340,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IEventStoreWebService implementation
 
-		public async Task<bool> SendEventsAsync (IEmployee updatedEntity, IEnumerable<Mise.Core.Entities.People.Events.IEmployeeEvent> events)
+		public async Task<bool> SendEventsAsync (Employee updatedEntity, IEnumerable<Mise.Core.Entities.People.Events.IEmployeeEvent> events)
 		{
 			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
-			var entRes = await StoreEntity<Employee, IEmployee>(updatedEntity);
+			var entRes = await StoreEntity(updatedEntity);
 			var evRes = await SendEventDTOs (dtos);
 
 			return entRes && evRes;
@@ -379,16 +379,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			}
 		}
 
-		private async Task<bool> StoreEntity<TRealType, TInterface>(TInterface entity) where TRealType : TInterface, IEntityBase, new()
+		private async Task<bool> StoreEntity<TRealType>(TRealType entity) where TRealType : IEntityBase, new()
 		{
-			TRealType concrete = default(TRealType);
-			try{
-				concrete = (TRealType)entity;
-			} catch(Exception e){
-				_logger.HandleException (e);
-				return false;
-			}
-			var dto = _entityDTOFactory.ToDataTransportObject (concrete);
+			var dto = _entityDTOFactory.ToDataTransportObject (entity);
 
 			var storageItem = new AzureEntityStorage (dto);
 

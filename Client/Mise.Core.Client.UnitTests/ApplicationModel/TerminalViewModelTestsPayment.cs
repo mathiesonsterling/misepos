@@ -36,11 +36,11 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                 PaymentStatus = CheckPaymentStatus.Closing,
                 Customer = new Customer { Name = PersonName.TestName },
             };
-			service.Setup(s => s.GetChecksAsync()).Returns(Task.Factory.StartNew(() =>new List<ICheck> { closingCheck }.AsEnumerable ()));
+			service.Setup(s => s.GetChecksAsync()).Returns(Task.Factory.StartNew(() =>new List<RestaurantCheck> { closingCheck }.AsEnumerable ()));
 
             var logger = new Mock<ILogger>();
 
-			var dal = MockingTools.GetClientDAL ();
+			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 			var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
             var empRepos = new Mock<IEmployeeRepository>();

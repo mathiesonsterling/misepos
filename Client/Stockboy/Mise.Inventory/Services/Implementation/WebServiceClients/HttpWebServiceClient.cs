@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mise.Core.Common.Events.DTOs;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
@@ -15,13 +16,13 @@ using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.InventoryWebService.ServiceModelPortable.Responses;
 using ModernHttpClient;
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients
 {
+    /*
 	public class HttpWebServiceClient : IInventoryApplicationWebService,
 	IDisposable
 	{
@@ -43,10 +44,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients
 		}
 			
 		#region IInventoryEmployeeWebService implementation
-		public async Task<IEnumerable<IEmployee>> GetEmployeesAsync ()
+		public async Task<IEnumerable<Employee>> GetEmployeesAsync ()
 		{
 			var empsResponse = await GetData<EmployeeResponse> ("employees");
-			return empsResponse != null ? empsResponse.Results : new List<IEmployee> ().AsEnumerable ();
+			return empsResponse != null ? empsResponse.Results : new List<Employee> ().AsEnumerable ();
 
 		}
 
@@ -262,6 +263,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients
 		}
 
 
-	}
+	}*/
 }
 

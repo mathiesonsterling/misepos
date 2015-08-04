@@ -9,7 +9,6 @@ using Mise.Core.Common.Events.Employee;
 using Mise.Core.Common.Services.Implementation.DAL;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities.People.Events;
-using Mise.Core.Services.WebServices;
 using NUnit.Framework;
 using Mise.Core.Common.UnitTests.Tools;
 using Moq;
@@ -20,6 +19,7 @@ using Mise.Core.Entities.People;
 using Mise.Core.Client.Repositories;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Events;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities;
 
 
@@ -36,11 +36,11 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			{
 				ID = Guid.NewGuid ()
 			};
-			service.Setup (s => s.GetEmployeesForRestaurant(It.IsAny<Guid>())).Returns (Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee>{emp}));
+			service.Setup (s => s.GetEmployeesForRestaurant(It.IsAny<Guid>())).Returns (Task<IEnumerable<Employee>>.Factory.StartNew(() => new List<Employee>{emp}));
 
 			var dal = new Mock<IClientDAL> ();
 			IList<IEntityBase> sentEnts = null;
-			dal.Setup(d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<IEntityBase>> ()))
+			dal.Setup(d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<Employee>> ()))
 				.Callback<IEnumerable<IEntityBase>>(r => sentEnts = r.ToList())
                 .Returns(Task.Factory.StartNew(() => true));
 
@@ -87,7 +87,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var gotten = repos.GetAll ().ToList();
 			//ASSERT
-			dal.Verify (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<IRestaurantEntityBase>> ()), Times.Never ());
+			dal.Verify (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<Employee>> ()), Times.Never ());
 
 			Assert.IsNotNull (gotten);
 			Assert.AreEqual (1, gotten.Count());
@@ -104,7 +104,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 ID = Guid.NewGuid()
             };
             service.Setup(s => s.GetEmployeesAsync())
-                .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => { throw new WebException(); }));
+                .Returns(Task<IEnumerable<Employee>>.Factory.StartNew(() => { throw new WebException(); }));
 
             var dal = new Mock<IClientDAL>();
             dal.Setup(d => d.GetEntitiesAsync<Employee> ()).Returns(Task.FromResult(new List<Employee> { emp }.AsEnumerable()));
@@ -118,7 +118,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
             var gotten = repos.GetAll().ToList();
             //ASSERT
-            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IRestaurantEntityBase>>()), Times.Never());
+            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<Employee>>()), Times.Never());
 
             Assert.IsNotNull(gotten);
             Assert.AreEqual(1, gotten.Count());
@@ -158,19 +158,19 @@ namespace Mise.Core.Client.UnitTests.Repositories
             };
 
             var restaurantService = new Mock<IRestaurantTerminalService>();
-			restaurantService.Setup(rs => rs.SendEventsAsync(It.IsAny<IEmployee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()))
+			restaurantService.Setup(rs => rs.SendEventsAsync(It.IsAny<Employee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()))
                 .Returns(Task<bool>.Factory.StartNew(() =>
                 {
                     var thrower = new ClientCheckRepositoryTests.Thrower();
                     return thrower.DoIt();
                 }));
             restaurantService.Setup(rs => rs.GetEmployeesForRestaurant(It.IsAny<Guid>()))
-                .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee> { emp }));
+                .Returns(Task<IEnumerable<Employee>>.Factory.StartNew(() => new List<Employee> { emp }));
 
 
             var dal = new Mock<IClientDAL>();
             dal.Setup(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEmployeeEvent>>())).Returns(Task.Factory.StartNew(() => true));
-            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IRestaurantEntityBase>>()))
+            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<Employee>>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
             var logger = new Mock<ILogger>();
@@ -196,12 +196,12 @@ namespace Mise.Core.Client.UnitTests.Repositories
             //ASSERT
             Assert.AreEqual(CommitResult.StoredInDB,res, "res is stored in DB");
             Assert.IsFalse(repository.Dirty, "repository is dirty");
-			restaurantService.Verify(r => r.SendEventsAsync(It.IsAny<IEmployee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Once());
+			restaurantService.Verify(r => r.SendEventsAsync(It.IsAny<Employee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Once());
             dal.Verify(d => d.AddEventsThatFailedToSend(It.IsAny<IEnumerable<IEntityEventBase>>()), Times.Once, "AddedEventsThat failed to send");
             dal.Verify(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Never);
 
             //once when we loaded, once when we updated
-            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>>()), Times.Exactly(2));
+            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<Employee>>()), Times.Exactly(2));
         }
 
         [Test]
@@ -214,15 +214,15 @@ namespace Mise.Core.Client.UnitTests.Repositories
             };
 
             var restaurantService = new Mock<IRestaurantTerminalService>();
-			restaurantService.Setup(rs => rs.SendEventsAsync(It.IsAny<IEmployee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()))
+			restaurantService.Setup(rs => rs.SendEventsAsync(It.IsAny<Employee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()))
                 .Returns(Task<bool>.Factory.StartNew(() => true));
             restaurantService.Setup(rs => rs.GetEmployeesForRestaurant(It.IsAny<Guid>()))
-                .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee>{emp}));
+                .Returns(Task<IEnumerable<Employee>>.Factory.StartNew(() => new List<Employee>{emp}));
 
 
             var dal = new Mock<IClientDAL>();
             dal.Setup(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEmployeeEvent>>())).Returns(Task.Factory.StartNew(() => true));
-            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IRestaurantEntityBase>>()))
+            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<Employee>>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
             var logger = new Mock<ILogger>();
@@ -248,9 +248,9 @@ namespace Mise.Core.Client.UnitTests.Repositories
             //ASSERT
             Assert.AreEqual(CommitResult.SentToServer,res, "res");
             Assert.IsFalse(repository.Dirty, "repository is dirty");
-			restaurantService.Verify(r => r.SendEventsAsync(It.IsAny<IEmployee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Once());
+			restaurantService.Verify(r => r.SendEventsAsync(It.IsAny<Employee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Once());
             dal.Verify(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEmployeeEvent>>()), Times.Never());
-            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>>()), Times.Exactly(2));
+            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<Employee>>()), Times.Exactly(2));
         }
 
 	    [Test]
@@ -268,7 +268,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 	        var underTest = new ClientEmployeeRepository(webService.Object, dal, logger.Object, resendService.Object);
 
-	        var emps = new List<IEmployee>
+	        var emps = new List<Employee>
 	        {
 	            new Employee
 	            {

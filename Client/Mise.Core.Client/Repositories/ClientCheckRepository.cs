@@ -3,23 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
-using Mise.Core.Common.Events.Checks;
-using Mise.Core.Entities.Base;
+using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
+using Mise.Core.Entities.Check;
 using Mise.Core.Entities.Check.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Repositories;
-using Mise.Core.Services.WebServices;
-using Mise.Core.Common.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
-using Mise.Core.Entities.Check;
 
 namespace Mise.Core.Client.Repositories
 {
 	/// <summary>
 	/// Check repository for use by terminals and clients
 	/// </summary>
-	public class ClientCheckRepository : BaseEventSourcedClientRepository<ICheck, ICheckEvent>, ICheckRepository
+	public class ClientCheckRepository : BaseEventSourcedClientRepository<ICheck, ICheckEvent, RestaurantCheck>, ICheckRepository
 	{
 		readonly IRestaurantTerminalService _service;
 		public ClientCheckRepository (IRestaurantTerminalService service,
@@ -30,12 +28,13 @@ namespace Mise.Core.Client.Repositories
 		}
 
 
-	    protected override Task<IEnumerable<ICheck>> LoadFromWebservice(Guid? restaurantID)
+	    protected override async Task<IEnumerable<RestaurantCheck>> LoadFromWebservice(Guid? restaurantID)
 	    {
-	        return _service.GetChecksAsync();
+	        var items = await _service.GetChecksAsync();
+	        return items.Cast<RestaurantCheck>();
 	    }
 
-	    protected override async Task<IEnumerable<ICheck>> LoadFromDB(Guid? restaurantID)
+	    protected override async Task<IEnumerable<RestaurantCheck>> LoadFromDB(Guid? restaurantID)
 	    {
             Logger.Log("Loading from DAL");
 			var items = await DAL.GetEntitiesAsync<RestaurantCheck> ();

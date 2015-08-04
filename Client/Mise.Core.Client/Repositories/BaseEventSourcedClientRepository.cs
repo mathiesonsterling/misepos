@@ -8,9 +8,9 @@ using Mise.Core.Entities.Base;
 using Mise.Core.ExtensionMethods;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using System.Linq.Expressions;
+using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.Repositories
 {
@@ -20,16 +20,18 @@ namespace Mise.Core.Client.Repositories
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEventType"></typeparam>
-    public abstract class BaseEventSourcedClientRepository<TEntity, TEventType> : BaseEventSourcedRepository<TEntity, TEventType> 
-        where TEntity : class, IEventStoreEntityBase<TEventType>, ICloneableEntity where TEventType : class, IEntityEventBase
+    public abstract class BaseEventSourcedClientRepository<TEntity, TEventType, TConcreteStorageType> : BaseEventSourcedRepository<TEntity, TEventType> 
+        where TEntity : class, IEventStoreEntityBase<TEventType>, ICloneableEntity 
+        where TEventType : class, IEntityEventBase
+        where TConcreteStorageType : class, IEntityBase, TEntity, new()
     {
         protected readonly IClientDAL DAL;
-        private readonly IEventStoreWebService<TEntity, TEventType> _webService;
+        private readonly IEventStoreWebService<TConcreteStorageType, TEventType> _webService;
         private readonly IResendEventsWebService _resendEventsWebService;
 
         protected BaseEventSourcedClientRepository(ILogger logger, 
             IClientDAL dal,
-            IEventStoreWebService<TEntity, TEventType> webService,
+            IEventStoreWebService<TConcreteStorageType, TEventType> webService,
             IResendEventsWebService resendService
             ) : base(logger)
         {
@@ -38,8 +40,8 @@ namespace Mise.Core.Client.Repositories
             _resendEventsWebService = resendService;
         }
 
-        protected abstract Task<IEnumerable<TEntity>> LoadFromWebservice(Guid? restaurantID);
-        protected abstract Task<IEnumerable<TEntity>> LoadFromDB(Guid? restaurantID);
+        protected abstract Task<IEnumerable<TConcreteStorageType>> LoadFromWebservice(Guid? restaurantID);
+        protected abstract Task<IEnumerable<TConcreteStorageType>> LoadFromDB(Guid? restaurantID);
 
         protected virtual TimeSpan DelayToReload { get { return new TimeSpan(0, 0, 0, 1); } }
 
@@ -141,7 +143,7 @@ namespace Mise.Core.Client.Repositories
             commitRes = CommitResult.Error;
             try
             {
-				var sendRes = await _webService.SendEventsAsync(bundle.NewVersion, toSend).ConfigureAwait(false);
+				var sendRes = await _webService.SendEventsAsync(bundle.NewVersion as TConcreteStorageType, toSend).ConfigureAwait(false);
                 if (sendRes)
                 {
                     commitRes = CommitResult.SentToServer;
@@ -157,7 +159,12 @@ namespace Mise.Core.Client.Repositories
                 throw;
             }
 
-            var entRes = await DAL.UpsertEntitiesAsync(new[] { bundle.NewVersion });
+            var realType = bundle.NewVersion as TConcreteStorageType;
+            if (realType == null)
+            {
+                throw new Exception("Can't store type of " + bundle.NewVersion.GetType());
+            }
+            var entRes = await DAL.UpsertEntitiesAsync(new[] { realType });
 
 
             if (entRes)
@@ -202,7 +209,7 @@ namespace Mise.Core.Client.Repositories
             commitRes = CommitResult.Error;
             var needsDBStore = false;
             try{
-				var sendRes = await _webService.SendEventsAsync (bundle.NewVersion, toSend).ConfigureAwait (false);
+				var sendRes = await _webService.SendEventsAsync (bundle.NewVersion as TConcreteStorageType, toSend).ConfigureAwait (false);
                 if(sendRes){
                     commitRes = CommitResult.SentToServer;
                     if (Offline)
@@ -230,7 +237,12 @@ namespace Mise.Core.Client.Repositories
 				}
             }
 
-            var entRes = await DAL.UpsertEntitiesAsync(new[] {bundle.NewVersion});
+            var realType = bundle.NewVersion as TConcreteStorageType;
+            if (realType == null)
+            {
+                throw new Exception("Can't store type of " + bundle.NewVersion.GetType());
+            }
+            var entRes = await DAL.UpsertEntitiesAsync(new[] {realType});
 
               
             if (entRes)

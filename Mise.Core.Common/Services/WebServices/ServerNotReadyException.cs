@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Mise.Core.Services.WebServices
+namespace Mise.Core.Common.Services.WebServices
 {
 	public class ServerNotReadyException : Exception
 	{

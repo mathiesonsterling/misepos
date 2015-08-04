@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.People;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Xamarin;
 using Xamarin.Forms;
 

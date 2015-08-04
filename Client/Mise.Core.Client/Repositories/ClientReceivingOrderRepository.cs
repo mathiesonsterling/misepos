@@ -8,14 +8,16 @@ using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Common.Events.Inventory;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientReceivingOrderRepository : BaseEventSourcedClientRepository<IReceivingOrder, IReceivingOrderEvent>, IReceivingOrderRepository
+    public class ClientReceivingOrderRepository 
+        : BaseEventSourcedClientRepository<IReceivingOrder, IReceivingOrderEvent, ReceivingOrder>, 
+        IReceivingOrderRepository
     {
         readonly IReceivingOrderWebService _webService;
         public ClientReceivingOrderRepository(ILogger logger, IClientDAL dal, IReceivingOrderWebService webService, IResendEventsWebService resend)
@@ -35,7 +37,7 @@ namespace Mise.Core.Client.Repositories
             return ev.ReceivingOrderID;
         }
 
-        protected override Task<IEnumerable<IReceivingOrder>> LoadFromWebservice(Guid? restaurantID)
+        protected override Task<IEnumerable<ReceivingOrder>> LoadFromWebservice(Guid? restaurantID)
         {
             if (restaurantID.HasValue == false)
             {
@@ -44,7 +46,7 @@ namespace Mise.Core.Client.Repositories
             return _webService.GetReceivingOrdersForRestaurant(restaurantID.Value);
         }
 
-        protected override async Task<IEnumerable<IReceivingOrder>> LoadFromDB(Guid? restaurantID)
+        protected override async Task<IEnumerable<ReceivingOrder>> LoadFromDB(Guid? restaurantID)
         {
             var items = await DAL.GetEntitiesAsync<ReceivingOrder>();
             if (restaurantID.HasValue)

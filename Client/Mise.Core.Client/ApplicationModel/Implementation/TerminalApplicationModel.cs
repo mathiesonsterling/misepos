@@ -16,12 +16,12 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Payments;
 using Mise.Core.Entities.Check.Events.PaymentEvents.CreditCards;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.ApplicationModel.Implementation
 {

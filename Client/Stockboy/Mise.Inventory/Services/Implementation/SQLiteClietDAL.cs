@@ -251,7 +251,7 @@ namespace Mise.Inventory.Services.Implementation
             throw new NotImplementedException("Not yet implemented to send");
 	    }
 
-	    public Task<bool> UpsertEntitiesAsync(IEnumerable<IEntityBase> entities)
+	    public Task<bool> UpsertEntitiesAsync<T>(IEnumerable<T> entities) where T :class, IEntityBase, new()
 	    {
 	        return Task.Run(() =>
 	        {

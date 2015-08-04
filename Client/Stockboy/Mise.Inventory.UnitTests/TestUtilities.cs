@@ -7,12 +7,12 @@ using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Common.Services;
 using Mise.Core.Entities.Base;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Moq;
 using NUnit.Framework;
 
 using Mise.Inventory.Services;
 using System.IO;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Services;
 using SQLite;
 

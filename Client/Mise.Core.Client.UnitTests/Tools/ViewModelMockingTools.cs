@@ -13,31 +13,31 @@ using Mise.Core.Common.UnitTests.Tools;
 using Mise.Core.Client.ApplicationModel.Implementation;
 using Moq;
 using Mise.Core.Entities.People;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.UnitTests.Tools
 {
 	public static class ViewModelMockingTools
 	{
-		public static Task<Tuple<TerminalApplicationModel, ICheckRepository, IEmployeeRepository>> CreateViewModel(IEmployee employee)
+		public static Task<Tuple<TerminalApplicationModel, ICheckRepository, IEmployeeRepository>> CreateViewModel(Employee employee)
 		{
 			return CreateViewModel (employee, null);
 		}
 
-		public static async Task<Tuple<TerminalApplicationModel, ICheckRepository, IEmployeeRepository>> CreateViewModel(IEmployee emp, 
+		public static async Task<Tuple<TerminalApplicationModel, ICheckRepository, IEmployeeRepository>> CreateViewModel(Employee emp, 
 			ICreditCardProcessorService processorService){
 			var service = MockingTools.GetTerminalServiceWithMenu ();
-			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.FromResult(new List<IEmployee>{emp}.AsEnumerable ()));
+			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.FromResult(new List<Employee>{emp}.AsEnumerable ()));
 		    service.Setup(s => s.GetEmployeesForRestaurant(It.IsAny<Guid>()))
-		        .Returns(Task.FromResult(new List<IEmployee> {emp}.AsEnumerable()));
+		        .Returns(Task.FromResult(new List<Employee> {emp}.AsEnumerable()));
 		    service.Setup(s => s.GetEmployeesAsync())
-		        .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new[] {emp}));
-		    service.Setup(s => s.SendEventsAsync(It.IsAny<IEmployee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()))
+		        .Returns(Task<IEnumerable<Employee>>.Factory.StartNew(() => new[] {emp}));
+		    service.Setup(s => s.SendEventsAsync(It.IsAny<Employee> (), It.IsAny<IEnumerable<IEmployeeEvent>>()))
 				.Returns(Task.Factory.StartNew (() => true));
 
 			var settings = service.Object.RegisterClientAsync (string.Empty).Result;
-			var dal = MockingTools.GetClientDAL ();
+			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 		    dal.Setup(d => d.GetEntitiesAsync<MiseTerminalDevice>())
 		        .Returns(
 		            Task.FromResult(new[] {settings.Item2 as MiseTerminalDevice}.AsEnumerable()));
@@ -65,20 +65,20 @@ namespace Mise.Core.Client.UnitTests.Tools
 		    return new Tuple<TerminalApplicationModel, ICheckRepository, IEmployeeRepository>(vm, checkRepos, empRepos);
 			}
 
-		public static TerminalApplicationModel CreateViewModel(IEmployee emp, ICheckRepository checkRepository, 
+		public static TerminalApplicationModel CreateViewModel(Employee emp, ICheckRepository checkRepository, 
 			IEmployeeRepository empRepos){
 			var service = MockingTools.GetTerminalServiceWithMenu ();
-			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<IEmployee>{emp}.AsEnumerable ()));
+			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.FromResult(new List<Employee>{emp}.AsEnumerable()));
 
 			return CreateViewModel (emp, checkRepository, empRepos, 
 				new Mock<ICashDrawerService> ().Object, 
 				service.Object);
 		}
 			
-		public static TerminalApplicationModel CreateViewModel(IEmployee emp, ICheckRepository checkRepos,
+		public static TerminalApplicationModel CreateViewModel(Employee emp, ICheckRepository checkRepos,
 			IEmployeeRepository empRepos, ICashDrawerService cds){
 			var service = MockingTools.GetTerminalServiceWithMenu ();
-			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<IEmployee>{emp}.AsEnumerable ()));
+			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.FromResult( new List<Employee>{emp}.AsEnumerable ()));
 
 			return CreateViewModel (emp, checkRepos, empRepos, 
 				cds, 
@@ -105,7 +105,7 @@ namespace Mise.Core.Client.UnitTests.Tools
 
 
 			var settings = service.RegisterClientAsync (string.Empty).Result;
-			var dal = MockingTools.GetClientDAL ();
+			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 		    dal.Setup(d => d.GetEntitiesAsync<MiseTerminalDevice>()).Returns(
 		        Task.FromResult(new[] {settings.Item2 as MiseTerminalDevice}.AsEnumerable()));
 
@@ -126,7 +126,7 @@ namespace Mise.Core.Client.UnitTests.Tools
 		    return vm;
 		}
 
-		public static async Task<TerminalApplicationModel> CreateViewModelWithEmployeeAndCreditCardProcessor(IEmployee emp){
+		public static async Task<TerminalApplicationModel> CreateViewModelWithEmployeeAndCreditCardProcessor(Employee emp){
 			var logger = new Mock<ILogger> ();
 			var ccProcessor = new TestingCreditCardService (logger.Object);
 

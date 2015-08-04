@@ -163,7 +163,6 @@
     <Compile Include="Events\Inventory\ReceivingOrderLineItemQuantityUpdatedEvent.cs" />
     <Compile Include="Events\Vendors\VendorAddNewLineItemEvent.cs" />
     <Compile Include="Entities\Inventory\PurchaseOrderPerVendor.cs" />
-    <Compile Include="Services\Implementation\FakeServices\FakeInventoryWebService.cs" />
     <Compile Include="Entities\ApplicationInvitation.cs" />
     <Compile Include="BeverageLineItemEquator.cs" />
     <Compile Include="Entities\Inventory\ItemCategory.cs" />
@@ -176,6 +175,24 @@
     <Compile Include="Services\Implementation\FakeServices\FakeCreditCardService.cs" />
     <Compile Include="Services\Implementation\MercuryPaymentProviderSettings.cs" />
     <Compile Include="Events\Employee\EmployeeRegistersRestaurantEvent.cs" />
+    <Compile Include="Services\WebServices\FakeServices\FakeInventoryWebService.cs" />
+    <Compile Include="Services\WebServices\IAccountWebService.cs" />
+    <Compile Include="Services\WebServices\IApplicationInvitationWebService.cs" />
+    <Compile Include="Services\WebServices\ICreditCardWebService.cs" />
+    <Compile Include="Services\WebServices\IEventStoreWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryApplicationWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryEmployeeWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryRestaurantWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryWebService.cs" />
+    <Compile Include="Services\WebServices\IParWebService.cs" />
+    <Compile Include="Services\WebServices\IPurchaseOrderWebService.cs" />
+    <Compile Include="Services\WebServices\IReceivingOrderWebService.cs" />
+    <Compile Include="Services\WebServices\IResendEventsWebService.cs" />
+    <Compile Include="Services\WebServices\IRestaurantTerminalService.cs" />
+    <Compile Include="Services\WebServices\IVendorWebService.cs" />
+    <Compile Include="Services\WebServices\SendErrors.cs" />
+    <Compile Include="Services\WebServices\SendEventsException.cs" />
+    <Compile Include="Services\WebServices\ServerNotReadyException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

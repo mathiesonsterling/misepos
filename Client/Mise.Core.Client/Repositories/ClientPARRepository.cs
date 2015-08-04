@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Repositories;
 
 namespace Mise.Core.Client.Repositories
 {
-	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IParEvent>, IParRepository
+	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IParEvent, Par>, IParRepository
 	{
 	    private readonly IParWebService _webService;
         public ClientParRepository(ILogger logger, IClientDAL dal, IParWebService webService, IResendEventsWebService resend)
@@ -35,7 +35,7 @@ namespace Mise.Core.Client.Repositories
 	        return ev.ParID;
 	    }
 
-	    protected override Task<IEnumerable<IPar>> LoadFromWebservice(Guid? restaurantID)
+	    protected override Task<IEnumerable<Par>> LoadFromWebservice(Guid? restaurantID)
 	    {
 	        if (restaurantID.HasValue == false)
 	        {
@@ -44,7 +44,7 @@ namespace Mise.Core.Client.Repositories
 	        return _webService.GetPARsForRestaurant(restaurantID.Value);
 	    }
 
-	    protected override async Task<IEnumerable<IPar>> LoadFromDB(Guid? restaurantID)
+	    protected override async Task<IEnumerable<Par>> LoadFromDB(Guid? restaurantID)
 	    {
 	        var items = await DAL.GetEntitiesAsync<Par>();
 	        return items;

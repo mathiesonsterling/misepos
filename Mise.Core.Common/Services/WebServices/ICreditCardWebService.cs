@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System;
 using System.Threading.Tasks;
 using Mise.Core.ValueItems;
 
-namespace Mise.Core.Services.WebServices
+namespace Mise.Core.Common.Services.WebServices
 {
     public interface ICreditCardWebService
     {

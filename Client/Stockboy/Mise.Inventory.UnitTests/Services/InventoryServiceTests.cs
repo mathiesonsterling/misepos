@@ -15,7 +15,6 @@ using Mise.Inventory.Services.Implementation;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Services;
@@ -24,6 +23,7 @@ using Mise.Core.ValueItems;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.ValueItems.Inventory;
 
@@ -73,12 +73,12 @@ namespace Mise.Inventory.UnitTests.Services
 			};
 			var ws = new Mock<IInventoryWebService> ();
 			ws.Setup(w => w.GetInventoriesForRestaurant(It.IsAny<Guid>()))
-				.Returns(Task.FromResult(new List<IInventory>{currentInventory}.AsEnumerable()));
-			ws.Setup (w => w.SendEventsAsync (It.IsAny<IInventory> (), It.IsAny<IEnumerable<IInventoryEvent>> ()))
+				.Returns(Task.FromResult(new List<Core.Common.Entities.Inventory.Inventory>{currentInventory}.AsEnumerable()));
+			ws.Setup (w => w.SendEventsAsync (It.IsAny<Core.Common.Entities.Inventory.Inventory> (), It.IsAny<IEnumerable<IInventoryEvent>> ()))
 				.Returns (Task.FromResult (true));
 
 			var dal = new Mock<IClientDAL> ();
-			dal.Setup (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<IEntityBase>> ()))
+			dal.Setup (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<Core.Common.Entities.Inventory.Inventory>> ()))
 				.Returns (Task.FromResult (true));
 			var invRepository = new ClientInventoryRepository (logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
 
@@ -153,12 +153,12 @@ namespace Mise.Inventory.UnitTests.Services
 			};
 			var ws = new Mock<IInventoryWebService> ();
 			ws.Setup(w => w.GetInventoriesForRestaurant(It.IsAny<Guid>()))
-				.Returns(Task.FromResult(new List<IInventory>{currentInventory}.AsEnumerable()));
-			ws.Setup (w => w.SendEventsAsync (It.IsAny<IInventory> (), It.IsAny<IEnumerable<IInventoryEvent>> ()))
+				.Returns(Task.FromResult(new List<Core.Common.Entities.Inventory.Inventory>{currentInventory}.AsEnumerable()));
+			ws.Setup (w => w.SendEventsAsync (It.IsAny<Core.Common.Entities.Inventory.Inventory> (), It.IsAny<IEnumerable<IInventoryEvent>> ()))
 				.Returns (Task.FromResult (true));
 
 			var dal = new Mock<IClientDAL> ();
-			dal.Setup (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<IEntityBase>> ()))
+			dal.Setup (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<Core.Common.Entities.Inventory.Inventory>> ()))
 				.Returns (Task.FromResult (true));
             var invRepository = new ClientInventoryRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
 
@@ -253,12 +253,12 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var ws = new Mock<IInventoryWebService>();
             ws.Setup(w => w.GetInventoriesForRestaurant(It.IsAny<Guid>()))
-                .Returns(Task.FromResult(new List<IInventory> { currentInventory }.AsEnumerable()));
-            ws.Setup(w => w.SendEventsAsync(It.IsAny<IInventory>(), It.IsAny<IEnumerable<IInventoryEvent>>()))
+                .Returns(Task.FromResult(new List<Core.Common.Entities.Inventory.Inventory> { currentInventory }.AsEnumerable()));
+            ws.Setup(w => w.SendEventsAsync(It.IsAny<Core.Common.Entities.Inventory.Inventory>(), It.IsAny<IEnumerable<IInventoryEvent>>()))
                 .Returns(Task.FromResult(true));
 
             var dal = new Mock<IClientDAL>();
-            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>>()))
+            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<Core.Common.Entities.Inventory.Inventory>>()))
                 .Returns(Task.FromResult(true));
             var invRepository = new ClientInventoryRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
 
@@ -315,7 +315,7 @@ namespace Mise.Inventory.UnitTests.Services
 			var logger = new Mock<ILogger> ();
 			var ws = new Mock<IInventoryWebService> ();
 			ws.Setup(w => w.GetInventoriesForRestaurant(It.IsAny<Guid>()))
-				.Returns(Task.FromResult(new List<IInventory>{currentInventory}.AsEnumerable()));
+				.Returns(Task.FromResult(new List<Core.Common.Entities.Inventory.Inventory>{currentInventory}.AsEnumerable()));
 					
 			var dal = new Mock<IClientDAL> ();
             var inventoryRepos = new ClientInventoryRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
@@ -330,8 +330,8 @@ namespace Mise.Inventory.UnitTests.Services
 
 		    var restaurantWs = new Mock<IInventoryRestaurantWebService>();
 		    restaurantWs.Setup(rws => rws.GetRestaurant(It.IsAny<Guid>()))
-		        .Returns(Task.FromResult(rest as IRestaurant));
-			restaurantWs.Setup (rws => rws.SendEventsAsync (It.IsAny<IRestaurant> (), It.IsAny<IEnumerable<IRestaurantEvent>> ()))
+		        .Returns(Task.FromResult(rest as Restaurant));
+			restaurantWs.Setup (rws => rws.SendEventsAsync (It.IsAny<Restaurant> (), It.IsAny<IEnumerable<IRestaurantEvent>> ()))
 				.Returns(Task.FromResult(true));
 
 		    var loc = new Mock<IDeviceLocationService>();

@@ -372,7 +372,7 @@ namespace Mise.Core.Server.Services.Implementation
                 }
                 var oldLI = downCast.ParLineItems.FirstOrDefault(l => l.ID == lineItem.ID);
                 downCast.ParLineItems.Remove(oldLI);
-                downCast.ParLineItems.Add(lineItem as PARBeverageLineItem);
+                downCast.ParLineItems.Add(lineItem as ParBeverageLineItem);
                 return Task.FromResult(true);
             }
 

@@ -8,9 +8,10 @@ using Mise.Core.Common.Services;
 using Mise.Core.Common.UnitTests.Tools;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Common;
+using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Services.WebServices;
 using Moq;
 using NUnit.Framework;
 using Mise.Core.Entities;
@@ -30,7 +31,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
             var inventoryEventsPassed = new List<IPurchaseOrderEvent>();
             var service = new Mock<IPurchaseOrderWebService>();
-			service.Setup(s => s.SendEventsAsync(It.IsAny<IPurchaseOrder> (), It.IsAny<IEnumerable<IPurchaseOrderEvent>>()))
+			service.Setup(s => s.SendEventsAsync(It.IsAny<PurchaseOrder> (), It.IsAny<IEnumerable<IPurchaseOrderEvent>>()))
                 .Callback<IPurchaseOrder, IEnumerable<IPurchaseOrderEvent>>((po, events) => inventoryEventsPassed.AddRange(events))
                 .Returns(Task.Factory.StartNew(() => true));
 

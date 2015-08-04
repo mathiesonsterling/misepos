@@ -15,13 +15,13 @@ using Mise.Core.Entities.Check;
 using Mise.Core.Entities.People.Events;
 using Mise.Core.Services;
 using Mise.Core.Client.ApplicationModel;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using NUnit.Framework;
 using Mise.Core.Services.UtilityServices;
 using Moq;
 using Mise.Core.Client.UnitTests.Tools;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Services.WebServices;
 
 
 namespace Mise.Core.Client.UnitTests.ApplicationModel
