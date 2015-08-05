@@ -41,6 +41,25 @@ namespace DeveloperTools.Commands
             _entityDataTransportObjectFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
         }
 
+        private class DTOStorage : Dictionary<Guid, RestaurantEntityDataTransportObject>
+        {
+            public void AddRange(IEnumerable<RestaurantEntityDataTransportObject> dtos)
+            {
+                foreach (var dto in dtos)
+                {
+                    Add(dto);
+                }
+            }
+
+            public void Add(RestaurantEntityDataTransportObject dto)
+            {
+                if (ContainsKey(dto.ID) == false)
+                {
+                    Add(dto.ID, dto);
+                }
+            }
+        } 
+
         public override async Task Execute()
         {
             //delete items
@@ -50,7 +69,7 @@ namespace DeveloperTools.Commands
             //get the fake service, and populate all parts of it!
             var fakeService = new FakeInventoryServiceDAL();
 
-            var allDTOs = new List<RestaurantEntityDataTransportObject>();
+            var allDTOs = new DTOStorage();
             Report("Generating accounts");
             //accounts
             var accts = (await fakeService.GetAccountsAsync());
@@ -185,7 +204,7 @@ namespace DeveloperTools.Commands
                 throw;
             }
             */
-            foreach (var dto in allDTOs)
+            foreach (var dto in allDTOs.Values)
             {
                 var ai = new AzureEntityStorage(dto);
                 await table.InsertAsync(ai);
