@@ -53,7 +53,7 @@ namespace DeveloperTools.Commands
             var allDTOs = new List<RestaurantEntityDataTransportObject>();
             Report("Generating accounts");
             //accounts
-            var accts =(await fakeService.GetAccountsAsync());
+            var accts = (await fakeService.GetAccountsAsync());
             var dtos = accts
                 .Select(act => act as RestaurantAccount)
                 .Select(act => _entityDataTransportObjectFactory.ToDataTransportObject(act));
@@ -133,24 +133,25 @@ namespace DeveloperTools.Commands
                 //pgBar.Value += perRestAmt / NUM_INNER_STEPS;
                 Report("Added receiving orders to " + rest.Name.ShortName);
                 var pos = await fakeService.GetPurchaseOrdersAsync(rest.ID);
-                foreach (var po in pos)
+                foreach (var po in pos.Select(p => p as PurchaseOrder))
                 {
                     if (po.ID == Guid.Empty)
                     {
                         throw new Exception("PO does not have ID");
                     }
-                    await graphDAL.AddPurchaseOrderAsync(po);
+
+                    allDTOs.Add(_entityDataTransportObjectFactory.ToDataTransportObject(po));
                 }
                 Report("Added purchase orders to " + rest.Name.ShortName);
                 //pgBar.Value += perRestAmt / NUM_INNER_STEPS;
                 var pars = await fakeService.GetPARsAsync(rest.ID);
-                foreach (var par in pars)
+                foreach (var par in pars.Select(p => p as Par))
                 {
                     if (par.ID == Guid.Empty)
                     {
                         throw new Exception("PAR does not have ID");
                     }
-                    await graphDAL.AddPARAsync(par);
+                    allDTOs.Add(_entityDataTransportObjectFactory.ToDataTransportObject(par));
                 }
                 Report("Added PARs to " + rest.Name.ShortName);
                 //pgBar.Value += perRestAmt / NUM_INNER_STEPS;
@@ -161,18 +162,34 @@ namespace DeveloperTools.Commands
             {
                 invites = invites.Where(i => i.RestaurantID != Guid.Empty);
             }
-            foreach (var invite in invites)
+            foreach (var invite in invites.Select(i => i as ApplicationInvitation))
             {
-                await graphDAL.AddApplicationInvitiation(invite);
+                allDTOs.Add(_entityDataTransportObjectFactory.ToDataTransportObject(invite));
             }
             Report("Added invitations");
 
             Report($"Storing {allDTOs.Count} entities in DB");
 
             var table = _client.GetTable<AzureEntityStorage>();
-            var insertTasks = allDTOs.Select(ai => table.InsertAsync(ai));
+            /*
+            var azureItems = allDTOs.Select(dto => new AzureEntityStorage(dto));
+            var insertTasks = azureItems.Select(ai => table.InsertAsync(ai));
 
-            await Task.WhenAll(insertTasks).ConfigureAwait(false);
+            try
+            {
+                await Task.WhenAll(insertTasks).ConfigureAwait(false);
+            }
+                catch (Exception e)
+            {
+                _logger.HandleException(e);
+                throw;
+            }
+            */
+            foreach (var dto in allDTOs)
+            {
+                var ai = new AzureEntityStorage(dto);
+                await table.InsertAsync(ai);
+            }
 
             Finish();
 
@@ -191,6 +208,6 @@ namespace DeveloperTools.Commands
             await Task.WhenAll(delEntities).ConfigureAwait(false);
             await Task.WhenAll(delEvents).ConfigureAwait(false);
         }
-        public override int NumSteps { get; }
+        public override int NumSteps => 32;
     }
 }

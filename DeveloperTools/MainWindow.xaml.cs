@@ -143,15 +143,16 @@ namespace DeveloperTools
                     return;
                 }
 
-                var uri = new Uri(selItem.Value);
-
+                //var uri = new Uri(selItem.Value);
+                var uri = new Uri("https://stockboymobileservice.azure-mobile.net/");
                 var progress = new Progress<ProgressReport>(ReportProgress);
                 var silentLogger = new DummyLogger();
 
                 try
                 {
-                    var populateInventoryCommand = new PopulateInventoryNeo4JDatabaseCommand(silentLogger, uri, progress,
-                        selItem.Key.ToUpper() == "DEV");
+                    /*var populateInventoryCommand = new PopulateInventoryNeo4JDatabaseCommand(silentLogger, uri, progress,
+                        selItem.Key.ToUpper() == "DEV");*/
+                    var populateInventoryCommand = new PopulateInventorySqlServerDBCommand(progress, silentLogger, uri, selItem.Key.ToUpper() == "DEV");
                     await populateInventoryCommand.Execute();
                     MessageBox.Show("GraphDB is now populated!");
                 }
@@ -167,7 +168,11 @@ namespace DeveloperTools
 
         public void ReportProgress(ProgressReport report)
         {
-            PgBar.Value = ((double) report.CurrentProgressAmount)/((double) report.TotalProgressAmount) * 100;
+             
+            var val = report.TotalProgressAmount > 0 
+                ?((double) report.CurrentProgressAmount)/((double) report.TotalProgressAmount) * 100
+                :0;
+            PgBar.Value = val;
             LblStatus.Content = report.CurrentProgressMessage;
         }
 

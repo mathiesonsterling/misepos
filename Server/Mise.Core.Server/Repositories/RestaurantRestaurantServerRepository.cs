@@ -71,11 +71,11 @@ namespace Mise.Core.Server.Repositories
 
 	    public ICollection<IRestaurant> Create(ICollection<IRestaurant> restaurants)
 		{
-			return base.CreateAsync(restaurants.ToList()).Result.ToList<IRestaurant> ();
+			throw new NotImplementedException();
 		}
         public ICollection<IRestaurant> Update(ICollection<IRestaurant> restaurants)
 		{
-			return base.UpdateAsync(restaurants.ToList()).Result.ToList<IRestaurant> ();
+			throw new NotImplementedException();
 		}
 
         private readonly IMiseAdminServer _server;

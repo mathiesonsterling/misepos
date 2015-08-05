@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Common.Services.Implementation.FakeServices;
+using Mise.Core.Common.Services.WebServices.FakeServices;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;
@@ -30,7 +31,7 @@ namespace Mise.Core.Server.Services.Implementation
         private List<IInventory> _restaurauntInventories;
         private List<IEmployee> _employees;
 
-        private List<IRestaurant> _restaurants;
+        private List<Restaurant> _restaurants;
 
         private List<IVendor> _vendors;
         private List<IPurchaseOrder> _purchaseOrders;
@@ -122,19 +123,19 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task<IRestaurant> GetRestaurantAsync(Guid restaurantID)
         {
-            return Task.Run(() => _restaurants.FirstOrDefault(r => r.ID == restaurantID));
+            return Task.FromResult(_restaurants.FirstOrDefault(r => r.ID == restaurantID) as IRestaurant);
         }
 
         public Task<IEnumerable<IRestaurant>> GetRestaurantsAsync()
         {
-            return Task.FromResult(_restaurants.AsEnumerable());
+            return Task.FromResult(_restaurants.AsEnumerable().Cast<IRestaurant>());
         }
 
         public Task AddRestaurantAsync(IRestaurant restaurant)
         {
             if (_restaurants.Select(r => r.ID).Contains(restaurant.ID) == false)
             {
-                _restaurants.Add(restaurant);
+                _restaurants.Add(restaurant as Restaurant);
             }
             return Task.FromResult(true);
         }

@@ -75,31 +75,7 @@ namespace Mise.Core.Server.Repositories
 
 	    public Task Load(Guid? restaurantID)
         {
-			return Task.Run (() => {
-				List<ICheck> items = null;
-				try {
-					items = restaurantID.HasValue
-                    ? _server.GetCheckSnapshots (restaurantID.Value).ToList ()
-                    : _server.GetAllChecks ().ToList ();
-					_loadedFromServer = true;
-					//load them into the DB as well
-					Logger.Log ("Loading from service", LogLevel.Debug);
-					IEnumerable<ICheck> items1 = items;
-					var loadTask = _restaurantServerDAL.UpsertEntitiesAsync (items1);
-
-					Task.WaitAll (new Task[] { loadTask });
-				} catch (Exception e) {
-					Logger.HandleException (e, LogLevel.Debug);
-					//if we didn't get items from the service, we need to load them from the DB
-					if (_loadedFromServer == false) {
-						Logger.Log ("Can't get service, loading from DAL", LogLevel.Debug);
-						items = _restaurantServerDAL.GetEntitiesAsync<RestaurantCheck> (restaurantID).Result.ToList<ICheck> ();
-					}
-					//TODO we should keep trying to get to the server
-				}
-				Cache.UpdateCache (items);
-				IsFullyCommitted = true;
-			});
+			throw new NotImplementedException();
         }
 
 		public override Task<CommitResult> Commit(Guid entityID)

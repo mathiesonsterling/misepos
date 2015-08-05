@@ -59,7 +59,6 @@
     <Compile Include="Services\Implementation\FakeInventoryServiceDAL.cs" />
     <Compile Include="Services\Implementation\FakeMiseAdminServer.cs" />
     <Compile Include="Services\DAL\IReportingServerDAL.cs" />
-    <Compile Include="Services\Implementation\MemoryRestaurantServerDAL.cs" />
     <Compile Include="Services\IWebHostingEnvironment.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

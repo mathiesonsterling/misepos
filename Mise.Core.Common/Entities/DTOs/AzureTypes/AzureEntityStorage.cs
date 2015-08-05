@@ -17,7 +17,7 @@ namespace Mise.Core.Common.Entities.DTOs.AzureTypes
 
         public AzureEntityStorage(RestaurantEntityDataTransportObject dto)
         {
-            id = EntityID.ToString();
+            id = dto.ID.ToString();
             MiseEntityType = dto.SourceType.ToString();
             EntityID = dto.ID;
             RestaurantID = dto.RestaurantID;
