@@ -6,7 +6,6 @@ using Mise.Inventory.iOS.Services;
 using Mise.Inventory.Services;
 using Mise.Core.Services.UtilityServices;
 
-using Mise.Core.Services.WebServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Microsoft.WindowsAzure.MobileServices;

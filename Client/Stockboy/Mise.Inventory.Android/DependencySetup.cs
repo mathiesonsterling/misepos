@@ -10,7 +10,6 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Microsoft.WindowsAzure.MobileServices;
-using Mise.Core.Services.WebServices;
 namespace Mise.Inventory.Android
 {
 	public class DependencySetup : Mise.Inventory.DependencySetup
