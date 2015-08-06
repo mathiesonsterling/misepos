@@ -37,16 +37,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private readonly IMobileServiceClient _client;
 		readonly ILogger _logger;
 		private readonly IJSONSerializer _serial;
-		private readonly BuildLevel _level;
 		private readonly EventDataTransportObjectFactory _eventDTOFactory;
 		private readonly EntityDataTransportObjectFactory _entityDTOFactory;
-		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client, BuildLevel level)
+		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client)
 		{
 			_logger = logger;
 			_client = client;
 			_serial = serializer;
-			_level = level;
-
 			_eventDTOFactory = new EventDataTransportObjectFactory (_serial);
 			_entityDTOFactory = new EntityDataTransportObjectFactory (_serial);
 		}
@@ -291,8 +288,31 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<Restaurant> GetRestaurant (Guid restaurantID)
 		{
-			var items = await GetEntityOfTypeForRestaurant<Restaurant> (restaurantID);
-			return items.FirstOrDefault ();
+			var type = typeof(Restaurant).ToString ();
+
+			var table = GetEntityTable();
+
+			var storageItems = await table
+				.Where (si => si.MiseEntityType == type && si.EntityID == restaurantID)
+				.ToEnumerableAsync ();
+
+			var ai = storageItems.FirstOrDefault ();
+			if(ai == null){
+				return null;
+			}
+				
+			_logger.Debug ("Rehydrating item of type " + type + " and id " + ai.EntityID);
+			var dto = ai.ToRestaurantDTO ();
+			if(dto == null){
+				throw new Exception ("Error turning item " + ai.EntityID + " to RestaurantDTO!");
+			} else {
+				var real = _entityDTOFactory.FromDataStorageObject<Restaurant> (dto);
+				if(real == null){
+					throw new Exception ("Error rehydrating item ID " + dto.ID);
+				} else {
+					return real;
+				}
+			}
 		}
 
 		#endregion
@@ -388,12 +408,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var table = GetEntityTable();
 
 			//does this exist?
-			var exists = (await table.Where(ai => ai.EntityID == dto.ID).ToEnumerableAsync ()).Any();
-			if(exists){
-				await table.UpdateAsync (storageItem);
-			} else {
-				await table.InsertAsync (storageItem);
-			}
+			var existing = (await table.Where(ai => ai.EntityID == dto.ID).ToEnumerableAsync ()).FirstOrDefault ();
+			if(existing != null){
+				//update is not firing, do NOT know why, but we'll do this in the meantime
+				//await table.UpdateAsync (storageItem);
+				await table.DeleteAsync (existing);
+			} 
+			await table.InsertAsync (storageItem);
 
 			return true;
 		}
@@ -423,11 +444,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				_logger.Debug ("Rehydrating item of type " + type + " and id " + ai.EntityID);
 				var dto = ai.ToRestaurantDTO ();
 				if(dto == null){
-					_logger.Error ("Error turning item " + ai.EntityID + " to RestaurantDTO!");
+					throw new Exception ("Error turning item " + ai.EntityID + " to RestaurantDTO!");
 				} else {
 					var real = _entityDTOFactory.FromDataStorageObject<T> (dto);
 					if(real == null){
-						_logger.Error ("Error rehydrating item ID " + dto.ID);
+						throw new Exception ("Error rehydrating item ID " + dto.ID);
 					} else {
 						realItems.Add (real);
 					}

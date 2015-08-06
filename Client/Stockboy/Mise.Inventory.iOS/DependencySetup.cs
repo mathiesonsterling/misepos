@@ -27,7 +27,7 @@ namespace Mise.Inventory.iOS
 					"vvECpsmISLzAxntFjNgSxiZEPmQLLG42"
 				);
 				CurrentPlatform.Init ();
-				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, GetBuildLevel ());
+				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService);
 
 				RegisterWebService (cb, webService);
 			} 

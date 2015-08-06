@@ -63,7 +63,7 @@ namespace Mise.Core.Client.Repositories
             if (restaurantID.HasValue)
             {
                 var rest = await _webService.GetRestaurant(restaurantID.Value);
-                return new[] {rest};
+				return rest != null ? new List<Restaurant> {rest} : new List<Restaurant>();
             }
 
             var location = await _locationService.GetDeviceLocation();
