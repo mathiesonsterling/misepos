@@ -62,7 +62,7 @@ namespace Mise.Inventory
 			#endif
 		}
 
-		protected static Uri GetWebServiceLocation(){
+		protected static AzureServiceLocation GetWebServiceLocation(){
 			var level = GetBuildLevel ();
 
 			return AzureServiceLocator.GetAzureMobileServiceLocation (level);
