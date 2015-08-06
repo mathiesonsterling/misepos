@@ -12,7 +12,6 @@ using Mise.Core.Server.Services.Implementation;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
-using Mise.Neo4J.Neo4JDAL;
 
 namespace DeveloperTools
 {
@@ -26,11 +25,6 @@ namespace DeveloperTools
         {
             InitializeComponent();
 
-            txtDBURL.Text =
-                "http://misetest:LeJwvOHjFnS7vgd7BLzX@misetest.sb02.stations.graphenedb.com:24789/db/data/";
-
-            // txtDBURL.Text = "http://localhost:7474/db/data/";
-
             _logger = new DataToolsLogger();
         }
 
@@ -40,91 +34,6 @@ namespace DeveloperTools
             DBChoices.LoadComboBox(CmbVendorDestDB);
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void BtnCreateDB_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var service = new FakeDomineesRestaurantServiceClient();
-
-                Uri dbLoc;
-                if (Uri.TryCreate(txtDBURL.Text, UriKind.RelativeOrAbsolute, out dbLoc) == false)
-                {
-                    return;
-                }
-                var menu = await service.GetMenusAsync();
-                var restaurant = service.RegisterClientAsync("").Result.Item1;
-                var account = new RestaurantAccount
-                {
-                    ID = restaurant.AccountID.HasValue ? restaurant.AccountID.Value : Guid.Empty,
-                    CreatedDate = DateTime.UtcNow.AddMonths(-2),
-                    Emails = new List<EmailAddress> { new EmailAddress { Value = "mathieson@misepos.com" } },
-                    Status = MiseAccountStatus.Active,
-                    LastUpdatedDate = DateTime.UtcNow,
-                    PhoneNumber = new PhoneNumber { AreaCode = "718", Number = "7152945" },
-                    ReferralCodeForAccountToGiveOut = new ReferralCode("mattyboi"),
-                    Revision = new EventID { AppInstanceCode = MiseAppTypes.DummyData, OrderingID = 15 }
-                };
-
-                var config = new DevToolsConfigs
-                {
-                    Neo4JConnectionDBUri = dbLoc
-                };
-                var graphDAL = new Neo4JEntityDAL(config, new DummyLogger());
-
-                graphDAL.ResetDatabase();
-
-                await PopulateInventoryNeo4JDatabaseCommand.PopulateStates(graphDAL);
-
-                await graphDAL.AddAccountAsync(account as IAccount);
-
-                await graphDAL.AddRestaurantAsync(restaurant);
-                foreach (var emp in service.GetEmployees())
-                {
-                    await graphDAL.AddEmployeeAsync(emp);
-                }
-
-                var fMenu = menu.FirstOrDefault();
-                await graphDAL.AddMenuAsync(fMenu);
-
-
-                _logger.Log("GraphDatabase Created", LogLevel.Info);
-                await graphDAL.GetEmployeesAsync(restaurant.ID);
-
-                //get the account
-                await graphDAL.GetAccountsAsync();
-
-                _logger.Log("Graph database verified!", LogLevel.Info);
-            }
-            catch (Exception ex)
-            {
-                _logger.HandleException(ex);
-            }
-        }
-
-
-        private async void BtnGetRestaurant_Click(object sender, RoutedEventArgs e)
-        {
-            Uri dbLoc;
-            if (Uri.TryCreate(txtDBURL.Text, UriKind.RelativeOrAbsolute, out dbLoc) == false)
-            {
-                return;
-            }
-
-            var config = new DevToolsConfigs
-            {
-                Neo4JConnectionDBUri = dbLoc
-            };
-
-            var graphDAL = new Neo4JEntityDAL(config, new DummyLogger());
-
-            await graphDAL.GetRestaurantAsync(Guid.Parse("5567f4a5-d163-4f44-8d88-b4598339dcb7"));
-
-        }
 
         private async void BtnCreateInvDB_Click(object sender, RoutedEventArgs e)
         {

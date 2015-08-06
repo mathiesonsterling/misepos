@@ -22,6 +22,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -193,6 +194,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AzureEntityStorageController.cs" />
     <Compile Include="Controllers\AzureEventStorageController.cs" />
+    <Compile Include="Controllers\InventoryMonitorController.cs" />
     <Compile Include="DataObjects\AzureEntityStorage.cs" />
     <Compile Include="DataObjects\AzureEventStorage.cs" />
     <Compile Include="Models\stockboymobileserviceContext.cs" />
@@ -218,6 +220,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\mobile-stockboymobileservice.pubxml" />
+    <None Include="Properties\PublishProfiles\stockboymobileservicestaging - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\stockboymobileservicestaging - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Mise.Core.Common\Mise.Core.Common.csproj">

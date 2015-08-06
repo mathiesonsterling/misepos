@@ -65,24 +65,6 @@
                     <Button x:Name="BtnGenJson" Content="Generate JSON from demo restauarant" HorizontalAlignment="Left" Margin="36,24,0,0" VerticalAlignment="Top" Width="263" Height="41"/>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="GraphDB">
-                <Grid Margin="0,0,-256,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="11*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="946*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100"></RowDefinition>
-                        <RowDefinition Height="100"></RowDefinition>
-                        <RowDefinition Height="100"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Label Grid.ColumnSpan="3">Neo4J Database location:</Label>
-                    <TextBox x:Name="txtDBURL" HorizontalAlignment="Left" Height="23" Margin="15,69,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="663" Grid.Column="2"/>
-                    <Button x:Name="BtnCreateDB" Content="Populate Graph DB" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="173" Height="41" Grid.Row="1" Click="BtnCreateDB_Click" Grid.Column="2"/>
-                    <Button x:Name="BtnGetRestaurant" Content="Get Restaurant" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="173" Height="41" Grid.Row="2" Click="BtnGetRestaurant_Click" Grid.Column="2"/>
-                </Grid>
-            </TabItem>
         </TabControl>
         <ProgressBar x:Name="PgBar" Minimum="0" Maximum="100" Value="0" Height="20"/>
         <Label x:Name="LblStatus" Height="30">Status</Label>
