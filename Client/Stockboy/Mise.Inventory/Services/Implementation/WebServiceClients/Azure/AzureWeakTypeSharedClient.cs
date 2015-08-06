@@ -212,7 +212,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		    var table = GetEntityTable();
 
 			var vendType = typeof(Vendor);
-			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToEnumerableAsync ();
+			//TODO - when we put this back into main, make it enum, not collection
+			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToCollectionAsync ();
 
 			//todo figure out a better way to do this on the server
 			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
@@ -241,8 +242,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			//todo figure out a better way to do this on the server
 			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
 				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto));
+			var filtered = vendors.Where(v => v.GetRestaurantIDsAssociatedWithVendor ().Contains (restaurantID)).ToList();
 
-			return vendors.Where(v => v.GetRestaurantIDsAssociatedWithVendor ().Contains (restaurantID));
+			return filtered;
 		}
 
 		#endregion
@@ -377,21 +379,20 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private async Task<bool> SendEventDTOs(ICollection<EventDataTransportObject> dtos){
 	
 			var table = GetEventTable ();
-			var existingIDs = await table.Select (ai => ai.EventID).ToCollectionAsync ();
+
+			var dtoIDs = dtos.Select (dto => dto.ID).ToList();
+			var existingEvents = await table.Where(ev => dtoIDs.Contains (ev.EventID)).ToEnumerableAsync ();
 
 			//get those that exist and those that don't
-			var news = dtos.Where (dto => existingIDs.Contains (dto.ID) == false);
-			var createTasks = news
+			var createTasks = dtos
 				.Select(dto => new AzureEventStorage (dto))
 				.Select (si => table.InsertAsync (si));
 
-			var existing = dtos.Where (dto => existingIDs.Contains (dto.ID));
-			var updateTasks = existing.Select (dto => new AzureEventStorage (dto))
-				.Select (si => table.UpdateAsync (si));
+			var delTasks = existingEvents.Select (ev => table.DeleteAsync (ev));
 			
 			try{
+				await Task.WhenAll (delTasks);
 				await Task.WhenAll (createTasks);
-				await Task.WhenAll (updateTasks);
 				return true;
 			} catch(Exception e){
 				_logger.HandleException (e);
