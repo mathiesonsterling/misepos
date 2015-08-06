@@ -95,7 +95,6 @@
     </Compile>
     <Compile Include="Commands\BaseProgressReportingCommand.cs" />
     <Compile Include="Commands\ImportVendorPriceListCommand.cs" />
-    <Compile Include="Commands\PopulateInventoryDatabaseCommand.cs" />
     <Compile Include="Commands\PopulateInventorySQLServerDBCommand.cs" />
     <Compile Include="Commands\ProgressReport.cs" />
     <Compile Include="DataToolsLogger.cs" />
@@ -147,10 +146,6 @@
     <ProjectReference Include="..\Mise.Core\Mise.Core.csproj">
       <Project>{085e418a-7cc9-4ab6-b38a-fc6cabe373d6}</Project>
       <Name>Mise.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Server\Databases\Mise.Database.Neo4J\Mise.Database.Neo4J.csproj">
-      <Project>{80851891-179e-408a-a3cb-08143a0a4f4c}</Project>
-      <Name>Mise.Database.Neo4J</Name>
     </ProjectReference>
     <ProjectReference Include="..\Server\Mise.VendorManagement\Mise.VendorManagement.csproj">
       <Project>{e9c01193-a119-4ab7-bcc8-54531759a971}</Project>
