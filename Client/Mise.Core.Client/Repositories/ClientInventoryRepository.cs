@@ -45,7 +45,6 @@ namespace Mise.Core.Client.Repositories
         {
             if (restaurantID.HasValue)
             {
-
                 return _inventoryWebService.GetInventoriesForRestaurant(restaurantID.Value);
             }
             return Task.FromResult(new List<Inventory>().AsEnumerable());

@@ -79,7 +79,7 @@ namespace Mise.Core.Client.Repositories
             var needsDBLoad = false;
             try
             {
-                var items = (await LoadFromWebservice(restaurantID)).ToList();
+				var items = (await LoadFromWebservice(restaurantID)).ToList();
                 Cache.UpdateCache(items);
 
                 //update our database with these

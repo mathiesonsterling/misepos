@@ -415,12 +415,24 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 	        var table = GetEntityTable();
 
 			var storageItems = await table
-				.Where (si => si.MiseEntityType == type && si.RestaurantID.HasValue && si.RestaurantID == restaurantID)
+				.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID)
 				.ToEnumerableAsync ();
 
-			var realItems = storageItems
-				.Select(si => si.ToRestaurantDTO ())
-				.Select (dto => _entityDTOFactory.FromDataStorageObject<T> (dto));
+			var realItems = new List<T> ();
+			foreach(var ai in storageItems){
+				_logger.Debug ("Rehydrating item of type " + type + " and id " + ai.EntityID);
+				var dto = ai.ToRestaurantDTO ();
+				if(dto == null){
+					_logger.Error ("Error turning item " + ai.EntityID + " to RestaurantDTO!");
+				} else {
+					var real = _entityDTOFactory.FromDataStorageObject<T> (dto);
+					if(real == null){
+						_logger.Error ("Error rehydrating item ID " + dto.ID);
+					} else {
+						realItems.Add (real);
+					}
+				}
+			}
 			return realItems;
 		}
 	}
