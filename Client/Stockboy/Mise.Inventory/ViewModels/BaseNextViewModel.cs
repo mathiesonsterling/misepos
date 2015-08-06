@@ -43,12 +43,12 @@ namespace Mise.Inventory.ViewModels
         {
             Processing = true;
             Items = await LoadItems();
-            if (Items.Any() == false)
+            if (Items.Any())
             {
-                Processing = false;
-                throw new Exception("No items found for this screen");
-            }
-			SetCurrent (Items.First ());
+				if (CurrentItem == null) {
+					SetCurrent (Items.First ());
+				}
+			} 
             Processing = false;
         }
 

@@ -134,7 +134,9 @@ namespace Mise.Inventory.ViewModels
 
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){
 			var items = (await _inventoryService.GetLineItemsForCurrentSection ()).ToList();
-            var itemsList = items.OrderBy(li => li.InventoryPosition).Select(li => new InventoryLineItemDisplayLine(li)).ToList();
+            var itemsList = items.OrderBy(li => li.InventoryPosition)
+				.ThenBy (li => li.DisplayName)
+				.Select(li => new InventoryLineItemDisplayLine(li)).ToList();
             //find the first unmeasured
 		    FirstUnmeasuredItem = itemsList.FirstOrDefault(li => li.Source.HasBeenMeasured == false);
 

@@ -27,7 +27,7 @@ namespace Mise.Inventory.Services.Implementation
 	    private IInventory _selectedInventory;
 	    private IInventory _lastCompletedInventory;
 		private IInventory _firstCompletedInventory;
-	    private IInventorySection _selectedInventorySection;
+	    private Guid _selectedInventorySectionID;
 
 		public InventoryService (ILogger logger, ILoginService loginService, 
 			IInventoryRepository inventoryRespository, IInventoryAppEventFactory eventFactory, IInsightsService insightsService)
@@ -83,9 +83,9 @@ namespace Mise.Inventory.Services.Implementation
 				throw new InvalidOperationException ("No current inventory to get line items for!");
 			}
 
-		    var invSection = _selectedInventorySection;
+			var invSection = inv.GetSections ().FirstOrDefault (sec => sec.ID == _selectedInventorySectionID);
 			if (invSection != null) {
-				return invSection.GetInventoryBeverageLineItemsInSection ().OrderBy (li => li.InventoryPosition);
+				return invSection.GetInventoryBeverageLineItemsInSection ();
 			}
 
 		    throw new InvalidOperationException ("No current inventory section!");
@@ -178,15 +178,13 @@ namespace Mise.Inventory.Services.Implementation
 
 
 			var categories = new []{ category as ItemCategory };
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, pricePaid, null, _selectedInventorySection, 
-				_selectedInventorySection.GetNextItemPosition(), _selectedInventory);
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, pricePaid, null, GetSelectedSection (), 
+				GetSelectedSection ().GetNextItemPosition(), _selectedInventory);
 		
 			_selectedInventory = _inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();
 
-			return _selectedInventory.GetBeverageLineItems ().FirstOrDefault (li => 
-				BeverageLineItemEquator.IsItem (li, name, upc)
-			);
+			return _selectedInventory.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
 		}
 
 		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity, Money pricePaid)
@@ -196,18 +194,17 @@ namespace Mise.Inventory.Services.Implementation
 			}
 			var emp = await _loginService.GetCurrentEmployee ();
 
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, _selectedInventorySection, _selectedInventorySection.GetNextItemPosition(), _selectedInventory);
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, GetSelectedSection (), GetSelectedSection ().GetNextItemPosition(), _selectedInventory);
 		
 			_selectedInventory = _inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();
 
-			return _selectedInventory.GetBeverageLineItems ()
-				.FirstOrDefault (li => BeverageLineItemEquator.AreSameBeverageLineItem (source, li));
+			return _selectedInventory.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
 		}
 
 	    public Task SetCurrentInventorySection(IInventorySection section)
 	    {
-	        _selectedInventorySection = section;
+	        _selectedInventorySectionID = section.ID;
 	        return Task.FromResult(true);
 	    }
 
@@ -215,7 +212,7 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 
-			var compEv = _eventFactory.CreateInventorySectionCompletedEvent (emp, _selectedInventory, _selectedInventorySection);
+			var compEv = _eventFactory.CreateInventorySectionCompletedEvent (emp, _selectedInventory, GetSelectedSection ());
 
 			_selectedInventory = _inventoryRepository.ApplyEvent (compEv);
 
@@ -281,7 +278,7 @@ namespace Mise.Inventory.Services.Implementation
 			var realLI = _selectedLineItem as InventoryBeverageLineItem;
 
 			//make an event
-			var ev = _eventFactory.CreateInventoryLiquidItemMeasuredEvent(emp, _selectedInventory, _selectedInventorySection, realLI, fullBottles, partials, totalAmt);
+			var ev = _eventFactory.CreateInventoryLiquidItemMeasuredEvent(emp, _selectedInventory, GetSelectedSection (), realLI, fullBottles, partials, totalAmt);
 
 			_selectedInventory = _inventoryRepository.ApplyEvent (ev);
 
@@ -292,7 +289,7 @@ namespace Mise.Inventory.Services.Implementation
 
 	    public Task<IInventorySection> GetCurrentInventorySection()
 	    {
-	        return Task.FromResult(_selectedInventorySection);
+	        return Task.FromResult(GetSelectedSection ());
 	    }
 
 	    public async Task AddNewSection (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
@@ -386,6 +383,15 @@ namespace Mise.Inventory.Services.Implementation
 	            }
 	        }
 	    }
+
+		private IInventorySection GetSelectedSection(){
+			//always get off the inventory, to ensure we're getting the latest!
+			if(_selectedInventory  == null){
+				return null;
+			}
+
+			return _selectedInventory.GetSections ().FirstOrDefault (sec => sec.ID == _selectedInventorySectionID);
+		}
 	}
 }
 

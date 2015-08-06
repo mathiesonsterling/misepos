@@ -106,7 +106,9 @@ namespace Mise.Inventory.ViewModels
 	    protected override async Task<IList<IInventoryBeverageLineItem>> LoadItems()
 	    {
             return (await _inventoryService.GetLineItemsForCurrentSection())
-                .OrderBy(li => li.InventoryPosition).ToList();
+                .OrderBy(li => li.InventoryPosition)
+				.ThenBy (li => li.DisplayName)
+				.ToList();
 	    }
 
 	    #region Commands
