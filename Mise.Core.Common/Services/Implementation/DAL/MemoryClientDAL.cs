@@ -146,7 +146,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 
 		public bool StoreEvents(IEnumerable<IEntityEventBase> events)
 		{
-            throw new NotImplementedException();
+			return true;
 		}
 
 		public Task<bool> StoreEventsAsync(IEnumerable<IEntityEventBase> events)

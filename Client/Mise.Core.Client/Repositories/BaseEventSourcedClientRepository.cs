@@ -180,13 +180,6 @@ namespace Mise.Core.Client.Repositories
 
         public override async Task<CommitResult> Commit(Guid entityID)
         {
-			Task startResend = null;
-			try{
-            	startResend = CheckAndSendResends();
-			} catch(Exception e){
-				Logger.HandleException (e, LogLevel.Error);
-			}
-
             if (UnderTransaction.ContainsKey(entityID) == false)
             {
                 var msg = "Error - recieved message to commit entity " + entityID + " but no transaction exists for that";
@@ -253,46 +246,9 @@ namespace Mise.Core.Client.Repositories
 
             Dirty = false;
 
-			if (startResend != null) {
-				try{
-					await startResend;
-				} catch(Exception e){
-					Logger.HandleException (e);
-				}
-			}
-
             return commitRes;
         }
-
-        public const int RESEND_CHUNK_SIZE = 10;
-        private async Task CheckAndSendResends()
-        {
-            var toResend = (await DAL.GetUnsentEvents()).ToList();
-
-			var allResends = toResend.Where (ev => ev != null);
-
-			//order these by their priority, so the first chunk gets the creations
-			var ordered = OrderEvents (allResends);
-            var chunks = ordered.Chunk(RESEND_CHUNK_SIZE);
-			foreach (var chunk in chunks) {
-				if (chunk != null && chunk.Any (ev => ev != null)) {
-					bool sent;
-					try {
-						var castItems = chunk.Cast<IEntityEventBase> ().ToList ();
-						sent = await _resendEventsWebService.ResendEvents (castItems);
-					} catch (Exception e) {
-						sent = false;
-						Logger.HandleException (e);
-					}
-
-					if (sent == false) {
-						await DAL.ReAddFailedSendEvents (chunk);
-					} else {
-						await DAL.MarkEventsAsSent (chunk);
-					}
-				}
-			}
-        }
+			
 
         /// <summary>
         /// If true, we have events we stored in the DB that we need to send again
