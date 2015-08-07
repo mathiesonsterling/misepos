@@ -21,7 +21,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				
 			switch(level){
 			case BuildLevel.Debugging:
-				return new AzureServiceLocation("http://localhost:43499", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
+				return new AzureServiceLocation("http://localhost:50778", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
 				break;
 			case BuildLevel.Development:
 			case BuildLevel.QA:
