@@ -13,12 +13,12 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Moq;
 using NUnit.Framework;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.UnitTests.Repositories
 {
@@ -33,7 +33,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
             var inventoryEventsPassed = new List<IInventoryEvent>();
             var service = new Mock<IInventoryWebService> ();
-			service.Setup(s => s.SendEventsAsync(It.IsAny<IInventory> (), It.IsAny<IEnumerable<IInventoryEvent>>()))
+			service.Setup(s => s.SendEventsAsync(It.IsAny<Inventory> (), It.IsAny<IEnumerable<IInventoryEvent>>()))
                 .Callback<IInventory, IEnumerable<IInventoryEvent>>((inv, events) => inventoryEventsPassed.AddRange(events))
                 .Returns(Task.FromResult(true));
 
@@ -93,7 +93,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
             var inventoryEventsPassed = new List<IInventoryEvent>();
             var service = new Mock<IInventoryWebService>();
-			service.Setup(s => s.SendEventsAsync(It.IsAny<IInventory> (), It.IsAny<IEnumerable<IInventoryEvent>>()))
+			service.Setup(s => s.SendEventsAsync(It.IsAny<Inventory> (), It.IsAny<IEnumerable<IInventoryEvent>>()))
                 .Callback<IInventory, IEnumerable<IInventoryEvent>>((inv, events)=>inventoryEventsPassed.AddRange(events))
                 .Returns(Task.FromResult(true));
 
@@ -160,7 +160,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
             var underTest = new ClientInventoryRepository(logger.Object, dal, webService.Object, resendService.Object);
 
             var compDate = DateTimeOffset.UtcNow;
-            var invs = new List<IInventory>
+            var invs = new List<Inventory>
             {
                 new Inventory
                 {

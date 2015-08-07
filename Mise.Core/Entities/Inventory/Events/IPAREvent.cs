@@ -7,7 +7,7 @@ using Mise.Core.Entities.Base;
 
 namespace Mise.Core.Entities.Inventory.Events
 {
-    public interface IPAREvent : IEntityEventBase
+    public interface IParEvent : IEntityEventBase
     {
         Guid ParID { get; }
     }

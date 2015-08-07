@@ -10,6 +10,7 @@ using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
@@ -18,7 +19,6 @@ using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
@@ -282,7 +282,7 @@ namespace Mise.Inventory.UnitTests.Services
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
                     Task.FromResult(
-                        new List<IReceivingOrder>
+                        new List<ReceivingOrder>
                         {
                             new ReceivingOrder
                             {
@@ -351,7 +351,7 @@ namespace Mise.Inventory.UnitTests.Services
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
                     Task.FromResult(
-                        new List<IReceivingOrder>().AsEnumerable()
+                        new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
             var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
@@ -412,7 +412,7 @@ namespace Mise.Inventory.UnitTests.Services
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
                     Task.FromResult(
-                        new List<IReceivingOrder>().AsEnumerable()
+                        new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
             var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);

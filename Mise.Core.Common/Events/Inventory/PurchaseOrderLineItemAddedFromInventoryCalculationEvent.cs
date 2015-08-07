@@ -24,7 +24,7 @@ namespace Mise.Core.Common.Events.Inventory
 		/// The PAR item we're filling for
 		/// </summary>
 		/// <value>The PAR line item.</value>
-		public PARBeverageLineItem PARLineItem{get;set;}
+		public ParBeverageLineItem PARLineItem{get;set;}
 		public int? NumBottlesNeeded{get;set;}
 		public LiquidAmount AmountNeeded{ get; set; }
 

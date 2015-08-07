@@ -6,19 +6,20 @@ using Mise.Core.Client.Services;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Events.Restaurant;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
+using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Repositories
 {
     /// <summary>
     /// Implementation of the restaurant repository for the client.  Only stores and retrieves here!
     /// </summary>
-	public class ClientRestaurantRepository : BaseEventSourcedClientRepository<IRestaurant, IRestaurantEvent>, 
+	public class ClientRestaurantRepository : BaseEventSourcedClientRepository<IRestaurant, IRestaurantEvent, Restaurant>, 
 		IRestaurantRepository
 	{
 		readonly IInventoryRestaurantWebService _webService;
@@ -57,20 +58,20 @@ namespace Mise.Core.Client.Repositories
             return ev.RestaurantID;
         }
 
-        protected override async Task<IEnumerable<IRestaurant>> LoadFromWebservice(Guid? restaurantID)
+        protected override async Task<IEnumerable<Restaurant>> LoadFromWebservice(Guid? restaurantID)
         {
             if (restaurantID.HasValue)
             {
                 var rest = await _webService.GetRestaurant(restaurantID.Value);
-                return new[] {rest};
+				return rest != null ? new List<Restaurant> {rest} : new List<Restaurant>();
             }
 
             var location = await _locationService.GetDeviceLocation();
-            var items = await _webService.GetRestaurants(location);
+			var items = await _webService.GetRestaurants(location, new Distance{Kilometers = 100});
             return items;
         }
 
-        protected override async Task<IEnumerable<IRestaurant>> LoadFromDB(Guid? restaurantID)
+        protected override async Task<IEnumerable<Restaurant>> LoadFromDB(Guid? restaurantID)
         {
             var items = await DAL.GetEntitiesAsync<Restaurant>();
             if (restaurantID.HasValue)

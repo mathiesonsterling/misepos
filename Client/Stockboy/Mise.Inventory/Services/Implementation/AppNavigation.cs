@@ -441,6 +441,8 @@ namespace Mise.Inventory.Services.Implementation
 				if(findPage != null){
 					_navi.RemovePage (findPage);
 				}
+
+				//we might need to alert the caling page we're coming back now
 				await _navi.PopAsync ();
 				/*
 				//can we go to measurement here?

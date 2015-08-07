@@ -18,7 +18,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Services;
 using Mise.Core.Common.Services;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities;
 
@@ -51,12 +51,12 @@ namespace Mise.Inventory.UnitTests.Services
                 AmountContained = new LiquidAmount { Milliliters = 100 },
                 DisplayName = "testCont"
             };
-            var par = new PAR
+            var par = new Par
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
-                ParLineItems = new List<PARBeverageLineItem>{
-					new PARBeverageLineItem{
+                ParLineItems = new List<ParBeverageLineItem>{
+					new ParBeverageLineItem{
 						ID = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
@@ -65,7 +65,7 @@ namespace Mise.Inventory.UnitTests.Services
 						DisplayName = "testPARItem",
 						Quantity = 12
 					},
-					new PARBeverageLineItem{
+					new ParBeverageLineItem{
 						RestaurantID = restID,
 						Container = container,
 						MiseName="itemOnlyInPar",
@@ -75,7 +75,7 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var parService = new Mock<IPARService>();
             parService.Setup(ps => ps.GetCurrentPAR())
-                .Returns(Task.FromResult(par as IPAR));
+                .Returns(Task.FromResult(par as IPar));
 
             var inventoryService = new Mock<IInventoryService>();
             IInventory inv = null;
@@ -130,12 +130,12 @@ namespace Mise.Inventory.UnitTests.Services
                 AmountContained = new LiquidAmount { Milliliters = 100 },
                 DisplayName = "testCont"
             };
-            var par = new PAR
+            var par = new Par
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
-                ParLineItems = new List<PARBeverageLineItem>{
-					new PARBeverageLineItem{
+                ParLineItems = new List<ParBeverageLineItem>{
+					new ParBeverageLineItem{
 						ID = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
@@ -144,13 +144,13 @@ namespace Mise.Inventory.UnitTests.Services
 						DisplayName = "testPARItem",
 						Quantity = 12
 					},
-					new PARBeverageLineItem{
+					new ParBeverageLineItem{
 						RestaurantID = restID,
 						Container = container,
 						MiseName="itemOnlyInPar",
 						Quantity = 981
 					},
-					new PARBeverageLineItem{
+					new ParBeverageLineItem{
 						RestaurantID = restID,
 						Container = container,
 						MiseName = "fullyStocked",
@@ -160,7 +160,7 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var parService = new Mock<IPARService>();
             parService.Setup(ps => ps.GetCurrentPAR())
-                .Returns(Task.FromResult(par as IPAR));
+                .Returns(Task.FromResult(par as IPar));
 
             var inventoryService = new Mock<IInventoryService>();
             IInventory inv = new Mise.Core.Common.Entities.Inventory.Inventory
@@ -264,12 +264,12 @@ namespace Mise.Inventory.UnitTests.Services
                 AmountContained = new LiquidAmount { Milliliters = 100 },
                 DisplayName = "testCont"
             };
-            var par = new PAR
+            var par = new Par
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
-                ParLineItems = new List<PARBeverageLineItem>{
-					new PARBeverageLineItem{
+                ParLineItems = new List<ParBeverageLineItem>{
+					new ParBeverageLineItem{
 						ID = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
@@ -282,7 +282,7 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var parService = new Mock<IPARService>();
             parService.Setup(ps => ps.GetCurrentPAR())
-                .Returns(Task.FromResult(par as IPAR));
+                .Returns(Task.FromResult(par as IPar));
 
             var inventoryService = new Mock<IInventoryService>();
             IInventory inv = new Core.Common.Entities.Inventory.Inventory
@@ -387,12 +387,12 @@ namespace Mise.Inventory.UnitTests.Services
                 AmountContained = new LiquidAmount { Milliliters = 100 },
                 DisplayName = "testCont"
             };
-            var par = new PAR
+            var par = new Par
             {
                 ID = Guid.NewGuid(),
                 RestaurantID = rest.ID,
-                ParLineItems = new List<PARBeverageLineItem>{
-					new PARBeverageLineItem{
+                ParLineItems = new List<ParBeverageLineItem>{
+					new ParBeverageLineItem{
 						ID = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
@@ -405,7 +405,7 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var parService = new Mock<IPARService>();
             parService.Setup(ps => ps.GetCurrentPAR())
-                .Returns(Task.FromResult(par as IPAR));
+                .Returns(Task.FromResult(par as IPar));
 
             var inventoryService = new Mock<IInventoryService>();
             IInventory inv = new Core.Common.Entities.Inventory.Inventory

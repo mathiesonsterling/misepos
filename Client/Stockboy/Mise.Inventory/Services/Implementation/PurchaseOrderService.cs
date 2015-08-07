@@ -95,7 +95,7 @@ namespace Mise.Inventory.Services.Implementation
 
 					var numBottles = (int)Math.Ceiling (diff);
 					//make an event
-					var realLI = parLI as PARBeverageLineItem;
+					var realLI = parLI as ParBeverageLineItem;
 					var addLIEvent = _eventFactory.CreatePOLineItemAddedFromInventoryCalcEvent (emp, _currentPO, realLI,
 						numBottles, null, vendor != null ? vendor.ID : (Guid?)null);
 

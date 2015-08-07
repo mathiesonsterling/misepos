@@ -143,6 +143,7 @@ namespace Mise.Core.Common.Entities
 	    {
 	        Name = ev.Name;
 	        ID = ev.RestaurantID;
+			RestaurantID = ev.RestaurantID;
 	        CreatedDate = ev.CreatedDate;
 	        StreetAddress = ev.StreetAddress;
 	        PhoneNumber = ev.PhoneNumber;

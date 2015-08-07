@@ -160,7 +160,7 @@ namespace Mise.Core.Common.Events
 		}			
 
 		public PARLineItemAddedEvent CreatePARLineItemAddedEvent (IEmployee emp, IBaseBeverageLineItem source, 
-			int? quantity, IPAR par)
+			int? quantity, IPar par)
 		{
 			return new PARLineItemAddedEvent {
 				CausedByID = emp.ID,
@@ -181,7 +181,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public PARLineItemAddedEvent CreatePARLineItemAddedEvent (IEmployee emp, string name, string upc, 
-			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, IPAR par)
+			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, IPar par)
 		{
 			return new PARLineItemAddedEvent {
 				CausedByID = emp.ID,
@@ -200,7 +200,7 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
-		public PARLineItemQuantityUpdatedEvent CreatePARLineItemQuantityUpdatedEvent (IEmployee emp, IPAR par, 
+		public PARLineItemQuantityUpdatedEvent CreatePARLineItemQuantityUpdatedEvent (IEmployee emp, IPar par, 
 			Guid lineItemID, decimal quantity)
 		{
 			return new PARLineItemQuantityUpdatedEvent {
@@ -478,7 +478,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public PurchaseOrderLineItemAddedFromInventoryCalculationEvent CreatePOLineItemAddedFromInventoryCalcEvent (IEmployee emp, IPurchaseOrder po, 
-			PARBeverageLineItem baseItem, int? numBottles, LiquidAmount amtDesired, Guid? vendorID)
+			ParBeverageLineItem baseItem, int? numBottles, LiquidAmount amtDesired, Guid? vendorID)
 		{
 			return new PurchaseOrderLineItemAddedFromInventoryCalculationEvent {
 				ID = Guid.NewGuid (),

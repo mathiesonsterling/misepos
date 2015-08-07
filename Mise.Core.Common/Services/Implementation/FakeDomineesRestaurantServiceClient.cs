@@ -11,9 +11,9 @@ using Mise.Core.Entities.People;
 using Mise.Core.Entities.People.Events;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Entities.MenuItems;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Payments;
 using Mise.Core.Entities.Check.Events;
 
@@ -21,8 +21,8 @@ namespace Mise.Core.Common.Services.Implementation
 {
 	public class FakeDomineesRestaurantServiceClient : IRestaurantTerminalService
     {
-        readonly IList<IEmployee> _employees;
-        readonly IList<ICheck> _tabs;
+        readonly IList<Employee> _employees;
+        readonly IList<RestaurantCheck> _tabs;
         readonly Guid _topCategoryID = Guid.NewGuid();
         /// <summary>
         /// Public to allow generation off it
@@ -33,11 +33,11 @@ namespace Mise.Core.Common.Services.Implementation
 		private static readonly Uri restServLoc = new Uri ("http://mise.com");
         private static readonly Guid AccountID = Guid.NewGuid();
 
-        public static List<IEmployee> CreateEmployees()
+        public static List<Employee> CreateEmployees()
         {
 			var restaurantList = new Dictionary<Guid, IList<MiseAppTypes>> ();
 			restaurantList.Add (RestaurantID, new List<MiseAppTypes>{ MiseAppTypes.DummyData });
-            return new List<IEmployee> {
+            return new List<Employee> {
 				new Employee {
 					ID = Guid.NewGuid (),
                     Name = new PersonName("Leo","Dominee"),
@@ -1478,7 +1478,7 @@ namespace Mise.Core.Common.Services.Implementation
 
 
             Menu.DefaultMiseItems = mostPopular;
-            _tabs = new List<ICheck>();
+            _tabs = new List<RestaurantCheck>();
 
             /*_tabs = new List<ICheck> {
                 new BarTab{
@@ -1510,7 +1510,7 @@ namespace Mise.Core.Common.Services.Implementation
 
         }
 
-        public Task<Tuple<IRestaurant, IMiseTerminalDevice>> RegisterClientAsync(string deviceName)
+        public Task<Tuple<Restaurant, IMiseTerminalDevice>> RegisterClientAsync(string deviceName)
         {
             var restaurant = new Restaurant
             {
@@ -1565,21 +1565,21 @@ namespace Mise.Core.Common.Services.Implementation
                 WaitForZToCloseCards = true,
             };
             restaurant.Terminals = new List<MiseTerminalDevice> { dev };
-			return Task.Factory.StartNew (() => new Tuple<IRestaurant, IMiseTerminalDevice>(restaurant, dev));
+			return Task.Factory.StartNew (() => new Tuple<Restaurant, IMiseTerminalDevice>(restaurant, dev));
         }
 
-        public IEnumerable<IEmployee> GetEmployees()
+        public IEnumerable<Employee> GetEmployees()
         {
             return _employees;
         }
 
-        public Task<IEnumerable<IEmployee>> GetEmployeesAsync()
+        public Task<IEnumerable<Employee>> GetEmployeesAsync()
         {
             return Task.FromResult(GetEmployees());
         }
 			
 
-        public Task<IEnumerable<ICheck>> GetChecksAsync()
+        public Task<IEnumerable<RestaurantCheck>> GetChecksAsync()
         {
 			return Task.FromResult(_tabs.AsEnumerable ());
         }
@@ -1594,7 +1594,7 @@ namespace Mise.Core.Common.Services.Implementation
 			return Task.FromResult (new []{GetCurrentMenu()}.AsEnumerable ());
         }
 
-		public Task<bool> SendEventsAsync(IEmployee emp, IEnumerable<IEmployeeEvent> empEvents)
+		public Task<bool> SendEventsAsync(Employee emp, IEnumerable<IEmployeeEvent> empEvents)
         {
             return Task.FromResult(SendEmployeeEvents(emp, empEvents));
         }
@@ -1611,36 +1611,36 @@ namespace Mise.Core.Common.Services.Implementation
         }
 
 
-		public Task<bool> SendEventsAsync(ICheck check, IEnumerable<ICheckEvent> events)
+		public Task<bool> SendEventsAsync(RestaurantCheck check, IEnumerable<ICheckEvent> events)
         {
 			return Task.FromResult (true);
         }
 
-        public Task<bool> SendEventsAsync(IRestaurant rest, IEnumerable<IRestaurantEvent> events)
+        public Task<bool> SendEventsAsync(Restaurant rest, IEnumerable<IRestaurantEvent> events)
         {
 			return Task.FromResult (true);
         }
-        public bool SendEmployeeEvents(IEmployee emp, IEnumerable<IEmployeeEvent> empEvents)
+        public bool SendEmployeeEvents(Employee emp, IEnumerable<IEmployeeEvent> empEvents)
         {
 			return true;
         }
 			
-		public Task<IEnumerable<IEmployee>> GetEmployeesForRestaurant (Guid restaurantID)
+		public Task<IEnumerable<Employee>> GetEmployeesForRestaurant (Guid restaurantID)
 		{
 			throw new NotImplementedException ();
 		}
-		public Task<IEmployee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
-		{
-			throw new NotImplementedException ();
-		}
-
-
-		public Task<IEnumerable<IRestaurant>> GetRestaurants (Location deviceLocation)
+		public Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public Task<IRestaurant> GetRestaurant (Guid restaurantID)
+
+		public Task<IEnumerable<Restaurant>> GetRestaurants (Location deviceLocation, Distance max)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public Task<Restaurant> GetRestaurant (Guid restaurantID)
 		{
 			throw new NotImplementedException ();
 		}

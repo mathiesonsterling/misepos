@@ -146,7 +146,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 
 		public bool StoreEvents(IEnumerable<IEntityEventBase> events)
 		{
-            throw new NotImplementedException();
+			return true;
 		}
 
 		public Task<bool> StoreEventsAsync(IEnumerable<IEntityEventBase> events)
@@ -155,7 +155,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 		}
 
 
-		private bool UpsertEntities(IEnumerable<IEntityBase> entities)
+		private bool UpsertEntities<T>(IEnumerable<T> entities) where T :class, IEntityBase, new()
 		{
 			var dbEnts = entities.Select(ent => new DatabaseEntityItem {
 				ID = ent.ID,
@@ -175,7 +175,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 			return true;
 		}
 
-		public Task<bool> UpsertEntitiesAsync(IEnumerable<IEntityBase> entities)
+		public Task<bool> UpsertEntitiesAsync<T>(IEnumerable<T> entities) where T:class, IEntityBase, new()
 		{
 			return Task.FromResult(UpsertEntities(entities));
 		}

@@ -81,15 +81,6 @@
     <Compile Include="Services\UtilityServices\IErrorTrackingService.cs" />
     <Compile Include="Services\UtilityServices\ILogger.cs" />
     <Compile Include="Services\UtilityServices\LogLevel.cs" />
-    <Compile Include="Services\WebServices\IAccountWebService.cs" />
-    <Compile Include="Services\WebServices\ICreditCardWebService.cs" />
-    <Compile Include="Services\WebServices\IEventStoreWebService.cs" />
-    <Compile Include="Services\WebServices\IInventoryRestaurantWebService.cs" />
-    <Compile Include="Services\WebServices\IInventoryWebService.cs" />
-    <Compile Include="Services\WebServices\IPARWebService.cs" />
-    <Compile Include="Services\WebServices\IReceivingOrderWebService.cs" />
-    <Compile Include="Services\WebServices\IResendEventsWebService.cs" />
-    <Compile Include="Services\WebServices\IVendorWebService.cs" />
     <Compile Include="ValueItems\Beacon.cs" />
     <Compile Include="ValueItems\CommitResult.cs" />
     <Compile Include="ValueItems\CreditCardProcessorToken.cs" />
@@ -132,7 +123,6 @@
     <Compile Include="Services\ICashDrawerService.cs" />
     <Compile Include="Services\UtilityServices\IJSONSerializer.cs" />
     <Compile Include="Services\UtilityServices\IPhotoService.cs" />
-    <Compile Include="Services\WebServices\IRestaurantTerminalService.cs" />
     <Compile Include="ValueItems\EventID.cs" />
     <Compile Include="ValueItems\Money.cs" />
     <Compile Include="Entities\People\Events\IEmployeeEvent.cs" />
@@ -176,12 +166,10 @@
     <Compile Include="Entities\Inventory\Events\IPurchaseOrderEvent.cs" />
     <Compile Include="Entities\Inventory\Events\IInventoryEvent.cs" />
     <Compile Include="ValueItems\Password.cs" />
-    <Compile Include="Services\WebServices\IInventoryEmployeeWebService.cs" />
     <Compile Include="Entities\Vendors\IVendorShippingCost.cs" />
     <Compile Include="Entities\IMobileDevice.cs" />
     <Compile Include="ValueItems\MobileDeviceTypes.cs" />
     <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Services\WebServices\IPurchaseOrderWebService.cs" />
     <Compile Include="ITextSearchable.cs" />
     <Compile Include="ITaggable.cs" />
     <Compile Include="ValueItems\Tag.cs" />
@@ -191,15 +179,10 @@
     <Compile Include="Entities\MiseAppTypes.cs" />
     <Compile Include="Entities\People\IApplicationInvitation.cs" />
     <Compile Include="Repositories\IApplicationInvitationRepository.cs" />
-    <Compile Include="Services\WebServices\IApplicationInvitationWebService.cs" />
     <Compile Include="Entities\Inventory\ICategory.cs" />
     <Compile Include="Services\ICategoriesService.cs" />
     <Compile Include="Services\UtilityServices\Cryptography.cs" />
     <Compile Include="ValueItems\CreditCardNumber.cs" />
-    <Compile Include="Services\WebServices\IInventoryApplicationWebService.cs" />
-    <Compile Include="Services\WebServices\SendErrors.cs" />
-    <Compile Include="Services\WebServices\SendEventsException.cs" />
-    <Compile Include="Services\WebServices\ServerNotReadyException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

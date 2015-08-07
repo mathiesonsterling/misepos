@@ -10,9 +10,9 @@ using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services.Implementation;
+using Mise.Inventory.Services.Implementation.WebServiceClients;
 using Moq;
 using NUnit.Framework;
 
@@ -20,6 +20,7 @@ using Mise.Core.Services;
 using Mise.Core.Entities.People.Events;
 using Mise.Core.Common.Events.Employee;
 using Mise.Core.Common.Services.Implementation.Serialization;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities;
 
@@ -31,6 +32,7 @@ namespace Mise.Inventory.UnitTests.Services
     [TestFixture]
     public class HttpWebServiceClientIntegrationTests
     {
+        /*
         readonly Guid _testRestaurantID = Guid.Empty;
 
         const string TEST_SERVER_URL = "http://miseinventoryservicedev.azurewebsites.net/";
@@ -607,6 +609,7 @@ namespace Mise.Inventory.UnitTests.Services
         }
 
         #endregion
+    }*/
     }
 }
 

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Autofac;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Base;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.ViewModels.Reports;
 using Xamarin.Forms;
@@ -207,7 +207,7 @@ namespace Mise.Inventory
                 var loader = new RepositoryLoader(_container.Resolve<IEmployeeRepository>(),
                     _container.Resolve<IApplicationInvitationRepository>(), _container.Resolve<IVendorRepository>(),
                     _container.Resolve<IInventoryAppEventFactory>(), _container.Resolve<IRestaurantRepository>(),
-                    _container.Resolve<IPARRepository>(), _container.Resolve<IInventoryRepository>(),
+                    _container.Resolve<IParRepository>(), _container.Resolve<IInventoryRepository>(),
                     _container.Resolve<IReceivingOrderRepository>(), _container.Resolve<IPurchaseOrderRepository>());
                 await loader.LoadRepositories(RestaurantID);
             }

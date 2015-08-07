@@ -8,18 +8,18 @@ using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Events.Vendors;
 using Mise.Core.Common.Repositories.Base;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientVendorRepository : BaseEventSourcedClientRepository<IVendor, IVendorEvent>, IVendorRepository
+    public class ClientVendorRepository : BaseEventSourcedClientRepository<IVendor, IVendorEvent, Vendor>, IVendorRepository
     {
         private readonly IVendorWebService _vendorWebService;
         private static readonly Distance DefaultSearchRadius = new Distance{Kilometers = 80.46};
@@ -54,7 +54,7 @@ namespace Mise.Core.Client.Repositories
 
         private const int MAX_RADIUS_RESULTS = 10;
 
-        protected override async Task<IEnumerable<IVendor>> LoadFromWebservice(Guid? restaurantID)
+        protected override async Task<IEnumerable<Vendor>> LoadFromWebservice(Guid? restaurantID)
         {
             if (restaurantID.HasValue)
             {
@@ -62,11 +62,12 @@ namespace Mise.Core.Client.Repositories
             }
 
             var loc = await _deviceLocationService.GetDeviceLocation();
-            return await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
+            var items = await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
+            return items.Cast<Vendor>();
         }
 
 
-        protected override async Task<IEnumerable<IVendor>> LoadFromDB(Guid? restaurantID)
+        protected override async Task<IEnumerable<Vendor>> LoadFromDB(Guid? restaurantID)
         {
             var vendors = await DAL.GetEntitiesAsync<Vendor>();
             if (restaurantID.HasValue)

@@ -54,16 +54,6 @@ namespace Mise.Core.Server.Repositories
 		{
 			throw new NotImplementedException();
 		}
-
-		public async Task<ICollection<TEntity>> CreateAsync(ICollection<TEntity> entities)
-		{
-		    await _dal.UpsertEntitiesAsync(entities);
-		    return entities;
-		}
-
-		public async Task<ICollection<TEntity>> UpdateAsync(ICollection<TEntity> entities){
-			return await CreateAsync (entities);
-		}
 	}
 }
 

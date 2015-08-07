@@ -15,7 +15,7 @@ namespace Mise.Database.StorableEntities.Inventory
             
         }
 
-        public ParLineItemGraphNode(IPARBeverageLineItem source)
+        public ParLineItemGraphNode(IParBeverageLineItem source)
         {
             ID = source.ID;
             RestaurantID = source.RestaurantID;
@@ -32,9 +32,9 @@ namespace Mise.Database.StorableEntities.Inventory
 
         public int? CaseSize { get; set; }
 
-        public PARBeverageLineItem Rehydrate(LiquidContainer container, IEnumerable<ItemCategory> categories)
+        public ParBeverageLineItem Rehydrate(LiquidContainer container, IEnumerable<ItemCategory> categories)
         {
-            return new PARBeverageLineItem
+            return new ParBeverageLineItem
             {
                 ID = ID,
                 Revision = string.IsNullOrEmpty(Revision) == false ? new EventID(Revision) : null,

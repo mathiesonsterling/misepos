@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Restaurant;
-using Mise.Core.Services.WebServices;
 using System.Collections.Generic;
 using Mise.Core.Entities.Check;
 using System;

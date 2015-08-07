@@ -12,6 +12,7 @@ namespace Mise.Core.Common.Entities.Inventory
 {
     public class Inventory : RestaurantEntityBase, IInventory
     {
+
         public Inventory()
         {
             Sections = new List<InventorySection>();

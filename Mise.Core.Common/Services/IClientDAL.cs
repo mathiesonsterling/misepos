@@ -16,6 +16,7 @@ namespace Mise.Core.Common.Services
 {
 	/// <summary>
 	/// A DAL which can be used for terminal processing
+	/// TODO change this to support resending of entities as well as events
 	/// </summary>
 	public interface IClientDAL : IDAL
 	{

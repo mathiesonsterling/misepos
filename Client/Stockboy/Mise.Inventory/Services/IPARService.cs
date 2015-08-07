@@ -11,15 +11,15 @@ namespace Mise.Inventory.Services
 			LiquidContainer container);
 		Task AddLineItemToCurrentPAR (IBaseBeverageLineItem source, int? quantity);
 
-		Task<IPAR> GetCurrentPAR ();
+		Task<IPar> GetCurrentPAR ();
 
-		Task<IPAR> CreateCurrentPAR();
-		Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, decimal newQuantity);
+		Task<IPar> CreateCurrentPAR();
+		Task UpdateQuantityOfPARLineItem (IParBeverageLineItem lineItem, decimal newQuantity);
 
 		Task SaveCurrentPAR();
 
-		Task SetCurrentLineItem (IPARBeverageLineItem li);
-		Task<IPARBeverageLineItem> GetCurrentLineItem ();
+		Task SetCurrentLineItem (IParBeverageLineItem li);
+		Task<IParBeverageLineItem> GetCurrentLineItem ();
 	}
 }
 

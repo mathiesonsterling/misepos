@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientInventoryRepository : BaseEventSourcedClientRepository<IInventory, IInventoryEvent>, IInventoryRepository
+    public class ClientInventoryRepository : BaseEventSourcedClientRepository<IInventory, IInventoryEvent, Inventory>, IInventoryRepository
     {
         private readonly IInventoryWebService _inventoryWebService;
         public ClientInventoryRepository(ILogger logger, IClientDAL dal, IInventoryWebService webService, IResendEventsWebService resend)
@@ -35,20 +35,19 @@ namespace Mise.Core.Client.Repositories
             return ev.InventoryID;
         }
 
-        protected override async Task<IEnumerable<IInventory>> LoadFromDB(Guid? restaurantID)
+        protected override async Task<IEnumerable<Inventory>> LoadFromDB(Guid? restaurantID)
         {
             var items = await DAL.GetEntitiesAsync<Inventory>();
             return items;
         }
 
-        protected override Task<IEnumerable<IInventory>> LoadFromWebservice(Guid? restaurantID)
+        protected override Task<IEnumerable<Inventory>> LoadFromWebservice(Guid? restaurantID)
         {
             if (restaurantID.HasValue)
             {
-
                 return _inventoryWebService.GetInventoriesForRestaurant(restaurantID.Value);
             }
-            return Task.FromResult(new List<IInventory>().AsEnumerable());
+            return Task.FromResult(new List<Inventory>().AsEnumerable());
         }
 
 

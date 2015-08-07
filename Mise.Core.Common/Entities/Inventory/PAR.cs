@@ -9,15 +9,16 @@ using Mise.Core.Common.Events.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
 {
-    public class PAR : RestaurantEntityBase, IPAR
+    public class Par : RestaurantEntityBase, IPar
     {
-		public PAR(){
-			ParLineItems = new List<PARBeverageLineItem> ();
+
+		public Par(){
+			ParLineItems = new List<ParBeverageLineItem> ();
 		}
 
         public ICloneableEntity Clone()
         {
-            var newItem = CloneRestaurantBase(new PAR());
+            var newItem = CloneRestaurantBase(new Par());
             newItem.IsCurrent = IsCurrent;
             newItem.CreatedByEmployeeID = CreatedByEmployeeID;
             newItem.ParLineItems = ParLineItems;
@@ -27,13 +28,13 @@ namespace Mise.Core.Common.Entities.Inventory
         public Guid CreatedByEmployeeID { get; set; }
         public bool IsCurrent { get; set; }
 
-        public List<PARBeverageLineItem> ParLineItems { get; set; }
-        public IEnumerable<IPARBeverageLineItem> GetBeverageLineItems()
+        public List<ParBeverageLineItem> ParLineItems { get; set; }
+        public IEnumerable<IParBeverageLineItem> GetBeverageLineItems()
         {
             return ParLineItems;
         }
 
-        public void When(IPAREvent entityEvent)
+        public void When(IParEvent entityEvent)
         {
 			switch(entityEvent.EventType){
 			case MiseEventTypes.PARCreated:
@@ -65,7 +66,7 @@ namespace Mise.Core.Common.Entities.Inventory
 		void WhenLineItemAdded (PARLineItemAddedEvent pARLineItemAddedEvent)
 		{
 			//make the li
-			var li = new PARBeverageLineItem {
+			var li = new ParBeverageLineItem {
 				ID = pARLineItemAddedEvent.LineItemID,
 				CreatedDate = pARLineItemAddedEvent.CreatedDate,
 				LastUpdatedDate = pARLineItemAddedEvent.CreatedDate,

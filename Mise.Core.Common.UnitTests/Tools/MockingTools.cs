@@ -8,9 +8,9 @@ using Mise.Core.Entities.Check;
 using Mise.Core.Entities.Menu;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Entities.Check.Events;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Base;
 using Moq;
 using Mise.Core.ValueItems;
@@ -47,7 +47,7 @@ namespace Mise.Core.Common.UnitTests.Tools
         }
 
         public static Guid RestaurantID { get { return Guid.Empty; } }
-        public static IRestaurant GetRestaurant()
+        public static Restaurant GetRestaurant()
         {
             return new Restaurant { ID = RestaurantID, Name = new RestaurantName("testRestaurant") };
         }
@@ -57,11 +57,11 @@ namespace Mise.Core.Common.UnitTests.Tools
 
             var tc = GetMiseDevice(printDupes);
 
-            var regRes = new Tuple<IRestaurant, IMiseTerminalDevice>(GetRestaurant(), tc.Object);
+            var regRes = new Tuple<Restaurant, IMiseTerminalDevice>(GetRestaurant(), tc.Object);
             var service = new Mock<IRestaurantTerminalService>();
 			service.Setup(s => s.RegisterClientAsync(It.IsAny<string>())).Returns(Task.Factory.StartNew (() => regRes));
-			service.Setup(s => s.SendEventsAsync(It.IsAny<ICheck> (), It.IsAny<IEnumerable<ICheckEvent>>())).Returns( Task.FromResult (true));
-			service.Setup(s => s.SendEventsAsync(It.IsAny<ICheck> (), It.IsAny<IEnumerable<ICheckEvent>>()))
+			service.Setup(s => s.SendEventsAsync(It.IsAny<RestaurantCheck> (), It.IsAny<IEnumerable<ICheckEvent>>())).Returns( Task.FromResult (true));
+			service.Setup(s => s.SendEventsAsync(It.IsAny<RestaurantCheck> (), It.IsAny<IEnumerable<ICheckEvent>>()))
 				.Returns(Task.FromResult(true));
            
             return service;
@@ -77,23 +77,24 @@ namespace Mise.Core.Common.UnitTests.Tools
             //service.Setup(s => s.GetCurrentMenu()).Returns(menu.Object);
 			service.Setup(s => s.GetMenusAsync()).Returns(Task<IEnumerable<Menu>>.Factory.StartNew(() => new[]{menu.Object}));
 
-			service.Setup(s => s.GetEmployeesAsync()).Returns(Task.Factory.StartNew (() => new List<IEmployee>().AsEnumerable ()));
+			service.Setup(s => s.GetEmployeesAsync()).Returns(Task.Factory.StartNew (() => new List<Employee>().AsEnumerable ()));
             service.Setup(s => s.GetEmployeesAsync())
-                .Returns(Task<IEnumerable<IEmployee>>.Factory.StartNew(() => new List<IEmployee> ()));
+                .Returns(Task<IEnumerable<Employee>>.Factory.StartNew(() => new List<Employee> ()));
 
-            service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<ICheck>>.Factory.StartNew(() => new List<ICheck>()));
+            service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => new List<RestaurantCheck>()));
             return service;
         }
 
-        public static Mock<IRestaurantTerminalService> GetTerminalServiceWithChecks(IEnumerable<ICheck> checks)
+        public static Mock<IRestaurantTerminalService> GetTerminalServiceWithChecks(IEnumerable<RestaurantCheck> checks)
         {
             var meChecks = checks.ToList();
             var service = GetTerminalServiceWithMenu();
-            service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<ICheck>>.Factory.StartNew(() => meChecks));
+            service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => meChecks));
             return service;
         }
          
-		public static Mock<IClientDAL> GetClientDAL(){
+		public static Mock<IClientDAL> GetClientDAL<TEntityType>() where TEntityType : class, IEntityBase, new()
+        {
             var miseDEv = new MiseTerminalDevice
             {
                 ID = Guid.Empty
@@ -101,12 +102,12 @@ namespace Mise.Core.Common.UnitTests.Tools
             var res = new List<MiseTerminalDevice> { miseDEv };
 
 			var dal = new Mock<IClientDAL> ();
-			dal.Setup (d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>> ()));
+			dal.Setup (d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<TEntityType>> ()));
 		    dal.Setup(d => d.GetEntitiesAsync<MiseTerminalDevice>()).Returns(Task.FromResult(res.AsEnumerable()));
                                                        
                                                      
 
-            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<IEntityBase>>()))
+            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<TEntityType>>()))
                 .Returns(Task.Factory.StartNew(() => true));
 
 			dal.Setup(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEntityEventBase>>())).Returns(new Task<bool>(() => true));

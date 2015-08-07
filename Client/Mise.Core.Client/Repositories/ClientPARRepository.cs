@@ -6,36 +6,36 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Repositories;
 
 namespace Mise.Core.Client.Repositories
 {
-	public class ClientParRepository : BaseEventSourcedClientRepository<IPAR, IPAREvent>, IPARRepository
+	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IParEvent, Par>, IParRepository
 	{
-	    private readonly IPARWebService _webService;
-        public ClientParRepository(ILogger logger, IClientDAL dal, IPARWebService webService, IResendEventsWebService resend)
+	    private readonly IParWebService _webService;
+        public ClientParRepository(ILogger logger, IClientDAL dal, IParWebService webService, IResendEventsWebService resend)
             : base(logger, dal, webService, resend)
 	    {
 	        _webService = webService;
 	    }
 
-	    protected override IPAR CreateNewEntity()
+	    protected override IPar CreateNewEntity()
 	    {
-	        return new PAR();
+	        return new Par();
 	    }
 
 
-	    public override Guid GetEntityID(IPAREvent ev)
+	    public override Guid GetEntityID(IParEvent ev)
 	    {
 	        return ev.ParID;
 	    }
 
-	    protected override Task<IEnumerable<IPAR>> LoadFromWebservice(Guid? restaurantID)
+	    protected override Task<IEnumerable<Par>> LoadFromWebservice(Guid? restaurantID)
 	    {
 	        if (restaurantID.HasValue == false)
 	        {
@@ -44,14 +44,14 @@ namespace Mise.Core.Client.Repositories
 	        return _webService.GetPARsForRestaurant(restaurantID.Value);
 	    }
 
-	    protected override async Task<IEnumerable<IPAR>> LoadFromDB(Guid? restaurantID)
+	    protected override async Task<IEnumerable<Par>> LoadFromDB(Guid? restaurantID)
 	    {
-	        var items = await DAL.GetEntitiesAsync<PAR>();
+	        var items = await DAL.GetEntitiesAsync<Par>();
 	        return items;
 	    }
 
 
-		public Task<IPAR> GetCurrentPAR (Guid restaurantID)
+		public Task<IPar> GetCurrentPAR (Guid restaurantID)
 		{
 			var par = GetAll ().FirstOrDefault (p => p.IsCurrent && p.RestaurantID == restaurantID);
 			return Task.FromResult (par);

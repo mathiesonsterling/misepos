@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mise.Core.Entities.Base;
 using Mise.Core.ValueItems;
+using Mise.Core.Entities;
 
 namespace Mise.Core.Common.Entities.DTOs
 {

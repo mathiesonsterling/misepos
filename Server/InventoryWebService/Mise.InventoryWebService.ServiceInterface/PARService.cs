@@ -11,8 +11,8 @@ namespace Mise.InventoryWebService.ServiceInterface
 {
     public class PARService : Service
     {
-        private readonly IPARRepository _parRepository;
-        public PARService(IPARRepository parRepository)
+        private readonly IParRepository _parRepository;
+        public PARService(IParRepository parRepository)
         {
             _parRepository = parRepository;
         }
@@ -32,11 +32,11 @@ namespace Mise.InventoryWebService.ServiceInterface
             {
                 return new PARResponse
                 {
-                    Results = new[] {_parRepository.GetByID(request.PARID.Value) as Core.Common.Entities.Inventory.PAR}
+                    Results = new[] {_parRepository.GetByID(request.PARID.Value) as Core.Common.Entities.Inventory.Par}
                 };
             }
 
-            var items = _parRepository.GetAll().Where(p => p.RestaurantID == request.RestaurantID).Cast<Core.Common.Entities.Inventory.PAR>();
+            var items = _parRepository.GetAll().Where(p => p.RestaurantID == request.RestaurantID).Cast<Core.Common.Entities.Inventory.Par>();
 
 
             return new PARResponse

@@ -18,16 +18,17 @@ using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
+using Mise.Inventory.Services.Implementation.WebServiceClients;
 using Mise.Inventory.ViewModels;
-using Mise.Core.Common.Services.Implementation.FakeServices;
 using Mise.Core.Common.Services.Implementation;
 using System.ServiceModel;
 using Mise.Core.Entities;
 using Mise.Core.Common;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.ViewModels.Reports;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 
 
 namespace Mise.Inventory
@@ -61,33 +62,24 @@ namespace Mise.Inventory
 			#endif
 		}
 
-		private static IInventoryApplicationWebService GetWebService(IJSONSerializer serial){
+		protected static AzureServiceLocation GetWebServiceLocation(){
 			var level = GetBuildLevel ();
 
-			if(level == BuildLevel.Demo){
-				return new FakeInventoryWebService();
-			}
+			return AzureServiceLocator.GetAzureMobileServiceLocation (level);
+		}
 
-			Uri uri = null;
-			switch(level){
-			case BuildLevel.Debugging:
-				uri = new Uri ("http://localhost:43499");
-				break;
-			case BuildLevel.Development:
-				uri = new Uri ("http://miseinventoryservicedev.azurewebsites.net");
-				break;
-			case BuildLevel.QA:
-				uri = new Uri ("http://miseinventoryserviceqa.azurewebsites.net");
-				break;
-			case BuildLevel.Production:
-				uri = new Uri ("http://miseinventoryserviceprod.azurewebsites.net");
-				break;
-			default:
-				throw new ArgumentException ();
-			}
-				
-			var webService = new HttpWebServiceClient (uri, "betaDevice", serial, Logger);
-			return webService;
+		protected static void RegisterWebService (ContainerBuilder cb, IInventoryWebService webService)
+		{
+			cb.RegisterInstance (webService).As<IInventoryEmployeeWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IInventoryRestaurantWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IVendorWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IParWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IInventoryWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IReceivingOrderWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IPurchaseOrderWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IResendEventsWebService> ().SingleInstance ();
 		}
 
 		/// <summary>
@@ -109,18 +101,6 @@ namespace Mise.Inventory
 			}
 			cb.RegisterInstance (Logger).As<ILogger>().SingleInstance ();
 
-			var webService = GetWebService (serial);
-			cb.RegisterInstance(webService).As<IInventoryEmployeeWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IInventoryRestaurantWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IVendorWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IPARWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IInventoryWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IReceivingOrderWebService>().SingleInstance();
-			cb.RegisterInstance(webService).As<IPurchaseOrderWebService>().SingleInstance();
-			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance();
-			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance();
-		    cb.RegisterInstance(webService).As<IResendEventsWebService>().SingleInstance();
-
 			// DAL
 			if (SqlLiteConnection != null) {
 				cb.RegisterType<SQLiteClietDAL> ().As<IClientDAL> ().SingleInstance ();
@@ -137,7 +117,7 @@ namespace Mise.Inventory
 			cb.RegisterType<ClientEmployeeRepository>().As<IEmployeeRepository>().SingleInstance();
 			cb.RegisterType<ClientVendorRepository>().As<IVendorRepository>().SingleInstance();
 			cb.RegisterType<ClientRestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
-			cb.RegisterType<ClientParRepository>().As<IPARRepository>().SingleInstance();
+			cb.RegisterType<ClientParRepository>().As<IParRepository>().SingleInstance();
 			cb.RegisterType<ClientReceivingOrderRepository>().As<IReceivingOrderRepository>().SingleInstance();
 			cb.RegisterType<ClientPurchaseOrderRepository>().As<IPurchaseOrderRepository>().SingleInstance();
 			cb.RegisterType<ClientInventoryRepository>().As<IInventoryRepository>().SingleInstance();

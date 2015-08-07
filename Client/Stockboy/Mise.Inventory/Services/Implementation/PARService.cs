@@ -15,15 +15,15 @@ namespace Mise.Inventory.Services.Implementation
 {
 	public class PARService : IPARService
 	{
-		private IPAR _currentPar;
-		IPARBeverageLineItem _lineItem;
+		private IPar _currentPar;
+		IParBeverageLineItem _lineItem;
 
-		readonly IPARRepository _parRepository;
+		readonly IParRepository _parRepository;
 		readonly ILoginService _loginService;
 		readonly IInventoryAppEventFactory _eventFactory;
 	    private readonly IInsightsService _insights;
 		readonly ILogger _logger;
-		public PARService (ILogger logger, ILoginService loginService, IPARRepository parRespository, 
+		public PARService (ILogger logger, ILoginService loginService, IParRepository parRespository, 
 			IInventoryAppEventFactory eventFactory, IInsightsService insights)
 		{
 			_parRepository = parRespository;
@@ -62,7 +62,7 @@ namespace Mise.Inventory.Services.Implementation
 			await _parRepository.Commit (_currentPar.ID);
 		}
 			
-		public async Task<IPAR> GetCurrentPAR ()
+		public async Task<IPar> GetCurrentPAR ()
 		{
 			if (_currentPar == null) {
 				var rest = await _loginService.GetCurrentRestaurant ();
@@ -88,7 +88,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public async Task<IPAR> CreateCurrentPAR ()
+		public async Task<IPar> CreateCurrentPAR ()
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 
@@ -99,7 +99,7 @@ namespace Mise.Inventory.Services.Implementation
 			return _currentPar;
 		}
 
-		public async Task UpdateQuantityOfPARLineItem (IPARBeverageLineItem lineItem, decimal newQuantity)
+		public async Task UpdateQuantityOfPARLineItem (IParBeverageLineItem lineItem, decimal newQuantity)
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 			var par = await GetCurrentPAR ().ConfigureAwait (false);
@@ -109,13 +109,13 @@ namespace Mise.Inventory.Services.Implementation
             ReportNumItemsInTransaction();
 		}
 
-		public Task SetCurrentLineItem (IPARBeverageLineItem li)
+		public Task SetCurrentLineItem (IParBeverageLineItem li)
 		{
 			_lineItem = li;
 			return Task.FromResult (true);
 		}
 
-		public Task<IPARBeverageLineItem> GetCurrentLineItem ()
+		public Task<IParBeverageLineItem> GetCurrentLineItem ()
 		{
 			return Task.FromResult (_lineItem);
 		}
