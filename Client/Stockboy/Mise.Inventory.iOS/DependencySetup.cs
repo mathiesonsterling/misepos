@@ -39,10 +39,7 @@ namespace Mise.Inventory.iOS
 				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey);
 				CurrentPlatform.Init ();
 				//create the SQL store for offline
-				var dbServ = new iOSSQLLite ();
-				var fileName = dbServ.GetLocalFilename ();
-				var store = new MobileServiceSQLiteStore (fileName);
-				await mobileService.SyncContext.InitializeAsync (store);
+
 				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService);
 				RegisterWebService (cb, webService);
 			}

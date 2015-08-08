@@ -27,10 +27,6 @@ namespace Mise.Inventory.Android
 			var processor = new MercuryPaymentProcessorService (Logger);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance();
 
-			/*var dbConn = new AndroidSQLite ();
-			SqlLiteConnection = dbConn;
-			cb.RegisterInstance<ISQLite> (dbConn).SingleInstance ();*/
-
 			//make the web service
 			InitWebService (cb);
 			var errorService = new AndroidRaygun ();
@@ -44,9 +40,9 @@ namespace Mise.Inventory.Android
 			if (wsLocation != null) {
 				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey);
 				CurrentPlatform.Init ();
-				var dbService = new AndroidSQLite ();
+				/*var dbService = new AndroidSQLite ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
-				await mobileService.SyncContext.InitializeAsync (store);
+				await mobileService.SyncContext.InitializeAsync (store);*/
 				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService);
 				RegisterWebService (cb, webService);
 			}

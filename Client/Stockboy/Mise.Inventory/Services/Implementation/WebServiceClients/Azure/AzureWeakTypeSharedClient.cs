@@ -457,6 +457,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			}
 			return realItems;
 		}
+
 	}
 }
 
