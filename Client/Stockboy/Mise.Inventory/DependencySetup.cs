@@ -56,9 +56,9 @@ namespace Mise.Inventory
 
 		public static BuildLevel GetBuildLevel(){
 			#if DEBUG
-			return BuildLevel.QA;
+			return BuildLevel.Development;
 			#else
-			return BuildLevel.QA;
+			return BuildLevel.Production;
 			#endif
 		}
 
