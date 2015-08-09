@@ -94,6 +94,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\BaseProgressReportingCommand.cs" />
+    <Compile Include="Commands\ExportInventoryCommand.cs" />
     <Compile Include="Commands\ImportVendorPriceListCommand.cs" />
     <Compile Include="Commands\PopulateInventorySQLServerDBCommand.cs" />
     <Compile Include="Commands\ProgressReport.cs" />
