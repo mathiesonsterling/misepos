@@ -10,10 +10,6 @@ using Microsoft.WindowsAzure.MobileServices;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Common.Entities.DTOs;
-using Mise.Core.Entities.People;
-using Mise.Core.Entities.Inventory;
-using Mise.Core.Entities.Restaurant;
-using Mise.Core.Entities.Vendors;
 
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Entities.Inventory;
@@ -23,8 +19,8 @@ using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.DTOs.AzureTypes;
 using Mise.Core.Common.Events.DTOs.AzureTypes;
 using Mise.Core.Common.Services.WebServices;
-using Mise.Inventory.ViewModels;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
+using Mise.Inventory.ViewModels;
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
@@ -357,7 +353,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			return found;
 		}
-
 		#endregion
 
 		#region IEventStoreWebService implementation

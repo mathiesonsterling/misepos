@@ -28,7 +28,7 @@ namespace Mise.Inventory.ViewModels.Reports
             {
                 get
                 {
-                    return Source.Quantity.HasValue ? Source.Quantity.Value.ToString() : "None";
+					return Source.Quantity.HasValue ? Math.Round(Source.Quantity.Value, 2).ToString () : "None";
                 }
             }
         }

@@ -47,7 +47,8 @@ namespace Mise.Core.Common.Repositories.Base
 		public virtual T GetByID(Guid id)
         {
             //TODO - if it's not in cache, check the DB
-            return Cache.GetByID(id);
+			var item= Cache.GetByID(id);
+			return item;
         }
 
         public virtual bool IsFullyCommitted {

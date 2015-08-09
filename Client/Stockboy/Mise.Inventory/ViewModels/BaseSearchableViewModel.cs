@@ -54,6 +54,12 @@ namespace Mise.Inventory.ViewModels
 
 		public IEnumerable<TLineItemType> LineItems{ get; private set;}
 
+		/// <summary>
+		/// The item that the display should focus on
+		/// </summary>
+		/// <value>The focused item.</value>
+		public TLineItemType FocusedItem{ get{return GetValue<TLineItemType> ();} protected set{ SetValue (value); }}
+
 		protected string LastSearchString{ get; private set;}
 		public string SearchString {
 			get{return GetValue<string> ();}

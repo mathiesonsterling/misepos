@@ -93,18 +93,7 @@ namespace Mise.Inventory.ViewModels
 			await _parService.SetCurrentLineItem (lineItem);
 		    await Navigation.ShowUpdateParLineItem();
 		}
-
-		async void QuantitySetCallback(int newQuant, decimal ignore){
-			if(_itemSettingQuantity != null)
-			{
-				if(_itemSettingQuantity.Quantity != newQuant){
-					await _parService.UpdateQuantityOfPARLineItem (_itemSettingQuantity, newQuant);
-				}
-			}
-
-			_itemSettingQuantity = null;
-			await LoadItems ();
-		}
+			
 
 		protected override async Task<ICollection<PARLineItemDisplay>> LoadItems(){
 			var currPar = await _parService.GetCurrentPAR ();
@@ -120,6 +109,9 @@ namespace Mise.Inventory.ViewModels
 				throw new NullReferenceException ("Cannot find current par or create one!");
 			}
 			var items = currPar.GetBeverageLineItems ().ToList();
+
+			var lastItem = items.OrderByDescending (li => li.LastUpdatedDate).FirstOrDefault ();
+			FocusedItem = new PARLineItemDisplay (lastItem);
 
 			return items.OrderBy (li => li.DisplayName).Select (li => new PARLineItemDisplay (li)).ToList();
 		}

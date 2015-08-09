@@ -9,6 +9,7 @@ namespace Mise.Inventory.Pages
 {
 	public partial class PARPage : ContentPage
 	{
+		ListView _customVL;
 		public PARPage()
 		{
 			InitializeComponent();
@@ -25,6 +26,12 @@ namespace Mise.Inventory.Pages
 		    if (vm != null)
 		    {
 		        await vm.OnAppearing();
+
+				if(vm.FocusedItem != null){
+					if(_customVL != null){
+						_customVL.ScrollTo (vm.FocusedItem, ScrollToPosition.MakeVisible, false);
+					}
+				}
 		    }
 		}
 
@@ -33,14 +40,14 @@ namespace Mise.Inventory.Pages
 			var vm = BindingContext as ParViewModel;
 			if (vm != null) {
 				lineItems.Children.Clear ();
-				var customVL = new ListView {
+				_customVL = new ListView {
 					ItemsSource = vm.LineItems,
 					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
 					RowHeight = 50,
 					HasUnevenRows = true,
 					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
-				customVL.ItemTapped += async (sender, e) =>  {
+				_customVL.ItemTapped += async (sender, e) =>  {
 					//mark it as the item being measured
 					var lineItem = e.Item as PARLineItemDisplay;
 					if (lineItem != null) {
@@ -48,7 +55,7 @@ namespace Mise.Inventory.Pages
 					}
 					((ListView)sender).SelectedItem = null;
 				};
-				lineItems.Children.Add (customVL);
+				lineItems.Children.Add (_customVL);
 			}
 		}
 	}

@@ -385,10 +385,6 @@
       <Project>{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}</Project>
       <Name>Mise.Core.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Server\InventoryWebService\Mise.InventoryWebService.ServiceModelPortable\Mise.InventoryWebService.ServiceModelPortable.csproj">
-      <Project>{9BA4713A-F2EF-46BE-9F86-31637A2217B6}</Project>
-      <Name>Mise.InventoryWebService.ServiceModelPortable</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Implementation\WebServiceClients\" />

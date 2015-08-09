@@ -82,8 +82,6 @@ namespace Mise.Inventory.ViewModels
 		public string Title{get{ return GetValue<string> (); } private set{ SetValue (value); }}
 		public bool IsInventoryEmpty{get{ return GetValue<bool> (); }private set{SetValue (value);}}
 
-        public InventoryLineItemDisplayLine FirstUnmeasuredItem { get { return GetValue<InventoryLineItemDisplayLine>(); } private set { SetValue(value);} }
-
 		public bool CanComplete{ get { return GetValue<bool> (); } private set { SetValue (value); } }
 
         public bool CameFromAdd { get; private set; }
@@ -116,7 +114,7 @@ namespace Mise.Inventory.ViewModels
 
 			PropertyChanged += (sender, e) => {
 				if(e.PropertyName != "CanComplete"){
-					CanComplete = NotProcessing && LineItems.Any () && FirstUnmeasuredItem == null;
+					CanComplete = NotProcessing && LineItems.Any () && FocusedItem == null;
 				}
 			};
 		}
@@ -138,7 +136,17 @@ namespace Mise.Inventory.ViewModels
 				.ThenBy (li => li.DisplayName)
 				.Select(li => new InventoryLineItemDisplayLine(li)).ToList();
             //find the first unmeasured
-		    FirstUnmeasuredItem = itemsList.FirstOrDefault(li => li.Source.HasBeenMeasured == false);
+		    
+
+			if(CameFromAdd){
+				//get the last updated item
+				var lastUpdated = items.OrderByDescending (li => li.LastUpdatedDate)
+					.FirstOrDefault ();
+				FocusedItem = lastUpdated != null ? new InventoryLineItemDisplayLine (lastUpdated) : null;
+			} else{
+				FocusedItem = itemsList
+					.FirstOrDefault(li => li.Source.HasBeenMeasured == false);
+			}
 
 			IsInventoryEmpty = itemsList.Any () == false;
 			//we can complete if we have items, and all are measured

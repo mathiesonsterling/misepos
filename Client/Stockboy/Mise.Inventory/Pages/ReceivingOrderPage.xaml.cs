@@ -50,8 +50,8 @@ namespace Mise.Inventory.Pages
 				};
 				lineItems.Children.Add (customVL);
 
-				if(vm.FocusOnLineItem != null){
-					customVL.ScrollTo(vm.FocusOnLineItem, ScrollToPosition.MakeVisible, false);
+				if(vm.FocusedItem != null){
+					customVL.ScrollTo(vm.FocusedItem, ScrollToPosition.MakeVisible, false);
 				}
 			}
 		}

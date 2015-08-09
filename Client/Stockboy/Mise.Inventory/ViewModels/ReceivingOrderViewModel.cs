@@ -131,10 +131,6 @@ namespace Mise.Inventory.ViewModels
 		public string InvoiceID{get{return GetValue<string> ();}set{SetValue(value);}}
 		public bool CanSave{get{return GetValue<bool> ();}private set{SetValue (value);}}
 
-		public ReceivingOrderDisplayLine FocusOnLineItem{
-			get{return GetValue<ReceivingOrderDisplayLine> ();}
-			private set{ SetValue (value); }
-		}
 		#region Commands
 
 		public ICommand AddNewItemCommand {
@@ -205,13 +201,13 @@ namespace Mise.Inventory.ViewModels
 
 			var displayItems = items.OrderBy (li => li.DisplayName)
 				.Select (li => new ReceivingOrderDisplayLine (li)).ToList ();
-			FocusOnLineItem = displayItems.FirstOrDefault(li => 
+			FocusedItem = displayItems.FirstOrDefault(li => 
 				li.Source.ZeroedOut == false 
 				&& (li.Source.LineItemPrice == null || li.Source.LineItemPrice.Equals(Money.None))
 			);
 
-			if(FocusOnLineItem == null){
-				FocusOnLineItem = displayItems.LastOrDefault ();
+			if(FocusedItem == null){
+				FocusedItem = displayItems.LastOrDefault ();
 			}
 			return displayItems;
 		}

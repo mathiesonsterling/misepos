@@ -1577,7 +1577,12 @@ namespace Mise.Core.Common.Services.Implementation
         {
             return Task.FromResult(GetEmployees());
         }
-			
+
+		public Task<Employee> GetEmployeeByID (Guid id)
+		{
+			var emp = GetEmployees ().FirstOrDefault (e => e.ID == id);
+			return Task.FromResult (emp);
+		}			
 
         public Task<IEnumerable<RestaurantCheck>> GetChecksAsync()
         {

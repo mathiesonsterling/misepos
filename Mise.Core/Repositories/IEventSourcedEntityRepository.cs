@@ -8,7 +8,7 @@ using Mise.Core.ValueItems;
 
 namespace Mise.Core.Repositories
 {
-    public interface IEventSourcedEntityRepository<out TEntity, in TEventType> : IRepository
+    public interface IEventSourcedEntityRepository<TEntity, in TEventType> : IRepository
         where TEntity:IEventStoreEntityBase<TEventType> 
         where TEventType : IEntityEventBase
     { 

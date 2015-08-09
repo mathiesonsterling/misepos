@@ -50,7 +50,7 @@ namespace Mise.Inventory.Reports
                 {
                     var existing = dic[key];
                     existing.Quantity += li.Quantity;
-                    existing.IsErrored = existing.Quantity >= 0;
+                    existing.IsErrored = existing.Quantity < 0;
                 }
             }
 

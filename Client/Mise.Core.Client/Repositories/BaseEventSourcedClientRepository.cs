@@ -20,7 +20,8 @@ namespace Mise.Core.Client.Repositories
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEventType"></typeparam>
-    public abstract class BaseEventSourcedClientRepository<TEntity, TEventType, TConcreteStorageType> : BaseEventSourcedRepository<TEntity, TEventType> 
+    public abstract class BaseEventSourcedClientRepository<TEntity, TEventType, TConcreteStorageType> 
+		: BaseEventSourcedRepository<TEntity, TEventType> 
         where TEntity : class, IEventStoreEntityBase<TEventType>, ICloneableEntity 
         where TEventType : class, IEntityEventBase
         where TConcreteStorageType : class, IEntityBase, TEntity, new()

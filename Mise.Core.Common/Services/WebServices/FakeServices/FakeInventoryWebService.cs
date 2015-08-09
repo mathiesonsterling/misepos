@@ -698,6 +698,12 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			return Task.FromResult (emp);
 		}
 
+		public Task<Employee> GetEmployeeByID (Guid id)
+		{
+			var emp = _emps.FirstOrDefault (e => e.ID == id);
+			return Task.FromResult (emp);
+		}
+
 		#endregion
 
 		public Task<IEnumerable<Restaurant>> GetRestaurants (Location deviceLocation, Distance max)

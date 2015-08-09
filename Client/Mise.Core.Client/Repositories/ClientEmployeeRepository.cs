@@ -33,7 +33,7 @@ namespace Mise.Core.Client.Repositories
             var items = await (restaurantID.HasValue ? _webService.GetEmployeesForRestaurant(restaurantID.Value) : _webService.GetEmployeesAsync());
             return items.Cast<Employee>();
         }
-
+			
         protected override async Task<IEnumerable<Employee>> LoadFromDB(Guid? restaurantID)
         {
 

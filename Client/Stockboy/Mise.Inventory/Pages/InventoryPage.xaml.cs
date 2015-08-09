@@ -28,10 +28,10 @@ namespace Mise.Inventory.Pages
                 var cameFromAdd = vm.CameFromAdd;
                 await vm.OnAppearing();
 
-				if (cameFromAdd && _customVL != null && vm.LineItems != null && vm.LineItems.Any())
-                {
-					_customVL.ScrollTo (vm.LineItems.Last(), ScrollToPosition.End, false);
-                }
+				if (vm.FocusedItem != null)
+				{
+					_customVL.ScrollTo(vm.FocusedItem, ScrollToPosition.MakeVisible, false);
+				}
             }
         }
 
@@ -58,9 +58,9 @@ namespace Mise.Inventory.Pages
 					((ListView)sender).SelectedItem = null;
 				};
 				listItems.Children.Add (_customVL);
-			    if (vm.FirstUnmeasuredItem != null)
+			    if (vm.FocusedItem != null)
 			    {
-			        _customVL.ScrollTo(vm.FirstUnmeasuredItem, ScrollToPosition.MakeVisible, false);
+			        _customVL.ScrollTo(vm.FocusedItem, ScrollToPosition.MakeVisible, false);
 			    }
 			}
 		}
