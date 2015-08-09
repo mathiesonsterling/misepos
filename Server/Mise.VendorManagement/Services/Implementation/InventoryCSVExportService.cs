@@ -11,7 +11,7 @@ using Mise.Core.Services.UtilityServices;
 
 namespace Mise.VendorManagement.Services.Implementation
 {
-    public class InventoryCSVExportService : IInventoryExportService
+    public class InventoryCSVExportService : BaseCsvWriter, IInventoryExportService
     {
         public readonly ILogger _logger;
 
@@ -24,7 +24,7 @@ namespace Mise.VendorManagement.Services.Implementation
         {
             return Task.Run(() =>
             {
-                var lineItems = inventory.GetBeverageLineItems().ToList();
+                var lineItems = inventory.GetBeverageLineItems();
                 if (lineItems.Any() == false)
                 {
                     throw new ArgumentException("No line items in the given inventory!");
@@ -35,38 +35,31 @@ namespace Mise.VendorManagement.Services.Implementation
                 {
                     var csv = new CsvWriter(writer);
 
-                    foreach (var li in lineItems)
+                    foreach (var section in inventory.GetSections())
                     {
-                        csv.WriteField(li.DisplayName);
-                        csv.WriteField(li.Container.DisplayName);
+                        foreach (var li in section.GetInventoryBeverageLineItemsInSection())
+                        {
+                            csv.WriteField(section.Name);
+                            csv.WriteField(li.DisplayName);
+                            csv.WriteField(li.Container.DisplayName);
 
 
-                        var numpartials = li.PartialBottlePercentages.Any()
-                            ? li.PartialBottlePercentages.Sum(p => p)
-                            : 0;
+                            var numpartials = li.PartialBottlePercentages.Any()
+                                ? li.PartialBottlePercentages.Sum(p => p)
+                                : 0;
 
-                        csv.WriteField(li.Quantity);
+                            csv.WriteField(li.Quantity);
 
-                        csv.WriteField(li.CurrentAmount.Milliliters);
-                        csv.WriteField(li.NumFullBottles);
+                            csv.WriteField(li.CurrentAmount.Milliliters);
+                            csv.WriteField(li.NumFullBottles);
 
-                        csv.WriteField(numpartials);
+                            csv.WriteField(numpartials);
 
-                        csv.NextRecord();
+                            csv.NextRecord();
+                        }
                     }
-
-                    csv.WriteRecords(lineItems);
                 }
             });
-        }
-
-        private static TextWriter GetTextWriter(string filename)
-        {
-            if (File.Exists(filename))
-            {
-                File.Delete(filename);
-            }
-            return File.CreateText(filename);
         }
     }
 }

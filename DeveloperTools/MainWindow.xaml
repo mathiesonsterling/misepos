@@ -66,9 +66,10 @@
                 </StackPanel>
             </TabItem>
 
-            <TabItem Header="Inventories">
+            <TabItem Header="Export to CSV">
                 <StackPanel>
                     <Button x:Name="BtnExportLatest" Height="41" Width="173" Content="Export last inventory" Click="BtnExportInventory_OnClick"></Button>
+                    <Button x:Name="BtnExportLatestPar" Height="41" Width="173" Content="Export last par" Click="BtnExportLastPar_OnClick"></Button>
                 </StackPanel>
             </TabItem>
         </TabControl>
