@@ -62,7 +62,9 @@ namespace Mise.Inventory.Reports
             }
 
             var checkSum = dic.Values.Where(i => i.Quantity.HasValue).Sum(i => i.Quantity.Value);
-            return new ReportResult(ReportTypes.CompletedInventory, title, dic.Values, checkSum);
+
+			var ordered = dic.Values.OrderBy (li => li.MainText).ThenBy (li => li.DetailText);
+            return new ReportResult(ReportTypes.CompletedInventory, title, ordered, checkSum);
         }
     }
 }
