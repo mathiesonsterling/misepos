@@ -44,8 +44,8 @@ namespace Mise.VendorManagement.Services.Implementation
                             csv.WriteField(li.Container.DisplayName);
 
 
-                            var numpartials = li.PartialBottlePercentages.Any()
-                                ? li.PartialBottlePercentages.Sum(p => p)
+                            var numpartials = li.GetPartialBottlePercentages().Any()
+                                ? li.GetPartialBottlePercentages().Sum(p => p)
                                 : 0;
 
                             csv.WriteField(li.Quantity);

@@ -21,7 +21,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                 RestaurantID = Guid.NewGuid(),
                 CreatedDate = DateTimeOffset.UtcNow,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
-                SourceType = typeof(Mise.Core.Common.Entities.Employee)
+                SourceType = typeof(Common.Entities.Employee)
             };
 
             //ACT

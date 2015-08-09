@@ -22,14 +22,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			switch(level){
 			case BuildLevel.Debugging:
 				return new AzureServiceLocation("http://localhost:50778", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
-				break;
 			case BuildLevel.Development:
 			case BuildLevel.QA:
 				return new AzureServiceLocation ("https://stockboymobileservice.azure-mobile.net/", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
-				break;
 			case BuildLevel.Production:
 				return new AzureServiceLocation("https://stockboymobileservice.azure-mobile.net/", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
-				break;
 			default:
 				throw new ArgumentException ();
 			}

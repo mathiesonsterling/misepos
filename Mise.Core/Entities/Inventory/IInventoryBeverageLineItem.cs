@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mise.Core.Entities.Base;
-using Mise.Core.Entities.Vendors;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 
@@ -13,7 +12,6 @@ namespace Mise.Core.Entities.Inventory
     public interface IInventoryBeverageLineItem : IRestaurantEntityBase, IBaseBeverageLineItem, ICloneableEntity
     {
         Guid? VendorBoughtFrom { get; }
-
 
         /// <summary>
         /// The amount of the item currently left.  This must be smaller than the container capacity!
@@ -30,11 +28,12 @@ namespace Mise.Core.Entities.Inventory
         Money PricePaid { get; }
 
 		int NumPartialBottles{get;}
-		/// <summary>
-		/// Gives a list of the percentage of container for EACH partial bottle
-		/// </summary>
-		/// <value>The partial bottle percentages.</value>
-		IEnumerable<decimal> PartialBottlePercentages{get;}
+
+        /// <summary>
+        /// Gives a list of the percentage of container for EACH partial bottle
+        /// </summary>
+        /// <value>The partial bottle percentages.</value>
+        IEnumerable<decimal> GetPartialBottlePercentages();
 
 		int NumFullBottles{get;}
 

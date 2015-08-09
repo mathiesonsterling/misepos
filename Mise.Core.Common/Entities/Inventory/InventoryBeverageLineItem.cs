@@ -17,9 +17,7 @@ namespace Mise.Core.Common.Entities.Inventory
         public InventoryBeverageLineItem()
         {
             PricePaid = Money.None;
-			PartialBottleListing = new List<decimal> ();
 			MethodsMeasuredLast = MeasurementMethods.Unmeasured;
-			Categories = new List<ItemCategory> ();
         }
 
         public Guid? VendorBoughtFrom { get; set; }
@@ -41,7 +39,7 @@ namespace Mise.Core.Common.Entities.Inventory
                 }
 
                 //don't have container, let's get it via category
-                var standCat = Categories.FirstOrDefault(c => c.IsCustomCategory == false);
+                var standCat = Categories?.FirstOrDefault(c => c.IsCustomCategory == false);
                 if (standCat != null)
                 {
 					var catService = new CategoriesService ();
@@ -54,7 +52,14 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public List<decimal> PartialBottleListing{ get; set;}
 
-		public IEnumerable<decimal> PartialBottlePercentages{get{return PartialBottleListing;}}
+        public IEnumerable<decimal> GetPartialBottlePercentages()
+        {
+            if (PartialBottleListing == null)
+            {
+                return new List<decimal>();
+            }
+            return PartialBottleListing;
+        }
 
 		public int NumPartialBottles{get{ return PartialBottleListing.Count;
 			}}
