@@ -10,6 +10,10 @@ namespace Mise.Core.Client.Services
 		Task SetValue<T>(string key, T value) where T:class;
 		T GetValue<T>(string key) where T:class;
 		Task DeleteValue(string key);
+
+		Task SetID(string key, Guid id);
+
+		Guid? GetID (string key);
 	}
 }
 

@@ -37,7 +37,7 @@ namespace Mise.Core.Common.Events
 			}
 		}
 
-		readonly string _deviceID;
+		string _deviceID;
 		readonly MiseAppTypes _appCode;
 
 		public InventoryAppEventFactory(string deviceID, MiseAppTypes appCode)
@@ -49,6 +49,10 @@ namespace Mise.Core.Common.Events
 
 		public void SetRestaurant(IRestaurant restaurant){
 			_restaurant = restaurant;
+		}
+
+		public void SetDeviceID(string id){
+			_deviceID = id;
 		}
 		/// <summary>
 		/// When loading from the repository, lets us tell our device to skip up to the last digit given

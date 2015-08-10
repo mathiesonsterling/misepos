@@ -25,6 +25,8 @@ namespace Mise.Core.Common.Events
 
 		void SetRestaurant(IRestaurant restaurant);
 
+		void SetDeviceID (string id);
+
 		#region Event creations
         EmployeeLoggedIntoInventoryAppEvent CreateEmployeeLoggedIntoInventoryAppEvent(IEmployee emp);
         EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(IEmployee emp);

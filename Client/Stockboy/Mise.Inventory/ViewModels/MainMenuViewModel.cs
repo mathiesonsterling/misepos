@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Xamarin.Forms;
+using Mise.Core.Common.Services.WebServices.Exceptions;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -131,8 +132,13 @@ namespace Mise.Inventory.ViewModels
                 var selectedInventory = await _inventoryService.GetSelectedInventory();
                 if (selectedInventory == null)
                 {
-                    //TODO might want to alert the user to this
-                    await _inventoryService.StartNewInventory();
+					try{
+                    	//TODO might want to alert the user to this
+                    	await _inventoryService.StartNewInventory();
+					} catch(DataNotSavedOnServerException dns){
+						HandleException (dns);
+						return;
+					}
                 }
 			    Processing = false;
 			await Navigation.ShowSectionSelect();

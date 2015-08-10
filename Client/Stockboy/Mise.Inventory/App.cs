@@ -17,6 +17,7 @@ using Xamarin.Forms;
 using Mise.Inventory.Services;
 using Mise.Inventory.ViewModels;
 using Mise.Core.Services;
+using Mise.Core.Client.Services;
 
 namespace Mise.Inventory
 {
@@ -60,6 +61,19 @@ namespace Mise.Inventory
 
             navigationService.Navi = MainPage.Navigation;
             navigationService.CurrentPage = initialPage;
+
+			//get the device ID
+			var kVService = Resolve<IClientKeyValueStorage> ();
+			var item = kVService.GetID ("DEVICE_ID");
+
+			if(item == null){
+				item = Guid.NewGuid ();
+				kVService.SetID("DEVICE_ID", item.Value);
+			}
+
+			//set the ev factory
+			var evFactory = Resolve<IInventoryAppEventFactory>();
+			evFactory.SetDeviceID (item.ToString ());
 
             LoadRepositoriesVoid();
 
@@ -180,7 +194,7 @@ namespace Mise.Inventory
             }
         }
 
-		private async void AttemptToLoginSavedEmployee(IAppNavigation appNavigation)
+		private static async void AttemptToLoginSavedEmployee(IAppNavigation appNavigation)
 		{
 			var loginService = _container.Resolve<ILoginService>();
 			if (loginService != null) {

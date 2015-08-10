@@ -43,6 +43,18 @@ namespace Mise.Inventory
 			}
 		}
 
+		public async Task SetID(string key, Guid id){
+			Application.Current.Properties [key] = id.ToString ();
+			await Application.Current.SavePropertiesAsync ();
+		}
+
+		public Guid? GetID(string key){
+			if(Application.Current.Properties.ContainsKey (key) == false){
+				return null;
+			}
+
+			return Guid.Parse (Application.Current.Properties [key].ToString ());
+		}
 		#endregion
 	}
 }
