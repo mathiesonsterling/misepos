@@ -29,7 +29,6 @@ namespace Mise.Core.Client.UnitTests.Repositories
         public async Task TwoEventsBothCommitedShouldReflectInGet()
         {
             var logger = new Mock<ILogger>();
-            var dal = new Mock<IClientDAL>();
 
             var inventoryEventsPassed = new List<IInventoryEvent>();
             var service = new Mock<IInventoryWebService> ();
@@ -37,7 +36,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Callback<IInventory, IEnumerable<IInventoryEvent>>((inv, events) => inventoryEventsPassed.AddRange(events))
                 .Returns(Task.FromResult(true));
 
-            var underTest = new ClientInventoryRepository(logger.Object, dal.Object, service.Object, MockingTools.GetResendEventsService().Object);
+            var underTest = new ClientInventoryRepository(logger.Object, service.Object, MockingTools.GetResendEventsService().Object);
 
             var entID = Guid.NewGuid();
             var createEvent = new InventoryCreatedEvent
@@ -89,7 +88,6 @@ namespace Mise.Core.Client.UnitTests.Repositories
         public async Task TwoEventsSecondCanceledShouldNotReflectSecondInGet()
         {
             var logger = new Mock<ILogger>();
-            var dal = new Mock<IClientDAL>();
 
             var inventoryEventsPassed = new List<IInventoryEvent>();
             var service = new Mock<IInventoryWebService>();
@@ -97,7 +95,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Callback<IInventory, IEnumerable<IInventoryEvent>>((inv, events)=>inventoryEventsPassed.AddRange(events))
                 .Returns(Task.FromResult(true));
 
-            var underTest = new ClientInventoryRepository(logger.Object, dal.Object, service.Object, MockingTools.GetResendEventsService().Object);
+            var underTest = new ClientInventoryRepository(logger.Object, service.Object, MockingTools.GetResendEventsService().Object);
 
             var entID = Guid.NewGuid();
             var createEvent = new InventoryCreatedEvent

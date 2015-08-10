@@ -26,7 +26,6 @@ namespace Mise.Core.Client.UnitTests.Repositories
         public void CreateEventShouldCreateWithCommit()
         {
             var logger = new Mock<ILogger>();
-            var dal = new Mock<IClientDAL>();
 
             var inventoryEventsPassed = new List<IReceivingOrderEvent>();
             var service = new Mock<IReceivingOrderWebService>();
@@ -34,7 +33,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Callback<IReceivingOrder, IEnumerable<IReceivingOrderEvent>>((ro, evs) => inventoryEventsPassed.AddRange(evs))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var underTest = new ClientReceivingOrderRepository(logger.Object, dal.Object, service.Object, MockingTools.GetResendEventsService().Object);
+            var underTest = new ClientReceivingOrderRepository(logger.Object, service.Object, MockingTools.GetResendEventsService().Object);
 
             var entID = Guid.NewGuid();
             var creation = new ReceivingOrderCreatedEvent

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Mise.Core.Entities;
-using Mise.Core.Common.Entities;
 using Mise.Core.Common.Events.Checks;
 using Mise.Core.Entities.Check.Events;
 using Mise.Core.Entities.People;
@@ -12,12 +10,9 @@ using Mise.Core.ValueItems;
 using NUnit.Framework;
 using Mise.Core.Common.UnitTests.Tools;
 using Moq;
-using Mise.Core.Common.Services;
-using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Check;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.Client.Repositories;
-using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.UnitTests.Repositories
 {
@@ -47,10 +42,9 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var logger = new Mock<ILogger> ();
 
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
 
 
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -96,8 +90,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var events = new List<ICheckEvent>{ ccev, custEv, orderEv };
 
 			var logger = new Mock<ILogger> ();
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			var check = repos.ApplyEvents (events);
 			await repos.Commit (ccev.CheckID);
@@ -140,7 +133,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var events = new List<ICheckEvent>{ ccev, custEv};
 
 			var logger = new Mock<ILogger> ();
-            var repos = new ClientCheckRepository(service.Object, null, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -177,9 +170,8 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var events = new List<ICheckEvent>{ ccev, custEv};
 
 			var logger = new Mock<ILogger> ();
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
 
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -213,8 +205,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var logger = new Mock<ILogger> ();
 
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 			//ACT
 			for(var i = 0; i < numTimes;i++){
@@ -240,9 +231,8 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		{
 		    var service = MockingTools.GetTerminalService();
 			var logger = new Mock<ILogger> ();
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
 
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
 		    var empID = Guid.NewGuid();
 		    var checkID = Guid.NewGuid();
