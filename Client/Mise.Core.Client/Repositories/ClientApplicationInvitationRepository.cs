@@ -55,16 +55,6 @@ namespace Mise.Core.Client.Repositories
             throw new Exception("Cannot load without a restaurant ID");
 	    }
 
-	    protected override async Task<IEnumerable<ApplicationInvitation>> LoadFromDB(Guid? restaurantID)
-	    {
-	        var items = await DAL.GetEntitiesAsync<ApplicationInvitation>();
-	        if (restaurantID.HasValue)
-	        {
-	            items = items.Where(ai => ai.RestaurantID == restaurantID);
-	        }
-	        return items;
-	    }
-
 	    public async Task Load (EmailAddress email)
 		{
 			try{

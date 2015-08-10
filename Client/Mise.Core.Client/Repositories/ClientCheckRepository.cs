@@ -34,13 +34,6 @@ namespace Mise.Core.Client.Repositories
 	        return items.Cast<RestaurantCheck>();
 	    }
 
-	    protected override async Task<IEnumerable<RestaurantCheck>> LoadFromDB(Guid? restaurantID)
-	    {
-            Logger.Log("Loading from DAL");
-			var items = await DAL.GetEntitiesAsync<RestaurantCheck> ();
-	        return items;
-	    }
-
         IEnumerable<ICheck> GetOpenChecks()
         {
             return GetAll().Where(c => c.PaymentStatus != CheckPaymentStatus.Closed && c.PaymentStatus != CheckPaymentStatus.PaymentPending);

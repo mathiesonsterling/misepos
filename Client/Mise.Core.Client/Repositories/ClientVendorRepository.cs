@@ -65,17 +65,7 @@ namespace Mise.Core.Client.Repositories
             var items = await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
             return items.Cast<Vendor>();
         }
-
-
-        protected override async Task<IEnumerable<Vendor>> LoadFromDB(Guid? restaurantID)
-        {
-            var vendors = await DAL.GetEntitiesAsync<Vendor>();
-            if (restaurantID.HasValue)
-            {
-                vendors = vendors.Where(v => v.GetRestaurantIDsAssociatedWithVendor().Contains(restaurantID.Value));
-            }
-            return vendors;
-        }
+			
 
         private async Task<IEnumerable<IVendor>> LoadWithinDistance(Location deviceLocation, Distance radius)
         {

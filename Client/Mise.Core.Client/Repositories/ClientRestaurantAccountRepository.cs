@@ -43,12 +43,5 @@ namespace Mise.Core.Client.Repositories
         {
             return Task.FromResult(new List<RestaurantAccount>().AsEnumerable());
         }
-
-        protected override async Task<IEnumerable<RestaurantAccount>> LoadFromDB(Guid? restaurantID)
-        {
-            var items = await DAL.GetEntitiesAsync<RestaurantAccount>();
-            return items;
-        }
-
     }
 }

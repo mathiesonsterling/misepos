@@ -19,8 +19,7 @@ namespace Mise.Inventory.Services
 		/// <summary>
 		/// Allows view models to pass exceptions for possible display
 		/// </summary>
-		/// <param name="e">E.</param>
-		void HandleException (Exception e);
+		void DisplayErrorMessage (string message);
 
 		Task ShowMainMenu();
 

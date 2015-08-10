@@ -45,15 +45,5 @@ namespace Mise.Core.Client.Repositories
             }
             return _webService.GetReceivingOrdersForRestaurant(restaurantID.Value);
         }
-
-        protected override async Task<IEnumerable<ReceivingOrder>> LoadFromDB(Guid? restaurantID)
-        {
-            var items = await DAL.GetEntitiesAsync<ReceivingOrder>();
-            if (restaurantID.HasValue)
-            {
-                items = items.Where(ro => ro.RestaurantID == restaurantID);
-            }
-            return items;
-        }
     }
 }

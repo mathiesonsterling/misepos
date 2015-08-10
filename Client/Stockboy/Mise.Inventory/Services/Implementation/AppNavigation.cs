@@ -51,7 +51,7 @@ namespace Mise.Inventory.Services.Implementation
 				await _navi.PushAsync(_pages.GetPage(page));
 				_navi.RemovePage(currentPage);
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -64,7 +64,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PopToRootAsync ();
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -73,7 +73,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PopToRootAsync();
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 			
@@ -87,7 +87,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 			await _navi.PushAsync(_pages.GetPage(Pages.Inventory));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -100,7 +100,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 			await _navi.PushAsync(_pages.GetPage(Pages.InventoryFind));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 			await _navi.PushAsync(_pages.GetPage(Pages.ItemFind));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -126,7 +126,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PushAsync(_pages.GetPage (Pages.Login));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -136,7 +136,7 @@ namespace Mise.Inventory.Services.Implementation
 			//until we have more stuff, go to review
 			await _navi.PushAsync (_pages.GetPage (Pages.PurchaseOrderReview));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -145,7 +145,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PushAsync (_pages.GetPage (Pages.PurchaseOrderSelect));
 			} catch(Exception e){
-				HandleException (e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -158,7 +158,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 			await _navi.PushAsync(_pages.GetPage(Pages.VendorAdd));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -171,7 +171,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 			await _navi.PushAsync(_pages.GetPage(Pages.VendorFind));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PushAsync(_pages.GetPage(Pages.ReceivingOrder));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -197,7 +197,7 @@ namespace Mise.Inventory.Services.Implementation
 				}
 			}
 			catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -206,7 +206,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PushAsync(_pages.GetPage(Pages.EmployeesManage));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -241,7 +241,7 @@ namespace Mise.Inventory.Services.Implementation
 					await _navi.PushAsync(_pages.GetPage(PAGE));
 				}
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -268,7 +268,7 @@ namespace Mise.Inventory.Services.Implementation
 				vm.CurrentAddType = type;
 				await _navi.PushAsync (_pages.GetPage (Pages.ItemAdd));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 			
@@ -278,7 +278,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PushModalAsync(_pages.GetPage(Pages.ItemScan));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -287,7 +287,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PushAsync(_pages.GetPage(Pages.SectionAdd));
 			} catch(Exception e){
-				 HandleException(e);
+				 DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -304,7 +304,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 			}
 			catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -316,7 +316,7 @@ namespace Mise.Inventory.Services.Implementation
 				}
 				await _navi.PushAsync(_pages.GetPage(Pages.RestaurantSelect));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -325,7 +325,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				return _navi.PushAsync (_pages.GetPage (Pages.InventoryVisuallyMeasure));
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 				return Task.FromResult (false);
 			}
 		}
@@ -338,7 +338,7 @@ namespace Mise.Inventory.Services.Implementation
 	        }
 	        catch (Exception e)
 	        {
-	            HandleException(e);
+	            DisplayErrorMessage (e.Message);
 	            return Task.FromResult(false);
 	        }
 	    }
@@ -355,7 +355,7 @@ namespace Mise.Inventory.Services.Implementation
 	        }
 	        catch (Exception e)
 	        {
-	            HandleException(e);
+	            DisplayErrorMessage (e.Message);
                 return Task.FromResult(false);
 	        }
 	    }
@@ -375,7 +375,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				return _navi.PushAsync(_pages.GetPage(Pages.AuthorizeCreditCard));
 			} catch(Exception e){
-				HandleException (e);
+				DisplayErrorMessage (e.Message);
 				return Task.FromResult (false);
 			}
 		}
@@ -384,7 +384,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PushAsync (_pages.GetPage (Pages.RegisterUser));
 			} catch(Exception e){
-				HandleException (e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -394,7 +394,7 @@ namespace Mise.Inventory.Services.Implementation
 				await App.InventoryViewModel.OnAppearing ();
 				await _navi.PopAsync ();
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -407,7 +407,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await  _navi.PopAsync ();
 			} catch(Exception e){
-				HandleException(e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -421,7 +421,7 @@ namespace Mise.Inventory.Services.Implementation
 				await _navi.PopAsync ();
 				//just go to RO
 			} catch(Exception e){
-				HandleException (e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -430,7 +430,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PopAsync();
 			} catch(Exception e){
-				HandleException (e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -454,7 +454,7 @@ namespace Mise.Inventory.Services.Implementation
 					}
 				}*/
 			} catch(Exception e){
-				HandleException (e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -462,7 +462,7 @@ namespace Mise.Inventory.Services.Implementation
 			try{
 				await _navi.PopAsync ();
 			} catch(Exception e){
-				HandleException (e);
+				DisplayErrorMessage (e.Message);
 			}
 		}
 
@@ -474,7 +474,7 @@ namespace Mise.Inventory.Services.Implementation
 	        }
 	        catch (Exception e)
 	        {
-	            HandleException(e);
+	            DisplayErrorMessage(e.Message);
 	        }
 	    }
 
@@ -488,7 +488,7 @@ namespace Mise.Inventory.Services.Implementation
 	        }
 	        catch (Exception e)
 	        {
-	            HandleException(e);
+	            DisplayErrorMessage(e.Message);
 	        }
 
 	    }
@@ -501,7 +501,7 @@ namespace Mise.Inventory.Services.Implementation
             }
             catch (Exception e)
             {
-                HandleException(e);
+                DisplayErrorMessage(e.Message);
                 return Task.FromResult(false);
             }
         }
@@ -514,18 +514,18 @@ namespace Mise.Inventory.Services.Implementation
 	        }
 	        catch (Exception e)
 	        {
-	            HandleException(e);
+	            DisplayErrorMessage(e.Message);
 	        }
 	    }
         #endregion	
 
-	    public async void HandleException(Exception e){
+	    public async void DisplayErrorMessage(string message){
 			try{
-				_logger.HandleException (e);
-				await _navi.DisplayAlert ("Error", e.Message);
+				await _navi.DisplayAlert ("Error", message);
 			} catch(Exception ex){
 				_logger.HandleException(ex);
 			}
 		}
+			
 	}
 }

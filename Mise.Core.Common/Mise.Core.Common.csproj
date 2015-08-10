@@ -191,8 +191,9 @@
     <Compile Include="Services\WebServices\IRestaurantTerminalService.cs" />
     <Compile Include="Services\WebServices\IVendorWebService.cs" />
     <Compile Include="Services\WebServices\SendErrors.cs" />
-    <Compile Include="Services\WebServices\SendEventsException.cs" />
-    <Compile Include="Services\WebServices\ServerNotReadyException.cs" />
+    <Compile Include="Services\WebServices\Exceptions\SendEventsException.cs" />
+    <Compile Include="Services\WebServices\Exceptions\ServerNotReadyException.cs" />
+    <Compile Include="Services\WebServices\Exceptions\DataNotSavedOnServerException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -203,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Requests\" />
+    <Folder Include="Services\WebServices\Exceptions\" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

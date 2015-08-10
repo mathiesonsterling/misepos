@@ -34,13 +34,6 @@ namespace Mise.Core.Client.Repositories
             return items.Cast<Employee>();
         }
 			
-        protected override async Task<IEnumerable<Employee>> LoadFromDB(Guid? restaurantID)
-        {
-
-            Logger.Log("Could not get employees from web service, pulling from DAL", LogLevel.Debug);
-            var items = await _clientDAL.GetEntitiesAsync<Employee>();
-            return items.ToList();
-        }
 
         public async Task<IEmployee> GetByEmailAndPassword(EmailAddress email, Password password)
         {

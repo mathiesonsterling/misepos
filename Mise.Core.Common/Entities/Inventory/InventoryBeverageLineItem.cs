@@ -72,7 +72,7 @@ namespace Mise.Core.Common.Entities.Inventory
 		/// <value>The total bottles.</value>
 		public decimal Quantity {
 			get {
-				var totalPartials = PartialBottleListing.Any ()
+				var totalPartials = PartialBottleListing != null && PartialBottleListing.Any ()
 					? PartialBottleListing.Sum (s => s)
 					: 0.0M;
 				return 

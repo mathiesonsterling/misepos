@@ -35,16 +35,7 @@ namespace Mise.Core.Client.Repositories
         {
             return ev.PurchaseOrderID;
         }
-
-        protected override async Task<IEnumerable<PurchaseOrder>> LoadFromDB(Guid? restaurantID)
-        {
-            var items = await DAL.GetEntitiesAsync<PurchaseOrder>();
-            if (restaurantID.HasValue)
-            {
-                items = items.Where(po => po.RestaurantID == restaurantID);
-            }
-            return items;
-        }
+			
 
         protected override Task<IEnumerable<PurchaseOrder>> LoadFromWebservice(Guid? restaurantID)
         {

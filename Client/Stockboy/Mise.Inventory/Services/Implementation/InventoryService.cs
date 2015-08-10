@@ -217,14 +217,7 @@ namespace Mise.Inventory.Services.Implementation
 			_selectedInventory = _inventoryRepository.ApplyEvent (compEv);
 
             //let's commit here to reduce transaction size
-            try
-            {
-                await _inventoryRepository.Commit(_selectedInventory.ID).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                _logger.HandleException(e);
-            }
+			 await _inventoryRepository.Commit(_selectedInventory.ID).ConfigureAwait(false);
 		}
 
 		public async Task MarkInventoryAsComplete ()
@@ -234,11 +227,7 @@ namespace Mise.Inventory.Services.Implementation
 
 			_inventoryRepository.ApplyEvent (compEv);
 
-			try{
-				await _inventoryRepository.Commit (_selectedInventory.ID).ConfigureAwait (false);
-			} catch(Exception e){
-				_logger.HandleException (e);
-			}
+			await _inventoryRepository.Commit (_selectedInventory.ID).ConfigureAwait (false);
 
 			//TODO our current should be copied over from here
 			_insights.Track("Completed Inventory", "Inventory ID", _selectedInventory.ID.ToString ());

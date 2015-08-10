@@ -9,6 +9,7 @@ using Mise.Inventory.Services;
 using Mise.Core.Entities.Inventory;
 using Xamarin.Forms;
 using Mise.Core.Services;
+using Mise.Core.Common.Services.WebServices.Exceptions;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -160,7 +161,11 @@ namespace Mise.Inventory.ViewModels
 				Processing = false;
 				//pop us back to our caller (select section)
 				await Navigation.ShowSectionSelect ();
-			} catch(Exception e){
+			} 
+			catch(DataNotSavedOnServerException des){
+				HandleException (des, "Can't save data on the server - are you connected to the internet?");
+			}
+			catch(Exception e){
 				HandleException (e);
 			}
 		}

@@ -34,12 +34,7 @@ namespace Mise.Core.Client.Repositories
         {
             return ev.InventoryID;
         }
-
-        protected override async Task<IEnumerable<Inventory>> LoadFromDB(Guid? restaurantID)
-        {
-            var items = await DAL.GetEntitiesAsync<Inventory>();
-            return items;
-        }
+			
 
         protected override Task<IEnumerable<Inventory>> LoadFromWebservice(Guid? restaurantID)
         {

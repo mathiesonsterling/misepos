@@ -44,12 +44,6 @@ namespace Mise.Core.Client.Repositories
 	        return _webService.GetPARsForRestaurant(restaurantID.Value);
 	    }
 
-	    protected override async Task<IEnumerable<Par>> LoadFromDB(Guid? restaurantID)
-	    {
-	        var items = await DAL.GetEntitiesAsync<Par>();
-	        return items;
-	    }
-
 
 		public Task<IPar> GetCurrentPAR (Guid restaurantID)
 		{

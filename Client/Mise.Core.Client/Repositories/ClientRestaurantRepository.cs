@@ -70,17 +70,6 @@ namespace Mise.Core.Client.Repositories
 			var items = await _webService.GetRestaurants(location, new Distance{Kilometers = 100});
             return items;
         }
-
-        protected override async Task<IEnumerable<Restaurant>> LoadFromDB(Guid? restaurantID)
-        {
-            var items = await DAL.GetEntitiesAsync<Restaurant>();
-            if (restaurantID.HasValue)
-            {
-                items = items.Where(r => r.ID == restaurantID);
-            }
-
-            return items;
-        }
 	}
 }
 
