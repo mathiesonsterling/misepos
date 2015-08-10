@@ -18,8 +18,8 @@ namespace Mise.Core.Client.Repositories
     public class ClientInventoryRepository : BaseEventSourcedClientRepository<IInventory, IInventoryEvent, Inventory>, IInventoryRepository
     {
         private readonly IInventoryWebService _inventoryWebService;
-        public ClientInventoryRepository(ILogger logger, IClientDAL dal, IInventoryWebService webService, IResendEventsWebService resend)
-            : base(logger, dal, webService, resend)
+        public ClientInventoryRepository(ILogger logger, IInventoryWebService webService, IResendEventsWebService resend)
+            : base(logger, webService, resend)
         {
             _inventoryWebService = webService;
         }

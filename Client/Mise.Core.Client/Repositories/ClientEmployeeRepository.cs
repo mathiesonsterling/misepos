@@ -18,14 +18,10 @@ namespace Mise.Core.Client.Repositories
     public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent, Employee>, IEmployeeRepository
     {
         readonly IInventoryEmployeeWebService _webService;
-        readonly IClientDAL _clientDAL;
-
-
-        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, IClientDAL dal, ILogger logger, IResendEventsWebService resend)
-            : base(logger, dal, webService, resend)
+        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, ILogger logger, IResendEventsWebService resend)
+            : base(logger, webService, resend)
         {
             _webService = webService;
-            _clientDAL = dal;
         }
 
         protected override async Task<IEnumerable<Employee>> LoadFromWebservice(Guid? restaurantID)

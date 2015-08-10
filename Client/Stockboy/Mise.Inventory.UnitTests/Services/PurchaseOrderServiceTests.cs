@@ -90,11 +90,10 @@ namespace Mise.Inventory.UnitTests.Services
 
             //use a real repos for full test
             var logger = new Mock<ILogger>();
-            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IPurchaseOrderWebService>();
             var roWS = new Mock<IReceivingOrderWebService>();
-            var poRepos = new ClientPurchaseOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, roWS.Object, TestUtilities.GetResendService().Object);
+            var poRepos = new ClientPurchaseOrderRepository(logger.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, roWS.Object, TestUtilities.GetResendService().Object);
             var eventFactory = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
 
             eventFactory.SetRestaurant(rest);
@@ -205,11 +204,10 @@ namespace Mise.Inventory.UnitTests.Services
 
             //use a real repos for full test
             var logger = new Mock<ILogger>();
-            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IPurchaseOrderWebService>();
             var roWS = new Mock<IReceivingOrderWebService>();
-            var poRepos = new ClientPurchaseOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, roWS.Object, TestUtilities.GetResendService().Object);
+            var poRepos = new ClientPurchaseOrderRepository(logger.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, roWS.Object, TestUtilities.GetResendService().Object);
             var eventFactory = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
 
             eventFactory.SetRestaurant(rest);
@@ -333,11 +331,10 @@ namespace Mise.Inventory.UnitTests.Services
 
             //use a real repos for full test
             var logger = new Mock<ILogger>();
-            var dal = new Mock<IClientDAL>();
             var ws = new Mock<IPurchaseOrderWebService>();
             var roWS = new Mock<IReceivingOrderWebService>();
-            var poRepos = new ClientPurchaseOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, roWS.Object, TestUtilities.GetResendService().Object);
+            var poRepos = new ClientPurchaseOrderRepository(logger.Object,  ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object,  roWS.Object, TestUtilities.GetResendService().Object);
 
             var eventFactory = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
 
@@ -443,7 +440,6 @@ namespace Mise.Inventory.UnitTests.Services
 
             //use a real repos for full test
             var logger = new Mock<ILogger>();
-            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IPurchaseOrderWebService>();
 
 
@@ -487,7 +483,7 @@ namespace Mise.Inventory.UnitTests.Services
 		        }
 		    };
 
-            var poRepos = new ClientPurchaseOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var poRepos = new ClientPurchaseOrderRepository(logger.Object, ws.Object, TestUtilities.GetResendService().Object);
             var roRepos = new Mock<IReceivingOrderRepository>();
             roRepos.Setup(r => r.GetAll())
                 .Returns(roList);

@@ -61,7 +61,9 @@ namespace Mise.Core.Common.Entities.Inventory
             return PartialBottleListing;
         }
 
-		public int NumPartialBottles{get{ return PartialBottleListing.Count;
+		public int NumPartialBottles{get{ 
+				return 
+					PartialBottleListing != null ? PartialBottleListing.Count : 0;
 			}}
 		
 		public int NumFullBottles{get;set;}
@@ -104,8 +106,12 @@ namespace Mise.Core.Common.Entities.Inventory
             newItem.Container = Container;
             newItem.VendorBoughtFrom = VendorBoughtFrom;
             newItem.NumFullBottles = NumFullBottles;
-			newItem.PartialBottleListing = PartialBottleListing.Select (d => d).ToList();
-			newItem.Categories = Categories.Select (c => c).ToList ();
+			newItem.PartialBottleListing = PartialBottleListing != null 
+				? PartialBottleListing.Select (d => d).ToList ()
+				: new List<decimal> ();;
+			newItem.Categories = Categories != null 
+				? Categories.Select (c => c).ToList () 
+				: new List<ItemCategory>();
             return newItem;
         }
 

@@ -30,8 +30,7 @@ namespace Mise.Core.Client.Repositories
         private readonly IEventStoreWebService<TConcreteStorageType, TEventType> _webService;
         private readonly IResendEventsWebService _resendEventsWebService;
 
-        protected BaseEventSourcedClientRepository(ILogger logger, 
-            IClientDAL dal,
+        protected BaseEventSourcedClientRepository(ILogger logger,
             IEventStoreWebService<TConcreteStorageType, TEventType> webService,
             IResendEventsWebService resendService
             ) : base(logger)

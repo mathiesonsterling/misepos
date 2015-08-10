@@ -25,8 +25,8 @@ namespace Mise.Core.Client.Repositories
         private static readonly Distance DefaultSearchRadius = new Distance{Kilometers = 80.46};
         private readonly IDeviceLocationService _deviceLocationService;
 
-        public ClientVendorRepository(ILogger logger, IClientDAL dal, IVendorWebService webService, IDeviceLocationService locationService, IResendEventsWebService resend)
-            : base(logger, dal, webService, resend)
+        public ClientVendorRepository(ILogger logger, IVendorWebService webService, IDeviceLocationService locationService, IResendEventsWebService resend)
+            : base(logger, webService, resend)
         {
             _vendorWebService = webService;
             _deviceLocationService = locationService;

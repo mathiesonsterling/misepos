@@ -24,8 +24,8 @@ namespace Mise.Core.Client.Repositories
 	{
 		readonly IInventoryRestaurantWebService _webService;
         private readonly IDeviceLocationService _locationService;
-        public ClientRestaurantRepository(ILogger logger, IClientDAL dal, IInventoryRestaurantWebService webService, IResendEventsWebService resend, IDeviceLocationService locationService)
-            : base(logger, dal, webService, resend)
+        public ClientRestaurantRepository(ILogger logger, IInventoryRestaurantWebService webService, IResendEventsWebService resend, IDeviceLocationService locationService)
+            : base(logger, webService, resend)
         {
 			_webService = webService;
             _locationService = locationService;
