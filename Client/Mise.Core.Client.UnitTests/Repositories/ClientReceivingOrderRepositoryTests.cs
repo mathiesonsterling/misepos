@@ -33,7 +33,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
                 .Callback<IReceivingOrder, IEnumerable<IReceivingOrderEvent>>((ro, evs) => inventoryEventsPassed.AddRange(evs))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var underTest = new ClientReceivingOrderRepository(logger.Object, service.Object, MockingTools.GetResendEventsService().Object);
+            var underTest = new ClientReceivingOrderRepository(logger.Object, service.Object);
 
             var entID = Guid.NewGuid();
             var creation = new ReceivingOrderCreatedEvent

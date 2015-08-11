@@ -44,7 +44,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 
 
-            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -90,7 +90,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var events = new List<ICheckEvent>{ ccev, custEv, orderEv };
 
 			var logger = new Mock<ILogger> ();
-            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			var check = repos.ApplyEvents (events);
 			await repos.Commit (ccev.CheckID);
@@ -133,7 +133,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var events = new List<ICheckEvent>{ ccev, custEv};
 
 			var logger = new Mock<ILogger> ();
-            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -171,7 +171,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var logger = new Mock<ILogger> ();
 
-            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -205,7 +205,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var logger = new Mock<ILogger> ();
 
-            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			//ACT
 			for(var i = 0; i < numTimes;i++){
@@ -232,7 +232,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		    var service = MockingTools.GetTerminalService();
 			var logger = new Mock<ILogger> ();
 
-            var repos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 		    var empID = Guid.NewGuid();
 		    var checkID = Guid.NewGuid();

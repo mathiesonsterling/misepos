@@ -35,6 +35,14 @@ namespace Mise.Inventory.Pages
             }
         }
 
+		void LineItemDeleted(object item){
+			int i = 5;
+		}
+
+		void LineItemInsertAfter(object item){
+			int i = 8;
+		}
+
 		void LoadItems ()
 		{
 			listItems.Children.Clear ();
@@ -42,9 +50,11 @@ namespace Mise.Inventory.Pages
 			//TODO arrange line items by their display order field
 			var vm = BindingContext as InventoryViewModel;
 			if (vm != null) {
+
+				var dataTemplate = new DataTemplate (() => new InventoryLineItemCell (LineItemDeleted, LineItemInsertAfter));
 				_customVL = new ListView {
 					ItemsSource = vm.LineItems,
-					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
+					ItemTemplate = dataTemplate,
 					RowHeight = 50,
 					HasUnevenRows = true,
 					HorizontalOptions = LayoutOptions.FillAndExpand

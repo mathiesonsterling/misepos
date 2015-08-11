@@ -27,7 +27,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 					
 			var service = MockingTools.GetTerminalService ();
 			var logger = new Mock<ILogger> ();
-            var repository = new ClientEmployeeRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repository = new ClientEmployeeRepository(service.Object, logger.Object);
 
 			//ACT
 			var res = repository.ApplyEvent (blEvent);

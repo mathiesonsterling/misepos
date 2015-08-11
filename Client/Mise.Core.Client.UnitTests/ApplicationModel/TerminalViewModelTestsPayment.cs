@@ -40,7 +40,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
             var logger = new Mock<ILogger>();
 
-			var checkRepos = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+			var checkRepos = new ClientCheckRepository(service.Object, logger.Object);
 
             var empRepos = new Mock<IEmployeeRepository>();
             empRepos.Setup(r => r.GetAll()).Returns(new List<IEmployee>());
