@@ -127,7 +127,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 			if (res == null) {
 				res = new MiseTerminalDevice {
 					TopLevelCategoryID = Guid.Empty,
-					CreatedDate = DateTime.Now,
+					CreatedDate = DateTimeOffset.UtcNow,
 					ID = Guid.NewGuid(), 
 					RequireEmployeeSignIn = false,
 					TableDropChecks = false,
