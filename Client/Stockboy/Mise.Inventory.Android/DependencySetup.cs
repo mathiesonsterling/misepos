@@ -44,6 +44,9 @@ namespace Mise.Inventory.Android
 				CurrentPlatform.Init ();
 
 				var dbService = new AndroidSQLite ();
+
+				cb.RegisterInstance<ISQLite> (dbService);
+
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
 				store.DefineTable<AzureEntityStorage>();

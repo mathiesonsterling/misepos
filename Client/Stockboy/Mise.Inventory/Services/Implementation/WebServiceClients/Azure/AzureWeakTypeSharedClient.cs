@@ -305,11 +305,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				throw new Exception ("Error turning item " + ai.EntityID + " to RestaurantDTO!");
 			} else {
 				var real = _entityDTOFactory.FromDataStorageObject<Restaurant> (dto);
-				if(real == null){
+				if (real == null) {
 					throw new Exception ("Error rehydrating item ID " + dto.ID);
-				} else {
-					return real;
 				}
+				return real;
 			}
 		}
 
@@ -343,12 +342,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
 			&& e.Password != null && e.Password.Equals (password));
 
-			if(found == null){
-				if(items.Any(e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))){
+			if(found == null) {
+				if (items.Any (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))) {
 					throw new UserNotFoundException (email, false, true);
-				} else{
-					throw new UserNotFoundException (email);
 				}
+				throw new UserNotFoundException (email);
 			} 
 
 			return found;
@@ -446,11 +444,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 					throw new Exception ("Error turning item " + ai.EntityID + " to RestaurantDTO!");
 				} else {
 					var real = _entityDTOFactory.FromDataStorageObject<T> (dto);
-					if(real == null){
+					if (real == null) {
 						throw new Exception ("Error rehydrating item ID " + dto.ID);
-					} else {
-						realItems.Add (real);
 					}
+					realItems.Add (real);
 				}
 			}
 			return realItems;

@@ -89,34 +89,7 @@ namespace Mise.Inventory
 
         protected override async void OnSleep()
         {
-            //if we have any events still trying to send, give them another try
-            try
-            {
-				if(_insights != null){
-					_insights.Track("Stockboy put to sleep", new Dictionary<string, string>());
-				}
-                var dal = Resolve<IClientDAL>();
-                var httpClient = Resolve<IResendEventsWebService>();
-
-                var resends = (await dal.GetUnsentEvents()).Select(dto => dto as IEntityEventBase).ToList();
-                if (resends.Any())
-                {
-                    await httpClient.ResendEvents(resends);
-                }
-            }
-            catch (Exception e)
-            {
-                try
-                {
-                    var logger = Resolve<ILogger>();
-                    logger.HandleException(e);
-                }
-                catch (Exception)
-                {
-                    //nuke it here
-                }
-            }
-
+			//TODO fire a sync if we're online and need one
         }
 
         #region View Models

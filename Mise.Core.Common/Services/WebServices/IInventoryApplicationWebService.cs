@@ -7,7 +7,7 @@ namespace Mise.Core.Common.Services.WebServices
 	IInventoryRestaurantWebService, IVendorWebService,
 	IParWebService, IInventoryWebService,
 	IReceivingOrderWebService, IPurchaseOrderWebService,
-	IApplicationInvitationWebService, IAccountWebService, IResendEventsWebService
+	IApplicationInvitationWebService, IAccountWebService
 	{
 	}
 }

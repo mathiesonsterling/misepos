@@ -19,8 +19,8 @@ namespace Mise.Core.Client.Repositories
         IPurchaseOrderRepository
     {
         private readonly IPurchaseOrderWebService _webService;
-        public ClientPurchaseOrderRepository(ILogger logger, IPurchaseOrderWebService webService, IResendEventsWebService resend)
-            : base(logger,  webService, resend)
+        public ClientPurchaseOrderRepository(ILogger logger, IPurchaseOrderWebService webService)
+            : base(logger,  webService)
         {
             _webService = webService;
         }

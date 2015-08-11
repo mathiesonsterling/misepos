@@ -20,8 +20,8 @@ namespace Mise.Core.Client.Repositories
 	public class ClientCheckRepository : BaseEventSourcedClientRepository<ICheck, ICheckEvent, RestaurantCheck>, ICheckRepository
 	{
 		readonly IRestaurantTerminalService _service;
-		public ClientCheckRepository (IRestaurantTerminalService service, ILogger logger, IResendEventsWebService resend)
-            : base(logger, service, resend)
+		public ClientCheckRepository (IRestaurantTerminalService service, ILogger logger)
+            : base(logger, service)
 		{
 		    _service = service;
 		}

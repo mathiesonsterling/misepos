@@ -11,12 +11,15 @@ namespace Mise.Inventory.ViewModels
 	public class MainMenuViewModel : BaseViewModel
 	{
 		readonly ILoginService _loginService;
+		readonly ISQLite _sqliteService;
 	    private readonly IInventoryService _inventoryService;
-		public MainMenuViewModel(ILogger logger, IAppNavigation navigationService, ILoginService loginService, IInventoryService inventoryService)
+		public MainMenuViewModel(ILogger logger, IAppNavigation navigationService, ILoginService loginService, 
+			IInventoryService inventoryService, ISQLite sqliteService)
 			:base(navigationService, logger)
 		{
 		    _loginService = loginService;
 		    _inventoryService = inventoryService;
+			_sqliteService = sqliteService;
 		}
 
 	    public override async Task OnAppearing(){
@@ -104,22 +107,27 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The reports command.</value>
 		public ICommand ReportsCommand {
-			get { return new Command(Reports, IsCurrentUserAdmin); }
+			get { return new Command (Reports, () => NotProcessing); }
 		}
 
 		public ICommand LogoutCommand {
 			get { return new Command(Logout, () => NotProcessing); }
 		}
 
+		public ICommand ResetDBCommand{get{return new Command (ResetDB, IsCurrentUserAdmin);}}
 		#endregion
 
 		async void ReceivingOrder()
 		{
 			try{
-			await Navigation.ShowVendorFind ();
+				await Navigation.ShowVendorFind ();
 			} catch(Exception e){
 				HandleException (e);
 			}
+		}
+
+		async void ResetDB(){
+			await _sqliteService.DeleteDatabaseFile ();
 		}
 
 		/// <summary>

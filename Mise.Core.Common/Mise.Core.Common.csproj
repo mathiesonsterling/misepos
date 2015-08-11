@@ -187,7 +187,6 @@
     <Compile Include="Services\WebServices\IParWebService.cs" />
     <Compile Include="Services\WebServices\IPurchaseOrderWebService.cs" />
     <Compile Include="Services\WebServices\IReceivingOrderWebService.cs" />
-    <Compile Include="Services\WebServices\IResendEventsWebService.cs" />
     <Compile Include="Services\WebServices\IRestaurantTerminalService.cs" />
     <Compile Include="Services\WebServices\IVendorWebService.cs" />
     <Compile Include="Services\WebServices\SendErrors.cs" />

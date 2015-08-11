@@ -1,6 +1,9 @@
 ﻿using System;
 
 using SQLite;
+using System.Threading.Tasks;
+
+
 namespace Mise.Inventory.Services
 {
 	/// <summary>
@@ -9,6 +12,10 @@ namespace Mise.Inventory.Services
 	public interface ISQLite
 	{
 		SQLiteConnection GetDatabase();
+
+		string GetLocalFilename();
+
+		Task DeleteDatabaseFile();
 	}
 }
 

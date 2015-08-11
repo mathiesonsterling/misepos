@@ -57,7 +57,7 @@ namespace Mise.Inventory.UnitTests
 			{
 			    lock (Locker)
 			    {
-			        const string FILENAME = "TestDB.db";
+			        string FILENAME = GetLocalFilename ();
 			        if (File.Exists(FILENAME))
 			        {
 			            File.Delete(FILENAME);
@@ -67,6 +67,16 @@ namespace Mise.Inventory.UnitTests
                     return db;
 			    }
 
+			}
+
+			public string GetLocalFilename ()
+			{
+				return "TestDB.db";
+			}
+
+			public Task DeleteDatabaseFile ()
+			{
+				throw new NotImplementedException ();
 			}
 			#endregion
 		}
