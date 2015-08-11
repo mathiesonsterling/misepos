@@ -82,7 +82,6 @@ namespace Mise.Inventory.Services.Implementation
 
 		public async Task<IEnumerable<IInventoryBeverageLineItem>> GetLineItemsForCurrentSection ()
 		{
-			var rest = await _loginService.GetCurrentRestaurant ();
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 
 			if (inv == null) {
