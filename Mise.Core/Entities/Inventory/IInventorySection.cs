@@ -12,6 +12,12 @@ namespace Mise.Core.Entities.Inventory
     /// </summary>
     public interface IInventorySection : IRestaurantEntityBase, ICloneableEntity, ITextSearchable
     {
+		/// <summary>
+		/// ID of the inventory this belongs to
+		/// </summary>
+		/// <value>The inventory I.</value>
+		Guid InventoryID{get;}
+
         string Name { get; }
 
 		/// <summary>

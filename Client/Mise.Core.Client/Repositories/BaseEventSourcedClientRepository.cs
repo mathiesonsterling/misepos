@@ -159,7 +159,7 @@ namespace Mise.Core.Client.Repositories
             var toSend = bundle.Events;
             Logger.Log("Sending events to service", LogLevel.Debug);
 
-            commitRes = CommitResult.Error;
+
             try{
 				var sendRes = await _webService.SendEventsAsync (bundle.NewVersion as TConcreteStorageType, toSend).ConfigureAwait (false);
                 if(sendRes){
@@ -171,19 +171,11 @@ namespace Mise.Core.Client.Repositories
                 }
             } catch(Exception ex){
                 Logger.HandleException (ex);
-				throw new DataNotSavedOnServerException ();
-            }
-		
-
-            var realType = bundle.NewVersion as TConcreteStorageType;
-            if (realType == null)
-            {
-                throw new Exception("Can't store type of " + bundle.NewVersion.GetType());
+				throw new DataNotSavedOnServerException (ex);
             }
 
 
-            var status = commitRes == CommitResult.SentToServer ? ItemCacheStatus.Clean : ItemCacheStatus.ClientDB;
-            Cache.UpdateCache(bundle.NewVersion, status);
+            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.Clean);
 
             Dirty = false;
 

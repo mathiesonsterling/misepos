@@ -13,6 +13,11 @@ namespace Mise.Core.Common.Entities.Inventory
             LineItems = new List<InventoryBeverageLineItem>();
         }
 
+		public Guid InventoryID {
+			get;
+			set;
+		}
+
         public string Name { get; set; }
 
 		public bool Completed {

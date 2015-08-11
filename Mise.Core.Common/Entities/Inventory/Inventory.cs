@@ -148,6 +148,7 @@ namespace Mise.Core.Common.Entities.Inventory
                     Revision = inventoryNewSectionAddedEvent.EventOrderingID,
                     CreatedDate = inventoryNewSectionAddedEvent.CreatedDate,
                     LastUpdatedDate = inventoryNewSectionAddedEvent.CreatedDate,
+					InventoryID = inventoryNewSectionAddedEvent.InventoryID
                 };
                 Sections.Add(newSec);
             }

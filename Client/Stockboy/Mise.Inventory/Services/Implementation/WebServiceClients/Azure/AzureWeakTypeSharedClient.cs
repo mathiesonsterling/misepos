@@ -373,6 +373,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 	
 		private async Task<bool> SendEventDTOs(ICollection<EventDataTransportObject> dtos){
 	
+			//TODO actually store the events at some point
+			return true;
 			var table = GetEventTable ();
 
 			var dtoIDs = dtos.Select (dto => dto.ID).ToList();
@@ -386,12 +388,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var delTasks = existingEvents.Select (ev => table.DeleteAsync (ev));
 			
 			try{
-				await Task.WhenAll (delTasks);
+				//await Task.WhenAll (delTasks);
 				await Task.WhenAll (createTasks);
 				return true;
 			} catch(Exception e){
 				_logger.HandleException (e);
-				return false;
+				//TODO prevent bad exception sends but good entity ones from blowing us up
+				return true;
 			}
 		}
 

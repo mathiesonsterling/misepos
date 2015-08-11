@@ -62,18 +62,9 @@ namespace Mise.Inventory
             navigationService.Navi = MainPage.Navigation;
             navigationService.CurrentPage = initialPage;
 
-			//get the device ID
-			var kVService = Resolve<IClientKeyValueStorage> ();
-			var item = kVService.GetID ("DEVICE_ID");
+			LoadDeviceID ();
 
-			if(item == null){
-				item = Guid.NewGuid ();
-				kVService.SetID("DEVICE_ID", item.Value);
-			}
 
-			//set the ev factory
-			var evFactory = Resolve<IInventoryAppEventFactory>();
-			evFactory.SetDeviceID (item.ToString ());
 
             LoadRepositoriesVoid();
 
@@ -81,6 +72,20 @@ namespace Mise.Inventory
 			AttemptToLoginSavedEmployee (appNavigation);
             
         }
+
+		static async void LoadDeviceID ()
+		{
+			//get the device ID
+			var kVService = Resolve<IClientKeyValueStorage> ();
+			var item = kVService.GetID ("DEVICE_ID");
+			if (item == null) {
+				item = Guid.NewGuid ();
+				await kVService.SetID ("DEVICE_ID", item.Value);
+			}
+			//set the ev factory
+			var evFactory = Resolve<IInventoryAppEventFactory> ();
+			evFactory.SetDeviceID (item.ToString ());
+		}
 
         protected override async void OnSleep()
         {
