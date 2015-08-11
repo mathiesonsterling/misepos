@@ -21,15 +21,6 @@ namespace Mise.Inventory.UnitTests
 {
     public static class TestUtilities
     {
-        public static Mock<IResendEventsWebService> GetResendService()
-        {
-            var moq = new Mock<IResendEventsWebService>();
-            moq.Setup(s => s.ResendEvents(It.IsAny<ICollection<IEntityEventBase>>()))
-                .Returns(Task.FromResult(true));
-
-            return moq;
-        }
-
         public static Mock<IClientDAL> GetDALWithoutResends()
         {
             var moq = new Mock<IClientDAL>();

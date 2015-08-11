@@ -221,7 +221,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //we'll want a real Repository for this test
             var ws = new Mock<IReceivingOrderWebService>();
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object);
 
             var invService = new Mock<IInventoryService>();
 
@@ -292,7 +292,7 @@ namespace Mise.Inventory.UnitTests.Services
                         }.AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object,  ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object,  ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
 
@@ -351,7 +351,7 @@ namespace Mise.Inventory.UnitTests.Services
                         new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object,  ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object,  ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
 
@@ -411,7 +411,7 @@ namespace Mise.Inventory.UnitTests.Services
                         new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
 
