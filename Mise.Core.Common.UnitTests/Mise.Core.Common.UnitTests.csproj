@@ -103,6 +103,7 @@
     <Compile Include="ValueItems\PasswordTests.cs" />
     <Compile Include="Entities\Serialization\InventoryEventsSerializationTests.cs" />
     <Compile Include="ValueItems\EmailAddressTests.cs" />
+    <Compile Include="Events\InventoryAppEventFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -129,4 +130,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Events\" />
+  </ItemGroup>
 </Project>

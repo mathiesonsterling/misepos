@@ -128,6 +128,7 @@ namespace Mise.Core.Common.Events
 			IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
+				ID = Guid.NewGuid (),
 				CausedByID = emp.ID,
 				CreatedDate = GetDate(),
 				RestaurantID = _restaurant.ID,
@@ -168,6 +169,7 @@ namespace Mise.Core.Common.Events
 			int? quantity, IPar par)
 		{
 			return new PARLineItemAddedEvent {
+				ID = Guid.NewGuid (),
 				CausedByID = emp.ID,
 				CreatedDate = GetDate(),
 				RestaurantID = _restaurant.ID,
@@ -180,7 +182,9 @@ namespace Mise.Core.Common.Events
 				DisplayName = source.DisplayName,
 				Quantity = quantity,
 				ParID = par.ID,
-				Categories = source.GetCategories ().Cast<ItemCategory>(),
+				Categories = source.GetCategories () != null 
+					? source.GetCategories ().Cast<ItemCategory>() 
+					: new List<ItemCategory>(),
                 LineItemID = Guid.NewGuid()
 			};
 		}
@@ -209,6 +213,7 @@ namespace Mise.Core.Common.Events
 			Guid lineItemID, decimal quantity)
 		{
 			return new PARLineItemQuantityUpdatedEvent {
+				ID = Guid.NewGuid (),
 				CausedByID = emp.ID,
 				CreatedDate = GetDate(),
 				RestaurantID = _restaurant.ID,
@@ -334,6 +339,7 @@ namespace Mise.Core.Common.Events
 				CreatedDate = GetDate (),
 				EventOrderingID = GetNextEventID(),
 				DeviceID = _deviceID,
+				RestaurantID = _restaurant.ID
 			};
 		}
 
@@ -344,7 +350,8 @@ namespace Mise.Core.Common.Events
 				EventOrderingID = GetNextEventID(),
 				DeviceID = _deviceID,
                 CreatedDate = GetDate (),
-				EmployeeID = emp.ID
+				EmployeeID = emp.ID,
+
 			};
 		}
 
@@ -356,7 +363,8 @@ namespace Mise.Core.Common.Events
 				EventOrderingID = GetNextEventID(),
 				DeviceID = _deviceID,
 				EmployeeID = emp.ID,
-				CausedByID = emp.ID
+				CausedByID = emp.ID,
+				RestaurantID = _restaurant.ID
 			};
 		}
 

@@ -213,7 +213,7 @@ namespace Mise.Core.Common.Entities.Inventory
             {
                 throw new ArgumentException("Cannot measure a negative amount");
             }
-            var lineItem = entityEvent.BeverageLineItem;
+			var lineItem = entityEvent.BeverageLineItem.Clone() as InventoryBeverageLineItem;
             lineItem.MethodsMeasuredLast = MeasurementMethods.VisualEstimate;
 
             lineItem.CurrentAmount = entityEvent.AmountMeasured;
