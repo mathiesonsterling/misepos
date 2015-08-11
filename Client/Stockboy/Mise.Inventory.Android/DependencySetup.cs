@@ -12,6 +12,8 @@ using Mise.Core.Common.Services.Implementation.Serialization;
 using Microsoft.WindowsAzure.MobileServices;
 using Mise.Inventory.Android.MercuryWebService;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using Mise.Core.Common.Entities.DTOs.AzureTypes;
+using Mise.Core.Common.Events.DTOs.AzureTypes;
 
 
 namespace Mise.Inventory.Android
@@ -40,8 +42,13 @@ namespace Mise.Inventory.Android
 			if (wsLocation != null) {
 				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey);
 				CurrentPlatform.Init ();
-				/*var dbService = new AndroidSQLite ();
+				/*
+				var dbService = new AndroidSQLite ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
+
+				store.DefineTable<AzureEntityStorage>();
+				store.DefineTable<AzureEventStorage>();
+
 				await mobileService.SyncContext.InitializeAsync (store);*/
 				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService);
 				RegisterWebService (cb, webService);
