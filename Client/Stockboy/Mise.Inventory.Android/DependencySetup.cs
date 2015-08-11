@@ -42,14 +42,14 @@ namespace Mise.Inventory.Android
 			if (wsLocation != null) {
 				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey);
 				CurrentPlatform.Init ();
-				/*
+
 				var dbService = new AndroidSQLite ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
 				store.DefineTable<AzureEntityStorage>();
 				store.DefineTable<AzureEventStorage>();
 
-				await mobileService.SyncContext.InitializeAsync (store);*/
+				await mobileService.SyncContext.InitializeAsync (store);
 				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService);
 				RegisterWebService (cb, webService);
 			}
