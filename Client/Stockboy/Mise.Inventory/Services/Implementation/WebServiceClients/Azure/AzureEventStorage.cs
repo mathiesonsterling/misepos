@@ -30,7 +30,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
         public DateTimeOffset EventDate { get; set; }
         public string JSON { get; set; }
 		[JsonProperty(PropertyName = "__version")]
-		[Version]
+		//[Version]
 		public string Version { set; get; }
     }
 }
