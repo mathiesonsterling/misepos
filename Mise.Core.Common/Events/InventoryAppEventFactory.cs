@@ -86,6 +86,7 @@ namespace Mise.Core.Common.Events
 	    {
             return new ReceivingOrderLineItemAddedEvent
             {
+				ID = Guid.NewGuid (),
                 CausedByID = emp.ID,
                 CreatedDate = GetDate(),
                 RestaurantID = _restaurant.ID,
@@ -98,7 +99,9 @@ namespace Mise.Core.Common.Events
                 DisplayName = source.DisplayName,
 				Quantity = quantity,
 				ReceivingOrderID = ro.ID,
-				Categories = source.GetCategories ().Cast<ItemCategory>(),
+				Categories = source.GetCategories () != null
+					? source.GetCategories ().Cast<ItemCategory>()
+					: new List<ItemCategory>(),
                 LineItemID = Guid.NewGuid()
             };
 	    }
@@ -107,6 +110,7 @@ namespace Mise.Core.Common.Events
 			string upc, IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, IReceivingOrder ro)
 		{
 			return new ReceivingOrderLineItemAddedEvent {
+				ID = Guid.NewGuid (),
 				CausedByID = emp.ID,
 				CreatedDate = GetDate(),
 				RestaurantID = _restaurant.ID,
@@ -193,6 +197,7 @@ namespace Mise.Core.Common.Events
 			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, IPar par)
 		{
 			return new PARLineItemAddedEvent {
+				ID = Guid.NewGuid (),
 				CausedByID = emp.ID,
 				CreatedDate = GetDate(),
 				RestaurantID = _restaurant.ID,
@@ -534,7 +539,8 @@ namespace Mise.Core.Common.Events
 				EventOrderingID = GetNextEventID (),
 				PurchaseOrderID = po.ID,
 				Status = status,
-				ReceivingOrderID = ro.ID
+				ReceivingOrderID = ro.ID,
+				RestaurantID = _restaurant.ID
 			};
 	    }
 
