@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Mise.Core.Common;
 using Mise.Core.Common.Entities.DTOs;
-using Mise.Core.Common.Entities.DTOs.AzureTypes;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation.Serialization;
@@ -17,6 +16,7 @@ using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 using Mise.VendorManagement.Services.Implementation;
 
 namespace DeveloperTools.Commands
