@@ -45,6 +45,8 @@ namespace Mise.Inventory.Services.Implementation
 			var restID = _eventFactory.RestaurantID;
 		    if (restID.HasValue)
 		    {
+				//TODO allow us to load up inventories from other devices ONLY if our restaurant supports it
+				//via billing feature
 				/*
 		        _selectedInventory = _inventoryRepository.GetAll()
 		            .Where(i => i.RestaurantID == restID.Value)

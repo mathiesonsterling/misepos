@@ -21,7 +21,6 @@ namespace Mise.Inventory.iOS
 			var processor = new MercuryPaymentProcessorService (Logger);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();
 
-
 			InitWebService (cb);
 
 			var raygun = new RaygunErrorTracking ();
