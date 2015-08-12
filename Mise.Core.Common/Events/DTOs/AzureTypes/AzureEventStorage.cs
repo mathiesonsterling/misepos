@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
 namespace Mise.Core.Common.Events.DTOs.AzureTypes
 {
     public class AzureEventStorage
@@ -24,5 +25,7 @@ namespace Mise.Core.Common.Events.DTOs.AzureTypes
         public Guid EventID { get; set; }
         public DateTimeOffset EventDate { get; set; }
         public string JSON { get; set; }
+		[JsonProperty(PropertyName = "__version")]
+		public string Version { set; get; }
     }
 }

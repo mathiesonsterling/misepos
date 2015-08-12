@@ -7,8 +7,6 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System;
-using System.Collections.ObjectModel;
-using Mise.Core.Services;
 using Xamarin.Forms;
 namespace Mise.Inventory.ViewModels
 {

@@ -344,7 +344,6 @@ namespace Mise.Core.Common.Events
 				CreatedDate = GetDate (),
 				EventOrderingID = GetNextEventID(),
 				DeviceID = _deviceID,
-				RestaurantID = _restaurant.ID
 			};
 		}
 

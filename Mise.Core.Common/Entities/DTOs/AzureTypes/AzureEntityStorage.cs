@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json;
 namespace Mise.Core.Common.Entities.DTOs.AzureTypes
 {
     /// <summary>
@@ -43,5 +43,7 @@ namespace Mise.Core.Common.Entities.DTOs.AzureTypes
         public Guid? RestaurantID { get; set; }
         public string JSON { get; set; }
         public DateTimeOffset LastUpdatedDate { get; set; }
+		[JsonProperty(PropertyName = "__version")]
+		public string Version { set; get; }
     }
 }

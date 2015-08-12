@@ -14,6 +14,9 @@ using Xamarin;
 using ServiceStack;
 using System.Net;
 using Xamarin.Forms;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
+using Mise.Core.Common.Events.Payments;
+using Mise.Core.Common.Services.WebServices.Exceptions;
 
 
 namespace Mise.Inventory.ViewModels
@@ -97,30 +100,31 @@ namespace Mise.Inventory.ViewModels
 	        await Login();
 	    }
 
+		private enum LoginResult{
+			ServerError,
+
+			LoggedIn,
+			BadPassword,
+			BadEmail,
+			ServerOffline,
+			Other
+		}
+
 		/// <summary>
 		/// Login this instance.
 		/// </summary>
 		public async Task Login()
 		{
-		    var succeeded = false;
 		    var shownErrorMessage = false;
-		    var missingServer = false;
+			var result = LoginResult.Other;
 			try{
 				Processing = true;
 				var email = new EmailAddress{ Value = Username.Trim() };
 				var password = new Password();
 				password.SetValue(Password);
 				IEmployee employee = null;
-				try{
-					employee = await _loginService.LoginAsync(email, password);
-				} catch(HttpRequestException he){
-					//is this a 404?
-					if(he.Message.Contains("No employee found for")){
-						_insightsService.Track("No employee found", new Dictionary<string, string>{{"email", email.Value}});
-					} else{
-						throw;
-					}
-				}
+
+				employee = await _loginService.LoginAsync(email, password);
 				Processing = false;
 
 			    if (employee == null)
@@ -139,9 +143,9 @@ namespace Mise.Inventory.ViewModels
 			    }
 			    else
 			    {
-			        succeeded = true;
+					result = LoginResult.LoggedIn;
 
-                    _insightsService.Identify(employee, "Stockboy Mobile");
+					_insightsService.Identify(employee, App.DeviceID);
 
 			        //do we have more than one restaurant?
 			        Processing = true;
@@ -171,7 +175,9 @@ namespace Mise.Inventory.ViewModels
 			        if (numRests == 0)
 			        {
 			            //do we have invites?
+						Processing = true;
 			            var invites = await _loginService.GetInvitationsForCurrentEmployee();
+						Processing = false;
 			            if (invites.Any())
 			            {
 			                await Navigation.ShowInvitations();
@@ -188,38 +194,55 @@ namespace Mise.Inventory.ViewModels
 			        }
 			    }
 			} 
+			catch(UserNotFoundException unf){
+				if(unf.IncorrectPassword && (unf.NoEmailFound == false)){
+					result = LoginResult.BadPassword;
+				} else {
+					result = LoginResult.BadEmail;
+				}
+			}
 			catch(WebException we){
 				_insightsService.ReportException (we, LogLevel.Warn);
 				Logger.HandleException (we);
 				if(we.Message.Contains ("NameResolutionFailure"))
 				{
-				    missingServer = true;
+					result = LoginResult.ServerOffline;
 				} 
 			}
+			catch(DataNotSavedOnServerException dse){
+				_insightsService.ReportException (dse, LogLevel.Error);
+				Logger.HandleException (dse);
+				result = LoginResult.ServerError;
+			}
+
 			catch(Exception e){
 				_insightsService.ReportException (e, LogLevel.Warn);
 				Logger.HandleException (e);
 			}
 
-		    if (missingServer)
-		    {
-                await Navigation.DisplayAlert("Connection problem", "Cannot connect to server, are you online?");
-                shownErrorMessage = true;
-		        Processing = false;
-		    }
-		    if (succeeded == false && shownErrorMessage == false)
-		    {
-		        try
-		        {
-					_insightsService.Track("Login error", new Dictionary<string, string>());
-		            await Navigation.DisplayAlert("Error", "Error logging in");
-					Processing = false;
-		        }
-		        catch (Exception e)
-		        {
-					HandleException (e);
-		        }
-		    }
+			if(result != LoginResult.LoggedIn){
+				Processing = false;
+				switch(result){
+				case LoginResult.BadEmail:
+					await Navigation.DisplayAlert ("User not found", "No user found for " + Username);
+					Username = string.Empty;
+					Password = string.Empty;
+					break;
+				case LoginResult.BadPassword:
+					await Navigation.DisplayAlert ("Incorrect password", "Password is not correct");
+					Password = string.Empty;
+					break;
+				case LoginResult.ServerOffline:
+					await Navigation.DisplayAlert ("Server offline", "Cannot connect to the server, are you online?");
+					break;
+				case LoginResult.ServerError:
+					await Navigation.DisplayAlert ("Server error", "Error while updating server.  We'll be working on getting you back online as quick as possible!");
+					break;
+				case LoginResult.Other:
+					await Navigation.DisplayAlert ("Error", "Error logging in");
+					break;
+				}
+			}
 		}
 
 		public async void Register(){
