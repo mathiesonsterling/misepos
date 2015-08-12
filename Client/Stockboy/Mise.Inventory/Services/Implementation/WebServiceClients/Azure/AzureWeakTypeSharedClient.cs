@@ -444,14 +444,23 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			return _client.GetTable<AzureEventStorage> ();
 		}
 
+		private string GetQueryID(string type, Guid restaurantID){
+			if(type.Length > 40){
+				type = type.Substring (type.Length - 40);
+			}
+
+			var hash = restaurantID.GetHashCode ();
+			return type + "_" + hash;
+		}
 	    private async Task<IEnumerable<T>> GetEntityOfTypeForRestaurant<T>(Guid restaurantID) where T:class, IEntityBase, new()
 		{
 			var type = typeof(T).ToString ();
 
 	        var table = GetEntityTable();
 			//TODO get query into our pull async code
-			//var query = table.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID);
-			await table.PullAsync (type + "_r_"+restaurantID.GetHashCode (), null);
+			var query = table.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID);
+			var queryID = GetQueryID (type, restaurantID);
+			await table.PullAsync (queryID, query);
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID)
 				.ToEnumerableAsync ();
