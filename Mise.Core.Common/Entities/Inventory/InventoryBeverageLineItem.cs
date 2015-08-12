@@ -16,7 +16,6 @@ namespace Mise.Core.Common.Entities.Inventory
     {
         public InventoryBeverageLineItem()
         {
-            PricePaid = Money.None;
 			MethodsMeasuredLast = MeasurementMethods.Unmeasured;
         }
 
@@ -89,7 +88,6 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public MeasurementMethods MethodsMeasuredLast { get; set; }
 
-        public Money PricePaid { get; set; }
 
         public decimal GetPercentageFull()
         {

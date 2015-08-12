@@ -115,7 +115,6 @@ namespace Mise.Core.Common.Entities.Inventory
                 LastUpdatedDate = entityEvent.CreatedDate,
                 MethodsMeasuredLast = MeasurementMethods.Unmeasured,
                 MiseName = entityEvent.MiseName,
-                PricePaid = entityEvent.PricePaid,
                 RestaurantID = entityEvent.RestaurantID,
                 Revision = entityEvent.EventOrderingID,
                 UPC = entityEvent.UPC,

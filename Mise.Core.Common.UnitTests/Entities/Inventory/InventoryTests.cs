@@ -28,7 +28,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                                 ID = Guid.NewGuid(),
                                 Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1},
                                 VendorBoughtFrom = Guid.NewGuid(),
-                                PricePaid = new Money(9.00M),
                                 UPC = "11111"
                             },
                             new InventoryBeverageLineItem()
@@ -47,7 +46,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             Assert.AreEqual(res.First().ID, li.ID);
             Assert.IsTrue(res.First().Revision.Equals(li.Revision));
 
-            Assert.AreEqual(9.00M, res.First().PricePaid.Dollars);
         }
 
 
@@ -191,7 +189,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                     Container = LiquidContainer.Bottle750ML,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 10,
-                    PricePaid = new Money(10.0M),
                     MethodsMeasuredLast = MeasurementMethods.VisualEstimate
                 }
             };
@@ -255,7 +252,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                     Container = LiquidContainer.Bottle750ML,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 0,
-                    PricePaid = new Money(10.0M),
                     MethodsMeasuredLast = MeasurementMethods.VisualEstimate
                 }
             };
@@ -273,7 +269,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             Assert.AreEqual(750, item.CurrentAmount.Milliliters);
             Assert.AreEqual(MeasurementMethods.VisualEstimate, item.MethodsMeasuredLast);
             Assert.AreEqual(10, item.NumFullBottles, "bottleQuantity");
-            Assert.AreEqual(10.0M, item.PricePaid.Dollars);
         }
 
         [Test]

@@ -13,9 +13,8 @@ namespace Mise.Inventory.Services
 		Task LoadLatest ();
 
 		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (string name, ICategory category, string upc, 
-			int quantity, int caseSize, LiquidContainer container, Money pricePaid);
-		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity, 
-			Money pricePaid);
+			int quantity, int caseSize, LiquidContainer container);
+		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity);
 
 		/// <summary>
 		/// Updates the current inventory with the items received from a RO

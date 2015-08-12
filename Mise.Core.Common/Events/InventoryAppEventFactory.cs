@@ -128,7 +128,7 @@ namespace Mise.Core.Common.Events
 		}			
 
 		public InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent (IEmployee emp, 
-			IBaseBeverageLineItem source, int quantity, Money pricePaid, Guid? vendorID, IInventorySection section, int inventoryPosition,  
+			IBaseBeverageLineItem source, int quantity, Guid? vendorID, IInventorySection section, int inventoryPosition,  
 			IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
@@ -144,7 +144,6 @@ namespace Mise.Core.Common.Events
 				DisplayName = source.DisplayName,
 				MiseName = source.MiseName,
 				Quantity = quantity,
-				PricePaid = pricePaid,
 				VendorBoughtFrom = vendorID,
 				RestaurantInventorySectionID = section.RestaurantInventorySectionID,
                 InventorySectionID = section.ID,
@@ -231,8 +230,8 @@ namespace Mise.Core.Common.Events
 		}
 
 		public InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent (IEmployee emp, string name, string upc,
-			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, Money pricePaid, Guid? vendorID, IInventorySection section,
-			int inventoryPosisiton, IInventory inventory)
+			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity,  Guid? vendorID, 
+            IInventorySection section, int inventoryPosisiton, IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
                 ID = Guid.NewGuid(),
@@ -246,7 +245,6 @@ namespace Mise.Core.Common.Events
 				Container = container,
 				CaseSize = caseSize,
 				Quantity = quantity,
-				PricePaid = pricePaid,
 				VendorBoughtFrom = vendorID,
 				RestaurantInventorySectionID = section.RestaurantInventorySectionID,
                 InventorySectionID = section.ID,
@@ -640,9 +638,11 @@ namespace Mise.Core.Common.Events
 
 		public EmployeeCreatedEvent CreateEmployeeCreatedEvent (EmailAddress email, Password password, PersonName name, MiseAppTypes appType)
 		{
+		    var empID = Guid.NewGuid();
 			return new EmployeeCreatedEvent {
 				ID = Guid.NewGuid(),
-				EmployeeID = Guid.NewGuid(),
+                CausedByID = empID,
+				EmployeeID = empID,
 				CreatedDate = GetDate(),
 				DeviceID = _deviceID,
 				EventOrderingID = GetNextEventID(),

@@ -126,7 +126,7 @@ namespace Mise.Inventory.ViewModels
 				switch(CurrentAddType){
 					case AddLineItemType.Inventory:
 					var invItem = await _inventoryService.AddLineItemToCurrentInventory (Name, category, null, 0, CaseSize, 
-						container, null);
+						container);
 					if(ParNumber > 0 && invItem != null){
 						await _parService.AddLineItemToCurrentPAR (invItem, ParNumber);
 					}

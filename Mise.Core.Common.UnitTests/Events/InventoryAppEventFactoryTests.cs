@@ -134,8 +134,14 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void CreateEmployee(){
 			var ev = _underTest.CreateEmployeeCreatedEvent (EmailAddress.TestEmail, Password.TestPassword, PersonName.TestName, MiseAppTypes.UnitTests);
 
-			TestCommonFields (ev);
-		}
+            Assert.AreNotEqual(Guid.Empty, ev.ID, "ID");
+            Assert.AreNotEqual(Guid.Empty, ev.CausedByID, "CausedByID");
+            Assert.AreEqual(ev.EmployeeID, ev.CausedByID, "CausedByID");
+            Assert.NotNull(ev.CreatedDate, "CreatedDate");
+            Assert.GreaterOrEqual(ev.CreatedDate, DateTimeOffset.UtcNow.AddHours(-1));
+            Assert.AreEqual("testDevice", ev.DeviceID, "DeviceID");
+            Assert.NotNull(ev.EventOrderingID, "ordering ID");
+        }
 
 		[Test]
 		public void EmployeeInvited(){
@@ -148,7 +154,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void Login(){
 			var ev = _underTest.CreateEmployeeLoggedIntoInventoryAppEvent (_emp);
 
-			TestCommonFieldsWithRest (ev);
+			TestCommonFields (ev);
 		}
 
 		[Test]
@@ -195,7 +201,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		[Test]
 		public void CreateInventoryLineItemFromBase(){
 			var ev = _underTest.CreateInventoryLineItemAddedEvent (_emp, _parLI, 12, 
-				Money.MiseMonthlyFee, null, _invSection, 23, _inv);
+				null, _invSection, 23, _inv);
 
 			TestInventoryEvent (ev);
 			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
@@ -214,7 +220,7 @@ namespace Mise.Core.Common.UnitTests.Events
 				         11,
 				         LiquidContainer.Bottle1_75ML,
 				         100,
-				         Money.None, null, _invSection, 10, _inv);
+				         null, _invSection, 10, _inv);
 
 			TestInventoryEvent (ev);
 		}
