@@ -35,6 +35,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private readonly IJSONSerializer _serial;
 		private readonly EventDataTransportObjectFactory _eventDTOFactory;
 		private readonly EntityDataTransportObjectFactory _entityDTOFactory;
+		private bool _needsPush = false;
 		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client)
 		{
 			_logger = logger;
@@ -427,7 +428,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			}
 
 			//TODO make await false, and only push if online!
-			await _client.SyncContext.PushAsync ();
+			try{
+				await _client.SyncContext.PushAsync ();
+			} catch(MobileServicePushFailedException me){
+				//could mean we're offline!
+				_logger.HandleException (me, LogLevel.Debug);
+				_needsPush = true;
+			}
 
 			return true;
 		}
