@@ -38,11 +38,16 @@ namespace Mise.Core.Client.Repositories
 
         protected override Task<IEnumerable<Inventory>> LoadFromWebservice(Guid? restaurantID)
         {
-            if (restaurantID.HasValue)
-            {
-                return _inventoryWebService.GetInventoriesForRestaurant(restaurantID.Value);
-            }
-            return Task.FromResult(new List<Inventory>().AsEnumerable());
+			try{
+	            if (restaurantID.HasValue)
+	            {
+	                return _inventoryWebService.GetInventoriesForRestaurant(restaurantID.Value);
+	            }
+	            return Task.FromResult(new List<Inventory>().AsEnumerable());
+			} catch(Exception e){
+				Logger.HandleException (e);
+				throw;
+			}
         }
 
 

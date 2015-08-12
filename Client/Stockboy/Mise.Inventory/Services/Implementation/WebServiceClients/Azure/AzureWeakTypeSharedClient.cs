@@ -162,8 +162,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<IEnumerable<Core.Common.Entities.Inventory.Inventory>> GetInventoriesForRestaurant (Guid restaurantID)
 		{
-			var items = await GetEntityOfTypeForRestaurant<Mise.Core.Common.Entities.Inventory.Inventory> (restaurantID);
+			try{
+				var items = await GetEntityOfTypeForRestaurant<Mise.Core.Common.Entities.Inventory.Inventory> (restaurantID);
 		    return items;
+			} catch(Exception e){
+				_logger.HandleException (e, LogLevel.Fatal);
+				throw;
+			}
 		}
 
 		#endregion
@@ -444,7 +449,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var type = typeof(T).ToString ();
 
 	        var table = GetEntityTable();
-			await table.PullAsync ("allItemsOf" + type, null);
+			//TODO get query into our pull async code
+			//var query = table.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID);
+			await table.PullAsync (type + "_r_"+restaurantID.GetHashCode (), null);
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID)
 				.ToEnumerableAsync ();

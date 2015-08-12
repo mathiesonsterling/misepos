@@ -22,7 +22,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
             MiseEntityType = dto.SourceType.ToString();
             EntityID = dto.ID;
             RestaurantID = dto.RestaurantID;
-            JSON = dto.JSON;
+            EntityJSON = dto.JSON;
             LastUpdatedDate = dto.LastUpdatedDate;
         }
 
@@ -33,7 +33,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
                 SourceType = Type.GetType(MiseEntityType),
                 ID = EntityID,
                 RestaurantID = RestaurantID,
-                JSON = JSON,
+                JSON = EntityJSON,
                 LastUpdatedDate = LastUpdatedDate
             };
         }
@@ -42,7 +42,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
         public string MiseEntityType { get; set; }
         public Guid EntityID { get; set; }
         public Guid? RestaurantID { get; set; }
-        public string JSON { get; set; }
+        public string EntityJSON { get; set; }
         public DateTimeOffset LastUpdatedDate { get; set; }
 
 		[JsonProperty(PropertyName = "__version")]
