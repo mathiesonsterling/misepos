@@ -21,6 +21,8 @@ using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using Mise.Inventory.ViewModels;
+using ServiceStack;
+using System.Net;
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
@@ -35,7 +37,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private readonly IJSONSerializer _serial;
 		private readonly EventDataTransportObjectFactory _eventDTOFactory;
 		private readonly EntityDataTransportObjectFactory _entityDTOFactory;
-		private bool _needsPush = false;
+		private bool _needsSynch = false;
 		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client)
 		{
 			_logger = logger;
@@ -329,7 +331,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var empType = typeof(Employee).ToString ();
 
 		    var table = GetEntityTable();
-			await table.PullAsync ("allEmployees", null);
+			await AttemptPull ("allEmployees", null);
 			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();
 
 			return ais.Select (ai => ai.ToRestaurantDTO ())
@@ -344,6 +346,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
+			//TODO change this to do the query on server, or at least limit it somehow
 			var items = (await GetEmployeesAsync ()).ToList();
 				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
 			&& e.Password != null && e.Password.Equals (password));
@@ -428,15 +431,33 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			}
 
 			//TODO make await false, and only push if online!
+			await AttemptPush ();
+
+
+			return true;
+		}
+
+		private async Task AttemptPush(){
 			try{
 				await _client.SyncContext.PushAsync ();
 			} catch(MobileServicePushFailedException me){
 				//could mean we're offline!
 				_logger.HandleException (me, LogLevel.Debug);
-				_needsPush = true;
+				_needsSynch = true;
 			}
+		}
 
-			return true;
+		private async Task AttemptPull(string queryName, IMobileServiceTableQuery<AzureEntityStorage> query){
+			try{
+				var table = GetEntityTable ();
+				if(query == null){
+					query = table.CreateQuery ();
+				}
+				await table.PullAsync (queryName, query);
+			} catch(WebException we){
+				_logger.HandleException (we, LogLevel.Debug);
+				_needsSynch = true;
+			}
 		}
 
 	    private IMobileServiceSyncTable<AzureEntityStorage> GetEntityTable() 
@@ -467,7 +488,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			//TODO get query into our pull async code
 			var query = table.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID);
 			var queryID = GetQueryID (type, restaurantID);
-			await table.PullAsync (queryID, query);
+			await AttemptPull (queryID, query);
+
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID)
 				.ToEnumerableAsync ();
