@@ -7,6 +7,8 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Core.Entities.Base;
 
 using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.Sync;
+
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Common.Entities.DTOs;
@@ -16,8 +18,6 @@ using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Entities.Accounts;
-using Mise.Core.Common.Entities.DTOs.AzureTypes;
-using Mise.Core.Common.Events.DTOs.AzureTypes;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using Mise.Inventory.ViewModels;
@@ -323,7 +323,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var empType = typeof(Employee).ToString ();
 
 		    var table = GetEntityTable();
-
+			await table.PullAsync ("allEmployees", null);
 			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();
 
 			return ais.Select (ai => ai.ToRestaurantDTO ())
@@ -408,17 +408,30 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var existing = (await table.Where(ai => ai.EntityID == dto.ID).ToEnumerableAsync ()).FirstOrDefault ();
 			if(existing != null){
 				//update is not firing, do NOT know why, but we'll do this in the meantime
-				//await table.UpdateAsync (storageItem);
-				await table.DeleteAsync (existing);
-			} 
-			await table.InsertAsync (storageItem);
+				try{
+					await table.UpdateAsync (storageItem);
+				} catch(Exception e){
+					_logger.HandleException (e);
+				}
+			} else{
+				try{
+					await table.InsertAsync (storageItem);
+				} catch(Exception e){
+					_logger.HandleException (e);
+				}
+			}
+
+			//TODO make await false, and only push if online!
+			await _client.SyncContext.PushAsync ();
 
 			return true;
 		}
 
-	    private IMobileServiceTable<AzureEntityStorage> GetEntityTable() 
+	    private IMobileServiceSyncTable<AzureEntityStorage> GetEntityTable() 
 	    {
-	        return _client.GetTable<AzureEntityStorage>();
+			var table = _client.GetSyncTable<AzureEntityStorage>();
+		
+			return table;
 	    }
 
 		private IMobileServiceTable<AzureEventStorage> GetEventTable ()
@@ -431,7 +444,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var type = typeof(T).ToString ();
 
 	        var table = GetEntityTable();
-
+			await table.PullAsync ("allItemsOf" + type, null);
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID)
 				.ToEnumerableAsync ();

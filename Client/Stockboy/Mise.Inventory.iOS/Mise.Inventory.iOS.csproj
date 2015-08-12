@@ -131,9 +131,6 @@
     <Reference Include="PCLCrypto">
       <HintPath>..\packages\PCLCrypto.1.0.2.15130\lib\Xamarin.iOS\PCLCrypto.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Components\azure-mobile-services-1.3.1\lib\ios-unified\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="XLabs.Ioc">
       <HintPath>..\packages\XLabs.IoC.2.0.5679\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+Xamarin.iOS10\XLabs.Ioc.dll</HintPath>
@@ -213,6 +210,10 @@
       <Project>{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}</Project>
       <Name>Mise.Core.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mise.Core.Client\Mise.Core.Client.csproj">
+      <Project>{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}</Project>
+      <Name>Mise.Core.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-568h%402x.png" />
@@ -245,6 +246,7 @@
     <Compile Include="Services\MercuryPaymentProcessorService.cs" />
     <Compile Include="Services\iOSLogger.cs" />
     <Compile Include="Services\RaygunErrorTracking.cs" />
+    <Compile Include="Services\iOSSQLite.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Insights.1.10.5\build\Xamarin.iOS10\Xamarin.Insights.targets" Condition="Exists('..\packages\Xamarin.Insights.1.10.5\build\Xamarin.iOS10\Xamarin.Insights.targets')" />
@@ -288,10 +290,6 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="raygun4net">
       <Version>5.1.0</Version>
-      <Visible>False</Visible>
-    </XamarinComponentReference>
-    <XamarinComponentReference Include="azure-mobile-services">
-      <Version>1.3.1</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>

@@ -11,8 +11,6 @@ namespace Mise.Inventory.Services
 	/// </summary>
 	public interface ISQLite
 	{
-		SQLiteConnection GetDatabase();
-
 		string GetLocalFilename();
 
 		Task DeleteDatabaseFile();

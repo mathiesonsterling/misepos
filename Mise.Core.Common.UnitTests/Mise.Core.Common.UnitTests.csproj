@@ -70,7 +70,6 @@
     <Compile Include="Entities\RestaurantAccountTests.cs" />
     <Compile Include="Entities\RestaurantTests.cs" />
     <Compile Include="Entities\Serialization\AccountSerializationTests.cs" />
-    <Compile Include="Entities\Serialization\AzureEntityStorageTests.cs" />
     <Compile Include="Entities\Serialization\EmployeeSerializationTests.cs" />
     <Compile Include="Entities\Serialization\MiseTerminalDeviceSerializationTests.cs" />
     <Compile Include="Entities\Serialization\RestaurantSerializationTests.cs" />

@@ -124,6 +124,7 @@
     <Compile Include="Services\InventoryServiceTests.cs" />
     <Compile Include="Services\HttpWebServiceClientIntegrationTests.cs" />
     <Compile Include="Services\SQLiteIntegrationTests.cs" />
+    <Compile Include="Services\AzureEntityStorageTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

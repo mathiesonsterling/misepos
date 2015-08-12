@@ -33,6 +33,9 @@ namespace Mise.Inventory
         private static Guid? RestaurantID { get; set; }
 
 		private IInsightsService _insights;
+
+		public static string DeviceID{ get; private set;}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Mise.Inventory.App"/> class.
         /// </summary>
@@ -85,6 +88,7 @@ namespace Mise.Inventory
 			//set the ev factory
 			var evFactory = Resolve<IInventoryAppEventFactory> ();
 			evFactory.SetDeviceID (item.ToString ());
+			DeviceID = item.ToString ();
 		}
 
         protected override async void OnSleep()

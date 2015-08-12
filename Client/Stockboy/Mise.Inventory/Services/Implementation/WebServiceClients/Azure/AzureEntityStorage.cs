@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-namespace Mise.Core.Common.Entities.DTOs.AzureTypes
+using Mise.Core.Common.Entities.DTOs;
+namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 {
     /// <summary>
     /// Quick non-typed class for storage of any entity
@@ -43,7 +44,9 @@ namespace Mise.Core.Common.Entities.DTOs.AzureTypes
         public Guid? RestaurantID { get; set; }
         public string JSON { get; set; }
         public DateTimeOffset LastUpdatedDate { get; set; }
+
 		[JsonProperty(PropertyName = "__version")]
+		[Microsoft.WindowsAzure.MobileServices.Version]
 		public string Version { set; get; }
     }
 }
