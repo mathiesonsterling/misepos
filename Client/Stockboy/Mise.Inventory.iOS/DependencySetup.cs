@@ -41,17 +41,13 @@ namespace Mise.Inventory.iOS
 				var dbService = new iOSSQLite ();
 
 				cb.RegisterInstance<ISQLite> (dbService);
-				try{
-					SQLitePCL.CurrentPlatform.Init ();
-					var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
+				SQLitePCL.CurrentPlatform.Init ();
+				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
-					store.DefineTable<AzureEntityStorage>();
-					store.DefineTable<AzureEventStorage>();
+				store.DefineTable<AzureEntityStorage>();
+				store.DefineTable<AzureEventStorage>();
 
-					await mobileService.SyncContext.InitializeAsync (store);
-				} catch(Exception e){
-					int i = 5;
-				}
+				await mobileService.SyncContext.InitializeAsync (store);
 				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService);
 				RegisterWebService (cb, webService);
 			}
