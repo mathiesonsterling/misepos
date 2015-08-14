@@ -79,6 +79,7 @@
     <Compile Include="ApplicationInvitationService.cs" />
     <Compile Include="EmployeeService.cs" />
     <Compile Include="EventsService.cs" />
+    <Compile Include="Exceptions\EmailAlreadyInUseException.cs" />
     <Compile Include="PARService.cs" />
     <Compile Include="PurchaseOrderService.cs" />
     <Compile Include="ReceivingOrderService.cs" />

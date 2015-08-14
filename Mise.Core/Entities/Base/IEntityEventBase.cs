@@ -46,6 +46,14 @@ namespace Mise.Core.Entities.Base
 		/// </summary>
 		/// <value>The device I.</value>
 		string DeviceID{get;set;}
+
+        /// <summary>
+        /// If true, this is a creation of either an entity or aggregate root, and should be processed first
+        /// </summary>
+        bool IsEntityCreation { get; }
+
+        //If true, the entity creates the aggregate root for its repository! 
+        bool IsAggregateRootCreation { get; }
 	}
 }
 

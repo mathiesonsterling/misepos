@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors.Events;
@@ -21,6 +22,7 @@ namespace Mise.Inventory.Services.Implementation
 	public class ReceivingOrderService : IReceivingOrderService
 	{
 		private IReceivingOrder _currentRO;
+	    private IReceivingOrderLineItem _currentLineItem;
 
 		readonly IReceivingOrderRepository _receivingOrderRepository;
 		readonly IInventoryService _inventoryService;
@@ -135,7 +137,8 @@ namespace Mise.Inventory.Services.Implementation
 		}
 
 		private IReceivingOrder _roToComplete;
-		public async Task<bool> CompleteReceivingOrderForSelectedVendor(string notes, string invoiceID)
+		public async Task<bool> CompleteReceivingOrderForSelectedVendor(DateTimeOffset dateReceived, 
+			string notes, string invoiceID)
 		{
 			try{
 				var emp = await GetCurrentEmployee();
@@ -146,7 +149,7 @@ namespace Mise.Inventory.Services.Implementation
 				//get all the line items, tell the inventory and vendors about them
 				var lineItems = _roToComplete.GetBeverageLineItems().ToList();
 
-				var validItems = lineItems.Where (li => li.ZeroedOut == false);
+				var validItems = lineItems.Where (li => li.ZeroedOut == false).ToList();
 				if (validItems.Any ()) {
 					await _vendorService.AddLineItemsToVendorIfDontExist (_roToComplete.VendorID, validItems).ConfigureAwait (false);
 				}
@@ -154,7 +157,7 @@ namespace Mise.Inventory.Services.Implementation
 			    var res = true;
 
 				//mark the RO as closed
-				var compEvent = _eventFactory.CreateReceivingOrderCompletedEvent(emp, _roToComplete, notes, invoiceID);
+				var compEvent = _eventFactory.CreateReceivingOrderCompletedEvent(emp, _roToComplete, dateReceived, notes, invoiceID);
 				var updatedOrder = _receivingOrderRepository.ApplyEvent (compEvent);
 			    if (updatedOrder.Status == ReceivingOrderStatus.Completed)
 			    {
@@ -232,7 +235,18 @@ namespace Mise.Inventory.Services.Implementation
 			_currentRO = _receivingOrderRepository.ApplyEvent (ev);
 		}
 
-		async Task<IEmployee> GetCurrentEmployee(){
+	    public Task SetCurrentLineItem(IReceivingOrderLineItem lineItem)
+	    {
+	        _currentLineItem = lineItem;
+	        return Task.FromResult(true);
+	    }
+
+	    public Task<IReceivingOrderLineItem> GetCurrentLineItem()
+	    {
+	        return Task.FromResult(_currentLineItem);
+	    }
+
+	    async Task<IEmployee> GetCurrentEmployee(){
 			var emp = await _loginService.GetCurrentEmployee ();
 			if (emp == null) {
 				throw new InvalidOperationException ("Current employee not set");

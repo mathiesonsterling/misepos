@@ -13,7 +13,7 @@ namespace Mise.Core.Common.Entities.Vendors
 {
 	public class Vendor : EntityBase, IVendor
 	{
-        public StreetAddress StreetAddress{get;set;}
+       public StreetAddress StreetAddress{get;set;}
 
 	    public EmailAddress EmailToOrderFrom { get; set; }
 

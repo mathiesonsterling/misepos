@@ -15,7 +15,7 @@ using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
-using LogLevel = Mise.Core.Services.LogLevel;
+using LogLevel = Mise.Core.Services.UtilityServices.LogLevel;
 
 namespace Mise.Azure
 {
@@ -96,7 +96,7 @@ namespace Mise.Azure
             {
                 //make the dto for it
                 var item = new AzureJSONEventStorageItem(e.DTO.RestaurantID, e.DTO.ID, _serializer.Serialize(e.DTO), e.Type,
-                    ItemCacheStatus.InMiseDB);
+                    ItemCacheStatus.Clean);
                 batchOperation.Insert(item);
             }
 

@@ -31,7 +31,28 @@ namespace Mise.Core.Common.Entities.Inventory
 		/// <value>The current amount.</value>
         public LiquidAmount CurrentAmount { get; set; }
 
-		public List<decimal> PartialBottleListing{ get; set;}
+        public LiquidContainerShape Shape
+        {
+            get
+            {
+                if (Container != null && Container.Shape != null)
+                {
+                    return Container.Shape;
+                }
+
+                //don't have container, let's get it via category
+                var standCat = Categories.FirstOrDefault(c => c.IsCustomCategory == false);
+                if (standCat != null)
+                {
+					var catService = new CategoriesService ();
+					return catService.GetShapeForCategory (standCat);
+                }
+
+				return LiquidContainerShape.DefaultBottleShape;
+            }
+        }
+
+        public List<decimal> PartialBottleListing{ get; set;}
 
 		public IEnumerable<decimal> PartialBottlePercentages{get{return PartialBottleListing;}}
 

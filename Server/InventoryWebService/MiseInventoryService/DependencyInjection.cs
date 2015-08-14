@@ -12,6 +12,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.InventoryWebService.ServiceInterface.Services;
 using Mise.Neo4J.Neo4JDAL;
 using MiseInventoryService.Repositories;
+using MiseInventoryService.Services;
 
 namespace MiseInventoryService
 {
@@ -25,10 +26,12 @@ namespace MiseInventoryService
             //config - do this to get the connection string to our db
             container.RegisterAutoWiredAs<Config, IConfig>();
 
+            container.RegisterAutoWiredAs<RaygunErrorTracking, IErrorTrackingService>();
+
             //logging
             var logger = new ConsoleLogger();
             container.Register<ILogger>(logger);
-            container.RegisterAutoWiredAs<ConsoleLogger, ILogger>();
+            //container.RegisterAutoWiredAs<ConsoleLogger, ILogger>();
 
             //serializer
             container.RegisterAs<JsonNetSerializer, IJSONSerializer>();
@@ -49,7 +52,7 @@ namespace MiseInventoryService
             container.RegisterAutoWiredAs<PurchaseOrderServerRepository, IPurchaseOrderRepository>();
             container.RegisterAutoWiredAs<EmployeeServerRepository, IEmployeeRepository>();
             container.RegisterAutoWiredAs<ReceivingOrderRepository, IReceivingOrderRepository>();
-            container.RegisterAutoWiredAs<PARServerRepository, IPARRepository>();
+            container.RegisterAutoWiredAs<PARServerRepository, IParRepository>();
             container.RegisterAutoWiredAs<RestaurantRepository, IRestaurantRepository>();
             container.RegisterAutoWiredAs<ApplicationInvitationServerRepository, IApplicationInvitationRepository>();
             container.RegisterAutoWiredAs<AccountServerRestaurantRepository, IAccountRepository>();
@@ -68,7 +71,7 @@ namespace MiseInventoryService
                 container.Resolve<IInventoryRepository>(),
                 container.Resolve<IPurchaseOrderRepository>(),
                 container.Resolve<IReceivingOrderRepository>(),
-                container.Resolve<IPARRepository>(),
+                container.Resolve<IParRepository>(),
                 container.Resolve<IApplicationInvitationRepository>(),
                 container.Resolve<IAccountRepository>()
             };

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Mise.Core.Repositories;
 using Mise.Core.Common.Events;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Common.Services.WebServices;
 
 
 namespace Mise.Inventory
@@ -16,12 +16,12 @@ namespace Mise.Inventory
 	    private readonly IVendorRepository _vendorRepository;
 	    private readonly IInventoryAppEventFactory _inventoryAppEventFactory;
 	    private readonly IRestaurantRepository _restaurantRepository;
-	    private readonly IPARRepository _parRepository;
+	    private readonly IParRepository _parRepository;
 	    private readonly IInventoryRepository _inventoryRepository;
 	    private readonly IReceivingOrderRepository _receivingOrderRepository;
         private readonly IPurchaseOrderRepository _purchaseOrderRepository;
 
-	    public RepositoryLoader(IEmployeeRepository employeeRepository, IApplicationInvitationRepository applicationInvitationRepository, IVendorRepository vendorRepository, IInventoryAppEventFactory inventoryAppEventFactory, IRestaurantRepository restaurantRepository, IPARRepository parRepository, IInventoryRepository inventoryRepository, IReceivingOrderRepository receivingOrderRepository, IPurchaseOrderRepository purchaseOrderRepository)
+	    public RepositoryLoader(IEmployeeRepository employeeRepository, IApplicationInvitationRepository applicationInvitationRepository, IVendorRepository vendorRepository, IInventoryAppEventFactory inventoryAppEventFactory, IRestaurantRepository restaurantRepository, IParRepository parRepository, IInventoryRepository inventoryRepository, IReceivingOrderRepository receivingOrderRepository, IPurchaseOrderRepository purchaseOrderRepository)
 	    {
 	        _employeeRepository = employeeRepository;
 	        _applicationInvitationRepository = applicationInvitationRepository;
@@ -47,7 +47,7 @@ namespace Mise.Inventory
 	        var needsReload = false;
 			try{
 				await restRepos.Load (restaurantID);
-			} catch(ServerNotReadyException e){
+			} catch(ServerNotReadyException){
 				//was it the service starting up?  if so, wait a second then reload
 			    needsReload = true;
 			}

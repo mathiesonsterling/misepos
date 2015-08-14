@@ -21,7 +21,7 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Server.Services.DAL;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.InventoryWebService.ServiceInterface;
 using Mise.InventoryWebService.ServiceModelPortable.Responses;
@@ -45,7 +45,7 @@ namespace Mise.InventoryService.Tests
             Mock<IApplicationInvitationRepository> appInvite;
             Mock<IRestaurantRepository> rest;
             Mock<IAccountRepository> acct;
-            Mock<IPARRepository> par;
+            Mock<IParRepository> par;
             EventDataTransportObjectFactory dtoFactory;
             var underTest = CreateEventsServiceAndMocks(out inventory, out emp, out vendor, out po, out par, out receive, out appInvite, out rest, out acct, out dtoFactory);
 
@@ -133,7 +133,7 @@ namespace Mise.InventoryService.Tests
             Mock<IVendorRepository> vendor;
             Mock<IPurchaseOrderRepository> po;
             Mock<IReceivingOrderRepository> receive;
-            Mock<IPARRepository> par;
+            Mock<IParRepository> par;
             Mock<IApplicationInvitationRepository> appInvite;
             Mock<IRestaurantRepository> rest;
             Mock<IAccountRepository> acct;
@@ -245,15 +245,17 @@ namespace Mise.InventoryService.Tests
             var emp = CreateMockRepository<IEmployeeRepository, IEmployee, IEmployeeEvent>();
             var vendor = CreateMockRepository<IVendorRepository, IVendor, IVendorEvent>();
             var po = CreateMockRepository<IPurchaseOrderRepository, IPurchaseOrder, IPurchaseOrderEvent>();
-            var par = CreateMockRepository<IPARRepository, IPAR, IPAREvent>();
+            var par = CreateMockRepository<IParRepository, IPar, IParEvent>();
             var receive = CreateMockRepository<IReceivingOrderRepository, IReceivingOrder, IReceivingOrderEvent>();
             var rest = CreateMockRepository<IRestaurantRepository, IRestaurant, IRestaurantEvent>();
             var acct = CreateMockRepository<IAccountRepository, IAccount, IAccountEvent>();
             var appInvite = CreateMockRepository<IApplicationInvitationRepository, IApplicationInvitation, IApplicationInvitationEvent>();
             var logger = new Mock<ILogger>();
 
+            var errorTracker = new Mock<IErrorTrackingService>();
+
             var underTest = new EventsService(moqDAL.Object, serial, inventory.Object, vendor.Object, po.Object,
-                emp.Object, par.Object, receive.Object, appInvite.Object, rest.Object, acct.Object, logger.Object);
+                emp.Object, par.Object, receive.Object, appInvite.Object, rest.Object, acct.Object, logger.Object, errorTracker.Object);
             var dtoFactory = new EventDataTransportObjectFactory(serial);
 
             var entID = Guid.NewGuid();
@@ -301,7 +303,7 @@ namespace Mise.InventoryService.Tests
             Mock<IEmployeeRepository> emp;
             Mock<IVendorRepository> vendor;
             Mock<IPurchaseOrderRepository> po;
-            Mock<IPARRepository> par;
+            Mock<IParRepository> par;
             Mock<IReceivingOrderRepository> receive;
             Mock<IApplicationInvitationRepository> appInvite;
             Mock<IRestaurantRepository> rest;
@@ -358,7 +360,7 @@ namespace Mise.InventoryService.Tests
         }
 
         private static EventsService CreateEventsServiceAndMocks(out Mock<IInventoryRepository> inventory, out Mock<IEmployeeRepository> emp, 
-            out Mock<IVendorRepository> vendor, out Mock<IPurchaseOrderRepository> po, out Mock<IPARRepository> par, 
+            out Mock<IVendorRepository> vendor, out Mock<IPurchaseOrderRepository> po, out Mock<IParRepository> par, 
             out Mock<IReceivingOrderRepository> receive, out Mock<IApplicationInvitationRepository> appInvite, out Mock<IRestaurantRepository> rest,
             out Mock<IAccountRepository> acct, out EventDataTransportObjectFactory dtoFactory)
         {
@@ -379,9 +381,9 @@ namespace Mise.InventoryService.Tests
             po.Setup(r => r.GetEntityID(It.IsAny<IPurchaseOrderEvent>()))
                 .Returns((IPurchaseOrderEvent e) => e.PurchaseOrderID);
 
-            par = CreateMockRepository<IPARRepository, IPAR, IPAREvent>();
-            par.Setup(r => r.GetEntityID(It.IsAny<IPAREvent>()))
-                .Returns((IPAREvent e) => e.ParID);
+            par = CreateMockRepository<IParRepository, IPar, IParEvent>();
+            par.Setup(r => r.GetEntityID(It.IsAny<IParEvent>()))
+                .Returns((IParEvent e) => e.ParID);
 
             receive = CreateMockRepository<IReceivingOrderRepository, IReceivingOrder, IReceivingOrderEvent>();
             receive.Setup(r => r.GetEntityID(It.IsAny<IReceivingOrderEvent>()))
@@ -399,8 +401,9 @@ namespace Mise.InventoryService.Tests
 
             dtoFactory = new EventDataTransportObjectFactory(serial);
             var logger = new Mock<ILogger>();
+            var errorTracker = new Mock<IErrorTrackingService>();
             var underTest = new EventsService(moqDAL.Object, serial, inventory.Object, vendor.Object, po.Object,
-                emp.Object, par.Object, receive.Object, appInvite.Object, rest.Object, acct.Object, logger.Object);
+                emp.Object, par.Object, receive.Object, appInvite.Object, rest.Object, acct.Object, logger.Object, errorTracker.Object);
             return underTest;
         }
     }

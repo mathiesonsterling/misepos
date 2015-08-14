@@ -8,20 +8,20 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Database.StorableEntities.Inventory
 {
-    public class PARLineItemGraphNode : IStorableEntityGraphNode
+    public class ParLineItemGraphNode : IStorableEntityGraphNode
     {
-        public PARLineItemGraphNode()
+        public ParLineItemGraphNode()
         {
             
         }
 
-        public PARLineItemGraphNode(IPARBeverageLineItem source)
+        public ParLineItemGraphNode(IParBeverageLineItem source)
         {
             ID = source.ID;
             RestaurantID = source.RestaurantID;
             CreatedDate = source.CreatedDate;
             LastUpdatedDate = source.LastUpdatedDate;
-            Revision = source.Revision.ToDatabaseString();
+            Revision = source.Revision != null? source.Revision.ToDatabaseString() : string.Empty;
 
             MiseName = source.MiseName;
             DisplayName = source.DisplayName;
@@ -32,12 +32,12 @@ namespace Mise.Database.StorableEntities.Inventory
 
         public int? CaseSize { get; set; }
 
-        public PARBeverageLineItem Rehydrate(LiquidContainer container, IEnumerable<ItemCategory> categories)
+        public ParBeverageLineItem Rehydrate(LiquidContainer container, IEnumerable<ItemCategory> categories)
         {
-            return new PARBeverageLineItem
+            return new ParBeverageLineItem
             {
                 ID = ID,
-                Revision = new EventID(Revision),
+                Revision = string.IsNullOrEmpty(Revision) == false ? new EventID(Revision) : null,
                 CreatedDate = CreatedDate,
                 DisplayName = DisplayName,
                 LastUpdatedDate = LastUpdatedDate,
@@ -57,7 +57,7 @@ namespace Mise.Database.StorableEntities.Inventory
 
         public Guid RestaurantID { get; set; }
 
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
         public string MiseName { get; set; }
 

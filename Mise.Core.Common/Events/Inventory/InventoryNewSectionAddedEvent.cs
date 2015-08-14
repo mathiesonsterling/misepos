@@ -12,7 +12,12 @@ namespace Mise.Core.Common.Events.Inventory
 			}
 		}
 
-		#endregion
+	    public override bool IsEntityCreation
+	    {
+	        get { return true; }
+	    }
+
+	    #endregion
 
         public Guid SectionID { get; set; }
 
@@ -21,6 +26,7 @@ namespace Mise.Core.Common.Events.Inventory
 		/// </summary>
 		/// <value>The name.</value>
 		public string Name{get;set;}
+
 		/// <summary>
 		/// ID of the matching section for the restaurant
 		/// </summary>

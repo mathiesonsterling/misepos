@@ -35,13 +35,14 @@ namespace Mise.Inventory.Pages
 			var lv = new ListView {
 				ItemsSource = vm.LineItems,
 				ItemTemplate = template,
+				HorizontalOptions = LayoutOptions.FillAndExpand
 			};
 
 			lv.ItemTapped += async (sender, e) => {
-				var selectedVendor = e.Item as IPurchaseOrder;
+				var selectedPO = e.Item as PurchaseOrderLineDisplay;
 				((ListView)sender).SelectedItem = null;
-				if(selectedVendor != null){
-					await vm.SelectLineItem (selectedVendor);
+				if(selectedPO != null){
+					await vm.SelectLineItem (selectedPO);
 				}
 			};
 			stckPOs.Children.Add (lv);

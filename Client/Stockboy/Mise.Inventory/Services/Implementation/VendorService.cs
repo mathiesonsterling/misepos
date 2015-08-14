@@ -7,6 +7,7 @@ using Mise.Core.Repositories;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Events;
 using Mise.Core.Services;
@@ -63,13 +64,18 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 
-			//TODO - check we don't get any name conflicts
-
 			//make the create event
 			var create = _eventFactory.CreateVendorCreatedEvent(emp, name, address, phoneNumber, email);
 
 			_selectedVendor = _vendorRepository.ApplyEvent (create);
 
+			//TODO - check we don't get any name conflicts
+			var alreadyExists = _vendorRepository.GetAll().Any(v => v.IsSameVendor(_selectedVendor));
+			if(alreadyExists){
+				_vendorRepository.CancelTransaction (_selectedVendor.ID);
+				_selectedVendor = null;
+				throw new ArgumentException ("This vendor already exists!");
+			}
 			await _vendorRepository.Commit (_selectedVendor.ID);
 
 			return _selectedVendor;
@@ -116,27 +122,34 @@ namespace Mise.Inventory.Services.Implementation
 		/// <returns>The line item to vendor if doesnt exist.</returns>
 		/// <param name="vendorID">Vendor I.</param>
 		/// <param name="lis">Li.</param>
-		public async Task AddLineItemsToVendorIfDontExist (Guid vendorID, IEnumerable<IReceivingOrderLineItem> lis)
+		public async Task AddLineItemsToVendorIfDontExist (Guid vendorID, IEnumerable<IReceivingOrderLineItem> lineItems)
 		{
 			var vendor = _vendorRepository.GetByID (vendorID);
 			if(vendor != null){
 				var emp = await _loginService.GetCurrentEmployee ();
 
+				var lis = lineItems.Where (li => li.ZeroedOut == false)
+					.OrderBy (li => li.DisplayName)
+					.ToList();
 				//TODO only take verified events in the future
-				foreach(var li in lis.Where(li => li.ZeroedOut == false)){
-					var item = vendor.GetItemsVendorSells ().FirstOrDefault (vLI => BeverageLineItemEquator.AreSameBeverageLineItem(vLI, li));
+				foreach(var lineItem in lis){
+					var item = vendor.GetItemsVendorSells ()
+						.OrderBy(li => li.DisplayName)
+						.FirstOrDefault (vLI => BeverageLineItemEquator.AreSameBeverageLineItem(vLI, lineItem));
 
 					if (item == null) {
-						var newLIEv = _eventFactory.CreateVendorLineItemAddedEvent (emp, li, vendor);
+						var newLIEv = _eventFactory.CreateVendorLineItemAddedEvent (emp, lineItem, vendor);
 						var updatedVendor = _vendorRepository.ApplyEvent (newLIEv);
-					    item = updatedVendor.GetItemsVendorSells ().FirstOrDefault (vLI => BeverageLineItemEquator.AreSameBeverageLineItem(vLI, li));
+						item = updatedVendor.GetItemsVendorSells ()
+							.Where(li => li.DisplayName == lineItem.DisplayName)
+							.FirstOrDefault (vLI => BeverageLineItemEquator.AreSameBeverageLineItem(vLI, lineItem));
 					}
 
 					if (item == null) {
-						_logger.Error ("Unable to resolve line item " + li.DisplayName + " id " + li.ID);
+						_logger.Error ("Unable to resolve line item " + lineItem.DisplayName + " id " + lineItem.ID);
 					} else {
 						//TODO - if we've got a price being reported that is GREATER than the public price, there's a problem!
-						var priceEv = _eventFactory.CreateRestaurantSetPriceEvent (emp, item, vendor, li.UnitPrice);
+						var priceEv = _eventFactory.CreateRestaurantSetPriceEvent (emp, item, vendor, lineItem.UnitPrice);
 						vendor = _vendorRepository.ApplyEvent (priceEv);
 					}
 				}

@@ -6,9 +6,9 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
 {
-	public class PARBeverageLineItem : BaseTaggableRestaurantEntity, IPARBeverageLineItem
+	public class ParBeverageLineItem : BaseTaggableRestaurantEntity, IParBeverageLineItem
 	{
-		public PARBeverageLineItem(){
+		public ParBeverageLineItem(){
 			Categories = new List<ItemCategory> ();
 		}
 
@@ -33,7 +33,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public ICloneableEntity Clone()
         {
-            var newItem = CloneRestaurantBase(new PARBeverageLineItem());
+            var newItem = CloneRestaurantBase(new ParBeverageLineItem());
             newItem.MiseName = MiseName;
             newItem.UPC = UPC;
             newItem.Container = Container;
@@ -44,7 +44,7 @@ namespace Mise.Core.Common.Entities.Inventory
             return newItem;
         }
 
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
 		public List<ItemCategory> Categories{get;set;}
 		public IEnumerable<ICategory> GetCategories(){
@@ -65,7 +65,7 @@ namespace Mise.Core.Common.Entities.Inventory
 				|| (Categories != null && Categories.Any(c => c.ContainsSearchString(searchString)));
 		}
 
-	    public bool Equals(IPARBeverageLineItem other)
+	    public bool Equals(IParBeverageLineItem other)
 	    {
 	        if (other == null)
 	        {

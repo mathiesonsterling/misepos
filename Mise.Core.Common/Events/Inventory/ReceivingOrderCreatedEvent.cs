@@ -14,7 +14,17 @@ namespace Mise.Core.Common.Events.Inventory
             get { return MiseEventTypes.ReceivingOrderCreated; }
         }
 
-		/// <summary>
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
+
+        /// <summary>
 		/// ID of the vendor this is for
 		/// </summary>
 		/// <value>The vendor I.</value>

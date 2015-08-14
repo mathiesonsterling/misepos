@@ -1,11 +1,7 @@
-﻿using System;
-using Mise.Core.Common.Events;
-using Mise.Core.Common.Events.Employee;
-using Mise.Core.Entities;
+﻿using Mise.Core.Entities;
 using Mise.Core.ValueItems;
 
-
-namespace Mise.Core.Common
+namespace Mise.Core.Common.Events.Employee
 {
 	public class EmployeeRegisteredForInventoryAppEvent : BaseEmployeeEvent
 	{
@@ -16,8 +12,6 @@ namespace Mise.Core.Common
 			}
 		}
 
-		public EmailAddress EmailAddress{get;set;}
-		public Password Password{get;set;}
 		#endregion
 	}
 }

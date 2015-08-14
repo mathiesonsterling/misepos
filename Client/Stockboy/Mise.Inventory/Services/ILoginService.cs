@@ -15,7 +15,7 @@ namespace Mise.Inventory.Services
 	/// </summary>
 	public interface ILoginService
 	{
-		void OnAppStarting ();
+		Task<bool> LoadSavedEmployee();
 
 		Task<IEmployee> LoginAsync(EmailAddress email, Password password);
 
@@ -33,10 +33,7 @@ namespace Mise.Inventory.Services
 
 		Task<IRestaurant> GetCurrentRestaurant();
 
-		Task<IRestaurantInventorySection> GetCurrentSection ();
-		Task SelectSection (IRestaurantInventorySection section);
-
-		Task<bool> AddNewSectionToRestaurant (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection);
+		Task AddNewSectionToRestaurant (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection);
 	
 		Task<IEmployee> RegisterEmployee (EmailAddress email, Password password, PersonName name);
 		Task InviteEmployeeToUseApp (EmailAddress destEmail);
@@ -60,12 +57,22 @@ namespace Mise.Inventory.Services
 		Task CommitRestaurantRegistrationWithoutAccount();
 
         /// <summary>
-        /// Registers an account using the information of the current employee
+        /// Primes our service to register an account - must be split into two so we can then pass it off to mercury!
         /// </summary>
-        /// <param name="card"></param>
         /// <returns></returns>
+		/// <param name = "email"></param>
 		/// <param name = "code"></param>
-		/// <param name = "cardName"></param>
-	    Task<IAccount> RegisterAccount(CreditCard card, ReferralCode code, PersonName cardName, MiseAppTypes app);
+		/// <param name = "accountName"></param>
+		/// <param name = "app"></param>
+		Task StartRegisterAccount(EmailAddress email, ReferralCode code, PersonName accountName, MiseAppTypes app);
+
+	    Task<Guid?> GetRegisteringAccountID();
+
+		/// <summary>
+		/// Finishes registering the account, once we've got the card info ready!
+		/// </summary>
+		/// <returns>The register account.</returns>
+		/// <param name="card">Card.</param>
+		Task<IAccount> CompleteRegisterAccount(CreditCard card);
 	}
 }

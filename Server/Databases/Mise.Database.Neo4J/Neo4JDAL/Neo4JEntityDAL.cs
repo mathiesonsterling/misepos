@@ -17,6 +17,7 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Server;
 using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Database.StorableEntities;
@@ -297,9 +298,19 @@ namespace Mise.Neo4J.Neo4JDAL
                 .ConfigureAwait(false);
         }
 
-        public Task UpdateRestaurantAsync(IRestaurant restaurant)
+        public async Task UpdateRestaurantAsync(IRestaurant restaurant)
         {
-            throw new NotImplementedException();
+            _logger.Warn("Update restaurant, will ONLY update basic fields for now");
+
+            var updateNode = new RestaurantGraphNode(restaurant);
+
+            await _graphClient.Cypher
+                .Match("(r:Restaurant)")
+                .Where((RestaurantGraphNode r) => r.ID == restaurant.ID)
+                .Set("r = {rNode}")
+                .WithParam("rNode", updateNode)
+                .ExecuteWithoutResultsAsync()
+                .ConfigureAwait(false);
         }
         #endregion
 
@@ -927,8 +938,8 @@ namespace Mise.Neo4J.Neo4JDAL
             await  _graphClient.Cypher
                 .Match("(li:PurchaseOrderLineItem)")
                 .Where((PurchaseOrderLineItemGraphNode li) => li.ID == lineItem.ID)
-                .Set("li = {liParam}")
-                .WithParam("liParam", node)
+                .Set("li = {lIParam}")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync();
             await UpdateLiquidContainerAsync(lineItem.Container, lineItem.ID);
             await SetCategoryOnLineItem(lineItem);
@@ -1089,8 +1100,8 @@ namespace Mise.Neo4J.Neo4JDAL
             //TODO add line to restaurant for the private price if it's here
             var node = new ReceivingOrderLineItemGraphNode(lineItem);
             await _graphClient.Cypher
-                .Create("(li:ReceivingOrderBeverageLineItem {liParam})")
-                .WithParam("liParam", node)
+                .Create("(li:ReceivingOrderBeverageLineItem {lIParam})")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync();
 
             var containerTask = SetLiquidContainerAsync(lineItem.Container, lineItem.ID);

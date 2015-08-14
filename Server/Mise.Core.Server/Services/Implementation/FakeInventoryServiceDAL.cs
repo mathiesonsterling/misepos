@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Common.Services.Implementation.FakeServices;
+using Mise.Core.Common.Services.WebServices.FakeServices;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;
@@ -30,12 +31,12 @@ namespace Mise.Core.Server.Services.Implementation
         private List<IInventory> _restaurauntInventories;
         private List<IEmployee> _employees;
 
-        private List<IRestaurant> _restaurants;
+        private List<Restaurant> _restaurants;
 
         private List<IVendor> _vendors;
         private List<IPurchaseOrder> _purchaseOrders;
         private List<IReceivingOrder> _receivingOrders;
-        private List<IPAR> _pars;
+        private List<IPar> _pars;
         private List<IApplicationInvitation> _invitations; 
         #endregion
 
@@ -45,13 +46,13 @@ namespace Mise.Core.Server.Services.Implementation
         {
             var fakeInventoryWebService = new FakeInventoryWebService();
 
-            _restaurants = (await fakeInventoryWebService.GetRestaurants(new Location())).ToList();
+            _restaurants = (await fakeInventoryWebService.GetRestaurants(new Location(), new Distance{Kilometers = 10000})).ToList();
 
             _employees = new List<IEmployee>();
             _vendors = new List<IVendor>();
             _restaurauntInventories = new List<IInventory>();
             _receivingOrders = new List<IReceivingOrder>();
-            _pars = new List<IPAR>();
+            _pars = new List<IPar>();
             _purchaseOrders = new List<IPurchaseOrder>();
             _invitations = new List<IApplicationInvitation>();
             foreach (var rest in _restaurants)
@@ -76,11 +77,11 @@ namespace Mise.Core.Server.Services.Implementation
         {
             var accounts = new List<IAccount>
             {
-                MakeEmployeeAccount(new PersonName("Justin", "Elliott"), new EmailAddress("justin.elliott@misepos.com"), new ReferralCode("TAKEMONDAYOFF"), new PhoneNumber("", "")),
+                MakeEmployeeAccount(new PersonName("Justin", "Elliott"), new EmailAddress("justin.elliott@misepos.com"), new ReferralCode("TAKEMONDAYOFF"), new PhoneNumber()),
                 MakeEmployeeAccount(new PersonName("Mathieson", "Sterling"), new EmailAddress("mathieson@misepos.com"), new ReferralCode("DRANKWITHMATTY"), new PhoneNumber("718", "7152945")),
-                MakeEmployeeAccount(new PersonName("Dave", "Stewart"), new EmailAddress("dave@misepos.com"), new ReferralCode("WHIZK3Y"), new PhoneNumber("", "")),
-                MakeEmployeeAccount(new PersonName("Andrew", "Siegler"), new EmailAddress("andrew@misepos.com"), new ReferralCode("CANNEDHEATBLUES"), new PhoneNumber("", "")),
-                MakeEmployeeAccount(new PersonName("Emily", "Perkins"), new EmailAddress("emily@misepos.com"), new ReferralCode("SHIFTDRINK"), new PhoneNumber("", ""))
+                MakeEmployeeAccount(new PersonName("Dave", "Stewart"), new EmailAddress("dave@misepos.com"), new ReferralCode("WHIZK3Y"), new PhoneNumber()),
+                MakeEmployeeAccount(new PersonName("Andrew", "Siegler"), new EmailAddress("andrew@misepos.com"), new ReferralCode("CANNEDHEATBLUES"), new PhoneNumber()),
+                MakeEmployeeAccount(new PersonName("Emily", "Perkins"), new EmailAddress("emily@misepos.com"), new ReferralCode("SHIFTDRINK"), new PhoneNumber())
             };
             return Task.FromResult(accounts.AsEnumerable());
         }
@@ -122,19 +123,19 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task<IRestaurant> GetRestaurantAsync(Guid restaurantID)
         {
-            return Task.Run(() => _restaurants.FirstOrDefault(r => r.ID == restaurantID));
+            return Task.FromResult(_restaurants.FirstOrDefault(r => r.ID == restaurantID) as IRestaurant);
         }
 
         public Task<IEnumerable<IRestaurant>> GetRestaurantsAsync()
         {
-            return Task.FromResult(_restaurants.AsEnumerable());
+            return Task.FromResult(_restaurants.AsEnumerable().Cast<IRestaurant>());
         }
 
         public Task AddRestaurantAsync(IRestaurant restaurant)
         {
             if (_restaurants.Select(r => r.ID).Contains(restaurant.ID) == false)
             {
-                _restaurants.Add(restaurant);
+                _restaurants.Add(restaurant as Restaurant);
             }
             return Task.FromResult(true);
         }
@@ -310,22 +311,22 @@ namespace Mise.Core.Server.Services.Implementation
             return Task.FromResult( _receivingOrders.Where(ro => ro.VendorID == vendor.ID));
         }
 
-        public Task UpdatePARAsync(IPAR arg)
+        public Task UpdatePARAsync(IPar arg)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddPARAsync(IPAR arg)
+        public Task AddPARAsync(IPar arg)
         {
             return Task.Run(() => _pars.Add(arg));
         }
 
-        public Task<IEnumerable<IPAR>> GetPARsAsync(Guid restaurantID)
+        public Task<IEnumerable<IPar>> GetPARsAsync(Guid restaurantID)
         {
             return Task.FromResult(_pars.Where(p => p.RestaurantID == restaurantID));
         }
 
-        public Task<IEnumerable<IPAR>> GetPARsAsync()
+        public Task<IEnumerable<IPar>> GetPARsAsync()
         {
             return Task.FromResult(_pars.AsEnumerable());
         }
@@ -360,19 +361,19 @@ namespace Mise.Core.Server.Services.Implementation
             return Task.FromResult(true);
         }
 
-        public Task UpdatePARLineItemAsync(IPARBeverageLineItem lineItem)
+        public Task UpdatePARLineItemAsync(IParBeverageLineItem lineItem)
         {
             var par = _pars.FirstOrDefault(p => p.GetBeverageLineItems().Select(pLi => pLi.ID).Contains(lineItem.ID));
             if (par != null)
             {
-                var downCast = par as PAR;
+                var downCast = par as Par;
                 if (downCast == null)
                 {
                     return Task.FromResult(false);
                 }
                 var oldLI = downCast.ParLineItems.FirstOrDefault(l => l.ID == lineItem.ID);
                 downCast.ParLineItems.Remove(oldLI);
-                downCast.ParLineItems.Add(lineItem as PARBeverageLineItem);
+                downCast.ParLineItems.Add(lineItem as ParBeverageLineItem);
                 return Task.FromResult(true);
             }
 
@@ -384,7 +385,7 @@ namespace Mise.Core.Server.Services.Implementation
             throw new NotImplementedException();
         }
 
-        public Task SetLineItemsForPARAsync(IPARBeverageLineItem lineItem, Guid parID)
+        public Task SetLineItemsForPARAsync(IParBeverageLineItem lineItem, Guid parID)
         {
             throw new NotImplementedException();
         }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System.Windows.Input;
-using Mise.Inventory.MVVM;
 using Xamarin.Forms;
 using Mise.Core.Services;
 
@@ -40,11 +40,11 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand ConfirmCommand {
-			get { return new SimpleCommand(Confirm); }
+			get { return new Command(Confirm, () => CanConfirm); }
 		}
 
 		public ICommand CancelCommand{
-			get{return new SimpleCommand (Cancel);}
+			get{return new Command (Cancel, () => NotProcessing);}
 		}
 		#endregion
 

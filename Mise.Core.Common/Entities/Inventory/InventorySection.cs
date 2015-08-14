@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 
@@ -19,9 +16,16 @@ namespace Mise.Core.Common.Entities.Inventory
         public string Name { get; set; }
 
 		public bool Completed {
-			get;
-			set;
+            get { return LastCompletedBy.HasValue; }
 		}
+
+        public Guid? LastCompletedBy { get; set; }
+
+	    public bool ContainsSearchString(string searchString)
+	    {
+	        return (string.IsNullOrWhiteSpace(Name) == false && String.Equals(Name, searchString, StringComparison.CurrentCultureIgnoreCase))
+	               || (LineItems.Any(li => li.ContainsSearchString(searchString)));
+	    }
 
         public Guid RestaurantInventorySectionID { get; set; }
 
@@ -39,7 +43,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
 	    public ICloneableEntity Clone()
         {
-            var newItem = base.CloneRestaurantBase(new InventorySection());
+            var newItem = CloneRestaurantBase(new InventorySection());
             newItem.Name = Name;
             newItem.LineItems = LineItems.Select(li => li.Clone() as InventoryBeverageLineItem).ToList();
             newItem.RestaurantInventorySectionID = RestaurantInventorySectionID;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Neo4J;
 using Mise.Neo4J.Neo4JDAL;

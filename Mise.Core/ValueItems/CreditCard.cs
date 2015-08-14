@@ -4,10 +4,13 @@ namespace Mise.Core.ValueItems
 {
     public class CreditCard : IEquatable<CreditCard>, ITextSearchable
     {
-        public CreditCard() { }
+        public CreditCard() {
+			MaskedCardNumber = string.Empty;
+		}
 
 		public CreditCard(CreditCardProcessorToken token, PersonName name, int expMonth, int expYear, int? verificationCode, ZipCode zip)
         {
+			MaskedCardNumber = string.Empty;
 			ProcessorToken = token;
             Name = name;
             ExpMonth = expMonth;
@@ -20,6 +23,7 @@ namespace Mise.Core.ValueItems
         }
 
         public PersonName Name { get; set; }
+		public string MaskedCardNumber{ get; set;}
 
         public int ExpMonth { get; set; }
         public int ExpYear { get; set; }
@@ -42,8 +46,8 @@ namespace Mise.Core.ValueItems
 				return true;
 			}
 
-            var res = Name.Equals(other.Name) && ExpMonth == other.ExpMonth &&
-                      ExpYear == other.ExpYear;
+			var res = Name.Equals (other.Name) && ExpMonth == other.ExpMonth &&
+			                   ExpYear == other.ExpYear && MaskedCardNumber == other.MaskedCardNumber;
             return res;
 		}
 			
@@ -55,7 +59,8 @@ namespace Mise.Core.ValueItems
             ||
             (ExpYear.ToString().Contains(searchString))
             ||
-            Name.ContainsSearchString(searchString);
+            Name.ContainsSearchString(searchString)
+			|| MaskedCardNumber.ToUpper ().Replace("X", "").Contains (searchString.ToUpper ());
         }
 
 		public static bool CardNumberIsValid(string num){

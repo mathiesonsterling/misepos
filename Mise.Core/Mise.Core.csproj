@@ -9,8 +9,8 @@
     <RootNamespace>Mise.Core</RootNamespace>
     <AssemblyName>Mise.Core</AssemblyName>
     <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +29,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Deploy</OutputPath>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Entities\Accounts\IAccount.cs" />
@@ -62,6 +67,8 @@
     <Compile Include="Entities\Vendors\Events\IVendorEvent.cs" />
     <Compile Include="Entities\Vendors\IVendor.cs" />
     <Compile Include="Entities\Vendors\IVendorBeverageLineItem.cs" />
+    <Compile Include="ExtensionMethods\DateTimeOffsetExtensions.cs" />
+    <Compile Include="ExtensionMethods\IEnumerableExtensions.cs" />
     <Compile Include="Repositories\IAccountRepository.cs" />
     <Compile Include="Repositories\IEventSourcedEntityRepository.cs" />
     <Compile Include="Repositories\IPARRepository.cs" />
@@ -70,18 +77,16 @@
     <Compile Include="Repositories\IInventoryRepository.cs" />
     <Compile Include="Repositories\IVendorRepository.cs" />
     <Compile Include="Services\IPrinterService.cs" />
-    <Compile Include="Services\WebServices\IAccountWebService.cs" />
-    <Compile Include="Services\WebServices\IEventStoreWebService.cs" />
-    <Compile Include="Services\WebServices\IInventoryRestaurantWebService.cs" />
-    <Compile Include="Services\WebServices\IInventoryWebService.cs" />
-    <Compile Include="Services\WebServices\IPARWebService.cs" />
-    <Compile Include="Services\WebServices\IReceivingOrderWebService.cs" />
-    <Compile Include="Services\WebServices\IVendorWebService.cs" />
+    <Compile Include="Services\UtilityServices\ErrorTrackingIdentityFields.cs" />
+    <Compile Include="Services\UtilityServices\IErrorTrackingService.cs" />
+    <Compile Include="Services\UtilityServices\ILogger.cs" />
+    <Compile Include="Services\UtilityServices\LogLevel.cs" />
     <Compile Include="ValueItems\Beacon.cs" />
     <Compile Include="ValueItems\CommitResult.cs" />
     <Compile Include="ValueItems\CreditCardProcessorToken.cs" />
     <Compile Include="ValueItems\Distance.cs" />
     <Compile Include="ValueItems\Inventory\LiquidAmountUnits.cs" />
+    <Compile Include="ValueItems\Inventory\LiquidContainerShape.cs" />
     <Compile Include="ValueItems\Inventory\MeasurementMethods.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />
     <Compile Include="ValueItems\Inventory\PurchaseOrderStatus.cs" />
@@ -115,11 +120,9 @@
     <Compile Include="Repositories\IMenuRepository.cs" />
     <Compile Include="Repositories\IMenuRulesRepository.cs" />
     <Compile Include="Repositories\IRestaurantRepository.cs" />
-    <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\ICashDrawerService.cs" />
     <Compile Include="Services\UtilityServices\IJSONSerializer.cs" />
     <Compile Include="Services\UtilityServices\IPhotoService.cs" />
-    <Compile Include="Services\WebServices\IRestaurantTerminalService.cs" />
     <Compile Include="ValueItems\EventID.cs" />
     <Compile Include="ValueItems\Money.cs" />
     <Compile Include="Entities\People\Events\IEmployeeEvent.cs" />
@@ -127,6 +130,10 @@
     <Compile Include="Services\ISalesTaxCalculatorService.cs" />
     <Compile Include="ValueItems\PersonName.cs" />
     <Compile Include="ValueItems\ReferralCode.cs" />
+    <Compile Include="ValueItems\Reports\ReportRequest.cs" />
+    <Compile Include="ValueItems\Reports\ReportResult.cs" />
+    <Compile Include="ValueItems\Reports\ReportResultLineItem.cs" />
+    <Compile Include="ValueItems\Reports\ReportTypes.cs" />
     <Compile Include="ValueItems\RestaurantName.cs" />
     <Compile Include="ValueItems\StreetAddress.cs" />
     <Compile Include="ValueItems\PhoneNumber.cs" />
@@ -159,12 +166,10 @@
     <Compile Include="Entities\Inventory\Events\IPurchaseOrderEvent.cs" />
     <Compile Include="Entities\Inventory\Events\IInventoryEvent.cs" />
     <Compile Include="ValueItems\Password.cs" />
-    <Compile Include="Services\WebServices\IInventoryEmployeeWebService.cs" />
     <Compile Include="Entities\Vendors\IVendorShippingCost.cs" />
     <Compile Include="Entities\IMobileDevice.cs" />
     <Compile Include="ValueItems\MobileDeviceTypes.cs" />
     <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Services\WebServices\IPurchaseOrderWebService.cs" />
     <Compile Include="ITextSearchable.cs" />
     <Compile Include="ITaggable.cs" />
     <Compile Include="ValueItems\Tag.cs" />
@@ -174,15 +179,10 @@
     <Compile Include="Entities\MiseAppTypes.cs" />
     <Compile Include="Entities\People\IApplicationInvitation.cs" />
     <Compile Include="Repositories\IApplicationInvitationRepository.cs" />
-    <Compile Include="Services\WebServices\IApplicationInvitationWebService.cs" />
     <Compile Include="Entities\Inventory\ICategory.cs" />
     <Compile Include="Services\ICategoriesService.cs" />
     <Compile Include="Services\UtilityServices\Cryptography.cs" />
     <Compile Include="ValueItems\CreditCardNumber.cs" />
-    <Compile Include="Services\WebServices\IInventoryApplicationWebService.cs" />
-    <Compile Include="Services\WebServices\SendErrors.cs" />
-    <Compile Include="Services\WebServices\SendEventsException.cs" />
-    <Compile Include="Services\WebServices\ServerNotReadyException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -196,4 +196,5 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

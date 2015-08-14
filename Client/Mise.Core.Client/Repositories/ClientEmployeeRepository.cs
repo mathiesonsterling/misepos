@@ -8,59 +8,37 @@ using Mise.Core.Entities.People.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Common.Services;
 using System;
-using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent>, IEmployeeRepository
+    public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent, Employee>, IEmployeeRepository
     {
         readonly IInventoryEmployeeWebService _webService;
         readonly IClientDAL _clientDAL;
 
 
-        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, IClientDAL dal, ILogger logger)
-            : base(logger, dal, webService)
+        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, IClientDAL dal, ILogger logger, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
         {
             _webService = webService;
             _clientDAL = dal;
         }
 
-
-        public override async Task Load(Guid? restaurantID)
+        protected override async Task<IEnumerable<Employee>> LoadFromWebservice(Guid? restaurantID)
         {
-            Loading = true;
-            IEnumerable<IEmployee> emps = null;
-            Logger.Log("Loading employees from service", LogLevel.Debug);
-
-            var needsDBLoad = true;
-            try
-            {
-                emps = await _webService.GetEmployeesAsync();
-                needsDBLoad = false;
-            }
-            catch (Exception e)
-            {
-                Logger.HandleException(e);
-            }
-
-            if (needsDBLoad)
-            {
-                emps = await LoadFromDB();
-            }
-
-            var loadedEmps = emps.Where(e => e != null).ToList();
-            await _clientDAL.UpsertEntitiesAsync(loadedEmps);
-            Cache.UpdateCache(loadedEmps);
-            Loading = false;
+            var items = await (restaurantID.HasValue ? _webService.GetEmployeesForRestaurant(restaurantID.Value) : _webService.GetEmployeesAsync());
+            return items.Cast<Employee>();
         }
 
-        async Task<IEnumerable<IEmployee>> LoadFromDB()
+        protected override async Task<IEnumerable<Employee>> LoadFromDB(Guid? restaurantID)
         {
+
             Logger.Log("Could not get employees from web service, pulling from DAL", LogLevel.Debug);
-            var items = await _clientDAL.GetEntitiesAsync<IEmployee>();
+            var items = await _clientDAL.GetEntitiesAsync<Employee>();
             return items.ToList();
         }
 
@@ -95,11 +73,6 @@ namespace Mise.Core.Client.Repositories
         protected override IEmployee CreateNewEntity()
         {
             return new Employee();
-        }
-
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is EmployeeCreatedEvent;
         }
 
         public override Guid GetEntityID(IEmployeeEvent ev)
@@ -138,7 +111,7 @@ namespace Mise.Core.Client.Repositories
                         {
                             return null;
                         }
-                        if (IsEventACreation(employeeEvent))
+                        if (employeeEvent.IsAggregateRootCreation)
                         {
                             bundle.NewVersion = CreateNewEntity();
                         }

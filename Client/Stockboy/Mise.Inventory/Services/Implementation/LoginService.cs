@@ -7,9 +7,9 @@ using Mise.Core.Common.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Restaurant;
-using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Client.Services;
@@ -29,11 +29,16 @@ namespace Mise.Inventory.Services.Implementation
 
 		IEmployee _currentEmployee;
 		IRestaurant _currentRestaurant;
-		IRestaurantInventorySection _currentSection;
 
 		public class MiseLoginRecord{
-			public Guid EmployeeID{get;set;}
+			public EmailAddress Email{get;set;}
+			public string Hash{get;set;}
 			public DateTime Time{get;set;}
+		}
+
+		public class RestaurantSelectRecord
+		{
+			public Guid RestaurantID{ get; set;}
 		}
 
 		public LoginService(IEmployeeRepository employeeRepository,
@@ -56,19 +61,79 @@ namespace Mise.Inventory.Services.Implementation
 		    _repositoryLoader = repositoryLoader;
 		}
 
-		const string LOGGED_IN_EMPLOYEE_ID_KEY = "LoggedInEmployee";
-		public void OnAppStarting(){
+		const string LOGGED_IN_EMPLOYEE_KEY = "LoggedInEmployee";
+		const string LAST_RESTAURANT_ID_KEY = "LastRestaurantID";
+
+		public async Task<bool> LoadSavedEmployee(){
+			bool needsDelete = false;
 			try{
 				//if we have an employee that logged in, less than 7 days ago, then mark it
-				var login = _keyValStorage.GetValue<MiseLoginRecord> (LOGGED_IN_EMPLOYEE_ID_KEY);
+				var login = _keyValStorage.GetValue<MiseLoginRecord> (LOGGED_IN_EMPLOYEE_KEY);
 				if(login != null){
-					if (login.Time > DateTime.UtcNow.AddDays (-7)) {
-						_currentEmployee = _employeeRepository.GetByID (login.EmployeeID);
-					}
+					return await LoadLoggedInEmployee(login);
 				}
 			} catch(Exception e){
+				needsDelete = true;
 				_logger.HandleException (e, LogLevel.Warn);
 			}
+
+			if (needsDelete) {
+				try{
+					await _keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);
+				} catch(Exception e){
+					_logger.HandleException (e);
+				}
+			}
+
+			return false;
+		}
+
+		private async Task<bool> LoadLoggedInEmployee(MiseLoginRecord login){
+			if (login.Time > DateTime.UtcNow.AddDays (-7)) {
+				var password = new Password{ HashValue = login.Hash };
+				try {
+					_currentEmployee = await _employeeRepository.GetByEmailAndPassword (login.Email, password);
+
+					//we need to also get our restaurants - if there's only one, pick that!
+					var rests = (await GetPossibleRestaurantsForLoggedInEmployee()).ToList();
+					if(rests.Count() == 1){
+						await SelectRestaurantForLoggedInEmployee(rests.First().ID);
+					} else {
+						//did we store the last restuarant?
+						var lastRestRecord = _keyValStorage.GetValue<RestaurantSelectRecord>(LAST_RESTAURANT_ID_KEY);
+						if(lastRestRecord != null){
+							var rest = _restaurantRepository.GetByID(lastRestRecord.RestaurantID);
+							if(rest != null){
+								await SelectRestaurantForLoggedInEmployee(rest.ID);
+							} else {
+								_currentEmployee = null;
+							}
+						} else{
+							_currentEmployee = null;
+						}
+					}
+				} catch (Exception e) {
+					_logger.HandleException (e);
+				}
+			}
+
+			return _currentEmployee != null;
+		}
+
+		/// <summary>
+		/// Sets the current employee.  Used only for testing!
+		/// </summary>
+		/// <param name="emp">Emp.</param>
+		public void SetCurrentEmployee(IEmployee emp){
+			_currentEmployee = emp;
+		}
+
+		/// <summary>
+		/// Used only for debugging!
+		/// </summary>
+		/// <param name="rest">Rest.</param>
+		public void SetCurrentRestaurant(IRestaurant rest){
+			_currentRestaurant = rest;
 		}
 
 		public async Task<IEmployee> LoginAsync(EmailAddress email, Password password)
@@ -89,10 +154,11 @@ namespace Mise.Inventory.Services.Implementation
 
 			try{
 				var loginRec = new MiseLoginRecord {
-					EmployeeID = _currentEmployee.ID,
+					Email = _currentEmployee.PrimaryEmail,
+					Hash = _currentEmployee.Password.HashValue,
 					Time = DateTime.UtcNow
 				};
-				_keyValStorage.SetValue (LOGGED_IN_EMPLOYEE_ID_KEY, loginRec);
+				await _keyValStorage.SetValue (LOGGED_IN_EMPLOYEE_KEY, loginRec);
 			} catch(Exception e){
 				_logger.HandleException (e, LogLevel.Warn);
 			}
@@ -115,7 +181,8 @@ namespace Mise.Inventory.Services.Implementation
 		    await _repositoryLoader.LoadRepositories(null);
 
 			//remove our stored employee from our local settings
-			_keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_ID_KEY);				
+			await _keyValStorage.DeleteValue(LOGGED_IN_EMPLOYEE_KEY);	
+			await _keyValStorage.DeleteValue (LAST_RESTAURANT_ID_KEY);
 		}
 
 		public async Task<IEnumerable<IRestaurant>> GetPossibleRestaurantsForLoggedInEmployee ()
@@ -159,6 +226,10 @@ namespace Mise.Inventory.Services.Implementation
 				_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
 				await _restaurantRepository.Commit (_currentRestaurant.ID);
 				_logger.Debug ("User selected restaurant event committed");
+
+				//store it in the DB
+				var restRecord = new RestaurantSelectRecord{RestaurantID = _currentRestaurant.ID};
+				await _keyValStorage.SetValue (LAST_RESTAURANT_ID_KEY, restRecord);
 			} else{
 				_logger.Error("Current restaurant is null!");
 			}
@@ -174,32 +245,31 @@ namespace Mise.Inventory.Services.Implementation
 			return Task.FromResult (_currentRestaurant);
 		}
 
-		public Task<IRestaurantInventorySection> GetCurrentSection ()
-		{
-			return Task.FromResult (_currentSection);
-		}
 
-		public Task SelectSection (IRestaurantInventorySection section)
-		{
-			_currentSection = section;
-			return Task.FromResult (false);
-			//ensure section and restaurant match!
-		}
 
-		public async Task<bool> AddNewSectionToRestaurant (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
+		public async Task AddNewSectionToRestaurant (string sectionName, bool hasPartialBottles, bool isDefaultInventorySection)
 		{
 			try{
 				if (_currentRestaurant == null) {
 					throw new InvalidOperationException ("Do not have a restaurant to add a section to!");
 				}
 
+				var existing = _currentRestaurant.GetInventorySections ()
+					.Select (s => s.Name)
+					.Where(n => string.IsNullOrEmpty (n) == false)
+					.Select (n => n.ToUpper ());
+				if(existing.Contains (sectionName.ToUpper ())){
+					throw new ArgumentException ("Section " + sectionName + " already exists in restaurant");
+				}
 				var secEvent = 
 					_eventFactory.CreateInventorySectionAddedToRestaurantEvent(_currentEmployee, sectionName, 
 						isDefaultInventorySection, hasPartialBottles);
 
 				_currentRestaurant = _restaurantRepository.ApplyEvent(secEvent);
 				var res = await _restaurantRepository.Commit (_currentRestaurant.ID);
-				return res != CommitResult.Error;
+				if(res == CommitResult.Error){
+					throw new Exception ("Error committing new section!");
+				}
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;
@@ -281,10 +351,11 @@ namespace Mise.Inventory.Services.Implementation
 		public async Task<IEmployee> RegisterEmployee (EmailAddress email, Password password, PersonName name)
 		{
 			try{
-				var ev = _eventFactory.CreateEmployeeCreatedEvent (email, password, name);
+				var ev = _eventFactory.CreateEmployeeCreatedEvent (email, password, name, MiseAppTypes.StockboyMobile);
 
 				_currentEmployee = _employeeRepository.ApplyEvent (ev);
-
+			    var registerEvent = _eventFactory.CreateEmployeeRegisteredForInventoryAppEvent(_currentEmployee);
+			    _currentEmployee = _employeeRepository.ApplyEvent(registerEvent);
 
 			    await _employeeRepository.CommitOnlyImmediately(_currentEmployee.ID);
 
@@ -316,7 +387,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public Task<IRestaurant> RegisterRestaurant(RestaurantName name, StreetAddress address, PhoneNumber phone)
+		public async Task<IRestaurant> RegisterRestaurant(RestaurantName name, StreetAddress address, PhoneNumber phone)
 	    {
 			try{
 		        var ev = _eventFactory.CreateNewRestaurantRegisteredOnAppEvent(_currentEmployee, name, address, phone);
@@ -324,15 +395,19 @@ namespace Mise.Inventory.Services.Implementation
 				_currentRestaurant = _restaurantRepository.ApplyEvent (ev);
 
 				//don't commit here - we want to do so only when we register our account, in case there's a problem
-				//await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.ID);
+				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.ID);
 
 				//set our system to use this new restaurant!
 				_eventFactory.SetRestaurant (_currentRestaurant);
 
 				//associate the restaurant with the employee?
-				_currentEmployee = _employeeRepository.ApplyEvent (ev);
+				var empEvent = _eventFactory.CreateEmployeeRegistersRestaurantEvent (_currentEmployee, _currentRestaurant);
 
-				return Task.FromResult(_currentRestaurant);
+				_currentEmployee = _employeeRepository.ApplyEvent (empEvent);
+
+				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.ID);
+
+				return _currentRestaurant;
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;
@@ -351,16 +426,48 @@ namespace Mise.Inventory.Services.Implementation
 				await _restaurantRepository.Load(_currentRestaurant.ID);
 			}
 		}
-			
-	    public async Task<IAccount> RegisterAccount(CreditCard card, ReferralCode code, PersonName name, MiseAppTypes app)
+
+		private class RegisterAccountInfo{
+			public EmailAddress Email;
+			public ReferralCode Referral;
+			public PersonName AccountName;
+			public MiseAppTypes App;
+		    public Guid AccountID;
+		}
+
+		private RegisterAccountInfo _currentRegistrationInProcess;
+		public Task StartRegisterAccount(EmailAddress email, ReferralCode code, PersonName accountName, MiseAppTypes app){
+			//just store this information, and return a checksum
+			var storedInfo = new RegisterAccountInfo {
+				Email = email,
+				Referral = code,
+				AccountName = accountName,
+				App = app,
+                AccountID = Guid.NewGuid()
+			};
+
+			_currentRegistrationInProcess = storedInfo;
+			return Task.FromResult(storedInfo.GetHashCode ());
+		}
+
+	    public Task<Guid?> GetRegisteringAccountID()
 	    {
+	        var accountID = _currentRegistrationInProcess != null ? (Guid?)_currentRegistrationInProcess.AccountID : null;
+
+	        return Task.FromResult(accountID);
+	    }
+
+	    public async Task<IAccount> CompleteRegisterAccount(CreditCard card)
+	    {
+			if (_currentRegistrationInProcess == null) {
+				throw new InvalidOperationException ("No registration currently in process!");
+			}
+
 			try{
-				//send our credit card, to get the token
-
-
 				//commit account registry
-				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, 
-					_currentEmployee.PrimaryEmail, _currentRestaurant.PhoneNumber, card, code, app, name);
+				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, _currentRegistrationInProcess.AccountID,
+					_currentRegistrationInProcess.Email, _currentRestaurant.PhoneNumber, card, _currentRegistrationInProcess.Referral, 
+					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName);
 
 				var acct = _accountRepository.ApplyEvent (ev);
 				await _accountRepository.CommitOnlyImmediately (acct.ID);

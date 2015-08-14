@@ -14,15 +14,15 @@
 					Text="Manage Par" 
 					Command="{Binding PARCommand}"
 				/>
-		    	<Button Text="Start Count" Command="{Binding SectionSelectCommand}" />
+		    	<Button Text="{Binding InventoryButtonText}" Command="{Binding SectionSelectCommand}"/>
 			    <Button Text="Receive Shipment" Command="{Binding ReceivingOrderCommand}" />
 			    <Button Text="Create Purchase Order" Command="{Binding CreatePurchaseOrderCommand}" />
 			    <Button Text="Reports" Command="{Binding ReportsCommand}"/>
 			    <Button Text="Invite Staff" Command="{Binding ManageEmployeesCommand}" />
 			    <Button Text="Logout" Command="{Binding LogoutCommand}"/>
+	    		<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 	    	</StackLayout>
 	    </ScrollView>
-	    <ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
   	</StackLayout>
 
 </ContentPage>

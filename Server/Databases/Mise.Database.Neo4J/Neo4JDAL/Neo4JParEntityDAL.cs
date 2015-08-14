@@ -13,7 +13,7 @@ namespace Mise.Neo4J.Neo4JDAL
     public partial class Neo4JEntityDAL
     {
         #region PAR
-        public async Task AddPARAsync(IPAR par)
+        public async Task AddPARAsync(IPar par)
         {
             //create our node
             var node = new PARGraphNode(par);
@@ -55,7 +55,7 @@ namespace Mise.Neo4J.Neo4JDAL
             }*/
         }
 
-        public async Task<IEnumerable<IPAR>> GetPARsAsync(Guid restaurantID)
+        public async Task<IEnumerable<IPar>> GetPARsAsync(Guid restaurantID)
         {
             var graphNodes = await _graphClient.Cypher
                 .Match("(p:PAR)")
@@ -63,7 +63,7 @@ namespace Mise.Neo4J.Neo4JDAL
                 .Return(p => p.As<PARGraphNode>())
                 .ResultsAsync;
 
-            var res = new List<IPAR>();
+            var res = new List<IPar>();
             foreach (var node in graphNodes)
             {
                 var lineItems = await GetLineItemsForPARAsync(node.ID);
@@ -72,14 +72,14 @@ namespace Mise.Neo4J.Neo4JDAL
             return res;
         }
 
-        public async Task<IEnumerable<IPAR>> GetPARsAsync()
+        public async Task<IEnumerable<IPar>> GetPARsAsync()
         {
             var graphNodes = await _graphClient.Cypher
                 .Match("(p:PAR)")
                 .Return(p => p.As<PARGraphNode>())
                 .ResultsAsync;
 
-            var res = new List<IPAR>();
+            var res = new List<IPar>();
             foreach (var node in graphNodes)
             {
                 var lineItems = await GetLineItemsForPARAsync(node.ID);
@@ -89,7 +89,7 @@ namespace Mise.Neo4J.Neo4JDAL
             return res;
         }
 
-        public async Task UpdatePARAsync(IPAR par)
+        public async Task UpdatePARAsync(IPar par)
         {
             //delete our LIs
             //TODO - since PARs can be very big, change this to instead only update items which are changed?
@@ -110,7 +110,7 @@ namespace Mise.Neo4J.Neo4JDAL
             await AddPARAsync(par);
         }
 
-        private async Task TiePARToRestaurantAsync(IPAR par)
+        private async Task TiePARToRestaurantAsync(IPar par)
         {
             var relationship = par.IsCurrent ? "CURRENT_PAR" : "PAST_PAR";
             await _graphClient.Cypher
@@ -122,34 +122,34 @@ namespace Mise.Neo4J.Neo4JDAL
                 .ConfigureAwait(false);
         }
 
-        private async Task<IEnumerable<PARBeverageLineItem>> GetLineItemsForPARAsync(Guid parID)
+        private async Task<IEnumerable<ParBeverageLineItem>> GetLineItemsForPARAsync(Guid parID)
         {
             var lineNodes = await _graphClient.Cypher
                 .Match("(p:PAR)-[:HAS_LINE_ITEM]->(il:PARBeverageLineItem)")
                 .Where((PARGraphNode p) => p.ID == parID)
-                .Return(il => il.As<PARLineItemGraphNode>())
+                .Return(il => il.As<ParLineItemGraphNode>())
                 .ResultsAsync;
 
-            var nodesAndContainers = new List<Tuple<PARLineItemGraphNode, IEnumerable<LiquidContainer>, IEnumerable<ItemCategory>>>();
+            var nodesAndContainers = new List<Tuple<ParLineItemGraphNode, IEnumerable<LiquidContainer>, IEnumerable<ItemCategory>>>();
             foreach (var node in lineNodes.AsParallel())
             {
                 var containers = await GetLiquidContainersForEntityAsync(node.ID);
                 var categories = await GetCategoriesForItem(node.ID);
                 nodesAndContainers.Add(
-                    new Tuple<PARLineItemGraphNode, IEnumerable<LiquidContainer>, IEnumerable<ItemCategory>>(node, containers, categories));
+                    new Tuple<ParLineItemGraphNode, IEnumerable<LiquidContainer>, IEnumerable<ItemCategory>>(node, containers, categories));
             }
             //feed em in
             return nodesAndContainers.Select(nc => nc.Item1.Rehydrate(nc.Item2.FirstOrDefault(), nc.Item3));
         }
 
-        public async Task UpdatePARLineItemAsync(IPARBeverageLineItem lineItem)
+        public async Task UpdatePARLineItemAsync(IParBeverageLineItem lineItem)
         {
-            var node = new PARLineItemGraphNode(lineItem);
+            var node = new ParLineItemGraphNode(lineItem);
             await _graphClient.Cypher
                 .Match("(li:PARBeverageLineItem)")
                 .Where((InventoryBeverageLineItemGraphNode li) => li.ID == lineItem.ID)
-                .Set("li = {liParam}")
-                .WithParam("liParam", node)
+                .Set("li = {lIParam}")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync()
                 .ConfigureAwait(false);
 
@@ -167,12 +167,12 @@ namespace Mise.Neo4J.Neo4JDAL
                 .ConfigureAwait(false);
         }
 
-        public async Task SetLineItemsForPARAsync(IPARBeverageLineItem lineItem, Guid parID)
+        public async Task SetLineItemsForPARAsync(IParBeverageLineItem lineItem, Guid parID)
         {
-            var node = new PARLineItemGraphNode(lineItem);
+            var node = new ParLineItemGraphNode(lineItem);
             await _graphClient.Cypher
-                .Create("(li:PARBeverageLineItem {liParam})")
-                .WithParam("liParam", node)
+                .Create("(li:PARBeverageLineItem {lIParam})")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync()
                 .ConfigureAwait(false);
 

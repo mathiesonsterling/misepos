@@ -13,7 +13,13 @@ namespace Mise.Core.Common.Events.Inventory
 				return MiseEventTypes.PARLineItemAdded;
 			}
 		}
-		#endregion
+
+	    public override bool IsEntityCreation
+	    {
+	        get { return true; }
+	    }
+
+	    #endregion
 
 	    public Guid LineItemID { get; set; }
 

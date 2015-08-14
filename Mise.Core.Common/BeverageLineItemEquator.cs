@@ -24,23 +24,23 @@ namespace Mise.Core.Common.Entities.Inventory
                 return true;
             }
 
-			if(first.DisplayName.ToUpper () == second.DisplayName.ToUpper () && first.Container.Equals (second.Container)){
+			if(first.DisplayName.ToUpper () == second.DisplayName.ToUpper () && (first.Container != null && first.Container.Equals (second.Container))){
 				return true;
 			}
 
             return false;
         }
 
-		public static bool IsItem(IBaseBeverageLineItem li, string name, string UPC){
-			if(string.IsNullOrEmpty (UPC) == false && string.IsNullOrEmpty (li.UPC) == false){
-				return UPC == li.UPC;
+		public static bool IsItem(IBaseBeverageLineItem li, string displayName, string upc){
+			if(string.IsNullOrEmpty (upc) == false && string.IsNullOrEmpty (li.UPC) == false){
+				return upc == li.UPC;
 			}
-			if(string.IsNullOrEmpty (li.DisplayName) == false  && string.IsNullOrEmpty (name) == false){
-				if(li.DisplayName == name){
+			if(string.IsNullOrEmpty (li.DisplayName) == false  && string.IsNullOrEmpty (displayName) == false){
+				if(li.DisplayName == displayName){
 					return true;
 				}
 
-				return string.IsNullOrEmpty (li.MiseName) == false && li.MiseName == name;
+				return string.IsNullOrEmpty (li.MiseName) == false && li.MiseName == displayName;
 			}
 
 			return false;

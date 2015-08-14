@@ -15,7 +15,17 @@ namespace Mise.Core.Common.Events.Vendors
             get { return MiseEventTypes.VendorCreatedEvent; }
         }
 
-		public string Name{ get; set;}
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
+
+        public string Name{ get; set;}
 		public StreetAddress Address{get;set;}
 		public PhoneNumber PhoneNumber{get;set;}
 

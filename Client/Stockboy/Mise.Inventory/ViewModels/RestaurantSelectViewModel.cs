@@ -2,16 +2,11 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Input;
-
 using Mise.Core.Entities.Restaurant;
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
-using System.Collections.ObjectModel;
-using SQLitePCL;
-using Mise.Core.Common.Entities;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -20,7 +15,7 @@ namespace Mise.Inventory.ViewModels
 		private readonly ILoginService _loginService;
 
 		public IEnumerable<IRestaurant> PossibleRestaurants{ get; private set; }
-		public ObservableCollection<RestaurantName> PossibleRestaurantNames{ get; set;}
+		public IEnumerable<RestaurantName> PossibleRestaurantNames{ get; set;}
 	
 		#region commands
 
@@ -41,7 +36,7 @@ namespace Mise.Inventory.ViewModels
 			PossibleRestaurants = await _loginService.GetPossibleRestaurantsForLoggedInEmployee();
 
 			var names = PossibleRestaurants.Where (r => r.Name != null).Select (r => r.Name);
-			PossibleRestaurantNames = new ObservableCollection<RestaurantName> (names);
+		    PossibleRestaurantNames = names;
 		}
 
 		public async Task SelectRestaurant(RestaurantName name)

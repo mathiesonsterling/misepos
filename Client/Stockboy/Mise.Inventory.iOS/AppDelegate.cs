@@ -18,6 +18,7 @@ namespace Mise.Inventory.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			Forms.Init();
+			MR.Gestures.iOS.Settings.LicenseKey = "8TJV-AFFS-72EV-SF4E-8BGG-S5YP-J9X4-CQQU-N9AY-YTBZ-GF8F-C3ED-GTWE";
 			LoadApplication(new App(new DependencySetup()));
 
 			return base.FinishedLaunching(app, options);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Services.Implementation

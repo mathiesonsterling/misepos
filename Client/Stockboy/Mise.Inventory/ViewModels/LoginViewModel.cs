@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Linq;
-
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Services;
@@ -12,6 +11,9 @@ using Mise.Core.Client.Services;
 using Mise.Core.Entities.People;
 using System.Net.Http;
 using Xamarin;
+using ServiceStack;
+using System.Net;
+using Xamarin.Forms;
 
 
 namespace Mise.Inventory.ViewModels
@@ -38,7 +40,8 @@ namespace Mise.Inventory.ViewModels
 	        {
 	            if (args.PropertyName != "CanLogin")
 	            {
-	                CanLogin = EmailAddress.IsValid(Username) && Core.ValueItems.Password.IsValid(Password);
+	                CanLogin = NotProcessing && EmailAddress.IsValid(Username) 
+						&& Core.ValueItems.Password.IsValid(Password);
 	            }
 	        };
 		}
@@ -57,11 +60,11 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The login command.</value>
 		public ICommand LoginCommand {
-			get { return new SimpleCommand(LoginWrapper); }
+			get { return new Command(LoginWrapper, () => CanLogin); }
 		}
 
 		public ICommand RegisterCommand{
-			get{return new SimpleCommand (Register);}
+			get{return new Command (Register, () => NotProcessing);}
 		}
 
 	    public bool NotProduction
@@ -99,8 +102,9 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		public async Task Login()
 		{
-		    bool succeeded = false;
-		    bool shownErrorMessage = false;
+		    var succeeded = false;
+		    var shownErrorMessage = false;
+		    var missingServer = false;
 			try{
 				Processing = true;
 				var email = new EmailAddress{ Value = Username.Trim() };
@@ -137,13 +141,7 @@ namespace Mise.Inventory.ViewModels
 			    {
 			        succeeded = true;
 
-			        _insightsService.Identify("Unique user ID", "MiseID", employee.ID.ToString());
-			        _insightsService.Identify("Unique user ID", Insights.Traits.Email, email.Value);
-
-					if(employee.Name != null){
-						_insightsService.Identify ("First Name", Insights.Traits.FirstName, employee.Name.FirstName);
-						_insightsService.Identify ("Last Name", Insights.Traits.LastName, employee.Name.LastName);
-					}
+                    _insightsService.Identify(employee, "Stockboy Mobile");
 
 			        //do we have more than one restaurant?
 			        Processing = true;
@@ -189,18 +187,32 @@ namespace Mise.Inventory.ViewModels
 			            }
 			        }
 			    }
-			} catch(Exception e){
+			} 
+			catch(WebException we){
+				_insightsService.ReportException (we, LogLevel.Warn);
+				Logger.HandleException (we);
+				if(we.Message.Contains ("NameResolutionFailure"))
+				{
+				    missingServer = true;
+				} 
+			}
+			catch(Exception e){
 				_insightsService.ReportException (e, LogLevel.Warn);
 				Logger.HandleException (e);
 			}
 
+		    if (missingServer)
+		    {
+                await Navigation.DisplayAlert("Connection problem", "Cannot connect to server, are you online?");
+                shownErrorMessage = true;
+		        Processing = false;
+		    }
 		    if (succeeded == false && shownErrorMessage == false)
 		    {
 		        try
 		        {
 					_insightsService.Track("Login error", new Dictionary<string, string>());
 		            await Navigation.DisplayAlert("Error", "Error logging in");
-		            shownErrorMessage = true;
 					Processing = false;
 		        }
 		        catch (Exception e)

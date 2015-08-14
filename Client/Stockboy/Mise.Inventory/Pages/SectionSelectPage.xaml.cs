@@ -26,15 +26,16 @@ namespace Mise.Inventory.Pages
 			var template = new DataTemplate (typeof(TextCell));
 			template.SetBinding (TextCell.TextProperty, "Name");
 			var lv = new ListView {
-				ItemsSource = vm.Sections,
+				ItemsSource = vm.LineItems,
 				ItemTemplate = template,
+				HorizontalOptions = LayoutOptions.FillAndExpand
 			};
 
 			lv.ItemTapped += async (sender, e) => {
-				var selectedSection = e.Item as IRestaurantInventorySection;
+				var selectedSection = e.Item as IInventorySection;
 				((ListView)sender).SelectedItem = null;
 				if(selectedSection != null){
-					await vm.SelectSection (selectedSection);
+					await vm.SelectLineItem(selectedSection);
 				}
 			};
 			slOther.Children.Add (lv);

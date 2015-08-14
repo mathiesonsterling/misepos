@@ -1,7 +1,7 @@
 ﻿using System;
-using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Entities;
-namespace Mise.Core.Common
+
+namespace Mise.Core.Common.Events.Inventory
 {
 	public class PARLineItemQuantityUpdatedEvent : BasePAREvent
 	{
@@ -16,7 +16,7 @@ namespace Mise.Core.Common
 		#endregion
 
 		public Guid LineItemID{get;set;}
-		public int UpdatedQuantity{get;set;}
+		public decimal UpdatedQuantity{get;set;}
 	}
 }
 

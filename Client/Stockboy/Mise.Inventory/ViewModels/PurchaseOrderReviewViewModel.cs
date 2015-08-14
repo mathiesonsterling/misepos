@@ -2,11 +2,12 @@
 using Mise.Core.Services;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System.Collections.Generic;
 using Mise.Core.Entities.Inventory;
 using System.Windows.Input;
-using Mise.Inventory.MVVM;
+
 using System.Collections.ObjectModel;
 using Mise.Core.Entities.Vendors;
 using Xamarin;
@@ -27,9 +28,9 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		public override decimal Quantity {
+		public override string Quantity {
 			get {
-				return Source.Quantity;
+				return Source.Quantity.ToString();
 			}
 		}
 
@@ -111,24 +112,21 @@ namespace Mise.Inventory.ViewModels
 
 				var newItem = new VendorAndItems {
 					VendorName = vendor != null ? vendor.Name : "No Vendor",
-					POLineItems = new ObservableCollection<PODisplayLineItem>(
-						poByV.GetLineItems ().Select(p => new PODisplayLineItem (p))
-					)
+					POLineItems = poByV.GetLineItems ().Select(p => new PODisplayLineItem (p))
 				};
 				res.Add (newItem);
 			}
 
 			var ordered = res.OrderBy (v => v.VendorName == "No Vendor")
 				.ThenBy (v => v.VendorName);
-			var list = new ObservableCollection<VendorAndItems> (ordered);
-			VendorsAndPOs = list;
+			VendorsAndPOs = ordered;
 
 		}
 
-		public ObservableCollection<VendorAndItems> VendorsAndPOs{ get; private set;}
+		public IEnumerable<VendorAndItems> VendorsAndPOs{ get; private set;}
 
 
-		public ICommand SubmitPOCommand{get{return new SimpleCommand (SubmitPO);}}
+		public ICommand SubmitPOCommand{get{return new Command (SubmitPO, () => NotProcessing);}}
 
 		async void SubmitPO(){
 			try{
@@ -144,7 +142,7 @@ namespace Mise.Inventory.ViewModels
 
 		public class VendorAndItems{
 			public string VendorName{get;set;}
-			public ObservableCollection<PODisplayLineItem> POLineItems{get;set;}
+			public IEnumerable<PODisplayLineItem> POLineItems{get;set;}
 		}
 	}
 }

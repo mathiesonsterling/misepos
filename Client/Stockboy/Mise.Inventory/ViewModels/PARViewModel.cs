@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 
 using Mise.Core.Entities.Inventory;
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System;
 using System.Collections.ObjectModel;
@@ -12,8 +12,8 @@ using Mise.Core.Services;
 using Xamarin.Forms;
 namespace Mise.Inventory.ViewModels
 {
-	public class PARLineItemDisplay : BaseLineItemDisplayLine<IPARBeverageLineItem>{
-		public PARLineItemDisplay(IPARBeverageLineItem source) : base(source){}
+	public class PARLineItemDisplay : BaseLineItemDisplayLine<IParBeverageLineItem>{
+		public PARLineItemDisplay(IParBeverageLineItem source) : base(source){}
 
 
 		#region implemented abstract members of BaseLineItemDisplayLine
@@ -22,9 +22,9 @@ namespace Mise.Inventory.ViewModels
 				return Color.Default;
 			}
 		}
-		public override decimal Quantity {
+		public override string Quantity {
 			get {
-				return Source.Quantity;
+				return Source.Quantity.ToString();
 			}
 		}
 
@@ -43,11 +43,11 @@ namespace Mise.Inventory.ViewModels
 		#endregion
 	}
 
-	public class PARViewModel : BaseSearchableViewModel<PARLineItemDisplay>
+	public class ParViewModel : BaseSearchableViewModel<PARLineItemDisplay>
 	{
 		readonly IPARService _parService;
-		IPARBeverageLineItem _itemSettingQuantity;
-		public PARViewModel(ILogger logger, IAppNavigation appNavigation, IPARService parService)
+		IParBeverageLineItem _itemSettingQuantity;
+		public ParViewModel(ILogger logger, IAppNavigation appNavigation, IPARService parService)
 		:base(appNavigation, logger)
 		{
 			_parService = parService;
@@ -57,11 +57,11 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand AddNewItemCommand {
-			get { return new SimpleCommand(AddNewItem); }
+			get { return new Command(AddNewItem, () => NotProcessing); }
 		}
 
 		public ICommand SaveCommand {
-			get { return new SimpleCommand(Save, () => Processing == false); }
+			get { return new Command(Save, () => Processing == false); }
 		}
 			
 		#endregion
@@ -90,8 +90,8 @@ namespace Mise.Inventory.ViewModels
 		public override async Task SelectLineItem(PARLineItemDisplay displayLineItem){
 			var lineItem = displayLineItem.Source;
 			_itemSettingQuantity = lineItem;
-			await Navigation.ShowUpdateQuantity (lineItem.Quantity, lineItem.DisplayName, QuantitySetCallback,
-				null, null, false, "Set Par for Item");
+			await _parService.SetCurrentLineItem (lineItem);
+		    await Navigation.ShowUpdateParLineItem();
 		}
 
 		async void QuantitySetCallback(int newQuant, decimal ignore){

@@ -4,19 +4,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
-using Mise.Core.Services;
-using Mise.Inventory.ViewModels;
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
+
 using Mise.Inventory.Services;
-using System.Collections.ObjectModel;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
-	public class SectionSelectViewModel : BaseViewModel
+	public class SectionSelectViewModel : BaseSearchableViewModel<IInventorySection>
 	{
 		readonly ILoginService _loginService;
 		readonly IInventoryService _inventoryService;
-		public ObservableCollection<IRestaurantInventorySection> Sections { get; set; }
 
 		public SectionSelectViewModel(IAppNavigation appNavigation, ILogger logger, ILoginService loginService, 
 			IInventoryService inventoryService) : base(appNavigation, logger)
@@ -25,27 +23,15 @@ namespace Mise.Inventory.ViewModels
 			_inventoryService = inventoryService;
 		}
 
-		public override async Task OnAppearing(){
-			try{
-				await LoadPossible(_loginService);
-			} catch(Exception e){
-				HandleException (e);
-			}
-		}
-		#region Commands
+	    #region Commands
 
 		public ICommand AddSectionCommand {
-			get { return new SimpleCommand(AddSection); }
-		}
-
-		public ICommand SelectSectionCommand {
-			get { return new SimpleCommand<IRestaurantInventorySection>(SelectSectionCom); }
+			get { return new Command(AddSection, () => NotProcessing); }
 		}
 
 		public ICommand CompleteInventoryCommand{
-			get{return new SimpleCommand (CompleteInventory, CanCompleteInventory);}
+			get{return new Command (CompleteInventory, CanCompleteInventory);}
 		}
-		#endregion
 
 		async void AddSection()
 		{
@@ -56,64 +42,85 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		async Task LoadPossible(ILoginService loginService)
-		{
-			var rest = await loginService.GetCurrentRestaurant();
-			if (rest != null) {
-				var secs = rest.GetInventorySections();
-				Sections = new ObservableCollection<IRestaurantInventorySection> (secs);
-			}
+        public async void CompleteInventory()
+        {
+            try
+            {
+                Processing = true;
+                //do we have all our sections done?
+                var currInv = await _inventoryService.GetSelectedInventory();
+                bool closeInv = true;
+                var sectionsNotDone = currInv.GetSections().Where(sec => sec.Completed == false).ToList();
+                if (sectionsNotDone.Any())
+                {
+                    var sectionsList = sectionsNotDone.Select(sec => sec.Name);
+                    var sectionsString = string.Join(",", sectionsList);
 
-			//do we need to create an inventory?
-		    Processing = true;
-			var selectedInventory = await _inventoryService.GetSelectedInventory ();
-		    Processing = false;
-			if(selectedInventory == null){
-				await _inventoryService.StartNewInventory ();
-			}
-		}
+                    var message = "You haven't done sections " + sectionsString + ".  Complete inventory anyways?";
+                    closeInv = await Navigation.AskUser("Incomplete Sections", message);
+                }
 
-		public async void SelectSectionCom(IRestaurantInventorySection param){
-			await SelectSection (param);
-		}
+                if (closeInv)
+                {
+                    await _inventoryService.MarkInventoryAsComplete();
+                    Processing = false;
+                    await Navigation.ShowRoot();
+                }
+                Processing = false;
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
+        }
 
-		public async Task SelectSection(IRestaurantInventorySection param)
-		{
-			try{
-				await _loginService.SelectSection (param);
-				await Navigation.ShowInventory();
-			}catch(Exception e){
-				HandleException (e);
-			}
-		}
+        #endregion
 
-		public async void CompleteInventory ()
-		{
-			try
-			{
-			    Processing = true;
-				//do we have all our sections done?
-				var currInv = await _inventoryService.GetSelectedInventory ();
-				bool closeInv = true;
-				var sectionsNotDone = currInv.GetSections ().Where(sec => sec.Completed == false).ToList ();
-				if(sectionsNotDone.Any()){
-					var sectionsList = sectionsNotDone.Select (sec => sec.Name);
-					var sectionsString = string.Join (",", sectionsList);
+        protected override async Task<ICollection<IInventorySection>> LoadItems()
+        {
+            Processing = true;
+            var selectedInventory = await _inventoryService.GetSelectedInventory();
+            if (selectedInventory == null)
+            {
+                throw new InvalidOperationException("No Inventory exists!");
+            }
+            Processing = false;
+            var sections = selectedInventory.GetSections();
+            return sections.ToList();
+        }
 
-					var message = "You haven't done sections " + sectionsString + ".  Complete inventory anyways?";
-					closeInv = await Navigation.AskUser ("Incomplete Sections", message);
-				}
+        protected override void AfterSearchDone()
+        {
+        }
 
-				if(closeInv){
-					await _inventoryService.MarkInventoryAsComplete ();
-			    	Processing = false;
-					await Navigation.ShowRoot ();
-				}
-				Processing = false;
-			} catch(Exception e){
-				HandleException (e);
-			}
-		}
+
+        public override async Task SelectLineItem(IInventorySection lineItem)
+        {
+            try
+            {
+                Processing = true;
+                var emp = await _loginService.GetCurrentEmployee();
+       
+                if (lineItem.Completed && lineItem.LastCompletedBy != emp.ID)
+                {
+                    var userResponse =
+                        await
+                            Navigation.AskUser("Already counted!",
+                                string.Format("This section has been completed by someone else.  Do you want to continue, and discard their count for {0}?", lineItem.Name));
+                    if (userResponse == false)
+                    {
+                        return;
+                    }
+                }
+                await _inventoryService.SetCurrentInventorySection(lineItem);
+                Processing = false;
+                await Navigation.ShowInventory();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
+        }
 
 
 		bool CanCompleteInventory ()

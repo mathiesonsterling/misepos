@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Client.Repositories;
+using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.UnitTests.Tools;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using Moq;
 using NUnit.Framework;
 using Mise.Core.Common.Events.Inventory;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory;
-
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.UnitTests.Repositories
 {
@@ -28,11 +30,11 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
             var inventoryEventsPassed = new List<IReceivingOrderEvent>();
             var service = new Mock<IReceivingOrderWebService>();
-			service.Setup(s => s.SendEventsAsync(It.IsAny<IReceivingOrder>(), It.IsAny<IEnumerable<IReceivingOrderEvent>>()))
+			service.Setup(s => s.SendEventsAsync(It.IsAny<ReceivingOrder>(), It.IsAny<IEnumerable<IReceivingOrderEvent>>()))
                 .Callback<IReceivingOrder, IEnumerable<IReceivingOrderEvent>>((ro, evs) => inventoryEventsPassed.AddRange(evs))
                 .Returns(Task.Factory.StartNew(() => true));
 
-            var underTest = new ClientReceivingOrderRepository(logger.Object, dal.Object, service.Object);
+            var underTest = new ClientReceivingOrderRepository(logger.Object, dal.Object, service.Object, MockingTools.GetResendEventsService().Object);
 
             var entID = Guid.NewGuid();
             var creation = new ReceivingOrderCreatedEvent

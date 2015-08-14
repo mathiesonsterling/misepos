@@ -5,7 +5,7 @@ using Mise.Core.Client.UnitTests.Tools;
 using Mise.Core.Client.ApplicationModel;
 using Mise.Core.Entities.Menu;
 using Mise.Core.Repositories;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Entities.People;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Common.Entities;
@@ -36,12 +36,12 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                 PaymentStatus = CheckPaymentStatus.Closing,
                 Customer = new Customer { Name = PersonName.TestName },
             };
-			service.Setup(s => s.GetChecksAsync()).Returns(Task.Factory.StartNew(() =>new List<ICheck> { closingCheck }.AsEnumerable ()));
+			service.Setup(s => s.GetChecksAsync()).Returns(Task.Factory.StartNew(() =>new List<RestaurantCheck> { closingCheck }.AsEnumerable ()));
 
             var logger = new Mock<ILogger>();
 
-			var dal = MockingTools.GetClientDAL ();
-			var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object);
+			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
+			var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
 
             var empRepos = new Mock<IEmployeeRepository>();
             empRepos.Setup(r => r.GetAll()).Returns(new List<IEmployee>());
@@ -57,17 +57,19 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         }
 
 		[Test]
-		public void ReopenCheck()
+		public async Task ReopenCheck()
 		{
-            ICheckRepository checkRepos;
-			IEmployeeRepository empRepos;
-			var vm = ViewModelMockingTools.CreateViewModel(out checkRepos, out empRepos);
+            var empID = Guid.NewGuid();
+            var emp = new Employee
+            {
+                Name = PersonName.TestName,
+                ID = empID
+            };
+		    var items = await ViewModelMockingTools.CreateViewModel(emp);
+		    var vm = items.Item1;
 
-		    var empID = Guid.NewGuid();
-			vm.SelectedEmployee = new Employee {
-				Name = PersonName.TestName,
-				ID = empID
-			};
+
+		    vm.SelectedEmployee = emp;
 
 			//ACT
 			vm.CreateNewCheck (PersonName.TestName);
@@ -93,15 +95,17 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			
 
         [Test]
-        public void CancelPaymentsClearsRepository()
+        public async Task CancelPaymentsClearsRepository()
         {
             var emp = new Employee
             {
                 ID = Guid.Empty,
                 CompBudget = new Money(10.0M)
             };
-            ICheckRepository checkRepos;
-            var vm = ViewModelMockingTools.CreateViewModel(emp, out checkRepos);
+
+            var items = await ViewModelMockingTools.CreateViewModel(emp);
+            ICheckRepository checkRepos = items.Item2;
+            var vm = items.Item1;
 
             var check = vm.CreateNewCheck(PersonName.TestName);
 
@@ -142,14 +146,16 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         }
 
 		[Test]
-		public void CancelPaymentsWithoutTotalGoesToClosed()
+		public async Task CancelPaymentsWithoutTotalGoesToClosed()
         {
 			var emp = new Employee {
 				ID = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
-			ICheckRepository checkRepos;
-			var vm = ViewModelMockingTools.CreateViewModel(emp, out checkRepos);
+
+		    var items = await ViewModelMockingTools.CreateViewModel(emp);
+		    ICheckRepository checkRepos = items.Item2;
+		    var vm = items.Item1;
  
 		    var tab = vm.CreateNewCheck (PersonName.TestName);
 
@@ -182,14 +188,16 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 
         [Test]
-		public void SavePaymentSetsOnCheckAndEmployee()
+		public async Task SavePaymentSetsOnCheckAndEmployee()
         {
 			var emp = new Employee {
 				ID = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
-			ICheckRepository checkRepos;
-			var vm = ViewModelMockingTools.CreateViewModel (emp, out checkRepos);
+
+            var items = await ViewModelMockingTools.CreateViewModel(emp);
+            ICheckRepository checkRepos = items.Item2;
+            var vm = items.Item1;
 
             var tab = vm.CreateNewCheck(PersonName.TestName);
 
@@ -227,15 +235,17 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         /// Tests scenario described in POS-126
         /// </summary>
         [Test]
-        public void SavePaymentAfterChargingPercent()
+        public async Task SavePaymentAfterChargingPercent()
         {
             var emp = new Employee
             {
                 ID = Guid.Empty,
                 CompBudget = new Money(10.0M)
             };
-            ICheckRepository checkRepos;
-            var vm = ViewModelMockingTools.CreateViewModel(emp, out checkRepos);
+
+            var items = await ViewModelMockingTools.CreateViewModel(emp);
+            ICheckRepository checkRepos = items.Item2;
+            var vm = items.Item1;
 
             var tab = vm.CreateNewCheck(PersonName.TestName);
 
@@ -275,13 +285,13 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         }
 
 		[Test]
-		public void CreateAndPayCheckWithCreditCard(){
+		public async Task CreateAndPayCheckWithCreditCard(){
 			var emp = new Employee {
 				ID = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
 
-			var vm = ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp);
+			var vm = (await ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp));
 
 			var mi = new MenuItem {
 				ID = Guid.NewGuid (),
@@ -334,12 +344,13 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		}
 
 		[Test]
-		public void CantCloseCheckWithPaymentStillRemaining(){
+		public async Task CantCloseCheckWithPaymentStillRemaining(){
 			var emp = new Employee {
 				ID = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
-			var vm = ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp);
+			var vm = await ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp);
+     
 
 			var mi = new MenuItem {
 				ID = Guid.NewGuid (),
@@ -383,13 +394,13 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		}
 
 		[Test]
-		public void CancelAuthOnCard(){
+		public async Task CancelAuthOnCard(){
 			var emp = new Employee {
 				ID = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
 					
-			var vm = ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp);
+			var vm = await ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp);
 
 			var mi = new MenuItem {
 				ID = Guid.NewGuid (),
@@ -450,9 +461,9 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			Assert.AreEqual (CheckPaymentStatus.Closing, vmCheck.PaymentStatus, "payment status");
 		}
 
-        [Ignore("Flaky when run in sequence, fix that")]
+       // [Ignore("Flaky when run in sequence, fix that")]
 	    [Test]
-	    public void PayCashAfterCreditCardIsRejected()
+	    public async Task PayCashAfterCreditCardIsRejected()
 	    {
             var emp = new Employee
             {
@@ -460,7 +471,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                 CompBudget = new Money(10.0M)
             };
 
-	        var vm = ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor(emp);
+	        var vm = await ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor(emp);
 
             var mi = new MenuItem
             {
@@ -544,14 +555,14 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         /// This should be prevented by the UI, but added here for consistency
         /// </summary>
 	    [Test]
-	    public void TestCompAfterPayment()
+	    public async Task TestCompAfterPayment()
 	    {
             var emp = new Employee
             {
                 ID = Guid.Empty,
                 CompBudget = new Money(10.0M)
             };
-	        var vm = ViewModelMockingTools.CreateViewModel(emp);
+	        var vm = (await ViewModelMockingTools.CreateViewModel(emp)).Item1;
 
             var tab = vm.CreateNewCheck(PersonName.TestName);
 

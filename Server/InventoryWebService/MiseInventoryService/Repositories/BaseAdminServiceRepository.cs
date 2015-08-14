@@ -6,7 +6,7 @@ using Mise.Core.Common.Repositories.Base;
 using Mise.Core.Entities.Base;
 using Mise.Core.Server.Services;
 using Mise.Core.Server.Services.DAL;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace MiseInventoryService.Repositories
@@ -60,16 +60,28 @@ namespace MiseInventoryService.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<CommitResult> CommitBase(Guid entityID, Func<TEntity, Task> updateFunc, Func<TEntity, Task> addFunc)
+        public Task<CommitResult> CommitBase(Guid entityID, Func<TEntity, Task> updateFunc, Func<TEntity, Task> addFunc)
         {
+            if (UnderTransaction.ContainsKey(entityID) == false)
+            {
+                Logger.Warn("Tried to commit entity " + entityID + " that is not under transaction");
+                return Task.FromResult(CommitResult.NothingToCommit);
+            }
+
             var bundle = UnderTransaction[entityID];
+            if (bundle.NewVersion == null)
+            {
+                Logger.Warn("Null new version, will not commit");
+                return Task.FromResult(CommitResult.NothingToCommit);
+            }
             var itemExistsAlready = Cache.ContainsItem(entityID);
 
             //update us in memory first
-            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.InMiseDB);
+            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.Clean);
             //todo - put the cache in first, then commit to DB via an update function
             HostingEnvironment.QueueBackgroundWorkItem(async token =>
             {
+                bool needsRetry = false;
                 try
                 {
                     var upsert = itemExistsAlready
@@ -80,10 +92,25 @@ namespace MiseInventoryService.Repositories
                 catch (Exception e)
                 {
                     Logger.HandleException(e);
+                    needsRetry = true;
+                }
+
+                if (needsRetry == false) return;
+                await Task.Delay(100, token);
+                try
+                {
+                    var upsert = itemExistsAlready
+                        ? updateFunc(bundle.NewVersion)
+                        : addFunc(bundle.NewVersion);
+                    await upsert.ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    Logger.HandleException(e, LogLevel.Fatal);
                 }
             });
 
-            return CommitResult.StoredInDB;
+            return Task.FromResult(CommitResult.StoredInDB);
         }
 
         public DateTimeOffset DefaultCacheTime;

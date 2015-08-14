@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
-using Mise.Core.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
 	public class MainMenuViewModel : BaseViewModel
 	{
 		readonly ILoginService _loginService;
-		public MainMenuViewModel(ILogger logger, IAppNavigation navigationService, ILoginService loginService)
+	    private readonly IInventoryService _inventoryService;
+		public MainMenuViewModel(ILogger logger, IAppNavigation navigationService, ILoginService loginService, IInventoryService inventoryService)
 			:base(navigationService, logger)
 		{
-			_loginService = loginService;
+		    _loginService = loginService;
+		    _inventoryService = inventoryService;
 		}
 
-		public override async Task OnAppearing(){
+	    public override async Task OnAppearing(){
 			try{
 				var emp = await _loginService.GetCurrentEmployee ();
 				if(emp == null){
 					await Navigation.ShowLogin ();
 				}
-
+					
 				var rest = await _loginService.GetCurrentRestaurant ();
 				if (rest == null) {
 					RestaurantName = "ERROR NO RESTAURANT";
@@ -50,17 +51,32 @@ namespace Mise.Inventory.ViewModels
 				    }
 					
 				}
+
+				await _inventoryService.LoadLatest();
+			    var inv = _inventoryService.GetSelectedInventory();
+			    if (inv == null || inv.IsCompleted)
+			    {
+			        InventoryButtonText = "Start Count";
+			    }
+			    else
+			    {
+			        InventoryButtonText = "Continue Count";
+			    }
 			} catch(Exception e){
 				HandleException (e);
 			}
 		}
 
 		public string RestaurantName{get{ return GetValue<string>(); }set{ SetValue(value); }}
+        public string InventoryButtonText {
+            get { return GetValue<string>(); }
+            set{SetValue(value); }
+        }
 
 		#region Commands
 
 		public ICommand ReceivingOrderCommand {
-			get{ return new SimpleCommand(ReceivingOrder); }
+			get{ return new Command(ReceivingOrder, () => NotProcessing); }
 		}
 
 		/// <summary>
@@ -68,30 +84,30 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The inventories command.</value>
 		public ICommand SectionSelectCommand {
-			get { return new SimpleCommand(SectionSelect); }
+			get { return new Command(SectionSelect, () => NotProcessing); }
 		}
 			
 		public ICommand PARCommand {
-			get { return new SimpleCommand(PAR); }
+			get { return new Command(PAR, () => NotProcessing); }
 		}
 
 		public ICommand ManageEmployeesCommand {
-			get { return new SimpleCommand(ManageEmployees); }
+			get { return new Command(ManageEmployees, () => NotProcessing); }
 		}
 
 		public ICommand CreatePurchaseOrderCommand{
-			get{return new SimpleCommand (CreatePurchaseOrder);}
+			get{return new Command (CreatePurchaseOrder, () => NotProcessing);}
 		}
 		/// <summary>
 		/// Gets the reports command.
 		/// </summary>
 		/// <value>The reports command.</value>
 		public ICommand ReportsCommand {
-			get { return new SimpleCommand(Reports, IsCurrentUserAdmin); }
+			get { return new Command(Reports, IsCurrentUserAdmin); }
 		}
 
 		public ICommand LogoutCommand {
-			get { return new SimpleCommand(Logout); }
+			get { return new Command(Logout, () => NotProcessing); }
 		}
 
 		#endregion
@@ -111,6 +127,14 @@ namespace Mise.Inventory.ViewModels
 		async void SectionSelect()
 		{
 			try{
+                Processing = true;
+                var selectedInventory = await _inventoryService.GetSelectedInventory();
+                if (selectedInventory == null)
+                {
+                    //TODO might want to alert the user to this
+                    await _inventoryService.StartNewInventory();
+                }
+			    Processing = false;
 			await Navigation.ShowSectionSelect();
 			} catch(Exception e){
 				HandleException(e);
@@ -186,9 +210,9 @@ namespace Mise.Inventory.ViewModels
 		/// If this is true, our current user is an admin, and can access our admin stuff
 		/// </summary>
 		/// <returns><c>true</c> if this instance is current user admin; otherwise, <c>false</c>.</returns>
-		static bool IsCurrentUserAdmin()
+		bool IsCurrentUserAdmin()
 		{
-			return false;
+			return NotProcessing;
 		}
 	}
 }

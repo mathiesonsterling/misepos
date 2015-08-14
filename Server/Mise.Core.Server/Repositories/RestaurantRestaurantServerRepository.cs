@@ -10,6 +10,7 @@ using Mise.Core.Server.Services;
 using Mise.Core.Common.Services.DAL;
 using Mise.Core.Services;
 using Mise.Core.Common.Entities;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Server.Repositories
@@ -47,6 +48,10 @@ namespace Mise.Core.Server.Repositories
 	    }
 
 	    public bool Dirty { get; private set; }
+	    public int GetNumberOfEventsInTransacitonForEntity(Guid entityID)
+	    {
+	        throw new NotImplementedException();
+	    }
 
 
 	    public IEnumerable<IRestaurant> GetByName(string name)
@@ -66,11 +71,11 @@ namespace Mise.Core.Server.Repositories
 
 	    public ICollection<IRestaurant> Create(ICollection<IRestaurant> restaurants)
 		{
-			return base.CreateAsync(restaurants.ToList()).Result.ToList<IRestaurant> ();
+			throw new NotImplementedException();
 		}
         public ICollection<IRestaurant> Update(ICollection<IRestaurant> restaurants)
 		{
-			return base.UpdateAsync(restaurants.ToList()).Result.ToList<IRestaurant> ();
+			throw new NotImplementedException();
 		}
 
         private readonly IMiseAdminServer _server;

@@ -81,19 +81,28 @@ namespace Mise.Inventory.Services
 
 		Task ShowAccountRegistration();
 
+		Task ShowAuthorizeCreditCard ();
+
 		/// <summary>
 		/// Shows the invitations.
 		/// </summary>
 		/// <returns>The invitations.</returns>
 		Task ShowInvitations();
 
-		Task ShowUpdateQuantity(int quantity, string itemName, Action<int, decimal> updateQuantCallback, Action zeroOutCallback,
-			Money currentPrice, bool addPrices = false, string title = "Update Quantity");
-		Task CloseUpdateQuantity();
+	    Task ShowUpdateReceivingOrderLineItem();
+
+        #region Reports
+
+	    Task ShowSelectCompletedInventory();
+	    Task ShowReportResults();
+        #endregion
+
+        Task CloseUpdateQuantity();
 		Task CloseItemScan();
 		Task CloseVendorAdd();
 		Task CloseItemAdd();
 		Task CloseItemFind ();
+		Task CloseSectionAdd();
 
         /// <summary>
         /// Fired when an RO is done, to update our skipped screen and move us to main menu
@@ -101,5 +110,6 @@ namespace Mise.Inventory.Services
         /// <returns></returns>
 	    Task CloseReceivingOrder();
 
+	    Task ShowUpdateParLineItem();
 	}
 }

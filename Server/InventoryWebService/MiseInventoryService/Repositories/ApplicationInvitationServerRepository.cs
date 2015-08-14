@@ -12,6 +12,7 @@ using Mise.Core.Server.Repositories;
 using Mise.Core.Server.Services;
 using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace MiseInventoryService.Repositories
@@ -32,10 +33,6 @@ namespace MiseInventoryService.Repositories
             return new ApplicationInvitation();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is EmployeeInvitedToApplicationEvent;
-        }
 
         public override Guid GetEntityID(IApplicationInvitationEvent ev)
         {

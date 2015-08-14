@@ -6,6 +6,7 @@ using Mise.Core.Common.Repositories.Base;
 using Mise.Core.Common.Services.DAL;
 using Mise.Core.Entities.Base;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Server.Repositories
@@ -49,21 +50,9 @@ namespace Mise.Core.Server.Repositories
 		    return item;
 		}
 
-		public override IEnumerable<TEntity> GetAll ()
+		public override IEnumerable<TEntity> GetAll () 
 		{
-			var items = _dal.GetEntitiesAsync<TEntity> ();
-
-		    return items.Result;
-		}
-
-		public async Task<ICollection<TEntity>> CreateAsync(ICollection<TEntity> entities)
-		{
-		    await _dal.UpsertEntitiesAsync(entities);
-		    return entities;
-		}
-
-		public async Task<ICollection<TEntity>> UpdateAsync(ICollection<TEntity> entities){
-			return await CreateAsync (entities);
+			throw new NotImplementedException();
 		}
 	}
 }

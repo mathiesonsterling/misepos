@@ -15,6 +15,22 @@ namespace Mise.Core.ValueItems
             LastName = string.Empty;
         }
 
+		public PersonName(string completeName){
+			if(string.IsNullOrWhiteSpace (completeName)){
+				throw new ArgumentException ("Name is empty");
+			}
+			var seps = completeName.Split (' ');
+			if(seps.Count () == 2){
+				FirstName = seps [0];
+				LastName = seps [1];
+			} else{
+				if(seps.Count () == 3){
+					FirstName = seps [0];
+					MiddleName = seps [1];
+					LastName = seps [2];
+				}
+			}
+		}
         public PersonName(string firstName, string lastName)
         {
             FirstName = firstName;
@@ -31,6 +47,16 @@ namespace Mise.Core.ValueItems
         public string ToDatabaseString()
         {
             return FirstName + "|" + MiddleName + "|" + LastName;
+        }
+
+        public string ToSingleString()
+        {
+            if (string.IsNullOrWhiteSpace(MiddleName))
+            {
+                return FirstName + " " + LastName;
+            }
+
+            return FirstName + " " + MiddleName + " " + LastName;
         }
 
         public string FirstName { get; set; }

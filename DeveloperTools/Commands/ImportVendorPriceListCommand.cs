@@ -4,14 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure.MobileServices;
 using Mise.Core.Common;
+using Mise.Core.Common.Entities.DTOs;
+using Mise.Core.Common.Entities.DTOs.AzureTypes;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
+using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
+using Mise.Core.Entities.Vendors;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
-using Mise.Neo4J.Neo4JDAL;
 using Mise.VendorManagement.Services.Implementation;
 
 namespace DeveloperTools.Commands
@@ -26,6 +31,8 @@ namespace DeveloperTools.Commands
         private readonly StreetAddress _vendorStreetAddress;
 
         private readonly int _numSteps;
+        private readonly IMobileServiceClient _client;
+        private readonly EntityDataTransportObjectFactory _entityDataTransportObjectFactory;
         public ImportVendorPriceListCommand(ILogger logger, Uri dbLocation, string fileName, string vendorName, EmailAddress vendorEmail, StreetAddress vendorAddress,
             IProgress<ProgressReport> progress) : base(progress)
         {
@@ -36,6 +43,12 @@ namespace DeveloperTools.Commands
             _vendorEmail = vendorEmail;
             _vendorStreetAddress = vendorAddress;
 
+            _client = new MobileServiceClient(
+    "https://stockboymobileservice.azure-mobile.net/",
+    "vvECpsmISLzAxntFjNgSxiZEPmQLLG42"
+);
+
+            _entityDataTransportObjectFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
             _numSteps = 10;
         }
 
@@ -102,11 +115,11 @@ namespace DeveloperTools.Commands
             Report("Connecting to DB . . . ");
 
             var config = new DevToolsConfigs { Neo4JConnectionDBUri = _dbLoc };
-            var graphDAL = new Neo4JEntityDAL(config, _logger);
 
             //TODO see if the vendor exists already
             Report("Retrieving current vendors");
-            var vendors = (await graphDAL.GetVendorsAsync());
+
+            var vendors = await RetrieveCurrentVendors();
 
             Report("Checking if Vendor " + _vendorName + " already exists . . . ");
             var found = vendors.Any(v => v.IsSameVendor(vendor));
@@ -114,14 +127,29 @@ namespace DeveloperTools.Commands
             {
                 _logger.Error("Vendor " + vendor.Name + " already exists!");
                 Finish();
-                return;
+                throw new Exception("Vendor already exists");
             }
 
             //save the vendor
             Report("Saving vendor in DB . . . ");
-            await graphDAL.AddVendorAsync(vendor);
+
+            var restDTO = _entityDataTransportObjectFactory.ToDataTransportObject(vendor);
+            var azureItem = new AzureEntityStorage(restDTO);
+            var table = _client.GetTable<AzureEntityStorage>();
+            await table.InsertAsync(azureItem);
 
             Finish();
+        }
+
+        private async Task<IEnumerable<IVendor>> RetrieveCurrentVendors()
+        {
+            var table = _client.GetTable<AzureEntityStorage>();
+            var vendType = typeof (Vendor).ToString();
+            var vendorStorage = await table.Where(ai => ai.MiseEntityType == vendType).ToEnumerableAsync();
+            var dtos = vendorStorage.Select(ai => ai.ToRestaurantDTO());
+            var vends = dtos.Select(dto => _entityDataTransportObjectFactory.FromDataStorageObject<Vendor>(dto));
+
+            return vends;
         }
 
         public override int NumSteps

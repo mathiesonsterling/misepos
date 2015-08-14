@@ -13,6 +13,7 @@ using Mise.Core.Server.Repositories;
 using Mise.Core.Server.Services;
 using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace MiseInventoryService.Repositories
@@ -33,11 +34,6 @@ namespace MiseInventoryService.Repositories
             return new Restaurant();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            //TODO real restaurant here as well!
-            return ev is PlaceholderRestaurantCreatedEvent;
-        }
 
         public override Guid GetEntityID(IRestaurantEvent ev)
         {

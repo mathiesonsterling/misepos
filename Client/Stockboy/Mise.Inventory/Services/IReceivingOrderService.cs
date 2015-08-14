@@ -13,7 +13,7 @@ namespace Mise.Inventory.Services{
 		Task<IReceivingOrder> StartReceivingOrderForSelectedVendor();
 		Task<IReceivingOrder> StartReceivingOrder(IPurchaseOrder po);
 		Task<IReceivingOrder> GetCurrentReceivingOrder();
-		Task<bool> CompleteReceivingOrderForSelectedVendor(string notes, string invoiceID);
+		Task<bool> CompleteReceivingOrderForSelectedVendor(DateTimeOffset dateReceived, string notes, string invoiceID);
 		/// <summary>
 		/// Final commit to mark a RO as done
 		/// </summary>
@@ -26,5 +26,8 @@ namespace Mise.Inventory.Services{
 			int quantity, int caseSize, LiquidContainer container);
 		Task UpdateQuantityOfLineItem(IReceivingOrderLineItem li, int newQuantity, Money price);
 		Task ZeroOutLineItem (IReceivingOrderLineItem li);
+
+	    Task SetCurrentLineItem(IReceivingOrderLineItem lineItem);
+	    Task<IReceivingOrderLineItem> GetCurrentLineItem();
 	}
 }

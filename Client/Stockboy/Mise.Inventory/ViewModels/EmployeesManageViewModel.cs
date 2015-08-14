@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
-using Mise.Inventory.MVVM;
+
 using Mise.Core.Entities.People;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -42,7 +44,7 @@ namespace Mise.Inventory.ViewModels
 		#region Commands
 
 		public ICommand InviteCommand {
-			get { return new SimpleCommand(Invite); }
+			get { return new Command(Invite, () => InviteEnabled); }
 		}
 
 		#endregion

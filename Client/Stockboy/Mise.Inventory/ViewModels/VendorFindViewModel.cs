@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using System.Linq;
 
 using Mise.Core.Entities.Vendors;
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System.Collections.ObjectModel;
 using System;
 using Mise.Core.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -40,7 +41,7 @@ namespace Mise.Inventory.ViewModels
 
 
 		public ICommand AddNewVendorCommand {
-			get { return new SimpleCommand(AddNewVendor); }	
+			get { return new Command(AddNewVendor, () => CanAdd); }	
 		}
 			
 		#endregion

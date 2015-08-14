@@ -13,7 +13,7 @@ namespace Mise.Core.Common.UnitTests
 	{
 		[Test]
 		public void SearchShouldNotThrowOnEmpty(){
-			var underTest = new PARBeverageLineItem ();
+			var underTest = new ParBeverageLineItem ();
 
 			var res = underTest.ContainsSearchString ("test");
 
@@ -22,7 +22,7 @@ namespace Mise.Core.Common.UnitTests
 
 		[Test]
 		public void SearchShouldFindFromContainer(){
-			var underTest = new PARBeverageLineItem {
+			var underTest = new ParBeverageLineItem {
 				MiseName = "testPL",
 				Container = new LiquidContainer{ AmountContained = new LiquidAmount{ Milliliters = 100 } }
 			};

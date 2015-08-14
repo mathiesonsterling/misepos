@@ -12,7 +12,7 @@ namespace Mise.Core.Common.Entities.DTOs
             _serializer = serializer;
         }
 
-        public RestaurantEntityDataTransportObject ToDataTransportObject(IEntityBase entity)
+        public RestaurantEntityDataTransportObject ToDataTransportObject<T>(T entity) where T:IEntityBase, new()
         {
             var json = _serializer.Serialize(entity);
             return new RestaurantEntityDataTransportObject

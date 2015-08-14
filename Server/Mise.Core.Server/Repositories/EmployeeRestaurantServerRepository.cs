@@ -12,6 +12,7 @@ using Mise.Core.Entities.People.Events;
 using Mise.Core.Server.Services;
 using Mise.Core.Common.Services.DAL;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Entities;
 namespace Mise.Core.Server.Repositories
@@ -38,10 +39,6 @@ namespace Mise.Core.Server.Repositories
 			return new Employee ();
 		}
 
-		protected override bool IsEventACreation (IEntityEventBase ev)
-		{
-			throw new NotImplementedException ();
-		}
 
 	    public override Guid GetEntityID(IEmployeeEvent ev)
 	    {
@@ -84,38 +81,9 @@ namespace Mise.Core.Server.Repositories
 	    public bool Loading { get; private set; }
 
 	    public Task Load(Guid? restaurantId)
-        {
-			return Task.Run (() => {
-				IList<IEmployee> emps = null;
-				try {
-					Logger.Log ("Loading employees from service", LogLevel.Debug);
-					if (restaurantId.HasValue) {
-						emps = _server.GetEmployeeSnapshots (restaurantId.Value).Where (e => e != null).ToList ();
-					} else {
-						emps = _server.GetAllEmployees ().ToList ();
-					}
-					_loadedFromServer = true;
-
-					var emps1 = emps;
-					var upsertTask = Task.Factory.StartNew (() => {
-						Logger.Log ("Updating entites from webservice", LogLevel.Debug);
-						var ut = _dal.UpsertEntitiesAsync (emps1);
-						ut.Wait ();
-					});
-
-					Task.WaitAll (new[] { upsertTask });
-				} catch (Exception e) {
-					Logger.HandleException (e, LogLevel.Debug);
-
-					if (_loadedFromServer == false) {
-						Logger.Log ("Could not get employees from web service, pulling from DAL", LogLevel.Debug);
-						emps = _dal.GetEntitiesAsync<Employee> ().Result.ToList<IEmployee> ();
-					}
-				}
-				Cache.UpdateCache (emps);
-				IsFullyCommitted = _loadedFromServer;
-			});
-        }
+	    {
+	        throw new NotImplementedException();
+	    }
 
 
 		public override Task<CommitResult> Commit(Guid employeeID)

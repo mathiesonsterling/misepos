@@ -15,12 +15,13 @@ using Mise.Core.Entities.People.Events;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Payments;
 using Mise.Core.Entities.Check.Events.PaymentEvents.CreditCards;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.ApplicationModel.Implementation
 {
@@ -205,7 +206,8 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                                  ICreditCardProcessorService creditCardProcessorService,
                                  IPrinterService printerService,
                                  ISalesTaxCalculatorService salesTaxService,
-                                 IRestaurantTerminalService terminalService
+                                 IRestaurantTerminalService terminalService,
+                                IDeviceLocationService locationService
         )
         {
 
@@ -233,16 +235,16 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 _logger.HandleException(e);
                 Online = false;
                 //get our restaraunt stored
-                IRestaurantRepository restaurantRepository = new ClientRestaurantRepository(logger,dal, terminalService);
+                IRestaurantRepository restaurantRepository = new ClientRestaurantRepository(logger, dal, terminalService, terminalWebService, locationService);
                 _restaurant = restaurantRepository.GetAll().FirstOrDefault();
             }
 				
-            var checkRepos = new ClientCheckRepository(terminalWebService, dal, logger);
-            logger.Log("Loading check repository . . .", LogLevel.Debug);
-            checkRepos.Load(_restaurant.ID);
-            var employeeRepos = new ClientEmployeeRepository(terminalWebService, dal, logger);
-            logger.Log("Loading employee repository", LogLevel.Debug);
-            employeeRepos.Load(_restaurant.ID);
+            var checkRepos = new ClientCheckRepository(terminalWebService, dal, logger, terminalWebService);
+
+            var employeeRepos = new ClientEmployeeRepository(terminalWebService, dal, logger, terminalWebService);
+
+            logger.Log("Loading employee and check repository . . .", LogLevel.Debug);
+            LoadRepositories(checkRepos, employeeRepos);
             var menuRepos = new ClientMenuRepository(terminalWebService, dal, logger);
             logger.Log("Loading menu repository", LogLevel.Debug);
             menuRepos.Load();
@@ -252,7 +254,12 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 , checkRepos, employeeRepos, menuRepos);
         }
 
-
+        private async void LoadRepositories(ClientCheckRepository checkRepos,
+            ClientEmployeeRepository employeeRepository)
+        {
+            await checkRepos.Load(_restaurant.ID);
+            await employeeRepository.Load(_restaurant.ID);
+        }
 
         /// <summary>
         /// If true, the employee needs to put their passcode in to order

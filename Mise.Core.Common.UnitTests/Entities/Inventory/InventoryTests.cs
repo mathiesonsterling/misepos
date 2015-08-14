@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
+using Mise.Core.Entities.Inventory;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using NUnit.Framework;
@@ -70,121 +71,112 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
         }
 
         [Test]
-        public void CreateAddsRestaurantSections()
+        public void AddingExistingSectionIsIgnored()
         {
-            var underTest = new Common.Entities.Inventory.Inventory();
-
-            var id1 = Guid.NewGuid();
-            var id2 = Guid.NewGuid();
-            var restID = Guid.NewGuid();
-            var create = new InventoryCreatedEvent
-            {
-                CausedByID = Guid.NewGuid(),
-                CreatedDate = DateTimeOffset.UtcNow,
-                RestaurantSectionsAndSectionIDs = new List<Tuple<RestaurantInventorySection, Guid>>
-                {
-                    new Tuple<RestaurantInventorySection, Guid>(
-                    new RestaurantInventorySection
-                    {
-                        ID = id1,
-                        Name = "section1"
-                    }, Guid.NewGuid()),
-                    new Tuple<RestaurantInventorySection, Guid>(
-                    new RestaurantInventorySection
-                    {
-                        ID = id2,
-                        Name = "section2"
-                    }, Guid.NewGuid())
-                },
-                InventoryID = Guid.NewGuid(),
-                RestaurantID = restID,
-            };
-
-            //ACT
-            underTest.When(create);
-
-            //ASSERT
-            Assert.AreEqual(underTest.ID, create.InventoryID);
-            Assert.AreEqual(underTest.CreatedDate, create.CreatedDate);
-            Assert.AreEqual(underTest.LastUpdatedDate, create.CreatedDate);
-            Assert.AreEqual(restID, underTest.RestaurantID, "RestaurantID");
-            Assert.AreEqual(create.CreatedDate, underTest.CreatedDate);
-            Assert.AreEqual(create.CreatedDate, underTest.LastUpdatedDate, "last updated");
-
-
-            var sections = underTest.GetSections().ToList();
-            Assert.AreEqual(2, sections.Count, "has 2 sections");
-
-            var firstSec = sections.First();
-            Assert.AreEqual("section1", firstSec.Name);
-            Assert.AreEqual(id1, firstSec.RestaurantInventorySectionID);
-            Assert.AreEqual(restID, firstSec.RestaurantID);
-
-            var secondSec = sections.Last();
-            Assert.AreEqual("section2", secondSec.Name);
-            Assert.AreEqual(id2, secondSec.RestaurantInventorySectionID);
-            Assert.AreEqual(restID, secondSec.RestaurantID);
-
-        }
-
-        [Test]
-        public void InventoryMeasuredShouldAddInventoryItemToExistingSection()
-        {
-            var sectionID = Guid.NewGuid();
             var underTest = new Common.Entities.Inventory.Inventory
             {
+                ID = Guid.NewGuid(),
                 Sections = new List<InventorySection>
                 {
                     new InventorySection
                     {
                         ID = Guid.NewGuid(),
-                        RestaurantInventorySectionID = sectionID,
-                        Name = "sectionMain"
+                        Name = "Test section",
+                        LineItems = new List<InventoryBeverageLineItem>()
                     }
                 }
             };
 
-            var inventoryEvent = new InventoryLiquidItemMeasuredEvent
+            var addEvent = new InventoryNewSectionAddedEvent
             {
-                CausedByID = Guid.NewGuid(),
+                ID = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                InventoryID = Guid.NewGuid(),
-				AmountMeasured = new LiquidAmount{Milliliters = 375},
-                RestaurantInventorySectionID = sectionID,
-                BeverageLineItem = new InventoryBeverageLineItem
-                {
-                    Container = new LiquidContainer
-                    {
-                        AmountContained = new LiquidAmount
-                        {
-                            Milliliters = 750
-                        }
-                    },
-                    CreatedDate = DateTime.UtcNow.AddDays(-1),
-					NumFullBottles = 10,
-                    PricePaid = new Money(10.0M),
-                    MethodsMeasuredLast = MeasurementMethods.VisualEstimate
-                }
+                InventoryID = underTest.ID,
+                Name = "Updated section",
+                SectionID = underTest.Sections.First().ID,
             };
 
             //ACT
-            underTest.When(inventoryEvent);
-            var items = underTest.GetBeverageLineItems().ToList();
+            underTest.When(addEvent);
 
             //ASSERT
-            Assert.NotNull(items);
-            Assert.AreEqual(1, items.Count);
-
-            var item = items.First();
-            Assert.IsNotNull(item);
-            Assert.AreEqual(375, item.CurrentAmount.Milliliters);
-            Assert.AreEqual(MeasurementMethods.VisualEstimate, item.MethodsMeasuredLast);
+            var sections = underTest.Sections;
+            Assert.AreEqual(1, sections.Count);
+            Assert.AreEqual("Test section", underTest.Sections.First().Name);
         }
+
+        [Test]
+        public void CreateAddsRestaurantSections()
+        {
+            var underTest = new Common.Entities.Inventory.Inventory();
+            var empID = Guid.NewGuid();
+            var invID = Guid.NewGuid();
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+            var restID = Guid.NewGuid();
+
+            var restSections = new List<IRestaurantInventorySection>{
+                new RestaurantInventorySection
+            {
+                ID = id2,
+                Name = "section2"
+            },new RestaurantInventorySection
+                    {
+                        ID = id1,
+                        Name = "section1"
+                    }
+            };
+            
+            var create = new InventoryCreatedEvent
+            {
+                CausedByID = empID,
+                CreatedDate = DateTimeOffset.UtcNow,
+                InventoryID = invID,
+                RestaurantID = restID,
+            };
+
+            var addSections = restSections.Select(rs => new InventoryNewSectionAddedEvent
+            {
+                CausedByID = empID,
+                CreatedDate = DateTimeOffset.UtcNow,
+                InventoryID = invID,
+                RestaurantID = restID,
+                RestaurantSectionId = rs.ID,
+                SectionID = Guid.NewGuid(),
+                Name = rs.Name,
+                ID = Guid.NewGuid()
+            });
+            //ACT
+            underTest.When(create);
+
+            foreach (var addSec in addSections)
+            {
+                underTest.When(addSec);
+            }
+            //ASSERT
+            Assert.AreEqual(underTest.ID, create.InventoryID);
+            Assert.AreEqual(underTest.CreatedDate, create.CreatedDate);
+            Assert.AreEqual(restID, underTest.RestaurantID, "RestaurantID");
+            Assert.AreEqual(create.CreatedDate, underTest.CreatedDate);
+
+
+            var sections = underTest.GetSections().ToList();
+            Assert.AreEqual(2, sections.Count, "has 2 sections");
+
+            var firstSec = sections.First(s => s.Name == "section1");
+            Assert.AreEqual(id1, firstSec.RestaurantInventorySectionID);
+            Assert.AreEqual(restID, firstSec.RestaurantID);
+
+            var secondSec = sections.First(s => s.Name == "section2");
+            Assert.AreEqual(id2, secondSec.RestaurantInventorySectionID);
+            Assert.AreEqual(restID, secondSec.RestaurantID);
+
+        }
+
 
         [Test]
         public void InventoryMeasuredInNonExistentSectionShouldThrow()
         {
-            var sectionID = Guid.NewGuid();
             var underTest = new Common.Entities.Inventory.Inventory();
 
             var inventoryEvent = new InventoryLiquidItemMeasuredEvent
@@ -192,17 +184,11 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 CausedByID = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 InventoryID = Guid.NewGuid(),
-				AmountMeasured = new LiquidAmount (){Milliliters = 375},
-                RestaurantInventorySectionID = sectionID,
+				AmountMeasured = new LiquidAmount {Milliliters = 375},
+                InventorySectionID = Guid.NewGuid(),
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    Container = new LiquidContainer
-                    {
-                        AmountContained = new LiquidAmount
-                        {
-                            Milliliters = 750
-                        }
-                    },
+                    Container = LiquidContainer.Bottle750ML,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 10,
                     PricePaid = new Money(10.0M),
@@ -229,18 +215,28 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
         /// Checks that a full bottle is OK
         /// </summary>
         [Test]
-        public void InventoryMeasuredFullByVisualShouldAddInventoryItem()
+        public void InventoryMeasuredFullByVisualShouldUpdateItem()
         {
             var restSectionID = Guid.NewGuid();
-
+            var invSectionID = Guid.NewGuid();
+            var liID = Guid.NewGuid();
             var underTest = new Common.Entities.Inventory.Inventory
             {
                 Sections = new List<InventorySection>
                 {
                     new InventorySection
                     {
+                        ID = invSectionID,
                         RestaurantInventorySectionID = restSectionID,
-                        Name = "newSection"
+                        Name = "newSection",
+                        LineItems = new List<InventoryBeverageLineItem>
+                        {
+                            new InventoryBeverageLineItem
+                            {
+                                ID = liID,
+                                Container = LiquidContainer.Bottle750ML
+                            }
+                        }
                     }
                 }
             };
@@ -250,18 +246,13 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 CausedByID = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 InventoryID = Guid.NewGuid(),
-				AmountMeasured = new LiquidAmount (){Milliliters = 750},
-                RestaurantInventorySectionID = restSectionID,
+				AmountMeasured = LiquidAmount.SevenFiftyMillilters,
+                InventorySectionID = invSectionID,
                 NumFullBottlesMeasured = 10,
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    Container = new LiquidContainer
-                    {
-                        AmountContained = new LiquidAmount
-                        {
-                            Milliliters = 750
-                        }
-                    },
+                    ID = liID,
+                    Container = LiquidContainer.Bottle750ML,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 0,
                     PricePaid = new Money(10.0M),
@@ -292,7 +283,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             var invEvent = new InventoryLiquidItemMeasuredEvent
             {
-				AmountMeasured = new LiquidAmount (){Milliliters = 150},
+				AmountMeasured = new LiquidAmount {Milliliters = 150},
                 BeverageLineItem = null
             };
 
@@ -310,15 +301,34 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             //ASSERT
             Assert.IsTrue(threw);
         }
+
         [Test]
-        public void InventoryMeasuredWithInvalidPercentageThrows()
+        public void InventoryMeasuredWithNegativeAmountThrows()
         {
             var underTest = new Common.Entities.Inventory.Inventory();
+            var liID = Guid.NewGuid();
+            var lineItem = new InventoryBeverageLineItem
+            {
+                ID = liID,
+                Container = LiquidContainer.Bottle330ml
+            };
+
+            var sectionID = Guid.NewGuid();
+            underTest.Sections.Add(
+                new InventorySection
+                {
+                    ID = sectionID,
+                    LineItems = new List<InventoryBeverageLineItem> { lineItem}
+                });
 
             var invEvent = new InventoryLiquidItemMeasuredEvent
             {
-				AmountMeasured = new LiquidAmount (){Milliliters = 1000},
-                BeverageLineItem = new InventoryBeverageLineItem()
+				AmountMeasured = new LiquidAmount {Milliliters = -10000},
+                BeverageLineItem = new InventoryBeverageLineItem
+                {
+                    ID = liID,
+                },
+                InventorySectionID = sectionID
             };
 
             //ACT
@@ -327,8 +337,46 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             {
                 underTest.When(invEvent);
             }
-            catch (ArgumentException)
+            catch (ArgumentException ae)
             {
+                Assert.IsTrue(ae.Message.Contains("Cannot measure a negative amount"));
+                threw = true;
+            }
+
+            //ASSERT
+            Assert.IsTrue(threw);
+        }
+
+        [Test]
+        public void InventoryMeasuredWithNonExistentItemThrows()
+        {
+            var underTest = new Common.Entities.Inventory.Inventory();
+            var sectionID = Guid.NewGuid();
+            underTest.Sections.Add(
+                new InventorySection
+                {
+                    ID = sectionID
+                });
+            var invEvent = new InventoryLiquidItemMeasuredEvent
+            {
+                AmountMeasured = new LiquidAmount { Milliliters = 1000 },
+                BeverageLineItem = new InventoryBeverageLineItem
+                {
+                    ID = Guid.NewGuid(),
+                    DisplayName = "testItem"
+                },
+                InventorySectionID = sectionID,
+            };
+
+            //ACT
+            var threw = false;
+            try
+            {
+                underTest.When(invEvent);
+            }
+            catch (ArgumentException ae)
+            {
+                Assert.True(ae.Message.Contains("No inventory item of testItem"));
                 threw = true;
             }
 
@@ -351,6 +399,8 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 IsCurrent = true,
                 Sections = new List<InventorySection>{
                     new InventorySection{
+                        ID = Guid.NewGuid(),
+                        RestaurantInventorySectionID = Guid.NewGuid(),
                         Name = "merg",
                         LineItems = new List<InventoryBeverageLineItem>
                         {

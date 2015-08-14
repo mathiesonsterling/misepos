@@ -9,8 +9,8 @@
     <RootNamespace>Mise.Core.Client</RootNamespace>
     <AssemblyName>Mise.Core.Client</AssemblyName>
     <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +29,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Deploy</OutputPath>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,7 +61,9 @@
     <Compile Include="Services\IClientKeyValueStorage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\WebServices\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mise.Core\Mise.Core.csproj">
       <Project>{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}</Project>

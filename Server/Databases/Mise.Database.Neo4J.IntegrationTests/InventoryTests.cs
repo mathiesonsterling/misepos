@@ -6,6 +6,7 @@ using Mise.Core.Common;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Neo4J;
@@ -39,6 +40,19 @@ namespace Mise.Database.Neo4J.IntegrationTests
             await TestUtilities.LoadCategories(_underTest);
 
             var rest = TestUtilities.CreateRestaurant();
+            //make sure the restaurant has a section!
+            var restSectionID = Guid.NewGuid();
+            rest.InventorySections.Add(
+                new RestaurantInventorySection
+                {
+                    Name = "test",
+                    ID = restSectionID,
+                    CreatedDate = DateTime.UtcNow,
+                    LastUpdatedDate = DateTime.UtcNow,
+                    RestaurantID = rest.ID,
+                    Revision = new EventID(MiseAppTypes.UnitTests, 10)
+                }
+                );
             await _underTest.AddRestaurantAsync(rest);
 
             var emp = TestUtilities.CreateEmployee();
@@ -62,6 +76,9 @@ namespace Mise.Database.Neo4J.IntegrationTests
                     new InventorySection{
                         Name = "sectionMain",
                         ID = sectionID,
+                        RestaurantInventorySectionID = restSectionID,
+                        CreatedDate = DateTime.UtcNow,
+                        LastUpdatedDate = DateTime.UtcNow,
                         Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1000},
                         LineItems = new List<InventoryBeverageLineItem>
                         {
@@ -408,7 +425,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
                         Revision = TestUtilities.GetEventID(),
                         RestaurantID = restID,
                         Name = "section1",
-                        Completed = true,
+                        LastCompletedBy = Guid.NewGuid(),
                         CreatedDate = DateTime.UtcNow,
                         LineItems = new List<InventoryBeverageLineItem>
                         {
@@ -439,7 +456,7 @@ namespace Mise.Database.Neo4J.IntegrationTests
                     {
                         ID = section2,
                         Revision = TestUtilities.GetEventID(),
-                        Completed = false,
+                        LastCompletedBy = null,
                         Name = "section2",
                         RestaurantID = restID,
                         LineItems = new List<InventoryBeverageLineItem>

@@ -2,8 +2,7 @@
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Linq;
-
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems.Inventory;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ using Mise.Core;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
 using Mise.Core.Common;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -95,21 +95,21 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public bool AddToParEnabled{
-			get{return CurrentAddType == AddLineItemType.Inventory || CurrentAddType == AddLineItemType.ReceivingOrder;}
+			get{return true;}
 		}
 		public IEnumerable<string> PossibleContainerNames{ get; set;}
 
 		public IEnumerable<string> PossibleCategoryNames{get;set;}
 		#endregion
 
-		#region Commands
+		#region Commandsk
 
 		public ICommand ScanCommand {
-			get { return new SimpleCommand(Scan); }
+			get { return new Command(Scan, ()=>NotProcessing); }
 		}
 
 		public ICommand AddCommand {
-			get { return new SimpleCommand(Add); }
+			get { return new Command(Add, () => CreateEnabled); }
 		}
 			
 		#endregion
@@ -141,7 +141,7 @@ namespace Mise.Inventory.ViewModels
 					// TODO go to quantity
 						break;
 				case AddLineItemType.PAR:
-						await _parService.AddLineItemToCurrentPAR (Name, category, null, 0, CaseSize, container);
+						await _parService.AddLineItemToCurrentPAR (Name, category, null, ParNumber, CaseSize, container);
 					//TODO go to quantity
 						break;
 					default:

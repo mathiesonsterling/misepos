@@ -18,15 +18,17 @@ using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services.WebServices;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
+using Mise.Inventory.Services.Implementation.WebServiceClients;
 using Mise.Inventory.ViewModels;
-using Mise.Core.Common.Services.Implementation.FakeServices;
 using Mise.Core.Common.Services.Implementation;
 using System.ServiceModel;
 using Mise.Core.Entities;
 using Mise.Core.Common;
+using Mise.Core.Common.Services.WebServices;
+using Mise.Inventory.ViewModels.Reports;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 
 
 namespace Mise.Inventory
@@ -34,6 +36,7 @@ namespace Mise.Inventory
 	public class DependencySetup
 	{
 		public static ILogger Logger{get;protected set;}
+		protected ISQLite SqlLiteConnection{ get; set; }
 
 		/// <summary>
 		/// Creates an instance of the AutoFac container
@@ -55,37 +58,28 @@ namespace Mise.Inventory
 			#if DEBUG
 			return BuildLevel.Development;
 			#else
-			return BuildLevel.QA;
+			return BuildLevel.Production;
 			#endif
 		}
 
-		private static IInventoryApplicationWebService GetWebService(IJSONSerializer serial){
+		protected static AzureServiceLocation GetWebServiceLocation(){
 			var level = GetBuildLevel ();
 
-			if(level == BuildLevel.Demo){
-				return new FakeInventoryWebService();
-			}
+			return AzureServiceLocator.GetAzureMobileServiceLocation (level);
+		}
 
-			Uri uri = null;
-			switch(level){
-			case BuildLevel.Debugging:
-				uri = new Uri ("http://localhost:43499");
-				break;
-			case BuildLevel.Development:
-				uri = new Uri ("http://miseinventoryservicedev.azurewebsites.net");
-				break;
-			case BuildLevel.QA:
-				uri = new Uri ("http://miseinventoryserviceqa.azurewebsites.net");
-				break;
-			case BuildLevel.Production:
-				uri = new Uri ("http://miseinventoryserviceprod.azurewebsites.net");
-				break;
-			default:
-				throw new ArgumentException ();
-			}
-				
-			var webService = new HttpWebServiceClient (uri, "betaDevice", serial, Logger);
-			return webService;
+		protected static void RegisterWebService (ContainerBuilder cb, IInventoryWebService webService)
+		{
+			cb.RegisterInstance (webService).As<IInventoryEmployeeWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IInventoryRestaurantWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IVendorWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IParWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IInventoryWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IReceivingOrderWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IPurchaseOrderWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance ();
+			cb.RegisterInstance (webService).As<IResendEventsWebService> ().SingleInstance ();
 		}
 
 		/// <summary>
@@ -99,7 +93,7 @@ namespace Mise.Inventory
 			var serial = new JsonNetSerializer ();
 			cb.RegisterInstance (serial).As<IJSONSerializer>();
 
-			cb.RegisterType<CrossSettingsClientKeyValueStorage> ().As<IClientKeyValueStorage> ().SingleInstance ();
+			cb.RegisterType<XamarinFormsSimpleKeyValueStorage> ().As<IClientKeyValueStorage> ().SingleInstance ();
 
 			// Logger
 			if(Logger == null){
@@ -107,19 +101,12 @@ namespace Mise.Inventory
 			}
 			cb.RegisterInstance (Logger).As<ILogger>().SingleInstance ();
 
-			var webService = GetWebService (serial);
-			cb.RegisterInstance(webService).As<IInventoryEmployeeWebService>();
-			cb.RegisterInstance(webService).As<IInventoryRestaurantWebService>();
-			cb.RegisterInstance(webService).As<IVendorWebService>();
-			cb.RegisterInstance(webService).As<IPARWebService>();
-			cb.RegisterInstance(webService).As<IInventoryWebService>();
-			cb.RegisterInstance(webService).As<IReceivingOrderWebService>();
-			cb.RegisterInstance(webService).As<IPurchaseOrderWebService>();
-			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ();
-			cb.RegisterInstance (webService).As<IAccountWebService> ();
-
 			// DAL
-			cb.RegisterType<MemoryClientDAL>().As<IClientDAL>().SingleInstance();
+			if (SqlLiteConnection != null) {
+				cb.RegisterType<SQLiteClietDAL> ().As<IClientDAL> ().SingleInstance ();
+			} else {
+				cb.RegisterType<MemoryClientDAL> ().As<IClientDAL> ().SingleInstance ();
+			}
 
 			//Event factory
 			//TODO - do we have a restaurant?  if not, use a fake ID and go to register
@@ -130,7 +117,7 @@ namespace Mise.Inventory
 			cb.RegisterType<ClientEmployeeRepository>().As<IEmployeeRepository>().SingleInstance();
 			cb.RegisterType<ClientVendorRepository>().As<IVendorRepository>().SingleInstance();
 			cb.RegisterType<ClientRestaurantRepository>().As<IRestaurantRepository>().SingleInstance();
-			cb.RegisterType<ClientPARRepository>().As<IPARRepository>().SingleInstance();
+			cb.RegisterType<ClientParRepository>().As<IParRepository>().SingleInstance();
 			cb.RegisterType<ClientReceivingOrderRepository>().As<IReceivingOrderRepository>().SingleInstance();
 			cb.RegisterType<ClientPurchaseOrderRepository>().As<IPurchaseOrderRepository>().SingleInstance();
 			cb.RegisterType<ClientInventoryRepository>().As<IInventoryRepository>().SingleInstance();
@@ -142,7 +129,6 @@ namespace Mise.Inventory
 
 			// Services
 			cb.RegisterType<AppNavigation>().As<IAppNavigation>().SingleInstance();
-			cb.RegisterType<DefaultThemer>().As<IThemer>().SingleInstance();
 			cb.RegisterType<LoginService>().As<ILoginService>().SingleInstance();
 			cb.RegisterType<NavigationService>().As<INavigationService>().SingleInstance();
 			cb.RegisterType<PageFactory>().As<IPageFactory>().SingleInstance();
@@ -154,6 +140,7 @@ namespace Mise.Inventory
 			cb.RegisterType<DummyDeviceLocationService>().As<IDeviceLocationService>().SingleInstance();
 			cb.RegisterType<PurchaseOrderService> ().As<IPurchaseOrderService> ().SingleInstance ();
 			cb.RegisterType<CategoriesService> ().As<ICategoriesService> ().SingleInstance ();
+			cb.RegisterType<ReportsService> ().As<IReportsService> ().SingleInstance ();
 
 			// View Models
 			cb.RegisterType<AboutViewModel>().SingleInstance();
@@ -164,23 +151,26 @@ namespace Mise.Inventory
 			cb.RegisterType<LoginViewModel>().SingleInstance();
 			cb.RegisterType<MainMenuViewModel>().SingleInstance();
 			cb.RegisterType<EmployeesManageViewModel>().SingleInstance();
-			cb.RegisterType<PARViewModel>().SingleInstance();
+			cb.RegisterType<ParViewModel>().SingleInstance();
 			cb.RegisterType<ReceivingOrderViewModel>().SingleInstance();
+		    cb.RegisterType<UpdateReceivingOrderLineItemViewModel>().SingleInstance();
 			cb.RegisterType<ReportsViewModel>().SingleInstance();
 			cb.RegisterType<RestaurantSelectViewModel>().SingleInstance();
 			cb.RegisterType<SectionAddViewModel>().SingleInstance();
 			cb.RegisterType<SectionSelectViewModel>().SingleInstance();
 			cb.RegisterType<VendorAddViewModel>().SingleInstance();
 			cb.RegisterType<VendorFindViewModel>().SingleInstance();
-			cb.RegisterType<InventoryVisuallyMeasureItemViewModel> ().SingleInstance ();
-			cb.RegisterType<InventoryVisuallyMeasureItemImprovedViewModel> ().SingleInstance ();
-			cb.RegisterType<UpdateQuantityViewModel>().SingleInstance ();
+			cb.RegisterType<InventoryVisuallyMeasureBottleViewModel>().SingleInstance ();
+			cb.RegisterType<UpdateParLineItemViewModel> ().SingleInstance ();
 			cb.RegisterType<PurchaseOrderReviewViewModel> ().SingleInstance ();
 			cb.RegisterType<UserRegistrationViewModel>().SingleInstance();
 			cb.RegisterType<InvitationViewModel>().SingleInstance();
 			cb.RegisterType<RestaurantRegistrationViewModel> ().SingleInstance ();
 			cb.RegisterType<PurchaseOrderSelectViewModel>().SingleInstance();
 			cb.RegisterType<AccountRegistrationViewModel> ().SingleInstance ();
+			cb.RegisterType<ReportResultsViewModel> ().SingleInstance ();
+			cb.RegisterType<SelectCompletedInventoryViewModel> ().SingleInstance ();
+			cb.RegisterType<AuthorizeCreditCardViewModel> ().SingleInstance ();
 		}
 	}
 }

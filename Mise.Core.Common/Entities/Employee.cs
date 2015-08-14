@@ -87,7 +87,7 @@ namespace Mise.Core.Common.Entities
             set { _displayName = value; }
         }
 
-	    public DateTime HiredDate { get; set; }
+	    public DateTimeOffset HiredDate { get; set; }
 
 	    public bool CurrentlyClockedInToPOS{ get; set; }
 
@@ -219,8 +219,8 @@ namespace Mise.Core.Common.Entities
                 case MiseEventTypes.EmployeeRejectsInvitation:
 	                WhenEmployeeRejectsInvitiation((EmployeeRejectsInvitationEvent) empEvent);
 	                break;
-				case MiseEventTypes.NewRestaurantRegisteredOnApp:
-					WhenEmployeeRegistersRestaurant ((NewRestaurantRegisteredOnAppEvent)empEvent);
+				case MiseEventTypes.EmployeeRegistersRestaurant:
+					WhenEmployeeRegistersRestaurant ((EmployeeRegistersRestaurantEvent)empEvent);
 					break;
                 default:
                     throw new ArgumentException("Employee object cannot process event of type " + empEvent.EventType);
@@ -246,18 +246,12 @@ namespace Mise.Core.Common.Entities
 			PrimaryEmail = ecEV.Email;
 			Revision = ecEV.EventOrderingID;
 			Password = ecEV.Password;
+
+	        //RestaurantsAndAppsAllowed[ecEV.RestaurantID] = new[] {ecEV.AppType};
 		}			
 
         protected virtual void WhenEmployeeRegisteredForInventoryAppEvent(EmployeeRegisteredForInventoryAppEvent empEvent)
 	    {
-	        Password = empEvent.Password;
-            
-	        if (Emails.Contains(empEvent.EmailAddress) == false)
-	        {
-	            Emails.Add(empEvent.EmailAddress);
-	            PrimaryEmail = empEvent.EmailAddress;
-	        }
-            CurrentlyLoggedIntoInventoryApp = true;
             if (RestaurantsAndAppsAllowed.ContainsKey(empEvent.RestaurantID) == false)
             {
 				RestaurantsAndAppsAllowed.Add (empEvent.RestaurantID, new List<MiseAppTypes> ());
@@ -273,7 +267,7 @@ namespace Mise.Core.Common.Entities
 			RestaurantsAndAppsAllowed [ev.RestaurantID].Add (ev.Application);
 		}
 
-		void WhenEmployeeRegistersRestaurant (NewRestaurantRegisteredOnAppEvent ev)
+		void WhenEmployeeRegistersRestaurant (EmployeeRegistersRestaurantEvent ev)
 		{
 			if(RestaurantsAndAppsAllowed.ContainsKey (ev.RestaurantID) == false){
 				RestaurantsAndAppsAllowed.Add (ev.RestaurantID, new List<MiseAppTypes> ());

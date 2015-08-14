@@ -27,6 +27,7 @@ namespace Mise.Database.StorableEntities.Inventory
             ReceivedByEmployeeID = source.ReceivedByEmployeeID;
             Notes = source.Notes;
             InvoiceID = source.InvoiceID;
+            DateReceived = source.DateReceived;
         }
 
         public IReceivingOrder Rehydrate(IEnumerable<ReceivingOrderLineItem> lineItems, Guid? purchaseOrderID, Guid vendorID)
@@ -45,10 +46,12 @@ namespace Mise.Database.StorableEntities.Inventory
                 ReceivedByEmployeeID = ReceivedByEmployeeID,
                 VendorID = vendorID,
                 InvoiceID = InvoiceID,
-                Notes = Notes
+                Notes = Notes,
+                DateReceived = DateReceived
             };
         }
 
+        public DateTimeOffset DateReceived { get; set; }
         public string Notes { get; set; }
         public string InvoiceID { get; set; }
         public Guid ReceivedByEmployeeID { get; set; }

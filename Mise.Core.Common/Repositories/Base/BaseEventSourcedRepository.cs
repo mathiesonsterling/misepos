@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Common.Repositories.Base
 {
-    public abstract class BaseEventSourcedRepository<TEntity, TEventType> : BaseRepository<TEntity> 
-        where TEntity:class, IEventStoreEntityBase<TEventType>, ICloneableEntity
+    public abstract class BaseEventSourcedRepository<TEntity, TEventType> : BaseRepository<TEntity>
+        where TEntity : class, IEventStoreEntityBase<TEventType>, ICloneableEntity
         where TEventType : class, IEntityEventBase
     {
         /// <summary>
@@ -30,11 +31,11 @@ namespace Mise.Core.Common.Repositories.Base
         }
 
 
-        protected ILogger Logger{get;private set;}
-		protected readonly IDictionary<Guid, EntityTransactionBundle> UnderTransaction;
-		protected BaseEventSourcedRepository(ILogger logger)
+        protected ILogger Logger { get; private set; }
+        protected readonly IDictionary<Guid, EntityTransactionBundle> UnderTransaction;
+        protected BaseEventSourcedRepository(ILogger logger)
         {
-			Logger = logger;
+            Logger = logger;
             UnderTransaction = new Dictionary<Guid, EntityTransactionBundle>();
         }
 
@@ -57,22 +58,31 @@ namespace Mise.Core.Common.Repositories.Base
         /// </summary>
         /// <returns></returns>
         protected abstract TEntity CreateNewEntity();
-        /// <summary>
-        /// Determines if an event should cause us to create a new entity
-        /// </summary>
-        /// <param name="ev"></param>
-        /// <returns></returns>
-        protected abstract bool IsEventACreation(IEntityEventBase ev);
-
+ 
         public abstract Guid GetEntityID(TEventType ev);
 
         public bool Dirty { get; protected set; }
+
+        /// <summary>
+        /// Get the number of events that are currently under transaction for a given entity ID
+        /// </summary>
+        /// <param name="entityID"></param>
+        /// <returns></returns>
+        public int GetNumberOfEventsInTransacitonForEntity(Guid entityID)
+        {
+            if (UnderTransaction.ContainsKey(entityID))
+            {
+                return UnderTransaction[entityID].Events.Count;
+            }
+
+            return 0;
+        }
 
         public bool StartTransaction(Guid entityID)
         {
             if (UnderTransaction.ContainsKey(entityID) == false)
             {
-                var newBundle = new EntityTransactionBundle{ EntityID = entityID };
+                var newBundle = new EntityTransactionBundle { EntityID = entityID };
                 var thisCheck = GetByID(entityID);
                 if (thisCheck != null)
                 {
@@ -97,14 +107,14 @@ namespace Mise.Core.Common.Repositories.Base
             UnderTransaction.Remove(entityID);
             if (bundle.OriginalVersion != null)
             {
-                Cache.UpdateCache(bundle.OriginalVersion, ItemCacheStatus.TerminalMemory);
+                Cache.UpdateCache(bundle.OriginalVersion, ItemCacheStatus.ClientMemory);
             }
             Dirty = false;
         }
 
         public virtual TEntity ApplyEvent(TEventType entEvent)
         {
-            return ApplyEvents(new[] {entEvent});
+            return ApplyEvents(new[] { entEvent });
         }
 
 
@@ -115,22 +125,24 @@ namespace Mise.Core.Common.Repositories.Base
         /// <returns></returns>
         public virtual TEntity ApplyEvents(IEnumerable<TEventType> events)
         {
-
-            var oEvents = events.OrderBy(e => e.CreatedDate)
-                .ThenBy(e => e.EventOrderingID);
+            var oEvents = OrderEvents(events);
 
             var firstEv = oEvents.FirstOrDefault();
             if (firstEv == null)
             {
-                return null;
+                throw new ArgumentException("Events given to apply are null or empty");
             }
             var entityID = GetEntityID(firstEv);
 
+            var logString = "Entity ID " + entityID + " processing events ";
+            var eventsInOrder = oEvents.Select(ev => ev.EventType.ToString());
+            logString += string.Join(", ", eventsInOrder);
+            Logger.Debug(logString);
 
-                if (UnderTransaction.ContainsKey(entityID) == false)
-                {
-                    StartTransaction(entityID);
-                }
+            if (UnderTransaction.ContainsKey(entityID) == false)
+            {
+                StartTransaction(entityID);
+            }
 
             var bundle = UnderTransaction[entityID];
             foreach (var cEvent in oEvents)
@@ -139,10 +151,10 @@ namespace Mise.Core.Common.Repositories.Base
                 {
                     var entID = GetEntityID(cEvent);
                     bundle.NewVersion = GetByID(entID);
-                    //if our event isn't a creation, we might have a problem
-                    if (bundle.NewVersion == null && (IsEventACreation(cEvent) == false))
+                    //if our event isn't a creation of the aggregate, we might have a problem
+                    if (bundle.NewVersion == null && (cEvent.IsAggregateRootCreation == false))
                     {
-                        throw new ArgumentException("Event specified for entity " + entID + " that can't be found");
+                        throw new EntityForEventNotFoundException(entID);
                     }
                 }
                 if (bundle.NewVersion == null)
@@ -168,6 +180,46 @@ namespace Mise.Core.Common.Repositories.Base
 
             Dirty = true;
             return bundle == null ? null : bundle.NewVersion;
+        }
+
+        public static IEnumerable<TEventType> OrderEventsOld(IEnumerable<TEventType> events)
+        {
+            var oEvents = events.OrderBy(e => e.CreatedDate)
+                .ThenBy(e => e.EventOrderingID);
+            return oEvents;
+        }
+
+		public ICollection<T> OrderEvents<T>(IEnumerable<T> events) where T:IEntityEventBase
+        {
+            //get the events that all came from the same application first
+            var appGroups = from ev in events
+                            group ev by new { ev.EventOrderingID.AppInstanceCode, ev.DeviceID } into appG
+                            select new
+                            {
+                                AppInstanceCode = appG.Key.AppInstanceCode,
+                                DeviceID = appG.Key.DeviceID,
+                                Items = appG.AsEnumerable(),
+                                FirstDate = appG.AsEnumerable().Min(g => g.CreatedDate)
+                            };
+
+            //we can now order these by min date
+            //need then by the app type and device ID
+            var groupsByDate = appGroups.OrderBy(k => k.AppInstanceCode)
+                .ThenBy(k => k.DeviceID)
+                .ThenBy(k => k.FirstDate);
+
+            var res = new List<T>();
+            foreach (var group in groupsByDate)
+            {
+                //we want to get first the aggregate root creation, then any other creations, then the rest by order
+                var orderedItems = group.Items
+                    .OrderByDescending(ev => ev.IsAggregateRootCreation)
+                    .ThenByDescending(ev => ev.IsEntityCreation)
+                    .ThenBy(ev => ev.EventOrderingID.OrderingID);
+                res.AddRange(orderedItems);
+            }
+
+            return res;
         }
     }
 }

@@ -7,6 +7,7 @@ using Xamarin.UITest.Queries;
 
 namespace Mise.Inventory.UITests
 {
+	[Ignore]
 	[TestFixture (Platform.Android)]
 	[TestFixture (Platform.iOS)]
 	public class Tests
@@ -26,9 +27,19 @@ namespace Mise.Inventory.UITests
 		}
 
 		[Test]
-		public void AppLaunches ()
+		public void AppLaunchesAndLoginAppearsDisabled ()
 		{
-			app.Screenshot ("First screen.");
+
+			var res = app.Query (e => e.Button ("Login"));
+
+			Assert.AreEqual (1, res.Length);
+			Assert.False (res.First().Enabled, "Login not enabled");
+
+			var regQuery = app.Query (e => e.Button ("Register"));
+			Assert.True(regQuery.First ().Enabled, "Register enabled");
+
+			var enterField = app.Query (e => e.TextField ().Marked ("Email"));
+			Assert.AreEqual (1, enterField.Length);
 		}
 	}
 }

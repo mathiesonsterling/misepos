@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Mise.Core.Entities.People;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
@@ -45,7 +47,7 @@ namespace Mise.Inventory.ViewModels
 		    }
 		    else
 		    {
-		        InvitesForUser = new ObservableCollection<IApplicationInvitation>(items);
+		        InvitesForUser = items;
 		    }
 
 
@@ -54,7 +56,7 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		public ObservableCollection<IApplicationInvitation> InvitesForUser{ get; set;}
+		public IEnumerable<IApplicationInvitation> InvitesForUser{ get; set;}
 
 		public EmailAddress Email{get;set;}
 

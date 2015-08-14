@@ -17,6 +17,11 @@ namespace Mise.Core.Common.Events.Restaurant
             get { return MiseEventTypes.InventorySectionAddedToRestaurant; }
         }
 
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
         public string SectionName { get; set; }
         public Guid SectionID { get; set; }
 		public bool IsDefaultInventorySection{ get; set; }

@@ -12,6 +12,7 @@ using Mise.Core.Repositories;
 using Mise.Core.Server.Services;
 using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace MiseInventoryService.Repositories
@@ -57,7 +58,7 @@ namespace MiseInventoryService.Repositories
 
         public Task<IInventory> GetCurrentInventory(Guid restaurantID)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => GetAll().FirstOrDefault(i => i.IsCurrent && i.RestaurantID == restaurantID));
         }
 
         public Task<IInventory> GetCurrentInventory()
@@ -68,11 +69,6 @@ namespace MiseInventoryService.Repositories
         protected override IInventory CreateNewEntity()
         {
             return new Inventory();
-        }
-
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is InventoryCreatedEvent;
         }
 
         public override Guid GetEntityID(IInventoryEvent ev)

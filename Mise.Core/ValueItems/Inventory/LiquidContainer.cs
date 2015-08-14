@@ -6,19 +6,263 @@ using System.Threading.Tasks;
 
 namespace Mise.Core.ValueItems.Inventory
 {
-	public class LiquidContainer : IEquatable<LiquidContainer>, ITextSearchable
+    public class LiquidContainer : IEquatable<LiquidContainer>, ITextSearchable
     {
-		private string _displayName;
-		public string DisplayName{get{
-				if(string.IsNullOrEmpty (_displayName)){
-					return AmountContained.GetInMilliliters () + " ml";
-				}
-				return _displayName;
+        #region Standard sizes
+
+        public static LiquidContainer Bottle750ML
+        {
+            get { return new LiquidContainer { 
+					AmountContained = new LiquidAmount { Milliliters = 750 }, 
+					DisplayName = "750ml Bottle"
+				}; }
+        }
+
+        public static LiquidContainer Bottle1L
+        {
+            get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 1000 }, 
+					DisplayName = "1L Bottle"
+				}; 
 			}
-			set{
-				_displayName = value;
+        }
+
+        /// <summary>
+        /// Handle of booze
+        /// </summary>
+        public static LiquidContainer Bottle1_75ML
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 1750M},
+                    DisplayName = "1.75L Bottle"
+                };
+            }
+        }
+        public static LiquidContainer Bottle375ML
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 375},
+                    DisplayName = "375ml Bottle"
+                };
+            }
+        }
+
+        public static LiquidContainer Can12oz
+        {
+            get { return new LiquidContainer { 
+					AmountContained = LiquidAmount.FromLiquidOunces(12.0M), 
+					DisplayName = "12oz Can",
+					Shape = LiquidContainerShape.DefaultCanShape
+				}; 
+			}
+        }
+
+        public static LiquidContainer Can16oz
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
+                    DisplayName = "16oz Can",
+					Shape = LiquidContainerShape.DefaultCanShape
+                };
+            }
+        }
+
+        public static LiquidContainer Can10oz
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = LiquidAmount.FromLiquidOunces(10.0M),
+                    DisplayName = "10oz Bottle",
+					Shape = LiquidContainerShape.DefaultCanShape
+                };
+            }
+        }
+
+        public static LiquidContainer Can250ml
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 250M},
+                    DisplayName = "250ml Can",
+					Shape = LiquidContainerShape.DefaultCanShape
+                };
+            }
+        }
+        public static LiquidContainer Bottle12oz
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = LiquidAmount.FromLiquidOunces(12.0M),
+                    DisplayName = "12oz Bottle",
+					Shape = LiquidContainerShape.DefaultBeerBottleShape	
+                };
+            }
+        }
+
+        public static LiquidContainer Bottle16oz
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
+                    DisplayName = "16oz Bottle",
+					Shape = LiquidContainerShape.DefaultBeerBottleShape	
+                };
+            }
+        }
+
+        public static LiquidContainer Bottle7oz
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = LiquidAmount.FromLiquidOunces(7.0M),
+                    DisplayName = "7oz Bottle",
+					Shape = LiquidContainerShape.DefaultBeerBottleShape	
+                };
+            }
+        }
+
+        public static LiquidContainer Bottle40oz
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = LiquidAmount.FromLiquidOunces(40M),
+                    DisplayName = "40oz Bottle",
+					Shape = LiquidContainerShape.DefaultBeerBottleShape	
+                };
+            }
+        }
+        public static LiquidContainer Bottle330ml
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount { Milliliters = 330 },
+                    DisplayName = "330ml Bottle"
+                };
+            }
+        }
+
+        public static LiquidContainer Bottle500ml
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount { Milliliters = 500 },
+                    DisplayName = "500ml Bottle"
+                };
+            }
+        }
+
+        public static LiquidContainer Keg
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 58673.8827M},
+					DisplayName = "Keg (Half Barrel)",
+					Shape = LiquidContainerShape.DefaultKegShape
+                };
+            }
+        }
+
+        public static LiquidContainer HalfKeg
+        {
+            get
+            {
+                return new LiquidContainer
+                {
+                    AmountContained = new LiquidAmount {Milliliters = 29336.94135M},
+					DisplayName = "Pony Keg (Quarter Barrel)",
+					Shape = LiquidContainerShape.DefaultKegShape
+                };
+            }
+        }
+
+		public static LiquidContainer TorpedoKeg{
+			get{
+				return new LiquidContainer {
+					AmountContained = new LiquidAmount{ Milliliters = 19800M },
+					DisplayName = "Sixth Barrel",
+					Shape = LiquidContainerShape.DefaultKegShape
+				};
 			}
 		}
+
+		public static LiquidContainer ImportKeg
+		{
+			get{return new LiquidContainer {
+					AmountContained = new LiquidAmount{Milliliters = 50000M},
+					DisplayName = "Import Keg (50L)",
+					Shape = LiquidContainerShape.DefaultKegShape
+				};
+			}
+		}
+        public static IEnumerable<LiquidContainer> GetStandardBarSizes()
+        {
+            return new List<LiquidContainer>
+            {
+                Bottle750ML,
+                Bottle375ML,
+                Bottle330ml,
+                Bottle1L,
+                Bottle1_75ML,
+                Bottle500ml,
+                Bottle1L,
+                Bottle12oz,
+                Can12oz,
+                Bottle16oz,
+                Bottle7oz,
+                Can16oz,
+                Can10oz,
+                Bottle40oz,
+                Keg,
+                HalfKeg,
+				ImportKeg,
+				TorpedoKeg,
+                Can250ml
+            };
+        }
+        #endregion
+
+        private string _displayName;
+        public string DisplayName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_displayName))
+                {
+                    return AmountContained.GetInMilliliters() + " ml";
+                }
+                return _displayName;
+            }
+            set
+            {
+                _displayName = value;
+            }
+        }
 
         /// <summary>
         /// The total amount of liquid this container can hold
@@ -35,20 +279,28 @@ namespace Mise.Core.ValueItems.Inventory
         /// </summary>
         public Weight WeightFull { get; set; }
 
+		/// <summary>
+		/// If set, the container shape we use for this container
+		/// </summary>
+		/// <value>The shape.</value>
+		public LiquidContainerShape Shape{get;set;}
+
         public bool Equals(LiquidContainer other)
         {
-			if(string.IsNullOrEmpty (_displayName) == false){
-				if(_displayName != other.DisplayName){
-					return false;
-				}
-			}
+            if (string.IsNullOrEmpty(_displayName) == false)
+            {
+                if (_displayName != other.DisplayName)
+                {
+                    return false;
+                }
+            }
 
             if (AmountContained.Equals(other.AmountContained) == false)
             {
                 return false;
             }
             if ((WeightEmpty == null && other.WeightEmpty != null)
-                ||( WeightEmpty != null && other.WeightEmpty == null))
+                || (WeightEmpty != null && other.WeightEmpty == null))
             {
                 return false;
             }
@@ -68,6 +320,13 @@ namespace Mise.Core.ValueItems.Inventory
                 return false;
             }
 
+			if ((Shape != null && other.Shape == null) || (other.Shape != null && Shape == null)) {
+				return false;
+			}
+
+			if (Shape != null && other.Shape != null && Shape.Equals (other.Shape) == false) {
+				return false;
+			}
             return true;
         }
 
@@ -92,28 +351,29 @@ namespace Mise.Core.ValueItems.Inventory
             }
         }
 
-	    public class ContainerComparer : IEqualityComparer<LiquidContainer>
-	    {
-	        public bool Equals(LiquidContainer x, LiquidContainer y)
-	        {
-	            return x.Equals(y);
-	        }
+        public class ContainerComparer : IEqualityComparer<LiquidContainer>
+        {
+            public bool Equals(LiquidContainer x, LiquidContainer y)
+            {
+                return x.Equals(y);
+            }
 
-	        public int GetHashCode(LiquidContainer lc)
-	        {
-	            return lc.GetHashCode();
-	        }
-	    }
+            public int GetHashCode(LiquidContainer lc)
+            {
+                return lc.GetHashCode();
+            }
+        }
 
-		#region ITextSearchable implementation
+        #region ITextSearchable implementation
 
-		public bool ContainsSearchString (string searchString)
-		{
-			return (AmountContained != null && AmountContained.Milliliters.ToString ().Contains (searchString)) 
-                || (DisplayName != null && DisplayName.ToUpper().Contains(searchString.ToUpper()));
-		}
+        public bool ContainsSearchString(string searchString)
+        {
+			return (AmountContained != null && AmountContained.Milliliters.ToString ().Contains (searchString))
+			|| (DisplayName != null && DisplayName.ToUpper ().Contains (searchString.ToUpper ()))
+			|| (Shape != null && Shape.ContainsSearchString (searchString));
+        }
 
-		#endregion
+        #endregion
     }
 
 

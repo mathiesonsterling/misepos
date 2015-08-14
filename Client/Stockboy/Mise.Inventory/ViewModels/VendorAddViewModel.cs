@@ -1,7 +1,8 @@
 ﻿using System.Windows.Input;
+using System.Collections.Generic;
 
 using Mise.Core.Repositories;
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System.Threading.Tasks;
 using Mise.Core.ValueItems;
@@ -65,11 +66,12 @@ namespace Mise.Inventory.ViewModels
         public string PhoneNumberVal { get { return GetValue<string>(); } set { SetValue(value); } }
         #endregion
 
+		public IEnumerable<State> States{get{return Mise.Core.ValueItems.State.GetUSStates ();}}
         #region commands
 
         public ICommand AddVendorCommand
         {
-            get { return new SimpleCommand(AddVendor); }
+			get { return new Command(AddVendor, () => CanAdd); }
         }
 
         #endregion
@@ -97,7 +99,7 @@ namespace Mise.Inventory.ViewModels
                 && (string.IsNullOrWhiteSpace(Zip) == false))
             {
                 return new StreetAddress(StreetAddressNumber, "", StreetName, City, State,
-                    "United States of America", Zip);
+                    Country.UnitedStates.Name, Zip);
             }
             return null;
         }
@@ -106,8 +108,7 @@ namespace Mise.Inventory.ViewModels
         {
             if ((string.IsNullOrEmpty(PhoneAreaCode) == false)
                && (string.IsNullOrEmpty(PhoneNumberVal) == false)
-                && PhoneAreaCode.Length >= 3
-                && PhoneNumberVal.Length >= 7
+                && PhoneNumber.IsValid(PhoneAreaCode, PhoneNumberVal)
             )
             {
                 return new PhoneNumber(PhoneAreaCode, PhoneNumberVal);

@@ -15,10 +15,14 @@ namespace Mise.Core.Common.Events.Inventory
             get { return MiseEventTypes.InventoryCreated; }
         }
 
-        /// <summary>
-        /// The sections that are in this inventory
-        /// </summary>
-        /// <remarks>Held in the event because we could create an inventory, then later create new sections</remarks>
-        public IEnumerable<Tuple<RestaurantInventorySection, Guid>> RestaurantSectionsAndSectionIDs { get; set; }
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
     }
 }

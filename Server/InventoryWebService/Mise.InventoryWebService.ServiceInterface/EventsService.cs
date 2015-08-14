@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Events.DTOs;
-using Mise.Core.Common.Events.Employee;
 using Mise.Core.Entities.Base;
 using Mise.Core.Repositories;
 using Mise.Core.Server.Services.DAL;
@@ -11,6 +10,7 @@ using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
+using Mise.InventoryWebService.ServiceInterface.Exceptions;
 using Mise.InventoryWebService.ServiceModelPortable.Responses;
 using ServiceStack;
 
@@ -29,7 +29,7 @@ namespace Mise.InventoryWebService.ServiceInterface
         private readonly IApplicationInvitationRepository _appInviteRepository;
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly IAccountRepository _accountRepository;
-        private readonly IPARRepository _parRepository;
+        private readonly IParRepository _parRepository;
 
         private readonly IEventStorageDAL _eventStorageDAL;
 
@@ -37,12 +37,12 @@ namespace Mise.InventoryWebService.ServiceInterface
         private readonly ILogger _logger;
 
         private readonly List<EventDataTransportObject> _unprocessedEvents;
- 
+        private readonly IErrorTrackingService _errorTrackingService;
         public EventsService(IEventStorageDAL dal, IJSONSerializer serializer,
             IInventoryRepository inventoryRepository, IVendorRepository vendorRepository, 
             IPurchaseOrderRepository purchaseOrderRepository, IEmployeeRepository employeeRepository, 
-            IPARRepository parRepository, IReceivingOrderRepository receivingOrderRepository, IApplicationInvitationRepository applicationInvitationRepository, 
-            IRestaurantRepository restaurantRepository, IAccountRepository accountRepository, ILogger logger)
+            IParRepository parRepository, IReceivingOrderRepository receivingOrderRepository, IApplicationInvitationRepository applicationInvitationRepository, 
+            IRestaurantRepository restaurantRepository, IAccountRepository accountRepository, ILogger logger, IErrorTrackingService errorTracking)
         {
             _eventStorageDAL = dal;
             _eventFactory = new EventDataTransportObjectFactory(serializer);
@@ -57,109 +57,11 @@ namespace Mise.InventoryWebService.ServiceInterface
             _parRepository = parRepository;
 
             _logger = logger;
+            _errorTrackingService = errorTracking;
 
             _unprocessedEvents = new List<EventDataTransportObject>();
         }
 
-        /// <summary>
-        /// Does all our repositories with a bit of parallelism
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public async Task<EventSubmissionResponse> Old_Post(EventSubmission request)
-        {
-            if (request.Events == null || request.Events.Any() == false)
-            {
-                return new EventSubmissionResponse
-                {
-                    NumEventsProcessed = 0,
-                    Result = false,
-                    ErrorMessage = "no events were sent to server"
-                };
-            }
-
-            var events = request.Events.ToList();
-            bool storedEvents = false;
-            try
-            {
-                storedEvents = await _eventStorageDAL.StoreEventsAsync(request.Events);
-            }
-            catch (Exception e)
-            {
-                _logger.HandleException(e);
-                _unprocessedEvents.AddRange(events);
-            }
-
-            if (storedEvents == false)
-            {
-                _logger.Log("Unable to store events");
-                _unprocessedEvents.AddRange(events);
-            }
-
-            var empEventsTask = HandleEmployeeEvents(events);
-
-            var vendorTask = HandleEventsIntoRepository(events, dto => _eventFactory.ToVendorEvent(dto),
-                _vendorRepository);
-
-            var poTask = HandleEventsIntoRepository(events, dto => _eventFactory.ToPurchaseOrderEvent(dto),
-                _purchaseOrderRepository);
-
-            var parTask = HandleEventsIntoRepository(events, dto => _eventFactory.ToPAREvent(dto), _parRepository);
-
-            var invTask = HandleEventsIntoRepository(events, dto => _eventFactory.ToInventoryEvent(dto),
-                _inventoryRepository);
-
-            var receivingOrderTask = HandleEventsIntoRepository(events,
-                dto => _eventFactory.ToReceivingOrderEvent(dto), _receivingOrderRepository);
-
-            var restTask = HandleEventsIntoRepository(events, dto => _eventFactory.ToRestaurantEvent(dto),
-                _restaurantRepository);
-
-            var appInviteTask = HandleEventsIntoRepository(events,
-                dto => _eventFactory.ToApplicationInvitiationEvent(dto), _appInviteRepository);
-
-            var accountsTask = HandleEventsIntoRepository(events, dto => _eventFactory.ToAccountEvent(dto),
-                _accountRepository);
-            var tasks = new List<Tuple<string, Task<bool>>>
-            {
-                new Tuple<string, Task<bool>>("empEvents",empEventsTask),
-                new Tuple<string, Task<bool>>("vendor",vendorTask),
-                new Tuple<string, Task<bool>>("purchaseOrder",poTask),
-                new Tuple<string, Task<bool>>("par", parTask),
-                new Tuple<string, Task<bool>>("Inventory",invTask),
-                new Tuple<string, Task<bool>>("ReceivingOrder",receivingOrderTask),
-                new Tuple<string, Task<bool>>("Restaurant", restTask),
-                new Tuple<string, Task<bool>>("ApplicationInvitation", appInviteTask),
-                new Tuple<string, Task<bool>>("Account", accountsTask)
-            };
-
-            var taskResults = new List<Tuple<string, bool>>();
-            foreach (var t in tasks)
-            {
-                var res = await t.Item2;
-                taskResults.Add(new Tuple<string, bool>(t.Item1, res));
-            }
-
-            if (taskResults.All(t => t.Item2))
-            {
-                //sort which objects this should go to, for each repository
-                return new EventSubmissionResponse
-                {
-                    Result = true,
-                    NumEventsProcessed = request.Events.Count()
-                };
-            }
-
-            var errors = taskResults.Where(t => t.Item2 == false).Select(t => t.Item1);
-            var errorString = string.Join(",", errors);
-            _logger.Error("Errors in event processing :" + errorString);
-            return new EventSubmissionResponse
-            {
-                Result = false,
-                ErrorMessage = "something went wrong : " + errorString,
-                NumEventsProcessed = -1
-            };
-        }
 
         /// <summary>
         /// Main method for this service.  Gets events sent, stores them, then dispatches them to the 
@@ -168,119 +70,137 @@ namespace Mise.InventoryWebService.ServiceInterface
         /// <returns></returns>
         public async Task<EventSubmissionResponse> Post(EventSubmission request)
         {
-            if (request.Events == null || request.Events.Any() == false)
-            {
-                return new EventSubmissionResponse
-                {
-                    NumEventsProcessed = 0,
-                    Result = false,
-                    ErrorMessage = "no events were sent to server"
-                };
-            }
-
-            var events = request.Events.ToList();
-            bool storedEvents = false;
             try
             {
-                storedEvents = await _eventStorageDAL.StoreEventsAsync(request.Events);
+                if (request.Events == null || request.Events.Any() == false)
+                {
+                    return new EventSubmissionResponse
+                    {
+                        NumEventsProcessed = 0,
+                        Result = false,
+                        ErrorMessage = "no events were sent to server"
+                    };
+                }
+
+                var events = request.Events.ToList();
+
+                //identify
+                var userIDs = events.Select(ev => ev.CausedByID).Distinct();
+                foreach (var userID in userIDs)
+                {
+                    try
+                    {
+                        var user = _employeeRepository.GetByID(userID);
+                        if (user != null)
+                        {
+                            _errorTrackingService.Identify(user, "server");
+                        }
+                        else
+                        {
+                            _errorTrackingService.Identify(userID, null, null, "server", false);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _errorTrackingService.Identify(userID, null, null, "server", false);
+                        _errorTrackingService.ReportException(e, LogLevel.Warn);
+                        _logger.HandleException(e, LogLevel.Warn);
+                    }
+                }
+                var storedEvents = false;
+                try
+                {
+                    storedEvents = await _eventStorageDAL.StoreEventsAsync(request.Events);
+                }
+                catch (Exception e)
+                {
+                    _logger.HandleException(e);
+                    _unprocessedEvents.AddRange(events);
+                }
+
+                if (storedEvents == false)
+                {
+                    _logger.Log("Unable to store events");
+                    _unprocessedEvents.AddRange(events);
+                }
+                bool empRes;
+                try
+                {
+                    empRes =
+                        await
+                            HandleEventsIntoRepository(events, dto => _eventFactory.ToEmployeeEvent(dto),
+                                _employeeRepository);
+                }
+                catch (EmailAlreadyInUseException e)
+                {
+                    _errorTrackingService.ReportException(e, LogLevel.Warn);
+                    throw HttpError.Conflict(e.SendError.ToString());
+                }
+
+                var vendorRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToVendorEvent(dto),
+                    _vendorRepository);
+
+                var poRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToPurchaseOrderEvent(dto),
+                    _purchaseOrderRepository);
+
+                var parRes =
+                    await HandleEventsIntoRepository(events, dto => _eventFactory.ToPAREvent(dto), _parRepository);
+
+                var invRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToInventoryEvent(dto),
+                    _inventoryRepository);
+
+                var receivingOrderRes = await HandleEventsIntoRepository(events,
+                    dto => _eventFactory.ToReceivingOrderEvent(dto), _receivingOrderRepository);
+
+                var restRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToRestaurantEvent(dto),
+                    _restaurantRepository);
+
+                var appInviteRes = await HandleEventsIntoRepository(events,
+                    dto => _eventFactory.ToApplicationInvitiationEvent(dto), _appInviteRepository);
+
+                var accountsRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToAccountEvent(dto),
+                    _accountRepository);
+                var tasks = new List<Tuple<string, bool>>
+                {
+                    new Tuple<string, bool>("empEvents", empRes),
+                    new Tuple<string, bool>("vendor", vendorRes),
+                    new Tuple<string, bool>("purchaseOrder", poRes),
+                    new Tuple<string, bool>("par", parRes),
+                    new Tuple<string, bool>("Inventory", invRes),
+                    new Tuple<string, bool>("ReceivingOrder", receivingOrderRes),
+                    new Tuple<string, bool>("Restaurant", restRes),
+                    new Tuple<string, bool>("ApplicationInvitation", appInviteRes),
+                    new Tuple<string, bool>("Account", accountsRes)
+                };
+
+
+                if (tasks.All(t => t.Item2))
+                {
+                    //sort which objects this should go to, for each repository
+                    return new EventSubmissionResponse
+                    {
+                        Result = true,
+                        NumEventsProcessed = request.Events.Count()
+                    };
+                }
+
+                var errors = tasks.Where(t => t.Item2 == false).Select(t => t.Item1);
+                var errorString = string.Join(",", errors);
+                _logger.Error("Errors in event processing :" + errorString);
+                return new EventSubmissionResponse
+                {
+                    Result = false,
+                    ErrorMessage = "something went wrong : " + errorString,
+                    NumEventsProcessed = -1
+                };
             }
             catch (Exception e)
             {
                 _logger.HandleException(e);
-                _unprocessedEvents.AddRange(events);
+                _errorTrackingService.ReportException(e, LogLevel.Fatal);
+
+                throw HttpError.Conflict(e.Message);
             }
-
-            if (storedEvents == false)
-            {
-                _logger.Log("Unable to store events");
-                _unprocessedEvents.AddRange(events);
-            }
-
-            var empRes = await HandleEmployeeEvents(events);
-
-            var vendorRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToVendorEvent(dto),
-                _vendorRepository);
-
-            var poRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToPurchaseOrderEvent(dto),
-                _purchaseOrderRepository);
-
-            var parRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToPAREvent(dto), _parRepository);
-
-            var invRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToInventoryEvent(dto),
-                _inventoryRepository);
-
-            var receivingOrderRes = await HandleEventsIntoRepository(events,
-                dto => _eventFactory.ToReceivingOrderEvent(dto), _receivingOrderRepository);
-
-            var restRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToRestaurantEvent(dto),
-                _restaurantRepository);
-
-            var appInviteRes = await HandleEventsIntoRepository(events,
-                dto => _eventFactory.ToApplicationInvitiationEvent(dto), _appInviteRepository);
-
-            var accountsRes = await HandleEventsIntoRepository(events, dto => _eventFactory.ToAccountEvent(dto),
-                _accountRepository);
-            var tasks = new List<Tuple<string, bool>>
-            {
-                new Tuple<string, bool>("empEvents",empRes),
-                new Tuple<string, bool>("vendor",vendorRes),
-                new Tuple<string, bool>("purchaseOrder",poRes),
-                new Tuple<string, bool>("par", parRes),
-                new Tuple<string, bool>("Inventory",invRes),
-                new Tuple<string, bool>("ReceivingOrder",receivingOrderRes),
-                new Tuple<string, bool>("Restaurant", restRes),
-                new Tuple<string, bool>("ApplicationInvitation", appInviteRes),
-                new Tuple<string, bool>("Account", accountsRes)
-            };
-
-
-            if (tasks.All(t => t.Item2))
-            {
-                //sort which objects this should go to, for each repository
-                return new EventSubmissionResponse
-                {
-                    Result = true,
-                    NumEventsProcessed = request.Events.Count()
-                };
-            }
-
-            var errors = tasks.Where(t => t.Item2 == false).Select(t => t.Item1);
-            var errorString = string.Join(",", errors);
-            _logger.Error("Errors in event processing :" + errorString);
-            return new EventSubmissionResponse
-            {
-                Result = false,
-                ErrorMessage = "something went wrong : " + errorString,
-                NumEventsProcessed = -1
-            };
-        }
-
-        //TODO move this to the employee repository!
-        private Task<bool> HandleEmployeeEvents(ICollection<EventDataTransportObject> allEventDTOs)
-        {
-            var events = allEventDTOs.Select(dto => _eventFactory.ToEmployeeEvent(dto)).Where(e => e != null).ToList();
-
-            //check for creations
-            var registrations = events.Where(e => e is EmployeeCreatedEvent).Cast<EmployeeCreatedEvent>();
-            if (registrations.Any(ev => EmailIsTaken(ev.Email)))
-            {
-                var ex = HttpError.Conflict(SendErrors.EmailAlreadyInUse.ToString());
-                throw ex;
-            } 
-
-            return HandleEventsIntoRepository(allEventDTOs, i => _eventFactory.ToEmployeeEvent(i), _employeeRepository);
-        }
-
-        private bool EmailIsTaken(EmailAddress email)
-        {
-            if (email == null)
-            {
-                return false;
-            }
-            return
-                _employeeRepository.GetAll()
-                    .SelectMany(e => e.GetEmailAddresses())
-                    .Any(e => e != null && e.Equals(email));
         }
 
         private async Task<bool> HandleEventsIntoRepository<TEntity, TEventType>(

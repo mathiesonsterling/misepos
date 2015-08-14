@@ -27,13 +27,18 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Deploy</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Xamarin.UITest">
-      <HintPath>..\packages\Xamarin.UITest.0.8.0\lib\Xamarin.UITest.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.UITest">
+      <HintPath>..\packages\Xamarin.UITest.1.0.0\lib\Xamarin.UITest.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +57,12 @@
     <ProjectReference Include="..\..\..\Mise.Core\Mise.Core.csproj">
       <Project>{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}</Project>
       <Name>Mise.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mise.Inventory.Android\Mise.Inventory.Android.csproj">
+      <Project>{EA2E8452-389E-46AF-BA29-5450F4048989}</Project>
+      <Name>Mise.Inventory.Android</Name>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

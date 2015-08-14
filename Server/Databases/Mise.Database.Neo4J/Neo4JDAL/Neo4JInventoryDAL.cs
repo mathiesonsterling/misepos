@@ -61,7 +61,7 @@ namespace Mise.Neo4J.Neo4JDAL
                     .Match("(i:Inventory)-[:INVENTORY]-(r:Restaurant)")
                     .Where((RestaurantGraphNode r) => r.ID == inventory.RestaurantID)
                     .AndWhere((InventoryGraphNode i) => i.IsCurrent == true)
-                    .Return(i =>  i.As<InventoryGraphNode>())
+                    .Return(i => i.As<InventoryGraphNode>())
                     .ResultsAsync;
 
                 foreach (var currInv in currentInventories)
@@ -91,52 +91,49 @@ namespace Mise.Neo4J.Neo4JDAL
                 await CreateLiquidContainerIfNotAlreadyPresent(container);
             }
 
-            var tasks = new List<Task>();
-            tasks.AddRange(inventory.GetSections().Select(s => SetSectionForInventoryAsync(s, inventory.ID)));
+            foreach (var section in inventory.GetSections())
+            {
+                await SetSectionForInventoryAsync(section, inventory.ID);
+            }
 
             //associate us with the restaurant
             const string RELATIONSHIP_NAME = "INVENTORY";
-            var restTask = _graphClient.Cypher
+            await _graphClient.Cypher
                 .Match("(r:Restaurant), (inv:Inventory)")
                 .Where((RestaurantGraphNode r) => r.ID == inventory.RestaurantID)
                 .AndWhere((InventoryGraphNode inv) => inv.ID == inventory.ID)
                 .CreateUnique("(r)-[:" + RELATIONSHIP_NAME + "]->(inv)")
-                .ExecuteWithoutResultsAsync();
-            tasks.Add(restTask);
+                .ExecuteWithoutResultsAsync()
+                .ConfigureAwait(false);
 
             //also our employee
-            var empTask = _graphClient.Cypher
+            await _graphClient.Cypher
                 .Match("(e:Employee), (inv:Inventory)")
                 .Where((EmployeeGraphNode e) => e.ID == inventory.CreatedByEmployeeID)
                 .AndWhere((InventoryGraphNode inv) => inv.ID == inventory.ID)
                 .CreateUnique("(e)-[:CREATED]->(inv)")
-                .ExecuteWithoutResultsAsync();
-            tasks.Add(empTask);
+                .ExecuteWithoutResultsAsync()
+                .ConfigureAwait(false);
 
-            foreach (var task in tasks)
-            {
-                await task.ConfigureAwait(false);
-            }
         }
 
         public async Task UpdateInventoryAsync(IInventory inventory)
         {
             var invID = inventory.ID;
             //delete connections to line items, but not the lis themselves
-            await _graphClient.Cypher
+            var remQuery = _graphClient.Cypher
                 .Match("(m)-[r2]-(li:InventoryBeverageLineItem)-[rSec:HAS_LINE_ITEM]-(sec:InventorySection)-[r:HAS_SECTION]-(i:Inventory)")
                 .Where((InventoryGraphNode i) => i.ID == invID)
-                .Delete("r2, rSec, li")
-                .ExecuteWithoutResultsAsync()
-                .ConfigureAwait(false);
+                .Delete("r2, li, rSec");
+
+            await remQuery.ExecuteWithoutResultsAsync().ConfigureAwait(false);
 
             //delete all the sections as well
-            var query = _graphClient.Cypher
-                .Match("(s:InventorySection)-[r:HAS_SECTION]-(i:Inventory)")
-                .Where((InventoryGraphNode i) => i.ID == invID)
-                .Delete("s, r");
-
-            await query.ExecuteWithoutResultsAsync()
+            var delSectionQuery = _graphClient.Cypher
+                 .Match("(m)-[oRel]-(s:InventorySection)-[r:HAS_SECTION]-(i:Inventory)")
+                 .Where((InventoryGraphNode i) => i.ID == invID)
+                 .Delete("oRel, s, r");
+            await delSectionQuery.ExecuteWithoutResultsAsync()
                 .ConfigureAwait(false);
 
             await _graphClient.Cypher
@@ -220,6 +217,14 @@ namespace Mise.Neo4J.Neo4JDAL
         private async Task SetSectionForInventoryAsync(IInventorySection section, Guid inventoryID)
         {
             //each inventory will carry its own copy of sections
+            //check we don't already have one!
+            await _graphClient.Cypher
+                .Match("(sec:InventorySection)")
+                .Where((InventorySectionGraphNode sec) => sec.ID == section.ID)
+                .Delete("sec")
+                .ExecuteWithoutResultsAsync()
+                .ConfigureAwait(false);
+
             var node = new InventorySectionGraphNode(section);
             await _graphClient.Cypher
                 .Create("(isec:InventorySection {param})")
@@ -248,10 +253,9 @@ namespace Mise.Neo4J.Neo4JDAL
                 .ExecuteWithoutResultsAsync();
             tasks.Add(restSec);
 
-            foreach (var t in tasks)
-            {
-                await t.ConfigureAwait(false);
-            }
+            await Task.WhenAll(tasks).ConfigureAwait(false);
+
+
         }
 
         private async Task<IEnumerable<InventoryBeverageLineItem>> GetLineItemsForInventorySectionAsync(Guid inventorySectionID)
@@ -278,8 +282,8 @@ namespace Mise.Neo4J.Neo4JDAL
             return _graphClient.Cypher
                 .Match("(li:InventoryBeverageLineItem)")
                 .Where((InventoryBeverageLineItemGraphNode li) => li.ID == lineItem.ID)
-                .Set("li = {liParam}")
-                .WithParam("liParam", node)
+                .Set("li = {lIParam}")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync()
                 .ContinueWith(task => UpdateLiquidContainerAsync(lineItem.Container, lineItem.ID));
         }
@@ -298,8 +302,8 @@ namespace Mise.Neo4J.Neo4JDAL
         {
             var node = new InventoryBeverageLineItemGraphNode(lineItem);
             await _graphClient.Cypher
-                .Create("(li:InventoryBeverageLineItem {liParam})")
-                .WithParam("liParam", node)
+                .Create("(li:InventoryBeverageLineItem {lIParam})")
+                .WithParam("lIParam", node)
                 .ExecuteWithoutResultsAsync()
                 .ConfigureAwait(false);
 

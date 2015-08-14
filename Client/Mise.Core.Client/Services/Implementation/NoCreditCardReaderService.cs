@@ -1,7 +1,7 @@
 ﻿using System;
 using Mise.Core.Client.Services;
 using Mise.Core.ValueItems;
-using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client
 {

@@ -40,6 +40,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mindscape.Raygun4Net">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Core.5.1.0\lib\net40\Mindscape.Raygun4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Mindscape.Raygun4Net.Mvc">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.1.0\lib\net40\Mindscape.Raygun4Net.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Mindscape.Raygun4Net4">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.1.0\lib\net40\Mindscape.Raygun4Net4.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Security">
       <HintPath>..\packages\Mono.Security.3.2.3.0\lib\net45\Mono.Security.dll</HintPath>
     </Reference>
@@ -91,10 +100,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\miseinventoryservicedev.pubxml" />
-    <None Include="Properties\PublishProfiles\miseinventoryserviceprod - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\MiseInventoryServiceQA.pubxml" />
+    <None Include="Properties\PublishProfiles\Dev.pubxml" />
+    <None Include="Properties\PublishProfiles\Production.pubxml" />
+    <None Include="Properties\PublishProfiles\QA.pubxml" />
     <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.miseinventoryservicedev.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.miseinventoryserviceprod - Web Deploy.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.MiseInventoryServiceQA.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
@@ -107,7 +125,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="ConsoleLogger.cs" />
     <Compile Include="DependencyInjection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -124,6 +141,8 @@
     <Compile Include="Repositories\ReceivingOrderRepository.cs" />
     <Compile Include="Repositories\RestaurantRepository.cs" />
     <Compile Include="Repositories\VendorServerRepository.cs" />
+    <Compile Include="Services\ConsoleLogger.cs" />
+    <Compile Include="Services\RaygunErrorTracking.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Mise.Core.Common\Mise.Core.Common.csproj">

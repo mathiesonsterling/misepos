@@ -13,6 +13,11 @@ namespace Mise.Core.Common.Events.Inventory
             get { return MiseEventTypes.InventoryLineItemAdded; }
         }
 
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
         public Guid LineItemID { get; set; }
 
         public string DisplayName { get; set; }
@@ -43,6 +48,8 @@ namespace Mise.Core.Common.Events.Inventory
         public Money PricePaid { get; set; }
 
         public Guid? RestaurantInventorySectionID { get; set; }
+
+        public Guid InventorySectionID { get; set; }
 
         public Guid? VendorBoughtFrom { get; set; }
 

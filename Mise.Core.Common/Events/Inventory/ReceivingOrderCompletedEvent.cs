@@ -16,6 +16,7 @@ namespace Mise.Core.Common.Events.Inventory
 
 		public string Notes{get;set;}
 		public string InvoiceID{get;set;}
+		public DateTimeOffset DateReceived{get;set;}
 	}
 }
 

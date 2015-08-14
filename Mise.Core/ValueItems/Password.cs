@@ -52,6 +52,11 @@ namespace Mise.Core.ValueItems
 		public static bool IsValid(string password){
 			return password != null && password.Length > 2;
 		}
+
+	    public static Password TestPassword 
+	    {
+            get { return new Password("test");}
+	    }
 	}
 }
 

@@ -20,7 +20,7 @@ namespace Mise.Core.Common.Events.Inventory
         /// <summary>
         /// 
         /// </summary>
-        public Guid RestaurantInventorySectionID { get; set; }
+        public Guid InventorySectionID { get; set; }
 
         public InventoryBeverageLineItem BeverageLineItem { get; set; }
 

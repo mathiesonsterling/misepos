@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Mise.Inventory</RootNamespace>
     <AssemblyName>Mise.Inventory</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,7 +22,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -35,12 +34,17 @@
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Reports\AmountUsedInTimeReport.cs" />
+    <Compile Include="Reports\BaseReport.cs" />
+    <Compile Include="Reports\CompletedInventoryReport.cs" />
     <Compile Include="Services\IInsightsService.cs" />
+    <Compile Include="Services\Implementation\ReportsService.cs" />
     <Compile Include="Services\Implementation\XamarinInsightsService.cs" />
+    <Compile Include="Services\IReportsService.cs" />
     <Compile Include="ViewModels\BaseLineItemDisplayLine.cs" />
+    <Compile Include="ViewModels\BaseNextViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="MVVM\SimpleCommand.cs" />
     <Compile Include="Async\AsyncImageSource.cs" />
     <Compile Include="Async\AsyncLazy.cs" />
     <Compile Include="Async\NotifyTaskCompletion.cs" />
@@ -48,8 +52,6 @@
     <Compile Include="Services\ILoginService.cs" />
     <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\IPageFactory.cs" />
-    <Compile Include="Services\IThemer.cs" />
-    <Compile Include="Services\Messages.cs" />
     <Compile Include="DependencySetup.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="Services\Implementation\LoginService.cs" />
@@ -57,13 +59,12 @@
     <Compile Include="Services\Implementation\RegistrationService.cs" />
     <Compile Include="App.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
-    <Compile Include="ViewModels\ReportsViewModel.cs" />
     <Compile Include="Pages\MainMenuPage.xaml.cs">
       <DependentUpon>MainMenuPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ReportsPage.xaml.cs">
-      <DependentUpon>ReportsPage.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\Reports\ReportsViewModel.cs" />
+    <Compile Include="ViewModels\Reports\SelectCompletedInventoryViewModel.cs" />
+    <Compile Include="ViewModels\UpdateReceivingOrderLineItemViewModel.cs" />
     <Compile Include="ViewModels\VendorFindViewModel.cs" />
     <Compile Include="ViewModels\VendorAddViewModel.cs" />
     <Compile Include="Pages\VendorAddPage.xaml.cs">
@@ -89,7 +90,6 @@
     </Compile>
     <Compile Include="Services\Implementation\PageFactory.cs" />
     <Compile Include="Services\Implementation\NavigationService.cs" />
-    <Compile Include="Services\Implementation\ServiceStackWebServiceClient.cs" />
     <Compile Include="Services\Implementation\ServiceStackJSONSerializer.cs" />
     <Compile Include="Pages\SectionSelectPage.xaml.cs">
       <DependentUpon>SectionSelectPage.xaml</DependentUpon>
@@ -131,25 +131,13 @@
     <Compile Include="Services\Implementation\PARService.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="CustomCells\LineItemWithQuantityCell.cs" />
-    <Compile Include="ViewModels\InventoryVisuallyMeasureItemViewModel.cs" />
-    <Compile Include="ViewModels\InventoryVisuallyMeasureItemImprovedViewModel.cs" />
-    <Compile Include="Pages\InventoryVisuallyMesasuredImprovedPage.xaml.cs">
-      <DependentUpon>InventoryVisuallyMesasuredImprovedPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Services\IPurchaseOrderService.cs" />
     <Compile Include="Services\Implementation\PurchaseOrderService.cs" />
-    <Compile Include="CustomCells\LineItemWithEditableQuantityCell.cs" />
-    <Compile Include="CustomCells\LineItemsWithEditableQuantityControl.cs" />
-    <Compile Include="Pages\UpdateQuantityPage.xaml.cs">
-      <DependentUpon>UpdateQuantityPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\UpdateQuantityViewModel.cs" />
     <Compile Include="Pages\PurchaseOrderReviewPage.xaml.cs">
       <DependentUpon>PurchaseOrderReviewPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\PurchaseOrderReviewViewModel.cs" />
     <Compile Include="AkavacheSqliteLinkerOverride.cs" />
-    <Compile Include="Services\Implementation\HttpWebServiceClient.cs" />
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="ViewModels\UserRegistrationViewModel.cs" />
     <Compile Include="Pages\InvitationsPage.xaml.cs">
@@ -171,11 +159,47 @@
     <Compile Include="Pages\AccountRegistrationPage.xaml.cs">
       <DependentUpon>AccountRegistrationPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\Implementation\CrossSettingsClientKeyValueStorage.cs" />
     <Compile Include="BuildLevel.cs" />
+    <Compile Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml.cs">
+      <DependentUpon>InventoryVisuallyMeasureWithGesturesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\InventoryVisuallyMeasureBottleViewModel.cs" />
+    <Compile Include="Pages\UpdateParLineItemPage.xaml.cs">
+      <DependentUpon>UpdateParLineItemPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\UpdateParLineItemViewModel.cs" />
+    <Compile Include="Pages\UpdateReceivingOrderLineItem.xaml.cs">
+      <DependentUpon>UpdateReceivingOrderLineItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\Implementation\XamarinFormsSimpleKeyValueStorage.cs" />
+    <Compile Include="Pages\Reports\SelectCompletedInventoriesPage.xaml.cs">
+      <DependentUpon>SelectCompletedInventoriesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\ReportsPage.xaml.cs">
+      <DependentUpon>ReportsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\ReportResultsPage.xaml.cs">
+      <DependentUpon>ReportResultsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Reports\ReportResultsViewModel.cs" />
+    <Compile Include="Pages\AuthorizeCreditCardPage.xaml.cs">
+      <DependentUpon>AuthorizeCreditCardPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\AuthorizeCreditCardViewModel.cs" />
+    <Compile Include="Themes\MiseTheme.cs" />
+    <Compile Include="Services\ISQLite.cs" />
+    <Compile Include="Services\Implementation\SQLiteClietDAL.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\HttpWebServiceClient.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\ServiceStackWebServiceClient.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureWeakTypeSharedClient.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Exceptions\UserNotFoundException.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureServiceLocator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  <Import Project="..\packages\Xamarin.Insights.1.10.5\build\portable-win+net45+wp80+windows8+wpa+MonoAndroid10+MonoTouch10\Xamarin.Insights.targets" Condition="Exists('..\packages\Xamarin.Insights.1.10.5\build\portable-win+net45+wp80+windows8+wpa+MonoAndroid10+MonoTouch10\Xamarin.Insights.targets')" />
+  <Import Project="..\packages\Xamarin.Forms.1.4.4.6392\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.4.6392\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <ItemGroup>
     <Reference Include="Autofac">
       <HintPath>..\packages\Autofac.3.5.2\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\Autofac.dll</HintPath>
@@ -207,38 +231,11 @@
     <Reference Include="ExifLib">
       <HintPath>..\packages\ExifLib.PCL.1.0.1\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\ExifLib.dll</HintPath>
     </Reference>
-    <Reference Include="XLabs.Ioc">
-      <HintPath>..\packages\XLabs.IoC.2.0.5610.2\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Ioc.dll</HintPath>
-    </Reference>
-    <Reference Include="XLabs.Core">
-      <HintPath>..\packages\XLabs.Core.2.0.5610.2\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="XLabs.Platform">
-      <HintPath>..\packages\XLabs.Platform.2.0.5610.2\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="XLabs.Serialization">
-      <HintPath>..\packages\XLabs.Serialization.2.0.5610.2\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="XLabs.Forms">
-      <HintPath>..\packages\XLabs.Forms.2.0.5610.2\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Forms.dll</HintPath>
-    </Reference>
     <Reference Include="ModernHttpClient">
       <HintPath>..\packages\modernhttpclient.2.4.2\lib\Portable-Net45+WinRT45+WP8+WPA81\ModernHttpClient.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Insights">
-      <HintPath>..\packages\Xamarin.Insights.1.10.4.112\lib\portable-win+net45+wp80+windows8+wpa+MonoAndroid10+MonoTouch10\Xamarin.Insights.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Core">
-      <HintPath>..\packages\Xamarin.Forms.1.4.3.6376\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Xaml">
-      <HintPath>..\packages\Xamarin.Forms.1.4.3.6376\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform">
-      <HintPath>..\packages\Xamarin.Forms.1.4.3.6376\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces">
       <HintPath>..\packages\ServiceStack.Interfaces.4.0.42\lib\portable-wp80+sl5+net40+win8+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
@@ -246,19 +243,57 @@
     <Reference Include="SQLitePCL.raw">
       <HintPath>..\packages\SQLitePCL.raw_basic.0.8.1\lib\portable-net45+netcore45+wp8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCL.raw.dll</HintPath>
     </Reference>
+    <Reference Include="XLabs.Ioc">
+      <HintPath>..\packages\XLabs.IoC.2.0.5679\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+Xamarin.iOS10\XLabs.Ioc.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Core">
+      <HintPath>..\packages\XLabs.Core.2.0.5679\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Platform">
+      <HintPath>..\packages\XLabs.Platform.2.0.5679\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Serialization">
+      <HintPath>..\packages\XLabs.Serialization.2.0.5679\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Forms">
+      <HintPath>..\packages\XLabs.Forms.2.0.5679\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="MR.Gestures">
+      <HintPath>..\packages\MR.Gestures.1.2.1\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\MR.Gestures.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite-net">
+      <HintPath>..\packages\sqlite-net-pcl.1.0.11\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Insights">
+      <HintPath>..\packages\Xamarin.Insights.1.10.5\lib\portable-win+net45+wp80+windows8+wpa+MonoAndroid10+MonoTouch10\Xamarin.Insights.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Core">
+      <HintPath>..\packages\Xamarin.Forms.1.4.4.6392\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Xaml">
+      <HintPath>..\packages\Xamarin.Forms.1.4.4.6392\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform">
+      <HintPath>..\packages\Xamarin.Forms.1.4.4.6392\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile">
+      <HintPath>..\packages\WindowsAzure.MobileServices.1.3.2\lib\portable-win+net45+wp8+wpa81+monotouch+monoandroid\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Pages\LoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\MainMenuPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\ReportsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\VendorAddPage.xaml">
@@ -297,12 +332,6 @@
     <EmbeddedResource Include="Pages\InventoryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pages\InventoryVisuallyMesasuredImprovedPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\UpdateQuantityPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="Pages\PurchaseOrderReviewPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -319,6 +348,27 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\AccountRegistrationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\UpdateParLineItemPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\UpdateReceivingOrderLineItem.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Reports\SelectCompletedInventoriesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Reports\ReportsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Reports\ReportResultsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\AuthorizeCreditCardPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -339,5 +389,10 @@
       <Project>{9BA4713A-F2EF-46BE-9F86-31637A2217B6}</Project>
       <Name>Mise.InventoryWebService.ServiceModelPortable</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Implementation\WebServiceClients\" />
+    <Folder Include="Services\Implementation\WebServiceClients\Azure\" />
+    <Folder Include="Services\Implementation\WebServiceClients\Exceptions\" />
   </ItemGroup>
 </Project>

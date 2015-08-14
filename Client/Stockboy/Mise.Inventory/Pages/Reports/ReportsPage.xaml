@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.Reports.ReportsPage"
+	BindingContext="{x:Static local:App.ReportsViewModel}"
+	Title="Reports">
+
+	<ContentPage.Content>
+		<ScrollView>
+			<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+				<Label Text="Start"></Label>
+				<DatePicker Date="{Binding StartDate}"/>
+				<Label Text="End"></Label>
+				<DatePicker Date="{Binding EndDate}" />
+				<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+				<Button Command="{Binding CompletedInventoriesCommand}" Text="Completed Inventories"/>
+				<Button Command="{Binding AmountUsedCommand}" Text="Amount Used"/>
+			</StackLayout>
+		</ScrollView>
+	</ContentPage.Content>
+</ContentPage>

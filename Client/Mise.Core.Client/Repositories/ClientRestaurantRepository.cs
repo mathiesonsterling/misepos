@@ -2,30 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Client.Services;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Events.Restaurant;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Repositories;
-using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
-using System.Threading;
 
 namespace Mise.Core.Client.Repositories
 {
     /// <summary>
     /// Implementation of the restaurant repository for the client.  Only stores and retrieves here!
     /// </summary>
-	public class ClientRestaurantRepository : BaseEventSourcedClientRepository<IRestaurant, IRestaurantEvent>, 
+	public class ClientRestaurantRepository : BaseEventSourcedClientRepository<IRestaurant, IRestaurantEvent, Restaurant>, 
 		IRestaurantRepository
 	{
 		readonly IInventoryRestaurantWebService _webService;
-        public ClientRestaurantRepository(ILogger logger, IClientDAL dal, IInventoryRestaurantWebService webService) : base(logger, dal, webService)
+        private readonly IDeviceLocationService _locationService;
+        public ClientRestaurantRepository(ILogger logger, IClientDAL dal, IInventoryRestaurantWebService webService, IResendEventsWebService resend, IDeviceLocationService locationService)
+            : base(logger, dal, webService, resend)
         {
 			_webService = webService;
+            _locationService = locationService;
         }
 
 			
@@ -49,33 +52,34 @@ namespace Mise.Core.Client.Repositories
             return new Restaurant();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-			return ev is PlaceholderRestaurantCreatedEvent || ev is NewRestaurantRegisteredOnAppEvent;
-        }
 
         public override Guid GetEntityID(IRestaurantEvent ev)
         {
             return ev.RestaurantID;
         }
 
-        public override async Task Load(Guid? restaurantID)
+        protected override async Task<IEnumerable<Restaurant>> LoadFromWebservice(Guid? restaurantID)
         {
-			try
-			{
-			    Loading = true;
-				if(restaurantID.HasValue){
-					var rest = await _webService.GetRestaurant (restaurantID.Value);
-					Cache.UpdateCache (rest, ItemCacheStatus.Clean);
-					return;
-				}
-					
-				var allRests = await _webService.GetRestaurants (new Location ());
-				Cache.UpdateCache (allRests);
-			    Loading = false;
-			} catch(Exception e){
-				Logger.HandleException (e);
-			}
+            if (restaurantID.HasValue)
+            {
+                var rest = await _webService.GetRestaurant(restaurantID.Value);
+				return rest != null ? new List<Restaurant> {rest} : new List<Restaurant>();
+            }
+
+            var location = await _locationService.GetDeviceLocation();
+			var items = await _webService.GetRestaurants(location, new Distance{Kilometers = 100});
+            return items;
+        }
+
+        protected override async Task<IEnumerable<Restaurant>> LoadFromDB(Guid? restaurantID)
+        {
+            var items = await DAL.GetEntitiesAsync<Restaurant>();
+            if (restaurantID.HasValue)
+            {
+                items = items.Where(r => r.ID == restaurantID);
+            }
+
+            return items;
         }
 	}
 }

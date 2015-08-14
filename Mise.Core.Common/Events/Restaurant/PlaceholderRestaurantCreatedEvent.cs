@@ -15,7 +15,17 @@ namespace Mise.Core.Common.Events.Restaurant
             get { return MiseEventTypes.PlaceholderRestaurantCreated; }
         }
 
-		/// <summary>
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
+
+        /// <summary>
 		/// The App that this is being set for
 		/// </summary>
 		/// <value>The app.</value>

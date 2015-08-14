@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Services;
-using Mise.Core.ValueItems;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Pages;
 using Mise.Inventory.ViewModels;
 
@@ -130,16 +130,11 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		/// <summary>
-		/// Shows the reports.
-		/// </summary>
-		/// <returns>The reports.</returns>
 		public async Task ShowCreatePurchaseOrder()
 		{
 			try{
 			//until we have more stuff, go to review
 			await _navi.PushAsync (_pages.GetPage (Pages.PurchaseOrderReview));
-			//await _navi.PushAsync(_pages.GetPage(Pages.Reports));
 			} catch(Exception e){
 				HandleException(e);
 			}
@@ -152,11 +147,6 @@ namespace Mise.Inventory.Services.Implementation
 			} catch(Exception e){
 				HandleException (e);
 			}
-		}
-
-		public Task ShowReports()
-		{
-			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -198,7 +188,7 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			try
 			{
-			    const Pages PAGE = Pages.PAR;
+			    const Pages PAGE = Pages.Par;
 
 			    if (replaceCurrentPage) {
 					await ReplacePage(PAGE);
@@ -340,28 +330,37 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public Task ShowUpdateQuantity (int quantity, string itemName, Action<int, decimal> quantCallback, 
-			Action zeroOutCallback, Money price, bool addPrices = false, string title = "Update Quantity")
-		{
-			try{
-				var destinationViewModel = App.UpdateQuantityViewModel;
-				destinationViewModel.DoPrices = addPrices;
-				destinationViewModel.OnUpdatedCallback = quantCallback;
-				destinationViewModel.ZeroedOutCallback = zeroOutCallback;
-				destinationViewModel.Title = title;
-				destinationViewModel.SetQuantity (quantity, itemName, price);
-				return _navi.PushAsync (_pages.GetPage (Pages.UpdateQuantity));
-			} catch(Exception e){
-				HandleException(e);
-				return Task.FromResult (false);
-			}
-		}
+	    public Task ShowUpdateParLineItem()
+	    {
+	        try
+	        {
+	            return _navi.PushAsync(_pages.GetPage(Pages.UpdateParLineItem));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+	            return Task.FromResult(false);
+	        }
+	    }
 
 		public async Task ShowInvitations(){
 			await _navi.PushAsync (_pages.GetPage (Pages.Invitations));	
 		}
 
-		public Task ShowRestaurantRegistration ()
+	    public Task ShowUpdateReceivingOrderLineItem()
+	    {
+	        try
+	        {
+	            return _navi.PushAsync(_pages.GetPage(Pages.UpdateRecievingOrderLineItem));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+                return Task.FromResult(false);
+	        }
+	    }
+
+        public Task ShowRestaurantRegistration ()
 		{
 			return _navi.PushAsync (_pages.GetPage (Pages.RegisterRestaurant));
 		}
@@ -369,6 +368,16 @@ namespace Mise.Inventory.Services.Implementation
 		public Task ShowAccountRegistration ()
 		{
 			return _navi.PushAsync (_pages.GetPage (Pages.AccountRegistration));
+		}
+
+		public Task ShowAuthorizeCreditCard ()
+		{
+			try{
+				return _navi.PushAsync(_pages.GetPage(Pages.AuthorizeCreditCard));
+			} catch(Exception e){
+				HandleException (e);
+				return Task.FromResult (false);
+			}
 		}
 
 		public async Task ShowUserRegistration(){
@@ -379,18 +388,17 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
-		public Task CloseInventoryVisuallyMeasureItem ()
+		public async Task CloseInventoryVisuallyMeasureItem ()
 		{
 			try{
-				App.InventoryViewModel.OnAppearing ();
-				return _navi.PopAsync ();
+				await App.InventoryViewModel.OnAppearing ();
+				await _navi.PopAsync ();
 			} catch(Exception e){
 				HandleException(e);
-				return Task.FromResult (false);
 			}
 		}
 
-		public async Task CloseUpdateQuantity ()
+	    public async Task CloseUpdateQuantity ()
 		{
 			#if __ANDROID__
 				//reload the items prior to us going there
@@ -417,6 +425,15 @@ namespace Mise.Inventory.Services.Implementation
 			}
 		}
 
+		public async Task CloseSectionAdd ()
+		{
+			try{
+				await _navi.PopAsync();
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+
 		public async Task CloseItemAdd(){
 			try{
 				var findPage = _navi.NavigationStack.FirstOrDefault(p => p is ItemFindPage);
@@ -424,6 +441,8 @@ namespace Mise.Inventory.Services.Implementation
 				if(findPage != null){
 					_navi.RemovePage (findPage);
 				}
+
+				//we might need to alert the caling page we're coming back now
 				await _navi.PopAsync ();
 				/*
 				//can we go to measurement here?
@@ -458,7 +477,47 @@ namespace Mise.Inventory.Services.Implementation
 	            HandleException(e);
 	        }
 	    }
-			
+
+        #region Reports
+
+	    public async Task ShowReports()
+	    {
+	        try
+	        {
+	            await _navi.PushAsync(_pages.GetPage(Pages.Reports));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+	        }
+
+	    }
+
+	    public Task ShowSelectCompletedInventory()
+        {
+            try
+            {
+                return _navi.PushAsync(_pages.GetPage(Pages.CompletedInventoriesSelect));
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return Task.FromResult(false);
+            }
+        }
+
+        public async Task ShowReportResults()
+	    {
+	        try
+	        {
+	            await _navi.PushAsync(_pages.GetPage(Pages.ReportResults));
+	        }
+	        catch (Exception e)
+	        {
+	            HandleException(e);
+	        }
+	    }
+        #endregion	
 
 	    public async void HandleException(Exception e){
 			try{

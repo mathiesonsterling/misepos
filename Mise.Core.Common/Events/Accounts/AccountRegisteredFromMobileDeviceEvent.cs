@@ -16,6 +16,16 @@ namespace Mise.Core.Common.Events.Accounts
             get { return MiseEventTypes.AccountRegisteredFromMobileDevice; }
         }
 
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
+
         public EmailAddress Email { get; set; }
 
         public PersonName AccountHolderName { get; set; }

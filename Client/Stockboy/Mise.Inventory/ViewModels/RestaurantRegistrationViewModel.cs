@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using System.Windows.Input;
-using Mise.Inventory.MVVM;
+
 using Mise.Core.Services;
 using Mise.Inventory.Services;
+using Xamarin.Forms;
 
 
 namespace Mise.Inventory.ViewModels
@@ -21,22 +23,28 @@ namespace Mise.Inventory.ViewModels
 			PropertyChanged += (sender, e) => {
 				if(e.PropertyName !=  "CanAdd"){
 					//don't need street direction
-					CanAdd = 
-						string.IsNullOrEmpty (Name) == false
-						&& string.IsNullOrEmpty (StreetAddressNumber) == false
-						&& string.IsNullOrEmpty (StreetName) == false
-						&& string.IsNullOrEmpty (City) == false
-						&& string.IsNullOrEmpty (State) == false
-						&& string.IsNullOrEmpty (Zip) == false
-						&& string.IsNullOrEmpty (PhoneAreaCode) == false
-						&& string.IsNullOrEmpty (PhoneNumberVal) == false;
+				    CanAdd =
+				        string.IsNullOrEmpty(Name) == false
+				        && string.IsNullOrEmpty(StreetAddressNumber) == false
+				        && string.IsNullOrEmpty(StreetName) == false
+				        && string.IsNullOrEmpty(City) == false
+				        && string.IsNullOrEmpty(State) == false
+				        && string.IsNullOrEmpty(Zip) == false
+				        && string.IsNullOrEmpty(PhoneAreaCode) == false
+				        && string.IsNullOrEmpty(PhoneNumberVal) == false
+				        && PhoneNumber.IsValid(PhoneAreaCode, PhoneNumberVal);
 				}
 			};
 		}
 
-        public override Task OnAppearing()
+        public override async Task OnAppearing()
         {
-            return Task.FromResult(false);
+			Processing = true;
+			var emp = await _login.GetCurrentEmployee ();
+			if (emp != null && emp.PrimaryEmail != null) {
+				EmailToGetReportsAt = emp.PrimaryEmail.Value;
+			}
+			Processing = false;
         }
 
 		#region Fields
@@ -52,10 +60,12 @@ namespace Mise.Inventory.ViewModels
 		public string PhoneAreaCode{get{return GetValue<string> ();}set{ SetValue (value); }}
 		public string PhoneNumberVal{get{return GetValue<string> ();}set{ SetValue (value); }}
 
+		public string EmailToGetReportsAt{get{ return GetValue<string> (); }set{SetValue(value);}}
+
 		public IEnumerable<State> States{get{return Mise.Core.ValueItems.State.GetUSStates ();}}
 		#endregion
 
-		public ICommand RegisterRestaurantCommand{get{return new SimpleCommand (Register);}}
+		public ICommand RegisterRestaurantCommand{get{return new Command (Register, () => CanAdd);}}
 
 		public async void Register(){
 			try{

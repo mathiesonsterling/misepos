@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,53 +6,52 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
-using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
-using Mise.Core.ValueItems;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.Repositories;
 
 namespace Mise.Core.Client.Repositories
 {
-	public class ClientPARRepository : BaseEventSourcedClientRepository<IPAR, IPAREvent>, IPARRepository
+	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IParEvent, Par>, IParRepository
 	{
-	    private readonly IPARWebService _webService;
-	    public ClientPARRepository(ILogger logger, IClientDAL dal, IPARWebService webService) : base(logger, dal, webService)
+	    private readonly IParWebService _webService;
+        public ClientParRepository(ILogger logger, IClientDAL dal, IParWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
 	    {
 	        _webService = webService;
 	    }
 
-	    protected override IPAR CreateNewEntity()
+	    protected override IPar CreateNewEntity()
 	    {
-	        return new PAR();
+	        return new Par();
 	    }
 
-	    protected override bool IsEventACreation(IEntityEventBase ev)
-	    {
-	        return ev is PARCreatedEvent;
-	    }
 
-	    public override Guid GetEntityID(IPAREvent ev)
+	    public override Guid GetEntityID(IParEvent ev)
 	    {
 	        return ev.ParID;
 	    }
 
-	    public override async Task Load(Guid? restaurantID)
+	    protected override Task<IEnumerable<Par>> LoadFromWebservice(Guid? restaurantID)
 	    {
-	        Loading = true;
-			if (restaurantID.HasValue == false) {
-				throw new ArgumentException ("Cannot load PARs until restaurant is set!");
-			}
-
-			var pars = await _webService.GetPARsForRestaurant (restaurantID.Value);
-
-	        Cache.UpdateCache(pars);
-	        Loading = false;
+	        if (restaurantID.HasValue == false)
+	        {
+	            throw new ArgumentException("Cannot load PARS until restaurant is set");
+	        }
+	        return _webService.GetPARsForRestaurant(restaurantID.Value);
 	    }
 
-		public Task<IPAR> GetCurrentPAR (Guid restaurantID)
+	    protected override async Task<IEnumerable<Par>> LoadFromDB(Guid? restaurantID)
+	    {
+	        var items = await DAL.GetEntitiesAsync<Par>();
+	        return items;
+	    }
+
+
+		public Task<IPar> GetCurrentPAR (Guid restaurantID)
 		{
 			var par = GetAll ().FirstOrDefault (p => p.IsCurrent && p.RestaurantID == restaurantID);
 			return Task.FromResult (par);

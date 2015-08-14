@@ -12,6 +12,12 @@ namespace Mise.Core.Entities.Inventory
     public interface IReceivingOrder : IRestaurantEntityBase, ICloneableEntity, 
 		IEventStoreEntityBase<IReceivingOrderEvent>, ITextSearchable
     {
+		/// <summary>
+		/// What time the order came in the door
+		/// </summary>
+		/// <value>The date received.</value>
+		DateTimeOffset DateReceived{get;}
+
         /// <summary>
         /// The vendor we're taking stuff from
         /// </summary>

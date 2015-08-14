@@ -7,10 +7,36 @@ namespace Mise.Core.Common.Events.DTOs
 {
 	public class EventDataTransportObject : IEntityEventBase
 	{
+        public EventDataTransportObject() { }
+
+        /// <summary>
+        /// Clone constructor
+        /// </summary>
+        /// <param name="toClone"></param>
+	    public EventDataTransportObject(EventDataTransportObject toClone)
+        {
+            CausedByID = toClone.CausedByID;
+            CreatedDate = toClone.CreatedDate;
+            DeviceID = toClone.DeviceID;
+            EntityID = toClone.EntityID;
+            EventOrderingID = toClone.EventOrderingID;
+            EventType = toClone.EventType;
+            ID = toClone.ID;
+            ItemCacheStatus = toClone.ItemCacheStatus;
+            JSON = toClone.JSON;
+            LastUpdatedDate = toClone.LastUpdatedDate;
+            RestaurantID = toClone.RestaurantID;
+            SourceType = toClone.SourceType;
+            IsAggregateRootCreation = toClone.IsAggregateRootCreation;
+            IsEntityCreation = toClone.IsEntityCreation;
+        }
 		/// <summary>
 		/// Class this event was serailized from
 		/// </summary>
 		public Type SourceType { get; set; }
+
+        public bool IsAggregateRootCreation { get; set; }
+        public bool IsEntityCreation { get; set; }
 
 		/// <summary>
 		/// JSON representation of this event

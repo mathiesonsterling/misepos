@@ -23,6 +23,7 @@ namespace Mise.Database.StorableEntities.Inventory
             RestaurantID = source.RestaurantID;
             RestaurantInventorySectionID = source.RestaurantInventorySectionID;
             Revision = source.Revision.ToDatabaseString();
+            LastCompletedBy = source.LastCompletedBy;
         }
 
         public InventorySection Rehydrate(IEnumerable<InventoryBeverageLineItem> inventoryLineItems, Guid restaurantInventorySectionID)
@@ -36,7 +37,8 @@ namespace Mise.Database.StorableEntities.Inventory
                 Name = Name,
                 RestaurantID = RestaurantID,
                 RestaurantInventorySectionID = restaurantInventorySectionID,
-                Revision = new EventID(Revision)
+                Revision = new EventID(Revision),
+                LastCompletedBy = LastCompletedBy
             };
         }
 
@@ -53,5 +55,7 @@ namespace Mise.Database.StorableEntities.Inventory
         public Guid ID { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
+
+        public Guid? LastCompletedBy { get; set; }
     }
 }

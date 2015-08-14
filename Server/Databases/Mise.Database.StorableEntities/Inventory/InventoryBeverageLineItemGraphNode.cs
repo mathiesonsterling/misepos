@@ -16,18 +16,18 @@ namespace Mise.Database.StorableEntities.Inventory
             RestaurantID = source.RestaurantID;
             CreatedDate = source.CreatedDate;
             LastUpdatedDate = source.LastUpdatedDate;
-            Revision = source.Revision.ToDatabaseString();
+            Revision = source.Revision != null ? source.Revision.ToDatabaseString() : string.Empty;
 
             UPC = source.UPC;
             MeasurementMethods = (int) source.MethodsMeasuredLast;
             MiseName = source.MiseName;
-            CurrentAmountMilliliters = source.CurrentAmount.Milliliters;
-            SpecificGravity = source.CurrentAmount.SpecificGravity;
+            CurrentAmountMilliliters = source.CurrentAmount != null ? source.CurrentAmount.Milliliters : 0;
+            SpecificGravity = source.CurrentAmount != null ? source.CurrentAmount.SpecificGravity : 0;
             DisplayName = source.DisplayName;
             VendorBoughtFrom = source.VendorBoughtFrom;
-            PricePaid = source.PricePaid.Dollars;
+            PricePaid = source.PricePaid != null ? source.PricePaid.Dollars : 0;
             NumFullBottles = source.NumFullBottles;
-            PartialBottlePercentages = source.PartialBottlePercentages.ToList();
+            PartialBottlePercentages = source.PartialBottlePercentages != null ? source.PartialBottlePercentages.ToList() : new List<decimal>();
             CaseSize = source.CaseSize;
             InventoryPosition = source.InventoryPosition;
         }
@@ -46,7 +46,7 @@ namespace Mise.Database.StorableEntities.Inventory
                 RestaurantID = RestaurantID,
                 CreatedDate = CreatedDate,
                 LastUpdatedDate = LastUpdatedDate,
-                Revision = new EventID(Revision),
+                Revision = string.IsNullOrEmpty(Revision) == false ? new EventID(Revision) : null,
 
                 Container = container,
                 UPC = UPC,

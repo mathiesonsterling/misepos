@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using Mise.Core;
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.Entities.Inventory;
 using Xamarin.Forms;
@@ -24,9 +24,9 @@ namespace Mise.Inventory.ViewModels
 	        {
 	        }
 
-	        public override decimal Quantity
+	        public override string Quantity
 	        {
-                get { return Source.Quantity; }
+				get { return Source.Quantity.ToString(); }
 	        }
 
 	        public override Color TextColor
@@ -57,26 +57,49 @@ namespace Mise.Inventory.ViewModels
 			_inventoryService = inventoryService;
 			_loginService = loginService;
 		}
-			
-		 
+
+        public override async Task OnAppearing()
+        {
+            try
+            {
+                if (CameFromAdd)
+                {
+                    CameFromAdd = false;
+                }
+                await base.OnAppearing();
+                var section = await _inventoryService.GetCurrentInventorySection();
+                if (section != null)
+                {
+                    Title = "Count for " + section.Name;
+                }
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
+        }
+
 		public string Title{get{ return GetValue<string> (); } private set{ SetValue (value); }}
+		public bool IsInventoryEmpty{get{ return GetValue<bool> (); }private set{SetValue (value);}}
 
         public InventoryLineItemDisplayLine FirstUnmeasuredItem { get { return GetValue<InventoryLineItemDisplayLine>(); } private set { SetValue(value);} }
 
 		public bool CanComplete{ get { return GetValue<bool> (); } private set { SetValue (value); } }
 
+        public bool CameFromAdd { get; private set; }
+
 		#region Commands
 
 		public ICommand AddNewLineItemCommand {
-			get { return new SimpleCommand(AddNewItem); }
+			get { return new Command(AddNewItem, () => NotProcessing); }
 		}
 
 		public ICommand ScanCommand {
-			get { return new SimpleCommand(Scan); }
+			get { return new Command(Scan, () => NotProcessing); }
 		}
 
 		public ICommand FinishSectionCommand{
-			get{return new SimpleCommand (FinishSection);}
+			get{return new Command (FinishSection, () => CanComplete);}
 		}
 		#endregion
 
@@ -100,6 +123,7 @@ namespace Mise.Inventory.ViewModels
 
 		async void AddNewItem()
 		{
+		    CameFromAdd = true;
 			await Navigation.ShowInventoryItemFind ();
 		}
 
@@ -110,25 +134,15 @@ namespace Mise.Inventory.ViewModels
 
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){
 			var items = (await _inventoryService.GetLineItemsForCurrentSection ()).ToList();
-            var itemsList = items.OrderBy(li => li.InventoryPosition).Select(li => new InventoryLineItemDisplayLine(li)).ToList();
+            var itemsList = items.OrderBy(li => li.InventoryPosition)
+				.ThenBy (li => li.DisplayName)
+				.Select(li => new InventoryLineItemDisplayLine(li)).ToList();
             //find the first unmeasured
 		    FirstUnmeasuredItem = itemsList.FirstOrDefault(li => li.Source.HasBeenMeasured == false);
 
+			IsInventoryEmpty = itemsList.Any () == false;
 			//we can complete if we have items, and all are measured
 			return itemsList;
-		}
-
-		public override async Task OnAppearing ()
-		{
-			try{
-				await base.OnAppearing ();
-				var section = await _loginService.GetCurrentSection ();
-				if(section != null){
-					Title = "Count for " + section.Name;
-				}
-			}catch(Exception e){
-				HandleException (e);
-			}
 		}
 
 		async void FinishSection(){

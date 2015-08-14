@@ -4,24 +4,25 @@ using Mise.Core.Common.Events.ApplicationInvitations;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Common.Services;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common;
 using Mise.Core.Entities.Base;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Repositories;
 using Mise.Core.ValueItems;
-
+using Mise.Core.Services.UtilityServices;
 namespace Mise.Core.Client.Repositories
 {
 	public class ClientApplicationInvitationRepository 
-		: BaseEventSourcedClientRepository<IApplicationInvitation, IApplicationInvitationEvent>, IApplicationInvitationRepository
+		: BaseEventSourcedClientRepository<IApplicationInvitation, IApplicationInvitationEvent, ApplicationInvitation>, IApplicationInvitationRepository
 	{
 		readonly IApplicationInvitationWebService _webService;
-		public ClientApplicationInvitationRepository(ILogger logger, IClientDAL dal, 
-			IApplicationInvitationWebService webService) : base(logger, dal, webService)
+		public ClientApplicationInvitationRepository(ILogger logger, IClientDAL dal,
+            IApplicationInvitationWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
 		{
 			_webService = webService;
 		}
@@ -33,10 +34,6 @@ namespace Mise.Core.Client.Repositories
 			return new ApplicationInvitation ();
 		}
 
-		protected override bool IsEventACreation (IEntityEventBase ev)
-		{
-			return ev is EmployeeInvitedToApplicationEvent;
-		}
 
 	    public override Guid GetEntityID(IApplicationInvitationEvent ev)
 	    {
@@ -47,37 +44,28 @@ namespace Mise.Core.Client.Repositories
 
 		#region implemented abstract members of BaseEventSourcedClientRepository
 
-		public override async Task Load (Guid? restaurantID)
-		{
-		    Loading = true;
-			IEnumerable<IApplicationInvitation> items = null;
-			try{
-			    if (restaurantID.HasValue)
-			    {
-			        items = await _webService.GetInvitationsForRestaurant(restaurantID.Value);
-			    }
-			} catch(Exception e){
-				Logger.HandleException (e);
-			}
+	    protected override async Task<IEnumerable<ApplicationInvitation>> LoadFromWebservice(Guid? restaurantID)
+	    {
+	        if (restaurantID.HasValue)
+	        {
+	            var items = await _webService.GetInvitationsForRestaurant(restaurantID.Value);
+	            return items.Cast<ApplicationInvitation>();
+	        }
 
-		    if (items == null)
-		    {
-		        try
-		        {
-		            items = await DAL.GetEntitiesAsync<IApplicationInvitation>();
-		        }
-		        catch (Exception e)
-		        {
-		            Logger.HandleException(e);
-		        }
-		    }
-			if(items != null){
-				Cache.UpdateCache (items);
-			}
-		    Loading = false;
-		}
+            throw new Exception("Cannot load without a restaurant ID");
+	    }
 
-		public async Task Load (EmailAddress email)
+	    protected override async Task<IEnumerable<ApplicationInvitation>> LoadFromDB(Guid? restaurantID)
+	    {
+	        var items = await DAL.GetEntitiesAsync<ApplicationInvitation>();
+	        if (restaurantID.HasValue)
+	        {
+	            items = items.Where(ai => ai.RestaurantID == restaurantID);
+	        }
+	        return items;
+	    }
+
+	    public async Task Load (EmailAddress email)
 		{
 			try{
                 Loading = true;

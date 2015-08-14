@@ -55,12 +55,12 @@ namespace Mise.Inventory.Services.Implementation
 			}
 
 			var inventory = await _inventoryService.GetLastCompletedInventory ();
-			if (inventory == null) {
+			if (inventory == null || inventory.DateCompleted.HasValue == false) {
 				throw new InvalidOperationException ("You haven't finished an inventory yet, can't create a purchase order");
 			}
 
 			//get all the ROs after the last inventory
-			var ros = _roRepository.GetAll().Where(ro => ro.CreatedDate > inventory.DateCompleted.Value);
+			var ros = _roRepository.GetAll().Where(ro => ro.DateReceived > inventory.DateCompleted.Value);
 			var roItems = ros.SelectMany (ro => ro.GetBeverageLineItems ()).ToList ();
 
 			//create the PO
@@ -95,7 +95,7 @@ namespace Mise.Inventory.Services.Implementation
 
 					var numBottles = (int)Math.Ceiling (diff);
 					//make an event
-					var realLI = parLI as PARBeverageLineItem;
+					var realLI = parLI as ParBeverageLineItem;
 					var addLIEvent = _eventFactory.CreatePOLineItemAddedFromInventoryCalcEvent (emp, _currentPO, realLI,
 						numBottles, null, vendor != null ? vendor.ID : (Guid?)null);
 

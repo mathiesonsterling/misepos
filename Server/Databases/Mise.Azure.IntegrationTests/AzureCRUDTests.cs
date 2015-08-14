@@ -10,6 +10,7 @@ using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Menu;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Moq;
 using NUnit.Framework;

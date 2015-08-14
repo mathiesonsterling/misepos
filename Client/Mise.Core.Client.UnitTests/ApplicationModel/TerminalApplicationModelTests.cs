@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Mise.Core.Client.ApplicationModel.Implementation;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Events.Employee;
@@ -14,12 +15,13 @@ using Mise.Core.Entities.Check;
 using Mise.Core.Entities.People.Events;
 using Mise.Core.Services;
 using Mise.Core.Client.ApplicationModel;
-using Mise.Core.Services.WebServices;
 using Mise.Core.ValueItems;
 using NUnit.Framework;
+using Mise.Core.Services.UtilityServices;
 using Moq;
 using Mise.Core.Client.UnitTests.Tools;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Services.WebServices;
 
 
 namespace Mise.Core.Client.UnitTests.ApplicationModel
@@ -28,16 +30,6 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 	[TestFixture]
 	public class TerminalApplicationModelTests
 	{
-		static TerminalApplicationModel GetViewModel (Guid empID)
-		{
-		    var vm = ViewModelMockingTools.CreateViewModel();
-			vm.SelectedEmployee = new Employee {
-				Name = PersonName.TestName,
-				ID = empID
-			};
-			return vm;
-		}
-
         [Test]
         public void GuidForTopCatLoadsCorrectCat()
         {
@@ -135,12 +127,12 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 	    }
 
 		[Test]
-		public void SetCustomerSetsNameCorrectly()
+		public async Task SetCustomerSetsNameCorrectly()
 		{
 			var empID = Guid.NewGuid ();
 			var emp = new Employee{ Name = PersonName.TestName, ID = empID };
 
-			var vm = ViewModelMockingTools.CreateViewModel ();
+			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 			vm.SelectedEmployee = emp;
 
 			//ACT
@@ -153,10 +145,10 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		}
 
 		[Test]
-		public void CreateNewTabCreatesWithServerID(){
+		public async Task CreateNewTabCreatesWithServerID(){
 			var empID = Guid.NewGuid ();
 			var emp = new Employee{ Name = PersonName.TestName, ID = empID };
-			var vm = ViewModelMockingTools.CreateViewModel (emp);
+			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 			vm.SelectedEmployee = emp;
 
 			//ACT
@@ -169,11 +161,11 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		}
 
         [Test]
-        public void CreateNewTabWithCreditCardPutsCardOnCheck()
+        public async Task CreateNewTabWithCreditCardPutsCardOnCheck()
         {
             var empID = Guid.NewGuid();
             var emp = new Employee { Name = PersonName.TestName, ID = empID };
-            var vm = ViewModelMockingTools.CreateViewModel(emp);
+            var vm = (await ViewModelMockingTools.CreateViewModel(emp)).Item1;
             vm.SelectedEmployee = emp;
 
             var creditCard = new CreditCard
@@ -196,18 +188,18 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         }
 
 	    [Test]
-		public void AddCheckAndRetrieve()
+		public async Task AddCheckAndRetrieve()
 		{
 			var empID = Guid.NewGuid ();
             var emp = new Employee { Name = PersonName.TestName, ID = empID };
-			var vm = ViewModelMockingTools.CreateViewModel (emp);
+			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 
 			//ACT
 			var check = vm.CreateNewCheck (PersonName.TestName);
 
 			Assert.IsNotNull (check);
 			Assert.AreEqual (check, vm.SelectedCheck, "created tab was set as selected");
-			Assert.AreEqual ("test ", check.GetTopOfCheck());
+			Assert.AreEqual (PersonName.TestName.ToSingleString(), check.GetTopOfCheck());
 			Assert.AreEqual (empID, check.CreatedByServerID);
 
 			vm.SendSelectedCheck ();
@@ -220,9 +212,14 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 
 		[Test]
-		public void AddTwoTabsAndCheckTheyAreStored()
+		public async Task AddTwoTabsAndCheckTheyAreStored()
 		{
-			var vm = GetViewModel (Guid.Empty);
+		    var emp = new Employee {
+		        Name = PersonName.TestName,
+		        ID = Guid.Empty
+		    };
+		    var vm = (await ViewModelMockingTools.CreateViewModel(emp)).Item1;
+		    vm.SelectedEmployee = emp;
 
 			//ACT
 			var check = vm.CreateNewCheck (PersonName.TestName);
@@ -249,11 +246,11 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 
 		[Test]
-		public void ClockinAndClockout()
+		public async Task ClockinAndClockout()
 		{
 			var emp = new Employee{ Passcode = "1111", CurrentlyClockedInToPOS = false };
 
-			var vm = ViewModelMockingTools.CreateViewModel (emp);
+			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 			Assert.IsFalse (emp.CurrentlyClockedInToPOS);
 
 			//ACT
@@ -275,11 +272,11 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         /// POS-102
         /// </summary>
         [Test]
-        public void ClockinIsNotResetByCancel()
+        public async Task ClockinIsNotResetByCancel()
         {
             var emp = new Employee { Passcode = "1111", CurrentlyClockedInToPOS = false };
 
-            var vm = ViewModelMockingTools.CreateViewModel(emp);
+            var vm = (await ViewModelMockingTools.CreateViewModel(emp)).Item1;
             Assert.IsFalse(emp.CurrentlyClockedInToPOS);
 
             Assert.AreEqual(emp, vm.SelectedEmployee);

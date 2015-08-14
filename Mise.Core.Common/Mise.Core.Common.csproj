@@ -9,8 +9,8 @@
     <RootNamespace>Mise.Core.Common</RootNamespace>
     <AssemblyName>Mise.Core.Common</AssemblyName>
     <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,12 +30,18 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Deploy|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Deploy</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Entities\Accounts\AccountCharge.cs" />
     <Compile Include="Entities\Accounts\AccountCredit.cs" />
     <Compile Include="Entities\Accounts\AccountCreditCardPayment.cs" />
     <Compile Include="Entities\Accounts\MiseEmployeeAccount.cs" />
     <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
+    <Compile Include="Entities\DTOs\AzureTypes\AzureEntityStorage.cs" />
     <Compile Include="Entities\DTOs\IEntityDataTransportObjectFactory.cs" />
     <Compile Include="Entities\Inventory\InventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\InventorySection.cs" />
@@ -54,6 +60,7 @@
     <Compile Include="Events\ApplicationInvitations\EmployeeInvitedToApplicationEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\EmployeeRejectsInvitationEvent.cs" />
     <Compile Include="Events\Checks\CheckCreatedWithCreditCardEvent.cs" />
+    <Compile Include="Events\DTOs\AzureTypes\AzureEventStorage.cs" />
     <Compile Include="Events\DTOs\EventDataTransportObject.cs" />
     <Compile Include="Events\DTOs\EventDataTransportObjectFactory.cs" />
     <Compile Include="Events\Employee\EmployeeCreatedEvent.cs" />
@@ -113,6 +120,7 @@
     <Compile Include="Events\Payments\CreditCards\CreditCardChargeCompletedEvent.cs" />
     <Compile Include="Events\Payments\CreditCards\CreditCardCloseRequestedEvent.cs" />
     <Compile Include="Events\Payments\CreditCards\CreditCardAuthorizationCancelledEvent.cs" />
+    <Compile Include="Repositories\Base\EntityForEventNotFoundException.cs" />
     <Compile Include="Services\Implementation\DummyLogger.cs" />
     <Compile Include="Services\Implementation\Serialization\DataContractSerializer.cs" />
     <Compile Include="Services\Implementation\Serialization\JsonNetSerializer.cs" />
@@ -155,7 +163,6 @@
     <Compile Include="Events\Inventory\ReceivingOrderLineItemQuantityUpdatedEvent.cs" />
     <Compile Include="Events\Vendors\VendorAddNewLineItemEvent.cs" />
     <Compile Include="Entities\Inventory\PurchaseOrderPerVendor.cs" />
-    <Compile Include="Services\Implementation\FakeServices\FakeInventoryWebService.cs" />
     <Compile Include="Entities\ApplicationInvitation.cs" />
     <Compile Include="BeverageLineItemEquator.cs" />
     <Compile Include="Entities\Inventory\ItemCategory.cs" />
@@ -165,6 +172,27 @@
     <Compile Include="Events\Inventory\ReceivingOrderLineItemZeroedOutEvent.cs" />
     <Compile Include="Events\Inventory\ReceivingOrderAssociatedWithPOEvent.cs" />
     <Compile Include="Events\Restaurant\UserSelectedRestaurant.cs" />
+    <Compile Include="Services\Implementation\FakeServices\FakeCreditCardService.cs" />
+    <Compile Include="Services\Implementation\MercuryPaymentProviderSettings.cs" />
+    <Compile Include="Events\Employee\EmployeeRegistersRestaurantEvent.cs" />
+    <Compile Include="Services\WebServices\FakeServices\FakeInventoryWebService.cs" />
+    <Compile Include="Services\WebServices\IAccountWebService.cs" />
+    <Compile Include="Services\WebServices\IApplicationInvitationWebService.cs" />
+    <Compile Include="Services\WebServices\ICreditCardWebService.cs" />
+    <Compile Include="Services\WebServices\IEventStoreWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryApplicationWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryEmployeeWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryRestaurantWebService.cs" />
+    <Compile Include="Services\WebServices\IInventoryWebService.cs" />
+    <Compile Include="Services\WebServices\IParWebService.cs" />
+    <Compile Include="Services\WebServices\IPurchaseOrderWebService.cs" />
+    <Compile Include="Services\WebServices\IReceivingOrderWebService.cs" />
+    <Compile Include="Services\WebServices\IResendEventsWebService.cs" />
+    <Compile Include="Services\WebServices\IRestaurantTerminalService.cs" />
+    <Compile Include="Services\WebServices\IVendorWebService.cs" />
+    <Compile Include="Services\WebServices\SendErrors.cs" />
+    <Compile Include="Services\WebServices\SendEventsException.cs" />
+    <Compile Include="Services\WebServices\ServerNotReadyException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

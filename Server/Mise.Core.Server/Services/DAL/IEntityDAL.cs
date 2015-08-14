@@ -86,19 +86,19 @@ namespace Mise.Core.Server.Services.DAL
         Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersAsync(Guid restaurantID);
         Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersAsync(IVendor vendor); 
 
-        Task UpdatePARAsync(IPAR arg);
-        Task AddPARAsync(IPAR arg);
-        Task<IEnumerable<IPAR>> GetPARsAsync(Guid restaurantID);
-        Task<IEnumerable<IPAR>> GetPARsAsync();
+        Task UpdatePARAsync(IPar arg);
+        Task AddPARAsync(IPar arg);
+        Task<IEnumerable<IPar>> GetPARsAsync(Guid restaurantID);
+        Task<IEnumerable<IPar>> GetPARsAsync();
         Task<IEnumerable<LiquidContainer>> GetAllLiquidContainersAsync();
 
         Task<IEnumerable<IApplicationInvitation>> GetOpenApplicationInvitations(EmailAddress destination);
         Task<IEnumerable<IApplicationInvitation>> GetApplicationInvitations(); 
         Task AddApplicationInvitiation(IApplicationInvitation invite);
         Task UpdateApplicationInvitation(IApplicationInvitation invite);
-        Task UpdatePARLineItemAsync(IPARBeverageLineItem lineItem);
+        Task UpdatePARLineItemAsync(IParBeverageLineItem lineItem);
         Task DeletePARLineItemAsync(Guid lineItemID);
-        Task SetLineItemsForPARAsync(IPARBeverageLineItem lineItem, Guid parID);
+        Task SetLineItemsForPARAsync(IParBeverageLineItem lineItem, Guid parID);
         Task CreateCategories(ICollection<ICategory> categories);
     }
 }

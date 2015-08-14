@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
-using Mise.Core.Entities.Inventory;
+using Mise.Inventory.CustomCells;
 
 namespace Mise.Inventory.Pages
 {
@@ -20,6 +20,7 @@ namespace Mise.Inventory.Pages
 		protected override async void OnAppearing ()
 		{
 			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "ReceivingOrderPage"}});
+			stckNotes.IsVisible = Device.Idiom != TargetIdiom.Phone;
 			var vm = BindingContext as ReceivingOrderViewModel;
 		    if (vm != null)
 		    {
@@ -36,7 +37,8 @@ namespace Mise.Inventory.Pages
 					ItemsSource = vm.LineItems,
 					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
 					RowHeight = 50,
-					HasUnevenRows = true
+					HasUnevenRows = true,
+					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
 				customVL.ItemTapped += async (sender, e) =>  {
 					//mark it as the item being measured
@@ -47,6 +49,10 @@ namespace Mise.Inventory.Pages
 					((ListView)sender).SelectedItem = null;
 				};
 				lineItems.Children.Add (customVL);
+
+				if(vm.FocusOnLineItem != null){
+					customVL.ScrollTo(vm.FocusOnLineItem, ScrollToPosition.MakeVisible, false);
+				}
 			}
 		}
 	}

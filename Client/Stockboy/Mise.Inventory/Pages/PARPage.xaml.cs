@@ -13,7 +13,7 @@ namespace Mise.Inventory.Pages
 		{
 			InitializeComponent();
 
-			var vm = BindingContext as PARViewModel;
+			var vm = BindingContext as ParViewModel;
 			vm.LoadItemsOnView = LoadItems;
 
 		}
@@ -21,7 +21,7 @@ namespace Mise.Inventory.Pages
 		protected override async void OnAppearing ()
 		{
 			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "ParPage"}});
-			var vm = BindingContext as PARViewModel;
+			var vm = BindingContext as ParViewModel;
 		    if (vm != null)
 		    {
 		        await vm.OnAppearing();
@@ -30,14 +30,15 @@ namespace Mise.Inventory.Pages
 
 		void LoadItems ()
 		{
-			var vm = BindingContext as PARViewModel;
+			var vm = BindingContext as ParViewModel;
 			if (vm != null) {
 				lineItems.Children.Clear ();
 				var customVL = new ListView {
 					ItemsSource = vm.LineItems,
 					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
 					RowHeight = 50,
-					HasUnevenRows = true
+					HasUnevenRows = true,
+					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
 				customVL.ItemTapped += async (sender, e) =>  {
 					//mark it as the item being measured

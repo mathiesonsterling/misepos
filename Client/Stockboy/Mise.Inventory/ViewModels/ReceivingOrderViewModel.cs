@@ -3,13 +3,13 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Mise.Core.Entities.Inventory;
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System.Threading.Tasks;
-using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Services;
 using Xamarin.Forms;
+using Mise.Core.ValueItems;
 namespace Mise.Inventory.ViewModels
 {
 	public class ReceivingOrderDisplayLine : BaseLineItemDisplayLine<IReceivingOrderLineItem>{
@@ -26,9 +26,9 @@ namespace Mise.Inventory.ViewModels
 						: Color.Accent;
 			}
 		}
-		public override decimal Quantity {
+		public override string Quantity {
 			get {
-				return Source.Quantity;
+				return Source.Quantity.ToString();
 			}
 		}
 
@@ -57,12 +57,15 @@ namespace Mise.Inventory.ViewModels
 	{
 		readonly IVendorService _vendorService;
 		readonly IReceivingOrderService _roService;
+	    private readonly IInsightsService _insights;
 		public ReceivingOrderViewModel(ILogger logger, IAppNavigation appNavigation,
-			IReceivingOrderService roService, IVendorService vendorService) : base(appNavigation, logger)
+			IReceivingOrderService roService, IVendorService vendorService, IInsightsService insights) : base(appNavigation, logger)
 		{
 			_vendorService = vendorService;
 			_roService = roService;
-			_itemSettingQuantity = null;
+		    _insights = insights;
+
+			DateReceived = DateTime.Now;
 
 		    PropertyChanged += (sender, args) =>
 		    {
@@ -75,9 +78,51 @@ namespace Mise.Inventory.ViewModels
 		        }
 		    };
 		}
-			
-			
-		IReceivingOrderLineItem _itemSettingQuantity;
+
+		public override async Task OnAppearing ()
+		{
+			try{
+				Processing = true;
+				DateReceived = DateTime.Now;
+				await base.OnAppearing ();
+				var vendor = await _vendorService.GetSelectedVendor ();
+				VendorName = vendor.Name;
+				var ro = await _roService.GetCurrentReceivingOrder ();
+				if (ro != null)
+				{
+					if (ro.PurchaseOrderDate.HasValue)
+					{
+						Title = "Order from " + VendorName + " for PO";
+					}
+					else
+					{
+						Title = "Receive from " + VendorName;
+					}
+
+					//debug
+					CanSave = true;
+					foreach(var li in ro.GetBeverageLineItems()){
+						if(li.ZeroedOut == false){
+							var hasPrice = li.UnitPrice != null && li.UnitPrice.HasValue && li.Quantity > 0;
+							if(hasPrice == false){
+								CanSave = false;
+								break;
+							}
+						}
+					}
+					//CanSave = ro.GetBeverageLineItems().All(li => li.ZeroedOut || (li.UnitPrice != null && li.UnitPrice.HasValue && li.Quantity > 0));
+				}
+				else
+				{
+					Title = "Receive from " + VendorName;
+					CanSave = false;
+				}
+				Processing = false;
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+		public DateTime DateReceived{get{return GetValue<DateTime> ();}set{ SetValue (value); }}
 
 		public string Title{get{return GetValue<string> ();}private set{ SetValue (value); }}
 		public string VendorName{ get { return GetValue<string> (); } private set { SetValue (value); } }
@@ -86,14 +131,18 @@ namespace Mise.Inventory.ViewModels
 		public string InvoiceID{get{return GetValue<string> ();}set{SetValue(value);}}
 		public bool CanSave{get{return GetValue<bool> ();}private set{SetValue (value);}}
 
+		public ReceivingOrderDisplayLine FocusOnLineItem{
+			get{return GetValue<ReceivingOrderDisplayLine> ();}
+			private set{ SetValue (value); }
+		}
 		#region Commands
 
 		public ICommand AddNewItemCommand {
-			get { return new SimpleCommand(AddNewLineItem); }
+			get { return new Command(AddNewLineItem, () => NotProcessing); }
 		}
 
 		public ICommand SaveCommand {
-			get { return new SimpleCommand(Save); }
+			get { return new Command(Save, () => CanSave); }
 		}
 
 		#endregion
@@ -108,13 +157,24 @@ namespace Mise.Inventory.ViewModels
 			try{
 				Processing = true;
 				CanSave = false;
-				var res = await _roService.CompleteReceivingOrderForSelectedVendor (Notes, InvoiceID);
-				PurchaseOrderStatus status;
-				status = res ? PurchaseOrderStatus.ReceivedTotally : PurchaseOrderStatus.ReceivedWithAlterations; 
-				await _roService.CommitCompletedOrder (status);
-				Processing = false;
-				CanSave = true;
-			    await Navigation.CloseReceivingOrder();
+			    using (_insights.TrackTime("Save RO time"))
+			    {
+                    PurchaseOrderStatus status;
+			        using (_insights.TrackTime("Completing receiving order"))
+			        {
+			            var res = await _roService.CompleteReceivingOrderForSelectedVendor(DateReceived, Notes, InvoiceID);
+			            status = res ? PurchaseOrderStatus.ReceivedTotally : PurchaseOrderStatus.ReceivedWithAlterations;
+			        }
+                    using(_insights.TrackTime("Committing receiving order"))
+			        {
+			            await _roService.CommitCompletedOrder(status);
+			        }
+			        CanSave = true;
+					InvoiceID = string.Empty;
+					DateReceived = DateTime.Now;
+					Processing = false;
+			        await Navigation.CloseReceivingOrder();
+			    }
 			} catch(Exception e){
 				HandleException (e);
 			}
@@ -122,41 +182,11 @@ namespace Mise.Inventory.ViewModels
 
 		public override async Task SelectLineItem(ReceivingOrderDisplayLine lineItem){
 			try{
-				var roLineItem = lineItem.Source;
-				_itemSettingQuantity = roLineItem;
-				await Navigation.ShowUpdateQuantity (roLineItem.Quantity, roLineItem.DisplayName, 
-					QuantitySetCallback, ZeroOutCallback, roLineItem.LineItemPrice, true, "Receive Item");
+			    await _roService.SetCurrentLineItem(lineItem.Source);
+			    await Navigation.ShowUpdateReceivingOrderLineItem();
 			} catch(Exception e){
 				HandleException (e);
 			}
-		}
-
-		async void ZeroOutCallback(){
-			if(_itemSettingQuantity != null){
-				Processing = true;
-				await _roService.ZeroOutLineItem (_itemSettingQuantity);
-				Processing = false;
-			}
-
-			await LoadItems ();
-		}
-
-		async void QuantitySetCallback(int newQuant, decimal price){
-			if(_itemSettingQuantity != null)
-			{
-				var rawPerBottle = price;
-				var priceMoney = new Money (rawPerBottle);
-				if(_itemSettingQuantity.Quantity != newQuant || 
-					(
-						priceMoney.HasValue && (_itemSettingQuantity.LineItemPrice == null ||( _itemSettingQuantity.LineItemPrice.Equals(priceMoney) == false))
-					)
-				){
-					await _roService.UpdateQuantityOfLineItem (_itemSettingQuantity, newQuant, priceMoney);
-				}
-			}
-
-			_itemSettingQuantity = null;
-			await LoadItems ();
 		}
 
 		protected override async Task<ICollection<ReceivingOrderDisplayLine>> LoadItems(){
@@ -172,40 +202,18 @@ namespace Mise.Inventory.ViewModels
 			} catch(Exception e){
 				HandleException (e);
 			}
-			return items.OrderBy (li => li.DisplayName).Select (li => new ReceivingOrderDisplayLine (li)).ToList ();
-		}
 
-		public override async Task OnAppearing ()
-		{
-			try{
-				Processing = true;
-				await base.OnAppearing ();
-				var vendor = await _vendorService.GetSelectedVendor ();
-				VendorName = vendor.Name;
-				var ro = await _roService.GetCurrentReceivingOrder ();
-			    if (ro != null)
-			    {
-			        InvoiceID = ro.InvoiceID;
-			        var items = ro.GetBeverageLineItems().ToList();
+			var displayItems = items.OrderBy (li => li.DisplayName)
+				.Select (li => new ReceivingOrderDisplayLine (li)).ToList ();
+			FocusOnLineItem = displayItems.FirstOrDefault(li => 
+				li.Source.ZeroedOut == false 
+				&& (li.Source.LineItemPrice == null || li.Source.LineItemPrice.Equals(Money.None))
+			);
 
-			        if (ro.PurchaseOrderDate.HasValue)
-			        {
-			            Title = "Order from " + VendorName + " for PO";
-			        }
-			        else
-			        {
-			            Title = "Receive from " + VendorName;
-			        }
-			    }
-			    else
-			    {
-                    Title = "Receive from " + VendorName;
-			        InvoiceID = string.Empty;
-			    }
-				Processing = false;
-			} catch(Exception e){
-				HandleException (e);
+			if(FocusOnLineItem == null){
+				FocusOnLineItem = displayItems.LastOrDefault ();
 			}
+			return displayItems;
 		}
 			
 		protected override void AfterSearchDone ()

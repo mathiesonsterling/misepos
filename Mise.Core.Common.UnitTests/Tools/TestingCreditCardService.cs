@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Mise.Core;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 using Mise.Core.Services;
@@ -95,6 +95,24 @@ namespace Mise.Core.Common.UnitTests.Tools
 		public Task<CreditCard> AuthorizeCard (CreditCardNumber card)
 		{
 			throw new NotImplementedException ();
+		}
+
+		/// <summary>
+		/// Gets the payment ID we'll send to be given back a token after we register
+		/// </summary>
+		/// <returns>The payment I.</returns>
+		public Task<string> SetPaymentID(Guid accountID, PersonName name, Money amount){
+			return Task.FromResult ("testPaymentID");
+		}
+
+		public Task<CreditCard> GetCardAfterAuthorization (string paymentID){
+			return Task.FromResult(
+				new CreditCard{ 
+					ProcessorToken = new CreditCardProcessorToken{
+						Processor = CreditCardProcessors.FakeProcessor,
+						Token = "testProcessorToken"
+					}
+			});
 		}
 	}
 }

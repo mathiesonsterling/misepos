@@ -10,6 +10,8 @@ namespace Mise.Inventory.Services
 {
 	public interface IInventoryService
 	{
+		Task LoadLatest ();
+
 		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (string name, ICategory category, string upc, 
 			int quantity, int caseSize, LiquidContainer container, Money pricePaid);
 		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity, 
@@ -28,6 +30,7 @@ namespace Mise.Inventory.Services
 		/// <returns>The selected inventory.</returns>
 		Task<IInventory> GetSelectedInventory ();
 		Task<IInventory> GetLastCompletedInventory();
+		Task<IInventory> GetFirstCompletedInventory();
 
 		Task<IInventoryBeverageLineItem> GetLineItemToMeasure();
 		Task<IEnumerable<IInventoryBeverageLineItem>> GetLineItemsForCurrentSection();
@@ -49,6 +52,9 @@ namespace Mise.Inventory.Services
 		/// <param name="partials">Partials.</param>
 		Task MeasureCurrentLineItemVisually (int fullBottles, ICollection<decimal> partials);
 
+	    Task<IInventorySection> GetCurrentInventorySection();
+	    Task SetCurrentInventorySection(IInventorySection section);
+
 		Task MarkSectionAsComplete ();
 
 		/// <summary>
@@ -57,9 +63,12 @@ namespace Mise.Inventory.Services
 		/// <returns>The inventory as complete.</returns>
 		Task MarkInventoryAsComplete();
 
-		Task<bool> AddNewSection (string sectionName, bool hasPartialBottles, 
+		Task AddNewSection (string sectionName, bool hasPartialBottles, 
 			bool isDefaultInventorySection);
 
+	    Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant(DateTimeOffset? start, DateTimeOffset? end);
+
+		Task<bool> HasInventoryPriorToDate (Guid restaurantID, DateTimeOffset date);
 	}
 }
 

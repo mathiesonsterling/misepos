@@ -9,16 +9,18 @@
 
 	<ContentPage.Content>
 		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<Label Text="Date Received" Style="{DynamicResource CaptionStyle}"/>
+			<DatePicker Date="{Binding DateReceived}"/>
 			<Entry Placeholder="Invoice #" Text="{Binding InvoiceID}"/>
-			<StackLayout VerticalOptions="FillAndExpand">
-				<SearchBar x:Name="searchEntry" Placeholder="Filter" Text="{Binding SearchString}"/>
-				<ScrollView VerticalOptions="FillAndExpand">
-					<StackLayout x:Name="lineItems"/>
-				</ScrollView>
+			<StackLayout x:Name="stckNotes">
 				<Label Text="Notes" Style="{DynamicResource CaptionStyle}"/>
 				<ScrollView>
-					<Editor Text="{Binding Notes}"/>
+						<Editor Text="{Binding Notes}"/>
 				</ScrollView>
+			</StackLayout>
+			<StackLayout VerticalOptions="FillAndExpand">
+				<SearchBar x:Name="searchEntry" Placeholder="Filter" Text="{Binding SearchString}"/>
+				<StackLayout x:Name="lineItems" VerticalOptions="FillAndExpand"/>
 			</StackLayout>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 			<Button Text="Add New Item" 

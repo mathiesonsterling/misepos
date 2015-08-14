@@ -1,22 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Repositories;
-using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientInventoryRepository : BaseEventSourcedClientRepository<IInventory, IInventoryEvent>, IInventoryRepository
+    public class ClientInventoryRepository : BaseEventSourcedClientRepository<IInventory, IInventoryEvent, Inventory>, IInventoryRepository
     {
         private readonly IInventoryWebService _inventoryWebService;
-        public ClientInventoryRepository(ILogger logger, IClientDAL dal, IInventoryWebService webService) : base(logger, dal, webService)
+        public ClientInventoryRepository(ILogger logger, IClientDAL dal, IInventoryWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
         {
             _inventoryWebService = webService;
         }
@@ -26,26 +29,27 @@ namespace Mise.Core.Client.Repositories
             return new Inventory();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is InventoryCreatedEvent;
-        }
 
         public override Guid GetEntityID(IInventoryEvent ev)
         {
             return ev.InventoryID;
         }
 
-        public override async Task Load(Guid? restaurantID)
+        protected override async Task<IEnumerable<Inventory>> LoadFromDB(Guid? restaurantID)
         {
-            Loading = true;
+            var items = await DAL.GetEntitiesAsync<Inventory>();
+            return items;
+        }
+
+        protected override Task<IEnumerable<Inventory>> LoadFromWebservice(Guid? restaurantID)
+        {
             if (restaurantID.HasValue)
             {
-				var items = await _inventoryWebService.GetInventoriesForRestaurant (restaurantID.Value);
-				Cache.UpdateCache (items);
+                return _inventoryWebService.GetInventoriesForRestaurant(restaurantID.Value);
             }
-            Loading = false;
+            return Task.FromResult(new List<Inventory>().AsEnumerable());
         }
+
 
 		public Task<IInventory> GetCurrentInventory(Guid restaurantID)
 		{

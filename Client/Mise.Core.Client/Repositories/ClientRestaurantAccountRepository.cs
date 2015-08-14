@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Events.Accounts;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;
 using Mise.Core.Repositories;
-using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientRestaurantAccountRepository : BaseEventSourcedClientRepository<IAccount, IAccountEvent>, IAccountRepository
+    public class ClientRestaurantAccountRepository : BaseEventSourcedClientRepository<IAccount, IAccountEvent, RestaurantAccount>, IAccountRepository
     {
         private IAccountWebService _webService;
-        public ClientRestaurantAccountRepository(ILogger logger, IClientDAL dal, IAccountWebService webService) : base(logger, dal, webService)
+        public ClientRestaurantAccountRepository(ILogger logger, IClientDAL dal, IAccountWebService webService, IResendEventsWebService resend) : base(logger, dal, webService, resend)
         {
             _webService = webService;
         }
@@ -26,10 +27,6 @@ namespace Mise.Core.Client.Repositories
             return new RestaurantAccount();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is AccountRegisteredFromMobileDeviceEvent;
-        }
 
         public override Guid GetEntityID(IAccountEvent ev)
         {
@@ -42,10 +39,16 @@ namespace Mise.Core.Client.Repositories
             return Task.FromResult(acct);
         }
 
-        public override Task Load(Guid? restaurantID)
+        protected override Task<IEnumerable<RestaurantAccount>> LoadFromWebservice(Guid? restaurantID)
         {
-            //we don't load anything here!  we only go outward on the client for now
-            return Task.FromResult(false);
+            return Task.FromResult(new List<RestaurantAccount>().AsEnumerable());
         }
+
+        protected override async Task<IEnumerable<RestaurantAccount>> LoadFromDB(Guid? restaurantID)
+        {
+            var items = await DAL.GetEntitiesAsync<RestaurantAccount>();
+            return items;
+        }
+
     }
 }

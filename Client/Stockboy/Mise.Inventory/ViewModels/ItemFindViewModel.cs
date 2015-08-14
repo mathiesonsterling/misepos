@@ -5,14 +5,11 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 
 using Mise.Core.Entities.Inventory;
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
-using Mise.Core.Common.Services;
-using Akavache;
-using System.Collections;
 using Mise.Core.Common.Entities.Inventory;
-using System.Collections.ObjectModel;
 using Mise.Core.Services;
+using Xamarin.Forms;
 
 
 namespace Mise.Inventory.ViewModels
@@ -23,7 +20,6 @@ namespace Mise.Inventory.ViewModels
 		readonly IInventoryService _inventoryService;
 		readonly IPARService _parService;
 		readonly IReceivingOrderService _roService;
-		readonly ILoginService _loginService;
 
 		public bool CreateItemEnabled{get{return GetValue<bool> ();}set{ SetValue (value); }}
 
@@ -31,19 +27,18 @@ namespace Mise.Inventory.ViewModels
 
 		public ItemFindViewModel(IAppNavigation appNavigation, IBeverageItemService biService,
 		IInventoryService inventoryService, IPARService parService, IReceivingOrderService roService, 
-			ILoginService loginService, ILogger logger) : base(appNavigation, logger)
+			ILogger logger) : base(appNavigation, logger)
 		{
 			_biService = biService;
 			_inventoryService = inventoryService;
 			_parService = parService;
 			_roService = roService;
-			_loginService = loginService;
 		}
 			
 		#region Commands
 
 		public ICommand AddNewItemCommand {
-			get { return new SimpleCommand(AddNewItem); }
+			get { return new Command(AddNewItem, () => CreateItemEnabled); }
 		}
 			
 		#endregion
@@ -99,21 +94,23 @@ namespace Mise.Inventory.ViewModels
 				//we need to remove the items that are currently already in our item!
 				switch(CurrentType){
 				case AddLineItemType.Inventory:
+					//don't filter the items, we want to be able to add multiple copies of them
+					/*
 					var currInv = await _inventoryService.GetSelectedInventory ();
-					if (currInv != null) {
-						var currSection = await _loginService.GetCurrentSection ();
-						var invSection = currInv.GetSections ().FirstOrDefault (invS => invS.RestaurantInventorySectionID == currSection.ID);
+					if (currInv != null)
+					{
+					    var invSection = await _inventoryService.GetCurrentInventorySection();
 						if (invSection != null) {
 							var existing = invSection.GetInventoryBeverageLineItemsInSection ();
-							bis = ExcludeItems (bis, existing);
+							bis = ExcludeItems (bis, existing.ToList<IBaseBeverageLineItem>());
 						}
-					}
+					}*/
 					break;
 				case AddLineItemType.PAR:
 					var currPar = await _parService.GetCurrentPAR ();
 					if (currPar != null) {
 						var existing = currPar.GetBeverageLineItems ();
-						bis = ExcludeItems (bis, existing);
+						bis = ExcludeItems (bis, existing.ToList<IBaseBeverageLineItem>());
 					}
 					break;
 				}
@@ -126,7 +123,7 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		static IEnumerable<IBaseBeverageLineItem> ExcludeItems(IEnumerable<IBaseBeverageLineItem> list, IEnumerable<IBaseBeverageLineItem> toExclude){
+		static IEnumerable<IBaseBeverageLineItem> ExcludeItems(IEnumerable<IBaseBeverageLineItem> list, ICollection<IBaseBeverageLineItem> toExclude){
 			var excluded = new List<IBaseBeverageLineItem> ();
 			foreach(var bi in list){
 				if(IsBIInList (toExclude, bi) == false){

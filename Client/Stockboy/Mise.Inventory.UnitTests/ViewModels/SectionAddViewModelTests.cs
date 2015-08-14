@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-
+using Mise.Core.Services.UtilityServices;
 using NUnit.Framework;
 using Moq;
 
@@ -12,8 +12,11 @@ namespace Mise.Inventory.UnitTests.ViewModels
 	[TestFixture]
 	public class SectionAddViewModelTests
 	{
+        /// <summary>
+        /// We want to close the window, not move to another one, so we're not in the back chain
+        /// </summary>
 		[Test]
-		public void AddSectionShouldCallServiceAndMoveBackToSelect(){
+		public void AddSectionShouldCallServiceAndCloseSectionAdd(){
 			var logger = new Mock<ILogger>();
 			var loginService = new Mock<ILoginService> ();
 			loginService.Setup (ls => ls.AddNewSectionToRestaurant (It.IsAny<string> (), It.IsAny<bool> (), It.IsAny<bool> ()))
@@ -32,7 +35,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			underTest.AddSection();
 
 			//ASSERT
-			appNav.Verify(an => an.ShowSectionSelect(false), Times.Once());
+			appNav.Verify(an => an.CloseSectionAdd(), Times.Once());
 		}
 	}
 }

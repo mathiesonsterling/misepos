@@ -4,11 +4,12 @@ using System.Linq;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
-using Mise.Core.Entities.Inventory;
+using Mise.Inventory.CustomCells;
 namespace Mise.Inventory.Pages
 {
 	public partial class InventoryPage : ContentPage
 	{
+		ListView _customVL;
 		public InventoryPage()
 		{
 			InitializeComponent();
@@ -17,6 +18,23 @@ namespace Mise.Inventory.Pages
 
 		}
 
+        protected override async void OnAppearing()
+        {
+            Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string> { { "ScreenName", "InventoryPage" } });
+            var vm = BindingContext as InventoryViewModel;
+            if (vm != null)
+            {
+                //this will be reset
+                var cameFromAdd = vm.CameFromAdd;
+                await vm.OnAppearing();
+
+				if (cameFromAdd && _customVL != null && vm.LineItems != null && vm.LineItems.Any())
+                {
+					_customVL.ScrollTo (vm.LineItems.Last(), ScrollToPosition.End, false);
+                }
+            }
+        }
+
 		void LoadItems ()
 		{
 			listItems.Children.Clear ();
@@ -24,13 +42,14 @@ namespace Mise.Inventory.Pages
 			//TODO arrange line items by their display order field
 			var vm = BindingContext as InventoryViewModel;
 			if (vm != null) {
-				var customVL = new ListView {
+				_customVL = new ListView {
 					ItemsSource = vm.LineItems,
 					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
 					RowHeight = 50,
-					HasUnevenRows = true
+					HasUnevenRows = true,
+					HorizontalOptions = LayoutOptions.FillAndExpand
 				};
-				customVL.ItemTapped += async (sender, e) =>  {
+				_customVL.ItemTapped += async (sender, e) =>  {
 					//mark it as the item being measured
 					var lineItem = e.Item as InventoryViewModel.InventoryLineItemDisplayLine;
 					if (lineItem != null) {
@@ -38,21 +57,11 @@ namespace Mise.Inventory.Pages
 					}
 					((ListView)sender).SelectedItem = null;
 				};
-				listItems.Children.Add (customVL);
+				listItems.Children.Add (_customVL);
 			    if (vm.FirstUnmeasuredItem != null)
 			    {
-			        customVL.ScrollTo(vm.FirstUnmeasuredItem, ScrollToPosition.MakeVisible, false);
-
+			        _customVL.ScrollTo(vm.FirstUnmeasuredItem, ScrollToPosition.MakeVisible, false);
 			    }
-			}
-		}
-
-		protected override async void OnAppearing ()
-		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "InventoryPage"}});
-			var vm = BindingContext as InventoryViewModel;
-			if(vm != null){
-				await vm.OnAppearing ();
 			}
 		}
 	}

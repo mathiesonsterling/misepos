@@ -13,13 +13,18 @@ namespace Mise.Core.Common.Events.Inventory
 			}
 		}
 
-        public Guid LineItemID { get; set; }
+	    public override bool IsEntityCreation
+	    {
+	        get { return true; }
+	    }
+
+	    public Guid LineItemID { get; set; }
 
 		/// <summary>
 		/// The PAR item we're filling for
 		/// </summary>
 		/// <value>The PAR line item.</value>
-		public PARBeverageLineItem PARLineItem{get;set;}
+		public ParBeverageLineItem PARLineItem{get;set;}
 		public int? NumBottlesNeeded{get;set;}
 		public LiquidAmount AmountNeeded{ get; set; }
 

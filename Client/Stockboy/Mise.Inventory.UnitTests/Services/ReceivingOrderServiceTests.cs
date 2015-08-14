@@ -10,6 +10,7 @@ using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Events.Inventory;
 using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
@@ -17,7 +18,7 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
@@ -219,9 +220,9 @@ namespace Mise.Inventory.UnitTests.Services
             var logger = new Mock<ILogger>();
 
             //we'll want a real Repository for this test
-            var dal = new Mock<IClientDAL>();
+            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IReceivingOrderWebService>();
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
 
             var invService = new Mock<IInventoryService>();
 
@@ -276,12 +277,12 @@ namespace Mise.Inventory.UnitTests.Services
             var logger = new Mock<ILogger>();
 
             //we'll want a real Repository for this test, since it uses events
-            var dal = new Mock<IClientDAL>();
+            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IReceivingOrderWebService>();
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
                     Task.FromResult(
-                        new List<IReceivingOrder>
+                        new List<ReceivingOrder>
                         {
                             new ReceivingOrder
                             {
@@ -293,7 +294,7 @@ namespace Mise.Inventory.UnitTests.Services
                         }.AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
             await roRepos.Load(Guid.NewGuid());
 
 
@@ -320,7 +321,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
 			var poRes = await underTest.StartReceivingOrderForSelectedVendor ();
-			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(string.Empty, string.Empty);
+			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(DateTimeOffset.UtcNow, string.Empty, string.Empty);
 
             var current = await underTest.GetCurrentReceivingOrder();
 
@@ -345,15 +346,15 @@ namespace Mise.Inventory.UnitTests.Services
             var logger = new Mock<ILogger>();
 
             //we'll want a real Repository for this test, since it uses events
-            var dal = new Mock<IClientDAL>();
+            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IReceivingOrderWebService>();
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
                     Task.FromResult(
-                        new List<IReceivingOrder>().AsEnumerable()
+                        new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
             await roRepos.Load(Guid.NewGuid());
 
 
@@ -383,7 +384,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
             var poRes = await underTest.StartReceivingOrder(po);
-			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(string.Empty, string.Empty);
+			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(DateTimeOffset.UtcNow, string.Empty, string.Empty);
 
             var current = await underTest.GetCurrentReceivingOrder();
 
@@ -406,15 +407,15 @@ namespace Mise.Inventory.UnitTests.Services
             var logger = new Mock<ILogger>();
 
             //we'll want a real Repository for this test, since it uses events
-            var dal = new Mock<IClientDAL>();
+            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IReceivingOrderWebService>();
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
                     Task.FromResult(
-                        new List<IReceivingOrder>().AsEnumerable()
+                        new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
             await roRepos.Load(Guid.NewGuid());
 
 
@@ -446,7 +447,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
             var poRes = await underTest.StartReceivingOrder(po);
-			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(string.Empty, string.Empty);
+			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(DateTimeOffset.UtcNow, string.Empty, string.Empty);
 
             var current = await underTest.GetCurrentReceivingOrder();
             await underTest.CommitCompletedOrder(status);
@@ -516,7 +517,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
 			var poRes = await underTest.StartReceivingOrderForSelectedVendor();
-			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor("this is a test note", string.Empty);
+			var completeRes = await underTest.CompleteReceivingOrderForSelectedVendor(DateTimeOffset.UtcNow, "this is a test note", string.Empty);
 
             var current = await underTest.GetCurrentReceivingOrder();
 

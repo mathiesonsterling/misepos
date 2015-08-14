@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Mise.Core.Services;
 using System.Windows.Input;
-
-using Mise.Inventory.MVVM;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -23,7 +23,7 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <value>The login command.</value>
 		public ICommand LogoutCommand {
-			get { return new SimpleCommand(Logout); }
+			get { return new Command(Logout, () => NotProcessing); }
 		}
 
 		/// <summary>

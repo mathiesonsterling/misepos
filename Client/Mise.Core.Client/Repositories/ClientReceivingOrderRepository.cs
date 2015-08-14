@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Services;
@@ -6,17 +8,20 @@ using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Services;
-using Mise.Core.Services.WebServices;
 using Mise.Core.Common.Events.Inventory;
+using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Repositories;
-
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientReceivingOrderRepository : BaseEventSourcedClientRepository<IReceivingOrder, IReceivingOrderEvent>, IReceivingOrderRepository
+    public class ClientReceivingOrderRepository 
+        : BaseEventSourcedClientRepository<IReceivingOrder, IReceivingOrderEvent, ReceivingOrder>, 
+        IReceivingOrderRepository
     {
         readonly IReceivingOrderWebService _webService;
-        public ClientReceivingOrderRepository(ILogger logger, IClientDAL dal, IReceivingOrderWebService webService) : base(logger, dal, webService)
+        public ClientReceivingOrderRepository(ILogger logger, IClientDAL dal, IReceivingOrderWebService webService, IResendEventsWebService resend)
+            : base(logger, dal, webService, resend)
         {
             _webService = webService;
         }
@@ -26,26 +31,29 @@ namespace Mise.Core.Client.Repositories
             return new ReceivingOrder();
         }
 
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is ReceivingOrderCreatedEvent;
-        }
 
         public override Guid GetEntityID(IReceivingOrderEvent ev)
         {
             return ev.ReceivingOrderID;
         }
 
-        public override async Task Load(Guid? restaurantID)
+        protected override Task<IEnumerable<ReceivingOrder>> LoadFromWebservice(Guid? restaurantID)
         {
-            Loading = true;
+            if (restaurantID.HasValue == false)
+            {
+                throw new ArgumentException("Cannot load ROs without a restaurant");
+            }
+            return _webService.GetReceivingOrdersForRestaurant(restaurantID.Value);
+        }
+
+        protected override async Task<IEnumerable<ReceivingOrder>> LoadFromDB(Guid? restaurantID)
+        {
+            var items = await DAL.GetEntitiesAsync<ReceivingOrder>();
             if (restaurantID.HasValue)
             {
-                var items = await _webService.GetReceivingOrdersForRestaurant(restaurantID.Value);
-
-			    Cache.UpdateCache (items);
+                items = items.Where(ro => ro.RestaurantID == restaurantID);
             }
-            Loading = false;
+            return items;
         }
     }
 }

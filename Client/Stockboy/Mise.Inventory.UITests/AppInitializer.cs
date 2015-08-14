@@ -6,7 +6,7 @@ using Xamarin.UITest.Queries;
 
 namespace Mise.Inventory.UITests
 {
-	public class AppInitializer
+	public static class AppInitializer
 	{
 		public static IApp StartApp (Platform platform)
 		{
@@ -16,6 +16,7 @@ namespace Mise.Inventory.UITests
 			if (platform == Platform.Android) {
 				return ConfigureApp
 					.Android
+					.EnableLocalScreenshots ()
 				// TODO: Update this path to point to your Android app and uncomment the
 				// code if the app is not included in the solution.
 				//.ApkFile ("../../../Droid/bin/Debug/xamarinforms.apk")
@@ -26,7 +27,8 @@ namespace Mise.Inventory.UITests
 				.iOS
 			// TODO: Update this path to point to your iOS app and uncomment the
 			// code if the app is not included in the solution.
-			//.AppBundle ("../../../iOS/bin/iPhoneSimulator/Debug/XamarinForms.iOS.app")
+			    .AppBundle ("../../../Mise.Inventory.iOS/bin/iPhoneSimulator/Debug/MiseInventoryiOS.app")
+				.EnableLocalScreenshots ()
 				.StartApp ();
 		}
 	}

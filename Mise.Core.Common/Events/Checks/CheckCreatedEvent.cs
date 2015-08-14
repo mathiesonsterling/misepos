@@ -8,6 +8,16 @@ namespace Mise.Core.Common.Events.Checks
         {
             get { return MiseEventTypes.CheckCreated;}
         }
+
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
     }
 }
 

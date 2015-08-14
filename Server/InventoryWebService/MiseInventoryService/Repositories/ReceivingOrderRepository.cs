@@ -10,6 +10,7 @@ using Mise.Core.Server.Repositories;
 using Mise.Core.Server.Services;
 using Mise.Core.Server.Services.DAL;
 using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 
 namespace MiseInventoryService.Repositories
@@ -28,11 +29,6 @@ namespace MiseInventoryService.Repositories
         protected override IReceivingOrder CreateNewEntity()
         {
             return new ReceivingOrder();
-        }
-
-        protected override bool IsEventACreation(IEntityEventBase ev)
-        {
-            return ev is ReceivingOrderCreatedEvent;
         }
 
         public override Guid GetEntityID(IReceivingOrderEvent ev)

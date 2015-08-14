@@ -14,6 +14,16 @@ namespace Mise.Core.Common.Events.Inventory
             get { return MiseEventTypes.PurchaseOrderCreated; }
         }
 
-		public string EmployeeCreatingName{get;set;}
+        public override bool IsEntityCreation
+        {
+            get { return true; }
+        }
+
+        public override bool IsAggregateRootCreation
+        {
+            get { return true; }
+        }
+
+        public string EmployeeCreatingName{get;set;}
     }
 }
