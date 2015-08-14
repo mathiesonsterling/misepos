@@ -13,11 +13,9 @@ using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.ValueItems.Inventory;
-using PCLCrypto;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
-using System.Runtime.InteropServices;
 
 namespace Mise.Core.Common.UnitTests.Events
 {

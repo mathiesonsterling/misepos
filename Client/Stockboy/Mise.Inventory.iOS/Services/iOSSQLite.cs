@@ -8,7 +8,7 @@ namespace Mise.Inventory.iOS.Services
 	{
 		#region ISQLite implementation
 
-		public System.Threading.Tasks.Task DeleteDatabaseFile ()
+		public Task DeleteDatabaseFile ()
 		{
 			var filename = GetLocalFilename ();
 
@@ -21,6 +21,8 @@ namespace Mise.Inventory.iOS.Services
 
 		public string GetLocalFilename(){
 			const string sqliteFilename = "MiseStockboy.db3";
+			//TODO shot in the dark for now
+			return sqliteFilename;
 			string documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
 			var path = System.IO.Path.Combine (documentsPath, sqliteFilename);
 
