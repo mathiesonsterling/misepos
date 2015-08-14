@@ -45,7 +45,6 @@ namespace Mise.Inventory.Services.Implementation
 				quantity.HasValue ? quantity.Value:0, curr);
 		
 			_currentPar = _parRepository.ApplyEvent (addEv);
-			await _parRepository.Commit (_currentPar.ID);
 		}
 
 		public async Task AddLineItemToCurrentPAR (IBaseBeverageLineItem source, int? quantity)
@@ -59,7 +58,6 @@ namespace Mise.Inventory.Services.Implementation
 			var addEv = _eventFactory.CreatePARLineItemAddedEvent (emp, source, quantity, curr);
 
 			_currentPar = _parRepository.ApplyEvent (addEv);
-			await _parRepository.Commit (_currentPar.ID);
 		}
 			
 		public async Task<IPar> GetCurrentPAR ()

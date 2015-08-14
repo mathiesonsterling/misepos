@@ -38,19 +38,20 @@ namespace Mise.Inventory.Reports
             //get all the items, and combine their amounts 
             foreach (var li in _inventory.GetBeverageLineItems())
             {
+				var itemIsErrored = li.Quantity < 0;
                 //make our key
                 var key = GetListItemKey(li);
                 if (dic.ContainsKey(key) == false)
                 {
                     var newItem = new ReportResultLineItem(li.DisplayName, li.Container.DisplayName, li.Quantity,
-                        li.Quantity >= 0);
+                        itemIsErrored);
                     dic.Add(key, newItem);
                 }
                 else
                 {
                     var existing = dic[key];
                     existing.Quantity += li.Quantity;
-                    existing.IsErrored = existing.Quantity < 0;
+                    existing.IsErrored = itemIsErrored;
                 }
             }
 

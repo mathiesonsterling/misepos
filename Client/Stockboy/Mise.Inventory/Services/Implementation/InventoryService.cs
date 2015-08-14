@@ -45,6 +45,8 @@ namespace Mise.Inventory.Services.Implementation
 			var restID = _eventFactory.RestaurantID;
 		    if (restID.HasValue)
 		    {
+				//TODO allow us to load up inventories from other devices ONLY if our restaurant supports it
+				//via billing feature
 				/*
 		        _selectedInventory = _inventoryRepository.GetAll()
 		            .Where(i => i.RestaurantID == restID.Value)
@@ -82,7 +84,6 @@ namespace Mise.Inventory.Services.Implementation
 
 		public async Task<IEnumerable<IInventoryBeverageLineItem>> GetLineItemsForCurrentSection ()
 		{
-			var rest = await _loginService.GetCurrentRestaurant ();
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 
 			if (inv == null) {
@@ -149,7 +150,7 @@ namespace Mise.Inventory.Services.Implementation
 		                        foreach (var li in lisInSection)
 		                        {
 		                            var ev = _eventFactory.CreateInventoryLineItemAddedEvent(emp,
-		                                li, 0, li.PricePaid, li.VendorBoughtFrom,
+		                                li, 0, li.VendorBoughtFrom,
 		                                newSection, li.InventoryPosition, inv);
 		                            events.Add(ev);
 		                        }
@@ -179,13 +180,13 @@ namespace Mise.Inventory.Services.Implementation
 		}
 
 		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (string name, ICategory category,
-			string upc, int quantity, int caseSize, LiquidContainer container, Money pricePaid)
+			string upc, int quantity, int caseSize, LiquidContainer container)
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 			var categories = new []{ category as ItemCategory };
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, pricePaid, null, GetSelectedSection (), 
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, null, GetSelectedSection (), 
 				GetSelectedSection ().GetNextItemPosition(), inv);
 		
 			inv = _inventoryRepository.ApplyEvent (addEv);
@@ -194,7 +195,7 @@ namespace Mise.Inventory.Services.Implementation
 			return inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
 		}
 
-		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity, Money pricePaid)
+		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity)
 		{
 			
 			if(_selectedInventoryID == null){
@@ -203,7 +204,7 @@ namespace Mise.Inventory.Services.Implementation
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 			var emp = await _loginService.GetCurrentEmployee ();
 
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, pricePaid, null, GetSelectedSection (), GetSelectedSection ().GetNextItemPosition(), inv);
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, null, GetSelectedSection (), GetSelectedSection ().GetNextItemPosition(), inv);
 		
 			inv = _inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();

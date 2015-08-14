@@ -7,6 +7,8 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Core.Entities.Base;
 
 using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.Sync;
+
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Common.Events.DTOs;
 using Mise.Core.Common.Entities.DTOs;
@@ -16,11 +18,11 @@ using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Entities.Accounts;
-using Mise.Core.Common.Entities.DTOs.AzureTypes;
-using Mise.Core.Common.Events.DTOs.AzureTypes;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using Mise.Inventory.ViewModels;
+using ServiceStack;
+using System.Net;
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
@@ -35,6 +37,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private readonly IJSONSerializer _serial;
 		private readonly EventDataTransportObjectFactory _eventDTOFactory;
 		private readonly EntityDataTransportObjectFactory _entityDTOFactory;
+		private bool _needsSynch = false;
 		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client)
 		{
 			_logger = logger;
@@ -162,8 +165,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<IEnumerable<Core.Common.Entities.Inventory.Inventory>> GetInventoriesForRestaurant (Guid restaurantID)
 		{
-			var items = await GetEntityOfTypeForRestaurant<Mise.Core.Common.Entities.Inventory.Inventory> (restaurantID);
+			try{
+				var items = await GetEntityOfTypeForRestaurant<Mise.Core.Common.Entities.Inventory.Inventory> (restaurantID);
 		    return items;
+			} catch(Exception e){
+				_logger.HandleException (e, LogLevel.Fatal);
+				throw;
+			}
 		}
 
 		#endregion
@@ -305,11 +313,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				throw new Exception ("Error turning item " + ai.EntityID + " to RestaurantDTO!");
 			} else {
 				var real = _entityDTOFactory.FromDataStorageObject<Restaurant> (dto);
-				if(real == null){
+				if (real == null) {
 					throw new Exception ("Error rehydrating item ID " + dto.ID);
-				} else {
-					return real;
 				}
+				return real;
 			}
 		}
 
@@ -324,7 +331,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var empType = typeof(Employee).ToString ();
 
 		    var table = GetEntityTable();
-
+			await AttemptPull ("allEmployees", null);
 			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();
 
 			return ais.Select (ai => ai.ToRestaurantDTO ())
@@ -339,16 +346,16 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
+			//TODO change this to do the query on server, or at least limit it somehow
 			var items = (await GetEmployeesAsync ()).ToList();
 				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
 			&& e.Password != null && e.Password.Equals (password));
 
-			if(found == null){
-				if(items.Any(e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))){
+			if(found == null) {
+				if (items.Any (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))) {
 					throw new UserNotFoundException (email, false, true);
-				} else{
-					throw new UserNotFoundException (email);
 				}
+				throw new UserNotFoundException (email);
 			} 
 
 			return found;
@@ -410,17 +417,54 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var existing = (await table.Where(ai => ai.EntityID == dto.ID).ToEnumerableAsync ()).FirstOrDefault ();
 			if(existing != null){
 				//update is not firing, do NOT know why, but we'll do this in the meantime
-				//await table.UpdateAsync (storageItem);
-				await table.DeleteAsync (existing);
-			} 
-			await table.InsertAsync (storageItem);
+				try{
+					await table.UpdateAsync (storageItem);
+				} catch(Exception e){
+					_logger.HandleException (e);
+				}
+			} else{
+				try{
+					await table.InsertAsync (storageItem);
+				} catch(Exception e){
+					_logger.HandleException (e);
+				}
+			}
+
+			//TODO make await false, and only push if online!
+			await AttemptPush ();
+
 
 			return true;
 		}
 
-	    private IMobileServiceTable<AzureEntityStorage> GetEntityTable() 
+		private async Task AttemptPush(){
+			try{
+				await _client.SyncContext.PushAsync ();
+			} catch(MobileServicePushFailedException me){
+				//could mean we're offline!
+				_logger.HandleException (me, LogLevel.Debug);
+				_needsSynch = true;
+			}
+		}
+
+		private async Task AttemptPull(string queryName, IMobileServiceTableQuery<AzureEntityStorage> query){
+			try{
+				var table = GetEntityTable ();
+				if(query == null){
+					query = table.CreateQuery ();
+				}
+				await table.PullAsync (queryName, query);
+			} catch(WebException we){
+				_logger.HandleException (we, LogLevel.Debug);
+				_needsSynch = true;
+			}
+		}
+
+	    private IMobileServiceSyncTable<AzureEntityStorage> GetEntityTable() 
 	    {
-	        return _client.GetTable<AzureEntityStorage>();
+			var table = _client.GetSyncTable<AzureEntityStorage>();
+		
+			return table;
 	    }
 
 		private IMobileServiceTable<AzureEventStorage> GetEventTable ()
@@ -428,11 +472,23 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			return _client.GetTable<AzureEventStorage> ();
 		}
 
+		private string GetQueryID(string type, Guid restaurantID){
+			if(type.Length > 40){
+				type = type.Substring (type.Length - 40);
+			}
+
+			var hash = restaurantID.GetHashCode ();
+			return type + "_" + hash;
+		}
 	    private async Task<IEnumerable<T>> GetEntityOfTypeForRestaurant<T>(Guid restaurantID) where T:class, IEntityBase, new()
 		{
 			var type = typeof(T).ToString ();
 
 	        var table = GetEntityTable();
+			//TODO get query into our pull async code
+			var query = table.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID);
+			var queryID = GetQueryID (type, restaurantID);
+			await AttemptPull (queryID, query);
 
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID)
@@ -446,11 +502,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 					throw new Exception ("Error turning item " + ai.EntityID + " to RestaurantDTO!");
 				} else {
 					var real = _entityDTOFactory.FromDataStorageObject<T> (dto);
-					if(real == null){
+					if (real == null) {
 						throw new Exception ("Error rehydrating item ID " + dto.ID);
-					} else {
-						realItems.Add (real);
 					}
+					realItems.Add (real);
 				}
 			}
 			return realItems;

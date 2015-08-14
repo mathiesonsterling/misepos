@@ -1,25 +1,14 @@
 ﻿using System;
-
-using Mise.Inventory.Services;
-using Java.IO;
 using System.Threading.Tasks;
+using Mise.Inventory.Services;
 
-
-namespace Mise.Inventory.Android.Services
+namespace Mise.Inventory.iOS.Services
 {
-	public class AndroidSQLite : ISQLite
+	public class iOSSQLite : ISQLite
 	{
 		#region ISQLite implementation
-		public SQLite.SQLiteConnection GetDatabase ()
-		{
-			var path = GetLocalFilename ();
 
-			var conn = new SQLite.SQLiteConnection (path);
-
-			return conn;
-		}
-
-		public System.Threading.Tasks.Task DeleteDatabaseFile ()
+		public Task DeleteDatabaseFile ()
 		{
 			var filename = GetLocalFilename ();
 
@@ -32,6 +21,8 @@ namespace Mise.Inventory.Android.Services
 
 		public string GetLocalFilename(){
 			const string sqliteFilename = "MiseStockboy.db3";
+			//TODO shot in the dark for now
+			return sqliteFilename;
 			string documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
 			var path = System.IO.Path.Combine (documentsPath, sqliteFilename);
 

@@ -18,8 +18,8 @@ namespace Mise.Core.Client.Repositories
 	public class ClientParRepository : BaseEventSourcedClientRepository<IPar, IParEvent, Par>, IParRepository
 	{
 	    private readonly IParWebService _webService;
-        public ClientParRepository(ILogger logger, IParWebService webService, IResendEventsWebService resend)
-            : base(logger, webService, resend)
+        public ClientParRepository(ILogger logger, IParWebService webService)
+            : base(logger, webService)
 	    {
 	        _webService = webService;
 	    }

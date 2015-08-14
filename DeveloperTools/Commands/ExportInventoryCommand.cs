@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.MobileServices;
-using Mise.Core.Common.Entities;
-using Mise.Core.Common.Entities.DTOs;
-using Mise.Core.Common.Entities.DTOs.AzureTypes;
 using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Common.Services.Implementation.Serialization;
-using Mise.Core.Entities.Base;
 using Mise.Core.Services.UtilityServices;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 using Mise.VendorManagement.Services.Implementation;
 
 namespace DeveloperTools.Commands

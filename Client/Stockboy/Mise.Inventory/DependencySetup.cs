@@ -69,7 +69,6 @@ namespace Mise.Inventory
 			cb.RegisterInstance (webService).As<IPurchaseOrderWebService> ().SingleInstance ();
 			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance ();
 			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance ();
-			cb.RegisterInstance (webService).As<IResendEventsWebService> ().SingleInstance ();
 		}
 
 		/// <summary>

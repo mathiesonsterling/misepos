@@ -45,7 +45,6 @@ namespace Mise.Core.Common.Events.Inventory
 
         public int Quantity { get; set; }
 
-        public Money PricePaid { get; set; }
 
         public Guid? RestaurantInventorySectionID { get; set; }
 

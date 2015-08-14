@@ -4,7 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mise.Core.Common.Events.DTOs.AzureTypes
+using Mise.Core.Common.Events.DTOs;
+using Newtonsoft.Json;
+using Microsoft.WindowsAzure.MobileServices;
+
+
+namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 {
     public class AzureEventStorage
     {
@@ -24,5 +29,8 @@ namespace Mise.Core.Common.Events.DTOs.AzureTypes
         public Guid EventID { get; set; }
         public DateTimeOffset EventDate { get; set; }
         public string JSON { get; set; }
+		[JsonProperty(PropertyName = "__version")]
+		//[Version]
+		public string Version { set; get; }
     }
 }

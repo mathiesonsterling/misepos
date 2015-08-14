@@ -15,7 +15,7 @@ namespace Mise.Core.Common.Services.WebServices
     /// <summary>
     /// Webservice for the restaurant, used to power terminals
     /// </summary>
-    public interface IRestaurantTerminalService : IEventStoreWebService<RestaurantCheck, ICheckEvent>, IInventoryEmployeeWebService, IInventoryRestaurantWebService, IResendEventsWebService
+    public interface IRestaurantTerminalService : IEventStoreWebService<RestaurantCheck, ICheckEvent>, IInventoryEmployeeWebService, IInventoryRestaurantWebService
     {
         /// <summary>
         /// Register the client with the service, and give us the restaurant client with it

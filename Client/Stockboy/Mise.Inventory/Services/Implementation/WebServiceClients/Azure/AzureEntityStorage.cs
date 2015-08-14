@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace Mise.Core.Common.Entities.DTOs.AzureTypes
+using Newtonsoft.Json;
+using Mise.Core.Common.Entities.DTOs;
+namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 {
     /// <summary>
     /// Quick non-typed class for storage of any entity
@@ -21,7 +22,7 @@ namespace Mise.Core.Common.Entities.DTOs.AzureTypes
             MiseEntityType = dto.SourceType.ToString();
             EntityID = dto.ID;
             RestaurantID = dto.RestaurantID;
-            JSON = dto.JSON;
+            EntityJSON = dto.JSON;
             LastUpdatedDate = dto.LastUpdatedDate;
         }
 
@@ -32,7 +33,7 @@ namespace Mise.Core.Common.Entities.DTOs.AzureTypes
                 SourceType = Type.GetType(MiseEntityType),
                 ID = EntityID,
                 RestaurantID = RestaurantID,
-                JSON = JSON,
+                JSON = EntityJSON,
                 LastUpdatedDate = LastUpdatedDate
             };
         }
@@ -41,7 +42,11 @@ namespace Mise.Core.Common.Entities.DTOs.AzureTypes
         public string MiseEntityType { get; set; }
         public Guid EntityID { get; set; }
         public Guid? RestaurantID { get; set; }
-        public string JSON { get; set; }
+        public string EntityJSON { get; set; }
         public DateTimeOffset LastUpdatedDate { get; set; }
+
+		[JsonProperty(PropertyName = "__version")]
+		//[Microsoft.WindowsAzure.MobileServices.Version]
+		public string Version { set; get; }
     }
 }

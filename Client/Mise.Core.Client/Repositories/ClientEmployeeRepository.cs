@@ -18,8 +18,8 @@ namespace Mise.Core.Client.Repositories
     public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent, Employee>, IEmployeeRepository
     {
         readonly IInventoryEmployeeWebService _webService;
-        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, ILogger logger, IResendEventsWebService resend)
-            : base(logger, webService, resend)
+        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, ILogger logger)
+            : base(logger, webService)
         {
             _webService = webService;
         }

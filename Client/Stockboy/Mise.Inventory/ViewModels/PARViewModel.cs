@@ -7,8 +7,6 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System;
-using System.Collections.ObjectModel;
-using Mise.Core.Services;
 using Xamarin.Forms;
 namespace Mise.Inventory.ViewModels
 {
@@ -46,12 +44,10 @@ namespace Mise.Inventory.ViewModels
 	public class ParViewModel : BaseSearchableViewModel<PARLineItemDisplay>
 	{
 		readonly IPARService _parService;
-		IParBeverageLineItem _itemSettingQuantity;
 		public ParViewModel(ILogger logger, IAppNavigation appNavigation, IPARService parService)
 		:base(appNavigation, logger)
 		{
 			_parService = parService;
-			_itemSettingQuantity = null;
 		}
 			
 		#region Commands
@@ -87,10 +83,9 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		public override async Task SelectLineItem(PARLineItemDisplay displayLineItem){
-			var lineItem = displayLineItem.Source;
-			_itemSettingQuantity = lineItem;
-			await _parService.SetCurrentLineItem (lineItem);
+		public override async Task SelectLineItem(PARLineItemDisplay lineItem){
+			var realLI = lineItem.Source;
+			await _parService.SetCurrentLineItem (realLI);
 		    await Navigation.ShowUpdateParLineItem();
 		}
 			

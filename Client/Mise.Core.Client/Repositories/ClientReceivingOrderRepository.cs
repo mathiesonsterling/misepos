@@ -20,8 +20,8 @@ namespace Mise.Core.Client.Repositories
         IReceivingOrderRepository
     {
         readonly IReceivingOrderWebService _webService;
-        public ClientReceivingOrderRepository(ILogger logger, IReceivingOrderWebService webService, IResendEventsWebService resend)
-            : base(logger, webService, resend)
+        public ClientReceivingOrderRepository(ILogger logger, IReceivingOrderWebService webService)
+            : base(logger, webService)
         {
             _webService = webService;
         }

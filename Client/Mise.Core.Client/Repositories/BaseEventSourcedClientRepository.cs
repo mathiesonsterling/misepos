@@ -28,15 +28,12 @@ namespace Mise.Core.Client.Repositories
         where TConcreteStorageType : class, IEntityBase, TEntity, new()
     {
         private readonly IEventStoreWebService<TConcreteStorageType, TEventType> _webService;
-        private readonly IResendEventsWebService _resendEventsWebService;
 
         protected BaseEventSourcedClientRepository(ILogger logger,
-            IEventStoreWebService<TConcreteStorageType, TEventType> webService,
-            IResendEventsWebService resendService
+            IEventStoreWebService<TConcreteStorageType, TEventType> webService
             ) : base(logger)
         {
             _webService = webService;
-            _resendEventsWebService = resendService;
         }
 
         protected abstract Task<IEnumerable<TConcreteStorageType>> LoadFromWebservice(Guid? restaurantID);

@@ -21,8 +21,8 @@ namespace Mise.Core.Client.Repositories
 	{
 		readonly IApplicationInvitationWebService _webService;
 		public ClientApplicationInvitationRepository(ILogger logger,
-            IApplicationInvitationWebService webService, IResendEventsWebService resend)
-            : base(logger, webService, resend)
+            IApplicationInvitationWebService webService)
+            : base(logger, webService)
 		{
 			_webService = webService;
 		}

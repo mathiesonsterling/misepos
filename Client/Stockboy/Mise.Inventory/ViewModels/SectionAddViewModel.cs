@@ -23,11 +23,18 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		public bool IsDefaultInventorySection{ get; set;}
 
+		public bool CanAdd{get{return GetValue<bool> ();}set{ SetValue (value); }}
 		public SectionAddViewModel(IAppNavigation appNavigation, ILogger logger, 
 			IInventoryService inventoryService) : base(appNavigation, logger)
 		{
 			_inventoryService = inventoryService;
 			SectionHasPartialBottles = true;
+
+			PropertyChanged += (sender, e) => {
+				if(e.PropertyName == "SectionName"){
+					CanAdd = AddCommand.CanExecute (null);
+				}
+			};
 		}
 
 		#region Commands
@@ -61,7 +68,8 @@ namespace Mise.Inventory.ViewModels
 
         public override Task OnAppearing()
         {
-            return Task.FromResult(false);
+			SectionName = string.Empty;
+            return Task.FromResult(true);
         }
 	}
 }

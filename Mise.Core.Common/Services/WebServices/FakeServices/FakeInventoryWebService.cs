@@ -584,7 +584,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
 					CreatedByEmployeeID = empID,
-					CreatedDate = DateTime.Now,
+					CreatedDate = DateTimeOffset.UtcNow,
 					ID = Guid.NewGuid(),
 					RestaurantID = restID,
 					IsCurrent = true,

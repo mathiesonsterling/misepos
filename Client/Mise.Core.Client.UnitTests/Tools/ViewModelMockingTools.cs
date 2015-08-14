@@ -41,11 +41,11 @@ namespace Mise.Core.Client.UnitTests.Tools
 			var logger = new Mock<ILogger>();
 			var cashDrawerService = new Mock<ICashDrawerService>();
 			var creditHardwareService = new Mock<ICreditCardReaderService>();
-            var checkReposC = new ClientCheckRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var checkReposC = new ClientCheckRepository(service.Object, logger.Object);
 			await checkReposC.Load (MockingTools.RestaurantID);
 			var checkRepos = checkReposC;
 
-            var empReposC = new ClientEmployeeRepository(service.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var empReposC = new ClientEmployeeRepository(service.Object, logger.Object);
 			await empReposC.Load (MockingTools.RestaurantID);
 			var empRepos = empReposC;
 

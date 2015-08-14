@@ -1554,7 +1554,7 @@ namespace Mise.Core.Common.Services.Implementation
             var dev = new MiseTerminalDevice
             {
                 TopLevelCategoryID = _topCategoryID,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTimeOffset.UtcNow,
                 ID = Guid.NewGuid(),
                 Revision = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101 },
                 RequireEmployeeSignIn = false,

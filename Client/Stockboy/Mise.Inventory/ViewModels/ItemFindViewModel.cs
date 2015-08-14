@@ -67,7 +67,7 @@ namespace Mise.Inventory.ViewModels
 				//based on our type, determine what LI to add
 				switch(CurrentType){
 				case AddLineItemType.Inventory:
-					await _inventoryService.AddLineItemToCurrentInventory (lineItem, 0, null);
+					await _inventoryService.AddLineItemToCurrentInventory (lineItem, 0);
 					break;
 				case AddLineItemType.ReceivingOrder:
 					await _roService.AddLineItemToCurrentReceivingOrder (lineItem, 0);

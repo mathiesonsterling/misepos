@@ -25,8 +25,6 @@ namespace Mise.Core.Entities.Inventory
         /// </summary>
         MeasurementMethods MethodsMeasuredLast { get; }
 
-        Money PricePaid { get; }
-
 		int NumPartialBottles{get;}
 
         /// <summary>
