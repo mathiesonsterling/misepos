@@ -706,6 +706,11 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 
 		#endregion
 
+		public Task<bool> SynchWithServer ()
+		{
+			return Task.FromResult (true);
+		}
+
 		public Task<IEnumerable<Restaurant>> GetRestaurants (Location deviceLocation, Distance max)
 		{
 			return Task.FromResult (_restaurants.AsEnumerable());
