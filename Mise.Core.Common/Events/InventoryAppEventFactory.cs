@@ -154,6 +154,22 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
+		public InventoryLineItemDeletedEvent CreateInventoryLineItemDeletedEvent (IEmployee emp, IInventory inv,
+			IInventorySection sec, IInventoryBeverageLineItem li)
+		{
+			return new InventoryLineItemDeletedEvent {
+				ID = Guid.NewGuid (),
+				CausedByID = emp.ID,
+				CreatedDate = GetDate (),
+				EventOrderingID = GetNextEventID (),
+				DeviceID = _deviceID,
+				RestaurantID = _restaurant.ID,
+
+				InventoryID = inv.ID,
+				InventorySectionID = sec.ID,
+				InventoryLineItemID = li.ID
+			};
+		}
 
 	    public PARCreatedEvent CreatePARCreatedEvent (IEmployee emp)
 		{

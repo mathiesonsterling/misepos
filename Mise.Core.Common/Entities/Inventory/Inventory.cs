@@ -81,10 +81,29 @@ namespace Mise.Core.Common.Entities.Inventory
                 case MiseEventTypes.InventoryLineItemAdded:
                     WhenInventoryLineItemAdded((InventoryLineItemAddedEvent)entityEvent);
                     break;
+				case MiseEventTypes.InventoryLineItemDeleted:
+					WhenInventoryLineItemDeleted ((InventoryLineItemDeletedEvent)entityEvent);
+					break;
                 default:
                     throw new ArgumentException("Cannot use event " + entityEvent.EventType);
             }
         }
+
+		void WhenInventoryLineItemDeleted (InventoryLineItemDeletedEvent ev)
+		{
+			var section = Sections.FirstOrDefault (sec => sec.ID == ev.InventorySectionID);
+			if(section == null)
+			{
+				throw new ArgumentException("Invalid section ID in inventory item add");
+			}
+
+			var lineItem = section.LineItems.FirstOrDefault (li => li.ID == ev.InventoryLineItemID);
+			if(lineItem == null){
+				throw new ArgumentException ("Line item not found to delete");
+			}
+
+			section.LineItems.Remove (lineItem);
+		}
 
         private void WhenInventoryLineItemAdded(InventoryLineItemAddedEvent entityEvent)
         {

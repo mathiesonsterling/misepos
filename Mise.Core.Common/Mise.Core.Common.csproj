@@ -191,6 +191,7 @@
     <Compile Include="Services\WebServices\Exceptions\SendEventsException.cs" />
     <Compile Include="Services\WebServices\Exceptions\ServerNotReadyException.cs" />
     <Compile Include="Services\WebServices\Exceptions\DataNotSavedOnServerException.cs" />
+    <Compile Include="Events\Inventory\InventoryLineItemDeletedEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

@@ -232,6 +232,15 @@ namespace Mise.Core.Common.UnitTests.Events
 		}
 
 		[Test]
+		public void LineItemDeleted(){
+			var ev = _underTest.CreateInventoryLineItemDeletedEvent (_emp, _inv, _invSection, _invLI);
+			TestInventoryEvent (ev);
+			Assert.AreEqual (_inv.ID, ev.InventoryID);
+			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
+			Assert.AreEqual (_invLI.ID, ev.InventoryLineItemID);
+		}
+
+		[Test]
 		public void InventoryMadeCurrent(){
 			var ev = _underTest.CreateInventoryMadeCurrentEvent (_emp, _inv);
 			TestInventoryEvent (ev);
