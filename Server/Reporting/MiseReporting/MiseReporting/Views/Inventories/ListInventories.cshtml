@@ -1,0 +1,34 @@
+﻿@model IEnumerable<MiseReporting.Models.InventoryViewModel>
+
+@{
+    ViewBag.Title = "ListInventories";
+}
+
+<h2>ListInventories</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DateCompleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DoneByEmployee)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCompleted)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DoneByEmployee)
+        </td>
+        <td>
+            @Html.ActionLink("Get CSV file", "GenerateCsv", new { id = item.Id})
+        </td>
+    </tr>
+}
+
+</table>
