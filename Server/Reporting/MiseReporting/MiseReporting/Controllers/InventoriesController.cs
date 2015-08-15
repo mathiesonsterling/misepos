@@ -10,9 +10,17 @@ namespace MiseReporting.Controllers
     public class InventoriesController : Controller
     {
         // GET: Inventories
-        public ActionResult Index(Guid inventoryId)
+        public ActionResult Index(Guid restaurantId)
         {
-            var viewModels = new List<InventoryViewModel>();
+            var viewModels = new List<InventoryViewModel>
+            {
+                new InventoryViewModel
+                {
+                    DateCompleted = DateTime.Now,
+                    DoneByEmployee = "Yo Mama",
+                    Id = Repository.RepositoryFactory.TestInvGuid
+                }
+            };
             return View(viewModels);
         }
 

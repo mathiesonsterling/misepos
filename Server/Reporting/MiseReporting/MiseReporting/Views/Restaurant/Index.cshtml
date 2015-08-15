@@ -26,7 +26,7 @@
             @Html.DisplayFor(modelItem => item.Address)
         </td>
         <td>
-            @Html.ActionLink("Line Items", "Index", "Inventories", new { inventoryId = item.Id})
+            <a href="../Inventories/Index?restaurantId=@item.Id">Inventories</a>
         </td>
     </tr>
 }
