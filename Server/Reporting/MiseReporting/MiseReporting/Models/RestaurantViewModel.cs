@@ -24,7 +24,7 @@ namespace MiseReporting.Models
 
             if (rest.StreetAddress != null && rest.StreetAddress.City != null && rest.StreetAddress.State != null)
             {
-                Address = rest.StreetAddress.City.Name + ", " + rest.StreetAddress.State.Abbreviation;
+                Address = rest.StreetAddress.City.Name + ", " + rest.StreetAddress.State.Name;
             }
 
 

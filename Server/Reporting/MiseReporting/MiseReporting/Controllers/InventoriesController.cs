@@ -1,33 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.DTOs;
+using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Services.Implementation;
+using Mise.Core.Common.Services.Implementation.Serialization;
+using Mise.Core.Entities.Inventory;
+using Mise.Core.Entities.People;
+using Mise.VendorManagement.Services;
+using Mise.VendorManagement.Services.Implementation;
 using MiseReporting.Models;
 
 namespace MiseReporting.Controllers
 {
     public class InventoriesController : Controller
     {
+        private readonly EntityDataTransportObjectFactory _dtoFactory;
+        private readonly IInventoryExportService _inventoryExportService;
+        public InventoriesController()
+        {
+            _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
+            _inventoryExportService = new InventoryCSVExportService(new DummyLogger());
+        }
+
         // GET: Inventories
         public ActionResult Index(Guid restaurantId)
         {
-            var viewModels = new List<InventoryViewModel>
+            var vms = new List<InventoryViewModel>();
+            using (var db = new AzureNonTypedEntities())
             {
-                new InventoryViewModel
+                var invType = typeof (Inventory).ToString();
+                var invAIs =
+                    db.AzureEntityStorages.Where(
+                        ai =>
+                            ai.MiseEntityType == invType && ai.RestaurantID.HasValue &&
+                            ai.RestaurantID.Value == restaurantId).ToList();
+
+                var invs = invAIs.Select(GetFromAi);
+
+                var empType = typeof (Employee).ToString();
+                //get the emp
+
+                foreach (var inv in invs)
                 {
-                    DateCompleted = DateTime.Now,
-                    DoneByEmployee = "Yo Mama",
-                    Id = Repository.RepositoryFactory.TestInvGuid
+                    IEmployee emp = null;
+                    var empAI =
+                        db.AzureEntityStorages
+                            .FirstOrDefault(ai => ai.MiseEntityType == empType && ai.EntityID == inv.CreatedByEmployeeID);
+
+                    if (empAI != null)
+                    {
+                        var empDTO = empAI.ToRestaurantDTO();
+                        emp = _dtoFactory.FromDataStorageObject<Employee>(empDTO);
+                    }
+
+                    vms.Add(new InventoryViewModel(inv, emp));
                 }
-            };
-            return View(viewModels);
+            }
+
+            return View(vms);
+        }
+
+        private IInventory GetFromAi(AzureEntityStorage ai)
+        {
+            var dto = ai.ToRestaurantDTO();
+            var inv = _dtoFactory.FromDataStorageObject<Inventory>(dto);
+            return inv;
         }
 
         // GET: Inventories/Details/5
-        public FileResult GenerateCsv(Guid id)
-        {
-            throw new NotImplementedException("No Csv yet");
+        public async Task<FileResult> GenerateCsv(Guid id)
+        { 
+            //get the inventory
+            var invType = typeof (Inventory).ToString();
+            AzureEntityStorage invAI;
+            using (var db = new AzureNonTypedEntities())
+            {
+                invAI = db.AzureEntityStorages.FirstOrDefault(
+                    ai =>
+                        ai.MiseEntityType == invType && ai.EntityID == id);
+
+            }
+            if (invAI == null)
+            {
+                throw new ArgumentException("No inventory of id " + id + " found");
+            }
+            var inv = GetFromAi(invAI);
+
+            //transform inventory to memory stream, then to file
+            var bytes =  await _inventoryExportService.ExportInventoryToCsv(inv);
+            var outputStream = new MemoryStream(bytes);
+            return new FileStreamResult(outputStream, "text/csv") {FileDownloadName = "inventory.csv"};
         }
+
+
     }
 }

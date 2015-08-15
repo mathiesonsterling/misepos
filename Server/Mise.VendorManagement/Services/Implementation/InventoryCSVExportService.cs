@@ -20,46 +20,53 @@ namespace Mise.VendorManagement.Services.Implementation
             _logger = logger;
         }
 
-        public Task ExportInventoryToCsvFile(string filename, IInventory inventory)
+        public async Task<byte[]> ExportInventoryToCsv(IInventory inventory)
         {
-            return Task.Run(() =>
             {
+
                 var lineItems = inventory.GetBeverageLineItems();
                 if (lineItems.Any() == false)
                 {
                     throw new ArgumentException("No line items in the given inventory!");
                 }
 
-                var writer = GetTextWriter(filename);
-                using (writer)
+                using (var ms = new MemoryStream())
                 {
-                    var csv = new CsvWriter(writer);
-
-                    foreach (var section in inventory.GetSections())
+                    using (var streamWriter = new StreamWriter(ms))
                     {
-                        foreach (var li in section.GetInventoryBeverageLineItemsInSection())
+                        using (var csv = new CsvWriter(streamWriter))
                         {
-                            csv.WriteField(section.Name);
-                            csv.WriteField(li.DisplayName);
-                            csv.WriteField(li.Container.DisplayName);
+                            foreach (var section in inventory.GetSections())
+                            {
+                                foreach (var li in section.GetInventoryBeverageLineItemsInSection())
+                                {
+                                    csv.WriteField(section.Name);
+                                    csv.WriteField(li.DisplayName);
+                                    csv.WriteField(li.Container.DisplayName);
 
 
-                            var numpartials = li.GetPartialBottlePercentages().Any()
-                                ? li.GetPartialBottlePercentages().Sum(p => p)
-                                : 0;
+                                    var numpartials = li.GetPartialBottlePercentages().Any()
+                                        ? li.GetPartialBottlePercentages().Sum(p => p)
+                                        : 0;
 
-                            csv.WriteField(li.Quantity);
+                                    csv.WriteField(li.Quantity);
 
-                            csv.WriteField(li.CurrentAmount.Milliliters);
-                            csv.WriteField(li.NumFullBottles);
+                                    csv.WriteField(li.CurrentAmount.Milliliters);
+                                    csv.WriteField(li.NumFullBottles);
 
-                            csv.WriteField(numpartials);
+                                    csv.WriteField(numpartials);
 
-                            csv.NextRecord();
+                                    csv.NextRecord();
+                                }
+                            }
+                            await streamWriter.FlushAsync();
+                            return ms.ToArray();
                         }
                     }
                 }
-            });
+            }
+
         }
+
     }
 }

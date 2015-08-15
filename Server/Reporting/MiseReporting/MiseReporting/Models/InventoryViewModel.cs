@@ -21,7 +21,10 @@ namespace MiseReporting.Models
         {
             DateCompleted = source.DateCompleted?.LocalDateTime;
 
-            DoneByEmployee = emp.DisplayName;
+            if (emp != null)
+            {
+                DoneByEmployee = emp.DisplayName;
+            }
 
             Id = source.ID;
         }
