@@ -15,6 +15,8 @@ namespace MiseReporting.Models
         public string DoneByEmployee { get; set; }
         public Guid Id { get; set; }
 
+        public bool HasLineItems { get; set; }
+
         public InventoryViewModel() { }
 
         public InventoryViewModel(IInventory source, IEmployee emp)
@@ -27,6 +29,7 @@ namespace MiseReporting.Models
             }
 
             Id = source.ID;
+            HasLineItems = source.GetBeverageLineItems().Any();
         }
     }
 }

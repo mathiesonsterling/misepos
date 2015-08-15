@@ -92,6 +92,11 @@ namespace MiseReporting.Controllers
             }
             var inv = GetFromAi(invAI);
 
+            if (inv.GetBeverageLineItems().Any() == false)
+            {
+                //do nothing
+                return null;
+            }
             //transform inventory to memory stream, then to file
             var bytes =  await _inventoryExportService.ExportInventoryToCsv(inv);
             var outputStream = new MemoryStream(bytes);
