@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Server", "..\Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Inventory", "..\Client\Stockboy\Mise.Inventory\Mise.Inventory.csproj", "{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Client", "..\Client\Mise.Core.Client\Mise.Core.Client.csproj", "{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,12 @@ Global
 		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Deploy|Any CPU.Build.0 = Debug|Any CPU
 		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA62BD3-BFA7-4622-93CE-BC2C4B04C4A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

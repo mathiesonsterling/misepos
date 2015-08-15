@@ -41,7 +41,8 @@ namespace DeveloperTools.Commands
             Report("Exporting items to CSV");
             var service = new InventoryCSVExportService(_logger);
 
-            await service.ExportInventoryToCsvFile(fileName, lastInv);
+            var bytes = await service.ExportInventoryToCsv(lastInv);
+
 
             Finish();
         }
