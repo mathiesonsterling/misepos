@@ -50,31 +50,6 @@ namespace stockboymobileserviceService
 
             base.Seed(context);
         }
-
-        private static EntityDataTransportObjectFactory _dataTransportObjectFactory;
-        private async Task LoadSeedFromFakeWebservice(stockboymobileserviceContext context)
-        {
-            var serializer = new JsonNetSerializer();
-            _dataTransportObjectFactory = new EntityDataTransportObjectFactory(serializer);
-
-            var fakeWebService = new FakeInventoryWebService();
-
-            var employees = await fakeWebService.GetEmployeesAsync();
-            var empDTOs = employees.Select(GetEntityStorage<Employee, IEmployee>);
-            foreach (var dto in empDTOs)
-            {
-                context.Set<AzureEntityStorage>().Add(dto);
-            }
-
-        }
-
-        private static AzureEntityStorage GetEntityStorage<TRealType, TInterface>(TInterface entity) where TRealType : TInterface, IEntityBase, new()
-        {
-            var concrete = (TRealType)entity;
-            var dto = _dataTransportObjectFactory.ToDataTransportObject(concrete);
-
-            return new AzureEntityStorage(dto);
-        }
     }
 }
 
