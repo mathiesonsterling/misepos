@@ -46,7 +46,47 @@ namespace Mise.Core.Common
 					ID = Guid.Parse ("aec4cf62-094d-4d51-9003-042e361f7cb2")
 				};
 			}}
-		public static ItemCategory Vodka{get{
+
+	    public static ItemCategory WhiskeyBourbon
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "Bourbon",
+	                ParentCategoryID = WhiskeyAmerican.ID,
+	                ID = Guid.Parse("d2552894-1979-4e90-9604-dca3f54e0a8d")
+	            };
+	        }
+	    }
+
+	    public static ItemCategory WhiskeyRye
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "Rye",
+	                ParentCategoryID = Whiskey.ID,
+	                ID = Guid.Parse("ed526b32-efcd-48e7-8c73-f5027e5ad0df")
+	            };
+	        }
+	    }
+
+	    public static ItemCategory WhiskeyCanadian
+	    {
+	        get
+	        {
+	            return new ItemCategory
+	            {
+	                Name = "Canadian Whiskey",
+	                ParentCategoryID = Whiskey.ID,
+	                ID = Guid.Parse("92b3ad51-7c1a-4363-9bc6-a85cf75e0b38")
+	            };
+	        }
+	    }
+
+	    public static ItemCategory Vodka{get{
 				return new ItemCategory {
 					Name = "Vodka",
 					ID = Guid.Parse ("99d452e5-2549-4038-922b-be8742021e30")

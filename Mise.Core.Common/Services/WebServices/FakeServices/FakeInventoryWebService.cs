@@ -249,7 +249,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						StreetAddressNumber = new StreetAddressNumber{Direction = "N", Number = "6021"},
 						Street = new Street{Name = "Ocean"},
 						City = new City{Name = "Brooklyn"},
-						State = new State{Name = "New York"},
+						State = State.GetUSStates().First(s => s.Abbreviation == "NY"),
 						Country = Country.UnitedStates,
 						Zip = new ZipCode{Value = "11226"}
 					},
@@ -350,7 +350,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							}
 						}
 					},
-					StreetAddress = new StreetAddress("2800", "", "Routh St", "Dallas", "TX",
+					StreetAddress = new StreetAddress("2800", "", "Routh St", "Dallas", "Texas",
 						Country.UnitedStates.Name, "75201"),
 					RestaurantsAssociatedIDs = new List<Guid>{marketingID}
 				},
@@ -371,7 +371,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							}
 						}
 					},
-					StreetAddress = new StreetAddress("4721", "", "Simonton Rd", "Dallas", "TX", 
+					StreetAddress = new StreetAddress("4721", "", "Simonton Rd", "Dallas", "Texas", 
 						Country.UnitedStates.Name, "75244"),
 					RestaurantsAssociatedIDs = new List<Guid>{marketingID}
 				},
@@ -382,7 +382,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					//13755 Diplomat Dr #100
 					//Farmers Branch, TX 75234
 					StreetAddress = new StreetAddress("13755", "", "Diplomat Dr", "Farmers Branch",
-						"TX", Country.UnitedStates.Name, "75234"),
+						"Texas", Country.UnitedStates.Name, "75234"),
 					RestaurantsAssociatedIDs = new List<Guid>{marketingID},
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {

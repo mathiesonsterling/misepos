@@ -117,8 +117,9 @@ namespace DeveloperTools
                 var progress = new Progress<ProgressReport>(ReportProgress);
 
                 var noMessageLogger = new DummyLogger();
+                var level = DBChoices.GetBuildLevelSelected(selItem.Key);
                 var cmd = new ImportVendorPriceListCommand(noMessageLogger, dbUri, TxtFileName.Text, TxtVendorName.Text, email,
-                    address, progress);
+                    address, level, progress);
                 try
                 {
                     await cmd.Execute();

@@ -13,12 +13,6 @@ namespace Mise.Core.Entities.Vendors
     {
         string Name { get; }
 
-		/// <summary>
-		/// Displays details, such as city and state
-		/// </summary>
-		/// <value>The detail.</value>
-		string Detail{get;}
-
         StreetAddress StreetAddress { get; }
         /// <summary>
         /// The email that people send their PO orders to currently
