@@ -228,6 +228,12 @@ namespace Mise.Inventory.ViewModels
 		{
 			return NotProcessing;
 		}
+
+		public bool DisplayResetDB{
+			get{
+				return DependencySetup.GetBuildLevel () != BuildLevel.Production;
+			}
+		}
 	}
 }
 

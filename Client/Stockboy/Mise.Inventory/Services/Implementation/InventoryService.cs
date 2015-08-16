@@ -289,6 +289,17 @@ namespace Mise.Inventory.Services.Implementation
 			_selectedLineItem = null;
 		}
 
+		public async Task DeleteLineItem (IInventoryBeverageLineItem li)
+		{
+			var currInv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			var currSection = currInv.GetSections ().FirstOrDefault (s => s.ID == _selectedInventorySectionID);
+			var emp = await _loginService.GetCurrentEmployee ();
+
+			var ev = _eventFactory.CreateInventoryLineItemDeletedEvent (emp, currInv, currSection, li);
+
+			_inventoryRepository.ApplyEvent (ev);
+		}
+
 	    public Task<IInventorySection> GetCurrentInventorySection()
 	    {
 	        return Task.FromResult(GetSelectedSection ());

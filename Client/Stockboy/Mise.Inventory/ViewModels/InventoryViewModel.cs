@@ -100,6 +100,10 @@ namespace Mise.Inventory.ViewModels
 		public ICommand FinishSectionCommand{
 			get{return new Command (FinishSection, () => CanComplete);}
 		}
+
+		public ICommand DeleteLineItemCommand{
+			get{return new Command<InventoryLineItemDisplayLine> (DeleteLineItem, (item) => NotProcessing);}
+		}
 		#endregion
 
 		public override async Task SelectLineItem(InventoryLineItemDisplayLine lineItem){
@@ -129,6 +133,19 @@ namespace Mise.Inventory.ViewModels
 		async void Scan()
 		{
 			await Navigation.ShowItemScan();
+		}
+
+		async void DeleteLineItem (InventoryLineItemDisplayLine displayLI)
+		{
+			try{
+				var li = displayLI.Source;
+
+				await _inventoryService.DeleteLineItem (li);
+
+				await OnAppearing ();
+			} catch(Exception e){
+				HandleException (e);
+			}
 		}
 
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){

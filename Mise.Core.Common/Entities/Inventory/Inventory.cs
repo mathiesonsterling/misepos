@@ -98,11 +98,9 @@ namespace Mise.Core.Common.Entities.Inventory
 			}
 
 			var lineItem = section.LineItems.FirstOrDefault (li => li.ID == ev.InventoryLineItemID);
-			if(lineItem == null){
-				throw new ArgumentException ("Line item not found to delete");
+			if (lineItem != null) {
+				section.LineItems.Remove (lineItem);
 			}
-
-			section.LineItems.Remove (lineItem);
 		}
 
         private void WhenInventoryLineItemAdded(InventoryLineItemAddedEvent entityEvent)
