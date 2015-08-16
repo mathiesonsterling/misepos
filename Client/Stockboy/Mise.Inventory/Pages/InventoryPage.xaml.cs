@@ -36,11 +36,9 @@ namespace Mise.Inventory.Pages
         }
 
 		void LineItemDeleted(object item){
-			int i = 5;
 		}
 
 		void LineItemInsertAfter(object item){
-			int i = 8;
 		}
 
 		void LoadItems ()

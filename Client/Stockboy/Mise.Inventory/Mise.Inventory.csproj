@@ -130,7 +130,7 @@
     <Compile Include="Services\IPARService.cs" />
     <Compile Include="Services\Implementation\PARService.cs" />
     <Compile Include="ViewModels\InventoryViewModel.cs" />
-    <Compile Include="CustomCells\LineItemWithQuantityCell.cs" />
+    <Compile Include="CustomControls\LineItemWithQuantityCell.cs" />
     <Compile Include="Services\IPurchaseOrderService.cs" />
     <Compile Include="Services\Implementation\PurchaseOrderService.cs" />
     <Compile Include="Pages\PurchaseOrderReviewPage.xaml.cs">
@@ -194,7 +194,7 @@
     <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureWeakTypeSharedClient.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureServiceLocator.cs" />
-    <Compile Include="CustomCells\InventoryLineItemCell.cs" />
+    <Compile Include="CustomControls\InventoryLineItemCell.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureEntityStorage.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureEventStorage.cs" />
     <Compile Include="Services\Implementation\DeviceConnectionService.cs" />
@@ -397,9 +397,5 @@
       <Name>Mise.Core.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Implementation\WebServiceClients\" />
-    <Folder Include="Services\Implementation\WebServiceClients\Azure\" />
-    <Folder Include="Services\Implementation\WebServiceClients\Exceptions\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

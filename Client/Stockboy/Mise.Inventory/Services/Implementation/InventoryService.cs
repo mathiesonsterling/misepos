@@ -82,7 +82,7 @@ namespace Mise.Inventory.Services.Implementation
 			return Task.FromResult (inv);
 		}
 
-		public async Task<IEnumerable<IInventoryBeverageLineItem>> GetLineItemsForCurrentSection ()
+		public Task<IEnumerable<IInventoryBeverageLineItem>> GetLineItemsForCurrentSection ()
 		{
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 
@@ -92,7 +92,7 @@ namespace Mise.Inventory.Services.Implementation
 
 			var invSection = inv.GetSections ().FirstOrDefault (sec => sec.ID == _selectedInventorySectionID);
 			if (invSection != null) {
-				return invSection.GetInventoryBeverageLineItemsInSection ();
+				return Task.FromResult(invSection.GetInventoryBeverageLineItemsInSection ());
 			}
 
 		    throw new InvalidOperationException ("No current inventory section!");

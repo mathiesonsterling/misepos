@@ -12,6 +12,7 @@ using Mise.Core.Server.Services.Implementation;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
+using Mise.Inventory;
 
 namespace DeveloperTools
 {
@@ -59,9 +60,8 @@ namespace DeveloperTools
 
                 try
                 {
-                    /*var populateInventoryCommand = new PopulateInventoryNeo4JDatabaseCommand(silentLogger, uri, progress,
-                        selItem.Key.ToUpper() == "DEV");*/
-                    var populateInventoryCommand = new PopulateInventorySqlServerDBCommand(progress, silentLogger, uri, selItem.Key.ToUpper() == "DEV");
+                    var buildLevel = DBChoices.GetBuildLevelSelected(selItem.Key);
+                    var populateInventoryCommand = new PopulateInventorySqlServerDBCommand(progress, silentLogger, uri, buildLevel);
                     await populateInventoryCommand.Execute();
                     MessageBox.Show("GraphDB is now populated!");
                 }
