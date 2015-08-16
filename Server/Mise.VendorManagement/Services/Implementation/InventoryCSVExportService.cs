@@ -20,6 +20,24 @@ namespace Mise.VendorManagement.Services.Implementation
             _logger = logger;
         }
 
+        private string GetCategoriesString(IEnumerable<ICategory> cats)
+        {
+            if (cats == null)
+            {
+                return string.Empty;
+            }
+
+            string catList = string.Empty;
+            var categories = cats.ToList();
+            if (categories.Any())
+            {
+                var catStrings = categories.Select(c => c.Name);
+                catList = string.Join(",", catStrings);
+            }
+
+            return catList;
+        }
+
         public async Task<byte[]> ExportInventoryToCsv(IInventory inventory)
         {
             {
@@ -49,6 +67,8 @@ namespace Mise.VendorManagement.Services.Implementation
                                         ? li.GetPartialBottlePercentages().Sum(p => p)
                                         : 0;
 
+                                 
+
                                     csv.WriteField(li.Quantity);
 
                                     csv.WriteField(li.CurrentAmount.Milliliters);
@@ -56,6 +76,7 @@ namespace Mise.VendorManagement.Services.Implementation
 
                                     csv.WriteField(numpartials);
 
+                                    csv.WriteField(GetCategoriesString(li.GetCategories()));
                                     csv.NextRecord();
                                 }
                             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
@@ -43,7 +44,11 @@ namespace DeveloperTools.Commands
 
             var bytes = await service.ExportInventoryToCsv(lastInv);
 
-
+            Report("Writing CSV to file");
+            using (var file = new FileStream(fileName, FileMode.Create))
+            {
+               await file.WriteAsync(bytes, 0, bytes.Length);
+            }
             Finish();
         }
 
