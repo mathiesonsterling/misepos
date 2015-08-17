@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common", "..\..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common.UnitTests", "..\..\..\Mise.Core.Common.UnitTests\Mise.Core.Common.UnitTests.csproj", "{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.VendorManagement", "..\..\Mise.VendorManagement\Mise.VendorManagement.csproj", "{E9C01193-A119-4AB7-BCC8-54531759A971}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.CSVImportExport", "..\..\Mise.VendorManagement\Mise.CSVImportExport.csproj", "{E9C01193-A119-4AB7-BCC8-54531759A971}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
