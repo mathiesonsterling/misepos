@@ -44,6 +44,7 @@ namespace Mise.Inventory.Pages
 				}
 			}
 		}
+
 			
 		void LoadItems ()
 		{

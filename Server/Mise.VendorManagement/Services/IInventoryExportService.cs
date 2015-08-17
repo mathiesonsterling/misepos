@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,6 @@ namespace Mise.VendorManagement.Services
 {
     public interface IInventoryExportService
     {
-        Task ExportInventoryToCsvFile(string filename, IInventory inventory);
+        Task<byte[]> ExportInventoryToCsv(IInventory inventory);
     }
 }

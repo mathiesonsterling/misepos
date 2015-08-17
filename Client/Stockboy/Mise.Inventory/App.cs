@@ -91,7 +91,7 @@ namespace Mise.Inventory
 			DeviceID = item.ToString ();
 		}
 
-        protected override async void OnSleep()
+        protected override void OnSleep()
         {
 			//TODO fire a sync if we're online and need one
         }

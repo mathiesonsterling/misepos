@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 using System.Web.Http;
 using Microsoft.WindowsAzure.Mobile.Service;
 using Mindscape.Raygun4Net.WebApi;
-using Mise.Core.Common.Entities;
-using Mise.Core.Common.Entities.DTOs;
-using Mise.Core.Common.Services.Implementation.Serialization;
-using Mise.Core.Common.Services.WebServices.FakeServices;
-using Mise.Core.Entities.Base;
-using Mise.Core.Entities.People;
-using Mise.Core.Services.UtilityServices;
-using stockboymobileserviceService.DataObjects;
+using Newtonsoft.Json;
 using stockboymobileserviceService.Models;
 
 namespace stockboymobileserviceService
@@ -34,8 +23,8 @@ namespace stockboymobileserviceService
             // config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
             
             // Set default and null value handling to "Include" for Json Serializer
-            config.Formatters.JsonFormatter.SerializerSettings.DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Include;
-            config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+            config.Formatters.JsonFormatter.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
+            config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = NullValueHandling.Include;
             
             Database.SetInitializer(new stockboymobileserviceInitializer());
         }
@@ -49,31 +38,6 @@ namespace stockboymobileserviceService
             //await LoadSeedFromFakeWebservice(context);
 
             base.Seed(context);
-        }
-
-        private static EntityDataTransportObjectFactory _dataTransportObjectFactory;
-        private async Task LoadSeedFromFakeWebservice(stockboymobileserviceContext context)
-        {
-            var serializer = new JsonNetSerializer();
-            _dataTransportObjectFactory = new EntityDataTransportObjectFactory(serializer);
-
-            var fakeWebService = new FakeInventoryWebService();
-
-            var employees = await fakeWebService.GetEmployeesAsync();
-            var empDTOs = employees.Select(GetEntityStorage<Employee, IEmployee>);
-            foreach (var dto in empDTOs)
-            {
-                context.Set<AzureEntityStorage>().Add(dto);
-            }
-
-        }
-
-        private static AzureEntityStorage GetEntityStorage<TRealType, TInterface>(TInterface entity) where TRealType : TInterface, IEntityBase, new()
-        {
-            var concrete = (TRealType)entity;
-            var dto = _dataTransportObjectFactory.ToDataTransportObject(concrete);
-
-            return new AzureEntityStorage(dto);
         }
     }
 }

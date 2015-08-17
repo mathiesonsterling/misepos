@@ -24,7 +24,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				return new AzureServiceLocation("http://localhost:50778", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
 			case BuildLevel.Development:
 			case BuildLevel.QA:
-				return new AzureServiceLocation ("https://stockboymobileservice.azure-mobile.net/", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
+				return new AzureServiceLocation ("http://stagingstockboymobileservice.azure-mobile.net/", "iMKBBmlToPggjupkuLeoclvRBOZHsk90");
 			case BuildLevel.Production:
 				return new AzureServiceLocation("https://stockboymobileservice.azure-mobile.net/", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
 			default:
