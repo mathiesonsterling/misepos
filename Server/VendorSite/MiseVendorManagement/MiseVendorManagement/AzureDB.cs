@@ -25,5 +25,7 @@ namespace MiseVendorManagement
                 .Property(e => e.Version)
                 .IsFixedLength();
         }
+
+        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorViewModel> VendorViewModels { get; set; }
     }
 }

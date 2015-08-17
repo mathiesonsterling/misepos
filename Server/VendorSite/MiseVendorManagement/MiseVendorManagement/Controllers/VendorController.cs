@@ -1,42 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation.Serialization;
+using Mise.Core.Entities;
+using Mise.Core.ValueItems;
 using MiseVendorManagement.Models;
 
 namespace MiseVendorManagement.Controllers
 {
     public class VendorController : Controller
     {
-        private readonly EntityDataTransportObjectFactory _entityFactory;
+        private readonly VendorDAL _dal;
         public VendorController()
         {
-            _entityFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
+            _dal = new VendorDAL();
         }
 
         // GET: Vendor
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             //get all our vendors
-            using (var db = new AzureDB())
-            {
-                var vendorType = typeof (Vendor).ToString();
-                var ais = db.AzureEntityStorages.Where(ai => ai.MiseEntityType == vendorType).ToList();
-                var dtos = ais.Select(ai => ai.ToRestaurantDTO());
-                var vendors = dtos.Select(dto => _entityFactory.FromDataStorageObject<Vendor>(dto));
-                var viewModels = vendors.Select(v => new VendorViewModel(v));
-                return View(viewModels);
-            }
+            var vendors = await _dal.GetAllVendors();
+            var viewModels = vendors.Select(v => new VendorViewModel(v));
+            return View(viewModels);
         }
 
         // GET: Vendor/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(Guid id)
         {
-            return View();
+            var vendor = await _dal.GetVendor(id);
+            var vm = new VendorViewModel(vendor);
+            return View(vm);
         }
 
         // GET: Vendor/Create
@@ -47,13 +46,24 @@ namespace MiseVendorManagement.Controllers
 
         // POST: Vendor/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public async Task<ActionResult> Create(VendorViewModel vm)
         {
             try
             {
                 // TODO: Add insert logic here
+                if (ModelState.IsValid == false)
+                {
+                    return View(vm);
+                }
+                {
+                    var vendor = VendorVMToVendor(vm);
 
-                return RedirectToAction("Index");
+                    //TODO get geolocation here
+
+                    //store this
+                    await _dal.InsertVendor(vendor);
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
@@ -61,20 +71,41 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
+        private static Vendor VendorVMToVendor(VendorViewModel vm)
+        {
+//convert this to a vendor!
+            var vendor = new Vendor
+            {
+                CreatedDate = DateTimeOffset.UtcNow,
+                EmailToOrderFrom = new EmailAddress(vm.Email),
+                ID = Guid.NewGuid(),
+                LastUpdatedDate = DateTimeOffset.UtcNow,
+                Name = vm.Name,
+                PhoneNumber = new PhoneNumber(vm.PhoneAreaCode, vm.PhoneNumber),
+                Revision = new EventID(MiseAppTypes.VendorManagement, 1),
+                Verified = false,
+                StreetAddress =
+                    new StreetAddress(vm.StreetAddressNumber, vm.StreetDirection, vm.StreetName, vm.City, vm.State, vm.Country,
+                        vm.ZipCode)
+            };
+            return vendor;
+        }
+
         // GET: Vendor/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
             return View();
         }
 
         // POST: Vendor/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit(VendorViewModel vm)
         {
             try
             {
-                // TODO: Add update logic here
-
+                var updated = VendorVMToVendor(vm);
+                await _dal.UpdateVendor(updated);
+                
                 return RedirectToAction("Index");
             }
             catch
@@ -84,14 +115,14 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: Vendor/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
             return View();
         }
 
         // POST: Vendor/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(Guid id, FormCollection collection)
         {
             try
             {

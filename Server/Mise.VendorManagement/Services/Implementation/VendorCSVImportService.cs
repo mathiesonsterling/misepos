@@ -94,7 +94,7 @@ namespace Mise.VendorManagement.Services.Implementation
                         ID = Guid.NewGuid(),
                         CreatedDate = DateTime.UtcNow,
                         LastUpdatedDate = DateTime.UtcNow,
-                        Revision = new EventID {AppInstanceCode = MiseAppTypes.VendorDataImport, OrderingID = i++},
+                        Revision = new EventID {AppInstanceCode = MiseAppTypes.VendorManagement, OrderingID = i++},
                         VendorID = vendorID,
                         NameInVendor = csv.GetField<string>(itemNameColumn),
                     };
