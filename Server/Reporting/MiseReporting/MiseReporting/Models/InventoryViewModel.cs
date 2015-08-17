@@ -12,6 +12,9 @@ namespace MiseReporting.Models
     public class InventoryViewModel
     {
         public DateTime? DateCompleted { get; set; }
+
+        public DateTime DateCreated { get; set; }
+
         public string DoneByEmployee { get; set; }
         public Guid Id { get; set; }
 
@@ -28,6 +31,7 @@ namespace MiseReporting.Models
                 DoneByEmployee = emp.DisplayName;
             }
 
+            DateCreated = source.CreatedDate.ToLocalTime().LocalDateTime;
             Id = source.ID;
             HasLineItems = source.GetBeverageLineItems().Any();
         }

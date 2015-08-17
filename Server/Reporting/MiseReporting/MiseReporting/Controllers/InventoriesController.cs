@@ -63,7 +63,7 @@ namespace MiseReporting.Controllers
                 }
             }
 
-            return View(vms);
+            return View(vms.OrderByDescending(vm => vm.DateCreated));
         }
 
         private IInventory GetFromAi(AzureEntityStorage ai)
