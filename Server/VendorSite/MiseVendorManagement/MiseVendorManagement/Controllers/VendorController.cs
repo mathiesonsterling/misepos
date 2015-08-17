@@ -71,30 +71,13 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
-        private static Vendor VendorVMToVendor(VendorViewModel vm)
-        {
-//convert this to a vendor!
-            var vendor = new Vendor
-            {
-                CreatedDate = DateTimeOffset.UtcNow,
-                EmailToOrderFrom = new EmailAddress(vm.Email),
-                ID = Guid.NewGuid(),
-                LastUpdatedDate = DateTimeOffset.UtcNow,
-                Name = vm.Name,
-                PhoneNumber = new PhoneNumber(vm.PhoneAreaCode, vm.PhoneNumber),
-                Revision = new EventID(MiseAppTypes.VendorManagement, 1),
-                Verified = false,
-                StreetAddress =
-                    new StreetAddress(vm.StreetAddressNumber, vm.StreetDirection, vm.StreetName, vm.City, vm.State, vm.Country,
-                        vm.ZipCode)
-            };
-            return vendor;
-        }
 
         // GET: Vendor/Edit/5
-        public ActionResult Edit(Guid id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            return View();
+            var vendor = await _dal.GetVendor(id);
+            var vm = new VendorViewModel(vendor);
+            return View(vm);
         }
 
         // POST: Vendor/Edit/5
@@ -134,6 +117,26 @@ namespace MiseVendorManagement.Controllers
             {
                 return View();
             }
+        }
+
+        private static Vendor VendorVMToVendor(VendorViewModel vm)
+        {
+            //convert this to a vendor!
+            var vendor = new Vendor
+            {
+                CreatedDate = DateTimeOffset.UtcNow,
+                EmailToOrderFrom = new EmailAddress(vm.Email),
+                ID = Guid.NewGuid(),
+                LastUpdatedDate = DateTimeOffset.UtcNow,
+                Name = vm.Name,
+                PhoneNumber = new PhoneNumber(vm.PhoneAreaCode, vm.PhoneNumber),
+                Revision = new EventID(MiseAppTypes.VendorManagement, 1),
+                Verified = false,
+                StreetAddress =
+                    new StreetAddress(vm.StreetAddressNumber, vm.StreetDirection, vm.StreetName, vm.City, vm.State, vm.Country,
+                        vm.ZipCode)
+            };
+            return vendor;
         }
     }
 }
