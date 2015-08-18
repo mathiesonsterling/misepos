@@ -495,7 +495,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var query = table.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID);
 			var queryID = GetQueryID (type, restaurantID);
 
-			await AttemptPull (queryID, query);
+			try{
+				await AttemptPull (queryID, query);
+			} catch(Exception e){
+				_logger.HandleException (e, LogLevel.Error);
+			}
 
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID)
