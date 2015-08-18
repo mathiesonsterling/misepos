@@ -23,6 +23,7 @@ using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using Mise.Inventory.ViewModels;
 using ServiceStack;
 using System.Net;
+using XLabs.Ioc;
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
@@ -478,7 +479,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			}
 
 			var hash = restaurantID.GetHashCode ();
-			return type + "_" + hash;
+			var res=  type + "_" + hash;
+			if(res.Length > 50){
+				return res.Substring (res.Length - 49);
+			}
+
+			return res;
 		}
 	    private async Task<IEnumerable<T>> GetEntityOfTypeForRestaurant<T>(Guid restaurantID) where T:class, IEntityBase, new()
 		{
@@ -488,6 +494,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			//TODO get query into our pull async code
 			var query = table.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID);
 			var queryID = GetQueryID (type, restaurantID);
+
 			await AttemptPull (queryID, query);
 
 			var storageItems = await table
