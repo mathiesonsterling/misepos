@@ -20,7 +20,6 @@
 				HorizontalOptions="FillAndExpand"/>
 			<Button Text="Complete Section" Command="{Binding FinishSectionCommand}" 
 				IsEnabled ="{Binding CanComplete}" HorizontalOptions="FillAndExpand"/>
-			<Button Text="Clear Section" Command="{Binding ClearSectionCommand}" HorizontalOptions="FillAndExpand"/>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>
