@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace Mise.Inventory.CustomCells
+namespace Mise.Inventory.CustomControls
 {
 	public class LineItemWithQuantityCell : ViewCell
 	{

@@ -10,6 +10,7 @@ using Mise.Core.Entities.Inventory;
 using Xamarin.Forms;
 using Mise.Core.Services;
 using Mise.Core.Common.Services.WebServices.Exceptions;
+using Mise.Core.Common.Events.Inventory;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -51,12 +52,13 @@ namespace Mise.Inventory.ViewModels
 
 		readonly IInventoryService _inventoryService;
 		readonly ILoginService _loginService;
-			
+		readonly IList<Guid> _lineItemsCurrentlyChanging;
 		public InventoryViewModel(IAppNavigation appNavigation, ILoginService loginService, 
 			IInventoryService inventoryService, ILogger logger) : base(appNavigation, logger)
 		{
 			_inventoryService = inventoryService;
 			_loginService = loginService;
+			_lineItemsCurrentlyChanging = new List<Guid> ();
 		}
 
         public override async Task OnAppearing()
@@ -102,7 +104,7 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public ICommand DeleteLineItemCommand{
-			get{return new Command<InventoryLineItemDisplayLine> (DeleteLineItem, (item) => NotProcessing);}
+			get{return new Command<InventoryLineItemDisplayLine> (DeleteLineItemT, (item) => CanDeleteLI(item));}
 		}
 		#endregion
 
@@ -135,14 +137,29 @@ namespace Mise.Inventory.ViewModels
 			await Navigation.ShowItemScan();
 		}
 
-		async void DeleteLineItem (InventoryLineItemDisplayLine displayLI)
+		async void DeleteLineItemT(InventoryLineItemDisplayLine displayLI){
+			await DeleteLineItem (displayLI);
+		}
+
+	
+		public bool CanDeleteLI(InventoryLineItemDisplayLine li){
+			return NotProcessing && (_lineItemsCurrentlyChanging.Contains(li.ID) == false);
+		}
+
+		public async Task DeleteLineItem (InventoryLineItemDisplayLine displayLI)
 		{
 			try{
-				var li = displayLI.Source;
 
-				await _inventoryService.DeleteLineItem (li);
+				var ask = await Navigation.AskUser ("Delete Item", "Remove " + displayLI.DisplayName + " from section?");
+				if(ask){
+					_lineItemsCurrentlyChanging.Add(displayLI.ID);
+					var li = displayLI.Source;
 
-				await OnAppearing ();
+					await _inventoryService.DeleteLineItem (li);
+
+					_lineItemsCurrentlyChanging.Remove(displayLI.ID);
+					await DoSearch();
+				}
 			} catch(Exception e){
 				HandleException (e);
 			}

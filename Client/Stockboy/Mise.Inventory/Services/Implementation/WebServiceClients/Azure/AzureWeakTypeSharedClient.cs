@@ -24,6 +24,7 @@ using System.Net;
 using Mise.Core.Client.Services;
 
 
+
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 {
 	/// <summary>
@@ -488,7 +489,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			}
 
 			var hash = restaurantID.GetHashCode ();
-			return type + "_" + hash;
+			var res=  type + "_" + hash;
+			if(res.Length > 50){
+				return res.Substring (res.Length - 49);
+			}
+
+			return res;
 		}
 
 	    private async Task<IEnumerable<T>> GetEntityOfTypeForRestaurant<T>(Guid restaurantID) where T:class, IEntityBase, new()
@@ -499,7 +505,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			//TODO get query into our pull async code
 			var query = table.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID);
 			var queryID = GetQueryID (type, restaurantID);
-			await AttemptPull (queryID, query);
+
+			try{
+				await AttemptPull (queryID, query);
+			} catch(Exception e){
+				_logger.HandleException (e, LogLevel.Error);
+			}
 
 			var storageItems = await table
 				.Where (si => si.MiseEntityType == type && si.RestaurantID != null && si.RestaurantID == restaurantID)

@@ -29,7 +29,7 @@ namespace Mise.Inventory.ViewModels
 			};
 		}
 
-		private async Task DoSearch(){
+		protected async Task DoSearch(){
 			try{
 				var items = await LoadItems();
 				if(string.IsNullOrEmpty (SearchString) == false){
