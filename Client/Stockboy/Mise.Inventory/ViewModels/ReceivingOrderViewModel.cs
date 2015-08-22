@@ -71,12 +71,30 @@ namespace Mise.Inventory.ViewModels
 		    {
 		        if (args.PropertyName != "CanSave")
 		        {
-					CanSave = NotProcessing && (string.IsNullOrEmpty(InvoiceID) == false) && LineItems.Any() 
-						&& LineItems.All(li => li.Source.ZeroedOut 
-							|| (li.Source.LineItemPrice != null && li.Source.LineItemPrice.HasValue));
-						
+					CheckIfSavable ();
 		        }
 		    };
+		}
+
+		void CheckIfSavable(){
+			if(Processing){
+				CanSave = false;
+				return;
+			}
+
+			if(LineItems.Any() == false){
+				CanSave = false;
+				return;
+			}
+
+			var realLIs = LineItems.Select (li => li.Source);
+			foreach(var li in realLIs){
+				if(li.ZeroedOut == false && (li.LineItemPrice == null || li.LineItemPrice.HasValue == false)){
+					CanSave = false;
+					return;
+				} 
+			}
+			CanSave = true;
 		}
 
 		public override async Task OnAppearing ()
@@ -98,24 +116,12 @@ namespace Mise.Inventory.ViewModels
 					{
 						Title = "Receive from " + VendorName;
 					}
-
-					//debug
-					CanSave = true;
-					foreach(var li in ro.GetBeverageLineItems()){
-						if(li.ZeroedOut == false){
-							var hasPrice = li.UnitPrice != null && li.UnitPrice.HasValue && li.Quantity > 0;
-							if(hasPrice == false){
-								CanSave = false;
-								break;
-							}
-						}
-					}
-					//CanSave = ro.GetBeverageLineItems().All(li => li.ZeroedOut || (li.UnitPrice != null && li.UnitPrice.HasValue && li.Quantity > 0));
+					CheckIfSavable ();
 				}
 				else
 				{
 					Title = "Receive from " + VendorName;
-					CanSave = false;
+					CheckIfSavable ();
 				}
 				Processing = false;
 			} catch(Exception e){
