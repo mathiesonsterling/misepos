@@ -43,7 +43,9 @@ namespace Mise.Core.Common.Entities.Inventory
 
 	    public int GetNextItemPosition()
 	    {
-	        return LineItems.Count + 1;
+			//we'll do BASIC style line numbers, so we can get lots of reorders without having to get to 
+			//n2 perf
+			return (LineItems.Count + 1) * 10;
 	    }
 
 	    public ICloneableEntity Clone()

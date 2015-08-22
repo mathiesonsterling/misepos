@@ -1,28 +1,36 @@
 ﻿using System;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace Mise.Inventory.CustomCells
+namespace Mise.Inventory.CustomControls
 { 
 	public class InventoryLineItemCell : LineItemWithQuantityCell
 	{
-		public delegate void InventoryLineItemDeletedHandler(object item);
-		public delegate void InventoryLineItemInsertHandler(object item);
-		public InventoryLineItemCell (InventoryLineItemDeletedHandler deleted, InventoryLineItemInsertHandler insert)
+		public delegate Task InventoryLineItemHandler(object item);
+		public InventoryLineItemCell (InventoryLineItemHandler deleted, InventoryLineItemHandler moveUp, 
+			InventoryLineItemHandler moveDown)
 		{
-			var insertAction = new MenuItem{ Text = "Insert After" };
-			insertAction.SetBinding (MenuItem.CommandParameterProperty, new Binding ("."));
-			insertAction.Clicked += (sender, e) => {
+			var moveUpAction = new MenuItem{ Text = "Up" };
+			moveUpAction.SetBinding (MenuItem.CommandParameterProperty, new Binding("."));
+			moveUpAction.Clicked += async (sender, e) => {
 				var mi = ((MenuItem)sender);
-				insert(mi.CommandParameter);
+				await moveUp(mi.CommandParameter);
 			};
-			ContextActions.Add (insertAction);
+			ContextActions.Add (moveUpAction);
+
+			var moveDownAction = new MenuItem { Text = "Down" };
+			moveDownAction.SetBinding (MenuItem.CommandParameterProperty, new Binding("."));
+			moveDownAction.Clicked += async (sender, e) => {
+				var mi =((MenuItem)sender);
+				await moveDown(mi.CommandParameter);
+			};
+			ContextActions.Add (moveDownAction);
 
 			var deleteAction = new MenuItem { Text = "Delete", IsDestructive = true }; // red background
 			deleteAction.SetBinding (MenuItem.CommandParameterProperty, new Binding ("."));
 			deleteAction.Clicked += async (sender, e) => {
 				var mi = ((MenuItem)sender);
-				deleted(mi.CommandParameter);
+				await deleted(mi.CommandParameter);
 			};
 			ContextActions.Add (deleteAction);
 		}

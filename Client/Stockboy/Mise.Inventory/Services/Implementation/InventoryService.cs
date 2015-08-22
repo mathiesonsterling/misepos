@@ -11,6 +11,11 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Services;
 using Mise.Core.Entities.Inventory.Events;
+using System.Runtime.InteropServices;
+using Mise.Core.Common.Events.Inventory;
+using Xamarin.Forms;
+
+
 
 
 namespace Mise.Inventory.Services.Implementation
@@ -231,6 +236,17 @@ namespace Mise.Inventory.Services.Implementation
 			 await _inventoryRepository.Commit(inv.ID).ConfigureAwait(false);
 		}
 
+		public async Task ClearCurrentSection ()
+		{
+			var emp = await _loginService.GetCurrentEmployee ();
+			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			var sec = GetSelectedSection ();
+
+			var ev = _eventFactory.CreateInventorySectionClearedEvent (emp, inv, sec);
+
+			_inventoryRepository.ApplyEvent (ev);
+		}
+
 		public async Task MarkInventoryAsComplete ()
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
@@ -287,6 +303,66 @@ namespace Mise.Inventory.Services.Implementation
             ReportNumItemsInTransaction();
 
 			_selectedLineItem = null;
+		}
+
+		public async Task DeleteLineItem (IInventoryBeverageLineItem li)
+		{
+			var currInv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			var currSection = currInv.GetSections ().FirstOrDefault (s => s.ID == _selectedInventorySectionID);
+			var emp = await _loginService.GetCurrentEmployee ();
+
+			var ev = _eventFactory.CreateInventoryLineItemDeletedEvent (emp, currInv, currSection, li);
+
+			_inventoryRepository.ApplyEvent (ev);
+		}
+
+		public async Task MoveLineItemToPosition (IInventoryBeverageLineItem li, int position)
+		{
+			var currInv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			var currSection = currInv.GetSections ().FirstOrDefault (s => s.ID == _selectedInventorySectionID);
+			var emp = await _loginService.GetCurrentEmployee ();
+
+			var ev = _eventFactory.CreateInventoryLineItemMovedToNewPositionEvent (emp, currInv, currSection, li, position);
+
+			_inventoryRepository.ApplyEvent (ev);
+		}
+
+		public Task MoveLineItemUpInList (IInventoryBeverageLineItem li)
+		{
+			return MoveLineItem (li, true);
+		}
+
+		public Task MoveLineItemDownInList (IInventoryBeverageLineItem li)
+		{
+			return MoveLineItem (li, false);
+		}
+
+		async Task MoveLineItem(IInventoryBeverageLineItem lineItem, bool up){
+			var emp = await _loginService.GetCurrentEmployee ();
+			var currInv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			var currSection = currInv.GetSections ().FirstOrDefault (s => s.ID == _selectedInventorySectionID);
+
+			var items = currSection.GetInventoryBeverageLineItemsInSection().OrderBy (li => li.InventoryPosition).ToList ();
+			var currIndex = items.IndexOf (lineItem);
+
+			int newPos;
+			if(up){
+				if(currIndex < 1){
+					return;
+				}  
+				var prevItem = items[currIndex - 1];
+				newPos = prevItem.InventoryPosition - 1;
+			} else {
+				if(currIndex >= (items.Count - 1)){
+					return;
+				}
+				var nextItem = items[currIndex + 1];
+				newPos = nextItem.InventoryPosition + 1;
+			}
+
+			var ev = _eventFactory.CreateInventoryLineItemMovedToNewPositionEvent (emp, currInv, currSection, lineItem, newPos);
+
+			_inventoryRepository.ApplyEvent(ev);
 		}
 
 	    public Task<IInventorySection> GetCurrentInventorySection()

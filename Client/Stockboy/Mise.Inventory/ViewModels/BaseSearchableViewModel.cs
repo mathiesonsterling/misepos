@@ -29,7 +29,7 @@ namespace Mise.Inventory.ViewModels
 			};
 		}
 
-		private async Task DoSearch(){
+		protected async Task DoSearch(){
 			try{
 				var items = await LoadItems();
 				if(string.IsNullOrEmpty (SearchString) == false){
@@ -85,7 +85,7 @@ namespace Mise.Inventory.ViewModels
 		/// Callback for the page to provide us to allow reloading manually
 		/// </summary>
 		/// <value>The load items on view.</value>
-		public Action LoadItemsOnView{ private get; set;}
+		public Action LoadItemsOnView{ protected get; set;}
 	}
 }
 

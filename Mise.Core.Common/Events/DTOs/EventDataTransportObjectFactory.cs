@@ -486,12 +486,16 @@ namespace Mise.Core.Common.Events.DTOs
                     return _jsonSerializer.Deserialize<InventoryLiquidItemMeasuredEvent>(dto.JSON);
                 case MiseEventTypes.InventoryLineItemAdded:
                     return _jsonSerializer.Deserialize<InventoryLineItemAddedEvent>(dto.JSON);
+				case MiseEventTypes.InventoryLineItemDeleted:
+					return _jsonSerializer.Deserialize<InventoryLineItemDeletedEvent> (dto.JSON);
                 case MiseEventTypes.InventoryMadeCurrent:
                     return _jsonSerializer.Deserialize<InventoryMadeCurrentEvent>(dto.JSON);
                 case MiseEventTypes.InventorySectionCompleted:
                     return _jsonSerializer.Deserialize<InventorySectionCompletedEvent>(dto.JSON);
                 case MiseEventTypes.InventoryNewSectionAdded:
                     return _jsonSerializer.Deserialize<InventoryNewSectionAddedEvent>(dto.JSON);
+				case MiseEventTypes.InventoryLineItemMovedToNewPosition:
+					return _jsonSerializer.Deserialize<InventoryLineItemMovedToNewPositionEvent> (dto.JSON);
                 default:
                     return null;
             }

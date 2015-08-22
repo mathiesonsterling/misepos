@@ -8,6 +8,11 @@ using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using NUnit.Framework;
 using Mise.Core.Entities;
+using System.Runtime.InteropServices;
+using Mise.Core.Common.Services;
+using System.Reflection;
+
+
 namespace Mise.Core.Common.UnitTests.Entities.Inventory
 {
     [TestFixture]
@@ -505,5 +510,43 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             Assert.NotNull(otherSec);
             Assert.False(otherSec.GetInventoryBeverageLineItemsInSection().Any());
         }
+
+		[Test]
+		public void DeleteEventShouldRemoveLineItem(){
+			var liID = Guid.NewGuid ();
+			var underTest = new Common.Entities.Inventory.Inventory {
+				ID = Guid.NewGuid (),
+				Sections = new List<InventorySection> {
+					new InventorySection {
+						ID = Guid.NewGuid (),
+						LineItems = new List<InventoryBeverageLineItem> {
+							new InventoryBeverageLineItem {
+								ID = liID,
+								DisplayName = "testItem"
+							},
+							new InventoryBeverageLineItem {
+								ID = Guid.NewGuid (),
+								DisplayName = "notDel"
+							}
+						}
+					}
+				}
+			};
+
+			var delEv = new InventoryLineItemDeletedEvent {
+				ID = Guid.NewGuid (),
+				InventoryID = underTest.ID,
+				InventorySectionID = underTest.Sections.First ().ID,
+				InventoryLineItemID = liID
+			};
+
+			//ACT
+			underTest.When (delEv);
+
+			//ASSERT
+			var lis = underTest.GetBeverageLineItems ().ToList ();
+			Assert.AreEqual (1, lis.Count());
+			Assert.AreEqual ("notDel", lis.First().DisplayName);
+		}
     }
 }

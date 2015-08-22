@@ -232,6 +232,15 @@ namespace Mise.Core.Common.UnitTests.Events
 		}
 
 		[Test]
+		public void LineItemDeleted(){
+			var ev = _underTest.CreateInventoryLineItemDeletedEvent (_emp, _inv, _invSection, _invLI);
+			TestInventoryEvent (ev);
+			Assert.AreEqual (_inv.ID, ev.InventoryID);
+			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
+			Assert.AreEqual (_invLI.ID, ev.InventoryLineItemID);
+		}
+
+		[Test]
 		public void InventoryMadeCurrent(){
 			var ev = _underTest.CreateInventoryMadeCurrentEvent (_emp, _inv);
 			TestInventoryEvent (ev);
@@ -243,6 +252,20 @@ namespace Mise.Core.Common.UnitTests.Events
 			TestInventoryEvent (ev);
 			Assert.AreNotEqual (_restSec.ID, ev.SectionID);
 			Assert.AreEqual (_restSec.ID, ev.RestaurantSectionId);
+		}
+
+		[Test]
+		public void InventoryLineItemMoved(){
+			var ev = _underTest.CreateInventoryLineItemMovedToNewPositionEvent (_emp, _inv, _invSection, _invLI, 5);
+			TestInventoryEvent (ev);
+			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
+			Assert.AreEqual (5, ev.NewPositionWanted);
+		}
+
+		[Test]
+		public void InventorySectionCleared(){
+			var ev = _underTest.CreateInventorySectionClearedEvent (_emp, _inv, _invSection);
+			TestInventoryEvent (ev);
 		}
 
 		[Test]

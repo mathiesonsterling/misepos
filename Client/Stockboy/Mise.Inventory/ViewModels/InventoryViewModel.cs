@@ -10,6 +10,7 @@ using Mise.Core.Entities.Inventory;
 using Xamarin.Forms;
 using Mise.Core.Services;
 using Mise.Core.Common.Services.WebServices.Exceptions;
+using Mise.Core.Common.Events.Inventory;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -51,12 +52,13 @@ namespace Mise.Inventory.ViewModels
 
 		readonly IInventoryService _inventoryService;
 		readonly ILoginService _loginService;
-			
+		readonly IList<Guid> _lineItemsCurrentlyChanging;
 		public InventoryViewModel(IAppNavigation appNavigation, ILoginService loginService, 
 			IInventoryService inventoryService, ILogger logger) : base(appNavigation, logger)
 		{
 			_inventoryService = inventoryService;
 			_loginService = loginService;
+			_lineItemsCurrentlyChanging = new List<Guid> ();
 		}
 
         public override async Task OnAppearing()
@@ -100,6 +102,14 @@ namespace Mise.Inventory.ViewModels
 		public ICommand FinishSectionCommand{
 			get{return new Command (FinishSection, () => CanComplete);}
 		}
+
+		public ICommand DeleteLineItemCommand{
+			get{return new Command<InventoryLineItemDisplayLine> (DeleteLineItemT, (item) => CanDeleteLI(item));}
+		}
+
+		public ICommand ClearSectionCommand{
+			get{return new Command (ClearSection, () => NotProcessing);}
+		}
 		#endregion
 
 		public override async Task SelectLineItem(InventoryLineItemDisplayLine lineItem){
@@ -129,6 +139,44 @@ namespace Mise.Inventory.ViewModels
 		async void Scan()
 		{
 			await Navigation.ShowItemScan();
+		}
+
+		async void DeleteLineItemT(InventoryLineItemDisplayLine displayLI){
+			await DeleteLineItem (displayLI);
+		}
+
+	
+		public bool CanDeleteLI(InventoryLineItemDisplayLine li){
+			return NotProcessing && (_lineItemsCurrentlyChanging.Contains(li.ID) == false);
+		}
+
+		public async Task DeleteLineItem (InventoryLineItemDisplayLine displayLI)
+		{
+			try{
+
+				//var ask = await Navigation.AskUser ("Delete Item", "Remove " + displayLI.DisplayName + " from section?");
+				//if(ask){
+					_lineItemsCurrentlyChanging.Add(displayLI.ID);
+					var li = displayLI.Source;
+
+					await _inventoryService.DeleteLineItem (li);
+
+					_lineItemsCurrentlyChanging.Remove(displayLI.ID);
+					await DoSearch();
+				//}
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+
+		public async Task MoveLineItemUp(InventoryLineItemDisplayLine dLI){
+			await _inventoryService.MoveLineItemUpInList (dLI.Source);
+			await DoSearch ();
+		}
+
+		public async Task MoveLineItemDown(InventoryLineItemDisplayLine dLI){
+			await _inventoryService.MoveLineItemDownInList (dLI.Source);
+			await DoSearch ();
 		}
 
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){
@@ -170,6 +218,19 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
+		async void ClearSection(){
+			try{
+				var res = await Navigation.AskUser ("Remove all items", "Remove all items from this section?");
+				if(res){
+					Processing = true;
+					await _inventoryService.ClearCurrentSection ();
+					Processing = false;
+					await DoSearch ();
+				}
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
 		#region implemented abstract members of BaseLineItemViewModel
 
 		protected override void AfterSearchDone ()
