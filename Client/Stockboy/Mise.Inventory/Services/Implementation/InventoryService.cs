@@ -13,15 +13,9 @@ using Mise.Core.Services;
 using Mise.Core.Entities.Inventory.Events;
 using System.Runtime.InteropServices;
 using Mise.Core.Common.Events.Inventory;
-
-
-using Mise.Core.Common.Events.Inventory;
-
-
 using Xamarin.Forms;
 
 
-using Xamarin.Forms;
 
 
 namespace Mise.Inventory.Services.Implementation
@@ -242,6 +236,17 @@ namespace Mise.Inventory.Services.Implementation
 			 await _inventoryRepository.Commit(inv.ID).ConfigureAwait(false);
 		}
 
+		public async Task ClearCurrentSection ()
+		{
+			var emp = await _loginService.GetCurrentEmployee ();
+			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			var sec = GetSelectedSection ();
+
+			var ev = _eventFactory.CreateInventorySectionClearedEvent (emp, inv, sec);
+
+			_inventoryRepository.ApplyEvent (ev);
+		}
+
 		public async Task MarkInventoryAsComplete ()
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
@@ -340,15 +345,15 @@ namespace Mise.Inventory.Services.Implementation
 			var items = currSection.GetInventoryBeverageLineItemsInSection().OrderBy (li => li.InventoryPosition).ToList ();
 			var currIndex = items.IndexOf (lineItem);
 
-			var newPos = -1;
+			int newPos;
 			if(up){
-				if(currIndex <= 0){
+				if(currIndex < 1){
 					return;
 				}  
 				var prevItem = items[currIndex - 1];
 				newPos = prevItem.InventoryPosition - 1;
 			} else {
-				if(currIndex >= items.Count){
+				if(currIndex >= (items.Count - 1)){
 					return;
 				}
 				var nextItem = items[currIndex + 1];

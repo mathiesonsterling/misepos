@@ -78,6 +78,9 @@ namespace Mise.Core.Common.Entities.Inventory
                 case MiseEventTypes.InventorySectionCompleted:
                     WhenInventorySectionCompleted((InventorySectionCompletedEvent)entityEvent);
                     break;
+			case MiseEventTypes.InventorySectionCleared:
+				WhenInventorySectionCleared ((InventorySectionClearedEvent)entityEvent);
+				break;
                 case MiseEventTypes.InventoryLineItemAdded:
                     WhenInventoryLineItemAdded((InventoryLineItemAddedEvent)entityEvent);
                     break;
@@ -170,6 +173,16 @@ namespace Mise.Core.Common.Entities.Inventory
             section.LineItems.Add(newLI);
 
         }
+
+		void WhenInventorySectionCleared (InventorySectionClearedEvent ev)
+		{
+			var section = Sections.FirstOrDefault (s => s.ID == ev.SectionId);
+			if(section == null){
+				throw new ArgumentException ("Invalid section");
+			}
+
+			section.LineItems.Clear ();
+		}
 
         private void WhenMadeCurrent(InventoryMadeCurrentEvent entityEvent)
         {

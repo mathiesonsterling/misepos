@@ -106,6 +106,10 @@ namespace Mise.Inventory.ViewModels
 		public ICommand DeleteLineItemCommand{
 			get{return new Command<InventoryLineItemDisplayLine> (DeleteLineItemT, (item) => CanDeleteLI(item));}
 		}
+
+		public ICommand ClearSectionCommand{
+			get{return new Command (ClearSection, () => NotProcessing);}
+		}
 		#endregion
 
 		public override async Task SelectLineItem(InventoryLineItemDisplayLine lineItem){
@@ -165,6 +169,16 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
+		public async Task MoveLineItemUp(InventoryLineItemDisplayLine dLI){
+			await _inventoryService.MoveLineItemUpInList (dLI.Source);
+			await DoSearch ();
+		}
+
+		public async Task MoveLineItemDown(InventoryLineItemDisplayLine dLI){
+			await _inventoryService.MoveLineItemDownInList (dLI.Source);
+			await DoSearch ();
+		}
+
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){
 			var items = (await _inventoryService.GetLineItemsForCurrentSection ()).ToList();
             var itemsList = items.OrderBy(li => li.InventoryPosition)
@@ -204,6 +218,19 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
+		async void ClearSection(){
+			try{
+				var res = await Navigation.AskUser ("Remove all items", "Remove all items from this section?");
+				if(res){
+					Processing = true;
+					await _inventoryService.ClearCurrentSection ();
+					Processing = false;
+					await DoSearch ();
+				}
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
 		#region implemented abstract members of BaseLineItemViewModel
 
 		protected override void AfterSearchDone ()

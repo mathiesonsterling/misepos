@@ -59,6 +59,7 @@ namespace Mise.Inventory.Services
 	    Task SetCurrentInventorySection(IInventorySection section);
 
 		Task MarkSectionAsComplete ();
+		Task ClearCurrentSection();
 
 		/// <summary>
 		/// marks the current inventory as completed

@@ -53,6 +53,7 @@ namespace Mise.Core.Common.Events
 			IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity,  
 			Guid? vendorID, IInventorySection section, int inventoryPosition, IInventory inventory);
 		InventorySectionCompletedEvent CreateInventorySectionCompletedEvent(IEmployee emp, IInventory inventory, IInventorySection section);
+		InventorySectionClearedEvent CreateInventorySectionClearedEvent (IEmployee emp, IInventory inventory, IInventorySection sec);
 		InventoryLiquidItemMeasuredEvent CreateInventoryLiquidItemMeasuredEvent(IEmployee emp, IInventory inventory, 
 			IInventorySection section, InventoryBeverageLineItem li, int numFullBottles, IEnumerable<decimal> partialBottlePercentages, LiquidAmount amtMeasured);
 		InventoryCompletedEvent CreateInventoryCompletedEvent(IEmployee emp, IInventory inventory);

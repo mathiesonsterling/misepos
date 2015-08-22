@@ -449,6 +449,20 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
+		public InventorySectionClearedEvent CreateInventorySectionClearedEvent (IEmployee emp, IInventory inventory, IInventorySection sec)
+		{
+			return new InventorySectionClearedEvent {
+				ID = Guid.NewGuid (),
+				CreatedDate = GetDate (),
+				DeviceID = _deviceID,
+				EventOrderingID = GetNextEventID (),
+				CausedByID = emp.ID,
+				RestaurantID = _restaurant.ID,
+				InventoryID = inventory.ID,
+				SectionId = sec.ID
+			};
+		}
+
 		public InventorySectionAddedToRestaurantEvent CreateInventorySectionAddedToRestaurantEvent (IEmployee emp, string newSectionName, bool isDefaultSection, bool allowsPartialBottles)
 		{
 			return new InventorySectionAddedToRestaurantEvent {

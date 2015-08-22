@@ -255,6 +255,20 @@ namespace Mise.Core.Common.UnitTests.Events
 		}
 
 		[Test]
+		public void InventoryLineItemMoved(){
+			var ev = _underTest.CreateInventoryLineItemMovedToNewPositionEvent (_emp, _inv, _invSection, _invLI, 5);
+			TestInventoryEvent (ev);
+			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
+			Assert.AreEqual (5, ev.NewPositionWanted);
+		}
+
+		[Test]
+		public void InventorySectionCleared(){
+			var ev = _underTest.CreateInventorySectionClearedEvent (_emp, _inv, _invSection);
+			TestInventoryEvent (ev);
+		}
+
+		[Test]
 		public void SectionAddedToRestaurant(){
 			var ev = _underTest.CreateInventorySectionAddedToRestaurantEvent (_emp, "NewSec", true, true);
 			TestCommonFieldsWithRest (ev);

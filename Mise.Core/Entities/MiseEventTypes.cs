@@ -68,6 +68,7 @@
 
         InventoryCreated,
         InventoryCompleted,
+		InventorySectionCleared,
 		InventorySectionCompleted,
         InventoryLiquidItemMeasured,
         InventoryMadeCurrent,
