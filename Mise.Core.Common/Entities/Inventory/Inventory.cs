@@ -84,10 +84,37 @@ namespace Mise.Core.Common.Entities.Inventory
 				case MiseEventTypes.InventoryLineItemDeleted:
 					WhenInventoryLineItemDeleted ((InventoryLineItemDeletedEvent)entityEvent);
 					break;
+				case MiseEventTypes.InventoryLineItemMovedToNewPosition:
+					WhenInventoryLineItemMovedToNewPosition ((InventoryLineItemMovedToNewPositionEvent)entityEvent);
+					break;
                 default:
                     throw new ArgumentException("Cannot use event " + entityEvent.EventType);
             }
         }
+
+		void WhenInventoryLineItemMovedToNewPosition(InventoryLineItemMovedToNewPositionEvent ev){
+			var section = Sections.FirstOrDefault (s => s.ID == ev.InventorySectionID);
+			if(section == null){
+				throw new ArgumentException("Section not found");
+			}
+
+			var item = section.LineItems.FirstOrDefault(li => li.ID == ev.LineItemID);
+			if(item == null){
+				throw new ArgumentException("Item not found");
+			}
+
+			MoveLineItemToPosition(section, item, ev.NewPositionWanted);
+		}
+
+		void MoveLineItemToPosition(InventorySection sec, InventoryBeverageLineItem li, int newPosition){
+			//is there already an item at the destination?	If so move it one forward
+			var existing = sec.LineItems.FirstOrDefault(l => l.InventoryPosition == newPosition);
+			if(existing != null){
+				MoveLineItemToPosition (sec, existing, newPosition + 1);
+			}
+
+			li.InventoryPosition = newPosition;
+		}
 
 		void WhenInventoryLineItemDeleted (InventoryLineItemDeletedEvent ev)
 		{

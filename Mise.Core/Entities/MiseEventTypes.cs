@@ -73,6 +73,7 @@
         InventoryMadeCurrent,
         InventoryLineItemAdded,
 		InventoryLineItemDeleted,
+		InventoryLineItemMovedToNewPosition,
 		InventoryNewSectionAdded,
 
         ReceivingOrderCreated,

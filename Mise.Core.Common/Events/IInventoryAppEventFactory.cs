@@ -58,6 +58,8 @@ namespace Mise.Core.Common.Events
 		InventoryCompletedEvent CreateInventoryCompletedEvent(IEmployee emp, IInventory inventory);
 		InventoryNewSectionAddedEvent CreateInventoryNewSectionAddedEvent(IEmployee emp, IInventory inventory, IRestaurantInventorySection restSection);
 		InventoryLineItemDeletedEvent CreateInventoryLineItemDeletedEvent (IEmployee emp, IInventory inv, IInventorySection sec, IInventoryBeverageLineItem li);
+		InventoryLineItemMovedToNewPositionEvent CreateInventoryLineItemMovedToNewPositionEvent(IEmployee emp, IInventory inv, 
+			IInventorySection sec, IInventoryBeverageLineItem li, int newPosition);
 
 		PARCreatedEvent CreatePARCreatedEvent(IEmployee emp);
 		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int? quantity, IPar par);
