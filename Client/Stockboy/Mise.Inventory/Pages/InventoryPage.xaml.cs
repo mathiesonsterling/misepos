@@ -48,7 +48,7 @@ namespace Mise.Inventory.Pages
 			//TODO arrange line items by their display order field
 			var vm = BindingContext as InventoryViewModel;
 			if (vm != null) {
-				if (vm.LineItems.Any ()) {
+
 					var dataTemplate = new DataTemplate (() => new InventoryLineItemCell (LineItemDeleted));
 					var _customVL = new DragAndDropListView {
 						ItemsSource = vm.LineItems,
@@ -69,7 +69,7 @@ namespace Mise.Inventory.Pages
 					if (vm.FocusedItem != null) {
 						_customVL.ScrollTo (vm.FocusedItem, ScrollToPosition.MakeVisible, false);
 					}
-				}
+
 			}
 		}
 	}

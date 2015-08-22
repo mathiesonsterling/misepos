@@ -150,8 +150,8 @@ namespace Mise.Inventory.ViewModels
 		{
 			try{
 
-				var ask = await Navigation.AskUser ("Delete Item", "Remove " + displayLI.DisplayName + " from section?");
-				if(ask){
+				//var ask = await Navigation.AskUser ("Delete Item", "Remove " + displayLI.DisplayName + " from section?");
+				//if(ask){
 					_lineItemsCurrentlyChanging.Add(displayLI.ID);
 					var li = displayLI.Source;
 
@@ -159,7 +159,7 @@ namespace Mise.Inventory.ViewModels
 
 					_lineItemsCurrentlyChanging.Remove(displayLI.ID);
 					await DoSearch();
-				}
+				//}
 			} catch(Exception e){
 				HandleException (e);
 			}
