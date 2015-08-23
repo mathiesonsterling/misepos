@@ -74,6 +74,7 @@ namespace Mise.Inventory.Android
 			global::Xamarin.Forms.Platform.Resource.String.ApplicationName = global::Mise.Inventory.Android.Resource.String.ApplicationName;
 			global::Xamarin.Forms.Platform.Resource.String.Hello = global::Mise.Inventory.Android.Resource.String.Hello;
 			global::Mindscape.Raygun4Net.Xamarin.Android.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
+			global::ModernHttpClient.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
 		}
 		
 		public partial class Attribute

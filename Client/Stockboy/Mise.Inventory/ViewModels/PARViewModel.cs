@@ -10,39 +10,39 @@ using System;
 using Xamarin.Forms;
 namespace Mise.Inventory.ViewModels
 {
-	public class PARLineItemDisplay : BaseLineItemDisplayLine<IParBeverageLineItem>{
-		public PARLineItemDisplay(IParBeverageLineItem source) : base(source){}
-
-
-		#region implemented abstract members of BaseLineItemDisplayLine
-		public override Color TextColor {
-			get {
-				return Color.Default;
-			}
-		}
-		public override string Quantity {
-			get {
-				return Source.Quantity.ToString();
-			}
-		}
-
-		public override string DetailDisplay {
-			get {
-				var res = string.Empty;
-				if(Source.GetCategories ().Any()){
-					res += Source.GetCategories ().First ().Name;
-				}
-				if(Source.Container != null){
-					res += "  " + Source.Container.DisplayName;
-				}
-				return res;
-			}
-		}
-		#endregion
-	}
-
-	public class ParViewModel : BaseSearchableViewModel<PARLineItemDisplay>
+	public class ParViewModel : BaseSearchableViewModel<ParViewModel.ParLineItemDisplay>
 	{
+		public class ParLineItemDisplay : BaseLineItemDisplayLine<IParBeverageLineItem>{
+			public ParLineItemDisplay(IParBeverageLineItem source) : base(source){}
+
+
+			#region implemented abstract members of BaseLineItemDisplayLine
+			public override Color TextColor {
+				get {
+					return Color.Default;
+				}
+			}
+			public override string Quantity {
+				get {
+					return Source.Quantity.ToString();
+				}
+			}
+
+			public override string DetailDisplay {
+				get {
+					var res = string.Empty;
+					if(Source.GetCategories ().Any()){
+						res += Source.GetCategories ().First ().Name;
+					}
+					if(Source.Container != null){
+						res += "  " + Source.Container.DisplayName;
+					}
+					return res;
+				}
+			}
+			#endregion
+		}
+
 		readonly IPARService _parService;
 		public ParViewModel(ILogger logger, IAppNavigation appNavigation, IPARService parService)
 		:base(appNavigation, logger)
@@ -57,9 +57,10 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public ICommand SaveCommand {
-			get { return new Command(Save, () => Processing == false); }
+			get { return new Command(Save, () => NotProcessing); }
 		}
-			
+
+		public ICommand DeleteLineItemCommand{get{return new Command<ParLineItemDisplay> (DeleteLineItemE, CanDeleteLineItem);}}
 		#endregion
 
 		async void AddNewItem()
@@ -69,6 +70,18 @@ namespace Mise.Inventory.ViewModels
 			} catch(Exception e){
 				HandleException (e);
 			}
+		}
+
+		async void DeleteLineItemE(ParLineItemDisplay lineItem){
+			await DeleteLineItem (lineItem);
+		}
+
+		public async Task DeleteLineItem(ParLineItemDisplay lineItem){
+
+		}
+
+		public bool CanDeleteLineItem(ParLineItemDisplay lineItem){
+			return NotProcessing;
 		}
 
 		async void Save()
@@ -83,14 +96,13 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		public override async Task SelectLineItem(PARLineItemDisplay lineItem){
+		public override async Task SelectLineItem(ParLineItemDisplay lineItem){
 			var realLI = lineItem.Source;
 			await _parService.SetCurrentLineItem (realLI);
 		    await Navigation.ShowUpdateParLineItem();
 		}
 			
-
-		protected override async Task<ICollection<PARLineItemDisplay>> LoadItems(){
+		protected override async Task<ICollection<ParLineItemDisplay>> LoadItems(){
 			var currPar = await _parService.GetCurrentPAR ();
 			if(currPar == null){
 				Processing = true;
@@ -106,9 +118,9 @@ namespace Mise.Inventory.ViewModels
 			var items = currPar.GetBeverageLineItems ().ToList();
 
 			var lastItem = items.OrderByDescending (li => li.LastUpdatedDate).FirstOrDefault ();
-			FocusedItem = new PARLineItemDisplay (lastItem);
+			FocusedItem = new ParLineItemDisplay (lastItem);
 
-			return items.OrderBy (li => li.DisplayName).Select (li => new PARLineItemDisplay (li)).ToList();
+			return items.OrderBy (li => li.DisplayName).Select (li => new ParLineItemDisplay (li)).ToList();
 		}
 
 		protected override void AfterSearchDone ()

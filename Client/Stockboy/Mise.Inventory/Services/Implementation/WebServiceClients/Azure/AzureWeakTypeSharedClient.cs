@@ -224,9 +224,19 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		    var table = GetEntityTable();
 
-			var vendType = typeof(Vendor);
-			//TODO - when we put this back into main, make it enum, not collection
-			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToCollectionAsync ();
+			var vendType = typeof(Vendor).ToString ();
+
+			var query = table.Where (ai => ai.MiseEntityType == vendType);
+
+			try{
+				await AttemptPull ("allVendors", query);
+			} catch(Exception e){
+				_logger.HandleException (e, LogLevel.Error);
+			}
+
+			var ais = await table
+				.Where (si => si.MiseEntityType == vendType)
+				.ToEnumerableAsync ();
 
 			//todo figure out a better way to do this on the server
 			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
