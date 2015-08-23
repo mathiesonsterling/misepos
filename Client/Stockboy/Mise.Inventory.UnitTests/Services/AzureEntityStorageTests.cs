@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
-using Mise.Core.Common.Entities.DTOs.AzureTypes;
 using NUnit.Framework;
 
-namespace Mise.Core.Common.UnitTests.Entities.Serialization
+using Mise.Core.Common.Entities;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
+namespace Mise.Inventory.UnitTests.Services
 {
     [TestFixture]
     public class AzureEntityStorageTests
@@ -21,7 +22,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                 RestaurantID = Guid.NewGuid(),
                 CreatedDate = DateTimeOffset.UtcNow,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
-                SourceType = typeof(Mise.Core.Common.Entities.Employee)
+                SourceType = typeof(Employee)
             };
 
             //ACT

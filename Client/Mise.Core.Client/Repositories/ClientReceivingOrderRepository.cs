@@ -20,8 +20,8 @@ namespace Mise.Core.Client.Repositories
         IReceivingOrderRepository
     {
         readonly IReceivingOrderWebService _webService;
-        public ClientReceivingOrderRepository(ILogger logger, IClientDAL dal, IReceivingOrderWebService webService, IResendEventsWebService resend)
-            : base(logger, dal, webService, resend)
+        public ClientReceivingOrderRepository(ILogger logger, IReceivingOrderWebService webService)
+            : base(logger, webService)
         {
             _webService = webService;
         }
@@ -44,16 +44,6 @@ namespace Mise.Core.Client.Repositories
                 throw new ArgumentException("Cannot load ROs without a restaurant");
             }
             return _webService.GetReceivingOrdersForRestaurant(restaurantID.Value);
-        }
-
-        protected override async Task<IEnumerable<ReceivingOrder>> LoadFromDB(Guid? restaurantID)
-        {
-            var items = await DAL.GetEntitiesAsync<ReceivingOrder>();
-            if (restaurantID.HasValue)
-            {
-                items = items.Where(ro => ro.RestaurantID == restaurantID);
-            }
-            return items;
         }
     }
 }

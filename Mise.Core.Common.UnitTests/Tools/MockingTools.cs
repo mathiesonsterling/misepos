@@ -92,37 +92,5 @@ namespace Mise.Core.Common.UnitTests.Tools
             service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => meChecks));
             return service;
         }
-         
-		public static Mock<IClientDAL> GetClientDAL<TEntityType>() where TEntityType : class, IEntityBase, new()
-        {
-            var miseDEv = new MiseTerminalDevice
-            {
-                ID = Guid.Empty
-            };
-            var res = new List<MiseTerminalDevice> { miseDEv };
-
-			var dal = new Mock<IClientDAL> ();
-			dal.Setup (d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<TEntityType>> ()));
-		    dal.Setup(d => d.GetEntitiesAsync<MiseTerminalDevice>()).Returns(Task.FromResult(res.AsEnumerable()));
-                                                       
-                                                     
-
-            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<TEntityType>>()))
-                .Returns(Task.Factory.StartNew(() => true));
-
-			dal.Setup(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEntityEventBase>>())).Returns(new Task<bool>(() => true));
-			dal.Setup(d => d.StoreEventsAsync(It.IsAny<IEnumerable<IEntityEventBase>>())).Returns(Task.Factory.StartNew(() => true));
-
-			return dal;
-		}
-
-        public static Mock<IResendEventsWebService> GetResendEventsService()
-        {
-            var moq = new Mock<IResendEventsWebService>();
-            moq.Setup(s => s.ResendEvents(It.IsAny<ICollection<IEntityEventBase>>()))
-                .Returns(Task.FromResult(true));
-
-            return moq;
-        }
     }
 }

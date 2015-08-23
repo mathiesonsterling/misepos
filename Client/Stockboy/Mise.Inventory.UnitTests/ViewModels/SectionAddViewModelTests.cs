@@ -28,14 +28,39 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			var invService = new Mock<IInventoryService> ();
 			invService.Setup (i => i.AddNewSection (It.IsAny<string> (), It.IsAny<bool> (), It.IsAny<bool> ()))
 				.Returns (Task.FromResult (true));
-			var underTest = new SectionAddViewModel (appNav.Object, loginService.Object, 
-				logger.Object, invService.Object);
+			var underTest = new SectionAddViewModel (appNav.Object, logger.Object, invService.Object);
 
 			//ACT
 			underTest.AddSection();
 
 			//ASSERT
 			appNav.Verify(an => an.CloseSectionAdd(), Times.Once());
+		}
+
+		[Test]
+		public void AddSectionCannotFireWithBlankName(){
+			var logger = new Mock<ILogger>();
+
+			var appNav = new Mock<IAppNavigation> ();
+			appNav.Setup (an => an.ShowSectionSelect (false)).Returns (Task.FromResult (true));
+
+			var invService = new Mock<IInventoryService> ();
+			invService.Setup (i => i.AddNewSection (It.IsAny<string> (), It.IsAny<bool> (), It.IsAny<bool> ()))
+				.Returns (Task.FromResult (true));
+			var underTest = new SectionAddViewModel (appNav.Object, logger.Object, invService.Object);
+
+			//ACT
+			underTest.SectionName = "  ";
+			var canWithBlank = underTest.AddCommand.CanExecute (null);
+			Assert.False (canWithBlank);
+
+			underTest.SectionName = "A";
+			var canWithSingle = underTest.AddCommand.CanExecute (null);
+			Assert.False (canWithSingle);
+
+			underTest.SectionName = "Bill";
+			var realOne = underTest.AddCommand.CanExecute (null);
+			Assert.True (realOne);
 		}
 	}
 }

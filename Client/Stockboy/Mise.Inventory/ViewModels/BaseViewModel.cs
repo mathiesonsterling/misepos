@@ -7,6 +7,7 @@ using Mise.Core.Services.UtilityServices;
 using Xamarin.Forms;
 using Mise.Inventory.Services;
 using Mise.Core.Services;
+using ServiceStack.Messaging;
 
 
 namespace Mise.Inventory.ViewModels
@@ -27,13 +28,17 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		protected void HandleException(Exception e){
+			HandleException (e, e.Message);
+		}
+
+		protected void HandleException(Exception e, string message){
 			Processing = false;
-			if (Navigation != null) {
-				Navigation.HandleException (e);
-			} else {
-				if(Logger != null){
-					Logger.HandleException (e);
-				}
+			if(Navigation != null){
+				Navigation.DisplayErrorMessage (message);
+			}
+
+			if(Logger != null){
+				Logger.HandleException (e);
 			}
 		}
 

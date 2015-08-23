@@ -70,7 +70,6 @@
     <Compile Include="Entities\RestaurantAccountTests.cs" />
     <Compile Include="Entities\RestaurantTests.cs" />
     <Compile Include="Entities\Serialization\AccountSerializationTests.cs" />
-    <Compile Include="Entities\Serialization\AzureEntityStorageTests.cs" />
     <Compile Include="Entities\Serialization\EmployeeSerializationTests.cs" />
     <Compile Include="Entities\Serialization\MiseTerminalDeviceSerializationTests.cs" />
     <Compile Include="Entities\Serialization\RestaurantSerializationTests.cs" />
@@ -103,6 +102,7 @@
     <Compile Include="ValueItems\PasswordTests.cs" />
     <Compile Include="Entities\Serialization\InventoryEventsSerializationTests.cs" />
     <Compile Include="ValueItems\EmailAddressTests.cs" />
+    <Compile Include="Events\InventoryAppEventFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -129,4 +129,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Events\" />
+  </ItemGroup>
 </Project>

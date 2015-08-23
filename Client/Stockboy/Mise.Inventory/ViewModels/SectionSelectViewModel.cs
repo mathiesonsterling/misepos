@@ -8,6 +8,7 @@ using Mise.Core.Services.UtilityServices;
 
 using Mise.Inventory.Services;
 using Xamarin.Forms;
+using Mise.Core.Common.Services.WebServices.Exceptions;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -68,6 +69,9 @@ namespace Mise.Inventory.ViewModels
                 }
                 Processing = false;
             }
+			catch(DataNotSavedOnServerException des){
+				HandleException (des, "Can't save data on the server - are you connected to the internet?");
+			}
             catch (Exception e)
             {
                 HandleException(e);

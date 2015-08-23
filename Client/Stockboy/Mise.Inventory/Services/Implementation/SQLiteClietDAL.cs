@@ -185,7 +185,7 @@ namespace Mise.Inventory.Services.Implementation
 		public SQLiteClietDAL (ILogger logger, IJSONSerializer serializer, ISQLite sqlLiteConnectorService)
 		{
 			_logger = logger;
-		    _db = sqlLiteConnectorService.GetDatabase();
+		    //_db = sqlLiteConnectorService.GetDatabase();
             _dbLock = new object();
 
 

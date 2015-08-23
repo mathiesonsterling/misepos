@@ -142,5 +142,43 @@ namespace DeveloperTools
                 TxtFileName.Text = ofd.FileName;
             }
         }
+
+        private async void BtnExportInventory_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var progress = new Progress<ProgressReport>(ReportProgress);
+
+                var noMessageLogger = new DummyLogger();
+                var cmd = new ExportInventoryCommand(progress, noMessageLogger);
+
+                await cmd.Execute();
+
+                MessageBox.Show("Exported Inventory");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error " + ex.Message);
+            }
+        }
+
+        private async void BtnExportLastPar_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var progress = new Progress<ProgressReport>(ReportProgress);
+
+                var noMessageLogger = new DummyLogger();
+                var cmd = new ExportParCommand(progress, noMessageLogger);
+
+                await cmd.Execute();
+
+                MessageBox.Show("Exported Par");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error " + ex.Message);
+            }
+        }
     }
 }

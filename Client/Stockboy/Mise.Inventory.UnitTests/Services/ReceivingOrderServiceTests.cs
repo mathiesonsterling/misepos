@@ -220,9 +220,8 @@ namespace Mise.Inventory.UnitTests.Services
             var logger = new Mock<ILogger>();
 
             //we'll want a real Repository for this test
-            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IReceivingOrderWebService>();
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object);
 
             var invService = new Mock<IInventoryService>();
 
@@ -277,7 +276,6 @@ namespace Mise.Inventory.UnitTests.Services
             var logger = new Mock<ILogger>();
 
             //we'll want a real Repository for this test, since it uses events
-            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IReceivingOrderWebService>();
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
@@ -294,7 +292,7 @@ namespace Mise.Inventory.UnitTests.Services
                         }.AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object,  ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
 
@@ -346,7 +344,6 @@ namespace Mise.Inventory.UnitTests.Services
             var logger = new Mock<ILogger>();
 
             //we'll want a real Repository for this test, since it uses events
-            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IReceivingOrderWebService>();
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
@@ -354,7 +351,7 @@ namespace Mise.Inventory.UnitTests.Services
                         new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object,  ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
 
@@ -407,7 +404,6 @@ namespace Mise.Inventory.UnitTests.Services
             var logger = new Mock<ILogger>();
 
             //we'll want a real Repository for this test, since it uses events
-            var dal = TestUtilities.GetDALWithoutResends();
             var ws = new Mock<IReceivingOrderWebService>();
             ws.Setup(s => s.GetReceivingOrdersForRestaurant(It.IsAny<Guid>()))
                 .Returns(
@@ -415,7 +411,7 @@ namespace Mise.Inventory.UnitTests.Services
                         new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
-            var roRepos = new ClientReceivingOrderRepository(logger.Object, dal.Object, ws.Object, TestUtilities.GetResendService().Object);
+            var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
 

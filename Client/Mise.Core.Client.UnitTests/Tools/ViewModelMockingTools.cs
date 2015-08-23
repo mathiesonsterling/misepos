@@ -37,19 +37,15 @@ namespace Mise.Core.Client.UnitTests.Tools
 				.Returns(Task.Factory.StartNew (() => true));
 
 			var settings = service.Object.RegisterClientAsync (string.Empty).Result;
-			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
-		    dal.Setup(d => d.GetEntitiesAsync<MiseTerminalDevice>())
-		        .Returns(
-		            Task.FromResult(new[] {settings.Item2 as MiseTerminalDevice}.AsEnumerable()));
 
 			var logger = new Mock<ILogger>();
 			var cashDrawerService = new Mock<ICashDrawerService>();
 			var creditHardwareService = new Mock<ICreditCardReaderService>();
-            var checkReposC = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var checkReposC = new ClientCheckRepository(service.Object, logger.Object);
 			await checkReposC.Load (MockingTools.RestaurantID);
 			var checkRepos = checkReposC;
 
-            var empReposC = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var empReposC = new ClientEmployeeRepository(service.Object, logger.Object);
 			await empReposC.Load (MockingTools.RestaurantID);
 			var empRepos = empReposC;
 
@@ -105,9 +101,6 @@ namespace Mise.Core.Client.UnitTests.Tools
 
 
 			var settings = service.RegisterClientAsync (string.Empty).Result;
-			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
-		    dal.Setup(d => d.GetEntitiesAsync<MiseTerminalDevice>()).Returns(
-		        Task.FromResult(new[] {settings.Item2 as MiseTerminalDevice}.AsEnumerable()));
 
 			var logger = new Mock<ILogger>();
 			var creditHardwareService = new Mock<ICreditCardReaderService>();

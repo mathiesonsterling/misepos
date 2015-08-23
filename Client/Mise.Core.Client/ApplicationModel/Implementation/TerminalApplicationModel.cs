@@ -199,6 +199,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
         /// <param name="printerService"></param>
         /// <param name="salesTaxService">Sales tax service.</param>
         /// <param name="terminalService"></param>
+		/// <param name = "locationService"></param>
         public TerminalApplicationModel(IUnitOfWork unitOfWork, ILogger logger,
                                  IClientDAL dal,
                                  ICashDrawerService cashDrawerService,
@@ -216,12 +217,6 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             var terminalWebService = terminalService;
             try
             {
-                /*
-                var uri = new Uri("http://miserestaurantserver.azurewebsites.net/");
-				var unkownRes = new Restaurant{
-					FriendlyID = "dominieslic",
-					RestaurantServerLocation = uri,
-				};*/
                 var regRes = terminalWebService.RegisterClientAsync("mainBar").Result;
                 _terminalSettings = regRes.Item2;
                 _restaurant = regRes.Item1;
@@ -235,13 +230,13 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 _logger.HandleException(e);
                 Online = false;
                 //get our restaraunt stored
-                IRestaurantRepository restaurantRepository = new ClientRestaurantRepository(logger, dal, terminalService, terminalWebService, locationService);
+                IRestaurantRepository restaurantRepository = new ClientRestaurantRepository(logger, terminalService, locationService);
                 _restaurant = restaurantRepository.GetAll().FirstOrDefault();
             }
 				
-            var checkRepos = new ClientCheckRepository(terminalWebService, dal, logger, terminalWebService);
+            var checkRepos = new ClientCheckRepository(terminalWebService, logger);
 
-            var employeeRepos = new ClientEmployeeRepository(terminalWebService, dal, logger, terminalWebService);
+            var employeeRepos = new ClientEmployeeRepository(terminalWebService, logger);
 
             logger.Log("Loading employee and check repository . . .", LogLevel.Debug);
             LoadRepositories(checkRepos, employeeRepos);

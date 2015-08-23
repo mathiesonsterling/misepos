@@ -71,11 +71,10 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 			var logger = new Mock<ILogger> ();
 
-			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
-            var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var checkRepos = new ClientCheckRepository(service.Object, logger.Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
-            var empRepos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var empRepos = new ClientEmployeeRepository(service.Object, logger.Object);
             await empRepos.Load(MockingTools.RestaurantID);
 
 			var empID = Guid.NewGuid ();
@@ -138,12 +137,11 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                         .Callback<OrderDestination, OrderItem >((dest, oi) => { sentDest.Add(dest); sentOI.Add(oi); });
 			var logger = new Mock<ILogger> ();
 
-			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 
-            var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var checkRepos = new ClientCheckRepository(service.Object,  logger.Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
-            var empRepos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var empRepos = new ClientEmployeeRepository(service.Object, logger.Object);
 		    await empRepos.Load(MockingTools.RestaurantID);
 
 			var emp = new Employee {
@@ -188,12 +186,11 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		    service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => new[] {tab}));
 		    
 			var logger = new Mock<ILogger> ();
-			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 
 			var empRepos = new Mock<IEmployeeRepository> ();
 			empRepos.Setup (er => er.GetAll ()).Returns (new List<IEmployee>{emp});
 
-            var checkRepos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var checkRepos = new ClientCheckRepository(service.Object, logger.Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
 			var vm = ViewModelMockingTools.CreateViewModel (emp, checkRepos, empRepos.Object);
@@ -455,16 +452,13 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 		    service.Setup(s => s.GetChecksAsync())
 		        .Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => new[] {barTab}));
-		    
-
-			var dal = MockingTools.GetClientDAL<RestaurantCheck> ();
 				
 
 			var logger = new Mock<ILogger> ();
-			var checkRepos = new ClientCheckRepository (service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+			var checkRepos = new ClientCheckRepository (service.Object, logger.Object);
 			await checkRepos.Load(MockingTools.RestaurantID);
 
-            var empRepos = new ClientEmployeeRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var empRepos = new ClientEmployeeRepository(service.Object, logger.Object);
 			await empRepos.Load(MockingTools.RestaurantID);
 
 			var vm = ViewModelMockingTools.CreateViewModel (emp, checkRepos, empRepos, null, service.Object);

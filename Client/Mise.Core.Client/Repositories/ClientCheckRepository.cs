@@ -20,9 +20,8 @@ namespace Mise.Core.Client.Repositories
 	public class ClientCheckRepository : BaseEventSourcedClientRepository<ICheck, ICheckEvent, RestaurantCheck>, ICheckRepository
 	{
 		readonly IRestaurantTerminalService _service;
-		public ClientCheckRepository (IRestaurantTerminalService service,
-            IClientDAL dal, ILogger logger, IResendEventsWebService resend)
-            : base(logger, dal, service, resend)
+		public ClientCheckRepository (IRestaurantTerminalService service, ILogger logger)
+            : base(logger, service)
 		{
 		    _service = service;
 		}
@@ -32,13 +31,6 @@ namespace Mise.Core.Client.Repositories
 	    {
 	        var items = await _service.GetChecksAsync();
 	        return items.Cast<RestaurantCheck>();
-	    }
-
-	    protected override async Task<IEnumerable<RestaurantCheck>> LoadFromDB(Guid? restaurantID)
-	    {
-            Logger.Log("Loading from DAL");
-			var items = await DAL.GetEntitiesAsync<RestaurantCheck> ();
-	        return items;
 	    }
 
         IEnumerable<ICheck> GetOpenChecks()

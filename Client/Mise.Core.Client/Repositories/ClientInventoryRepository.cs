@@ -18,8 +18,8 @@ namespace Mise.Core.Client.Repositories
     public class ClientInventoryRepository : BaseEventSourcedClientRepository<IInventory, IInventoryEvent, Inventory>, IInventoryRepository
     {
         private readonly IInventoryWebService _inventoryWebService;
-        public ClientInventoryRepository(ILogger logger, IClientDAL dal, IInventoryWebService webService, IResendEventsWebService resend)
-            : base(logger, dal, webService, resend)
+        public ClientInventoryRepository(ILogger logger, IInventoryWebService webService)
+            : base(logger, webService)
         {
             _inventoryWebService = webService;
         }
@@ -34,20 +34,20 @@ namespace Mise.Core.Client.Repositories
         {
             return ev.InventoryID;
         }
-
-        protected override async Task<IEnumerable<Inventory>> LoadFromDB(Guid? restaurantID)
-        {
-            var items = await DAL.GetEntitiesAsync<Inventory>();
-            return items;
-        }
+			
 
         protected override Task<IEnumerable<Inventory>> LoadFromWebservice(Guid? restaurantID)
         {
-            if (restaurantID.HasValue)
-            {
-                return _inventoryWebService.GetInventoriesForRestaurant(restaurantID.Value);
-            }
-            return Task.FromResult(new List<Inventory>().AsEnumerable());
+			try{
+	            if (restaurantID.HasValue)
+	            {
+	                return _inventoryWebService.GetInventoriesForRestaurant(restaurantID.Value);
+	            }
+	            return Task.FromResult(new List<Inventory>().AsEnumerable());
+			} catch(Exception e){
+				Logger.HandleException (e);
+				throw;
+			}
         }
 
 

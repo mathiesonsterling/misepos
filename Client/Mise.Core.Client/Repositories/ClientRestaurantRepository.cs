@@ -24,8 +24,8 @@ namespace Mise.Core.Client.Repositories
 	{
 		readonly IInventoryRestaurantWebService _webService;
         private readonly IDeviceLocationService _locationService;
-        public ClientRestaurantRepository(ILogger logger, IClientDAL dal, IInventoryRestaurantWebService webService, IResendEventsWebService resend, IDeviceLocationService locationService)
-            : base(logger, dal, webService, resend)
+        public ClientRestaurantRepository(ILogger logger, IInventoryRestaurantWebService webService, IDeviceLocationService locationService)
+            : base(logger, webService)
         {
 			_webService = webService;
             _locationService = locationService;
@@ -68,17 +68,6 @@ namespace Mise.Core.Client.Repositories
 
             var location = await _locationService.GetDeviceLocation();
 			var items = await _webService.GetRestaurants(location, new Distance{Kilometers = 100});
-            return items;
-        }
-
-        protected override async Task<IEnumerable<Restaurant>> LoadFromDB(Guid? restaurantID)
-        {
-            var items = await DAL.GetEntitiesAsync<Restaurant>();
-            if (restaurantID.HasValue)
-            {
-                items = items.Where(r => r.ID == restaurantID);
-            }
-
             return items;
         }
 	}

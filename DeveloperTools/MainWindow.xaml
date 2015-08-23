@@ -65,6 +65,13 @@
                     <Button x:Name="BtnGenJson" Content="Generate JSON from demo restauarant" HorizontalAlignment="Left" Margin="36,24,0,0" VerticalAlignment="Top" Width="263" Height="41"/>
                 </StackPanel>
             </TabItem>
+
+            <TabItem Header="Export to CSV">
+                <StackPanel>
+                    <Button x:Name="BtnExportLatest" Height="41" Width="173" Content="Export last inventory" Click="BtnExportInventory_OnClick"></Button>
+                    <Button x:Name="BtnExportLatestPar" Height="41" Width="173" Content="Export last par" Click="BtnExportLastPar_OnClick"></Button>
+                </StackPanel>
+            </TabItem>
         </TabControl>
         <ProgressBar x:Name="PgBar" Minimum="0" Maximum="100" Value="0" Height="20"/>
         <Label x:Name="LblStatus" Height="30">Status</Label>

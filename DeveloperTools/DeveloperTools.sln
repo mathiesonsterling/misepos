@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.VendorManagement", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Server", "..\Server\Mise.Core.Server\Mise.Core.Server.csproj", "{53FD6B41-CD49-4355-B78D-C2355069E2FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Inventory", "..\Client\Stockboy\Mise.Inventory\Mise.Inventory.csproj", "{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,12 @@ Global
 		{53FD6B41-CD49-4355-B78D-C2355069E2FC}.Deploy|Any CPU.Build.0 = Debug|Any CPU
 		{53FD6B41-CD49-4355-B78D-C2355069E2FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53FD6B41-CD49-4355-B78D-C2355069E2FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

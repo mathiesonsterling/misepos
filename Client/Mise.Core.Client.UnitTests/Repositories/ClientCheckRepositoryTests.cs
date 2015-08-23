@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Mise.Core.Entities;
-using Mise.Core.Common.Entities;
 using Mise.Core.Common.Events.Checks;
 using Mise.Core.Entities.Check.Events;
 using Mise.Core.Entities.People;
@@ -12,127 +10,15 @@ using Mise.Core.ValueItems;
 using NUnit.Framework;
 using Mise.Core.Common.UnitTests.Tools;
 using Moq;
-using Mise.Core.Common.Services;
-using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Check;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.Client.Repositories;
-using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.UnitTests.Repositories
 {
 	[TestFixture]
 	public class ClientCheckRepositoryTests
 	{
-		[Test]
-		public async Task LoadRepositoryStoresWebServiceResultsInDB(){
-			var service = MockingTools.GetTerminalService ();
-
-			var barTab = new RestaurantCheck {
-				ID = Guid.NewGuid ()
-			};
-		    service.Setup(s => s.GetChecksAsync())
-		        .Returns(
-		            Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => new List<RestaurantCheck> {barTab})
-		        );
-			service.Setup (s => s.GetChecksAsync()).Returns (Task.FromResult(new List<RestaurantCheck>{
-				barTab}.AsEnumerable ()
-			));
-
-			var dal = new Mock<IClientDAL> ();
-			IList<RestaurantCheck> sentEnts = null;
-		    dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<RestaurantCheck>>()))
-		        .Callback<IEnumerable<RestaurantCheck>>(r => sentEnts = r.ToList())
-		        .Returns(Task.FromResult(true));
-
-			var logger = new Mock<ILogger> ();
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
-
-			//ACT
-			await repos.Load (MockingTools.RestaurantID);
-			var gotten = repos.GetAll ().ToList();
-
-			//ASSERT
-			Assert.IsNotNull (sentEnts);
-			Assert.AreEqual (1, sentEnts.Count());
-			var myEnt = sentEnts.First () as ICheck;
-			Assert.IsNotNull (myEnt);
-			Assert.AreEqual (barTab.ID, myEnt.ID);
-
-			Assert.IsNotNull (gotten);
-			Assert.AreEqual (1, gotten.Count());
-			Assert.AreEqual (barTab.ID, gotten.First ().ID);
-		}
-
-		[Test]
-		public async Task LoadRepositoryLoadsFromDBWhenExceptionThrownFromService(){
-			var service = MockingTools.GetTerminalService ();
-
-			var barTab = new RestaurantCheck {
-				ID = Guid.NewGuid ()
-			};
-		    service.Setup(s => s.GetChecksAsync()).Throws(new WebException());
-
-			var dal = new Mock<IClientDAL> ();
-			dal.Setup (d => d.GetEntitiesAsync<RestaurantCheck> ()).Returns(Task.Factory.StartNew(() => new List<RestaurantCheck>{barTab}.AsEnumerable()));
-
-			var logger = new Mock<ILogger> ();
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
-
-			//ACT
-			await repos.Load (MockingTools.RestaurantID);
-
-			var gotten = repos.GetAll ().ToList();
-
-			//ASSERT
-			dal.Verify (d => d.UpsertEntitiesAsync (It.IsAny<IEnumerable<RestaurantCheck>> ()), Times.Never ());
-
-			Assert.IsNotNull (gotten);
-			Assert.AreEqual (1, gotten.Count());
-			Assert.AreEqual (barTab.ID, gotten.First ().ID);
-		}
-
-        [Test]
-        public async Task LoadRepositoryLoadsFromDBWhenTaskFaulted()
-        {
-            var service = MockingTools.GetTerminalService();
-
-            var barTab = new RestaurantCheck
-            {
-                ID = Guid.NewGuid()
-            };
-
-            service.Setup(s => s.GetChecksAsync())
-                .Returns(() =>
-                    {
-                        var task = new Task<IEnumerable<RestaurantCheck>>(() =>
-                        {
-                            throw new WebException();
-                        });
-                        task.Start();
-                        return task;
-                    }
-                );
-      
-
-            var dal = new Mock<IClientDAL>();
-            dal.Setup(d => d.GetEntitiesAsync<RestaurantCheck> ()).Returns(Task.FromResult(new List<RestaurantCheck> { barTab }.AsEnumerable()));
-
-            var logger = new Mock<ILogger>();
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
-
-            //ACT
-            await repos.Load(MockingTools.RestaurantID);
-
-            var gotten = repos.GetAll().ToList();
-            //ASSERT
-            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<RestaurantCheck>>()), Times.Never());
-            logger.Verify(l => l.HandleException(It.IsAny<WebException>(), It.IsAny<LogLevel>()), Times.Once());
-            Assert.IsNotNull(gotten);
-            Assert.AreEqual(1, gotten.Count());
-            Assert.AreEqual(barTab.ID, gotten.First().ID);
-        }
-
 		[Test]
 		public void AddEventsWithCreationAddsToRepository()
 		{
@@ -156,10 +42,9 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var logger = new Mock<ILogger> ();
 
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
 
 
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -205,8 +90,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var events = new List<ICheckEvent>{ ccev, custEv, orderEv };
 
 			var logger = new Mock<ILogger> ();
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			var check = repos.ApplyEvents (events);
 			await repos.Commit (ccev.CheckID);
@@ -249,7 +133,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var events = new List<ICheckEvent>{ ccev, custEv};
 
 			var logger = new Mock<ILogger> ();
-            var repos = new ClientCheckRepository(service.Object, null, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -286,9 +170,8 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var events = new List<ICheckEvent>{ ccev, custEv};
 
 			var logger = new Mock<ILogger> ();
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
 
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			//ACT
 			var check = repos.ApplyEvents (events);
@@ -322,8 +205,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var logger = new Mock<ILogger> ();
 
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 			//ACT
 			for(var i = 0; i < numTimes;i++){
@@ -349,9 +231,8 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		{
 		    var service = MockingTools.GetTerminalService();
 			var logger = new Mock<ILogger> ();
-		    var dal = MockingTools.GetClientDAL<RestaurantCheck>();
 
-            var repos = new ClientCheckRepository(service.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
+            var repos = new ClientCheckRepository(service.Object, logger.Object);
 
 		    var empID = Guid.NewGuid();
 		    var checkID = Guid.NewGuid();
@@ -408,92 +289,6 @@ namespace Mise.Core.Client.UnitTests.Repositories
 	        }
 	    }
 
-	    [Test]
-	    public void CommitStoresEventsInDALWhenUnableToSend()
-	    {
-	        var checkID = Guid.NewGuid();
-
-	        var restaurantService = new Mock<IRestaurantTerminalService>();
-			restaurantService.Setup(rs => rs.SendEventsAsync(It.IsAny<RestaurantCheck> (), It.IsAny<IEnumerable<ICheckEvent>>()))
-                .Returns(Task<bool>.Factory.StartNew(() =>
-                {
-                    var thrower = new Thrower();
-                    return thrower.DoIt();
-                }));
-
-
-	        var dal = new Mock<IClientDAL>();
-	        dal.Setup(d => d.StoreEventsAsync(It.IsAny<IEnumerable<ICheckEvent>>())).Returns(Task.Factory.StartNew(() => true));
-	        dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<RestaurantCheck>>()))
-	            .Returns(Task.Factory.StartNew(() => true));
-
-	        var logger = new Mock<ILogger>();
-
-            var repository = new ClientCheckRepository(restaurantService.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
-
-            //ACT
-	        repository.ApplyEvent(new CheckCreatedEvent
-	        {
-	            ID = Guid.NewGuid(),
-	            CheckID = checkID,
-                EventOrderingID = new EventID
-                {
-                    AppInstanceCode = MiseAppTypes.UnitTests,
-                    OrderingID = 1
-                }
-	        });
-
-	        var res = repository.Commit(checkID).Result;
-
-            //ASSERT
-            Assert.AreEqual(CommitResult.StoredInDB,res, "res is StoredInDB");
-            Assert.IsFalse(repository.Dirty, "repository is dirty");
-			restaurantService.Verify(r => r.SendEventsAsync(It.IsAny<RestaurantCheck> (), It.IsAny<IEnumerable<ICheckEvent>>()), Times.Once());
-            dal.Verify(d => d.AddEventsThatFailedToSend(It.IsAny<IEnumerable<IEntityEventBase>>()), Times.Once);
-            dal.Verify(d => d.StoreEventsAsync(It.IsAny<IEnumerable<ICheckEvent>>()), Times.Never);
-            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<RestaurantCheck>>()), Times.Once());
-	    }
-
-        [Test]
-        public void CommitDoesntStoreEventsInDALWhenAbleToSend()
-        {
-            var checkID = Guid.NewGuid();
-
-            var restaurantService = new Mock<IRestaurantTerminalService>();
-			restaurantService.Setup(rs => rs.SendEventsAsync(It.IsAny<RestaurantCheck> (), It.IsAny<IEnumerable<ICheckEvent>>()))
-                .Returns(Task<bool>.Factory.StartNew(() => true));
-
-
-            var dal = new Mock<IClientDAL>();
-            dal.Setup(d => d.StoreEventsAsync(It.IsAny<IEnumerable<ICheckEvent>>())).Returns(Task.Factory.StartNew(() => true));
-            dal.Setup(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<RestaurantCheck>>()))
-                .Returns(Task.Factory.StartNew(() => true));
-
-            var logger = new Mock<ILogger>();
-
-            var repository = new ClientCheckRepository(restaurantService.Object, dal.Object, logger.Object, MockingTools.GetResendEventsService().Object);
-
-            //ACT
-            repository.ApplyEvent(new CheckCreatedEvent
-            {
-                ID = Guid.NewGuid(),
-                CheckID = checkID,
-                EventOrderingID = new EventID
-                {
-                    AppInstanceCode = MiseAppTypes.UnitTests,
-                    OrderingID = 1
-                }
-            });
-
-            var res = repository.Commit(checkID).Result;
-
-            //ASSERT
-            Assert.AreEqual(CommitResult.SentToServer, res, "res is SentToServer");
-            Assert.IsFalse(repository.Dirty, "repository is dirty");
-			restaurantService.Verify(r => r.SendEventsAsync(It.IsAny<RestaurantCheck> (), It.IsAny<IEnumerable<ICheckEvent>>()), Times.Once());
-            dal.Verify(d => d.StoreEventsAsync(It.IsAny<IEnumerable<ICheckEvent>>()), Times.Never());
-            dal.Verify(d => d.UpsertEntitiesAsync(It.IsAny<IEnumerable<RestaurantCheck>>()), Times.Once());
-        }
 	}
 }
 

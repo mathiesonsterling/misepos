@@ -1,6 +1,7 @@
 ﻿using System;
 using Mise.Core.Entities.Base;
 using Mise.Core.Services.UtilityServices;
+using Mise.Core.Entities.Restaurant;
 
 namespace Mise.Core.Common.Entities.DTOs
 {
@@ -15,13 +16,23 @@ namespace Mise.Core.Common.Entities.DTOs
         public RestaurantEntityDataTransportObject ToDataTransportObject<T>(T entity) where T:IEntityBase, new()
         {
             var json = _serializer.Serialize(entity);
+			Guid? restaurantID = null;
+			if(entity is IRestaurantEntityBase)
+			{
+				var restEnt = ((IRestaurantEntityBase)entity);
+				if(restEnt.RestaurantID == Guid.Empty && entity is IRestaurant){
+					restaurantID = entity.ID;
+				} else{
+					restaurantID = restEnt.RestaurantID;
+				}
+			}
             return new RestaurantEntityDataTransportObject
             {
                 CreatedDate = entity.CreatedDate,
                 ID = entity.ID,
                 JSON = json,
                 LastUpdatedDate = entity.LastUpdatedDate,
-				RestaurantID = entity is IRestaurantEntityBase? ((IRestaurantEntityBase)entity).RestaurantID : (Guid?)null,
+				RestaurantID = restaurantID,
                 Revision = entity.Revision,
                 SourceType = entity.GetType()
             };

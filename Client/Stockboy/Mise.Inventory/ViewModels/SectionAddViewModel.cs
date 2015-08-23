@@ -10,7 +10,6 @@ namespace Mise.Inventory.ViewModels
 {
 	public class SectionAddViewModel : BaseViewModel
 	{
-		readonly ILoginService _loginService;
 		readonly IInventoryService _inventoryService;
 
 		public string SectionName{get{return GetValue<string> ();}set{ SetValue (value); }}
@@ -24,18 +23,27 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		public bool IsDefaultInventorySection{ get; set;}
 
-		public SectionAddViewModel(IAppNavigation appNavigation, ILoginService loginService, ILogger logger, 
+		public bool CanAdd{get{return GetValue<bool> ();}set{ SetValue (value); }}
+		public SectionAddViewModel(IAppNavigation appNavigation, ILogger logger, 
 			IInventoryService inventoryService) : base(appNavigation, logger)
 		{
-			_loginService = loginService;
 			_inventoryService = inventoryService;
 			SectionHasPartialBottles = true;
+
+			PropertyChanged += (sender, e) => {
+				if(e.PropertyName == "SectionName"){
+					CanAdd = AddCommand.CanExecute (null);
+				}
+			};
 		}
 
 		#region Commands
 
 		public ICommand AddCommand {
-			get { return new Command(AddSection, () => NotProcessing); }
+			get { return new Command(AddSection, () => NotProcessing 
+				&& string.IsNullOrWhiteSpace (SectionName) == false
+				&& SectionName.Length > 1
+			); }
 		}
 
 		#endregion
@@ -60,7 +68,8 @@ namespace Mise.Inventory.ViewModels
 
         public override Task OnAppearing()
         {
-            return Task.FromResult(false);
+			SectionName = string.Empty;
+            return Task.FromResult(true);
         }
 	}
 }

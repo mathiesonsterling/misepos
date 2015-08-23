@@ -11,6 +11,7 @@ using Mise.Core.Services;
 using Mise.Core.ValueItems;
 using System.Linq.Expressions;
 using Mise.Core.Common.Services.WebServices;
+using Mise.Core.Common.Services.WebServices.Exceptions;
 
 namespace Mise.Core.Client.Repositories
 {
@@ -20,28 +21,22 @@ namespace Mise.Core.Client.Repositories
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEventType"></typeparam>
-    public abstract class BaseEventSourcedClientRepository<TEntity, TEventType, TConcreteStorageType> : BaseEventSourcedRepository<TEntity, TEventType> 
+    public abstract class BaseEventSourcedClientRepository<TEntity, TEventType, TConcreteStorageType> 
+		: BaseEventSourcedRepository<TEntity, TEventType> 
         where TEntity : class, IEventStoreEntityBase<TEventType>, ICloneableEntity 
         where TEventType : class, IEntityEventBase
         where TConcreteStorageType : class, IEntityBase, TEntity, new()
     {
-        protected readonly IClientDAL DAL;
         private readonly IEventStoreWebService<TConcreteStorageType, TEventType> _webService;
-        private readonly IResendEventsWebService _resendEventsWebService;
 
-        protected BaseEventSourcedClientRepository(ILogger logger, 
-            IClientDAL dal,
-            IEventStoreWebService<TConcreteStorageType, TEventType> webService,
-            IResendEventsWebService resendService
+        protected BaseEventSourcedClientRepository(ILogger logger,
+            IEventStoreWebService<TConcreteStorageType, TEventType> webService
             ) : base(logger)
         {
-            DAL = dal;
             _webService = webService;
-            _resendEventsWebService = resendService;
         }
 
         protected abstract Task<IEnumerable<TConcreteStorageType>> LoadFromWebservice(Guid? restaurantID);
-        protected abstract Task<IEnumerable<TConcreteStorageType>> LoadFromDB(Guid? restaurantID);
 
         protected virtual TimeSpan DelayToReload { get { return new TimeSpan(0, 0, 0, 1); } }
 
@@ -50,22 +45,6 @@ namespace Mise.Core.Client.Repositories
         /// </summary>
         protected Guid? RestaurantID { get; private set; }
 
-        /// <summary>
-        /// What to do when we've go online when previously we weren't
-        /// </summary>
-        protected virtual async void OnWentOnline()
-        {
-            try
-            {
-                //we want to reload, but do so after a delay
-                await Task.Delay(DelayToReload).ConfigureAwait(false);
-                await Load(RestaurantID).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                Logger.HandleException(e);
-            }
-        }
 
         /// <summary>
         /// Each client repository needs to be able to load, both when attached to a restaurant and when not
@@ -76,28 +55,18 @@ namespace Mise.Core.Client.Repositories
         {
             Loading = true;
             RestaurantID = restaurantID;
-            var needsDBLoad = false;
             try
             {
 				var items = (await LoadFromWebservice(restaurantID)).ToList();
                 Cache.UpdateCache(items);
 
-                //update our database with these
-                await DAL.UpsertEntitiesAsync(items);
                 Offline = false;
             }
             catch (Exception e)
             {
                 Logger.HandleException(e, LogLevel.Warn);
-                needsDBLoad = true;
             }
-
-            if (needsDBLoad)
-            {
-                var dbItems = await LoadFromDB(restaurantID);
-                Cache.UpdateCache(dbItems, ItemCacheStatus.ClientDB);
-                Offline = true;
-            }
+				
             Loading = false;
         }
 
@@ -147,31 +116,19 @@ namespace Mise.Core.Client.Repositories
                 if (sendRes)
                 {
                     commitRes = CommitResult.SentToServer;
-                    if (Offline)
-                    {
-                        OnWentOnline();
-                    }
-                }
+				} else{
+					throw new DataNotSavedOnServerException();
+				}
             }
             catch (Exception ex)
             {
                 Logger.HandleException(ex);
-                throw;
+				throw new DataNotSavedOnServerException (ex);
             }
+				
 
-            var realType = bundle.NewVersion as TConcreteStorageType;
-            if (realType == null)
-            {
-                throw new Exception("Can't store type of " + bundle.NewVersion.GetType());
-            }
-            var entRes = await DAL.UpsertEntitiesAsync(new[] { realType });
-
-
-            if (entRes)
-            {
-                var status = commitRes == CommitResult.SentToServer ? ItemCacheStatus.Clean : ItemCacheStatus.ClientDB;
-                Cache.UpdateCache(bundle.NewVersion, status);
-            }
+            var status = commitRes == CommitResult.SentToServer ? ItemCacheStatus.Clean : ItemCacheStatus.ClientDB;
+            Cache.UpdateCache(bundle.NewVersion, status);
 
             Dirty = false;
 
@@ -199,50 +156,23 @@ namespace Mise.Core.Client.Repositories
             var toSend = bundle.Events;
             Logger.Log("Sending events to service", LogLevel.Debug);
 
-            commitRes = CommitResult.Error;
-            var needsDBStore = false;
+
             try{
 				var sendRes = await _webService.SendEventsAsync (bundle.NewVersion as TConcreteStorageType, toSend).ConfigureAwait (false);
                 if(sendRes){
                     commitRes = CommitResult.SentToServer;
-                    if (Offline)
-                    {
-                        OnWentOnline();
-                    }
                 }
                 else
                 {
-                    needsDBStore = true;
+					throw new DataNotSavedOnServerException ();
                 }
             } catch(Exception ex){
                 Logger.HandleException (ex);
-                needsDBStore = true;
+				throw new DataNotSavedOnServerException (ex);
             }
 
-            if (needsDBStore)
-            {
-				try{
-                await DAL.AddEventsThatFailedToSend(toSend);
-                commitRes = CommitResult.StoredInDB;
-				} catch(Exception e){
-					Logger.HandleException (e, LogLevel.Fatal);
-					throw;
-				}
-            }
 
-            var realType = bundle.NewVersion as TConcreteStorageType;
-            if (realType == null)
-            {
-                throw new Exception("Can't store type of " + bundle.NewVersion.GetType());
-            }
-            var entRes = await DAL.UpsertEntitiesAsync(new[] {realType});
-
-              
-            if (entRes)
-            {
-                var status = commitRes == CommitResult.SentToServer ? ItemCacheStatus.Clean : ItemCacheStatus.ClientDB;
-                Cache.UpdateCache(bundle.NewVersion, status);
-            }
+            Cache.UpdateCache(bundle.NewVersion, ItemCacheStatus.Clean);
 
             Dirty = false;
 

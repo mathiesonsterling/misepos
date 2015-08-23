@@ -584,7 +584,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
 					CreatedByEmployeeID = empID,
-					CreatedDate = DateTime.Now,
+					CreatedDate = DateTimeOffset.UtcNow,
 					ID = Guid.NewGuid(),
 					RestaurantID = restID,
 					IsCurrent = true,
@@ -695,6 +695,12 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				return Task.FromResult (null as Employee);
 			}
 			var emp = _emps.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Value == email.Value && e.Password != null && password.HashValue == e.Password.HashValue);
+			return Task.FromResult (emp);
+		}
+
+		public Task<Employee> GetEmployeeByID (Guid id)
+		{
+			var emp = _emps.FirstOrDefault (e => e.ID == id);
 			return Task.FromResult (emp);
 		}
 

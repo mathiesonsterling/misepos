@@ -1554,7 +1554,7 @@ namespace Mise.Core.Common.Services.Implementation
             var dev = new MiseTerminalDevice
             {
                 TopLevelCategoryID = _topCategoryID,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTimeOffset.UtcNow,
                 ID = Guid.NewGuid(),
                 Revision = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101 },
                 RequireEmployeeSignIn = false,
@@ -1577,7 +1577,12 @@ namespace Mise.Core.Common.Services.Implementation
         {
             return Task.FromResult(GetEmployees());
         }
-			
+
+		public Task<Employee> GetEmployeeByID (Guid id)
+		{
+			var emp = GetEmployees ().FirstOrDefault (e => e.ID == id);
+			return Task.FromResult (emp);
+		}			
 
         public Task<IEnumerable<RestaurantCheck>> GetChecksAsync()
         {

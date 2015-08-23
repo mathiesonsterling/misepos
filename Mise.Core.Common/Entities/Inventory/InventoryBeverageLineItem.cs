@@ -16,10 +16,7 @@ namespace Mise.Core.Common.Entities.Inventory
     {
         public InventoryBeverageLineItem()
         {
-            PricePaid = Money.None;
-			PartialBottleListing = new List<decimal> ();
 			MethodsMeasuredLast = MeasurementMethods.Unmeasured;
-			Categories = new List<ItemCategory> ();
         }
 
         public Guid? VendorBoughtFrom { get; set; }
@@ -41,7 +38,7 @@ namespace Mise.Core.Common.Entities.Inventory
                 }
 
                 //don't have container, let's get it via category
-                var standCat = Categories.FirstOrDefault(c => c.IsCustomCategory == false);
+                var standCat = Categories?.FirstOrDefault(c => c.IsCustomCategory == false);
                 if (standCat != null)
                 {
 					var catService = new CategoriesService ();
@@ -54,9 +51,18 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public List<decimal> PartialBottleListing{ get; set;}
 
-		public IEnumerable<decimal> PartialBottlePercentages{get{return PartialBottleListing;}}
+        public IEnumerable<decimal> GetPartialBottlePercentages()
+        {
+            if (PartialBottleListing == null)
+            {
+                return new List<decimal>();
+            }
+            return PartialBottleListing;
+        }
 
-		public int NumPartialBottles{get{ return PartialBottleListing.Count;
+		public int NumPartialBottles{get{ 
+				return 
+					PartialBottleListing != null ? PartialBottleListing.Count : 0;
 			}}
 		
 		public int NumFullBottles{get;set;}
@@ -67,7 +73,7 @@ namespace Mise.Core.Common.Entities.Inventory
 		/// <value>The total bottles.</value>
 		public decimal Quantity {
 			get {
-				var totalPartials = PartialBottleListing.Any ()
+				var totalPartials = PartialBottleListing != null && PartialBottleListing.Any ()
 					? PartialBottleListing.Sum (s => s)
 					: 0.0M;
 				return 
@@ -82,7 +88,6 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public MeasurementMethods MethodsMeasuredLast { get; set; }
 
-        public Money PricePaid { get; set; }
 
         public decimal GetPercentageFull()
         {
@@ -99,8 +104,12 @@ namespace Mise.Core.Common.Entities.Inventory
             newItem.Container = Container;
             newItem.VendorBoughtFrom = VendorBoughtFrom;
             newItem.NumFullBottles = NumFullBottles;
-			newItem.PartialBottleListing = PartialBottleListing.Select (d => d).ToList();
-			newItem.Categories = Categories.Select (c => c).ToList ();
+			newItem.PartialBottleListing = PartialBottleListing != null 
+				? PartialBottleListing.Select (d => d).ToList ()
+				: new List<decimal> ();;
+			newItem.Categories = Categories != null 
+				? Categories.Select (c => c).ToList () 
+				: new List<ItemCategory>();
             return newItem;
         }
 

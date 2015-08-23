@@ -194,7 +194,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AzureEntityStorageController.cs" />
     <Compile Include="Controllers\AzureEventStorageController.cs" />
-    <Compile Include="Controllers\InventoryMonitorController.cs" />
     <Compile Include="DataObjects\AzureEntityStorage.cs" />
     <Compile Include="DataObjects\AzureEventStorage.cs" />
     <Compile Include="Models\stockboymobileserviceContext.cs" />

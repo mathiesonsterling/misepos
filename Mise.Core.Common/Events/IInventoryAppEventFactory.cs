@@ -25,6 +25,8 @@ namespace Mise.Core.Common.Events
 
 		void SetRestaurant(IRestaurant restaurant);
 
+		void SetDeviceID (string id);
+
 		#region Event creations
         EmployeeLoggedIntoInventoryAppEvent CreateEmployeeLoggedIntoInventoryAppEvent(IEmployee emp);
         EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(IEmployee emp);
@@ -44,11 +46,11 @@ namespace Mise.Core.Common.Events
 
 		InventoryCreatedEvent CreateInventoryCreatedEvent(IEmployee emp);
 		InventoryMadeCurrentEvent CreateInventoryMadeCurrentEvent(IEmployee emp, IInventory inventory);
-		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int quantity, Money pricePaid, Guid? vendorID, IInventorySection section, 
+		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int quantity, Guid? vendorID, IInventorySection section, 
            int inventoryPosition, IInventory inventory);
 
 		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, string name, string upc, 
-			IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity, Money pricePaid, 
+			IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity,  
 			Guid? vendorID, IInventorySection section, int inventoryPosition, IInventory inventory);
 		InventorySectionCompletedEvent CreateInventorySectionCompletedEvent(IEmployee emp, IInventory inventory, IInventorySection section);
 		InventoryLiquidItemMeasuredEvent CreateInventoryLiquidItemMeasuredEvent(IEmployee emp, IInventory inventory, 

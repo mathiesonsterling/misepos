@@ -20,6 +20,7 @@
 			    <Button Text="Reports" Command="{Binding ReportsCommand}"/>
 			    <Button Text="Invite Staff" Command="{Binding ManageEmployeesCommand}" />
 			    <Button Text="Logout" Command="{Binding LogoutCommand}"/>
+			    <Button Text="ResetDB" Command="{Binding ResetDBCommand}"/>
 	    		<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 	    	</StackLayout>
 	    </ScrollView>

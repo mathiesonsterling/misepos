@@ -18,14 +18,10 @@ namespace Mise.Core.Client.Repositories
     public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent, Employee>, IEmployeeRepository
     {
         readonly IInventoryEmployeeWebService _webService;
-        readonly IClientDAL _clientDAL;
-
-
-        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, IClientDAL dal, ILogger logger, IResendEventsWebService resend)
-            : base(logger, dal, webService, resend)
+        public ClientEmployeeRepository(IInventoryEmployeeWebService webService, ILogger logger)
+            : base(logger, webService)
         {
             _webService = webService;
-            _clientDAL = dal;
         }
 
         protected override async Task<IEnumerable<Employee>> LoadFromWebservice(Guid? restaurantID)
@@ -33,14 +29,7 @@ namespace Mise.Core.Client.Repositories
             var items = await (restaurantID.HasValue ? _webService.GetEmployeesForRestaurant(restaurantID.Value) : _webService.GetEmployeesAsync());
             return items.Cast<Employee>();
         }
-
-        protected override async Task<IEnumerable<Employee>> LoadFromDB(Guid? restaurantID)
-        {
-
-            Logger.Log("Could not get employees from web service, pulling from DAL", LogLevel.Debug);
-            var items = await _clientDAL.GetEntitiesAsync<Employee>();
-            return items.ToList();
-        }
+			
 
         public async Task<IEmployee> GetByEmailAndPassword(EmailAddress email, Password password)
         {

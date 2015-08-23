@@ -7,8 +7,6 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System;
-using System.Collections.ObjectModel;
-using Mise.Core.Services;
 using Xamarin.Forms;
 namespace Mise.Inventory.ViewModels
 {
@@ -46,12 +44,10 @@ namespace Mise.Inventory.ViewModels
 	public class ParViewModel : BaseSearchableViewModel<PARLineItemDisplay>
 	{
 		readonly IPARService _parService;
-		IParBeverageLineItem _itemSettingQuantity;
 		public ParViewModel(ILogger logger, IAppNavigation appNavigation, IPARService parService)
 		:base(appNavigation, logger)
 		{
 			_parService = parService;
-			_itemSettingQuantity = null;
 		}
 			
 		#region Commands
@@ -87,24 +83,12 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		public override async Task SelectLineItem(PARLineItemDisplay displayLineItem){
-			var lineItem = displayLineItem.Source;
-			_itemSettingQuantity = lineItem;
-			await _parService.SetCurrentLineItem (lineItem);
+		public override async Task SelectLineItem(PARLineItemDisplay lineItem){
+			var realLI = lineItem.Source;
+			await _parService.SetCurrentLineItem (realLI);
 		    await Navigation.ShowUpdateParLineItem();
 		}
-
-		async void QuantitySetCallback(int newQuant, decimal ignore){
-			if(_itemSettingQuantity != null)
-			{
-				if(_itemSettingQuantity.Quantity != newQuant){
-					await _parService.UpdateQuantityOfPARLineItem (_itemSettingQuantity, newQuant);
-				}
-			}
-
-			_itemSettingQuantity = null;
-			await LoadItems ();
-		}
+			
 
 		protected override async Task<ICollection<PARLineItemDisplay>> LoadItems(){
 			var currPar = await _parService.GetCurrentPAR ();
@@ -120,6 +104,9 @@ namespace Mise.Inventory.ViewModels
 				throw new NullReferenceException ("Cannot find current par or create one!");
 			}
 			var items = currPar.GetBeverageLineItems ().ToList();
+
+			var lastItem = items.OrderByDescending (li => li.LastUpdatedDate).FirstOrDefault ();
+			FocusedItem = new PARLineItemDisplay (lastItem);
 
 			return items.OrderBy (li => li.DisplayName).Select (li => new PARLineItemDisplay (li)).ToList();
 		}

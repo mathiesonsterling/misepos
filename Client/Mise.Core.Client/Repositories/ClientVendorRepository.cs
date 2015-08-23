@@ -25,8 +25,8 @@ namespace Mise.Core.Client.Repositories
         private static readonly Distance DefaultSearchRadius = new Distance{Kilometers = 80.46};
         private readonly IDeviceLocationService _deviceLocationService;
 
-        public ClientVendorRepository(ILogger logger, IClientDAL dal, IVendorWebService webService, IDeviceLocationService locationService, IResendEventsWebService resend)
-            : base(logger, dal, webService, resend)
+        public ClientVendorRepository(ILogger logger, IVendorWebService webService, IDeviceLocationService locationService)
+            : base(logger, webService)
         {
             _vendorWebService = webService;
             _deviceLocationService = locationService;
@@ -65,17 +65,7 @@ namespace Mise.Core.Client.Repositories
             var items = await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
             return items.Cast<Vendor>();
         }
-
-
-        protected override async Task<IEnumerable<Vendor>> LoadFromDB(Guid? restaurantID)
-        {
-            var vendors = await DAL.GetEntitiesAsync<Vendor>();
-            if (restaurantID.HasValue)
-            {
-                vendors = vendors.Where(v => v.GetRestaurantIDsAssociatedWithVendor().Contains(restaurantID.Value));
-            }
-            return vendors;
-        }
+			
 
         private async Task<IEnumerable<IVendor>> LoadWithinDistance(Location deviceLocation, Distance radius)
         {

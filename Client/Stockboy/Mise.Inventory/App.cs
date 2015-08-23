@@ -17,6 +17,7 @@ using Xamarin.Forms;
 using Mise.Inventory.Services;
 using Mise.Inventory.ViewModels;
 using Mise.Core.Services;
+using Mise.Core.Client.Services;
 
 namespace Mise.Inventory
 {
@@ -32,6 +33,9 @@ namespace Mise.Inventory
         private static Guid? RestaurantID { get; set; }
 
 		private IInsightsService _insights;
+
+		public static string DeviceID{ get; private set;}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Mise.Inventory.App"/> class.
         /// </summary>
@@ -61,6 +65,10 @@ namespace Mise.Inventory
             navigationService.Navi = MainPage.Navigation;
             navigationService.CurrentPage = initialPage;
 
+			LoadDeviceID ();
+
+
+
             LoadRepositoriesVoid();
 
             //if we've got a stored login, load it up
@@ -68,36 +76,24 @@ namespace Mise.Inventory
             
         }
 
+		static async void LoadDeviceID ()
+		{
+			//get the device ID
+			var kVService = Resolve<IClientKeyValueStorage> ();
+			var item = kVService.GetID ("DEVICE_ID");
+			if (item == null) {
+				item = Guid.NewGuid ();
+				await kVService.SetID ("DEVICE_ID", item.Value);
+			}
+			//set the ev factory
+			var evFactory = Resolve<IInventoryAppEventFactory> ();
+			evFactory.SetDeviceID (item.ToString ());
+			DeviceID = item.ToString ();
+		}
+
         protected override async void OnSleep()
         {
-            //if we have any events still trying to send, give them another try
-            try
-            {
-				if(_insights != null){
-					_insights.Track("Stockboy put to sleep", new Dictionary<string, string>());
-				}
-                var dal = Resolve<IClientDAL>();
-                var httpClient = Resolve<IResendEventsWebService>();
-
-                var resends = (await dal.GetUnsentEvents()).Select(dto => dto as IEntityEventBase).ToList();
-                if (resends.Any())
-                {
-                    await httpClient.ResendEvents(resends);
-                }
-            }
-            catch (Exception e)
-            {
-                try
-                {
-                    var logger = Resolve<ILogger>();
-                    logger.HandleException(e);
-                }
-                catch (Exception)
-                {
-                    //nuke it here
-                }
-            }
-
+			//TODO fire a sync if we're online and need one
         }
 
         #region View Models
@@ -180,7 +176,7 @@ namespace Mise.Inventory
             }
         }
 
-		private async void AttemptToLoginSavedEmployee(IAppNavigation appNavigation)
+		private static async void AttemptToLoginSavedEmployee(IAppNavigation appNavigation)
 		{
 			var loginService = _container.Resolve<ILoginService>();
 			if (loginService != null) {

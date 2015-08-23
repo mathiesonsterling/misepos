@@ -28,12 +28,20 @@ namespace Mise.Inventory.Pages
                 var cameFromAdd = vm.CameFromAdd;
                 await vm.OnAppearing();
 
-				if (cameFromAdd && _customVL != null && vm.LineItems != null && vm.LineItems.Any())
-                {
-					_customVL.ScrollTo (vm.LineItems.Last(), ScrollToPosition.End, false);
-                }
+				if (vm.FocusedItem != null)
+				{
+					_customVL.ScrollTo(vm.FocusedItem, ScrollToPosition.MakeVisible, false);
+				}
             }
         }
+
+		void LineItemDeleted(object item){
+			int i = 5;
+		}
+
+		void LineItemInsertAfter(object item){
+			int i = 8;
+		}
 
 		void LoadItems ()
 		{
@@ -42,9 +50,11 @@ namespace Mise.Inventory.Pages
 			//TODO arrange line items by their display order field
 			var vm = BindingContext as InventoryViewModel;
 			if (vm != null) {
+
+				var dataTemplate = new DataTemplate (() => new InventoryLineItemCell (LineItemDeleted, LineItemInsertAfter));
 				_customVL = new ListView {
 					ItemsSource = vm.LineItems,
-					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
+					ItemTemplate = dataTemplate,
 					RowHeight = 50,
 					HasUnevenRows = true,
 					HorizontalOptions = LayoutOptions.FillAndExpand
@@ -58,9 +68,9 @@ namespace Mise.Inventory.Pages
 					((ListView)sender).SelectedItem = null;
 				};
 				listItems.Children.Add (_customVL);
-			    if (vm.FirstUnmeasuredItem != null)
+			    if (vm.FocusedItem != null)
 			    {
-			        _customVL.ScrollTo(vm.FirstUnmeasuredItem, ScrollToPosition.MakeVisible, false);
+			        _customVL.ScrollTo(vm.FocusedItem, ScrollToPosition.MakeVisible, false);
 			    }
 			}
 		}

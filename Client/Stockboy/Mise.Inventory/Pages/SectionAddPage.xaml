@@ -20,7 +20,10 @@
 				</StackLayout>
 			</ScrollView>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
-			<Button Text="Add" Command="{Binding AddCommand}" HorizontalOptions="FillAndExpand"/>
+			<Button Text="Add" 
+				Command="{Binding AddCommand}" 
+				HorizontalOptions="FillAndExpand" 
+				IsEnabled="{Binding CanAdd}"/>
 		</StackLayout>
 	</ContentPage.Content>
 </ContentPage>

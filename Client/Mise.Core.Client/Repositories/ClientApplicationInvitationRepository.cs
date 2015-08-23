@@ -20,9 +20,9 @@ namespace Mise.Core.Client.Repositories
 		: BaseEventSourcedClientRepository<IApplicationInvitation, IApplicationInvitationEvent, ApplicationInvitation>, IApplicationInvitationRepository
 	{
 		readonly IApplicationInvitationWebService _webService;
-		public ClientApplicationInvitationRepository(ILogger logger, IClientDAL dal,
-            IApplicationInvitationWebService webService, IResendEventsWebService resend)
-            : base(logger, dal, webService, resend)
+		public ClientApplicationInvitationRepository(ILogger logger,
+            IApplicationInvitationWebService webService)
+            : base(logger, webService)
 		{
 			_webService = webService;
 		}
@@ -53,16 +53,6 @@ namespace Mise.Core.Client.Repositories
 	        }
 
             throw new Exception("Cannot load without a restaurant ID");
-	    }
-
-	    protected override async Task<IEnumerable<ApplicationInvitation>> LoadFromDB(Guid? restaurantID)
-	    {
-	        var items = await DAL.GetEntitiesAsync<ApplicationInvitation>();
-	        if (restaurantID.HasValue)
-	        {
-	            items = items.Where(ai => ai.RestaurantID == restaurantID);
-	        }
-	        return items;
 	    }
 
 	    public async Task Load (EmailAddress email)

@@ -1,29 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
+﻿
 using Autofac;
 
 using Mise.Core;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Client.Services;
-using Mise.Core.Common.Entities;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Services;
 using Mise.Core.Common.Services.Implementation.DAL;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Repositories;
-using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
-using Mise.Inventory.Services.Implementation.WebServiceClients;
 using Mise.Inventory.ViewModels;
 using Mise.Core.Common.Services.Implementation;
-using System.ServiceModel;
 using Mise.Core.Entities;
 using Mise.Core.Common;
 using Mise.Core.Common.Services.WebServices;
@@ -56,7 +46,7 @@ namespace Mise.Inventory
 
 		public static BuildLevel GetBuildLevel(){
 			#if DEBUG
-			return BuildLevel.Development;
+			return BuildLevel.Production;
 			#else
 			return BuildLevel.Production;
 			#endif
@@ -79,7 +69,6 @@ namespace Mise.Inventory
 			cb.RegisterInstance (webService).As<IPurchaseOrderWebService> ().SingleInstance ();
 			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance ();
 			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance ();
-			cb.RegisterInstance (webService).As<IResendEventsWebService> ().SingleInstance ();
 		}
 
 		/// <summary>

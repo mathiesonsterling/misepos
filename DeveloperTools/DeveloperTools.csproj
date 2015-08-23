@@ -93,7 +93,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\BaseCSVExportCommand.cs" />
     <Compile Include="Commands\BaseProgressReportingCommand.cs" />
+    <Compile Include="Commands\ExportInventoryCommand.cs" />
+    <Compile Include="Commands\ExportParCommand.cs" />
     <Compile Include="Commands\ImportVendorPriceListCommand.cs" />
     <Compile Include="Commands\PopulateInventorySQLServerDBCommand.cs" />
     <Compile Include="Commands\ProgressReport.cs" />
@@ -135,6 +138,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Client\Stockboy\Mise.Inventory\Mise.Inventory.csproj">
+      <Project>{77C23146-21AF-441D-B5BA-6E11A6AFAB3E}</Project>
+      <Name>Mise.Inventory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mise.Core.Common\Mise.Core.Common.csproj">
       <Project>{bc3bd128-1d20-4c41-83b0-3fc37e5c5f5e}</Project>
       <Name>Mise.Core.Common</Name>
