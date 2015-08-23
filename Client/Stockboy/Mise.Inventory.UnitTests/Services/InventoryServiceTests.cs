@@ -1,32 +1,26 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using Mise.Core.Client.Services;
-using Mise.Core.Entities.Restaurant;
-using Mise.Core.Services.UtilityServices;
-using Mise.Inventory.Services;
-using NUnit.Framework;
-using Moq;
-
-using Mise.Core.Entities.Inventory;
-using Mise.Core.Entities.Base;
-using Mise.Inventory.Services.Implementation;
+using System.Threading.Tasks;
 using Mise.Core.Client.Repositories;
-using Mise.Core.Repositories;
-using Mise.Core.Services;
+using Mise.Core.Client.Services;
 using Mise.Core.Common.Entities;
-using Mise.Core.Common.Events;
-using Mise.Core.Common.Services;
-using Mise.Core.Entities.People;
-using Mise.Core.ValueItems;
-using Mise.Core.Entities;
-using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Events;
 using Mise.Core.Common.Services.WebServices;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory.Events;
+using Mise.Core.Entities.People;
+using Mise.Core.Entities.Restaurant;
+using Mise.Core.Entities.Restaurant.Events;
+using Mise.Core.Repositories;
+using Mise.Core.Services.UtilityServices;
+using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
-
+using Mise.Inventory.Services;
+using Mise.Inventory.Services.Implementation;
+using Moq;
+using NUnit.Framework;
 
 namespace Mise.Inventory.UnitTests.Services
 {
@@ -342,7 +336,6 @@ namespace Mise.Inventory.UnitTests.Services
 			var underTest = new InventoryService (logger.Object, loginService, inventoryRepos, eventFact, insights.Object);
 
 			//ACT
-		    await underTest.LoadLatest();
 			await underTest.AddNewSection("testSection", false, false);
 
 			//ASSERT

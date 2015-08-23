@@ -24,7 +24,7 @@
         /// <summary>
         /// Imported for vendor via CSV upload
         /// </summary>
-        VendorDataImport,
+        VendorManagement,
 	}
 }
 

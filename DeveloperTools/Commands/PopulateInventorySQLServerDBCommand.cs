@@ -14,6 +14,7 @@ using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Server.Services.Implementation;
 using Mise.Core.Services.UtilityServices;
+using Mise.Inventory;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 
 namespace DeveloperTools.Commands
@@ -26,15 +27,16 @@ namespace DeveloperTools.Commands
 
         private readonly IMobileServiceClient _client;
         private readonly EntityDataTransportObjectFactory _entityDataTransportObjectFactory;
-        public PopulateInventorySqlServerDBCommand(IProgress<ProgressReport> progress, ILogger logger, Uri uri, bool addDemo) : base(progress)
+        public PopulateInventorySqlServerDBCommand(IProgress<ProgressReport> progress, ILogger logger, Uri uri, BuildLevel level) : base(progress)
         {
             _logger = logger;
             _uri = uri;
-            _addDemo = addDemo;
+            _addDemo = level == BuildLevel.Development;
 
+            var mobileServiceLocation = AzureServiceLocator.GetAzureMobileServiceLocation(level);
             _client = new MobileServiceClient(
-                "https://stockboymobileservice.azure-mobile.net/",
-                "vvECpsmISLzAxntFjNgSxiZEPmQLLG42"
+               mobileServiceLocation.Uri.ToString(),
+               mobileServiceLocation.AppKey
             );
 
             _entityDataTransportObjectFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());

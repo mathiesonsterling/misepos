@@ -218,9 +218,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\mobile-stagingstockboymobileservice.pubxml" />
     <None Include="Properties\PublishProfiles\mobile-stockboymobileservice.pubxml" />
-    <None Include="Properties\PublishProfiles\stockboymobileservicestaging - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\stockboymobileservicestaging - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Mise.Core.Common\Mise.Core.Common.csproj">

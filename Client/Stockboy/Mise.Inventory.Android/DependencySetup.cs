@@ -1,17 +1,15 @@
 ﻿using Autofac;
 
-using Xamarin.Forms;
 using Mise.Core.Services;
 using Mise.Inventory.Services;
-using XLabs.Platform;
 using XLabs.Platform.Device;
 using Mise.Inventory.Android.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Microsoft.WindowsAzure.MobileServices;
-using Mise.Inventory.Android.MercuryWebService;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using Mise.Inventory.Services.Implementation;
 
 
 namespace Mise.Inventory.Android
@@ -52,7 +50,10 @@ namespace Mise.Inventory.Android
 				store.DefineTable<AzureEventStorage>();
 
 				await mobileService.SyncContext.InitializeAsync (store);
-				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService);
+
+				var deviceConnection = new DeviceConnectionService ();
+				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, 
+					deviceConnection);
 				RegisterWebService (cb, webService);
 			}
 		}

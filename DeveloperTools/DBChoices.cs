@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using Mise.Inventory;
 
 namespace DeveloperTools
 {
@@ -29,6 +30,21 @@ namespace DeveloperTools
                 box.Items.Add(kv);
             }
             box.SelectedIndex = 0;
+        }
+
+        public static BuildLevel GetBuildLevelSelected(string key)
+        {
+            switch (key.ToUpper())
+            {
+                case "DEV":
+                    return BuildLevel.Development;
+                case "QA":
+                    return BuildLevel.QA;
+                case "PRODUCTION":
+                    return BuildLevel.Production;
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 }

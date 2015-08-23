@@ -50,11 +50,16 @@ namespace Mise.Inventory.Services
 		/// <param name="fullBottles">Full bottles.</param>
 		/// <param name="partials">Partials.</param>
 		Task MeasureCurrentLineItemVisually (int fullBottles, ICollection<decimal> partials);
+		Task DeleteLineItem (IInventoryBeverageLineItem li);
+		Task MoveLineItemToPosition(IInventoryBeverageLineItem li, int position);
+		Task MoveLineItemUpInList(IInventoryBeverageLineItem li);
+		Task MoveLineItemDownInList(IInventoryBeverageLineItem li);
 
 	    Task<IInventorySection> GetCurrentInventorySection();
 	    Task SetCurrentInventorySection(IInventorySection section);
 
 		Task MarkSectionAsComplete ();
+		Task ClearCurrentSection();
 
 		/// <summary>
 		/// marks the current inventory as completed

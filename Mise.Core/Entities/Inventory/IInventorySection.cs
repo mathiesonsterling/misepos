@@ -26,11 +26,21 @@ namespace Mise.Core.Entities.Inventory
 		/// <value><c>true</c> if completed; otherwise, <c>false</c>.</value>
 		bool Completed{get;}
 
+		/// <summary>
+		/// If set, the employee that is currently working on this section.  Used for multimachine setups to warn
+		/// </summary>
+		/// <value>The currently in use by.</value>
+		Guid? CurrentlyInUseBy{get;}
+		/// <summary>
+		/// Last time the count for this section was started
+		/// </summary>
+		/// <value>The time count started.</value>
+		DateTimeOffset? TimeCountStarted{get;}
+
         /// <summary>
         /// The employee ID of the last person who completed this section
         /// </summary>
-        Guid? LastCompletedBy { get; set; }
-
+        Guid? LastCompletedBy { get;}
 
         /// <summary>
         /// Points back to the inventory section of the restaurant

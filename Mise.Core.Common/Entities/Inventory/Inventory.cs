@@ -78,13 +78,63 @@ namespace Mise.Core.Common.Entities.Inventory
                 case MiseEventTypes.InventorySectionCompleted:
                     WhenInventorySectionCompleted((InventorySectionCompletedEvent)entityEvent);
                     break;
+				case MiseEventTypes.InventorySectionCleared:
+					WhenInventorySectionCleared ((InventorySectionClearedEvent)entityEvent);
+					break;
                 case MiseEventTypes.InventoryLineItemAdded:
                     WhenInventoryLineItemAdded((InventoryLineItemAddedEvent)entityEvent);
                     break;
+				case MiseEventTypes.InventoryLineItemDeleted:
+					WhenInventoryLineItemDeleted ((InventoryLineItemDeletedEvent)entityEvent);
+					break;
+				case MiseEventTypes.InventoryLineItemMovedToNewPosition:
+					WhenInventoryLineItemMovedToNewPosition ((InventoryLineItemMovedToNewPositionEvent)entityEvent);
+					break;
+				case MiseEventTypes.InventorySectionStartedByEmployee:
+					WhenInventorySectionStartedByEmployee ((InventorySectionStartedByEmployeeEvent)entityEvent);
+					break;
                 default:
                     throw new ArgumentException("Cannot use event " + entityEvent.EventType);
             }
         }
+
+		void WhenInventoryLineItemMovedToNewPosition(InventoryLineItemMovedToNewPositionEvent ev){
+			var section = Sections.FirstOrDefault (s => s.ID == ev.InventorySectionID);
+			if(section == null){
+				throw new ArgumentException("Section not found");
+			}
+
+			var item = section.LineItems.FirstOrDefault(li => li.ID == ev.LineItemID);
+			if(item == null){
+				throw new ArgumentException("Item not found");
+			}
+
+			MoveLineItemToPosition(section, item, ev.NewPositionWanted);
+		}
+
+		void MoveLineItemToPosition(InventorySection sec, InventoryBeverageLineItem li, int newPosition){
+			//is there already an item at the destination?	If so move it one forward
+			var existing = sec.LineItems.FirstOrDefault(l => l.InventoryPosition == newPosition);
+			if(existing != null){
+				MoveLineItemToPosition (sec, existing, newPosition + 1);
+			}
+
+			li.InventoryPosition = newPosition;
+		}
+
+		void WhenInventoryLineItemDeleted (InventoryLineItemDeletedEvent ev)
+		{
+			var section = Sections.FirstOrDefault (sec => sec.ID == ev.InventorySectionID);
+			if(section == null)
+			{
+				throw new ArgumentException("Invalid section ID in inventory item add");
+			}
+
+			var lineItem = section.LineItems.FirstOrDefault (li => li.ID == ev.InventoryLineItemID);
+			if (lineItem != null) {
+				section.LineItems.Remove (lineItem);
+			}
+		}
 
         private void WhenInventoryLineItemAdded(InventoryLineItemAddedEvent entityEvent)
         {
@@ -127,6 +177,16 @@ namespace Mise.Core.Common.Entities.Inventory
 
         }
 
+		void WhenInventorySectionCleared (InventorySectionClearedEvent ev)
+		{
+			var section = Sections.FirstOrDefault (s => s.ID == ev.SectionId);
+			if(section == null){
+				throw new ArgumentException ("Invalid section");
+			}
+
+			section.LineItems.Clear ();
+		}
+
         private void WhenMadeCurrent(InventoryMadeCurrentEvent entityEvent)
         {
             IsCurrent = true;
@@ -155,26 +215,37 @@ namespace Mise.Core.Common.Entities.Inventory
 
         protected virtual void WhenInventorySectionCompleted(InventorySectionCompletedEvent inventorySectionCompletedEvent)
         {
-            var section = GetSections().FirstOrDefault(s => s.ID == inventorySectionCompletedEvent.InventorySectionID);
+            var section = Sections.FirstOrDefault(s => s.ID == inventorySectionCompletedEvent.InventorySectionID);
             if (section == null)
             {
                 throw new ArgumentException("Cannot find section for inventory section " + inventorySectionCompletedEvent.InventorySectionID);
             }
 
             section.LastCompletedBy = inventorySectionCompletedEvent.CausedByID;
+			section.CurrentlyInUseBy = null;
         }
+
+		void WhenInventorySectionStartedByEmployee (InventorySectionStartedByEmployeeEvent ev)
+		{
+			var section = Sections.FirstOrDefault (s => s.ID == ev.InventorySectionId);
+			if (section == null)
+			{
+				throw new ArgumentException("Cannot find section for inventory section " + ev.InventorySectionId);
+			}
+
+			section.CurrentlyInUseBy = ev.CausedByID;
+			section.TimeCountStarted = ev.CreatedDate;
+		}
 
         protected virtual void WhenCompleted(InventoryCompletedEvent entityEvent)
         {
-            //check all sections are completed!
-            var undoneSections = GetSections().Where(s => s.Completed == false);
-            foreach (var sec in undoneSections)
+            //check all sections are completed!  any not already assigned, complete them with this user
+			foreach (var sec in Sections.Where(s => s.LastCompletedBy.HasValue == false))
             {
                 sec.LastCompletedBy = entityEvent.CausedByID;
             }
             DateCompleted = entityEvent.CreatedDate;
             IsCurrent = false;
-            //TODO the service should make a copy, and mark that one as current
         }
 
 

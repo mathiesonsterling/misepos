@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace Mise.Core.Common.Services.WebServices
 {
 	/// <summary>
@@ -9,6 +11,11 @@ namespace Mise.Core.Common.Services.WebServices
 	IReceivingOrderWebService, IPurchaseOrderWebService,
 	IApplicationInvitationWebService, IAccountWebService
 	{
+		/// <summary>
+		/// Attempt to get us in line with the server
+		/// </summary>
+		/// <returns>The with server.</returns>
+		Task<bool> SynchWithServer();
 	}
 }
 

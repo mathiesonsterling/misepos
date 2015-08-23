@@ -17,6 +17,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Events.Vendors;
 using Mise.Core.Common.Events.Accounts;
+using Mise.Core.Common.Services;
 
 
 namespace Mise.Core.Common.Events
@@ -154,6 +155,40 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
+		public InventoryLineItemDeletedEvent CreateInventoryLineItemDeletedEvent (IEmployee emp, IInventory inv,
+			IInventorySection sec, IInventoryBeverageLineItem li)
+		{
+			return new InventoryLineItemDeletedEvent {
+				ID = Guid.NewGuid (),
+				CausedByID = emp.ID,
+				CreatedDate = GetDate (),
+				EventOrderingID = GetNextEventID (),
+				DeviceID = _deviceID,
+				RestaurantID = _restaurant.ID,
+
+				InventoryID = inv.ID,
+				InventorySectionID = sec.ID,
+				InventoryLineItemID = li.ID
+			};
+		}
+
+		public InventoryLineItemMovedToNewPositionEvent CreateInventoryLineItemMovedToNewPositionEvent (IEmployee emp, IInventory inv, 
+			IInventorySection sec, IInventoryBeverageLineItem li, int newPosition)
+		{
+			return new InventoryLineItemMovedToNewPositionEvent {
+				ID = Guid.NewGuid (),
+				CausedByID = emp.ID,
+				CreatedDate = GetDate (),
+				EventOrderingID = GetNextEventID (),
+				DeviceID = _deviceID,
+				RestaurantID = _restaurant.ID,
+
+				InventoryID = inv.ID,
+				InventorySectionID = sec.ID,
+				LineItemID = li.ID,
+				NewPositionWanted = newPosition
+			};
+		}
 
 	    public PARCreatedEvent CreatePARCreatedEvent (IEmployee emp)
 		{
@@ -400,6 +435,20 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
+		public InventorySectionStartedByEmployeeEvent CreateInventorySectionStartedByEmployeeEvent (IEmployee emp, IInventory inventory, IInventorySection section)
+		{
+			return new InventorySectionStartedByEmployeeEvent {
+				ID = Guid.NewGuid (),
+				CreatedDate = GetDate (),
+				DeviceID = _deviceID,
+				EventOrderingID = GetNextEventID (),
+				CausedByID = emp.ID,
+				RestaurantID = _restaurant.ID,
+				InventoryID = inventory.ID,
+				InventorySectionId = section.ID,
+			};
+		}
+
 		public InventorySectionCompletedEvent CreateInventorySectionCompletedEvent (IEmployee emp, IInventory inventory, IInventorySection section)
 		{
 			return new InventorySectionCompletedEvent {
@@ -411,6 +460,20 @@ namespace Mise.Core.Common.Events
 				RestaurantID = _restaurant.ID,
 				InventoryID = inventory.ID,
                 InventorySectionID = section.ID
+			};
+		}
+
+		public InventorySectionClearedEvent CreateInventorySectionClearedEvent (IEmployee emp, IInventory inventory, IInventorySection sec)
+		{
+			return new InventorySectionClearedEvent {
+				ID = Guid.NewGuid (),
+				CreatedDate = GetDate (),
+				DeviceID = _deviceID,
+				EventOrderingID = GetNextEventID (),
+				CausedByID = emp.ID,
+				RestaurantID = _restaurant.ID,
+				InventoryID = inventory.ID,
+				SectionId = sec.ID
 			};
 		}
 

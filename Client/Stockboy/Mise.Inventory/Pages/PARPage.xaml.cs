@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
-using Mise.Inventory.CustomCells;
+using Mise.Inventory.CustomControls;
 using Mise.Core.Entities.Inventory;
 namespace Mise.Inventory.Pages
 {

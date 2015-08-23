@@ -1,7 +1,7 @@
 ﻿
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels.Reports;
-using Mise.Inventory.CustomCells;
+using Mise.Inventory.CustomControls;
 namespace Mise.Inventory
 {
 	public partial class ReportResultsPage : ContentPage

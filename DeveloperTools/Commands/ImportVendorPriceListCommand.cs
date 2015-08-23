@@ -16,6 +16,7 @@ using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
+using Mise.Inventory;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 using Mise.VendorManagement.Services.Implementation;
 
@@ -33,7 +34,7 @@ namespace DeveloperTools.Commands
         private readonly int _numSteps;
         private readonly IMobileServiceClient _client;
         private readonly EntityDataTransportObjectFactory _entityDataTransportObjectFactory;
-        public ImportVendorPriceListCommand(ILogger logger, Uri dbLocation, string fileName, string vendorName, EmailAddress vendorEmail, StreetAddress vendorAddress,
+        public ImportVendorPriceListCommand(ILogger logger, Uri dbLocation, string fileName, string vendorName, EmailAddress vendorEmail, StreetAddress vendorAddress, BuildLevel level,
             IProgress<ProgressReport> progress) : base(progress)
         {
             _logger = logger;
@@ -43,10 +44,11 @@ namespace DeveloperTools.Commands
             _vendorEmail = vendorEmail;
             _vendorStreetAddress = vendorAddress;
 
+            var mobSer = AzureServiceLocator.GetAzureMobileServiceLocation(level);
             _client = new MobileServiceClient(
-    "https://stockboymobileservice.azure-mobile.net/",
-    "vvECpsmISLzAxntFjNgSxiZEPmQLLG42"
-);
+               mobSer.Uri.ToString(),
+                mobSer.AppKey
+            );
 
             _entityDataTransportObjectFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
             _numSteps = 10;
@@ -61,6 +63,7 @@ namespace DeveloperTools.Commands
             var mappings = new Dictionary<string, ItemCategory>
             {
                 {"absinthe/oddball".ToUpper(), CategoriesService.Unknown},
+                {"02 absinthe/oddball".ToUpper(), CategoriesService.Unknown},
                 {"agave".ToUpper(), CategoriesService.Agave},
                 {"AMARO", CategoriesService.LiquerAmaro},
                 {"american whiskey".ToUpper(), CategoriesService.WhiskeyAmerican},
@@ -68,12 +71,22 @@ namespace DeveloperTools.Commands
                 {"brandy".ToUpper(), CategoriesService.Brandy},
                 {"fortified & aromatized".ToUpper(), CategoriesService.WineFortified},
                 {"gin".ToUpper(), CategoriesService.Gin},
+                {"02 gin".ToUpper(), CategoriesService.Gin},
                 {"LIQUEUR", CategoriesService.Liquer},
                 {"NA", CategoriesService.Unknown},
                 {"RUM", CategoriesService.Rum},
+                {"03 RUM", CategoriesService.Rum},
                 {"SCOTCH", CategoriesService.WhiskeyScotch},
                 {"VODKA", CategoriesService.Vodka},
-                {"WORLD WHISKY", CategoriesService.WhiskeyWorld}
+                { "01 VODKA", CategoriesService.Vodka},
+                {"WORLD WHISKY", CategoriesService.WhiskeyWorld},
+                { "04 MEZCAL", CategoriesService.AgaveMezcal},
+                {"04 SOTOL", CategoriesService.Agave},
+                {"04 TEQUILA", CategoriesService.AgaveTequila},
+                {"05 AMERICAN", CategoriesService.WhiskeyAmerican},
+                {"05 BOURBON", CategoriesService.WhiskeyBourbon},
+                {"05 RYE", CategoriesService.WhiskeyRye},
+                {"06 CANADIAN", CategoriesService.WhiskeyCanadian}
             };
 
             var vendorID = Guid.NewGuid();

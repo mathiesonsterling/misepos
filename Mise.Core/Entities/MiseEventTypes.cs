@@ -5,7 +5,8 @@
     /// </summary>
     /// <remarks>Each of these should have a feature associated with them!</remarks>
     public enum MiseEventTypes
-    {
+	{
+
 		EmployeeRegistersRestaurant,
 
         CheckCreated,
@@ -68,10 +69,14 @@
 
         InventoryCreated,
         InventoryCompleted,
+		InventorySectionCleared,
 		InventorySectionCompleted,
+		InventorySectionStartedByEmployee,
         InventoryLiquidItemMeasured,
         InventoryMadeCurrent,
         InventoryLineItemAdded,
+		InventoryLineItemDeleted,
+		InventoryLineItemMovedToNewPosition,
 		InventoryNewSectionAdded,
 
         ReceivingOrderCreated,

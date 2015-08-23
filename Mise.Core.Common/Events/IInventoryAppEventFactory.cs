@@ -52,11 +52,18 @@ namespace Mise.Core.Common.Events
 		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, string name, string upc, 
 			IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity,  
 			Guid? vendorID, IInventorySection section, int inventoryPosition, IInventory inventory);
-		InventorySectionCompletedEvent CreateInventorySectionCompletedEvent(IEmployee emp, IInventory inventory, IInventorySection section);
+		InventorySectionCompletedEvent CreateInventorySectionCompletedEvent(IEmployee emp, IInventory inventory, 
+			IInventorySection section);
+		InventorySectionStartedByEmployeeEvent CreateInventorySectionStartedByEmployeeEvent(IEmployee emp, 
+			IInventory inventory, IInventorySection section);
+		InventorySectionClearedEvent CreateInventorySectionClearedEvent (IEmployee emp, IInventory inventory, IInventorySection sec);
 		InventoryLiquidItemMeasuredEvent CreateInventoryLiquidItemMeasuredEvent(IEmployee emp, IInventory inventory, 
 			IInventorySection section, InventoryBeverageLineItem li, int numFullBottles, IEnumerable<decimal> partialBottlePercentages, LiquidAmount amtMeasured);
 		InventoryCompletedEvent CreateInventoryCompletedEvent(IEmployee emp, IInventory inventory);
 		InventoryNewSectionAddedEvent CreateInventoryNewSectionAddedEvent(IEmployee emp, IInventory inventory, IRestaurantInventorySection restSection);
+		InventoryLineItemDeletedEvent CreateInventoryLineItemDeletedEvent (IEmployee emp, IInventory inv, IInventorySection sec, IInventoryBeverageLineItem li);
+		InventoryLineItemMovedToNewPositionEvent CreateInventoryLineItemMovedToNewPositionEvent(IEmployee emp, IInventory inv, 
+			IInventorySection sec, IInventoryBeverageLineItem li, int newPosition);
 
 		PARCreatedEvent CreatePARCreatedEvent(IEmployee emp);
 		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int? quantity, IPar par);

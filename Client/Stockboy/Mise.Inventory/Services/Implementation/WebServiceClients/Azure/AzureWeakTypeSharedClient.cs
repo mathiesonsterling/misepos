@@ -20,10 +20,9 @@ using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
-using Mise.Inventory.ViewModels;
-using ServiceStack;
 using System.Net;
-using XLabs.Ioc;
+using Mise.Core.Client.Services;
+
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
@@ -38,29 +37,39 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private readonly IJSONSerializer _serial;
 		private readonly EventDataTransportObjectFactory _eventDTOFactory;
 		private readonly EntityDataTransportObjectFactory _entityDTOFactory;
+		private readonly IDeviceConnectionService _deviceConnectionService;
 		private bool _needsSynch = false;
-		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client)
+		private DateTimeOffset? _lastTimePushed;
+		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client,
+		IDeviceConnectionService devConnectionService)
 		{
 			_logger = logger;
 			_client = client;
 			_serial = serializer;
 			_eventDTOFactory = new EventDataTransportObjectFactory (_serial);
 			_entityDTOFactory = new EntityDataTransportObjectFactory (_serial);
+			_deviceConnectionService = devConnectionService;
+
+			_deviceConnectionService.ConnectionStateChanged += ConnectionStateChanged;
 		}
 
-		#region IInventoryApplicationWebService implementation
+		async void ConnectionStateChanged(object sender, ConnectionStateChangedEventArgs args){
+			if(args.CanReachMiseServer){
+				if(_needsSynch){
+					var res = await SynchWithServer ();
 
-		#region IResendEventsWebService implementation
+					if(res){
+						_needsSynch = false;
+					}
+				}
+			}
+		}
 
-		public Task<bool> ResendEvents (ICollection<IEntityEventBase> events)
+		public Task<bool> SynchWithServer ()
 		{
-			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
-			return SendEventDTOs (dtos);
+			return AttemptPush ();
+			//TODO do we need to pull tables as well?
 		}
-
-		#endregion
-
-		#region IEventStoreWebService implementation
 
 		public async Task<bool> SendEventsAsync (RestaurantAccount updatedEntity, IEnumerable<IAccountEvent> events)
 		{
@@ -121,7 +130,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			return entRes && evRes;
 		}
-		#endregion
 
 		#region IApplicationInvitationWebService implementation
 
@@ -376,7 +384,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		}
 
 		#endregion
-		#endregion
 
 	
 		private async Task<bool> SendEventDTOs(ICollection<EventDataTransportObject> dtos){
@@ -438,13 +445,16 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			return true;
 		}
 
-		private async Task AttemptPush(){
+		private async Task<bool> AttemptPush(){
 			try{
 				await _client.SyncContext.PushAsync ();
+				_lastTimePushed = DateTimeOffset.UtcNow;
+				return true;
 			} catch(MobileServicePushFailedException me){
 				//could mean we're offline!
 				_logger.HandleException (me, LogLevel.Debug);
 				_needsSynch = true;
+				return false;
 			}
 		}
 
@@ -486,6 +496,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			return res;
 		}
+
 	    private async Task<IEnumerable<T>> GetEntityOfTypeForRestaurant<T>(Guid restaurantID) where T:class, IEntityBase, new()
 		{
 			var type = typeof(T).ToString ();
