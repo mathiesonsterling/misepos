@@ -16,7 +16,7 @@ namespace Mise.Inventory.Pages
 {
 	public partial class InventoryPage : ContentPage
 	{
-		private ListView _customVL;
+		private DragAndDropListView _customVL;
 		public InventoryPage()
 		{
 			InitializeComponent();
@@ -65,9 +65,6 @@ namespace Mise.Inventory.Pages
 
 		void LoadItems ()
 		{
-//			listItems.Children.Clear ();
-
-			//TODO arrange line items by their display order field
 			var vm = BindingContext as InventoryViewModel;
 			if (vm != null) {
 
@@ -88,12 +85,24 @@ namespace Mise.Inventory.Pages
 						}
 						((ListView)sender).SelectedItem = null;
 					};
+
+					_customVL.ItemDraggedToNewPosition += (sender, args) => {
+						
+					};
+
+					_customVL.SwipedLeftOnItem += async (sender, args) => {
+						var item = vm.LineItems.FirstOrDefault(li => li.ID == args.ItemId);
+						if(item != null){
+							vm.DeleteLineItem (item);
+						}
+					};
+
 					listItems.Children.Add (_customVL);
 				}
 				_customVL.ItemsSource = vm.LineItems;
-					/*if (vm.FocusedItem != null) {
+					if (vm.FocusedItem != null) {
 						_customVL.ScrollTo (vm.FocusedItem, ScrollToPosition.MakeVisible, false);
-					}*/
+					}
 
 			}
 		}

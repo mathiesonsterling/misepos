@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Inventory.CustomControls;
-using Mise.Core.Entities.Inventory;
 namespace Mise.Inventory.Pages
 {
 	public partial class PARPage : ContentPage
@@ -41,27 +41,38 @@ namespace Mise.Inventory.Pages
 		    }
 		}
 
+		async Task LineItemDeleted(object item){
+			var realItem = item as ParViewModel.ParLineItemDisplay;
+			var vm = BindingContext as ParViewModel;
+			if(realItem != null && vm != null){
+				if(vm.CanDeleteLineItem (realItem)){
+					await vm.DeleteLineItem(realItem);
+				}
+			}
+		}
+
 		void LoadItems ()
 		{
 			var vm = BindingContext as ParViewModel;
 			if (vm != null) {
-				lineItems.Children.Clear ();
-				_customVL = new ListView {
-					ItemsSource = vm.LineItems,
-					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
-					RowHeight = 50,
-					HasUnevenRows = true,
-					HorizontalOptions = LayoutOptions.FillAndExpand
-				};
-				_customVL.ItemTapped += async (sender, e) =>  {
-					//mark it as the item being measured
-					var lineItem = e.Item as PARLineItemDisplay;
-					if (lineItem != null) {
-						await vm.SelectLineItem (lineItem);
-					}
-					((ListView)sender).SelectedItem = null;
-				};
-				lineItems.Children.Add (_customVL);
+				if (_customVL == null) {
+					_customVL = new ListView {
+						ItemTemplate = new DataTemplate (() => new DeletableLineItemCell (LineItemDeleted)),
+						RowHeight = 50,
+						HasUnevenRows = true,
+						HorizontalOptions = LayoutOptions.FillAndExpand
+					};
+					_customVL.ItemTapped += async (sender, e) => {
+						//mark it as the item being measured
+						var lineItem = e.Item as ParViewModel.ParLineItemDisplay;
+						if (lineItem != null) {
+							await vm.SelectLineItem (lineItem);
+						}
+						((ListView)sender).SelectedItem = null;
+					};
+					lineItems.Children.Add (_customVL);
+				}
+				_customVL.ItemsSource = vm.LineItems;
 			}
 		}
 	}
