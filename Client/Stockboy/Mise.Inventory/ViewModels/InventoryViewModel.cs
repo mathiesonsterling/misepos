@@ -53,6 +53,10 @@ namespace Mise.Inventory.ViewModels
 			public int InventoryPosition{
 				get{return Source.InventoryPosition;}
 			}
+
+			public DateTimeOffset LastUpdatedDate{
+				get{return Source.LastUpdatedDate;}
+			}
 	    }
 
 		readonly IInventoryService _inventoryService;
@@ -183,23 +187,24 @@ namespace Mise.Inventory.ViewModels
 
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){
 			var items = (await _inventoryService.GetLineItemsForCurrentSection ()).ToList();
-            var itemsList = items.Select(li => new InventoryLineItemDisplayLine(li)).ToList();
+            var itemsList = items.Select(li => new InventoryLineItemDisplayLine(li))
+				.OrderBy(li => li.InventoryPosition)
+				.ToList();
             //find the first unmeasured
 		    
 
 			if(CameFromAdd){
 				//get the last updated item
-				var lastUpdated = items.OrderByDescending (li => li.LastUpdatedDate)
+				var lastUpdated = itemsList.OrderByDescending (li => li.LastUpdatedDate)
 					.FirstOrDefault ();
-				FocusedItem = lastUpdated != null ? new InventoryLineItemDisplayLine (lastUpdated) : null;
+				FocusedItem = lastUpdated;
 			} else{
-				FocusedItem = itemsList
-					.FirstOrDefault(li => li.Source.HasBeenMeasured == false);
+				FocusedItem = itemsList.FirstOrDefault(li => li.Source.HasBeenMeasured == false);
 			}
 
 			IsInventoryEmpty = itemsList.Any () == false;
 			//we can complete if we have items, and all are measured
-			return itemsList.OrderBy(li => li.InventoryPosition).ToList();
+			return itemsList;
 		}
 
 		async void FinishSection(){
