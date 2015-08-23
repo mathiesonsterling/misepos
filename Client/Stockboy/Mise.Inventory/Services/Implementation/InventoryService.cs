@@ -148,8 +148,7 @@ namespace Mise.Inventory.Services.Implementation
 		                                newSec.RestaurantInventorySectionID == oldInventorySection.RestaurantInventorySectionID);
 		                if (newSection != null)
 		                {
-		                    var lisInSection = oldInventorySection.GetInventoryBeverageLineItemsInSection()
-		                        .Where(li => li.Quantity > 0).ToList();
+		                    var lisInSection = oldInventorySection.GetInventoryBeverageLineItemsInSection().ToList();
 		                    if (lisInSection.Any())
 		                    {
 		                        foreach (var li in lisInSection)
