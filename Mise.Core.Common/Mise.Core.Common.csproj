@@ -194,6 +194,7 @@
     <Compile Include="Events\Inventory\InventoryLineItemDeletedEvent.cs" />
     <Compile Include="Events\Inventory\InventoryLineItemMovedToNewPositionEvent.cs" />
     <Compile Include="Events\Inventory\InventorySectionClearedEvent.cs" />
+    <Compile Include="Events\Inventory\InventorySectionStartedByEmployeeEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

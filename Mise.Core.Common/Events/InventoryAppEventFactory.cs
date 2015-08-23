@@ -435,6 +435,20 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
+		public InventorySectionStartedByEmployeeEvent CreateInventorySectionStartedByEmployeeEvent (IEmployee emp, IInventory inventory, IInventorySection section)
+		{
+			return new InventorySectionStartedByEmployeeEvent {
+				ID = Guid.NewGuid (),
+				CreatedDate = GetDate (),
+				DeviceID = _deviceID,
+				EventOrderingID = GetNextEventID (),
+				CausedByID = emp.ID,
+				RestaurantID = _restaurant.ID,
+				InventoryID = inventory.ID,
+				InventorySectionId = section.ID,
+			};
+		}
+
 		public InventorySectionCompletedEvent CreateInventorySectionCompletedEvent (IEmployee emp, IInventory inventory, IInventorySection section)
 		{
 			return new InventorySectionCompletedEvent {

@@ -217,10 +217,17 @@ namespace Mise.Inventory.Services.Implementation
 			return inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
 		}
 
-	    public Task SetCurrentInventorySection(IInventorySection section)
+	    public async Task SetCurrentInventorySection(IInventorySection section)
 	    {
 	        _selectedInventorySectionID = section.ID;
-	        return Task.FromResult(true);
+
+			//mark that we've started it
+			var emp = await _loginService.GetCurrentEmployee ();
+			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			var ev = _eventFactory.CreateInventorySectionStartedByEmployeeEvent (emp, inv, section);
+			_inventoryRepository.ApplyEvent (ev);
+
+			//TODO send a message also that we've started it so other devices are notified
 	    }
 
 	    public async Task MarkSectionAsComplete ()

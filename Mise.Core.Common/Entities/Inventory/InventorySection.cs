@@ -26,6 +26,13 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public Guid? LastCompletedBy { get; set; }
 
+		public Guid? CurrentlyInUseBy {
+			get;
+			set;
+		}
+
+		public DateTimeOffset? TimeCountStarted{get;set;}
+
 	    public bool ContainsSearchString(string searchString)
 	    {
 	        return (string.IsNullOrWhiteSpace(Name) == false && String.Equals(Name, searchString, StringComparison.CurrentCultureIgnoreCase))

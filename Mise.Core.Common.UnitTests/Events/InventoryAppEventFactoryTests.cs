@@ -16,6 +16,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
+using System.Runtime.InteropServices;
 
 namespace Mise.Core.Common.UnitTests.Events
 {
@@ -427,6 +428,13 @@ namespace Mise.Core.Common.UnitTests.Events
 			var ev = _underTest.CreateVendorLineItemAddedEvent (_emp, _invLI, _vendor);
 			TestVendorEvent (ev);
 			Assert.AreEqual (_invLI.DisplayName, ev.DisplayName);
+		}
+
+		[Test]
+		public void InventorySectionStartedByEmployee(){
+			var ev = _underTest.CreateInventorySectionStartedByEmployeeEvent (_emp, _inv, _invSection);
+			TestInventoryEvent (ev);
+			Assert.AreEqual (_invSection.ID, ev.InventorySectionId);
 		}
 		#endregion
 	}
