@@ -148,18 +148,14 @@ namespace Mise.Inventory.Services.Implementation
 		                                newSec.RestaurantInventorySectionID == oldInventorySection.RestaurantInventorySectionID);
 		                if (newSection != null)
 		                {
-		                    var lisInSection = oldInventorySection.GetInventoryBeverageLineItemsInSection()
-		                        .Where(li => li.Quantity > 0).ToList();
-		                    if (lisInSection.Any())
-		                    {
-		                        foreach (var li in lisInSection)
-		                        {
-		                            var ev = _eventFactory.CreateInventoryLineItemAddedEvent(emp,
-		                                li, 0, li.VendorBoughtFrom,
-		                                newSection, li.InventoryPosition, inv);
-		                            events.Add(ev);
-		                        }
-		                    }
+		                    var lisInSection = oldInventorySection.GetInventoryBeverageLineItemsInSection().ToList();
+	                        foreach (var li in lisInSection)
+	                        {
+	                            var ev = _eventFactory.CreateInventoryLineItemAddedEvent(emp,
+	                                li, 0, li.VendorBoughtFrom,
+	                                newSection, li.InventoryPosition, inv);
+	                            events.Add(ev);
+	                        }
 		                }
 		            }
 
