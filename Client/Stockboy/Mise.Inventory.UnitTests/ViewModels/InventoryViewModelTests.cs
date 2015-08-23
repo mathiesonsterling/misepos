@@ -24,9 +24,6 @@ namespace Mise.Inventory.UnitTests.ViewModels
         public async Task InventoryLineItemsShouldBeOrderedByInventoryPosition()
         {
             var sectionID = Guid.NewGuid();
-            var loginService = new Mock<ILoginService>();
-            loginService.Setup(s => s.GetCurrentEmployee()).Returns(Task.FromResult(new Employee() as IEmployee));
-
             var appNav = new Mock<IAppNavigation>();
 
             var invService = new Mock<IInventoryService>();
@@ -65,7 +62,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
             invService.Setup(inv => inv.GetLineItemsForCurrentSection())
                 .Returns(Task.FromResult(invItems.AsEnumerable()));
 
-            var underTest = new InventoryViewModel(appNav.Object, loginService.Object, invService.Object, null);
+            var underTest = new InventoryViewModel(appNav.Object, invService.Object, null);
 
             //ACT
             await underTest.OnAppearing();
@@ -83,9 +80,6 @@ namespace Mise.Inventory.UnitTests.ViewModels
 		public async Task InventoryLineItemsShouldBeOrderedByInventoryPositionAfterSearch()
 		{
 			var sectionID = Guid.NewGuid();
-			var loginService = new Mock<ILoginService>();
-			loginService.Setup(s => s.GetCurrentEmployee()).Returns(Task.FromResult(new Employee() as IEmployee));
-
 			var appNav = new Mock<IAppNavigation>();
 
 			var invService = new Mock<IInventoryService>();
@@ -119,7 +113,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			invService.Setup(inv => inv.GetLineItemsForCurrentSection())
 				.Returns(Task.FromResult(invItems.AsEnumerable()));
 
-			var underTest = new InventoryViewModel(appNav.Object, loginService.Object, invService.Object, null);
+			var underTest = new InventoryViewModel(appNav.Object, invService.Object, null);
 
 			//ACT
 			await underTest.OnAppearing();
@@ -161,7 +155,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 .Returns(Task.FromResult(lineItems.AsEnumerable()));
 
 
-            var underTest = new InventoryViewModel(appNav.Object, null, invService.Object, logger.Object);
+            var underTest = new InventoryViewModel(appNav.Object, invService.Object, logger.Object);
 
             //ACT
             underTest.SearchString = "bu d";
@@ -204,7 +198,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 .Returns(Task.FromResult(lineItems.AsEnumerable()));
 
 
-            var underTest = new InventoryViewModel(appNav.Object, null, invService.Object, logger.Object);
+            var underTest = new InventoryViewModel(appNav.Object, invService.Object, logger.Object);
 
             //ACT
             underTest.SearchString = "beer";

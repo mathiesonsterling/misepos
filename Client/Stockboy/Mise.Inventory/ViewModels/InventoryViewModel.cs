@@ -11,6 +11,7 @@ using Xamarin.Forms;
 using Mise.Core.Services;
 using Mise.Core.Common.Services.WebServices.Exceptions;
 using Mise.Core.Common.Events.Inventory;
+using Mise.Inventory.Async;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -48,16 +49,17 @@ namespace Mise.Inventory.ViewModels
 					return res;
 				}
 			}
+
+			public int InventoryPosition{
+				get{return Source.InventoryPosition;}
+			}
 	    }
 
 		readonly IInventoryService _inventoryService;
-		readonly ILoginService _loginService;
 		readonly IList<Guid> _lineItemsCurrentlyChanging;
-		public InventoryViewModel(IAppNavigation appNavigation, ILoginService loginService, 
-			IInventoryService inventoryService, ILogger logger) : base(appNavigation, logger)
+		public InventoryViewModel(IAppNavigation appNavigation, IInventoryService inventoryService, ILogger logger) : base(appNavigation, logger)
 		{
 			_inventoryService = inventoryService;
-			_loginService = loginService;
 			_lineItemsCurrentlyChanging = new List<Guid> ();
 		}
 
@@ -181,9 +183,7 @@ namespace Mise.Inventory.ViewModels
 
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){
 			var items = (await _inventoryService.GetLineItemsForCurrentSection ()).ToList();
-            var itemsList = items.OrderBy(li => li.InventoryPosition)
-				.ThenBy (li => li.DisplayName)
-				.Select(li => new InventoryLineItemDisplayLine(li)).ToList();
+            var itemsList = items.Select(li => new InventoryLineItemDisplayLine(li)).ToList();
             //find the first unmeasured
 		    
 
@@ -199,7 +199,7 @@ namespace Mise.Inventory.ViewModels
 
 			IsInventoryEmpty = itemsList.Any () == false;
 			//we can complete if we have items, and all are measured
-			return itemsList;
+			return itemsList.OrderBy(li => li.InventoryPosition).ToList();
 		}
 
 		async void FinishSection(){
