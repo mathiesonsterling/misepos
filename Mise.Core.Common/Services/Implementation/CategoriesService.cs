@@ -5,6 +5,7 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.ValueItems.Inventory;
 using System.Threading;
+using System.Dynamic;
 
 
 namespace Mise.Core.Common
@@ -17,7 +18,8 @@ namespace Mise.Core.Common
 		private List<ItemCategory> _allCats = new List<ItemCategory>{
 			BeerWineLiquor, Consumables, Operationals, Unknown,
 			Beer, Wine, Liquor,
-			Whiskey, WhiskeyAmerican, WhiskeyBourbon, WhiskeyCanadian, WhiskeyRye, WhiskeyScotch, WhiskeyWorld,
+			Whiskey, WhiskeyAmerican, WhiskeyBourbon, WhiskeyCanadian, WhiskeyRye, WhiskeyScotch, 
+			WhiskeyWorld, WhiskeyIrish,
 			Vodka, Gin,
 			Rum, RumDark,
 			Agave, AgaveMezcal, AgaveTequila,
@@ -108,6 +110,16 @@ namespace Mise.Core.Common
 					ID = Guid.Parse ("9949f991-0ed2-4ec5-96db-c21f5ce0e54c")
 				};
 			}}
+
+		public static ItemCategory WhiskeyIrish{
+			get{
+				return new ItemCategory {
+					Name = "Irish Whiskey",
+					ParentCategoryID = Whiskey.ID,
+					ID = Guid.Parse ("1916f019-d98c-4f13-bc3c-0cf44bfa6f22")
+				};
+			}
+		}
 
 		public static ItemCategory WhiskeyAmerican{get{
 				return new ItemCategory {
