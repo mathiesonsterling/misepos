@@ -20,6 +20,7 @@ namespace Mise.Inventory.Services
 
 		Task SetCurrentLineItem (IParBeverageLineItem li);
 		Task<IParBeverageLineItem> GetCurrentLineItem ();
+		Task DeleteLineItem (IParBeverageLineItem li);
 	}
 }
 

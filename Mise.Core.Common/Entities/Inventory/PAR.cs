@@ -38,13 +38,16 @@ namespace Mise.Core.Common.Entities.Inventory
         {
 			switch(entityEvent.EventType){
 			case MiseEventTypes.PARCreated:
-				WhenPARCreated ((PARCreatedEvent)entityEvent);
+				WhenParCreated ((PARCreatedEvent)entityEvent);
 				break;
 			case MiseEventTypes.PARLineItemAdded:
 				WhenLineItemAdded ((PARLineItemAddedEvent)entityEvent);
 				break;
 			case MiseEventTypes.PARLineItemQuantityUpdated:
 				WhenLineItemQuantityUpdated ((PARLineItemQuantityUpdatedEvent)entityEvent);
+				break;
+			case MiseEventTypes.ParLineItemDeleted:
+				WhenLineItemDeleted ((ParLineItemDeletedEvent)entityEvent);
 				break;
 			default:
 				throw new InvalidOperationException ("Don't know how to handle event " + entityEvent.EventType);
@@ -54,7 +57,7 @@ namespace Mise.Core.Common.Entities.Inventory
 			Revision = entityEvent.EventOrderingID;
         }
 
-		void WhenPARCreated (PARCreatedEvent pARCreatedEvent)
+		void WhenParCreated (PARCreatedEvent pARCreatedEvent)
 		{
 			ID = pARCreatedEvent.ParID;
 			CreatedDate = pARCreatedEvent.CreatedDate;
@@ -85,6 +88,16 @@ namespace Mise.Core.Common.Entities.Inventory
 				li.Quantity = pARLineItemAddedEvent.Quantity.Value;
 			}
 			ParLineItems.Add (li);
+		}
+
+		void WhenLineItemDeleted (ParLineItemDeletedEvent ev)
+		{
+			var lineItem = ParLineItems.FirstOrDefault (li => li.ID == ev.LineItemId);
+			if(lineItem == null){
+				throw new InvalidOperationException ("Can't find line item with ID " + ev.LineItemId);
+			}
+
+			ParLineItems.Remove (lineItem);
 		}
 
 		void WhenLineItemQuantityUpdated (PARLineItemQuantityUpdatedEvent pEvent)

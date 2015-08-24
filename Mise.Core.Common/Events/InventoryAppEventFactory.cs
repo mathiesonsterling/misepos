@@ -17,7 +17,6 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Events.Vendors;
 using Mise.Core.Common.Events.Accounts;
-using Mise.Core.Common.Services;
 
 
 namespace Mise.Core.Common.Events
@@ -245,6 +244,20 @@ namespace Mise.Core.Common.Events
 				ParID = par.ID,
 				Categories = categories,
                 LineItemID = Guid.NewGuid()
+			};
+		}
+
+		public ParLineItemDeletedEvent CreateParLineItemDeletedEvent (IEmployee emp, IPar par, IParBeverageLineItem li)
+		{
+			return new ParLineItemDeletedEvent{
+				ID = Guid.NewGuid (),
+				CausedByID = emp.ID,
+				CreatedDate = GetDate (),
+				RestaurantID = _restaurant.ID,
+				EventOrderingID = GetNextEventID (),
+				DeviceID = _deviceID,
+				ParID = par.ID,
+				LineItemId = li.ID
 			};
 		}
 

@@ -77,7 +77,8 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public async Task DeleteLineItem(ParLineItemDisplay lineItem){
-
+			await _parService.DeleteLineItem (lineItem.Source);
+			await DoSearch ();
 		}
 
 		public bool CanDeleteLineItem(ParLineItemDisplay lineItem){

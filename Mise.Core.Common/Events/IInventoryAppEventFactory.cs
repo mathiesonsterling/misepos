@@ -70,6 +70,7 @@ namespace Mise.Core.Common.Events
 		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, string name, string upc, IEnumerable<ItemCategory> category, 
 			int caseSize, LiquidContainer container, int quantity, IPar par);
 		PARLineItemQuantityUpdatedEvent CreatePARLineItemQuantityUpdatedEvent(IEmployee emp, IPar par, Guid lineItemID, decimal quantity);
+		ParLineItemDeletedEvent CreateParLineItemDeletedEvent (IEmployee emp, IPar par, IParBeverageLineItem li);
 
 		InventorySectionAddedToRestaurantEvent CreateInventorySectionAddedToRestaurantEvent(IEmployee emp, string newSectionName, bool isDefaultSection, bool allowsPartialBottles);
 

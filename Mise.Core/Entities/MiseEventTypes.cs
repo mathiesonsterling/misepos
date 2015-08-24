@@ -97,6 +97,7 @@
         PARCreated,
 		PARLineItemAdded,
 		PARLineItemQuantityUpdated,
+		ParLineItemDeleted,
 
         PlaceholderRestaurantCreated,
         InventorySectionAddedToRestaurant,
