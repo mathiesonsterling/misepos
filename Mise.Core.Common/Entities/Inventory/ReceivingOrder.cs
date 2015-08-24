@@ -84,6 +84,9 @@ namespace Mise.Core.Common.Entities.Inventory
 				case MiseEventTypes.ReceivingOrderLineItemZeroedOut:
 					WhenLIZeroedOut ((ReceivingOrderLineItemZeroedOutEvent)entityEvent);
 					break;
+				case MiseEventTypes.ReceivingOrderLineItemDeleted:
+					WhenLineItemDeleted ((ReceivingOrderLineItemDeletedEvent)entityEvent);
+					break;
 				case MiseEventTypes.ReceivingOrderAssociatedWithPO:
 					WhenReceivingOrderAssociatedWithPurchaseOrder ((ReceivingOrderAssociatedWithPOEvent)entityEvent);
 					break;
@@ -147,6 +150,16 @@ namespace Mise.Core.Common.Entities.Inventory
 				li.UnitPrice = perUnitPrice;
 				li.ZeroedOut = false;
 			}
+		}
+
+		void WhenLineItemDeleted (ReceivingOrderLineItemDeletedEvent ev)
+		{
+			var lineItem = LineItems.FirstOrDefault (l => l.ID == ev.LineItemId);
+			if(lineItem == null){
+				throw new ArgumentException ("No line item found for ID " + ev.LineItemId);
+			}
+
+			LineItems.Remove (lineItem);
 		}
 
 		void WhenLIZeroedOut (ReceivingOrderLineItemZeroedOutEvent ev)

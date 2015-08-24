@@ -54,7 +54,6 @@ namespace Mise.Inventory.UnitTests.Services
                 .Returns(newRO);
 
             var logger = new Mock<ILogger>();
-            var invService = new Mock<IInventoryService>();
 
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             evFac.SetRestaurant(new Restaurant
@@ -75,7 +74,7 @@ namespace Mise.Inventory.UnitTests.Services
                 .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
 
 			var insights = new Mock<IInsightsService> ();
-            var underTest = new ReceivingOrderService(logger.Object, mockRORepos.Object, invService.Object, evFac,
+            var underTest = new ReceivingOrderService(logger.Object, mockRORepos.Object,  evFac,
 				loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
 
             //ACT
@@ -174,7 +173,6 @@ namespace Mise.Inventory.UnitTests.Services
             var mockRORepos = new Mock<IReceivingOrderRepository>();
 
             var logger = new Mock<ILogger>();
-            var invService = new Mock<IInventoryService>();
 
             var evFac = new Mock<IInventoryAppEventFactory>();
 
@@ -188,7 +186,7 @@ namespace Mise.Inventory.UnitTests.Services
             vendServ.Setup(vs => vs.GetSelectedVendor())
                 .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
 			var insights = new Mock<IInsightsService> ();
-            var underTest = new ReceivingOrderService(logger.Object, mockRORepos.Object, invService.Object, 
+            var underTest = new ReceivingOrderService(logger.Object, mockRORepos.Object,  
 				evFac.Object, loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
 
             var po = CreatePurchaseOrder(otherVendorID);
@@ -223,7 +221,6 @@ namespace Mise.Inventory.UnitTests.Services
             var ws = new Mock<IReceivingOrderWebService>();
             var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object);
 
-            var invService = new Mock<IInventoryService>();
 
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             evFac.SetRestaurant(new Restaurant
@@ -243,7 +240,7 @@ namespace Mise.Inventory.UnitTests.Services
             vendServ.Setup(vs => vs.GetSelectedVendor())
                 .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
 			var insights = new Mock<IInsightsService> ();
-            var underTest = new ReceivingOrderService(logger.Object, roRepos, invService.Object, evFac,
+            var underTest = new ReceivingOrderService(logger.Object, roRepos, evFac,
 				loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
 
             var po = CreatePurchaseOrder(vendorID);
@@ -296,7 +293,6 @@ namespace Mise.Inventory.UnitTests.Services
             await roRepos.Load(Guid.NewGuid());
 
 
-            var invService = new Mock<IInventoryService>();
 
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             evFac.SetRestaurant(new Restaurant{ID = restID});
@@ -314,7 +310,7 @@ namespace Mise.Inventory.UnitTests.Services
                 .Returns(Task.FromResult(true));
 
 			var insights = new Mock<IInsightsService> ();
-            var underTest = new ReceivingOrderService(logger.Object, roRepos, invService.Object, evFac,
+            var underTest = new ReceivingOrderService(logger.Object, roRepos,  evFac,
 				loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
 
             //ACT
@@ -354,9 +350,6 @@ namespace Mise.Inventory.UnitTests.Services
             var roRepos = new ClientReceivingOrderRepository(logger.Object,  ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
-
-            var invService = new Mock<IInventoryService>();
-
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             evFac.SetRestaurant(new Restaurant { ID = restID });
 
@@ -376,7 +369,7 @@ namespace Mise.Inventory.UnitTests.Services
 				vs => vs.AddLineItemsToVendorIfDontExist(vendorID, It.IsAny<IEnumerable<IReceivingOrderLineItem>>()))
                 .Returns(Task.FromResult(true));
 			var insights = new Mock<IInsightsService> ();
-            var underTest = new ReceivingOrderService(logger.Object, roRepos, invService.Object, evFac,
+            var underTest = new ReceivingOrderService(logger.Object, roRepos,  evFac,
 				loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
 
             //ACT
@@ -414,9 +407,6 @@ namespace Mise.Inventory.UnitTests.Services
             var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
-
-            var invService = new Mock<IInventoryService>();
-
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             evFac.SetRestaurant(new Restaurant { ID = restID });
 
@@ -438,7 +428,7 @@ namespace Mise.Inventory.UnitTests.Services
 				vs => vs.AddLineItemsToVendorIfDontExist(vendorID, It.IsAny<IEnumerable<IReceivingOrderLineItem>>()))
                 .Returns(Task.FromResult(true));
 			var insights = new Mock<IInsightsService> ();
-            var underTest = new ReceivingOrderService(logger.Object, roRepos, invService.Object, evFac,
+            var underTest = new ReceivingOrderService(logger.Object, roRepos,  evFac,
 				loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
 
             //ACT
@@ -482,8 +472,6 @@ namespace Mise.Inventory.UnitTests.Services
 		        .Returns(completedRO)
 		        .Callback<IReceivingOrderEvent>(ev => givenEvent = ev as ReceivingOrderCompletedEvent);
 
-            var invService = new Mock<IInventoryService>();
-
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             evFac.SetRestaurant(new Restaurant { ID = restID });
 
@@ -508,7 +496,7 @@ namespace Mise.Inventory.UnitTests.Services
 				vs => vs.AddLineItemsToVendorIfDontExist(vendorID, It.IsAny<IEnumerable<IReceivingOrderLineItem>>()))
                 .Returns(Task.FromResult(true));
 			var insights = new Mock<IInsightsService> ();
-            var underTest = new ReceivingOrderService(logger.Object, roRepos.Object, invService.Object, evFac,
+            var underTest = new ReceivingOrderService(logger.Object, roRepos.Object, evFac,
 				loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
 
             //ACT

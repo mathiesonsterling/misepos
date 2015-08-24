@@ -25,7 +25,6 @@ namespace Mise.Inventory.Services.Implementation
 	    private IReceivingOrderLineItem _currentLineItem;
 
 		readonly IReceivingOrderRepository _receivingOrderRepository;
-		readonly IInventoryService _inventoryService;
 		readonly IInventoryAppEventFactory _eventFactory;
 		readonly ILoginService _loginService;
 		readonly IPurchaseOrderService _poService;
@@ -33,12 +32,11 @@ namespace Mise.Inventory.Services.Implementation
 		readonly IInsightsService _insights;
 		readonly ILogger _logger;
 		public ReceivingOrderService(ILogger logger, IReceivingOrderRepository receivingOrderRepository, 
-			IInventoryService inventoryService, IInventoryAppEventFactory eventFactory, 
+			IInventoryAppEventFactory eventFactory, 
 			ILoginService loginService, IVendorService vendorService, IPurchaseOrderService poService,
 		IInsightsService insights)
 		{
 			_receivingOrderRepository = receivingOrderRepository;
-			_inventoryService = inventoryService;
 			_eventFactory = eventFactory;
 			_loginService = loginService;
 			_logger = logger;
@@ -232,6 +230,14 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 			var ev = _eventFactory.CreateReceivingOrderLineItemZeroedOutEvent (emp, _currentRO, li.ID);
+			_currentRO = _receivingOrderRepository.ApplyEvent (ev);
+		}
+
+		public async Task DeleteLineItem (IReceivingOrderLineItem li)
+		{
+			var emp = await _loginService.GetCurrentEmployee ();
+			var ev = _eventFactory.CreateReceivingOrderLineItemDeletedEvent (emp, _currentRO, li);
+
 			_currentRO = _receivingOrderRepository.ApplyEvent (ev);
 		}
 

@@ -43,6 +43,7 @@ namespace Mise.Core.Common.Events
 		ReceivingOrderLineItemQuantityUpdatedEvent CreateROLineItemUpdateQuantityEvent(IEmployee emp, 
 			IReceivingOrder ro, Guid lineItemID, int quantity, Money pricePerBottle);
 		ReceivingOrderLineItemZeroedOutEvent CreateReceivingOrderLineItemZeroedOutEvent(IEmployee emp, IReceivingOrder ro, Guid lineItemID);
+		ReceivingOrderLineItemDeletedEvent CreateReceivingOrderLineItemDeletedEvent (IEmployee emp, IReceivingOrder receivingOrder, IReceivingOrderLineItem lineItem);
 
 		InventoryCreatedEvent CreateInventoryCreatedEvent(IEmployee emp);
 		InventoryMadeCurrentEvent CreateInventoryMadeCurrentEvent(IEmployee emp, IInventory inventory);

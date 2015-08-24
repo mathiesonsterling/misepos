@@ -12,49 +12,49 @@ using Xamarin.Forms;
 using Mise.Core.ValueItems;
 namespace Mise.Inventory.ViewModels
 {
-	public class ReceivingOrderDisplayLine : BaseLineItemDisplayLine<IReceivingOrderLineItem>{
-		public ReceivingOrderDisplayLine(IReceivingOrderLineItem source) : base(source){
-			
-		}
-
-
-		#region implemented abstract members of BaseLineItemDisplayLine
-		public override Color TextColor {
-			get {
-				return (Source.LineItemPrice != null && Source.LineItemPrice.HasValue) || Source.ZeroedOut
-						? Color.Default
-						: Color.Accent;
-			}
-		}
-		public override string Quantity {
-			get {
-				return Source.Quantity.ToString();
-			}
-		}
-
-		public override string DetailDisplay {
-			get {
-				var res = string.Empty;
-				if(Source.GetCategories ().Any()){
-					res += Source.GetCategories ().First ().Name;
-				}
-				if (Source.ZeroedOut) {
-					res += " ZEROED OUT";
-				} else {
-					if (Source.LineItemPrice != null) {
-						res += "  " + string.Format ("{0:C}", Source.LineItemPrice.Dollars);
-					} else {
-						res += " NO PRICE";
-					}
-				}
-				return res;
-			}
-		}
-		#endregion
-	}
-
-	public class ReceivingOrderViewModel : BaseSearchableViewModel<ReceivingOrderDisplayLine>
+	public class ReceivingOrderViewModel : BaseSearchableViewModel<ReceivingOrderViewModel.ReceivingOrderDisplayLine>
 	{
+		public class ReceivingOrderDisplayLine : BaseLineItemDisplayLine<IReceivingOrderLineItem>{
+			public ReceivingOrderDisplayLine(IReceivingOrderLineItem source) : base(source){
+
+			}
+
+
+			#region implemented abstract members of BaseLineItemDisplayLine
+			public override Color TextColor {
+				get {
+					return (Source.LineItemPrice != null && Source.LineItemPrice.HasValue) || Source.ZeroedOut
+						? Color.Default
+							: Color.Accent;
+				}
+			}
+			public override string Quantity {
+				get {
+					return Source.Quantity.ToString();
+				}
+			}
+
+			public override string DetailDisplay {
+				get {
+					var res = string.Empty;
+					if(Source.GetCategories ().Any()){
+						res += Source.GetCategories ().First ().Name;
+					}
+					if (Source.ZeroedOut) {
+						res += " ZEROED OUT";
+					} else {
+						if (Source.LineItemPrice != null) {
+							res += "  " + string.Format ("{0:C}", Source.LineItemPrice.Dollars);
+						} else {
+							res += " NO PRICE";
+						}
+					}
+					return res;
+				}
+			}
+			#endregion
+		}
+
 		readonly IVendorService _vendorService;
 		readonly IReceivingOrderService _roService;
 	    private readonly IInsightsService _insights;
@@ -146,7 +146,6 @@ namespace Mise.Inventory.ViewModels
 		public ICommand SaveCommand {
 			get { return new Command(Save, () => CanSave); }
 		}
-
 		#endregion
 
 		async void AddNewLineItem()
@@ -186,6 +185,15 @@ namespace Mise.Inventory.ViewModels
 			try{
 			    await _roService.SetCurrentLineItem(lineItem.Source);
 			    await Navigation.ShowUpdateReceivingOrderLineItem();
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+
+		public async Task DeleteLineItem(ReceivingOrderDisplayLine displayItem){
+			try{
+				await _roService.DeleteLineItem (displayItem.Source);
+				await DoSearch ();
 			} catch(Exception e){
 				HandleException (e);
 			}

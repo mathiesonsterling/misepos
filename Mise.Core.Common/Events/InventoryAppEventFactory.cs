@@ -382,6 +382,21 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
+		public ReceivingOrderLineItemDeletedEvent CreateReceivingOrderLineItemDeletedEvent (IEmployee emp, IReceivingOrder receivingOrder, IReceivingOrderLineItem lineItem)
+		{
+			return new ReceivingOrderLineItemDeletedEvent {
+				ID = Guid.NewGuid (),
+				CreatedDate = GetDate (),
+				CausedByID = emp.ID,
+				EventOrderingID = GetNextEventID (),
+				DeviceID = _deviceID,
+				RestaurantID = _restaurant.ID,
+
+				ReceivingOrderID = receivingOrder.ID,
+				LineItemId = lineItem.ID
+			};
+		}
+
 		public EmployeeLoggedIntoInventoryAppEvent CreateEmployeeLoggedIntoInventoryAppEvent(IEmployee emp)
 		{
 			return new EmployeeLoggedIntoInventoryAppEvent {
