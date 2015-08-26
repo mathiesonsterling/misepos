@@ -7,6 +7,11 @@ namespace Mise.Inventory.Android.Services
 {
 	public class AndroidLogger : ILogger
 	{
+		readonly IErrorTrackingService _errorTracking;
+		public AndroidLogger(IErrorTrackingService errorTracking){
+			_errorTracking = errorTracking;
+		}
+
 		#region ILogger implementation
 		private const string TAG = "misePOS";
 		public void Log (string message, LogLevel level = LogLevel.Error)
@@ -57,6 +62,11 @@ namespace Mise.Inventory.Android.Services
 			if (ex != null) {
 				if (level == LogLevel.Error || level == LogLevel.Fatal) {
 					Insights.Report (ex);
+				}
+				try{
+					_errorTracking.ReportException (ex, level);
+				} catch(Exception e){
+					Log (e.Message);
 				}
 				Log (ex.Message + "::" + ex.StackTrace, level);
 			} else {

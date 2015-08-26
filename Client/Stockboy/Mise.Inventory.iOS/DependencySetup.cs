@@ -20,15 +20,15 @@ namespace Mise.Inventory.iOS
 		
 		protected override void RegisterDepenencies(ContainerBuilder cb)
 		{
-			Logger = new IOSLogger ();
+			var raygun = new RaygunErrorTracking ();
+			cb.RegisterInstance<IErrorTrackingService>(raygun).SingleInstance ();
+
+			Logger = new IOSLogger (raygun);
 			cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
 			var processor = new MercuryPaymentProcessorService (Logger);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();
 
 			InitWebService (cb);
-
-			var raygun = new RaygunErrorTracking ();
-			cb.RegisterInstance<IErrorTrackingService>(raygun).SingleInstance ();
 
 			base.RegisterDepenencies (cb);
 		}
