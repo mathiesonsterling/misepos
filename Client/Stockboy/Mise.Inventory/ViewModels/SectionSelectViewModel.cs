@@ -51,14 +51,16 @@ namespace Mise.Inventory.ViewModels
                 //do we have all our sections done?
                 var currInv = await _inventoryService.GetSelectedInventory();
                 bool closeInv = true;
-                var sectionsNotDone = currInv.GetSections().Where(sec => sec.Completed == false).ToList();
+                var sectionsNotDone = currInv.GetSections()
+					.Where(sec => sec.Completed == false && sec.GetInventoryBeverageLineItemsInSection ().Any())
+					.ToList();
                 if (sectionsNotDone.Any())
                 {
                     var sectionsList = sectionsNotDone.Select(sec => sec.Name);
                     var sectionsString = string.Join(",", sectionsList);
 
                     var message = "You haven't done sections " + sectionsString + ".  Complete inventory anyways?";
-                    closeInv = await Navigation.AskUser("Incomplete Sections", message);
+					closeInv = true;//await Navigation.AskUser("Incomplete Sections", message);
                 }
 
                 if (closeInv)
