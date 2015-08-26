@@ -366,18 +366,23 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
 			//TODO change this to do the query on server, or at least limit it somehow
-			var items = (await GetEmployeesAsync ()).ToList();
-				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
-			&& e.Password != null && e.Password.Equals (password));
+			try{
+				var items = (await GetEmployeesAsync ()).ToList();
+					var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
+				&& e.Password != null && e.Password.Equals (password));
 
-			if(found == null) {
-				if (items.Any (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))) {
-					throw new UserNotFoundException (email, false, true);
-				}
-				throw new UserNotFoundException (email);
-			} 
+				if(found == null) {
+					if (items.Any (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))) {
+						throw new UserNotFoundException (email, false, true);
+					}
+					throw new UserNotFoundException (email);
+				} 
 
-			return found;
+				return found;
+			} catch(Exception e){
+				_logger.HandleException (e);
+				throw;
+			}
 		}
 		#endregion
 

@@ -56,14 +56,18 @@ namespace Mise.Core.Client.Repositories
 
         protected override async Task<IEnumerable<Vendor>> LoadFromWebservice(Guid? restaurantID)
         {
+			var res = new List<IVendor> ();
             if (restaurantID.HasValue)
             {
-                return await _vendorWebService.GetVendorsAssociatedWithRestaurant(restaurantID.Value);
+				var restaurantVends = await _vendorWebService.GetVendorsAssociatedWithRestaurant(restaurantID.Value);
+				res.AddRange (restaurantVends);
             }
 
             var loc = await _deviceLocationService.GetDeviceLocation();
-            var items = await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
-            return items.Cast<Vendor>();
+            var inRange = await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
+			res.AddRange (inRange);
+
+            return res.Cast<Vendor>();
         }
 			
 
