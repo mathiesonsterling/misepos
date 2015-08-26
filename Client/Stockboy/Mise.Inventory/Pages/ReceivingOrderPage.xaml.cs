@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
@@ -9,6 +10,7 @@ namespace Mise.Inventory.Pages
 {
 	public partial class ReceivingOrderPage : ContentPage
 	{
+		ListView _customVL;
 		public ReceivingOrderPage()
 		{
 			InitializeComponent();
@@ -28,30 +30,38 @@ namespace Mise.Inventory.Pages
 		    }
 		}
 
+		async Task LineItemDeleted(object item){
+			var realItem = item as ReceivingOrderViewModel.ReceivingOrderDisplayLine;
+			var vm = BindingContext as ReceivingOrderViewModel;
+			if(realItem != null && vm != null){
+				await vm.DeleteLineItem(realItem);
+			}
+		}
+
 		void LoadItems ()
 		{
 			var vm = BindingContext as ReceivingOrderViewModel;
 			if (vm != null) {
-				lineItems.Children.Clear ();
-				var customVL = new ListView {
-					ItemsSource = vm.LineItems,
-					ItemTemplate = new DataTemplate (typeof(LineItemWithQuantityCell)),
-					RowHeight = 50,
-					HasUnevenRows = true,
-					HorizontalOptions = LayoutOptions.FillAndExpand
-				};
-				customVL.ItemTapped += async (sender, e) =>  {
-					//mark it as the item being measured
-					var lineItem = e.Item as ReceivingOrderDisplayLine;
-					if (lineItem != null) {
-						await vm.SelectLineItem (lineItem);
-					}
-					((ListView)sender).SelectedItem = null;
-				};
-				lineItems.Children.Add (customVL);
-
+				if (_customVL == null) {
+					_customVL = new ListView {
+						ItemTemplate = new DataTemplate (() => new DeletableLineItemCell (LineItemDeleted)),
+						RowHeight = 50,
+						HasUnevenRows = true,
+						HorizontalOptions = LayoutOptions.FillAndExpand
+					};
+					_customVL.ItemTapped += async (sender, e) => {
+						//mark it as the item being measured
+						var lineItem = e.Item as ReceivingOrderViewModel.ReceivingOrderDisplayLine;
+						if (lineItem != null) {
+							await vm.SelectLineItem (lineItem);
+						}
+						((ListView)sender).SelectedItem = null;
+					};
+					lineItems.Children.Add (_customVL);
+				}
+				_customVL.ItemsSource = vm.LineItems;
 				if(vm.FocusedItem != null){
-					customVL.ScrollTo(vm.FocusedItem, ScrollToPosition.MakeVisible, false);
+					_customVL.ScrollTo(vm.FocusedItem, ScrollToPosition.MakeVisible, false);
 				}
 			}
 		}

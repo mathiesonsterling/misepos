@@ -43,6 +43,7 @@ namespace Mise.Core.Common.Events
 		ReceivingOrderLineItemQuantityUpdatedEvent CreateROLineItemUpdateQuantityEvent(IEmployee emp, 
 			IReceivingOrder ro, Guid lineItemID, int quantity, Money pricePerBottle);
 		ReceivingOrderLineItemZeroedOutEvent CreateReceivingOrderLineItemZeroedOutEvent(IEmployee emp, IReceivingOrder ro, Guid lineItemID);
+		ReceivingOrderLineItemDeletedEvent CreateReceivingOrderLineItemDeletedEvent (IEmployee emp, IReceivingOrder receivingOrder, IReceivingOrderLineItem lineItem);
 
 		InventoryCreatedEvent CreateInventoryCreatedEvent(IEmployee emp);
 		InventoryMadeCurrentEvent CreateInventoryMadeCurrentEvent(IEmployee emp, IInventory inventory);
@@ -70,6 +71,7 @@ namespace Mise.Core.Common.Events
 		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, string name, string upc, IEnumerable<ItemCategory> category, 
 			int caseSize, LiquidContainer container, int quantity, IPar par);
 		PARLineItemQuantityUpdatedEvent CreatePARLineItemQuantityUpdatedEvent(IEmployee emp, IPar par, Guid lineItemID, decimal quantity);
+		ParLineItemDeletedEvent CreateParLineItemDeletedEvent (IEmployee emp, IPar par, IParBeverageLineItem li);
 
 		InventorySectionAddedToRestaurantEvent CreateInventorySectionAddedToRestaurantEvent(IEmployee emp, string newSectionName, bool isDefaultSection, bool allowsPartialBottles);
 

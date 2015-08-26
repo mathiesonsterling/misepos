@@ -556,6 +556,8 @@ namespace Mise.Core.Common.Events.DTOs
                     return _jsonSerializer.Deserialize<ReceivingOrderLineItemZeroedOutEvent>(dto.JSON);
                 case MiseEventTypes.ReceivingOrderAssociatedWithPO:
                     return _jsonSerializer.Deserialize<ReceivingOrderAssociatedWithPOEvent>(dto.JSON);
+				case MiseEventTypes.ReceivingOrderLineItemDeleted:
+					return _jsonSerializer.Deserialize<ReceivingOrderLineItemDeletedEvent> (dto.JSON);
                 default:
                     return null;
             }
@@ -592,6 +594,8 @@ namespace Mise.Core.Common.Events.DTOs
                     return _jsonSerializer.Deserialize<PARLineItemAddedEvent>(dto.JSON);
                 case MiseEventTypes.PARLineItemQuantityUpdated:
                     return _jsonSerializer.Deserialize<PARLineItemQuantityUpdatedEvent>(dto.JSON);
+				case MiseEventTypes.ParLineItemDeleted:
+					return _jsonSerializer.Deserialize<ParLineItemDeletedEvent> (dto.JSON);
                 default:
                     return null;
             }

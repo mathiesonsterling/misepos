@@ -36,7 +36,7 @@ namespace Mise.Inventory
 
 	    public async Task LoadRepositories(Guid? restaurantID)
 		{
-			var repositories = new List<IRepository> {_vendorRepository};
+			var repositories = new List<IRepository>();
 
 	        //TODO - load the vendors based on distance once that's available
 
@@ -61,6 +61,7 @@ namespace Mise.Inventory
 
 			if (restaurantID.HasValue)
 			{
+				repositories.Add (_vendorRepository);
 			    repositories.Add(_employeeRepository);
                 repositories.Add(_applicationInvitationRepository);
 				repositories.Add(_parRepository);

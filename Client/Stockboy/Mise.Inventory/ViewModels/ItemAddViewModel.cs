@@ -47,11 +47,10 @@ namespace Mise.Inventory.ViewModels
 						&& (string.IsNullOrEmpty (SelectedCategoryName) == false);
 				}
 			};
-
-			LoadPossibleItems ();
+				
 		}
 
-		public override Task OnAppearing(){
+		public override async Task OnAppearing(){
 			ParNumber = 0;
 			CaseSize = 12;
 			CaseSize = 12;
@@ -59,8 +58,9 @@ namespace Mise.Inventory.ViewModels
 			SelectedContainerName = string.Empty;
 			SelectedCategoryName = string.Empty;
 
-		    return Task.FromResult(true);
+			await LoadPossibleItems ();
 		}
+
 		#region Fields
 		public int CaseSize{
 			get{return GetValue<int> ();}
@@ -154,7 +154,7 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
-		async void LoadPossibleItems ()
+		async Task LoadPossibleItems ()
 		{
 			//curretly only handles one level of subcats
 			PossibleCategories = _categoriesService.GetIABIngredientCategories ();
@@ -163,10 +163,12 @@ namespace Mise.Inventory.ViewModels
 			PossibleContainers = containers;
 			PossibleContainerNames = containers.Select (c => c.DisplayName);
 
-			var names = new List<string> ();
-			//arrange the names
+			var names = PossibleCategories.Select (c => c.Name)
+				.OrderByDescending (s => s.ToUpper () == "NONE")
+				.ThenBy (s => s);
+			//arrange the names how?
+			/*
 			var baseCats = PossibleCategories
-				.Where(c => c.ParentCategoryID.HasValue == false)
 				.OrderByDescending (c => c.ID == CategoriesService.Unknown.ID)
 				.ThenBy (c => c.Name);
 			foreach(var baseCat in baseCats){
@@ -176,7 +178,7 @@ namespace Mise.Inventory.ViewModels
 					.OrderBy (c => c.Name)
 					.Select (c => c.Name);
 				names.AddRange (subCats);
-			}
+			}*/
 
 			PossibleCategoryNames = names;
 		}

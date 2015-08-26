@@ -16,7 +16,6 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
-using System.Runtime.InteropServices;
 
 namespace Mise.Core.Common.UnitTests.Events
 {
@@ -73,18 +72,18 @@ namespace Mise.Core.Common.UnitTests.Events
 		}
 
 		#region ID and Date tests
-		private void TestCommonFieldsWithRest(IEntityEventBase ev){
+		void TestCommonFieldsWithRest(IEntityEventBase ev){
 			TestCommonFields (ev);
 			Assert.AreEqual (_rest.ID, ev.RestaurantID, "RestaurantID");
 		}
 
-		private void TestInventoryEvent(IInventoryEvent ev){
+		void TestInventoryEvent(IInventoryEvent ev){
 			TestCommonFieldsWithRest (ev);
 			Assert.AreNotEqual (Guid.Empty, ev.InventoryID);
 			Assert.AreEqual (_inv.ID, ev.InventoryID, "InventoryID");
 		}
 
-		private void TestCommonFields(IEntityEventBase ev){
+		void TestCommonFields(IEntityEventBase ev){
 			Assert.AreNotEqual (Guid.Empty, ev.ID, "ID");
 			Assert.AreNotEqual (Guid.Empty, ev.CausedByID, "CausedByID");
 			Assert.AreEqual (_emp.ID, ev.CausedByID, "CausedByID");
@@ -94,22 +93,22 @@ namespace Mise.Core.Common.UnitTests.Events
 			Assert.NotNull (ev.EventOrderingID, "ordering ID");
 		}
 
-		private void TestParEvent(IParEvent ev){
+		void TestParEvent(IParEvent ev){
 			TestCommonFieldsWithRest (ev);
 			Assert.AreNotEqual (Guid.Empty, ev.ParID, "ParID");
 		}
 
-		private void TestPurchaseOrderEvent(IPurchaseOrderEvent ev){
+		void TestPurchaseOrderEvent(IPurchaseOrderEvent ev){
 			TestCommonFieldsWithRest (ev);
 			Assert.AreNotEqual (Guid.Empty, ev.PurchaseOrderID, "PurchaseOrderID");
 		}
 
-		private void TestReceivingOrderEvent(IReceivingOrderEvent ev){
+		void TestReceivingOrderEvent(IReceivingOrderEvent ev){
 			TestCommonFieldsWithRest (ev);
 			Assert.AreNotEqual (Guid.Empty, ev.ReceivingOrderID, "ReceivingOrderID");
 		}
 
-		private void TestVendorEvent(IVendorEvent ev){
+		void TestVendorEvent(IVendorEvent ev){
 			TestCommonFields (ev);
 			Assert.AreNotEqual (Guid.Empty, ev.VendorID, "VendorID");
 		}
@@ -319,6 +318,13 @@ namespace Mise.Core.Common.UnitTests.Events
 			var ev = _underTest.CreatePARLineItemQuantityUpdatedEvent (_emp, _par, _parLI.ID, 10);
 			TestParEvent (ev);
 			Assert.AreEqual (10, ev.UpdatedQuantity);
+		}
+
+		[Test]
+		public void ParLineItemDeleted(){
+			var ev = _underTest.CreateParLineItemDeletedEvent (_emp, _par, _parLI);
+			TestParEvent (ev);
+			Assert.AreEqual (_parLI.ID, ev.LineItemId);
 		}
 
 		[Test]

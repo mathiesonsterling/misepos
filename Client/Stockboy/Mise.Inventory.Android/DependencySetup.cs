@@ -19,7 +19,10 @@ namespace Mise.Inventory.Android
 	{
 		protected override void RegisterDepenencies(ContainerBuilder cb)
 		{
-			Logger = new AndroidLogger ();
+			var errorService = new AndroidRaygun ();
+			cb.RegisterInstance<IErrorTrackingService> (errorService).SingleInstance ();
+			Logger = new AndroidLogger (errorService);
+
 			var device = AndroidDevice.CurrentDevice;
 			cb.RegisterInstance<IDevice> (device).SingleInstance ();
 
@@ -28,8 +31,6 @@ namespace Mise.Inventory.Android
 
 			//make the web service
 			InitWebService (cb);
-			var errorService = new AndroidRaygun ();
-			cb.RegisterInstance<IErrorTrackingService> (errorService).SingleInstance ();
 			base.RegisterDepenencies(cb);
 		}
 			

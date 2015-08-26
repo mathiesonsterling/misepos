@@ -113,6 +113,16 @@ namespace Mise.Inventory.Services.Implementation
 			return Task.FromResult (true);
 		}
 
+		public async Task DeleteLineItem (IParBeverageLineItem li)
+		{
+			var emp = await _loginService.GetCurrentEmployee ();
+			var par = await GetCurrentPAR ();
+
+			var ev = _eventFactory.CreateParLineItemDeletedEvent (emp, par, li);
+			_currentPar = _parRepository.ApplyEvent (ev);
+			ReportNumItemsInTransaction ();
+		}
+
 		public Task<IParBeverageLineItem> GetCurrentLineItem ()
 		{
 			return Task.FromResult (_lineItem);

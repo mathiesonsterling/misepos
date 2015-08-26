@@ -6,7 +6,6 @@
     /// <remarks>Each of these should have a feature associated with them!</remarks>
     public enum MiseEventTypes
 	{
-
 		EmployeeRegistersRestaurant,
 
         CheckCreated,
@@ -86,6 +85,7 @@
 		ReceivingOrderLineItemQuantityUpdated,
 		ReceivingOrderLineItemZeroedOut,
 		ReceivingOrderAssociatedWithPO,
+		ReceivingOrderLineItemDeleted,
 
         PurchaseOrderCreated,
 		PurchaseOrderLineItemAddedFromInventoryCalculation,
@@ -97,6 +97,7 @@
         PARCreated,
 		PARLineItemAdded,
 		PARLineItemQuantityUpdated,
+		ParLineItemDeleted,
 
         PlaceholderRestaurantCreated,
         InventorySectionAddedToRestaurant,
