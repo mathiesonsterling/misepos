@@ -16,7 +16,7 @@ namespace Mise.Inventory.Pages
 {
 	public partial class InventoryPage : ContentPage
 	{
-		private DragAndDropListView _customVL;
+		private DragListView _customVL;
 		public InventoryPage()
 		{
 			InitializeComponent();
@@ -71,7 +71,7 @@ namespace Mise.Inventory.Pages
 					var dataTemplate = new DataTemplate (() => new InventoryLineItemCell (LineItemDeleted, LineItemMovedUp, LineItemMovedDown));
 				if (_customVL == null) {
 					
-					_customVL = new DragAndDropListView {
+					_customVL = new DragListView {
 						ItemTemplate = dataTemplate,
 						RowHeight = 50,
 						HasUnevenRows = true,
@@ -86,16 +86,12 @@ namespace Mise.Inventory.Pages
 						((ListView)sender).SelectedItem = null;
 					};
 
-					_customVL.ItemDraggedToNewPosition += (sender, args) => {
-						
-					};
-
-					_customVL.SwipedLeftOnItem += async (sender, args) => {
-						var item = vm.LineItems.FirstOrDefault(li => li.ID == args.ItemId);
-						if(item != null){
-							vm.DeleteLineItem (item);
+					_customVL.ItemDraggedToNewPosition += async (sender, args) => {
+						if(vm != null){
+							await vm.MoveLineItemToPosition (args.OldIndex, args.NewIndex);
 						}
 					};
+						
 
 					listItems.Children.Add (_customVL);
 				}

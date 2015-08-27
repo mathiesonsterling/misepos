@@ -176,13 +176,44 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public async Task MoveLineItemUp(InventoryLineItemDisplayLine dLI){
-			await _inventoryService.MoveLineItemUpInList (dLI.Source);
-			await DoSearch ();
+			try{
+				await _inventoryService.MoveLineItemUpInList (dLI.Source);
+				await DoSearch ();
+			} catch(Exception e){
+				HandleException (e);
+			}
 		}
 
 		public async Task MoveLineItemDown(InventoryLineItemDisplayLine dLI){
-			await _inventoryService.MoveLineItemDownInList (dLI.Source);
-			await DoSearch ();
+			try{
+				await _inventoryService.MoveLineItemDownInList (dLI.Source);
+				await DoSearch ();
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+
+		public async Task MoveLineItemToPosition(int oldPos, int newPos){
+			try{
+				var items = LineItems.OrderBy(li => li.InventoryPosition).ToList ();
+				if(oldPos > items.Count){
+					throw new ArgumentException ("Invalid position given for old position");
+				}
+				var item = items [oldPos];
+
+				//calc the new inventory position
+				var newInventoryPositionVal = 0;
+				if(newPos < items.Count - 1){
+					var itemInNewSpot = items[newPos];
+					newInventoryPositionVal = itemInNewSpot.InventoryPosition;
+				} else{
+					var lastItem = items.Last ();
+					newInventoryPositionVal = lastItem.InventoryPosition + 10;
+				}
+				await _inventoryService.MoveLineItemToPosition (item.Source, newPos);	
+			} catch(Exception e){
+				HandleException (e);
+			}
 		}
 
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){
