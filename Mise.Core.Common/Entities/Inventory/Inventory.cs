@@ -152,6 +152,16 @@ namespace Mise.Core.Common.Entities.Inventory
                 currentAmount = entityEvent.Container.AmountContained.Multiply(entityEvent.Quantity);
             }
 
+			//double check we don't already have the inventory position
+			var invPos = entityEvent.InventoryPosition;
+			if(section.LineItems.Any())
+			{
+				var currentInvPositions = section.LineItems.Select (l => l.InventoryPosition).Distinct ().ToList();
+				while(currentInvPositions.Contains (invPos)){
+					invPos++;
+				}
+			}
+
             //make our new LI
             var newLI = new InventoryBeverageLineItem
             {
@@ -170,7 +180,7 @@ namespace Mise.Core.Common.Entities.Inventory
                 UPC = entityEvent.UPC,
                 VendorBoughtFrom = entityEvent.VendorBoughtFrom,
                 Categories = entityEvent.Categories.ToList(),
-                InventoryPosition = entityEvent.InventoryPosition
+				InventoryPosition = invPos
             };
 
             section.LineItems.Add(newLI);
