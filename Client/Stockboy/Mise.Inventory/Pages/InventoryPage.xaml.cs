@@ -1,15 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Inventory.CustomControls;
-using System.Threading;
 
 
-using System.Runtime.InteropServices;
 
 
 namespace Mise.Inventory.Pages
@@ -91,8 +87,6 @@ namespace Mise.Inventory.Pages
 							await vm.MoveLineItemToPosition (args.OldIndex, args.NewIndex);
 						}
 					};
-						
-
 					listItems.Children.Add (_customVL);
 				}
 				_customVL.ItemsSource = vm.LineItems;
