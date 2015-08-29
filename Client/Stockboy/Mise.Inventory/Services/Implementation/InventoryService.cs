@@ -6,14 +6,10 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Repositories;
 using Mise.Core.Common.Events;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Services;
 using Mise.Core.Entities.Inventory.Events;
-using System.Runtime.InteropServices;
 using Mise.Core.Common.Events.Inventory;
-using Xamarin.Forms;
 
 
 
@@ -181,22 +177,29 @@ namespace Mise.Inventory.Services.Implementation
 		}
 
 		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (string name, ICategory category,
-			string upc, int quantity, int caseSize, LiquidContainer container)
+			string upc, int quantity, int caseSize, LiquidContainer container, int? inventoryPosition)
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 			var categories = new []{ category as ItemCategory };
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, null, GetSelectedSection (), 
-				GetSelectedSection ().GetNextItemPosition(), inv);
+
+			var section = GetSelectedSection ();
+			var itemPosition = inventoryPosition.HasValue ? inventoryPosition.Value : section.GetNextItemPosition ();
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, null, 
+				section, itemPosition, inv);
 		
 			inv = _inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();
 
-			return inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
+			//make the new item selected
+			_selectedLineItem = inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
+
+			return _selectedLineItem;
 		}
 
-		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity)
+		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, 
+			int quantity, int? inventoryPosition)
 		{
 			
 			if(_selectedInventoryID == null){
@@ -205,12 +208,17 @@ namespace Mise.Inventory.Services.Implementation
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 			var emp = await _loginService.GetCurrentEmployee ();
 
-			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, null, GetSelectedSection (), GetSelectedSection ().GetNextItemPosition(), inv);
+			var section = GetSelectedSection ();
+			var itemPosition = inventoryPosition.HasValue ? inventoryPosition.Value : section.GetNextItemPosition ();
+			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, null, section,
+				itemPosition, inv);
 		
 			inv = _inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();
 
-			return inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
+			//make the new item selected
+			_selectedLineItem = inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
+			return _selectedLineItem;
 		}
 
 	    public async Task SetCurrentInventorySection(IInventorySection section)
@@ -328,6 +336,25 @@ namespace Mise.Inventory.Services.Implementation
 			var ev = _eventFactory.CreateInventoryLineItemMovedToNewPositionEvent (emp, currInv, currSection, li, position);
 
 			_inventoryRepository.ApplyEvent (ev);
+		}
+
+		public async Task<int> GetInventoryPositionAfterCurrentItem ()
+		{
+			var section = GetSelectedSection ();
+
+			//see if the item after next is taken
+			var items = section.GetInventoryBeverageLineItemsInSection ()
+				.OrderBy (li => li.InventoryPosition)
+				.ToList();
+			var currentItemPos = _selectedLineItem.InventoryPosition;
+			var nextIndex = currentItemPos + 1;
+
+			var itemToMove = items.FirstOrDefault (li => li.InventoryPosition == nextIndex);
+			if(itemToMove != null){
+				await MoveLineItemDownInList (itemToMove);
+			}
+
+			return nextIndex;
 		}
 
 		public Task MoveLineItemUpInList (IInventoryBeverageLineItem li)

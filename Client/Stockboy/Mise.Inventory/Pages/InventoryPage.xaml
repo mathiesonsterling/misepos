@@ -17,7 +17,7 @@
 				</StackLayout>
 			</StackLayout>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
-			<Button Text="Count New Item" Command="{Binding AddNewLineItemCommand}" 
+			<Button Text="Add new item to section" Command="{Binding AddNewLineItemCommand}" 
 				HorizontalOptions="FillAndExpand"/>
 			<Button Text="Complete Section" Command="{Binding FinishSectionCommand}" 
 				IsEnabled ="{Binding CanComplete}" HorizontalOptions="FillAndExpand"/>

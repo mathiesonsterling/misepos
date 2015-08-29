@@ -35,6 +35,7 @@ namespace Mise.Inventory.ViewModels
 			_roService = roService;
 		}
 			
+		public int? AddAtPosition{get{return GetValue<int?> ();}set{ SetValue (value); }}
 		#region Commands
 
 		public ICommand AddNewItemCommand {
@@ -67,7 +68,7 @@ namespace Mise.Inventory.ViewModels
 				//based on our type, determine what LI to add
 				switch(CurrentType){
 				case AddLineItemType.Inventory:
-					await _inventoryService.AddLineItemToCurrentInventory (lineItem, 0);
+					await _inventoryService.AddLineItemToCurrentInventory (lineItem, 0, AddAtPosition);
 					break;
 				case AddLineItemType.ReceivingOrder:
 					await _roService.AddLineItemToCurrentReceivingOrder (lineItem, 0);
@@ -78,6 +79,7 @@ namespace Mise.Inventory.ViewModels
 				default:
 					throw new ArgumentException ("Invalid AddLineItemType selected!");
 				}
+				AddAtPosition = null;
 				//and return to our home base
 				await Navigation.CloseItemFind ();
 			} catch(Exception e){

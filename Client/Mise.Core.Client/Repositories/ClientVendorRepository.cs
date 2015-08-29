@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mise.Core.Client.Services;
 using Mise.Core.Common.Entities.Vendors;
-using Mise.Core.Common.Events.Vendors;
-using Mise.Core.Common.Repositories.Base;
-using Mise.Core.Common.Services;
 using Mise.Core.Common.Services.WebServices;
-using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Repositories;
-using Mise.Core.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Services.UtilityServices;
 
@@ -66,6 +60,10 @@ namespace Mise.Core.Client.Repositories
             var loc = await _deviceLocationService.GetDeviceLocation();
             var inRange = await GetVendorsWithinRadius(DefaultSearchRadius, loc, MAX_RADIUS_RESULTS);
 			res.AddRange (inRange);
+
+			if(res.Any() == false){
+				Logger.Error ("No vendors we loaded for restaurant " + restaurantID);
+			}
 
             return res.Cast<Vendor>();
         }

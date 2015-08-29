@@ -119,6 +119,7 @@ namespace Mise.Inventory.ViewModels
 
 		public ICommand CancelCommand{get{return new Command (Cancel, () => NotProcessing);}}
 
+		public ICommand InsertNewItemAfterCommand{get{return new Command (InsertNewItemAfter, () => NotProcessing);}}
 		#endregion
 
 	    protected override async Task BeforeMove(IInventoryBeverageLineItem currentItem)
@@ -131,6 +132,19 @@ namespace Mise.Inventory.ViewModels
 	        await _inventoryService.MarkLineItemForMeasurement(newItem);
 	        await OnAppearing();
 	    }
+
+		async void InsertNewItemAfter(){
+			//get the current position
+			try{
+				var nextIndex = await _inventoryService.GetInventoryPositionAfterCurrentItem ();
+				App.ItemAddViewModel.AddAtPosition = nextIndex;
+				App.ItemFindViewModel.AddAtPosition = nextIndex;
+
+				await Navigation.ShowInventoryItemFind ();
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
 
 		async void MeasureEv(){
 			await Measure();

@@ -135,10 +135,19 @@ namespace Mise.Inventory.ViewModels
 				}
 			};
 		}
+			
 
 		async void AddNewItem()
 		{
-		    CameFromAdd = true;
+			try{
+		    	CameFromAdd = true;
+
+				//update the other view models to add at the end
+				App.ItemAddViewModel.AddAtPosition = null;
+				App.ItemFindViewModel.AddAtPosition = null;
+			} catch(Exception e){
+				HandleException (e);
+			}
 			await Navigation.ShowInventoryItemFind ();
 		}
 
