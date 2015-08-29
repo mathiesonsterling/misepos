@@ -46,7 +46,7 @@ namespace Mise.Core.Client.Repositories
 		/// <value>The current max radius.</value>
 		public Distance CurrentMaxRadius{ get; private set; }
 
-        private const int MAX_RADIUS_RESULTS = 10;
+        private const int MAX_RADIUS_RESULTS = 100000;
 
         protected override async Task<IEnumerable<Vendor>> LoadFromWebservice(Guid? restaurantID)
         {
@@ -102,6 +102,11 @@ namespace Mise.Core.Client.Repositories
             return ev.VendorID;
         }
 
+		public Task<IEnumerable<IVendor>> GetVendorsWithinRadius(Distance radius, Location deviceLocation, int maxResults){
+			return LoadWithinDistance (deviceLocation, radius);
+		}
+
+		/*
         public Task<IEnumerable<IVendor>> GetVendorsWithinRadius(Distance radius, Location deviceLocation, int maxResults)
         {
             Loading = true;
@@ -119,6 +124,6 @@ namespace Mise.Core.Client.Repositories
                 .Select(vd => vd.Vendor);
             Loading = false;
             return Task.FromResult(items);
-        }
+        }*/
     }
 }
