@@ -150,7 +150,19 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainerShape
                 {
                     Name = "Default Can",
-                    WidthsAsPercentageOfHeight = {.5, .519, .519, .519, .519, .519, .519, .519, .519, .5}
+                    //WidthsAsPercentageOfHeight = {.5, .519, .519, .519, .519, .519, .519, .519, .519, .5}
+					WidthsAsPercentageOfHeight = {
+							.5, .51,
+							.519, .519,
+							.519, .519,
+							.519, .519,
+							.519, .519,
+							.519, .519,
+							.519, .519,
+							.519, .519,
+							.519, .51,
+							.5, .5
+						}
                 };
             }
         }
@@ -162,7 +174,19 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainerShape
                 {
                     Name = "Default Keg",
-                    WidthsAsPercentageOfHeight = {.705, .705, .75, .705, .705, .705, .75, .705, .705, .705}
+                    //WidthsAsPercentageOfHeight = {.705, .705, .75, .705, .705, .705, .75, .705, .705, .705}
+					WidthsAsPercentageOfHeight = {
+							.705, .705,
+							.705, .725,
+							.75,  .725,
+							.705, .705,
+							.705, .705,
+							.705, .725,
+							.75, .725,
+							.705, .705,
+							.705, .705,
+							.705, .705
+						}
                 };
             }
         }
@@ -174,7 +198,18 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainerShape
                 {
                     Name = "Beer Bottle",
-                    WidthsAsPercentageOfHeight = {.25, .25, .25, .25, .25, .25, .143, .12, .11, .12}
+					WidthsAsPercentageOfHeight = {
+							.25,.25, 
+							.25, .25,
+							.25, .25,
+							.25, .25,
+							.25, .25,
+							.25, .1965,
+							.143, 13,
+							.12, .12,
+							.11, .11,
+							.11, .12
+						}
                 };
             }
         }
@@ -183,7 +218,7 @@ namespace Mise.Core.ValueItems.Inventory
 			get{
 				return new LiquidContainerShape {
 					Name = "Box",
-					WidthsAsPercentageOfHeight = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+					WidthsAsPercentageOfHeight = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 				};
 			}
 		}

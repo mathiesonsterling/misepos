@@ -305,7 +305,6 @@ namespace Mise.Core.Common.Entities.Inventory
             lineItem.NumFullBottles = entityEvent.NumFullBottlesMeasured;
             lineItem.PartialBottleListing = entityEvent.PartialBottles;
 
-
             var existingLI = section.LineItems.FirstOrDefault(li => li.ID == entityEvent.BeverageLineItem.ID);
             if (existingLI == null)
             {

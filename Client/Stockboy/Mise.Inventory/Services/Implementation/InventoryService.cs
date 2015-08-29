@@ -48,12 +48,6 @@ namespace Mise.Inventory.Services.Implementation
 		    {
 				//TODO allow us to load up inventories from other devices ONLY if our restaurant supports it
 				//via billing feature
-				/*
-		        _selectedInventory = _inventoryRepository.GetAll()
-		            .Where(i => i.RestaurantID == restID.Value)
-		            .Where(i => i.DateCompleted.HasValue == false)
-		            .OrderByDescending(i => i.LastUpdatedDate)
-		            .FirstOrDefault();*/
 				_selectedInventoryID = null;
 
 				var completeds = _inventoryRepository.GetAll ()
