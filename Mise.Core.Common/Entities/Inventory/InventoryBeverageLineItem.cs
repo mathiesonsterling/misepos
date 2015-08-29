@@ -110,6 +110,7 @@ namespace Mise.Core.Common.Entities.Inventory
 			newItem.Categories = Categories != null 
 				? Categories.Select (c => c).ToList () 
 				: new List<ItemCategory>();
+			newItem.InventoryPosition = InventoryPosition;
             return newItem;
         }
 

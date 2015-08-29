@@ -138,6 +138,10 @@ namespace Mise.Core.Common.Entities.Inventory
 
         private void WhenInventoryLineItemAdded(InventoryLineItemAddedEvent entityEvent)
         {
+			if(entityEvent.InventoryPosition < 10){
+				throw new ArgumentException ("Attempting to add an item at position 0");
+			}
+
             var section = Sections.FirstOrDefault(s => s.ID == entityEvent.InventorySectionID);
 
             if (section == null)
@@ -184,6 +188,7 @@ namespace Mise.Core.Common.Entities.Inventory
             };
 
             section.LineItems.Add(newLI);
+			section.LineItems = section.LineItems.OrderBy (li => li.InventoryPosition).ToList ();
 
         }
 

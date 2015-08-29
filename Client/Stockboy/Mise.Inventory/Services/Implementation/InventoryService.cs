@@ -24,7 +24,7 @@ namespace Mise.Inventory.Services.Implementation
 		readonly ILogger _logger;
 	    readonly IInsightsService _insights;
 
-	    private IInventoryBeverageLineItem _selectedLineItem;
+	    private Guid? _selectedLineItemId;
 	    private Guid? _selectedInventoryID;
 	    private IInventory _lastCompletedInventory;
 		private IInventory _firstCompletedInventory;
@@ -189,13 +189,13 @@ namespace Mise.Inventory.Services.Implementation
 			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, name, upc, categories, caseSize, container, quantity, null, 
 				section, itemPosition, inv);
 		
-			inv = _inventoryRepository.ApplyEvent (addEv);
+			_inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();
 
 			//make the new item selected
-			_selectedLineItem = inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
+			_selectedLineItemId = addEv.LineItemID;
 
-			return _selectedLineItem;
+			return GetSelectedLineItem ();
 		}
 
 		public async Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, 
@@ -213,12 +213,12 @@ namespace Mise.Inventory.Services.Implementation
 			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, null, section,
 				itemPosition, inv);
 		
-			inv = _inventoryRepository.ApplyEvent (addEv);
+			_inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();
 
 			//make the new item selected
-			_selectedLineItem = inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == addEv.LineItemID);
-			return _selectedLineItem;
+			_selectedLineItemId = addEv.LineItemID;
+			return GetSelectedLineItem ();
 		}
 
 	    public async Task SetCurrentInventorySection(IInventorySection section)
@@ -268,7 +268,6 @@ namespace Mise.Inventory.Services.Implementation
 
 			await _inventoryRepository.Commit (inv.ID).ConfigureAwait (false);
 
-			//TODO our current should be copied over from here
 			_insights.Track("Completed Inventory", "Inventory ID", inv.ID.ToString ());
 			_lastCompletedInventory = inv;
 			_selectedInventoryID = null;
@@ -276,18 +275,19 @@ namespace Mise.Inventory.Services.Implementation
 
 		public Task MarkLineItemForMeasurement (IInventoryBeverageLineItem li)
 		{
-			_selectedLineItem = li;
+			_selectedLineItemId = li.ID;
 			return Task.FromResult (false);
 		}
 
 		public Task<IInventoryBeverageLineItem> GetLineItemToMeasure ()
 		{
-			return Task.FromResult (_selectedLineItem);
+			return Task.FromResult (GetSelectedLineItem ());
 		}
 
 		public async Task MeasureCurrentLineItemVisually (int fullBottles, ICollection<decimal> partials)
 		{
-			if(_selectedLineItem == null){
+			var selectedLineItem = GetSelectedLineItem ();
+			if(selectedLineItem == null){
 				throw new InvalidOperationException ("No line item being measured currently!");
 			}
 
@@ -300,10 +300,10 @@ namespace Mise.Inventory.Services.Implementation
 				totalContainers += partials.Sum();
 			}
 
-			var totalAmt = _selectedLineItem.Container.AmountContained.Multiply (totalContainers);
+			var totalAmt = selectedLineItem.Container.AmountContained.Multiply (totalContainers);
 
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
-			var realLI = _selectedLineItem as InventoryBeverageLineItem;
+			var realLI = selectedLineItem as InventoryBeverageLineItem;
 
 			//make an event
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
@@ -312,8 +312,6 @@ namespace Mise.Inventory.Services.Implementation
 			_inventoryRepository.ApplyEvent (ev);
 
             ReportNumItemsInTransaction();
-
-			_selectedLineItem = null;
 		}
 
 		public async Task DeleteLineItem (IInventoryBeverageLineItem li)
@@ -346,12 +344,13 @@ namespace Mise.Inventory.Services.Implementation
 			var items = section.GetInventoryBeverageLineItemsInSection ()
 				.OrderBy (li => li.InventoryPosition)
 				.ToList();
-			var currentItemPos = _selectedLineItem.InventoryPosition;
+			var lineItem = GetSelectedLineItem ();
+			var currentItemPos = lineItem.InventoryPosition;
 			var nextIndex = currentItemPos + 1;
 
 			var itemToMove = items.FirstOrDefault (li => li.InventoryPosition == nextIndex);
 			if(itemToMove != null){
-				await MoveLineItemDownInList (itemToMove);
+				await MoveLineItemToPosition (itemToMove, nextIndex + 1);
 			}
 
 			return nextIndex;
@@ -484,7 +483,6 @@ namespace Mise.Inventory.Services.Implementation
 	    {
 	        if (_selectedInventoryID.HasValue)
 	        {
-				var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 				var numItems = _inventoryRepository.GetNumberOfEventsInTransacitonForEntity(_selectedInventoryID.Value);
 	            if (numItems > REPORT_NUMBER_OF_EVENTS_THRESHOLD)
 	            {
@@ -506,6 +504,15 @@ namespace Mise.Inventory.Services.Implementation
 
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 			return inv.GetSections ().FirstOrDefault (sec => sec.ID == _selectedInventorySectionID);
+		}
+
+		IInventoryBeverageLineItem GetSelectedLineItem(){
+			if(_selectedInventoryID.HasValue == false){
+				return null;
+			}
+
+			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			return inv.GetBeverageLineItems ().FirstOrDefault (li => li.ID == _selectedLineItemId.Value);
 		}
 	}
 }

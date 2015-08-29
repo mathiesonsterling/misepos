@@ -124,7 +124,7 @@ namespace Mise.Inventory.ViewModels
 
 	    protected override async Task BeforeMove(IInventoryBeverageLineItem currentItem)
 	    {
-	        await Measure();
+	        await SaveCurrentMeasurement();
 	    }
 
 	    protected override async Task AfterMove(IInventoryBeverageLineItem newItem)
@@ -136,6 +136,8 @@ namespace Mise.Inventory.ViewModels
 		async void InsertNewItemAfter(){
 			//get the current position
 			try{
+				//save the current
+				await SaveCurrentMeasurement ();
 				var nextIndex = await _inventoryService.GetInventoryPositionAfterCurrentItem ();
 				App.ItemAddViewModel.AddAtPosition = nextIndex;
 				App.ItemFindViewModel.AddAtPosition = nextIndex;
@@ -147,12 +149,12 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		async void MeasureEv(){
-			await Measure();
+			await SaveCurrentMeasurement();
 			//we have to load here, otherwise the values won't update
 			await Navigation.CloseInventoryVisuallyMeasureItem ();
 		}
 
-		async Task Measure(){
+		async Task SaveCurrentMeasurement(){
 			try{
 				//if we have partials, add em
 				AddPartial ();
