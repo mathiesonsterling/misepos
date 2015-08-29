@@ -111,6 +111,8 @@ namespace Mise.Inventory.ViewModels
 				.ToList();
 	    }
 
+		public Action<LiquidContainerShape> UpdateShapeOnPage{get;set;}
+
 	    #region Commands
 		public ICommand MeasureCommand{get{ return new Command (MeasureEv, () => NotProcessing);
 			}}
@@ -209,6 +211,9 @@ namespace Mise.Inventory.ViewModels
 			    else
 			    {
 			        SetCurrent(item);
+					if(UpdateShapeOnPage != null){
+						UpdateShapeOnPage(item.Shape);
+					}
 			    }
 			} catch(Exception e){
 				HandleException (e);

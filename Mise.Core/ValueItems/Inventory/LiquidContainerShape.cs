@@ -104,7 +104,19 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainerShape
                 {
                     Name = "Default Bottle",
-                    WidthsAsPercentageOfHeight = {.3, .33, .33, .33, .33, .33, .3, .16, .1, .1}
+                    //WidthsAsPercentageOfHeight = {.3, .33, .33, .33, .33, .33, .3, .16, .1, .1}
+					WidthsAsPercentageOfHeight = {
+							.3, .315, 
+							.33,.33, 
+							.33, .33, 
+							.33, .33,
+							.33, .33,
+							.33, .315,
+							.3, .23,
+							.16, .13,
+							.1, .1,
+							.1, .1
+						}
                 };
             }
         }
@@ -116,7 +128,18 @@ namespace Mise.Core.ValueItems.Inventory
                 return new LiquidContainerShape
                 {
                     Name = "Default Bottle",
-                    WidthsAsPercentageOfHeight = { .233, .233, .233, .233, .233, .233, .233, .139, .08, .09 }
+                    //WidthsAsPercentageOfHeight = { .233, .233, .233, .233, .233, .233, .233, .139, .08, .09 }
+					WidthsAsPercentageOfHeight = { 
+							.233, .233, 
+							.233, .233,
+							.233, .233,
+							.233, .233,
+							.233, .233,
+							.233, .233,
+							.233, .186,
+							.139, .110,
+							.08, .08,
+							.08, 0.09 }
                 };
             }
         }
