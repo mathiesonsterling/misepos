@@ -53,6 +53,12 @@ namespace Mise.Core.Entities.People
 		Password Password{get;}
 
 		/// <summary>
+		/// If another service has a token associated with this employee
+		/// </summary>
+		/// <value>The O auth token.</value>
+		OAuthToken OAuthToken{get;}
+
+		/// <summary>
 		/// Return if an employee can void items in a particular status
 		/// </summary>
 		/// <returns><c>true</c> if this instance can void the specified status; otherwise, <c>false</c>.</returns>

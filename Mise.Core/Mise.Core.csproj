@@ -183,6 +183,7 @@
     <Compile Include="Services\ICategoriesService.cs" />
     <Compile Include="Services\UtilityServices\Cryptography.cs" />
     <Compile Include="ValueItems\CreditCardNumber.cs" />
+    <Compile Include="ValueItems\OAuthToken.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

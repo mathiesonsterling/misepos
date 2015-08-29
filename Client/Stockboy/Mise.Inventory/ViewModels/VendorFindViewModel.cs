@@ -30,6 +30,12 @@ namespace Mise.Inventory.ViewModels
 			_loginService = loginService;
 			_poService = poService;
 			_roService = roService;
+
+			PropertyChanged += async (sender, e) =>{
+				if(e.PropertyName == "ShowOutOfStateVendors"){
+					await DoSearch ();
+				}
+			} ;
 		}
 
 		protected override void AfterSearchDone ()
@@ -37,6 +43,10 @@ namespace Mise.Inventory.ViewModels
 			CanAdd = LineItems.Any () == false;
 		}
 
+		public bool ShowOutOfStateVendors{get{return GetValue<bool> ();}set{ 
+				SetValue (value);
+			}
+		}
 		#region commands
 
 
@@ -63,11 +73,19 @@ namespace Mise.Inventory.ViewModels
 		protected override async Task<ICollection<IVendor>> LoadItems ()
 		{
 			Processing = true;
-			var items = await _vendorService.GetPossibleVendors ();
+			var items = (await _vendorService.GetPossibleVendors ()).ToList();
 
 			var rest = await _loginService.GetCurrentRestaurant ();
 			Processing = false;
 			//get our vendors that are tied to us FIRST
+
+			if(ShowOutOfStateVendors == false){
+				if(rest.StreetAddress != null && rest.StreetAddress.State != null){
+					items = items.Where(v => v.StreetAddress == null || v.StreetAddress.State == null || 
+						v.StreetAddress.State.Equals (rest.StreetAddress.State))
+						.ToList();
+				}
+			}
 			return items.OrderByDescending (v => v.GetRestaurantIDsAssociatedWithVendor ().Contains (rest.ID))
 				.ThenBy (v => v.Name).ToList();
 		}
