@@ -349,25 +349,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<IEnumerable<Employee>> GetEmployeesAsync ()
 		{
 			var empType = typeof(Employee).ToString ();
-			var needsDBReset = false;
 		    var table = GetEntityTable();
 			try{
 				await AttemptPull ("allEmployees", null);
 			} 	catch(MobileServicePushFailedException pe){
 				//check the push result to see if this is deletion of a mod that we can ignore
-				foreach(var err in pe.PushResult.Errors){
-					_logger.Log ("Push result error " + err.RawResult);
-					if(err.Status == HttpStatusCode.NotFound){
-						//TODO delete the items in our table
-						needsDBReset = true;
-					}
-				}
 				_logger.HandleException (pe);
-			}
-			if(needsDBReset){
-				_logger.Log ("Push exception on pull, clearing DB");
-				await table.PurgeAsync ();
-				await AttemptPull ("allEmployees", null);
+				throw;
 			}
 
 			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();

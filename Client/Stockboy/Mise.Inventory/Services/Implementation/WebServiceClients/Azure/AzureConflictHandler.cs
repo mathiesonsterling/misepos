@@ -1,0 +1,47 @@
+﻿using System.Threading.Tasks;
+
+using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.Sync;
+using Newtonsoft.Json.Linq;
+using Mise.Core.Services.UtilityServices;
+
+
+namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
+{
+	public class AzureConflictHandler : IMobileServiceSyncHandler
+	{
+		readonly ILogger _logger;
+		public AzureConflictHandler(ILogger logger){
+			_logger = logger;
+		}
+		#region IMobileServiceSyncHandler implementation
+
+		public Task OnPushCompleteAsync (MobileServicePushCompletionResult result)
+		{
+			return Task.FromResult (false);
+		}
+
+		public async Task<JObject> ExecuteTableOperationAsync (IMobileServiceTableOperation operation)
+		{
+			try{
+				await operation.ExecuteAsync ();
+				return null;
+			}                 
+			catch (MobileServiceConflictException ex)
+			{
+				_logger.HandleException (ex);
+				return ex.Value;
+			}
+			catch (MobileServicePreconditionFailedException ex)
+			{
+				_logger.HandleException (ex);
+				return ex.Value;
+			}
+		}
+
+		#endregion
+
+
+	}
+}
+

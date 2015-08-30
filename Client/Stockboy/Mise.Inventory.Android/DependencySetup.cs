@@ -34,7 +34,7 @@ namespace Mise.Inventory.Android
 			base.RegisterDepenencies(cb);
 		}
 			
-		static async void InitWebService (ContainerBuilder cb)
+		async void InitWebService (ContainerBuilder cb)
 		{
 			var wsLocation = GetWebServiceLocation ();
 			if (wsLocation != null) {
@@ -51,7 +51,7 @@ namespace Mise.Inventory.Android
 				store.DefineTable<AzureEntityStorage>();
 				store.DefineTable<AzureEventStorage>();
 
-				await mobileService.SyncContext.InitializeAsync (store);
+				await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
 
 				var deviceConnection = new DeviceConnectionService ();
 				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, 
