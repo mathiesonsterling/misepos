@@ -20,7 +20,9 @@
         <th>
             Employee who started
         </th>
-        <th></th>
+        <th>
+            Export
+        </th>
     </tr>
 
 @foreach (var item in Model.Inventories) {
@@ -38,8 +40,8 @@
             @Html.DisplayFor(modelItem => item.DoneByEmployee)
         </td>
         <td>
-            @Html.ActionLink("Get inventory by section", "GenerateRawCSV", new {id = item.Id})
-            @Html.ActionLink("Get total inventory", "GenerateAggregatedCSV", new {id = item.Id})
+            @Html.ActionLink("CSV By section", "GenerateRawCSV", new {id = item.Id})
+            @Html.ActionLink("CSV Total inventory", "GenerateAggregatedCSV", new {id = item.Id})
         </td>
     </tr>
 }
