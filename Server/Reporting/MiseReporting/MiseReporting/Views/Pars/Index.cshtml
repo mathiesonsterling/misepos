@@ -22,6 +22,7 @@
             Number of Items
         </th>
         <th></th>
+        <th>Export</th>
     </tr>
 
 @foreach (var item in Model.Pars) {
@@ -39,7 +40,10 @@
             @Html.DisplayFor(modelItem => item.NumLineItems)
         </td>
         <td>
-            @Html.ActionLink("Details", "Details", new {parId = @item.Id}) |
+            @Html.ActionLink("Line Items", "Details", new { parId = @item.Id }) 
+        </td>
+        <td>
+
             @Html.ActionLink("CSV", "GenerateCSV", new {parId = @item.Id})
         </td>
     </tr>
