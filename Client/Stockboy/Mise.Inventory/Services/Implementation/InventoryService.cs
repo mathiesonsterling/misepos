@@ -233,6 +233,7 @@ namespace Mise.Inventory.Services.Implementation
 			//TODO check if we have any inventory positions that aren't multiples of 10
 			//if we do, take the items in order and redo them
 			var section = GetSelectedSection ();
+			section.UpdatePositions ();
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);

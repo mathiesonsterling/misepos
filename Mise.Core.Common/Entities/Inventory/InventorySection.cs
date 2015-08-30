@@ -59,6 +59,19 @@ namespace Mise.Core.Common.Entities.Inventory
 			return 10;
 	    }
 
+		public void UpdatePositions ()
+		{
+			var needsUpdate = LineItems.Any (li => li.InventoryPosition % 10 != 0);
+			if(needsUpdate){
+				var items = LineItems.OrderBy (li => li.InventoryPosition);
+				var pos = 10;
+				foreach(var item in items){
+					item.InventoryPosition = pos;
+					pos = pos + 10;
+				}
+			}
+		}
+
 	    public ICloneableEntity Clone()
         {
             var newItem = CloneRestaurantBase(new InventorySection());

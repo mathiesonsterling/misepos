@@ -349,9 +349,27 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<IEnumerable<Employee>> GetEmployeesAsync ()
 		{
 			var empType = typeof(Employee).ToString ();
-
+			var needsDBReset = false;
 		    var table = GetEntityTable();
-			await AttemptPull ("allEmployees", null);
+			try{
+				await AttemptPull ("allEmployees", null);
+			} 	catch(MobileServicePushFailedException pe){
+				//check the push result to see if this is deletion of a mod that we can ignore
+				foreach(var err in pe.PushResult.Errors){
+					_logger.Log ("Push result error " + err.RawResult);
+					if(err.Status == HttpStatusCode.NotFound){
+						//TODO delete the items in our table
+						needsDBReset = true;
+					}
+				}
+				_logger.HandleException (pe);
+			}
+			if(needsDBReset){
+				_logger.Log ("Push exception on pull, clearing DB");
+				await table.PurgeAsync ();
+				await AttemptPull ("allEmployees", null);
+			}
+
 			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();
 
 			return ais.Select (ai => ai.ToRestaurantDTO ())
@@ -369,8 +387,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			//TODO change this to do the query on server, or at least limit it somehow
 			try{
 				var items = (await GetEmployeesAsync ()).ToList();
-					var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
-				&& e.Password != null && e.Password.Equals (password));
+				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
+					&& e.Password != null && e.Password.Equals (password));
 
 				if(found == null) {
 					if (items.Any (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))) {
@@ -381,18 +399,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 				return found;
 			} 
-			catch(MobileServicePushFailedException pe){
-				//check the push result to see if this is deletion of a mod that we can ignore
-				foreach(var err in pe.PushResult.Errors){
-					_logger.Log ("Push result error " + err.RawResult);
-					if(err.Status == HttpStatusCode.NotFound){
-						//TODO delete the item
-						var item = err.Item.ToString ();
-					}
-				}
-				_logger.HandleException (pe);
-				throw;
-			}
 			catch(Exception e){
 				_logger.HandleException (e);
 				throw;
