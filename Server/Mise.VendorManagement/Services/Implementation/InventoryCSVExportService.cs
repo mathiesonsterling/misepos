@@ -53,6 +53,9 @@ namespace Mise.VendorManagement.Services.Implementation
                 {
                     using (var csv = new CsvWriter(streamWriter))
                     {
+                        csv.WriteField("Section");
+                        WriteInventoryLineItemHeader(csv);
+                        csv.NextRecord();
                         foreach (var section in inventory.GetSections().OrderBy(s => s.Name))
                         {
                             foreach (var li in section.GetInventoryBeverageLineItemsInSection().OrderBy(li => li.DisplayName))
@@ -101,8 +104,9 @@ namespace Mise.VendorManagement.Services.Implementation
                 {
                     using (var csv = new CsvWriter(streamWriter))
                     {
-
-                        foreach (var li in itemDic.Values.OrderBy(t => t.Item1.DisplayName))
+                        WriteInventoryLineItemHeader(csv);
+                        csv.NextRecord();
+                        foreach (var li in itemDic.Values.Where(t => t.Item2 > 0).OrderBy(t => t.Item1.DisplayName))
                         {
                             WriteInventoryLineItem(csv, li.Item1, li.Item2);
                         }
@@ -127,7 +131,12 @@ namespace Mise.VendorManagement.Services.Implementation
                 {
                     using (var csv = new CsvWriter(streamWriter))
                     {
-
+                        //write the header
+                        csv.WriteField("Name");
+                        csv.WriteField("Container");
+                        csv.WriteField("Quantity");
+                        csv.WriteField("Categories");
+                        csv.NextRecord();
                         foreach (var li in lineItems.OrderBy(li => li.DisplayName))
                         {
                             csv.WriteField(li.DisplayName);
@@ -143,6 +152,20 @@ namespace Mise.VendorManagement.Services.Implementation
                     }
                 }
             }
+        }
+
+        private static void WriteInventoryLineItemHeader(ICsvWriter csv)
+        {
+            csv.WriteField("Name");
+            csv.WriteField("Container");
+            csv.WriteField("Quantity");
+
+            csv.WriteField("Amount in ML");
+            csv.WriteField("Number of Full Bottles");
+
+            csv.WriteField("Number of Partial Bottles");
+
+            csv.WriteField("Categories");
         }
 
         private static void WriteInventoryLineItem(ICsvWriter csv, IInventoryBeverageLineItem li, decimal quantity)
