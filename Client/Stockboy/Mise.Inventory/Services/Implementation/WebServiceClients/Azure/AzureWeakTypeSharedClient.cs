@@ -379,7 +379,19 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				} 
 
 				return found;
-			} catch(Exception e){
+			} 
+			catch(MobileServicePushFailedException pe){
+				//check the push result to see if this is deletion of a mod that we can ignore
+				foreach(var err in pe.PushResult.Errors){
+					_logger.Log ("Push result error " + err.RawResult);
+					if(err.Status == HttpStatusCode.NotFound){
+						
+					}
+				}
+				_logger.HandleException (pe);
+				throw;
+			}
+			catch(Exception e){
 				_logger.HandleException (e);
 				throw;
 			}
