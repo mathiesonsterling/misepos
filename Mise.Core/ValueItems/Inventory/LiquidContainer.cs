@@ -247,6 +247,11 @@ namespace Mise.Core.ValueItems.Inventory
         }
         #endregion
 
+        /// <summary>
+        /// If set, this container only shows up for this restaurant
+        /// </summary>
+        public Guid? RestaurantId { get; set; }
+
         private string _displayName;
         public string DisplayName
         {

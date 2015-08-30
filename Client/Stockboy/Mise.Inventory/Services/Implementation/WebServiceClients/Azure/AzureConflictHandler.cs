@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.Sync;
@@ -23,20 +24,30 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<JObject> ExecuteTableOperationAsync (IMobileServiceTableOperation operation)
 		{
-			try{
+		    try{
 				await operation.ExecuteAsync ();
 				return null;
 			}                 
 			catch (MobileServiceConflictException ex)
 			{
-				_logger.HandleException (ex);
-				return ex.Value;
+			    _logger.HandleException (ex);
 			}
 			catch (MobileServicePreconditionFailedException ex)
 			{
-				_logger.HandleException (ex);
-				return ex.Value;
+			    _logger.HandleException (ex);
 			}
+
+		    try
+		    {
+                //retry so we'll take the client value
+		        await operation.ExecuteAsync();
+		        return null;
+		    }
+		    catch (MobileServicePreconditionFailedException e)
+		    {
+		        _logger.HandleException(e, LogLevel.Fatal);
+		        return e.Value;
+		    }
 		}
 
 		#endregion
