@@ -240,7 +240,7 @@ namespace Mise.Inventory.ViewModels
 					await Navigation.DisplayAlert ("Server error", "Error while updating server.  We'll be working on getting you back online as quick as possible!");
 					break;
 				case LoginResult.Other:
-					await Navigation.DisplayAlert ("Error", "Error logging in");
+					await Navigation.DisplayAlert ("Error", "Error logging in.  If this continues try uninstalling and reinstalling Stockboy");
 					break;
 				}
 			}

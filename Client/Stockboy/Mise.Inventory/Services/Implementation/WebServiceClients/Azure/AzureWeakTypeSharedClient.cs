@@ -22,6 +22,7 @@ using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using System.Net;
 using Mise.Core.Client.Services;
+using Newtonsoft.Json.Serialization;
 
 
 
@@ -385,7 +386,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				foreach(var err in pe.PushResult.Errors){
 					_logger.Log ("Push result error " + err.RawResult);
 					if(err.Status == HttpStatusCode.NotFound){
-						
+						//TODO delete the item
+						var item = err.Item.ToString ();
 					}
 				}
 				_logger.HandleException (pe);
