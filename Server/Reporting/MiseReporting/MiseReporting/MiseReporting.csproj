@@ -183,9 +183,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BaseBeverageLineItemViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\InventoryLineItemViewModel.cs" />
     <Compile Include="Models\InventoryViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ParLineItemViewModel.cs" />
     <Compile Include="Models\ParViewModel.cs" />
     <Compile Include="Models\RestaurantViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -251,6 +254,8 @@
     <Content Include="Views\Restaurant\Index.cshtml" />
     <Content Include="Views\Inventories\Index.cshtml" />
     <Content Include="Views\Pars\Index.cshtml" />
+    <Content Include="Views\Pars\Details.cshtml" />
+    <Content Include="Views\Inventories\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -40,6 +40,7 @@
             @Html.DisplayFor(modelItem => item.DoneByEmployee)
         </td>
         <td>
+            @Html.ActionLink("Details", "Details", new { inventoryId = @item.Id }) |
             @Html.ActionLink("By section", "GenerateRawCSV", new {id = item.Id})
             &#124;
             @Html.ActionLink("Total inventory", "GenerateAggregatedCSV", new {id = item.Id})

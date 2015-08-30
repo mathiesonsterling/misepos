@@ -27,5 +27,9 @@ namespace MiseReporting
         }
 
         public System.Data.Entity.DbSet<MiseReporting.Models.ParViewModel> ParViewModels { get; set; }
+
+        public System.Data.Entity.DbSet<MiseReporting.Models.ParLineItemViewModel> ParLineItemViewModels { get; set; }
+
+        public System.Data.Entity.DbSet<MiseReporting.Models.InventoryLineItemViewModel> InventoryLineItemViewModels { get; set; }
     }
 }

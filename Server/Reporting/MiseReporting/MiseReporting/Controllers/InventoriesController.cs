@@ -79,6 +79,25 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        public ActionResult Details(Guid inventoryId)
+        {
+            var invType = typeof(Inventory).ToString();
+            AzureEntityStorage invAi;
+            using (var db = new AzureNonTypedEntities())
+            {
+                invAi = db.AzureEntityStorages.FirstOrDefault(ai => ai.EntityID == inventoryId && ai.MiseEntityType == invType);
+
+            }
+            if (invAi == null)
+            {
+                throw new ArgumentException("No inventory of id " + inventoryId + " found");
+            }
+            var inventory = GetFromAi(invAi);
+
+            var vms = inventory.GetBeverageLineItems().Select(li => new InventoryLineItemViewModel(li));
+
+            return View(vms);
+        }
 
         // GET: Inventories/Details/5
         public async Task<FileResult> GenerateRawCSV(Guid id)

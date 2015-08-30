@@ -88,28 +88,43 @@ namespace MiseReporting.Controllers
         }
 
         // GET: Pars/Details/5
-        public ActionResult Details(int parId)
+        public ActionResult Details(Guid parId)
         {
-            return View();
+            var parType = typeof(Par).ToString();
+            AzureEntityStorage parAi;
+            using (var db = new AzureNonTypedEntities())
+            {
+                parAi = db.AzureEntityStorages.FirstOrDefault(ai => ai.EntityID == parId && ai.MiseEntityType == parType);
+
+            }
+            if (parAi == null)
+            {
+                throw new ArgumentException("No par of id " + parId + " found");
+            }
+            var par = GetFromAi(parAi);
+
+            var vms = par.GetBeverageLineItems().Select(li => new ParLineItemViewModel(li));
+
+            return View(vms);
         }
 
         public async Task<FileResult> GenerateCSV(Guid parId)
         {
             //get the inventory
             var invType = typeof(Par).ToString();
-            AzureEntityStorage invAi;
+            AzureEntityStorage parAi;
             using (var db = new AzureNonTypedEntities())
             {
-                invAi = db.AzureEntityStorages.FirstOrDefault(
+                parAi = db.AzureEntityStorages.FirstOrDefault(
                     ai =>
                         ai.MiseEntityType == invType && ai.EntityID == parId);
 
             }
-            if (invAi == null)
+            if (parAi == null)
             {
                 throw new ArgumentException("No par of id " + parId + " found");
             }
-            var par = GetFromAi(invAi);
+            var par = GetFromAi(parAi);
 
             if (par.GetBeverageLineItems().Any() == false)
             {
