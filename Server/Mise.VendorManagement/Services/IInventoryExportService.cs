@@ -23,5 +23,7 @@ namespace Mise.VendorManagement.Services
         /// <param name="inventory"></param>
         /// <returns></returns>
         Task<byte[]> ExportInventoryToCSVAggregated(IInventory inventory);
+
+        Task<byte[]> ExportParToCSV(IPar par);
     }
 }

@@ -11,7 +11,10 @@ namespace MiseReporting.Models
 
         public string Address { get; set; }
 
-        public IEnumerable<InventoryViewModel> Inventories { get; private set; } 
+        public IEnumerable<InventoryViewModel> Inventories { get; private set; }
+
+        public IEnumerable<ParViewModel> Pars { get; private set; }
+
 
         public RestaurantViewModel()
         {
@@ -33,6 +36,11 @@ namespace MiseReporting.Models
         public RestaurantViewModel(IRestaurant rest, IEnumerable<InventoryViewModel> inventories) : this(rest)
         {
             Inventories = inventories;
+        }
+
+        public RestaurantViewModel(IRestaurant rest, IEnumerable<ParViewModel> pars) : this(rest)
+        {
+            Pars = pars;
         }
     }
 }

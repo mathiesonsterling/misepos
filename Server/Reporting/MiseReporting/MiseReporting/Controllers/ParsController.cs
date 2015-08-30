@@ -17,41 +17,42 @@ using MiseReporting.Models;
 
 namespace MiseReporting.Controllers
 {
-    public class InventoriesController : Controller
+    public class ParsController : Controller
     {
         private readonly EntityDataTransportObjectFactory _dtoFactory;
         private readonly IInventoryExportService _inventoryExportService;
-        public InventoriesController()
+
+        public ParsController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
             _inventoryExportService = new InventoryCSVExportService(new DummyLogger());
         }
 
-        // GET: Inventories
+        // GET: Pars
         public ActionResult Index(Guid restaurantId)
         {
             RestaurantViewModel vm;
             using (var db = new AzureNonTypedEntities())
             {
-                var invType = typeof (Inventory).ToString();
-                var invAIs =
+                var parType = typeof(Par).ToString();
+                var parAIs =
                     db.AzureEntityStorages.Where(
                         ai =>
-                            ai.MiseEntityType == invType && ai.RestaurantID.HasValue &&
+                            ai.MiseEntityType == parType && ai.RestaurantID.HasValue &&
                             ai.RestaurantID.Value == restaurantId).ToList();
 
-                var invs = invAIs.Select(GetFromAi);
+                var pars = parAIs.Select(GetFromAi);
 
-                var empType = typeof (Employee).ToString();
+                var empType = typeof(Employee).ToString();
                 //get the emp
 
-                var vms = new List<InventoryViewModel>();
-                foreach (var inv in invs)
+                var vms = new List<ParViewModel>();
+                foreach (var par in pars)
                 {
                     IEmployee emp = null;
                     var empAi =
                         db.AzureEntityStorages
-                            .FirstOrDefault(ai => ai.MiseEntityType == empType && ai.EntityID == inv.CreatedByEmployeeID);
+                            .FirstOrDefault(ai => ai.MiseEntityType == empType && ai.EntityID == par.CreatedByEmployeeID);
 
                     if (empAi != null)
                     {
@@ -59,7 +60,7 @@ namespace MiseReporting.Controllers
                         emp = _dtoFactory.FromDataStorageObject<Employee>(empDTO);
                     }
 
-                    vms.Add(new InventoryViewModel(inv, emp));
+                    vms.Add(new ParViewModel(par, emp));
                 }
 
                 var restType = typeof(Restaurant).ToString();
@@ -79,72 +80,112 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
-
-        // GET: Inventories/Details/5
-        public async Task<FileResult> GenerateRawCSV(Guid id)
-        { 
-            //get the inventory
-            var invType = typeof (Inventory).ToString();
-            AzureEntityStorage invAi;
-            using (var db = new AzureNonTypedEntities())
-            {
-                invAi = db.AzureEntityStorages.FirstOrDefault(
-                    ai =>
-                        ai.MiseEntityType == invType && ai.EntityID == id);
-
-            }
-            if (invAi == null)
-            {
-                throw new ArgumentException("No inventory of id " + id + " found");
-            }
-            var inv = GetFromAi(invAi);
-
-            if (inv.GetBeverageLineItems().Any() == false)
-            {
-                //do nothing
-                return null;
-            }
-            //transform inventory to memory stream, then to file
-            var bytes =  await _inventoryExportService.ExportInventoryToCsvBySection(inv);
-            var outputStream = new MemoryStream(bytes);
-            return new FileStreamResult(outputStream, "text/csv") {FileDownloadName = "inventoryBySections.csv"};
-        }
-
-        // GET: Inventories/Details/5
-        public async Task<FileResult> GenerateAggregatedCSV(Guid id)
-        {
-            //get the inventory
-            var invType = typeof(Inventory).ToString();
-            AzureEntityStorage invAi;
-            using (var db = new AzureNonTypedEntities())
-            {
-                invAi = db.AzureEntityStorages.FirstOrDefault(
-                    ai =>
-                        ai.MiseEntityType == invType && ai.EntityID == id);
-
-            }
-            if (invAi == null)
-            {
-                throw new ArgumentException("No inventory of id " + id + " found");
-            }
-            var inv = GetFromAi(invAi);
-
-            if (inv.GetBeverageLineItems().Any() == false)
-            {
-                //do nothing
-                return null;
-            }
-            //transform inventory to memory stream, then to file
-            var bytes = await _inventoryExportService.ExportInventoryToCSVAggregated(inv);
-            var outputStream = new MemoryStream(bytes);
-            return new FileStreamResult(outputStream, "text/csv") { FileDownloadName = "RestaurantInventory.csv" };
-        }
-
-        private IInventory GetFromAi(AzureEntityStorage ai)
+        private IPar GetFromAi(AzureEntityStorage ai)
         {
             var dto = ai.ToRestaurantDTO();
-            var inv = _dtoFactory.FromDataStorageObject<Inventory>(dto);
-            return inv;
+            var par = _dtoFactory.FromDataStorageObject<Par>(dto);
+            return par;
         }
+
+        // GET: Pars/Details/5
+        public ActionResult Details(int parId)
+        {
+            return View();
+        }
+
+        public async Task<FileResult> GenerateCSV(Guid parId)
+        {
+            //get the inventory
+            var invType = typeof(Par).ToString();
+            AzureEntityStorage invAi;
+            using (var db = new AzureNonTypedEntities())
+            {
+                invAi = db.AzureEntityStorages.FirstOrDefault(
+                    ai =>
+                        ai.MiseEntityType == invType && ai.EntityID == parId);
+
+            }
+            if (invAi == null)
+            {
+                throw new ArgumentException("No par of id " + parId + " found");
+            }
+            var par = GetFromAi(invAi);
+
+            if (par.GetBeverageLineItems().Any() == false)
+            {
+                //do nothing
+                return null;
+            }
+            //transform inventory to memory stream, then to file
+            var bytes = await _inventoryExportService.ExportParToCSV(par);
+            var outputStream = new MemoryStream(bytes);
+            return new FileStreamResult(outputStream, "text/csv") { FileDownloadName = "Par.csv" };
+        }
+        /*
+        // GET: Pars/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Pars/Create
+        [HttpPost]
+        public ActionResult Create(FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Pars/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: Pars/Edit/5
+        [HttpPost]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add update logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Pars/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: Pars/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add delete logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }*/
     }
 }

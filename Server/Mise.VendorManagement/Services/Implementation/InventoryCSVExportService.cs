@@ -41,35 +41,31 @@ namespace Mise.VendorManagement.Services.Implementation
 
         public async Task<byte[]> ExportInventoryToCsvBySection(IInventory inventory)
         {
+            var lineItems = inventory.GetBeverageLineItems();
+            if (lineItems.Any() == false)
             {
+                throw new ArgumentException("No line items in the given inventory!");
+            }
 
-                var lineItems = inventory.GetBeverageLineItems();
-                if (lineItems.Any() == false)
+            using (var ms = new MemoryStream())
+            {
+                using (var streamWriter = new StreamWriter(ms))
                 {
-                    throw new ArgumentException("No line items in the given inventory!");
-                }
-
-                using (var ms = new MemoryStream())
-                {
-                    using (var streamWriter = new StreamWriter(ms))
+                    using (var csv = new CsvWriter(streamWriter))
                     {
-                        using (var csv = new CsvWriter(streamWriter))
+                        foreach (var section in inventory.GetSections().OrderBy(s => s.Name))
                         {
-                            foreach (var section in inventory.GetSections().OrderBy(s => s.Name))
+                            foreach (var li in section.GetInventoryBeverageLineItemsInSection().OrderBy(li => li.DisplayName))
                             {
-                                foreach (var li in section.GetInventoryBeverageLineItemsInSection().OrderBy(li => li.DisplayName))
-                                {
-                                    csv.WriteField(section.Name);
-                                    WriteLineItem(csv, li, li.Quantity);
-                                }
+                                csv.WriteField(section.Name);
+                                WriteInventoryLineItem(csv, li, li.Quantity);
                             }
-                            await streamWriter.FlushAsync();
-                            return ms.ToArray();
                         }
+                        await streamWriter.FlushAsync();
+                        return ms.ToArray();
                     }
                 }
             }
-
         }
 
 
@@ -106,10 +102,10 @@ namespace Mise.VendorManagement.Services.Implementation
                     using (var csv = new CsvWriter(streamWriter))
                     {
 
-                            foreach (var li in itemDic.Values.OrderBy(t => t.Item1.DisplayName))
-                            {
-                                WriteLineItem(csv, li.Item1, li.Item2);
-                            }
+                        foreach (var li in itemDic.Values.OrderBy(t => t.Item1.DisplayName))
+                        {
+                            WriteInventoryLineItem(csv, li.Item1, li.Item2);
+                        }
                         await streamWriter.FlushAsync();
                         return ms.ToArray();
                     }
@@ -117,7 +113,39 @@ namespace Mise.VendorManagement.Services.Implementation
             }
         }
 
-        private void WriteLineItem(ICsvWriter csv, IInventoryBeverageLineItem li, decimal quantity)
+        public async Task<byte[]> ExportParToCSV(IPar par)
+        {
+            var lineItems = par.GetBeverageLineItems().ToList();
+            if (lineItems.Any() == false)
+            {
+                throw new ArgumentException("No line items in the par!");
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                using (var streamWriter = new StreamWriter(ms))
+                {
+                    using (var csv = new CsvWriter(streamWriter))
+                    {
+
+                        foreach (var li in lineItems.OrderBy(li => li.DisplayName))
+                        {
+                            csv.WriteField(li.DisplayName);
+                            csv.WriteField(li.Container.DisplayName);
+
+                            csv.WriteField(li.Quantity);
+
+                            csv.WriteField(GetCategoriesString(li.GetCategories()));
+                            csv.NextRecord();
+                        }
+                        await streamWriter.FlushAsync();
+                        return ms.ToArray();
+                    }
+                }
+            }
+        }
+
+        private static void WriteInventoryLineItem(ICsvWriter csv, IInventoryBeverageLineItem li, decimal quantity)
         {
             csv.WriteField(li.DisplayName);
             csv.WriteField(li.Container.DisplayName);
