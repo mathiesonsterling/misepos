@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
 
@@ -20,7 +16,7 @@ namespace MiseReporting.Models
         public string DoneByEmployee { get; set; }
         public Guid Id { get; set; }
 
-        public bool HasLineItems { get; set; }
+        public int NumLineItems { get; set; }
 
         public InventoryViewModel() { }
 
@@ -37,7 +33,7 @@ namespace MiseReporting.Models
             DateCreatedUTC = source.CreatedDate.DateTime;
 
             Id = source.ID;
-            HasLineItems = source.GetBeverageLineItems().Any();
+            NumLineItems = source.GetBeverageLineItems().Count();
         }
     }
 }
