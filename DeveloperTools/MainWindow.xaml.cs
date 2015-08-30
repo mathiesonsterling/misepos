@@ -108,9 +108,9 @@ namespace DeveloperTools
                 }
 
                 //make the command
-                var address = new StreetAddress("519", "E", "7th St", "Austin", "Texas", Country.UnitedStates.Name,
-                    "78701");
-                var email = new EmailAddress("orders@twinliquors.com");
+                var address = new StreetAddress(TxtAddressNumber.Text, TxtStreetDir.Text, TxtStreetName.Text, 
+                    TxtCity.Text, TxtState.Text, Country.UnitedStates.Name, TxtZip.Text);
+                var email = new EmailAddress(TxtEmail.Text);
 
                 var dbUri = new Uri(selItem.Value);
 

@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.ValueItems.Inventory;
-using Mise.VendorManagement.Services.Implementation;
 
 namespace Mise.VendorManagement.Services
 {
@@ -41,6 +36,6 @@ namespace Mise.VendorManagement.Services
         /// <param name="priceColumn"></param>
         /// <returns></returns>
         IEnumerable<VendorBeverageLineItem> ParseDataFile(string fileName, Guid vendorID, string itemNameColumn, string containerColumn,
-            LiquidAmountUnits containerUnit, string categoryColumn, Dictionary<string, ItemCategory> categoryMapping, string caseSizeColumn, string upcColumn, string priceColumn);
+            LiquidAmountUnits containerUnit, string categoryColumn, IDictionary<string, ItemCategory> categoryMapping, string caseSizeColumn, string upcColumn, string priceColumn);
     }
 }

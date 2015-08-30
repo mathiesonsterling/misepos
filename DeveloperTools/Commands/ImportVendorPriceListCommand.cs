@@ -60,34 +60,8 @@ namespace DeveloperTools.Commands
 
             //we need to create the new vendor
             //TODO this should come from UI at some point
-            var mappings = new Dictionary<string, ItemCategory>
-            {
-                {"absinthe/oddball".ToUpper(), CategoriesService.Unknown},
-                {"02 absinthe/oddball".ToUpper(), CategoriesService.Unknown},
-                {"agave".ToUpper(), CategoriesService.Agave},
-                {"AMARO", CategoriesService.LiquerAmaro},
-                {"american whiskey".ToUpper(), CategoriesService.WhiskeyAmerican},
-                {"bitters".ToUpper(), CategoriesService.NonAlcoholic},
-                {"brandy".ToUpper(), CategoriesService.Brandy},
-                {"fortified & aromatized".ToUpper(), CategoriesService.WineFortified},
-                {"gin".ToUpper(), CategoriesService.Gin},
-                {"02 gin".ToUpper(), CategoriesService.Gin},
-                {"LIQUEUR", CategoriesService.Liquer},
-                {"NA", CategoriesService.Unknown},
-                {"RUM", CategoriesService.Rum},
-                {"03 RUM", CategoriesService.Rum},
-                {"SCOTCH", CategoriesService.WhiskeyScotch},
-                {"VODKA", CategoriesService.Vodka},
-                { "01 VODKA", CategoriesService.Vodka},
-                {"WORLD WHISKY", CategoriesService.WhiskeyWorld},
-                { "04 MEZCAL", CategoriesService.AgaveMezcal},
-                {"04 SOTOL", CategoriesService.Agave},
-                {"04 TEQUILA", CategoriesService.AgaveTequila},
-                {"05 AMERICAN", CategoriesService.WhiskeyAmerican},
-                {"05 BOURBON", CategoriesService.WhiskeyBourbon},
-                {"05 RYE", CategoriesService.WhiskeyRye},
-                {"06 CANADIAN", CategoriesService.WhiskeyCanadian}
-            };
+            var catService = new CategoriesService();
+            var mappings = catService.GetAllKnownCategoryMappings();
 
             var vendorID = Guid.NewGuid();
             Report("Parsing file " + _fileName);
@@ -102,7 +76,7 @@ namespace DeveloperTools.Commands
             }
 
             //assign the hash to the event - we can use this later to determine if the file was already uploaded?
-            var eventID = new EventID {AppInstanceCode = MiseAppTypes.VendorDataImport, OrderingID = _fileName.GetHashCode()};
+            var eventID = new EventID {AppInstanceCode = MiseAppTypes.VendorManagement, OrderingID = _fileName.GetHashCode()};
             foreach (var li in lineItems)
             {
                 li.Revision = eventID;

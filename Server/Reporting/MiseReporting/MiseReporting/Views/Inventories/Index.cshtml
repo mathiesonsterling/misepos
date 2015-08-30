@@ -12,6 +12,9 @@
             Date Created
         </th>
         <th>
+            Date Created UTC
+        </th>
+        <th>
             Date Inventory Completed
         </th>
         <th>
@@ -27,6 +30,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DateCompleted)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCreatedUTC)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DoneByEmployee)

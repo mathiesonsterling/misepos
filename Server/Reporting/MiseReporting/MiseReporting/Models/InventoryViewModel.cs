@@ -13,6 +13,8 @@ namespace MiseReporting.Models
     {
         public DateTime? DateCompleted { get; set; }
 
+        public DateTime DateCreatedUTC { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public string DoneByEmployee { get; set; }
@@ -32,6 +34,8 @@ namespace MiseReporting.Models
             }
 
             DateCreated = source.CreatedDate.ToLocalTime().LocalDateTime;
+            DateCreatedUTC = source.CreatedDate.DateTime;
+
             Id = source.ID;
             HasLineItems = source.GetBeverageLineItems().Any();
         }
