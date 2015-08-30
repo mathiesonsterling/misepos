@@ -20,7 +20,7 @@ namespace Mise.Core.Common.Entities.Reports
         /// </summary>
         /// <param name="li"></param>
         /// <returns></returns>
-        protected static string GetListItemKey(IBaseBeverageLineItem li)
+        public static string GetListItemKey(IBaseBeverageLineItem li)
         {
             var key = li.DisplayName + "|" + li.MiseName + "|" + li.Container.DisplayName;
             return key;

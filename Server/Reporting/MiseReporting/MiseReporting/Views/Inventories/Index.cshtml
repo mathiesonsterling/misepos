@@ -37,8 +37,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.DoneByEmployee)
         </td>
-        <td> 
-            @Html.ActionLink("Get CSV file", "GenerateCsv", new {id = item.Id})
+        <td>
+            @Html.ActionLink("Get inventory by section", "GenerateRawCSV", new {id = item.Id})
+            @Html.ActionLink("Get total inventory", "GenerateAggregatedCSV", new {id = item.Id})
         </td>
     </tr>
 }

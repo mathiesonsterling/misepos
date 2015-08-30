@@ -66,31 +66,25 @@ namespace MiseReporting.Controllers
             return View(vms.OrderByDescending(vm => vm.DateCreated));
         }
 
-        private IInventory GetFromAi(AzureEntityStorage ai)
-        {
-            var dto = ai.ToRestaurantDTO();
-            var inv = _dtoFactory.FromDataStorageObject<Inventory>(dto);
-            return inv;
-        }
 
         // GET: Inventories/Details/5
-        public async Task<FileResult> GenerateCsv(Guid id)
+        public async Task<FileResult> GenerateRawCSV(Guid id)
         { 
             //get the inventory
             var invType = typeof (Inventory).ToString();
-            AzureEntityStorage invAI;
+            AzureEntityStorage invAi;
             using (var db = new AzureNonTypedEntities())
             {
-                invAI = db.AzureEntityStorages.FirstOrDefault(
+                invAi = db.AzureEntityStorages.FirstOrDefault(
                     ai =>
                         ai.MiseEntityType == invType && ai.EntityID == id);
 
             }
-            if (invAI == null)
+            if (invAi == null)
             {
                 throw new ArgumentException("No inventory of id " + id + " found");
             }
-            var inv = GetFromAi(invAI);
+            var inv = GetFromAi(invAi);
 
             if (inv.GetBeverageLineItems().Any() == false)
             {
@@ -98,11 +92,46 @@ namespace MiseReporting.Controllers
                 return null;
             }
             //transform inventory to memory stream, then to file
-            var bytes =  await _inventoryExportService.ExportInventoryToCsv(inv);
+            var bytes =  await _inventoryExportService.ExportInventoryToCsvBySection(inv);
             var outputStream = new MemoryStream(bytes);
-            return new FileStreamResult(outputStream, "text/csv") {FileDownloadName = "inventory.csv"};
+            return new FileStreamResult(outputStream, "text/csv") {FileDownloadName = "inventoryBySections.csv"};
         }
 
+        // GET: Inventories/Details/5
+        public async Task<FileResult> GenerateAggregatedCSV(Guid id)
+        {
+            //get the inventory
+            var invType = typeof(Inventory).ToString();
+            AzureEntityStorage invAi;
+            using (var db = new AzureNonTypedEntities())
+            {
+                invAi = db.AzureEntityStorages.FirstOrDefault(
+                    ai =>
+                        ai.MiseEntityType == invType && ai.EntityID == id);
 
+            }
+            if (invAi == null)
+            {
+                throw new ArgumentException("No inventory of id " + id + " found");
+            }
+            var inv = GetFromAi(invAi);
+
+            if (inv.GetBeverageLineItems().Any() == false)
+            {
+                //do nothing
+                return null;
+            }
+            //transform inventory to memory stream, then to file
+            var bytes = await _inventoryExportService.ExportInventoryToCSVAggregated(inv);
+            var outputStream = new MemoryStream(bytes);
+            return new FileStreamResult(outputStream, "text/csv") { FileDownloadName = "RestaurantInventory.csv" };
+        }
+
+        private IInventory GetFromAi(AzureEntityStorage ai)
+        {
+            var dto = ai.ToRestaurantDTO();
+            var inv = _dtoFactory.FromDataStorageObject<Inventory>(dto);
+            return inv;
+        }
     }
 }
