@@ -195,6 +195,7 @@ namespace Mise.Inventory.ViewModels
 			    }
 			} 
 			catch(UserNotFoundException unf){
+				_insightsService.ReportException (unf, LogLevel.Info);
 				if(unf.IncorrectPassword && (unf.NoEmailFound == false)){
 					result = LoginResult.BadPassword;
 				} else {
@@ -202,7 +203,7 @@ namespace Mise.Inventory.ViewModels
 				}
 			}
 			catch(WebException we){
-				_insightsService.ReportException (we, LogLevel.Warn);
+				_insightsService.ReportException (we, LogLevel.Error);
 				Logger.HandleException (we);
 				if(we.Message.Contains ("NameResolutionFailure"))
 				{
@@ -216,7 +217,7 @@ namespace Mise.Inventory.ViewModels
 			}
 
 			catch(Exception e){
-				_insightsService.ReportException (e, LogLevel.Warn);
+				_insightsService.ReportException (e, LogLevel.Error);
 				Logger.HandleException (e);
 			}
 

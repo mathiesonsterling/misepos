@@ -111,6 +111,8 @@ namespace Mise.Inventory.ViewModels
 				.ToList();
 	    }
 
+		public Action<LiquidContainerShape> UpdateShapeOnPage{get;set;}
+
 	    #region Commands
 		public ICommand MeasureCommand{get{ return new Command (MeasureEv, () => NotProcessing);
 			}}
@@ -119,11 +121,12 @@ namespace Mise.Inventory.ViewModels
 
 		public ICommand CancelCommand{get{return new Command (Cancel, () => NotProcessing);}}
 
+		public ICommand InsertNewItemAfterCommand{get{return new Command (InsertNewItemAfter, () => NotProcessing);}}
 		#endregion
 
 	    protected override async Task BeforeMove(IInventoryBeverageLineItem currentItem)
 	    {
-	        await Measure();
+	        await SaveCurrentMeasurement();
 	    }
 
 	    protected override async Task AfterMove(IInventoryBeverageLineItem newItem)
@@ -132,13 +135,28 @@ namespace Mise.Inventory.ViewModels
 	        await OnAppearing();
 	    }
 
+		async void InsertNewItemAfter(){
+			//get the current position
+			try{
+				//save the current
+				await SaveCurrentMeasurement ();
+				var nextIndex = await _inventoryService.GetInventoryPositionAfterCurrentItem ();
+				App.ItemAddViewModel.AddAtPosition = nextIndex;
+				App.ItemFindViewModel.AddAtPosition = nextIndex;
+
+				await Navigation.ShowInventoryItemFind ();
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+
 		async void MeasureEv(){
-			await Measure();
+			await SaveCurrentMeasurement();
 			//we have to load here, otherwise the values won't update
 			await Navigation.CloseInventoryVisuallyMeasureItem ();
 		}
 
-		async Task Measure(){
+		async Task SaveCurrentMeasurement(){
 			try{
 				//if we have partials, add em
 				AddPartial ();
@@ -193,6 +211,9 @@ namespace Mise.Inventory.ViewModels
 			    else
 			    {
 			        SetCurrent(item);
+					if(UpdateShapeOnPage != null){
+						UpdateShapeOnPage(item.Shape);
+					}
 			    }
 			} catch(Exception e){
 				HandleException (e);

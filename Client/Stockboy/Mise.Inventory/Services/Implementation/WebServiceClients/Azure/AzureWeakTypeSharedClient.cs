@@ -221,7 +221,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<IEnumerable<Vendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
 		{
-
 		    var table = GetEntityTable();
 
 			var vendType = typeof(Vendor).ToString ();
@@ -236,11 +235,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			var ais = await table
 				.Where (si => si.MiseEntityType == vendType)
-				.ToEnumerableAsync ();
+				.ToCollectionAsync ();
 
 			//todo figure out a better way to do this on the server
 			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
-				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto));
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto))
+				.ToList();
 
 			return vendors;
 				/*.Where(v => v.StreetAddress != null && v.StreetAddress.StreetAddressNumber != null)

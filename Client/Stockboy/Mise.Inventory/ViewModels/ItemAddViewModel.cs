@@ -6,11 +6,8 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems.Inventory;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 using Mise.Core;
 using Mise.Core.Entities.Inventory;
-using Mise.Core.Services;
-using Mise.Core.Common;
 using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
@@ -80,6 +77,8 @@ namespace Mise.Inventory.ViewModels
 			set{ SetValue (value); }
 		}
 
+		public int? AddAtPosition{ get { return GetValue<int?> (); } set { SetValue (value); } }
+
 		/// <summary>
 		/// If set, we wish to create a par item for this as well
 		/// </summary>
@@ -125,12 +124,11 @@ namespace Mise.Inventory.ViewModels
 				//add it, then return based on that!
 				switch(CurrentAddType){
 					case AddLineItemType.Inventory:
-					var invItem = await _inventoryService.AddLineItemToCurrentInventory (Name, category, null, 0, CaseSize, 
-						container);
+					var invItem = await _inventoryService.AddLineItemToCurrentInventory (Name, category, null, 0, CaseSize,
+						container, AddAtPosition);
 					if(ParNumber > 0 && invItem != null){
 						await _parService.AddLineItemToCurrentPAR (invItem, ParNumber);
 					}
-						//TODO - go straight to measurement
 						break;
 					case AddLineItemType.ReceivingOrder:
 						var roItem = await _roService.AddLineItemToCurrentReceivingOrder (Name, category, null, 0, CaseSize, 
@@ -148,6 +146,7 @@ namespace Mise.Inventory.ViewModels
 						throw new ArgumentException ("Error, type of item to add has not been set");
 				}
 				Processing = false;
+				AddAtPosition = null;
 				await Navigation.CloseItemAdd ();
 			} catch(Exception e){
 				HandleException (e);
@@ -167,18 +166,6 @@ namespace Mise.Inventory.ViewModels
 				.OrderByDescending (s => s.ToUpper () == "NONE")
 				.ThenBy (s => s);
 			//arrange the names how?
-			/*
-			var baseCats = PossibleCategories
-				.OrderByDescending (c => c.ID == CategoriesService.Unknown.ID)
-				.ThenBy (c => c.Name);
-			foreach(var baseCat in baseCats){
-				names.Add (baseCat.Name);
-				var subCats = PossibleCategories
-					.Where (c => c.ParentCategoryID.HasValue && c.ParentCategoryID.Value == baseCat.ID)
-					.OrderBy (c => c.Name)
-					.Select (c => c.Name);
-				names.AddRange (subCats);
-			}*/
 
 			PossibleCategoryNames = names;
 		}

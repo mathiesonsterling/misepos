@@ -52,7 +52,11 @@ namespace Mise.Core.Common.Entities.Inventory
 	    {
 			//we'll do BASIC style line numbers, so we can get lots of reorders without having to get to 
 			//n2 perf
-			return (LineItems.Count + 1) * 10;
+			if(LineItems.Any()){
+				var currMax = LineItems.Max (li => li.InventoryPosition);
+				return currMax + 10;
+			}
+			return 10;
 	    }
 
 	    public ICloneableEntity Clone()

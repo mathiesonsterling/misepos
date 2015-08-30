@@ -8,6 +8,7 @@ namespace Mise.Inventory.Pages
 {
 	public partial class VendorFindPage : ContentPage
 	{
+		private ListView _lv;
 		public VendorFindPage()
 		{
 			InitializeComponent();
@@ -30,24 +31,25 @@ namespace Mise.Inventory.Pages
 
 		public void LoadItems(){
 			var vm = BindingContext as VendorFindViewModel;
-			stckVendors.Children.Clear ();
 			var template = new DataTemplate (typeof(TextCell));
 			template.SetBinding (TextCell.TextProperty, "Name");
 			template.SetBinding (TextCell.DetailProperty, "Detail");
-			var lv = new ListView {
-				ItemsSource = vm.LineItems,
-				ItemTemplate = template,
-				HorizontalOptions = LayoutOptions.FillAndExpand
-			};
+			if (_lv == null) {
+				_lv = new ListView {
+					ItemTemplate = template,
+					HorizontalOptions = LayoutOptions.FillAndExpand
+				};
 
-			lv.ItemTapped += async (sender, e) => {
-				var selectedVendor = e.Item as IVendor;
-				((ListView)sender).SelectedItem = null;
-				if(selectedVendor != null){
-					await vm.SelectLineItem (selectedVendor);
-				}
-			};
-			stckVendors.Children.Add (lv);
+				_lv.ItemTapped += async (sender, e) => {
+					var selectedVendor = e.Item as IVendor;
+					((ListView)sender).SelectedItem = null;
+					if (selectedVendor != null) {
+						await vm.SelectLineItem (selectedVendor);
+					}
+				};
+				stckVendors.Children.Add (_lv);
+			}
+			_lv.ItemsSource = vm.LineItems;
 		}
 	}
 }

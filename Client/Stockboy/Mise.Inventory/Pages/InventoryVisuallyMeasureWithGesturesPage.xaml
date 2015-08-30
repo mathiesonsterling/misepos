@@ -46,8 +46,13 @@
 				 HorizontalOptions="FillAndExpand"
 				 IsVisible = "{Binding CanMoveToNext}"
 		    />
-			<Button Command="{Binding MeasureCommand}" Text="Measure" 
+		    <Button Command="{Binding MeasureCommand}" Text="Save and return to list" 
 				HorizontalOptions="FillAndExpand"/>
+		    <Button
+		    	Command="{Binding InsertNewItemAfterCommand}"
+		    	Text="Insert item"
+		    	HorizontalOptions="FillAndExpand"
+		    />
 		</mr:StackLayout>
 		</ScrollView>
 	</ContentPage.Content>

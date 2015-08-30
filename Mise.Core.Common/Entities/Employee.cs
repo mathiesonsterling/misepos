@@ -36,9 +36,9 @@ namespace Mise.Core.Common.Entities
                 CanCompAmount = CanCompAmount,
                 PreferredColorName = PreferredColorName,
                 EmployeeIconUri = EmployeeIconUri,
+				OAuthToken = OAuthToken
             });
-
-			//TODO do a full copy here
+						
 			newItem.RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>();
 			foreach(var rest in RestaurantsAndAppsAllowed){
 				newItem.RestaurantsAndAppsAllowed [rest.Key] = new List<MiseAppTypes> (rest.Value);
@@ -98,6 +98,11 @@ namespace Mise.Core.Common.Entities
 		/// </summary>
 		/// <value>The password hash.</value>
 		public Password Password {
+			get;
+			set;
+		}
+
+		public OAuthToken OAuthToken {
 			get;
 			set;
 		}
@@ -246,7 +251,7 @@ namespace Mise.Core.Common.Entities
 			PrimaryEmail = ecEV.Email;
 			Revision = ecEV.EventOrderingID;
 			Password = ecEV.Password;
-
+			OAuthToken = ecEV.OAuthToken;
 	        //RestaurantsAndAppsAllowed[ecEV.RestaurantID] = new[] {ecEV.AppType};
 		}			
 

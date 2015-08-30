@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mise.Core.Entities;
-using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Common.Entities.Inventory;
 namespace Mise.Core.Common.Events.Inventory
