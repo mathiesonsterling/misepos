@@ -94,8 +94,11 @@ namespace MiseReporting.Controllers
             }
             var inventory = GetFromAi(invAi);
 
-            var vms = inventory.GetBeverageLineItems().Select(li => new InventoryLineItemViewModel(li));
-
+            var vms = new List<InventoryLineItemViewModel>();
+            foreach (var sec in inventory.GetSections().OrderBy(s => s.Name))
+            {
+                vms.AddRange(sec.GetInventoryBeverageLineItemsInSection().OrderBy(li => li.DisplayName).Select(li => new InventoryLineItemViewModel(sec.Name, li)));
+            }
             return View(vms);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,16 @@ namespace MiseReporting.Models
 {
     public class InventoryLineItemViewModel : BaseBeverageLineItemViewModel
     {
+        [DisplayName("Section")]
+        public string SectionName { get; set; }
+
+        [DisplayName("Total in Bottles")]
         public decimal Total { get; set; }
+
+        [DisplayName("Number Full")]
         public decimal FullBottles { get; set; }
+
+        [DisplayName("Number Partial")]
         public decimal PartialBottles { get; set; }
 
         public InventoryLineItemViewModel()
@@ -18,8 +27,9 @@ namespace MiseReporting.Models
             
         }
 
-        public InventoryLineItemViewModel(IInventoryBeverageLineItem li) : base(li)
+        public InventoryLineItemViewModel(string sectionName, IInventoryBeverageLineItem li) : base(li)
         {
+            SectionName = sectionName;
             Total = li.Quantity;
             FullBottles = li.NumFullBottles;
             PartialBottles = li.NumPartialBottles;
