@@ -21,7 +21,7 @@
             Employee who started
         </th>
         <th>
-            Export
+            Export CSV
         </th>
     </tr>
 
@@ -40,8 +40,9 @@
             @Html.DisplayFor(modelItem => item.DoneByEmployee)
         </td>
         <td>
-            @Html.ActionLink("CSV By section", "GenerateRawCSV", new {id = item.Id})
-            @Html.ActionLink("CSV Total inventory", "GenerateAggregatedCSV", new {id = item.Id})
+            @Html.ActionLink("By section", "GenerateRawCSV", new {id = item.Id})
+            &#124;
+            @Html.ActionLink("Total inventory", "GenerateAggregatedCSV", new {id = item.Id})
         </td>
     </tr>
 }
