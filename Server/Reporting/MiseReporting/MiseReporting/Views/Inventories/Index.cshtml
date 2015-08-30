@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MiseReporting.Models.InventoryViewModel>
+﻿@model MiseReporting.Models.RestaurantViewModel
 
 @{
     ViewBag.Title = "Inventories";
 }
 
-<h2>Inventories</h2>
+<h2>Inventories for @Model.Name</h2>
 
 <table class="table">
     <tr>
@@ -12,10 +12,10 @@
             Date Created
         </th>
         <th>
-            Date Created UTC
+            Date Inventory Completed
         </th>
         <th>
-            Date Inventory Completed
+            Number of items
         </th>
         <th>
             Employee who started
@@ -23,7 +23,7 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Inventories) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.DateCreated)
@@ -32,7 +32,7 @@
             @Html.DisplayFor(modelItem => item.DateCompleted)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DateCreatedUTC)
+            @Html.DisplayFor(modelItem => item.NumLineItems)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DoneByEmployee)

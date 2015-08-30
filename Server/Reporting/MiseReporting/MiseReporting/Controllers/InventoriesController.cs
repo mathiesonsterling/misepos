@@ -31,7 +31,7 @@ namespace MiseReporting.Controllers
         // GET: Inventories
         public ActionResult Index(Guid restaurantId)
         {
-            var vms = new List<InventoryViewModel>();
+            RestaurantViewModel vm = null;
             using (var db = new AzureNonTypedEntities())
             {
                 var invType = typeof (Inventory).ToString();
@@ -46,24 +46,38 @@ namespace MiseReporting.Controllers
                 var empType = typeof (Employee).ToString();
                 //get the emp
 
+                var vms = new List<InventoryViewModel>();
                 foreach (var inv in invs)
                 {
                     IEmployee emp = null;
-                    var empAI =
+                    var empAi =
                         db.AzureEntityStorages
                             .FirstOrDefault(ai => ai.MiseEntityType == empType && ai.EntityID == inv.CreatedByEmployeeID);
 
-                    if (empAI != null)
+                    if (empAi != null)
                     {
-                        var empDTO = empAI.ToRestaurantDTO();
+                        var empDTO = empAi.ToRestaurantDTO();
                         emp = _dtoFactory.FromDataStorageObject<Employee>(empDTO);
                     }
 
                     vms.Add(new InventoryViewModel(inv, emp));
                 }
+
+                var restType = typeof(Restaurant).ToString();
+                var restAi =
+                    db.AzureEntityStorages
+                        .FirstOrDefault(ai => ai.EntityID == restaurantId && ai.MiseEntityType == restType);
+
+                if (restAi == null)
+                {
+                    throw new ArgumentException("Error, cannot find restaurant " + restaurantId);
+                }
+
+                var rest = _dtoFactory.FromDataStorageObject<Restaurant>(restAi.ToRestaurantDTO());
+                vm = new RestaurantViewModel(rest, vms.OrderByDescending(inv => inv.DateCreated));
             }
 
-            return View(vms.OrderByDescending(vm => vm.DateCreated));
+            return View(vm);
         }
 
 

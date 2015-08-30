@@ -57,7 +57,7 @@ namespace Mise.VendorManagement.Services.Implementation
                         {
                             foreach (var section in inventory.GetSections())
                             {
-                                foreach (var li in section.GetInventoryBeverageLineItemsInSection())
+                                foreach (var li in section.GetInventoryBeverageLineItemsInSection().OrderBy(li => li.DisplayName))
                                 {
                                     csv.WriteField(section.Name);
                                     WriteLineItem(csv, li, li.Quantity);
@@ -106,7 +106,7 @@ namespace Mise.VendorManagement.Services.Implementation
                     using (var csv = new CsvWriter(streamWriter))
                     {
 
-                            foreach (var li in itemDic.Values)
+                            foreach (var li in itemDic.Values.OrderBy(t => t.Item1.DisplayName))
                             {
                                 WriteLineItem(csv, li.Item1, li.Item2);
                             }

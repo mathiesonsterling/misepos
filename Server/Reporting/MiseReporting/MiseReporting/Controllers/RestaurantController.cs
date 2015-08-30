@@ -32,7 +32,7 @@ namespace MiseReporting.Controllers
                 viewModels.AddRange(vms);
             }
 
-            return View(viewModels);
+            return View(viewModels.OrderBy(r => r.Name));
         }
 
         // GET: Restaurant/Details/5

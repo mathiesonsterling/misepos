@@ -20,7 +20,9 @@ namespace MiseReporting.Models
         public string DoneByEmployee { get; set; }
         public Guid Id { get; set; }
 
-        public bool HasLineItems { get; set; }
+        public bool HasLineItems => NumLineItems > 0;
+
+        public int NumLineItems { get; set; }
 
         public InventoryViewModel() { }
 
@@ -37,7 +39,7 @@ namespace MiseReporting.Models
             DateCreatedUTC = source.CreatedDate.DateTime;
 
             Id = source.ID;
-            HasLineItems = source.GetBeverageLineItems().Any();
+            NumLineItems = source.GetBeverageLineItems().Count();
         }
     }
 }
