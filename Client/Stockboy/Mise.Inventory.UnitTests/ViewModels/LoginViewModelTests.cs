@@ -86,8 +86,6 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			var navigationService = new Mock<IAppNavigation> ();
 			navigationService.Setup (ns => ns.ShowMainMenu())
 				.Returns (Task.FromResult(true));
-			navigationService.Setup (ns => ns.DisplayAlert ("Login Error", "Incorrect login information", "OK"))
-				.Returns (Task.FromResult(true));
 
 			var logger = new Mock<ILogger> ();
 		    var insights = new Mock<IInsightsService>();
@@ -104,7 +102,6 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			//ASSERT
 			loginService.Verify (ls => ls.LoginAsync (It.IsAny<EmailAddress> (), It.IsAny<Password> ()), Times.Once ());
 			navigationService.Verify (ns => ns.ShowMainMenu(), Times.Never (), "didnt go to main menu");
-			navigationService.Verify (ns => ns.DisplayAlert ("Login Error", "Incorrect login information", "OK"), Times.Once());
 		}
 
 		[Test]

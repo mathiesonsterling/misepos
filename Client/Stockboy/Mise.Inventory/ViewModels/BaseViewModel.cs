@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using Mise.Core.Services.UtilityServices;
 using Xamarin.Forms;
 using Mise.Inventory.Services;
-using Mise.Core.Services;
-using ServiceStack.Messaging;
-
+using Mise.Inventory.ViewModels.Modals;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -31,11 +29,26 @@ namespace Mise.Inventory.ViewModels
 			HandleException (e, e.Message);
 		}
 
+		public Func<ErrorMessage, Task> DisplayMessage{ private get; set;}
+		public Func<UserQuestion, Task<bool>> AskUserQuestion{ private get; set;} 
+
+		protected Task DisplayMessageModal(string title, string message){
+			if(DisplayMessage == null){
+				throw new InvalidOperationException ("Page does not have a DisplayMessage function!");
+			}
+			return DisplayMessage (new ErrorMessage (title, message));
+		}
+
+		protected Task<bool> AskUserQuestionModal(string title, string message, string yes = "OK", string no = "Cancel"){
+			if(AskUserQuestion == null){
+				throw new InvalidOperationException ("Page does not hae a AskUserQuestion function!");
+			}	
+			return AskUserQuestion (new UserQuestion (title, message, yes, no));
+		}
+
 		protected void HandleException(Exception e, string message){
 			Processing = false;
-			if(Navigation != null){
-				Navigation.DisplayErrorMessage (message);
-			}
+			DisplayMessageModal ("Error", e.Message);
 
 			if(Logger != null){
 				Logger.HandleException (e);
@@ -96,6 +109,7 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		/// <param name="propertyName">The name of the property for which you're
 		/// trying to get the value of.</param>
+		/// <param name = "defaultValue"></param>
 		/// <param name="propertyName">The name of the property (note this is case sensitive)
 		/// for which you're trying to get the value of</param>
 		T GetValue<T>(string propertyName, T defaultValue)

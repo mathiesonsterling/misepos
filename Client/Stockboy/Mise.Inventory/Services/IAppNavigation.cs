@@ -6,20 +6,7 @@ namespace Mise.Inventory.Services
 {
 	public interface IAppNavigation
 	{
-        Task DisplayAlert(
-            string title,
-            string message,
-            string accept = "OK"
-        );
-
-		Task<bool> AskUser (string title, string message, string accept = "OK", string cancel = "Cancel");
-
 		Pages DefaultPage{ get; }
-
-		/// <summary>
-		/// Allows view models to pass exceptions for possible display
-		/// </summary>
-		void DisplayErrorMessage (string message);
 
 		Task ShowMainMenu();
 
@@ -36,7 +23,7 @@ namespace Mise.Inventory.Services
 		/// <returns>The inventory visually measure item.</returns>
 		Task CloseInventoryVisuallyMeasureItem();
 
-		Task ShowPAR(bool replaceCurrentPage = false);
+		Task ShowPAR();
 
 		/// <summary>
 		/// Invites page
@@ -66,7 +53,7 @@ namespace Mise.Inventory.Services
 		Task ShowVendorFind();
 
 		Task ShowSectionAdd();
-		Task ShowSectionSelect(bool replaceCurrentPage = false);
+		Task ShowSectionSelect();
 
 		Task ShowSelectRestaurant();
 

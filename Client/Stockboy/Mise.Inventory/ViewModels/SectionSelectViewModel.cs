@@ -110,8 +110,7 @@ namespace Mise.Inventory.ViewModels
                 if (lineItem.Completed && lineItem.LastCompletedBy != emp.ID)
                 {
                     var userResponse =
-                        await
-                            Navigation.AskUser("Already counted!",
+                        await AskUserQuestionModal ("Already counted!",
                                 string.Format("This section has been completed by someone else.  Do you want to continue, and discard their count for {0}?", lineItem.Name));
                     if (userResponse == false)
                     {
