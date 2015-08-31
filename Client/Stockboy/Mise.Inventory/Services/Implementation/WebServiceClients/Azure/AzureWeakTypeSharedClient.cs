@@ -484,6 +484,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				_needsSynch = true;
 				return false;
 			}
+
+			//https://codemilltech.com/why-cant-we-be-friends-conflict-resolution-in-azure-mobile-services/
 		}
 
 		private async Task AttemptPull(string queryName, IMobileServiceTableQuery<AzureEntityStorage> query){
