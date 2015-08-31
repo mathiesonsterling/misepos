@@ -68,7 +68,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public Task<bool> SynchWithServer ()
 		{
-			return AttemptPush ();
+			try{
+				return AttemptPush ();
+			} catch(Exception e){
+				_logger.HandleException (e);
+				return Task.FromResult (false);
+			}
 			//TODO do we need to pull tables as well?
 		}
 
