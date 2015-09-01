@@ -15,6 +15,7 @@ namespace MiseReporting.Models
 
         public IEnumerable<ParViewModel> Pars { get; private set; }
 
+        public IEnumerable<ReceivingOrderViewModel> ReceivingOrders { get; private set; } 
 
         public RestaurantViewModel()
         {
@@ -41,6 +42,11 @@ namespace MiseReporting.Models
         public RestaurantViewModel(IRestaurant rest, IEnumerable<ParViewModel> pars) : this(rest)
         {
             Pars = pars;
+        }
+
+        public RestaurantViewModel(IRestaurant rest, IEnumerable<ReceivingOrderViewModel> ros) : this(rest)
+        {
+            ReceivingOrders = ros;
         }
     }
 }
