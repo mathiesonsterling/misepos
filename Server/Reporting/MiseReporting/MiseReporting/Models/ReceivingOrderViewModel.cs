@@ -25,11 +25,15 @@ namespace MiseReporting.Models
 
         public int NumLineItems { get; set; }
 
+        public string InvoiceId { get; set;}
+
         public ReceivingOrderViewModel(IReceivingOrder ro, IVendor vendor, IEmployee emp)
         {
             Id = ro.ID;
             DateCreated = ro.CreatedDate.ToLocalTime().DateTime;
             LastUpdated = ro.CreatedDate.ToLocalTime().DateTime;
+            InvoiceId = ro.InvoiceID;
+
             if (vendor != null)
             {
                 VendorName = vendor.Name;

@@ -17,6 +17,8 @@ namespace MiseReporting.Models
 
         public IEnumerable<ReceivingOrderViewModel> ReceivingOrders { get; private set; } 
 
+        public IEnumerable<PurchaseOrderViewModel> PurchaseOrders { get; private set; }
+         
         public RestaurantViewModel()
         {
         }
@@ -47,6 +49,11 @@ namespace MiseReporting.Models
         public RestaurantViewModel(IRestaurant rest, IEnumerable<ReceivingOrderViewModel> ros) : this(rest)
         {
             ReceivingOrders = ros;
+        }
+
+        public RestaurantViewModel(IRestaurant rest, IEnumerable<PurchaseOrderViewModel> pos) : this(rest)
+        {
+            PurchaseOrders = pos;
         }
     }
 }

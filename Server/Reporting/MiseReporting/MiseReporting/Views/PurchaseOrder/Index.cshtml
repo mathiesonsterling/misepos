@@ -1,11 +1,10 @@
 ﻿@model MiseReporting.Models.RestaurantViewModel
 
 @{
-    ViewBag.Title = "Receiving Orders";
+    ViewBag.Title = "Purchase Orders";
 }
 
-<h2>Receiving Orders for @Model.Name</h2>
-
+<h2>Purchase Orders for @Model.Name</h2>
 <!--
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -19,20 +18,24 @@
             Last Updated
         </th>
         <th>
-            Received By
+            Vendor
         </th>
         <th>
-            From Vendor
+            Created By
         </th>
         <th>
             Number of Items
         </th>
-        <th>Invoice ID</th>
+        <th>
+            Status
+        </th>
+        <th>
+            Receiving Order
+        </th>
         <th></th>
-        <th>Export</th>
     </tr>
 
-@foreach (var item in Model.ReceivingOrders) {
+@foreach (var item in Model.PurchaseOrders) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.DateCreated)
@@ -41,25 +44,24 @@
             @Html.DisplayFor(modelItem => item.LastUpdated)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ReceivedByEmployee)
+            @Html.DisplayFor(modelItem => item.VendorName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.VendorName)
+            @Html.DisplayFor(modelItem => item.EmployeeName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.NumLineItems)
         </td>
         <td>
-           @item.InvoiceId
-        </td>
-
-        <td>
-            <!-- @Html.ActionLink("Edit", "Edit", new {id = item.Id}) | -->
-            @Html.ActionLink("Line Items", "Details", new {id = item.Id})
-            <!-- @Html.ActionLink("Delete", "Delete", new {id = item.Id}) -->
+            @Html.DisplayFor(modelItem => item.Status)
         </td>
         <td>
-            @Html.ActionLink("CSV", "GenerateCSV", new {roId = @item.Id})
+            @Html.DisplayFor(modelItem => item.LinkedReceivingOrderId)
+        </td>
+        <td>
+           <!-- @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |-->
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) 
+           <!-- @Html.ActionLink("Delete", "Delete", new { id=item.Id }) -->
         </td>
     </tr>
 }

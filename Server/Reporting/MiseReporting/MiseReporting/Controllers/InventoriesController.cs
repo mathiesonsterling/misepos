@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,17 +29,17 @@ namespace MiseReporting.Controllers
         }
 
         // GET: Inventories
-        public ActionResult Index(Guid restaurantId)
+        public async Task<ActionResult> Index(Guid restaurantId)
         {
             RestaurantViewModel vm;
             using (var db = new AzureNonTypedEntities())
             {
                 var invType = typeof (Inventory).ToString();
-                var invAIs =
+                var invAIs = await
                     db.AzureEntityStorages.Where(
                         ai =>
                             ai.MiseEntityType == invType && ai.RestaurantID.HasValue &&
-                            ai.RestaurantID.Value == restaurantId).ToList();
+                            ai.RestaurantID.Value == restaurantId).ToListAsync();
 
                 var invs = invAIs.Select(GetFromAi);
 
@@ -49,9 +50,9 @@ namespace MiseReporting.Controllers
                 foreach (var inv in invs)
                 {
                     IEmployee emp = null;
-                    var empAi =
+                    var empAi = await
                         db.AzureEntityStorages
-                            .FirstOrDefault(ai => ai.MiseEntityType == empType && ai.EntityID == inv.CreatedByEmployeeID);
+                            .FirstOrDefaultAsync(ai => ai.MiseEntityType == empType && ai.EntityID == inv.CreatedByEmployeeID);
 
                     if (empAi != null)
                     {
@@ -63,9 +64,9 @@ namespace MiseReporting.Controllers
                 }
 
                 var restType = typeof(Restaurant).ToString();
-                var restAi =
+                var restAi = await
                     db.AzureEntityStorages
-                        .FirstOrDefault(ai => ai.EntityID == restaurantId && ai.MiseEntityType == restType);
+                        .FirstOrDefaultAsync(ai => ai.EntityID == restaurantId && ai.MiseEntityType == restType);
 
                 if (restAi == null)
                 {
@@ -79,13 +80,13 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
-        public ActionResult Details(Guid inventoryId)
+        public async Task<ActionResult> Details(Guid inventoryId)
         {
             var invType = typeof(Inventory).ToString();
             AzureEntityStorage invAi;
             using (var db = new AzureNonTypedEntities())
             {
-                invAi = db.AzureEntityStorages.FirstOrDefault(ai => ai.EntityID == inventoryId && ai.MiseEntityType == invType);
+                invAi = await db.AzureEntityStorages.FirstOrDefaultAsync(ai => ai.EntityID == inventoryId && ai.MiseEntityType == invType);
 
             }
             if (invAi == null)
@@ -110,7 +111,7 @@ namespace MiseReporting.Controllers
             AzureEntityStorage invAi;
             using (var db = new AzureNonTypedEntities())
             {
-                invAi = db.AzureEntityStorages.FirstOrDefault(
+                invAi = await db.AzureEntityStorages.FirstOrDefaultAsync(
                     ai =>
                         ai.MiseEntityType == invType && ai.EntityID == id);
 
@@ -140,7 +141,7 @@ namespace MiseReporting.Controllers
             AzureEntityStorage invAi;
             using (var db = new AzureNonTypedEntities())
             {
-                invAi = db.AzureEntityStorages.FirstOrDefault(
+                invAi = await db.AzureEntityStorages.FirstOrDefaultAsync(
                     ai =>
                         ai.MiseEntityType == invType && ai.EntityID == id);
 

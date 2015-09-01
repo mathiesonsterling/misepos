@@ -178,6 +178,7 @@
     <Compile Include="Controllers\InventoriesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ParsController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\ReceivingOrderController.cs" />
     <Compile Include="Controllers\RestaurantController.cs" />
     <Compile Include="Global.asax.cs">
@@ -191,6 +192,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ParLineItemViewModel.cs" />
     <Compile Include="Models\ParViewModel.cs" />
+    <Compile Include="Models\PurchaseOrderViewModel.cs" />
     <Compile Include="Models\ReceivingOrderLineItemViewModel.cs" />
     <Compile Include="Models\ReceivingOrderViewModel.cs" />
     <Compile Include="Models\RestaurantViewModel.cs" />
@@ -261,6 +263,7 @@
     <Content Include="Views\Inventories\Details.cshtml" />
     <Content Include="Views\ReceivingOrder\Index.cshtml" />
     <Content Include="Views\ReceivingOrder\Details.cshtml" />
+    <Content Include="Views\PurchaseOrder\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

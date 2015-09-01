@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.DTOs;
@@ -32,17 +32,29 @@ namespace MiseReporting.Controllers
         }
 
         // GET: ReceivingOrder
-        public ActionResult Index(Guid restaurantId)
+        public async Task<ActionResult> Index(Guid restaurantId)
         {
             RestaurantViewModel vm;
             using (var db = new AzureNonTypedEntities())
             {
+                var restType = typeof(Restaurant).ToString();
+                var restAi = await
+                    db.AzureEntityStorages
+                        .FirstOrDefaultAsync(ai => ai.EntityID == restaurantId && ai.MiseEntityType == restType);
+
+                if (restAi == null)
+                {
+                    throw new ArgumentException("Error, cannot find restaurant " + restaurantId);
+                }
+
+                var rest = _dtoFactory.FromDataStorageObject<Restaurant>(restAi.ToRestaurantDTO());
+
                 var roType = typeof(ReceivingOrder).ToString();
-                var parAIs =
+                var parAIs = await
                     db.AzureEntityStorages.Where(
                         ai =>
                             ai.MiseEntityType == roType && ai.RestaurantID.HasValue &&
-                            ai.RestaurantID.Value == restaurantId).ToList();
+                            ai.RestaurantID.Value == restaurantId).ToListAsync();
 
                 var ros = parAIs.Select(GetFromAi);
 
@@ -52,9 +64,9 @@ namespace MiseReporting.Controllers
                 foreach (var ro in ros)
                 {
                     IEmployee emp = null;
-                    var empAi =
+                    var empAi = await
                         db.AzureEntityStorages
-                            .FirstOrDefault(ai => ai.MiseEntityType == empType && ai.EntityID == ro.ReceivedByEmployeeID);
+                            .FirstOrDefaultAsync(ai => ai.MiseEntityType == empType && ai.EntityID == ro.ReceivedByEmployeeID);
 
                     if (empAi != null)
                     {
@@ -62,21 +74,10 @@ namespace MiseReporting.Controllers
                         emp = _dtoFactory.FromDataStorageObject<Employee>(empDTO);
                     }
 
-                    var vendor = GetVendorForRo(db, ro);
+                    var vendor = await GetVendorForRo(db, ro);
                     vms.Add(new ReceivingOrderViewModel(ro, vendor, emp));
                 }
 
-                var restType = typeof(Restaurant).ToString();
-                var restAi =
-                    db.AzureEntityStorages
-                        .FirstOrDefault(ai => ai.EntityID == restaurantId && ai.MiseEntityType == restType);
-
-                if (restAi == null)
-                {
-                    throw new ArgumentException("Error, cannot find restaurant " + restaurantId);
-                }
-
-                var rest = _dtoFactory.FromDataStorageObject<Restaurant>(restAi.ToRestaurantDTO());
                 vm = new RestaurantViewModel(rest, vms.OrderByDescending(inv => inv.DateCreated));
             }
 
@@ -84,13 +85,13 @@ namespace MiseReporting.Controllers
         }
 
         // GET: ReceivingOrder/Details/5
-        public ActionResult Details(Guid id)
+        public async Task<ActionResult> Details(Guid id)
         {
             var roType = typeof(ReceivingOrder).ToString();
             AzureEntityStorage roAi;
             using (var db = new AzureNonTypedEntities())
             {
-                roAi = db.AzureEntityStorages.FirstOrDefault(ai => ai.EntityID == id && ai.MiseEntityType == roType);
+                roAi = await db.AzureEntityStorages.FirstOrDefaultAsync(ai => ai.EntityID == id && ai.MiseEntityType == roType);
             }
             if (roAi == null)
             {
@@ -110,7 +111,7 @@ namespace MiseReporting.Controllers
             AzureEntityStorage roAi;
             using (var db = new AzureNonTypedEntities())
             {
-                roAi = db.AzureEntityStorages.FirstOrDefault(
+                roAi = await db.AzureEntityStorages.FirstOrDefaultAsync(
                     ai =>
                         ai.MiseEntityType == roType && ai.EntityID == roId);
             }
@@ -129,7 +130,7 @@ namespace MiseReporting.Controllers
             var fileName = "ReceivingOrder.csv";
             using (var db = new AzureNonTypedEntities())
             {
-                var vendor = GetVendorForRo(db, ro);
+                var vendor = await GetVendorForRo(db, ro);
                 if (vendor != null)
                 {
                     fileName = vendor.Name + ".csv";
@@ -149,12 +150,12 @@ namespace MiseReporting.Controllers
             return ro;
         }
 
-        private IVendor GetVendorForRo(AzureNonTypedEntities db, IReceivingOrder ro)
+        private async Task<IVendor> GetVendorForRo(AzureNonTypedEntities db, IReceivingOrder ro)
         {
             var vendType = typeof(Vendor).ToString();
             IVendor vendor = null;
-            var vendAi =
-                db.AzureEntityStorages.FirstOrDefault(
+            var vendAi = await
+                db.AzureEntityStorages.FirstOrDefaultAsync(
                     ai => ai.MiseEntityType == vendType && ai.EntityID == ro.VendorID);
             if (vendAi != null)
             {
