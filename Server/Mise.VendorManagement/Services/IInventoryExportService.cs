@@ -25,5 +25,7 @@ namespace Mise.VendorManagement.Services
         Task<byte[]> ExportInventoryToCSVAggregated(IInventory inventory);
 
         Task<byte[]> ExportParToCSV(IPar par);
+
+        Task<byte[]> ExportReceivingOrderToCSV(IReceivingOrder ro);
     }
 }

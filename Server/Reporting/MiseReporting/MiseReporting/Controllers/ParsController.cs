@@ -111,13 +111,13 @@ namespace MiseReporting.Controllers
         public async Task<FileResult> GenerateCSV(Guid parId)
         {
             //get the inventory
-            var invType = typeof(Par).ToString();
+            var parType = typeof(Par).ToString();
             AzureEntityStorage parAi;
             using (var db = new AzureNonTypedEntities())
             {
                 parAi = db.AzureEntityStorages.FirstOrDefault(
                     ai =>
-                        ai.MiseEntityType == invType && ai.EntityID == parId);
+                        ai.MiseEntityType == parType && ai.EntityID == parId);
 
             }
             if (parAi == null)

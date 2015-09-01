@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities;
@@ -45,7 +47,6 @@ namespace MiseReporting.Controllers
                 var ros = parAIs.Select(GetFromAi);
 
                 var empType = typeof(Employee).ToString();
-                var vendType = typeof (Vendor).ToString();
 
                 var vms = new List<ReceivingOrderViewModel>();
                 foreach (var ro in ros)
@@ -61,14 +62,7 @@ namespace MiseReporting.Controllers
                         emp = _dtoFactory.FromDataStorageObject<Employee>(empDTO);
                     }
 
-                    IVendor vendor = null;
-                    var vendAi =
-                        db.AzureEntityStorages.FirstOrDefault(
-                            ai => ai.MiseEntityType == vendType && ai.EntityID == ro.VendorID);
-                    if (vendAi != null)
-                    {
-                        vendor = _dtoFactory.FromDataStorageObject<Vendor>(vendAi.ToRestaurantDTO());
-                    }
+                    var vendor = GetVendorForRo(db, ro);
                     vms.Add(new ReceivingOrderViewModel(ro, vendor, emp));
                 }
 
@@ -109,12 +103,64 @@ namespace MiseReporting.Controllers
             return View(vms);
         }
 
+        public async Task<FileResult> GenerateCSV(Guid roId)
+        {
+            //get the inventory
+            var roType = typeof(ReceivingOrder).ToString();
+            AzureEntityStorage roAi;
+            using (var db = new AzureNonTypedEntities())
+            {
+                roAi = db.AzureEntityStorages.FirstOrDefault(
+                    ai =>
+                        ai.MiseEntityType == roType && ai.EntityID == roId);
+            }
+            if (roAi == null)
+            {
+                throw new ArgumentException("No receiving order of id " + roId + " found");
+            }
+            var ro = GetFromAi(roAi);
+
+            if (ro.GetBeverageLineItems().Any() == false)
+            {
+                //do nothing
+                return null;
+            }
+
+            var fileName = "ReceivingOrder.csv";
+            using (var db = new AzureNonTypedEntities())
+            {
+                var vendor = GetVendorForRo(db, ro);
+                if (vendor != null)
+                {
+                    fileName = vendor.Name + ".csv";
+                }
+            }
+
+            //transform inventory to memory stream, then to file
+            var bytes = await _inventoryExportService.ExportReceivingOrderToCSV(ro);
+            var outputStream = new MemoryStream(bytes);
+            return new FileStreamResult(outputStream, "text/csv") { FileDownloadName = fileName };
+        }
 
         private IReceivingOrder GetFromAi(AzureEntityStorage ai)
         {
             var dto = ai.ToRestaurantDTO();
             var ro = _dtoFactory.FromDataStorageObject<ReceivingOrder>(dto);
             return ro;
+        }
+
+        private IVendor GetVendorForRo(AzureNonTypedEntities db, IReceivingOrder ro)
+        {
+            var vendType = typeof(Vendor).ToString();
+            IVendor vendor = null;
+            var vendAi =
+                db.AzureEntityStorages.FirstOrDefault(
+                    ai => ai.MiseEntityType == vendType && ai.EntityID == ro.VendorID);
+            if (vendAi != null)
+            {
+                vendor = _dtoFactory.FromDataStorageObject<Vendor>(vendAi.ToRestaurantDTO());
+            }
+            return vendor;
         }
     }
 }

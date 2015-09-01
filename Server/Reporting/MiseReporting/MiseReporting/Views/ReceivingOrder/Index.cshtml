@@ -28,6 +28,7 @@
             Number of Items
         </th>
         <th></th>
+        <th>Export</th>
     </tr>
 
 @foreach (var item in Model.ReceivingOrders) {
@@ -48,9 +49,12 @@
             @Html.DisplayFor(modelItem => item.NumLineItems)
         </td>
         <td>
-           <!-- @Html.ActionLink("Edit", "Edit", new { id=item.Id }) | -->
-            @Html.ActionLink("Line Items", "Details", new { id=item.Id }) 
-          <!--  @Html.ActionLink("Delete", "Delete", new { id=item.Id }) -->
+            <!-- @Html.ActionLink("Edit", "Edit", new {id = item.Id}) | -->
+            @Html.ActionLink("Line Items", "Details", new {id = item.Id})
+            <!-- @Html.ActionLink("Delete", "Delete", new {id = item.Id}) -->
+        </td>
+        <td>
+            @Html.ActionLink("CSV", "GenerateCSV", new {roId = @item.Id})
         </td>
     </tr>
 }

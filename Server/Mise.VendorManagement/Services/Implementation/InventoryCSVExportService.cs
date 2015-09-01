@@ -154,6 +154,45 @@ namespace Mise.VendorManagement.Services.Implementation
             }
         }
 
+        public async Task<byte[]> ExportReceivingOrderToCSV(IReceivingOrder ro)
+        {
+            var lineItems = ro.GetBeverageLineItems().ToList();
+            if (lineItems.Any() == false)
+            {
+                throw new ArgumentException("No line items in the receiving order!");
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                using (var streamWriter = new StreamWriter(ms))
+                {
+                    using (var csv = new CsvWriter(streamWriter))
+                    {
+                        //write the header
+                        csv.WriteField("Name");
+                        csv.WriteField("Container");
+                        csv.WriteField("Quantity");
+                        csv.WriteField("Categories");
+                        csv.WriteField("Price");
+                        csv.NextRecord();
+                        foreach (var li in lineItems.OrderBy(li => li.DisplayName))
+                        {
+                            csv.WriteField(li.DisplayName);
+                            csv.WriteField(li.Container.DisplayName);
+
+                            csv.WriteField(li.Quantity);
+
+                            csv.WriteField(GetCategoriesString(li.GetCategories()));
+                            csv.WriteField(li.LineItemPrice != null ? li.LineItemPrice.Dollars.ToString("c") : "N/A");
+                            csv.NextRecord();
+                        }
+                        await streamWriter.FlushAsync();
+                        return ms.ToArray();
+                    }
+                }
+            }
+        }
+
         private static void WriteInventoryLineItemHeader(ICsvWriter csv)
         {
             csv.WriteField("Name");
