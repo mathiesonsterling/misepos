@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,13 @@ namespace MiseReporting.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string UPC { get; set; }
+
+        [DisplayName("Container")]
         public string ContainerName { get; set; }
+
+        [DisplayName("Size ML")]
         public decimal ContainerSizeML { get; set; }
+
         public string Categories { get; set; }
 
         protected BaseBeverageLineItemViewModel() { }

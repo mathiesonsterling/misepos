@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
@@ -7,8 +8,10 @@ namespace MiseReporting.Models
 {
     public class ParViewModel
     {
+        [DisplayName("Date Created")]
         public DateTime? DateCreated { get; set; }
 
+        [DisplayName("Last Updated")]
         public DateTime? LastUpdated { get; set; }
 
         public string DoneByEmployee { get; set; }

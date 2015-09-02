@@ -15,14 +15,14 @@ namespace MiseReporting.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Restaurant management for users of Stockboy";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Contact Mise";
 
             return View();
         }
