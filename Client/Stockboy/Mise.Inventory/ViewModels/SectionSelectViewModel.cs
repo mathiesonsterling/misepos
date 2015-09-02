@@ -60,7 +60,7 @@ namespace Mise.Inventory.ViewModels
                     var sectionsString = string.Join(",", sectionsList);
 
                     var message = "You haven't done sections " + sectionsString + ".  Complete inventory anyways?";
-					closeInv = true;//await Navigation.AskUser("Incomplete Sections", message);
+					closeInv = await AskUserQuestionModal ("Incomplete sections", message);
                 }
 
                 if (closeInv)

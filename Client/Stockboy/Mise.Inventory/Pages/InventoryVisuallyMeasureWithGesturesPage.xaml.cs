@@ -10,7 +10,7 @@ using Mise.Inventory.Themes;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class InventoryVisuallyMeasureWithGesturesPage : Xamarin.Forms.ContentPage
+	public partial class InventoryVisuallyMeasureWithGesturesPage : BasePage
 	{
 		private List<MeasureButton> _measureButtons;
 		private double _oldHeight = DEFAULT_HEIGHT;
@@ -102,15 +102,29 @@ namespace Mise.Inventory.Pages
 				}
 			};
 		}
+
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.InventoryVisuallyMeasureBottleViewModel;
+			}
+		}
+
+		public override String PageName {
+			get {
+				return "InventoryVisuallyMeasureWithGesturesPage";
+			}
+		}
+
+		#endregion
 		 
 		protected override async void OnAppearing ()
 		{
-			Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "InventoryVisuallyMeasuredImprovedPage"}});
-
-			var vm = BindingContext as InventoryVisuallyMeasureBottleViewModel;
+			base.OnAppearing ();
+			var vm = ViewModel as InventoryVisuallyMeasureBottleViewModel;
             //TODO get our shape from the line item
 			if(vm != null){
-				await vm.OnAppearing ();
 				//TODO - do we need to update this shape and recreate controls?
 				UpdateBottleShape (vm.Shape);
 

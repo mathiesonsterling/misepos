@@ -1,41 +1,43 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
-
+﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Inventory.CustomControls;
-
-
+using Mise.Inventory.Services.Implementation;
 
 
 namespace Mise.Inventory.Pages
 {
-	public partial class InventoryPage : ContentPage
+	public partial class InventoryPage : BasePage
 	{
 		private DragListView _customVL;
 		public InventoryPage()
 		{
 			InitializeComponent();
-			var vm = BindingContext as InventoryViewModel;
+			var vm = ViewModel as InventoryViewModel;
 			vm.LoadItemsOnView = LoadItems;
 
 		}
 
-        protected override async void OnAppearing()
-        {
-            Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string> { { "ScreenName", "InventoryPage" } });
-            var vm = BindingContext as InventoryViewModel;
-            if (vm != null)
-            {
-                //this will be reset
-                await vm.OnAppearing();
+		#region implemented abstract members of BasePage
 
-            }
-        }
+		public override BaseViewModel ViewModel {
+			get {
+				return App.InventoryViewModel;
+			}
+		}
+
+		public override string PageName {
+			get {
+				return "InventoryPage";
+			}
+		}
+
+		#endregion
 
 		async Task LineItemDeleted(object item){
 			var realItem = item as InventoryViewModel.InventoryLineItemDisplayLine;
-			var vm = BindingContext as InventoryViewModel;
+			var vm = ViewModel as InventoryViewModel;
 			if(realItem != null && vm != null){
 				if (vm.CanDeleteLI (realItem)) {
 					await vm.DeleteLineItem (realItem);
@@ -45,7 +47,7 @@ namespace Mise.Inventory.Pages
 
 		async Task LineItemMovedUp(object item){
 			var realItem = item as InventoryViewModel.InventoryLineItemDisplayLine;
-			var vm = BindingContext as InventoryViewModel;
+			var vm = ViewModel as InventoryViewModel;
 			if(realItem != null && vm != null){
 				await vm.MoveLineItemUp (realItem);
 			}
@@ -53,7 +55,7 @@ namespace Mise.Inventory.Pages
 
 		async Task LineItemMovedDown(object item){
 			var realItem = item as InventoryViewModel.InventoryLineItemDisplayLine;
-			var vm = BindingContext as InventoryViewModel;
+			var vm = ViewModel as InventoryViewModel;
 			if(realItem != null && vm != null){
 				await vm.MoveLineItemDown (realItem);
 			}

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<d:BasePage
+<local:BasePage
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:d="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
 	x:Class="Mise.Inventory.Pages.MainMenuPage"
 	Title="{Binding RestaurantName}">
 
@@ -25,4 +25,4 @@
 	    </ScrollView>
   	</StackLayout>
 
-</d:BasePage>
+</local:BasePage>

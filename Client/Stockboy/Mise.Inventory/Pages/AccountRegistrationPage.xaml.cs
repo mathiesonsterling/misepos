@@ -1,25 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
+﻿
 using Mise.Inventory.ViewModels;
-namespace Mise.Inventory
+namespace Mise.Inventory.Pages
 {
-	public partial class AccountRegistrationPage : ContentPage
+	public partial class AccountRegistrationPage : BasePage
 	{
 		public AccountRegistrationPage ()
 		{
-			BindingContext = App.AccountRegistrationViewModel;
 			InitializeComponent ();
 		}
 
-		protected override async void OnAppearing ()
-		{
-			var vm = BindingContext as AccountRegistrationViewModel;
-			if (vm != null) {
-				await vm.OnAppearing ();
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.AccountRegistrationViewModel;
 			}
 		}
+
+		public override string PageName {
+			get {
+				return "AccountRegistrationPage";
+			}
+		}
+
+		#endregion
+
 	}
 }
 

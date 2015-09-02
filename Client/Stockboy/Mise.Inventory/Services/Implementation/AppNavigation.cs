@@ -81,6 +81,8 @@ namespace Mise.Inventory.Services.Implementation
 		/// <returns>The login.</returns>
 		public async Task ShowLogin()
 		{
+			//blank out the restaurant name for iOS nav bar
+			App.MainMenuViewModel.RestaurantName = string.Empty;
 			await _navi.PushAsync(_pages.GetPage (Pages.Login));
 		}
 
