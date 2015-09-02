@@ -9,17 +9,13 @@ namespace Mise.Inventory.ViewModels.Modals
 	public class UserQuestion : ErrorMessage
 	{
 		/// <summary>
-		/// Caption for the option to return true
-		/// </summary>
-		public string YesOption{get;set;}
-		/// <summary>
 		/// Caption for option to return false
 		/// </summary>
 		public string NoOption{get;set;}
 
-		public UserQuestion(string title, string message, string yesOption, string noOption) : base(title, message)
+		public UserQuestion(string title, string message, string yesOption = "OK", string noOption = "Cancel") 
+			: base(title, message, yesOption)
 		{
-			YesOption = yesOption;
 			NoOption = noOption;
 		}
 	}
