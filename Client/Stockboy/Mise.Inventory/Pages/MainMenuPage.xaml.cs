@@ -1,28 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
+﻿
 using Mise.Inventory.ViewModels;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class MainMenuPage : ContentPage
+	public partial class MainMenuPage : BasePage
 	{
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.MainMenuViewModel;
+			}
+		}
+
+		public override string PageName {
+			get {
+				return "MainMenuPage";
+			}
+		}
+
+		#endregion
+
 		public MainMenuPage()
 		{
 			InitializeComponent();
 		}
 
-		protected override async void OnAppearing()
+		protected override void OnAppearing()
 		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "MainMenuPage"}});
+			Icon = "mise.png";
 			base.OnAppearing();
-
-			this.Icon = "mise.png";
-			var vm = BindingContext as MainMenuViewModel;
-			if(vm != null){
-				await vm.OnAppearing ();
-			}
 		}
 	}
 }

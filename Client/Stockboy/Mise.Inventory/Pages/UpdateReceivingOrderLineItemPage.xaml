@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<local:BasePage 
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-	x:Class="Mise.Inventory.UpdateReceivingOrderLineItem"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.UpdateReceivingOrderLineItemPage"
 	Title="{Binding ItemName}">
 	<ContentPage.Content>
 		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
@@ -41,4 +42,4 @@
 				HorizontalOptions="FillAndExpand"/>
 		</StackLayout>
 	</ContentPage.Content>
-</ContentPage>
+</local:BasePage>

@@ -265,7 +265,7 @@ namespace Mise.Inventory.ViewModels
 
 		async void ClearSection(){
 			try{
-				var res = await Navigation.AskUser ("Remove all items", "Remove all items from this section?");
+				var res = await AskUserQuestionModal ("Remove all items", "Remove all items from this section?");
 				if(res){
 					Processing = true;
 					await _inventoryService.ClearCurrentSection ();

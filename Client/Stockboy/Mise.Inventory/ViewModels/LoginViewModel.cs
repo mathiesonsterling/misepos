@@ -6,16 +6,10 @@ using System.Linq;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems;
-using Mise.Core.Services;
-using Mise.Core.Client.Services;
 using Mise.Core.Entities.People;
-using System.Net.Http;
-using Xamarin;
-using ServiceStack;
 using System.Net;
 using Xamarin.Forms;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
-using Mise.Core.Common.Events.Payments;
 using Mise.Core.Common.Services.WebServices.Exceptions;
 
 
@@ -133,7 +127,7 @@ namespace Mise.Inventory.ViewModels
 			        Username = string.Empty;
 			        try
 			        {
-			            await Navigation.DisplayAlert("Login Error", "Incorrect login information");
+						await DisplayMessageModal ("Login Error", "Incorrect login information");
 			            shownErrorMessage = true;
 			        }
 			        catch (Exception e)
@@ -185,7 +179,7 @@ namespace Mise.Inventory.ViewModels
 			            else
 			            {
 							//double check this
-							var userConf = await Navigation.AskUser ("No Restaurant Found", 
+							var userConf = await AskUserQuestionModal ("No Restaurant Found", 
 								"We don't show any restaurants assigned to this user.  This could be a server error.  Do you want to register a new restaurant?");
 							if(userConf){
 								await Navigation.ShowRestaurantRegistration();
@@ -225,22 +219,22 @@ namespace Mise.Inventory.ViewModels
 				Processing = false;
 				switch(result){
 				case LoginResult.BadEmail:
-					await Navigation.DisplayAlert ("User not found", "No user found for " + Username);
+					await DisplayMessageModal("User not found", "No user found for " + Username);
 					Username = string.Empty;
 					Password = string.Empty;
 					break;
 				case LoginResult.BadPassword:
-					await Navigation.DisplayAlert ("Incorrect password", "Password is not correct");
+					await DisplayMessageModal("Incorrect password", "Password is not correct");
 					Password = string.Empty;
 					break;
 				case LoginResult.ServerOffline:
-					await Navigation.DisplayAlert ("Server offline", "Cannot connect to the server, are you online?");
+					await DisplayMessageModal("Server offline", "Cannot connect to the server, are you online?");
 					break;
 				case LoginResult.ServerError:
-					await Navigation.DisplayAlert ("Server error", "Error while updating server.  We'll be working on getting you back online as quick as possible!");
+					await DisplayMessageModal("Server error", "Error while updating server.  We'll be working on getting you back online as quick as possible!");
 					break;
 				case LoginResult.Other:
-					await Navigation.DisplayAlert ("Error", "Error logging in.  If this continues try uninstalling and reinstalling Stockboy");
+					await DisplayMessageModal("Error", "Error logging in.  If this continues try uninstalling and reinstalling Stockboy");
 					break;
 				}
 			}

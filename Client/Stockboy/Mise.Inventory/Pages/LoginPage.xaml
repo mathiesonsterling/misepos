@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
+<local:BasePage
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
 	x:Class="Mise.Inventory.Pages.LoginPage"
-	BindingContext="{x:Static local:App.LoginViewModel}"
 	Title="Login">
 
 	<!--- scroll view will keep our target on in iOS -->
@@ -49,4 +48,4 @@
 
 	  	</StackLayout>
   	</ScrollView>
- </ContentPage>
+ </local:BasePage>

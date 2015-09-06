@@ -6,38 +6,53 @@ using Mise.Inventory.ViewModels;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class RestaurantSelectPage : ContentPage
+	public partial class RestaurantSelectPage : BasePage
 	{
+		private ListView lv;
 		public RestaurantSelectPage()
 		{
 			InitializeComponent();
 		}
+
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.RestaurantSelectViewModel;
+			}
+		}
+
+		public override string PageName {
+			get {
+				return "RestaurantSelectPage";
+			}
+		}
+
+		#endregion
 			
-		protected override async void OnAppearing(){
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "RestaurantSelectPage"}});
-		
+		protected override void OnAppearing(){
+			base.OnAppearing();
 			var vm = BindingContext as RestaurantSelectViewModel;
 			if(vm != null){
-				await vm.OnAppearing ();
+				if(lv == null)
+				{
+					var template = new DataTemplate (typeof(TextCell));
+					template.SetBinding (TextCell.TextProperty, "FullName");
+					lv = new ListView {
+						ItemTemplate = template,
+						HorizontalOptions = LayoutOptions.FillAndExpand
+					};
 
-				stckMain.Children.Clear ();
-
-				var template = new DataTemplate (typeof(TextCell));
-				template.SetBinding (TextCell.TextProperty, "FullName");
-				var lv = new ListView {
-					ItemsSource = vm.PossibleRestaurantNames,
-					ItemTemplate = template,
-					HorizontalOptions = LayoutOptions.FillAndExpand
-				};
-
-				lv.ItemTapped += async (sender, e) => {
-					var selName = e.Item as RestaurantName;
-					((ListView)sender).SelectedItem = null;
-					if(selName != null){
-						await vm.SelectRestaurant(selName);
-					}
-				};
-				stckMain.Children.Add (lv);
+					lv.ItemTapped += async (sender, e) => {
+						var selName = e.Item as RestaurantName;
+						((ListView)sender).SelectedItem = null;
+						if(selName != null){
+							await vm.SelectRestaurant(selName);
+						}
+					};
+					stckMain.Children.Add (lv);
+				}
+				lv.ItemsSource = vm.PossibleRestaurantNames;
 			}
 		}
 	}

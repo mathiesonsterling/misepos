@@ -3,31 +3,34 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Xamarin.Forms;
+using Mise.Inventory.ViewModels;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class PurchaseOrderReviewPage : ContentPage
+	public partial class PurchaseOrderReviewPage : BasePage
 	{
 		public PurchaseOrderReviewPage ()
 		{
-			var vm = App.PurchaseOrderReviewViewModel;
+			var vm = ViewModel as PurchaseOrderReviewViewModel;
 			vm.LoadItemsOnPage = LoadItems;
-			BindingContext = vm;
 			InitializeComponent ();
 		}
 
-		protected override async void OnAppearing ()
-		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "PurchaseOrderReviewPage"}});
-			var vm = App.PurchaseOrderReviewViewModel;
-		    if (vm != null)
-		    {
-		        await vm.OnAppearing();
-		    }
+		#region implemented abstract members of BasePage
+		public override BaseViewModel ViewModel {
+			get {
+				return App.PurchaseOrderReviewViewModel;
+			}
 		}
+		public override String PageName {
+			get {
+				return "PurchaseOrderReviewPage";
+			}
+		}
+		#endregion			
 
 		void LoadItems(){
-			var vm = App.PurchaseOrderReviewViewModel;
+			var vm = ViewModel as PurchaseOrderReviewViewModel;
 
 			foreach(var vendorAndItems in vm.VendorsAndPOs){
 				var vendorLabel = new Label{ 

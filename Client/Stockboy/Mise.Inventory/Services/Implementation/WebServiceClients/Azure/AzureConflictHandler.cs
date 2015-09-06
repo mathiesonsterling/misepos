@@ -32,11 +32,15 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			{
 			    _logger.HandleException (ex);
 			}
-			catch (MobileServicePreconditionFailedException<AzureEntityStorage> ex)
+			catch (MobileServicePreconditionFailedException ex)
 			{
 			    _logger.HandleException (ex);
 
 				//https://codemilltech.com/why-cant-we-be-friends-conflict-resolution-in-azure-mobile-services/
+			}
+			catch(Exception e){
+				_logger.HandleException (e);
+				throw;
 			}
 
 		    try

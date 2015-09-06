@@ -80,7 +80,7 @@ namespace Mise.Inventory.ViewModels.Reports
 			}
 			var hasPriorInv = await _inventoryService.HasInventoryPriorToDate (rest.ID, StartDate);
 			if(hasPriorInv == false){
-				var userRes = await Navigation.AskUser ("No prior inventory", 
+				var userRes = await AskUserQuestionModal("No prior inventory", 
 					              "There's not a starting inventory before the dates you selected.  Your results will only depend on items you received, and might not be accurrate.  Continue?");
 				if(userRes == false){
 					return;

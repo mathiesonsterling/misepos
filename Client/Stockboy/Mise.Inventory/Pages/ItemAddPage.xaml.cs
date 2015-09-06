@@ -8,26 +8,41 @@ using XLabs.Forms.Mvvm;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class ItemAddPage : ContentPage
+	public partial class ItemAddPage : BasePage
 	{
 		public ItemAddPage()
 		{
 			InitializeComponent();
 		}
 
-		protected override async void OnAppearing ()
+		protected override void OnAppearing ()
 		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "ItemAddPage"}});
-			var vm = BindingContext as ItemAddViewModel;
+			base.OnAppearing ();
+			var vm = ViewModel as ItemAddViewModel;
 			if(vm != null){
-				await vm.OnAppearing ();
 				LoadPickers ();
 			}
 		}
 
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.ItemAddViewModel;
+			}
+		}
+
+		public override String PageName {
+			get {
+				return "ItemAddPage";
+			}
+		}
+
+		#endregion
+
 		public void LoadPickers(){
 			//get the picker items
-			var vm = BindingContext as ItemAddViewModel;
+			var vm = ViewModel as ItemAddViewModel;
 			if(vm != null){
 				pckContainer.Items.Clear ();
 				foreach(var opt in vm.PossibleContainerNames){

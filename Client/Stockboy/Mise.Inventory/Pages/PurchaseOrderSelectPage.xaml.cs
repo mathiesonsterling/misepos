@@ -7,24 +7,27 @@ using Mise.Core.Entities.Inventory;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class PurchaseOrderSelectPage : ContentPage
+	public partial class PurchaseOrderSelectPage : BasePage
 	{
 		public PurchaseOrderSelectPage ()
 		{
-			var vm = App.PurchaseOrderSelectViewModel;
-			BindingContext = vm;
+			var vm = ViewModel as PurchaseOrderSelectViewModel;
 			vm.LoadItemsOnView = LoadItems;
 			InitializeComponent ();
 		}
 
-		protected override async void OnAppearing ()
-		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "PurchaseOrderSelectPage"}});
-			var vm = BindingContext as PurchaseOrderSelectViewModel;
-			if (vm != null) {
-				await vm.OnAppearing ();
+		#region implemented abstract members of BasePage
+		public override BaseViewModel ViewModel {
+			get {
+				return App.PurchaseOrderSelectViewModel;
 			}
 		}
+		public override String PageName {
+			get {
+				return "PurchaseOrderSelectPage";
+			}
+		}
+		#endregion			
 
 		public void LoadItems(){
 			var vm = BindingContext as PurchaseOrderSelectViewModel;

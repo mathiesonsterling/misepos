@@ -7,17 +7,16 @@ using MR.Gestures;
 using System.Threading.Tasks;
 
 
-namespace Mise.Inventory
+namespace Mise.Inventory.Pages
 {
-	public partial class UpdateParLineItemPage : Xamarin.Forms.ContentPage
+	public partial class UpdateParLineItemPage : BasePage
 	{
 		bool swipeInProgress;
 		public UpdateParLineItemPage ()
 		{
-			var vm = App.UpdateParLineItemViewModel;
-			BindingContext = vm;
 			InitializeComponent ();
 
+			var vm = ViewModel as UpdateParLineItemViewModel;
 			vm.MovePreviousAnimation = async () => 
 				await stckMain.TranslateTo (stckMain.Width, 0, MiseTheme.SwipeAnimationDuration);
 
@@ -30,13 +29,27 @@ namespace Mise.Inventory
 			};
 		}
 
-		protected override async void OnAppearing ()
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.UpdateParLineItemViewModel;
+			}
+		}
+
+		public override string PageName {
+			get {
+				return "UpdateParLineItemPage";
+			}
+		}
+
+		#endregion
+
+		protected override void OnAppearing ()
 		{
 			base.OnAppearing ();
-			var vm = BindingContext as UpdateParLineItemViewModel;
+			var vm = ViewModel as UpdateParLineItemViewModel;
 			if (vm != null) {
-				await vm.OnAppearing();
-
 				btnNext.IsEnabled = vm.MoveNextCommand.CanExecute (null);
 			}
 		}
@@ -45,7 +58,7 @@ namespace Mise.Inventory
 			if(swipeInProgress){
 				return;
 			}
-			var vm = BindingContext as UpdateParLineItemViewModel;
+			var vm = ViewModel as UpdateParLineItemViewModel;
 
 			if (vm != null) {
 				swipeInProgress = true;

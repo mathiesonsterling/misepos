@@ -1,20 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
+﻿
+using System;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class EmployeesManagePage : ContentPage
+	public partial class EmployeesManagePage : BasePage
 	{
 		public EmployeesManagePage()
 		{
 			InitializeComponent();
 		}
 
-		protected override void OnAppearing(){
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "EmployeesManagePage"}});
+		#region implemented abstract members of BasePage
+
+		public override Mise.Inventory.ViewModels.BaseViewModel ViewModel {
+			get {
+				return App.EmployeesManageViewModel;
+			}
 		}
+
+		public override String PageName {
+			get {
+				return "EmployeesManagePage";
+			}
+		}
+
+		#endregion
 	}
 }
 
