@@ -37,7 +37,7 @@ namespace Mise.Inventory.Services
                 case Pages.ReceivingOrder:
                     return new ReceivingOrderPage();
                 case Pages.UpdateRecievingOrderLineItem:
-                    return new UpdateReceivingOrderLineItem();
+                    return new UpdateReceivingOrderLineItemPage();
                 case Pages.RestaurantSelect:
                     return new RestaurantSelectPage();
                 case Pages.SectionAdd:

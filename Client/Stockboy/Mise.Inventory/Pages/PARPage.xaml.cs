@@ -8,7 +8,7 @@ using Mise.Inventory.ViewModels;
 using Mise.Inventory.CustomControls;
 namespace Mise.Inventory.Pages
 {
-	public partial class PARPage : ContentPage
+	public partial class PARPage : BasePage
 	{
 		ListView _customVL;
 		public PARPage()
@@ -20,15 +20,28 @@ namespace Mise.Inventory.Pages
 
 		}
 
-		protected override async void OnAppearing ()
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.PARViewModel;
+			}
+		}
+
+		public override String PageName {
+			get {
+				return "ParPage";
+			}
+		}
+
+		#endregion
+
+		protected override void OnAppearing ()
 		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "ParPage"}});
-			var vm = BindingContext as ParViewModel;
+			base.OnAppearing ();
+			var vm = ViewModel as ParViewModel;
 		    if (vm != null)
-		    {
-		        await vm.OnAppearing();
-
-
+			{
 				try{
 					if(vm.FocusedItem != null && vm.LineItems.Any() && vm.LineItems.Contains(vm.FocusedItem)){
 						if(_customVL != null){
@@ -43,7 +56,7 @@ namespace Mise.Inventory.Pages
 
 		async Task LineItemDeleted(object item){
 			var realItem = item as ParViewModel.ParLineItemDisplay;
-			var vm = BindingContext as ParViewModel;
+			var vm = ViewModel as ParViewModel;
 			if(realItem != null && vm != null){
 				if(vm.CanDeleteLineItem (realItem)){
 					await vm.DeleteLineItem(realItem);
@@ -53,7 +66,7 @@ namespace Mise.Inventory.Pages
 
 		void LoadItems ()
 		{
-			var vm = BindingContext as ParViewModel;
+			var vm = ViewModel as ParViewModel;
 			if (vm != null) {
 				if (_customVL == null) {
 					_customVL = new ListView {

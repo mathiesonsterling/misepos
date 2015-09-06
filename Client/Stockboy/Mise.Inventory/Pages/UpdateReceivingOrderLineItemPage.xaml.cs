@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Mise.Inventory.ViewModels;
 using Xamarin.Forms;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class UserRegistrationPage : BasePage
+	public partial class UpdateReceivingOrderLineItemPage : BasePage
 	{
-		public UserRegistrationPage ()
+		public UpdateReceivingOrderLineItemPage ()
 		{
 			InitializeComponent ();
 		}
 
 		#region implemented abstract members of BasePage
 
-		public override Mise.Inventory.ViewModels.BaseViewModel ViewModel {
+		public override BaseViewModel ViewModel {
 			get {
-				return App.UserRegistrationViewModel;
+				return App.UpdateReceivingOrderLineItemViewModel;
 			}
 		}
 
 		public override string PageName {
 			get {
-				return "UserRegistrationPage";
+				return "UpdateReceivingOrderLineItemPage";
 			}
 		}
 
