@@ -19,8 +19,11 @@ namespace MiseReporting.Models
 
         public IEnumerable<PurchaseOrderViewModel> PurchaseOrders { get; private set; }
          
+        public DateTime CurrentTime { get; private set; }
+
         public RestaurantViewModel()
         {
+            CurrentTime = DateTimeOffset.UtcNow.ToLocalTime().DateTime;
         }
 
         public RestaurantViewModel(IRestaurant rest)
@@ -34,6 +37,7 @@ namespace MiseReporting.Models
 
 
             Name = rest.Name.FullName;
+            CurrentTime = DateTimeOffset.UtcNow.ToLocalTime().DateTime;
         }
 
         public RestaurantViewModel(IRestaurant rest, IEnumerable<InventoryViewModel> inventories) : this(rest)
