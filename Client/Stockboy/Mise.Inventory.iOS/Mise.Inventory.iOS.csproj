@@ -153,12 +153,6 @@
     <Reference Include="XLabs.Forms">
       <HintPath>..\packages\XLabs.Forms.2.0.5679\lib\Xamarin.iOS10\XLabs.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="MR.Gestures.iOS">
-      <HintPath>..\packages\MR.Gestures.1.2.1\lib\Xamarin.iOS10\MR.Gestures.iOS.dll</HintPath>
-    </Reference>
-    <Reference Include="MR.Gestures">
-      <HintPath>..\packages\MR.Gestures.1.2.1\lib\Xamarin.iOS10\MR.Gestures.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Forms.Platform.iOS">
       <HintPath>..\packages\Xamarin.Forms.1.4.4.6392\lib\Xamarin.iOS10\Xamarin.Forms.Platform.iOS.dll</HintPath>
     </Reference>
@@ -205,11 +199,17 @@
     <Reference Include="ModernHttpClient">
       <HintPath>..\Components\modernhttpclient-2.4.2\lib\ios-unified\ModernHttpClient.dll</HintPath>
     </Reference>
+    <Reference Include="MR.Gestures.iOS">
+      <HintPath>..\packages\MR.Gestures.1.2.2\lib\Xamarin.iOS10\MR.Gestures.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="MR.Gestures">
+      <HintPath>..\packages\MR.Gestures.1.2.2\lib\Xamarin.iOS10\MR.Gestures.dll</HintPath>
+    </Reference>
     <Reference Include="Connectivity.Plugin">
-      <HintPath>..\packages\Xam.Plugin.Connectivity.1.0.3\lib\Xamarin.iOS10\Connectivity.Plugin.dll</HintPath>
+      <HintPath>..\packages\Xam.Plugin.Connectivity.1.0.4\lib\Xamarin.iOS10\Connectivity.Plugin.dll</HintPath>
     </Reference>
     <Reference Include="Connectivity.Plugin.Abstractions">
-      <HintPath>..\packages\Xam.Plugin.Connectivity.1.0.3\lib\Xamarin.iOS10\Connectivity.Plugin.Abstractions.dll</HintPath>
+      <HintPath>..\packages\Xam.Plugin.Connectivity.1.0.4\lib\Xamarin.iOS10\Connectivity.Plugin.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
