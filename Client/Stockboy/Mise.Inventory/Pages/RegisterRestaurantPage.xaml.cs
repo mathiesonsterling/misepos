@@ -6,31 +6,45 @@ using Xamarin;
 using Mise.Inventory.ViewModels;
 
 
-namespace Mise.Inventory
+namespace Mise.Inventory.Pages
 {
-	public partial class RegisterRestaurantPage : ContentPage
+	public partial class RegisterRestaurantPage : BasePage
 	{
 		public RegisterRestaurantPage ()
 		{
-			BindingContext = App.RestaurantRegistrationViewModel;
 			InitializeComponent ();
+
+			pckState.SelectedIndexChanged += (sender, e) => {
+				var selectedItem = pckState.Items[pckState.SelectedIndex];
+				var vm = ViewModel as RestaurantRegistrationViewModel;
+				vm.State = selectedItem;
+			};
 		}
 
-		protected override async void OnAppearing(){
-			Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "RegisterRestaurantPage"}});
+		#region implemented abstract members of BasePage
 
-			var vm = BindingContext as RestaurantRegistrationViewModel;
+		public override BaseViewModel ViewModel {
+			get {
+				return App.RestaurantRegistrationViewModel;
+			}
+		}
+
+		public override String PageName {
+			get {
+				return "RegisterRestaurantPage";
+			}
+		}
+
+		#endregion
+
+		protected override void OnAppearing(){
+			base.OnAppearing ();
+			var vm = ViewModel as RestaurantRegistrationViewModel;
 			if(vm != null){
-				await vm.OnAppearing ();
 				pckState.Items.Clear ();
 				foreach(var state in vm.States){
 					pckState.Items.Add (state.Abbreviation);
 				}
-
-				pckState.SelectedIndexChanged += (sender, e) => {
-					var selectedItem = pckState.Items[pckState.SelectedIndex];
-					vm.State = selectedItem;
-				};
 			}
 		}
 	}

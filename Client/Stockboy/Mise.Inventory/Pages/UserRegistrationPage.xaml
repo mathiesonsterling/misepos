@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-	x:Class="Mise.Inventory.UserRegistrationPage"
+	x:Class="Mise.Inventory.Pages.UserRegistrationPage"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
 	Title="Register User">
 	<ContentPage.Content>
 	  	<StackLayout VerticalOptions="FillAndExpand" Padding="50">
@@ -40,4 +41,4 @@
 		    <Button Text="Register User" Command="{Binding SubmitCommand}" IsEnabled="{Binding CanSubmit}"/>
 	    </StackLayout>
 	</ContentPage.Content>
-</ContentPage>
+</local:BasePage>

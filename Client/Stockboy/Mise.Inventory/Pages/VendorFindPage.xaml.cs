@@ -6,12 +6,13 @@ using Mise.Inventory.ViewModels;
 using Mise.Core.Entities.Vendors;
 namespace Mise.Inventory.Pages
 {
-	public partial class VendorFindPage : ContentPage
+	public partial class VendorFindPage : BasePage
 	{
+		private ListView _lv;
 		public VendorFindPage()
 		{
 			InitializeComponent();
-			var vm = BindingContext as VendorFindViewModel;
+			var vm = ViewModel as VendorFindViewModel;
 			vm.LoadItemsOnView = LoadItems;
 			searchEntry.SearchButtonPressed += (sender, e) => {
 				//TODO we might need to look up additional vendors we don't have
@@ -19,35 +20,43 @@ namespace Mise.Inventory.Pages
 			};
 		}
 
-		protected override async void OnAppearing ()
-		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "VendorFindPage"}});
-			var vm = BindingContext as VendorFindViewModel;
-			if (vm != null) {
-				await vm.OnAppearing ();
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.VendorFindViewModel;
 			}
 		}
 
+		public override string PageName {
+			get {
+				return "VendorFindPage";
+			}
+		}
+
+		#endregion
+
 		public void LoadItems(){
-			var vm = BindingContext as VendorFindViewModel;
-			stckVendors.Children.Clear ();
+			var vm = ViewModel as VendorFindViewModel;
 			var template = new DataTemplate (typeof(TextCell));
 			template.SetBinding (TextCell.TextProperty, "Name");
 			template.SetBinding (TextCell.DetailProperty, "Detail");
-			var lv = new ListView {
-				ItemsSource = vm.LineItems,
-				ItemTemplate = template,
-				HorizontalOptions = LayoutOptions.FillAndExpand
-			};
+			if (_lv == null) {
+				_lv = new ListView {
+					ItemTemplate = template,
+					HorizontalOptions = LayoutOptions.FillAndExpand
+				};
 
-			lv.ItemTapped += async (sender, e) => {
-				var selectedVendor = e.Item as IVendor;
-				((ListView)sender).SelectedItem = null;
-				if(selectedVendor != null){
-					await vm.SelectLineItem (selectedVendor);
-				}
-			};
-			stckVendors.Children.Add (lv);
+				_lv.ItemTapped += async (sender, e) => {
+					var selectedVendor = e.Item as IVendor;
+					((ListView)sender).SelectedItem = null;
+					if (selectedVendor != null) {
+						await vm.SelectLineItem (selectedVendor);
+					}
+				};
+				stckVendors.Children.Add (_lv);
+			}
+			_lv.ItemsSource = vm.LineItems;
 		}
 	}
 }

@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage
+<local:BasePage
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
 	x:Class="Mise.Inventory.Pages.InventoryPage"
-	BindingContext="{x:Static local:App.InventoryViewModel}"
 	Title="{Binding Title}">
 
 	<ContentPage.Content>
@@ -12,15 +11,14 @@
 			<Label Text = "Add your items in the order they appear on the shelf . . . we'll keep them in order for you!" IsVisible="{Binding IsInventoryEmpty}"/>
 			<Label Text = "You can move or delete items by giving a long press on Android, or a pulling the item to the left on iOS" IsVisible="{Binding IsInventoryEmpty}"/>
 			<StackLayout>
-				<SearchBar x:Name="searchEntry" Placeholder="Filter" Text="{Binding SearchString}"/>
 				<StackLayout x:Name="listItems" VerticalOptions="FillAndExpand">
 				</StackLayout>
 			</StackLayout>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
-			<Button Text="Count New Item" Command="{Binding AddNewLineItemCommand}" 
+			<Button Text="Add new item to section" Command="{Binding AddNewLineItemCommand}" 
 				HorizontalOptions="FillAndExpand"/>
 			<Button Text="Complete Section" Command="{Binding FinishSectionCommand}" 
 				IsEnabled ="{Binding CanComplete}" HorizontalOptions="FillAndExpand"/>
 		</StackLayout>
 	</ContentPage.Content>
-</ContentPage>
+</local:BasePage>

@@ -5,28 +5,33 @@ using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Core;
 
-namespace Mise.Inventory
+namespace Mise.Inventory.Pages
 {
-	public partial class InvitationsPage : ContentPage
+	public partial class InvitationsPage : BasePage
 	{
 		public InvitationsPage ()
 		{
-			BindingContext = App.InvitationViewModel;
 			InitializeComponent ();
 		}
 
 		protected override void OnAppearing(){
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "InvitationsPage"}});
-			DoAppear ();
+			base.OnAppearing ();
+			var vm = ViewModel as InvitationViewModel;
+			vm.LoadDataOnView = LoadItems;
 		}
 
-		private async void DoAppear(){
-			var vm = BindingContext as InvitationViewModel;
-			if(vm != null){
-				vm.LoadDataOnView = LoadItems;
-				await vm.OnAppearing ();
+		#region implemented abstract members of BasePage
+		public override BaseViewModel ViewModel {
+			get {
+				return App.InvitationViewModel;
 			}
 		}
+		public override String PageName {
+			get {
+				return "InvitationsPage";
+			}
+		}
+		#endregion			
 
 		private void LoadItems(){
 			var vm = App.InvitationViewModel;

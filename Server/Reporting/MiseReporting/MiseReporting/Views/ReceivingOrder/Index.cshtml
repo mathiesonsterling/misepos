@@ -1,0 +1,67 @@
+﻿@model MiseReporting.Models.RestaurantViewModel
+
+@{
+    ViewBag.Title = "Receiving Orders";
+}
+
+<h2>Receiving Orders for @Model.Name</h2>
+
+<!--
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>-->
+<table class="table">
+    <tr>
+        <th>
+            Date Created
+        </th>
+        <th>
+            Last Updated
+        </th>
+        <th>
+            Received By
+        </th>
+        <th>
+            From Vendor
+        </th>
+        <th>
+            Number of Items
+        </th>
+        <th>Invoice ID</th>
+        <th></th>
+        <th>Export</th>
+    </tr>
+
+@foreach (var item in Model.ReceivingOrders) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCreated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastUpdated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReceivedByEmployee)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VendorName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumLineItems)
+        </td>
+        <td>
+           @item.InvoiceId
+        </td>
+
+        <td>
+            <!-- @Html.ActionLink("Edit", "Edit", new {id = item.Id}) | -->
+            @Html.ActionLink("Line Items", "Details", new {id = item.Id})
+            <!-- @Html.ActionLink("Delete", "Delete", new {id = item.Id}) -->
+        </td>
+        <td>
+            @Html.ActionLink("CSV", "GenerateCSV", new {roId = @item.Id})
+        </td>
+    </tr>
+}
+
+</table>

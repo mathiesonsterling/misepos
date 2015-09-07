@@ -1,10 +1,10 @@
-﻿@model IEnumerable<MiseReporting.Models.InventoryViewModel>
+﻿@model MiseReporting.Models.RestaurantViewModel
 
 @{
     ViewBag.Title = "Inventories";
 }
 
-<h2>Inventories</h2>
+<h2>Inventories for @Model.Name</h2>
 
 <table class="table">
     <tr>
@@ -15,12 +15,19 @@
             Date Inventory Completed
         </th>
         <th>
+            Number of items
+        </th>
+        <th>
             Employee who started
         </th>
-        <th></th>
+        <th>
+        </th>
+        <th>
+            Export CSV
+        </th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Inventories) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.DateCreated)
@@ -29,10 +36,19 @@
             @Html.DisplayFor(modelItem => item.DateCompleted)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.NumLineItems)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.DoneByEmployee)
         </td>
-        <td> 
-            @Html.ActionLink("Get CSV file", "GenerateCsv", new {id = item.Id})
+        <td>
+            @Html.ActionLink("Line items", "Details", new { inventoryId = @item.Id })
+        </td>
+        <td>
+
+            @Html.ActionLink("By section", "GenerateRawCSV", new {id = item.Id})
+            &#124;
+            @Html.ActionLink("Total inventory", "GenerateAggregatedCSV", new {id = item.Id})
         </td>
     </tr>
 }

@@ -23,7 +23,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
 				.Returns (Task.FromResult (true));
 
 			var appNav = new Mock<IAppNavigation> ();
-			appNav.Setup (an => an.ShowSectionSelect (false)).Returns (Task.FromResult (true));
+			appNav.Setup (an => an.ShowSectionSelect ()).Returns (Task.FromResult (true));
 
 			var invService = new Mock<IInventoryService> ();
 			invService.Setup (i => i.AddNewSection (It.IsAny<string> (), It.IsAny<bool> (), It.IsAny<bool> ()))
@@ -42,7 +42,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			var logger = new Mock<ILogger>();
 
 			var appNav = new Mock<IAppNavigation> ();
-			appNav.Setup (an => an.ShowSectionSelect (false)).Returns (Task.FromResult (true));
+			appNav.Setup (an => an.ShowSectionSelect ()).Returns (Task.FromResult (true));
 
 			var invService = new Mock<IInventoryService> ();
 			invService.Setup (i => i.AddNewSection (It.IsAny<string> (), It.IsAny<bool> (), It.IsAny<bool> ()))

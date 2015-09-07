@@ -23,7 +23,7 @@ namespace Mise.Core.Common
 			Vodka, Gin,
 			Rum, RumDark,
 			Agave, AgaveMezcal, AgaveTequila,
-			Brandy, Liquer, LiquerAmaro,
+			Brandy, Liqueur, LiquerAmaro,
 			WineFortified, WineRed, WineRose, WineSparkling, WineWhite,
 			NonAlcoholic, Food,
 			BeerDraft, BeerPackage
@@ -241,7 +241,7 @@ namespace Mise.Core.Common
 				};
 			}}
 
-		public static ItemCategory Liquer{get{
+		public static ItemCategory Liqueur{get{
 				return new ItemCategory {
 					Name = "Liqueur",
 					ID = Guid.Parse ("435f5bf7-4828-42fe-838a-59cf5e86e0be"),
@@ -252,7 +252,7 @@ namespace Mise.Core.Common
 		public static ItemCategory LiquerAmaro{get{
 				return new ItemCategory {
 					Name = "Amaro",
-					ParentCategoryID = Liquer.ID,
+					ParentCategoryID = Liqueur.ID,
 					ID = Guid.Parse ("758d1f9d-053f-4a76-958b-aebfda88f580")
 				};
 			}}
@@ -393,7 +393,7 @@ namespace Mise.Core.Common
                 AgaveMezcal, 
                 
                 Brandy, 
-                Liquer, 
+                Liqueur, 
                 LiquerAmaro, 
                 
                 Wine, 

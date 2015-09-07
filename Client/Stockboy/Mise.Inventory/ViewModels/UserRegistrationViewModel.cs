@@ -33,7 +33,7 @@ namespace Mise.Inventory.ViewModels
 				try{
 	                if (e.PropertyName != "CanSubmit")
 	                {
-						CanSubmit = Mise.Core.ValueItems.EmailAddress.IsValid(Email) && Password.IsValid(PasswordFirst)
+						CanSubmit = EmailAddress.IsValid(Email) && Password.IsValid(PasswordFirst)
 	                    && string.IsNullOrEmpty(FirstName) == false
 	                    && string.IsNullOrEmpty(LastName) == false
 	                    && PasswordFirst == PasswordRepeat
@@ -106,7 +106,7 @@ namespace Mise.Inventory.ViewModels
 
         public async void EmailAlreadyTaken(SendEventsException e)
         {
-            await Navigation.DisplayAlert("Already Registered", "Email is already registered");
+			await DisplayMessageModal ("Already Registered", "Email is already registered");
             Email = string.Empty;
         }
 

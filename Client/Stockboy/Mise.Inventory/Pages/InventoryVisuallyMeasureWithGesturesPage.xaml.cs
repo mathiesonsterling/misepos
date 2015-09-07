@@ -10,14 +10,13 @@ using Mise.Inventory.Themes;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class InventoryVisuallyMeasureWithGesturesPage : Xamarin.Forms.ContentPage
+	public partial class InventoryVisuallyMeasureWithGesturesPage : BasePage
 	{
 		private List<MeasureButton> _measureButtons;
 		private double _oldHeight = DEFAULT_HEIGHT;
 	    private const double DEFAULT_HEIGHT = 200;
-		private LiquidContainerShape _shape;
 		private bool _loading = false;
-
+		private LiquidContainerShape _shape;
 		bool swipeInProgress = false;
 
 		private void OnSwiped(object sender, SwipeEventArgs e){
@@ -69,9 +68,10 @@ namespace Mise.Inventory.Pages
 				return Task.FromResult (true);
 			};
 
+			vm.UpdateShapeOnPage = UpdateBottleShape;
+
 			using(Insights.TrackTime("Time to create measure bottle")){
-				_shape = vm.Shape;
-				CreateMeasureBottleStack (stckMeasure, _shape);
+				UpdateBottleShape (vm.Shape);
 			}
 
 			stckMeasure.SizeChanged += (sender, e) => {
@@ -102,20 +102,31 @@ namespace Mise.Inventory.Pages
 				}
 			};
 		}
+
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.InventoryVisuallyMeasureBottleViewModel;
+			}
+		}
+
+		public override String PageName {
+			get {
+				return "InventoryVisuallyMeasureWithGesturesPage";
+			}
+		}
+
+		#endregion
 		 
 		protected override async void OnAppearing ()
 		{
-			Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "InventoryVisuallyMeasuredImprovedPage"}});
-
-			var vm = BindingContext as InventoryVisuallyMeasureBottleViewModel;
+			base.OnAppearing ();
+			var vm = ViewModel as InventoryVisuallyMeasureBottleViewModel;
             //TODO get our shape from the line item
 			if(vm != null){
-				await vm.OnAppearing ();
 				//TODO - do we need to update this shape and recreate controls?
-				if (vm.Shape.Equals (_shape) == false) {
-					_shape = vm.Shape;
-					CreateMeasureBottleStack (stckMeasure, _shape);
-				}
+				UpdateBottleShape (vm.Shape);
 
 				btnMoveNext.IsEnabled = vm.MoveNextCommand.CanExecute (null);
 			}
@@ -124,20 +135,19 @@ namespace Mise.Inventory.Pages
 		/// <summary>
 		/// Given a shape, make a series of buttons that describe the bottle
 		/// </summary>
-		/// <param name="destLayout">Destination layout.</param>
 		/// <param name="shape">Shape.</param>
-		private void CreateMeasureBottleStack(IViewContainer<View> destLayout, LiquidContainerShape shape){
+		private void UpdateBottleShape(LiquidContainerShape shape){
 			if (_loading) {
 				return;
 			}
 			_loading = true;
 			_measureButtons = new List<MeasureButton> ();
-			destLayout.Children.Clear ();
+			stckMeasure.Children.Clear ();
 
-			var levelHeight = DEFAULT_HEIGHT / (_shape.WidthsAsPercentageOfHeight.Count + 1);
+			var levelHeight = DEFAULT_HEIGHT / (shape.WidthsAsPercentageOfHeight.Count + 1);
 			var i = 0;
 
-			foreach (var percentage in _shape.WidthsAsPercentageOfHeight) {
+			foreach (var percentage in shape.WidthsAsPercentageOfHeight) {
 				var width = DEFAULT_HEIGHT * percentage;
 				var button = new MeasureButton (i++, percentage) {
 					HeightRequest = levelHeight,
@@ -153,12 +163,13 @@ namespace Mise.Inventory.Pages
 			_measureButtons.Reverse();
 
 			foreach (var mb in _measureButtons) {
-				destLayout.Children.Add (mb);
+				stckMeasure.Children.Add (mb);
 			}
 			var zeroButton = new ZeroButton (levelHeight);
 			zeroButton.Clicked += ZeroButton_Clicked;
-			destLayout.Children.Add (zeroButton);
+			stckMeasure.Children.Add (zeroButton);
 
+			_shape = shape;
 			_loading = false;
 		}
 

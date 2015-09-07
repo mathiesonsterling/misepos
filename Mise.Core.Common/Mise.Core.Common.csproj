@@ -52,6 +52,9 @@
     <Compile Include="Entities\Inventory\RestaurantInventorySection.cs" />
     <Compile Include="Entities\DTOs\RestaurantEntityDataTransportObject.cs" />
     <Compile Include="Entities\DTOs\EntityDataTransportObjectFactory.cs" />
+    <Compile Include="Entities\Reports\AmountUsedInTimeReport.cs" />
+    <Compile Include="Entities\Reports\BaseReport.cs" />
+    <Compile Include="Entities\Reports\CompletedInventoryReport.cs" />
     <Compile Include="Events\Accounts\AccountRegisteredFromMobileDeviceEvent.cs" />
     <Compile Include="Events\Accounts\BaseAccountEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\BaseInvitationEvent.cs" />
@@ -70,10 +73,12 @@
     <Compile Include="Events\Inventory\InventoryLineItemAddedEvent.cs" />
     <Compile Include="Events\Inventory\InventoryMadeCurrentEvent.cs" />
     <Compile Include="Events\Inventory\PARCreatedEvent.cs" />
+    <Compile Include="Events\Inventory\ParLineItemDeletedEvent.cs" />
     <Compile Include="Events\Inventory\PurchaseOrderCreatedEvent.cs" />
     <Compile Include="Events\Inventory\PurchaseOrderSentToVendorEvent.cs" />
     <Compile Include="Events\Inventory\InventoryCompletedEvent.cs" />
     <Compile Include="Events\Inventory\InventoryCreatedEvent.cs" />
+    <Compile Include="Events\Inventory\ReceivingOrderLineItemDeletedEvent.cs" />
     <Compile Include="Events\Payments\CreditCards\CreditCardAuthorizationStartedEvent.cs" />
     <Compile Include="Events\Restaurant\BaseRestaurantEvent.cs" />
     <Compile Include="Events\Restaurant\InventorySectionAddedToRestaurantEvent.cs" />
@@ -195,8 +200,6 @@
     <Compile Include="Events\Inventory\InventoryLineItemMovedToNewPositionEvent.cs" />
     <Compile Include="Events\Inventory\InventorySectionClearedEvent.cs" />
     <Compile Include="Events\Inventory\InventorySectionStartedByEmployeeEvent.cs" />
-    <Compile Include="Events\Inventory\ParLineItemDeletedEvent.cs" />
-    <Compile Include="Events\Inventory\ReceivingOrderLineItemDeletedEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -207,7 +210,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Requests\" />
-    <Folder Include="Services\WebServices\Exceptions\" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

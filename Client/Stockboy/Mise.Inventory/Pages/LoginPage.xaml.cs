@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
-
-using Mise.Inventory.ViewModels;
+﻿using Mise.Inventory.ViewModels;
 using Mise.Core.ValueItems;
 namespace Mise.Inventory.Pages
 {
-	public partial class LoginPage : ContentPage
+	public partial class LoginPage : BasePage
 	{
 		public LoginPage()
 		{
 			InitializeComponent();
 
 			entEmail.Completed += (sender, e) => {
-				var vm = BindingContext as LoginViewModel;
+				var vm = ViewModel as LoginViewModel;
 				if(vm != null){
 					if(string.IsNullOrEmpty (vm.Username) == false){
 						if(EmailAddress.IsValid (vm.Username))
@@ -34,7 +29,7 @@ namespace Mise.Inventory.Pages
 			};
 
 			entPassword.Completed += (sender, e) => {
-				var vm = BindingContext as LoginViewModel;
+				var vm = ViewModel as LoginViewModel;
 				if(vm != null){
 					if(string.IsNullOrEmpty (vm.Password) == false){
 						if(string.IsNullOrEmpty (vm.Username) == false){
@@ -48,14 +43,21 @@ namespace Mise.Inventory.Pages
 			};
 		}
 
-		protected override async void OnAppearing(){
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "LoginPage"}});
+		#region implemented abstract members of BasePage
 
-			var vm = BindingContext as LoginViewModel;
-			if (vm != null) {
-				await vm.OnAppearing ();
+		public override BaseViewModel ViewModel {
+			get {
+				return App.LoginViewModel;
 			}
 		}
+
+		public override string PageName {
+			get {
+				return "LoginPage";
+			}
+		}
+
+		#endregion
 	}
 }
 

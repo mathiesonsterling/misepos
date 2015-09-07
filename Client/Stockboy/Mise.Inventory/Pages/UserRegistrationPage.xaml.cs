@@ -3,22 +3,30 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 
-namespace Mise.Inventory
+namespace Mise.Inventory.Pages
 {
-	public partial class UserRegistrationPage : ContentPage
+	public partial class UserRegistrationPage : BasePage
 	{
 		public UserRegistrationPage ()
 		{
-			var vm = App.UserRegistrationViewModel;
-			BindingContext = vm;
 			InitializeComponent ();
 		}
 
-		protected override void OnAppearing(){
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "UserRegistrationPage"}});
-			var vm = App.UserRegistrationViewModel;
-			vm.OnAppearing();
+		#region implemented abstract members of BasePage
+
+		public override Mise.Inventory.ViewModels.BaseViewModel ViewModel {
+			get {
+				return App.UserRegistrationViewModel;
+			}
 		}
+
+		public override string PageName {
+			get {
+				return "UserRegistrationPage";
+			}
+		}
+
+		#endregion
 	}
 }
 

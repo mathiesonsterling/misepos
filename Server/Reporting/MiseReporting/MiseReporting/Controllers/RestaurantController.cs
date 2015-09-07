@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.DTOs;
@@ -19,20 +21,20 @@ namespace MiseReporting.Controllers
         }
 
         // GET: Restaurant
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var restType = typeof (Restaurant).ToString();
             var viewModels = new List<RestaurantViewModel>();
             using (var db = new AzureNonTypedEntities())
             {
-                var restAIs = db.AzureEntityStorages.Where(ai => ai.MiseEntityType == restType).ToList();
+                var restAIs = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == restType).ToListAsync();
                 var dtos = restAIs.Select(ai => ai.ToRestaurantDTO());
                 var rests = dtos.Select(dto => _dtoFactory.FromDataStorageObject<Restaurant>(dto));
                 var vms = rests.Select(r => new RestaurantViewModel(r));
                 viewModels.AddRange(vms);
             }
 
-            return View(viewModels);
+            return View(viewModels.OrderBy(r => r.Name));
         }
 
         // GET: Restaurant/Details/5

@@ -77,7 +77,7 @@ namespace Mise.VendorManagement.Services.Implementation
         }
 
         public IEnumerable<VendorBeverageLineItem> ParseDataFile(string fileName, Guid vendorID, string itemNameColumn, string containerColumn,
-            LiquidAmountUnits containerUnit, string categoryColumn, Dictionary<string, ItemCategory> categoryMapping, string caseSizeColumn,
+            LiquidAmountUnits containerUnit, string categoryColumn, IDictionary<string, ItemCategory> categoryMapping, string caseSizeColumn,
             string upcColumn, string priceColumn)
         {
             var csv = ReadFile(fileName);

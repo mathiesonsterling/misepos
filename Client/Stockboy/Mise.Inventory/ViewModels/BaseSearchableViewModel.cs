@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.ViewModels;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 using Mise.Core;
 using Mise.Inventory.Services;
-using Mise.Core.Services;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -15,6 +13,8 @@ namespace Mise.Inventory.ViewModels
 	{
 		protected BaseSearchableViewModel(IAppNavigation navigation, ILogger logger) : base(navigation, logger)
 		{
+			LastSearchString = string.Empty;
+			SearchString = string.Empty;
 			PropertyChanged += async (sender, e) => {
 				try{
 					if(e.PropertyName == "SearchString"){
@@ -60,7 +60,7 @@ namespace Mise.Inventory.ViewModels
 		/// <value>The focused item.</value>
 		public TLineItemType FocusedItem{ get{return GetValue<TLineItemType> ();} protected set{ SetValue (value); }}
 
-		protected string LastSearchString{ get; private set;}
+		private string LastSearchString{ get; set;}
 		public string SearchString {
 			get{return GetValue<string> ();}
 			set{ SetValue (value); }

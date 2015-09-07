@@ -29,5 +29,11 @@ namespace Mise.Core.Common.Events.Employee
         /// The type of app that's creating this employee
         /// </summary>
         public MiseAppTypes AppType { get; set; }
+
+		/// <summary>
+		/// If set, the value of the token from the external login we're using
+		/// </summary>
+		/// <value>The O auth token.</value>
+		public OAuthToken OAuthToken{get;set;}
     }
 }

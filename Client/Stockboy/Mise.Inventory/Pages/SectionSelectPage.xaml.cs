@@ -8,37 +8,54 @@ using Mise.Core.Entities.Inventory;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class SectionSelectPage : ContentPage
+	public partial class SectionSelectPage : BasePage
 	{
+		private ListView _lv;
 		public SectionSelectPage()
 		{
 			InitializeComponent();
 		}
 
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.SectionSelectViewModel;
+			}
+		}
+
+		public override String PageName {
+			get {
+				return "SectionSelectPage";
+			}
+		}
+
+		#endregion
+
 		protected override async void OnAppearing ()
 		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "SectionSelectPage"}});
-			var vm = BindingContext as SectionSelectViewModel;
+			base.OnAppearing ();
+			var vm = ViewModel as SectionSelectViewModel;
 
-			await vm.OnAppearing ();
+			if (_lv == null) {
+				slOther.Children.Clear ();
+				var template = new DataTemplate (typeof(TextCell));
+				template.SetBinding (TextCell.TextProperty, "Name");
+				_lv = new ListView {
+					ItemTemplate = template,
+					HorizontalOptions = LayoutOptions.FillAndExpand
+				};
 
-			slOther.Children.Clear ();
-			var template = new DataTemplate (typeof(TextCell));
-			template.SetBinding (TextCell.TextProperty, "Name");
-			var lv = new ListView {
-				ItemsSource = vm.LineItems,
-				ItemTemplate = template,
-				HorizontalOptions = LayoutOptions.FillAndExpand
-			};
-
-			lv.ItemTapped += async (sender, e) => {
-				var selectedSection = e.Item as IInventorySection;
-				((ListView)sender).SelectedItem = null;
-				if(selectedSection != null){
-					await vm.SelectLineItem(selectedSection);
-				}
-			};
-			slOther.Children.Add (lv);
+				_lv.ItemTapped += async (sender, e) => {
+					var selectedSection = e.Item as IInventorySection;
+					((ListView)sender).SelectedItem = null;
+					if (selectedSection != null) {
+						await vm.SelectLineItem (selectedSection);
+					}
+				};
+				slOther.Children.Add (_lv);
+			}
+			_lv.ItemsSource = vm.LineItems;
 		}
 	}
 }

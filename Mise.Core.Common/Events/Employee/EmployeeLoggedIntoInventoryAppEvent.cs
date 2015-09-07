@@ -1,4 +1,5 @@
 ﻿using Mise.Core.Entities;
+using Mise.Core.ValueItems;
 
 namespace Mise.Core.Common.Events.Employee
 {

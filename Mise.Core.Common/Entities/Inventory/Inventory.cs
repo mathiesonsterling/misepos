@@ -138,6 +138,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
         private void WhenInventoryLineItemAdded(InventoryLineItemAddedEvent entityEvent)
         {
+
             var section = Sections.FirstOrDefault(s => s.ID == entityEvent.InventorySectionID);
 
             if (section == null)
@@ -151,6 +152,20 @@ namespace Mise.Core.Common.Entities.Inventory
             {
                 currentAmount = entityEvent.Container.AmountContained.Multiply(entityEvent.Quantity);
             }
+
+			//double check we don't already have the inventory position
+			var invPos = entityEvent.InventoryPosition;
+			if(invPos < 10){
+				invPos = 10;
+			}
+
+			if(section.LineItems.Any())
+			{
+				var currentInvPositions = section.LineItems.Select (l => l.InventoryPosition).Distinct ().ToList();
+				while(currentInvPositions.Contains (invPos)){
+					invPos++;
+				}
+			}
 
             //make our new LI
             var newLI = new InventoryBeverageLineItem
@@ -170,10 +185,11 @@ namespace Mise.Core.Common.Entities.Inventory
                 UPC = entityEvent.UPC,
                 VendorBoughtFrom = entityEvent.VendorBoughtFrom,
                 Categories = entityEvent.Categories.ToList(),
-                InventoryPosition = entityEvent.InventoryPosition
+				InventoryPosition = invPos
             };
 
             section.LineItems.Add(newLI);
+			section.LineItems = section.LineItems.OrderBy (li => li.InventoryPosition).ToList ();
 
         }
 
@@ -289,7 +305,6 @@ namespace Mise.Core.Common.Entities.Inventory
             lineItem.CurrentAmount = entityEvent.AmountMeasured;
             lineItem.NumFullBottles = entityEvent.NumFullBottlesMeasured;
             lineItem.PartialBottleListing = entityEvent.PartialBottles;
-
 
             var existingLI = section.LineItems.FirstOrDefault(li => li.ID == entityEvent.BeverageLineItem.ID);
             if (existingLI == null)

@@ -46,15 +46,23 @@
                     <TextBox Grid.Column="1" Grid.Row="0" x:Name="TxtFileName"></TextBox>
                     <Button Grid.Column="2" Grid.Row="0" x:Name="BtnFindFile" Click="BtnFindFile_OnClick">Browse...</Button>
                     
-                    <Label Grid.Column="0" Grid.Row="1">Vendor name:</Label>
+                    <TextBox Grid.Column="0" Grid.Row="1" x:Name="TxtEmail">orders@twinliquors.com</TextBox>
                     <TextBox Grid.Column="1" Grid.Row="1" x:Name="TxtVendorName">Twin Liquor</TextBox>
+
+                    <TextBox Grid.Column="0" Grid.Row="2" x:Name="TxtAddressNumber">519</TextBox>  
+                    <TextBox Grid.Column="1" Grid.Row="2" x:Name="TxtStreetDir">E</TextBox>
+                    <TextBox Grid.Column="2" Grid.Row="2" x:Name="TxtStreetName">7th St</TextBox>
                     
-                    <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">Neo4J Database location:</Label>
+                    <TextBox Grid.Column="0" Grid.Row="3" x:Name="TxtCity">Austin</TextBox>
+                    <TextBox Grid.Column="1" Grid.Row="3" x:Name="TxtState">Texas</TextBox>
+                    <TextBox Grid.Column="2" Grid.Row="3" x:Name="TxtZip">78701</TextBox>
+                    
+                        <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2">Database:</Label>
                     <ComboBox x:Name="CmbVendorDestDB" HorizontalAlignment="Left" Height="23" Margin="15,2,0,0" VerticalAlignment="Top" Width="663" 
-                              Grid.Column="1" Grid.Row="3"
+                              Grid.Column="1" Grid.Row="4"
                               DisplayMemberPath="Key" SelectedValuePath="Value" />
                     <Button x:Name="BtnImportVendor" Content="Import file" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="173" Height="41" 
-                            Grid.Row="4" Click="BtnImportVendor_Click" Grid.Column="1" Grid.ColumnSpan="2"/>
+                            Grid.Row="4" Click="BtnImportVendor_Click" Grid.Column="2" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
 

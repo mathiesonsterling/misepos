@@ -35,6 +35,21 @@ namespace Mise.Core.Common.UnitTests
 			Assert.IsTrue (res);
 			Assert.IsFalse (badRes, "False positive");
 		}
+
+		[Test]
+		public void CloneShouldClonePosition(){
+			var underTest = new InventoryBeverageLineItem () {
+				MiseName = "testPL",
+				InventoryPosition = 102,
+			};
+
+			//ACT
+			var res = underTest.Clone () as InventoryBeverageLineItem;
+
+			//ASSERT
+			Assert.NotNull (res);
+			Assert.AreEqual (underTest.InventoryPosition, res.InventoryPosition);
+		}
 	}
 }
 

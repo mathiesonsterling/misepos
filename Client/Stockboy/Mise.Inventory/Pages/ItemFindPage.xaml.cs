@@ -4,50 +4,57 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Core.Entities.Inventory;
+using Mise.Inventory.CustomControls;
+
+
 namespace Mise.Inventory.Pages
 {
-	public partial class ItemFindPage : ContentPage
+	public partial class ItemFindPage : BasePage
 	{
+		private ListView _lv;
 		public ItemFindPage()
 		{
 			InitializeComponent();
 
-			var vm = BindingContext as ItemFindViewModel;
+			var vm = ViewModel as ItemFindViewModel;
 			if(vm != null){
 				vm.LoadItemsOnView = LoadItems;
 			}
 		}
 
-		protected override async void OnAppearing ()
-		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "ItemFindPage"}});
-			var vm = BindingContext as ItemFindViewModel;
-		    if (vm != null)
-		    {
-		        await vm.OnAppearing();
-		    }
+		#region implemented abstract members of BasePage
+		public override BaseViewModel ViewModel {
+			get {
+				return App.ItemFindViewModel;
+			}
 		}
+		public override string PageName {
+			get {
+				return "ItemFindPage";
+			}
+		}
+		#endregion
 
 		void LoadItems(){
-			var vm = BindingContext as ItemFindViewModel;
+			var vm = ViewModel as ItemFindViewModel;
 			if(vm != null){
-				stckPossibles.Children.Clear ();
-
-				//make our list view
-				var template = new DataTemplate (typeof(TextCell));
-				template.SetBinding (TextCell.TextProperty, "DisplayName");
-				template.SetBinding (TextCell.DetailProperty, "DetailDisplay");
-				var lv = new ListView {
-					ItemsSource = vm.LineItems,
-					ItemTemplate = template,
-					HorizontalOptions = LayoutOptions.FillAndExpand
-				};
-				lv.ItemSelected += async (sender, e) => {
-					//fire the command
-					var item = e.SelectedItem as IBaseBeverageLineItem;
-					await vm.SelectLineItem(item);
-				};
-				stckPossibles.Children.Add(lv);
+				if (_lv == null) {
+					//make our list view
+					var template = new DataTemplate (typeof(TextCell));
+					template.SetBinding (TextCell.TextProperty, "DisplayName");
+					template.SetBinding (TextCell.DetailProperty, "DetailDisplay");
+					_lv = new ListView {
+						ItemTemplate = template,
+						HorizontalOptions = LayoutOptions.FillAndExpand
+					};
+					_lv.ItemSelected += async (sender, e) => {
+						//fire the command
+						var item = e.SelectedItem as IBaseBeverageLineItem;
+						await vm.SelectLineItem (item);
+					};
+					stckPossibles.Children.Add (_lv);
+				}
+				_lv.ItemsSource = vm.LineItems;
 			}
 		}
 	}

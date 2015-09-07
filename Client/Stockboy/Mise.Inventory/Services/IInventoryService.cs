@@ -12,9 +12,28 @@ namespace Mise.Inventory.Services
 	{
 		Task LoadLatest ();
 
+		/// <summary>
+		/// Add a new item to the inventory
+		/// </summary>
+		/// <returns>The line item to current inventory.</returns>
+		/// <param name="name">Name.</param>
+		/// <param name="category">Category.</param>
+		/// <param name="upc">Upc.</param>
+		/// <param name="quantity">Quantity.</param>
+		/// <param name="caseSize">Case size.</param>
+		/// <param name="container">Container.</param>
+		/// <param name="inventoryPosition">position in the list.  If null, it will be added to the end</param>
 		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (string name, ICategory category, string upc, 
-			int quantity, int caseSize, LiquidContainer container);
-		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity);
+			int quantity, int caseSize, LiquidContainer container, int? inventoryPosition);
+
+		/// <summary>
+		/// Add a new item to the inventory, based on an existing item
+		/// </summary>
+		/// <returns>The line item to current inventory.</returns>
+		/// <param name="source">Source.</param>
+		/// <param name="quantity">Quantity.</param>
+		/// <param name="inventoryPosition">Inventory position.  If null, add to the end of the list</param>
+		Task<IInventoryBeverageLineItem> AddLineItemToCurrentInventory (IBaseBeverageLineItem source, int quantity, int? inventoryPosition);
 
 		/// <summary>
 		/// Updates the current inventory with the items received from a RO
@@ -57,6 +76,7 @@ namespace Mise.Inventory.Services
 
 	    Task<IInventorySection> GetCurrentInventorySection();
 	    Task SetCurrentInventorySection(IInventorySection section);
+		Task<int> GetInventoryPositionAfterCurrentItem ();
 
 		Task MarkSectionAsComplete ();
 		Task ClearCurrentSection();

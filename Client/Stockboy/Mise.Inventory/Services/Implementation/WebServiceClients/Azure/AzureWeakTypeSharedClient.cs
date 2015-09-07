@@ -22,6 +22,7 @@ using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using System.Net;
 using Mise.Core.Client.Services;
+using Newtonsoft.Json.Serialization;
 
 
 
@@ -67,7 +68,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public Task<bool> SynchWithServer ()
 		{
-			return AttemptPush ();
+			try{
+				return AttemptPush ();
+			} catch(Exception e){
+				_logger.HandleException (e);
+				return Task.FromResult (false);
+			}
 			//TODO do we need to pull tables as well?
 		}
 
@@ -221,7 +227,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<IEnumerable<Vendor>> GetVendorsWithinSearchRadius (Location currentLocation, Distance radius)
 		{
-
 		    var table = GetEntityTable();
 
 			var vendType = typeof(Vendor).ToString ();
@@ -236,11 +241,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			var ais = await table
 				.Where (si => si.MiseEntityType == vendType)
-				.ToEnumerableAsync ();
+				.ToCollectionAsync ();
 
 			//todo figure out a better way to do this on the server
 			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
-				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto));
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto))
+				.ToList();
 
 			return vendors;
 				/*.Where(v => v.StreetAddress != null && v.StreetAddress.StreetAddressNumber != null)
@@ -348,9 +354,15 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<IEnumerable<Employee>> GetEmployeesAsync ()
 		{
 			var empType = typeof(Employee).ToString ();
-
 		    var table = GetEntityTable();
-			await AttemptPull ("allEmployees", null);
+			try{
+				await AttemptPull ("allEmployees", null);
+			} 	catch(MobileServicePushFailedException pe){
+				//check the push result to see if this is deletion of a mod that we can ignore
+				_logger.HandleException (pe);
+				throw;
+			}
+
 			var ais = await table.Where (ai => ai.MiseEntityType == empType).ToEnumerableAsync ();
 
 			return ais.Select (ai => ai.ToRestaurantDTO ())
@@ -368,8 +380,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			//TODO change this to do the query on server, or at least limit it somehow
 			try{
 				var items = (await GetEmployeesAsync ()).ToList();
-					var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
-				&& e.Password != null && e.Password.Equals (password));
+				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
+					&& e.Password != null && e.Password.Equals (password));
 
 				if(found == null) {
 					if (items.Any (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email))) {
@@ -379,7 +391,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				} 
 
 				return found;
-			} catch(Exception e){
+			} 
+			catch(Exception e){
 				_logger.HandleException (e);
 				throw;
 			}
@@ -471,6 +484,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				_needsSynch = true;
 				return false;
 			}
+
+			//https://codemilltech.com/why-cant-we-be-friends-conflict-resolution-in-azure-mobile-services/
 		}
 
 		private async Task AttemptPull(string queryName, IMobileServiceTableQuery<AzureEntityStorage> query){

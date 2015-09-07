@@ -69,10 +69,9 @@ namespace Mise.Inventory
 				repositories.Add(_receivingOrderRepository);
 				repositories.Add(_purchaseOrderRepository);
 			}
-				
-			foreach (var repository in repositories) {
-				await repository.Load(restaurantID);
-			}
+
+			var loadTasks = repositories.Select (r => r.Load (restaurantID));
+			await Task.WhenAll (loadTasks);
 
 			//get the last ID on each
 			var lastIDs = repositories.Select(r => r.GetLastEventID());

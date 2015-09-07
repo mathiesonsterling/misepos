@@ -26,7 +26,9 @@
             @Html.DisplayFor(modelItem => item.Address)
         </td>
         <td>
-            <a href="../Inventories/Index?restaurantId=@item.Id">Inventories</a>
+            <a href="../Inventories/Index?restaurantId=@item.Id">Inventories</a> |
+            <a href="../Pars/Index?restaurantId=@item.Id">Pars</a> |
+            <a href="../ReceivingOrder/Index?restaurantId=@item.Id">Received Shipments</a>
         </td>
     </tr>
 }

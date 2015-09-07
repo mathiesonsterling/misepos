@@ -54,5 +54,6 @@ namespace Mise.Core.Entities.Inventory
         /// </summary>
         /// <returns></returns>
         int GetNextItemPosition();
+		void UpdatePositions();
     }
 }

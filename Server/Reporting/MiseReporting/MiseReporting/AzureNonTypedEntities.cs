@@ -25,5 +25,7 @@ namespace MiseReporting
                 .Property(e => e.Version)
                 .IsFixedLength();
         }
+
+        public System.Data.Entity.DbSet<MiseReporting.Models.PurchaseOrderViewModel> PurchaseOrderViewModels { get; set; }
     }
 }

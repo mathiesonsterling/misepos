@@ -8,31 +8,42 @@ using Mise.Inventory.CustomControls;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class ReceivingOrderPage : ContentPage
+	public partial class ReceivingOrderPage : BasePage
 	{
 		ListView _customVL;
 		public ReceivingOrderPage()
 		{
 			InitializeComponent();
 
-			var vm = BindingContext as ReceivingOrderViewModel;
+			var vm = ViewModel as ReceivingOrderViewModel;
 			vm.LoadItemsOnView = LoadItems;
 		}
 
-		protected override async void OnAppearing ()
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.ReceivingOrderViewModel;
+			}
+		}
+
+		public override string PageName {
+			get {
+				return "ReceivingOrderPage";
+			}
+		}
+
+		#endregion
+
+		protected override void OnAppearing ()
 		{
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "ReceivingOrderPage"}});
+			base.OnAppearing ();
 			stckNotes.IsVisible = Device.Idiom != TargetIdiom.Phone;
-			var vm = BindingContext as ReceivingOrderViewModel;
-		    if (vm != null)
-		    {
-		        await vm.OnAppearing();
-		    }
 		}
 
 		async Task LineItemDeleted(object item){
 			var realItem = item as ReceivingOrderViewModel.ReceivingOrderDisplayLine;
-			var vm = BindingContext as ReceivingOrderViewModel;
+			var vm = ViewModel as ReceivingOrderViewModel;
 			if(realItem != null && vm != null){
 				await vm.DeleteLineItem(realItem);
 			}
@@ -40,7 +51,7 @@ namespace Mise.Inventory.Pages
 
 		void LoadItems ()
 		{
-			var vm = BindingContext as ReceivingOrderViewModel;
+			var vm = ViewModel as ReceivingOrderViewModel;
 			if (vm != null) {
 				if (_customVL == null) {
 					_customVL = new ListView {

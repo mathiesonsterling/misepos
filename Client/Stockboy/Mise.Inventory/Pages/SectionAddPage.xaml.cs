@@ -5,16 +5,28 @@ using Xamarin.Forms;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class SectionAddPage : ContentPage
+	public partial class SectionAddPage : BasePage
 	{
 		public SectionAddPage()
 		{
 			InitializeComponent();
 		}
 
-		protected override void OnAppearing(){
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "SectionAddPage"}});
+		#region implemented abstract members of BasePage
+
+		public override Mise.Inventory.ViewModels.BaseViewModel ViewModel {
+			get {
+				return App.SectionAddViewModel;
+			}
 		}
+
+		public override string PageName {
+			get {
+				return "SectionAddPage";
+			}
+		}
+
+		#endregion
 	}
 }
 

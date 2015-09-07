@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<local:BasePage
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures" 
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
 	x:Class="Mise.Inventory.Pages.InventoryVisuallyMeasureWithGesturesPage"
 	Title="Measure Item"
 >
@@ -46,9 +47,14 @@
 				 HorizontalOptions="FillAndExpand"
 				 IsVisible = "{Binding CanMoveToNext}"
 		    />
-			<Button Command="{Binding MeasureCommand}" Text="Measure" 
+		    <Button Command="{Binding MeasureCommand}" Text="Save and return to list" 
 				HorizontalOptions="FillAndExpand"/>
+		    <Button
+		    	Command="{Binding InsertNewItemAfterCommand}"
+		    	Text="Insert item"
+		    	HorizontalOptions="FillAndExpand"
+		    />
 		</mr:StackLayout>
 		</ScrollView>
 	</ContentPage.Content>
-</ContentPage>
+</local:BasePage>
