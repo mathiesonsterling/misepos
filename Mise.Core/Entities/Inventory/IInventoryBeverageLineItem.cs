@@ -21,6 +21,11 @@ namespace Mise.Core.Entities.Inventory
         LiquidContainerShape Shape { get; }
 
         /// <summary>
+        /// Price given by the user through the website.  RO prices should take precedence always!
+        /// </summary>
+        Money PricePaid { get; }
+
+        /// <summary>
         /// Flagged enum showing how we got the current amount
         /// </summary>
         MeasurementMethods MethodsMeasuredLast { get; }

@@ -119,7 +119,7 @@ namespace Mise.Inventory.Pages
 
 		#endregion
 		 
-		protected override async void OnAppearing ()
+		protected override void OnAppearing ()
 		{
 			base.OnAppearing ();
 			var vm = ViewModel as InventoryVisuallyMeasureBottleViewModel;

@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
-using Mise.Core.Entities.Vendors;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
-using System.Collections.Generic;
+
 namespace Mise.Core.Common.Entities.Inventory
 {
     /// <summary>
@@ -32,22 +31,23 @@ namespace Mise.Core.Common.Entities.Inventory
         {
             get
             {
-                if (Container != null && Container.Shape != null)
+                if (Container?.Shape != null)
                 {
                     return Container.Shape;
                 }
 
                 //don't have container, let's get it via category
                 var standCat = Categories?.FirstOrDefault(c => c.IsCustomCategory == false);
-                if (standCat != null)
+                if (standCat == null)
                 {
-					var catService = new CategoriesService ();
-					return catService.GetShapeForCategory (standCat);
+                    return LiquidContainerShape.DefaultBottleShape;
                 }
-
-				return LiquidContainerShape.DefaultBottleShape;
+                var catService = new CategoriesService ();
+                return catService.GetShapeForCategory (standCat);
             }
         }
+
+        public Money PricePaid { get; set; }
 
         public List<decimal> PartialBottleListing{ get; set;}
 
@@ -60,12 +60,9 @@ namespace Mise.Core.Common.Entities.Inventory
             return PartialBottleListing;
         }
 
-		public int NumPartialBottles{get{ 
-				return 
-					PartialBottleListing != null ? PartialBottleListing.Count : 0;
-			}}
-		
-		public int NumFullBottles{get;set;}
+		public int NumPartialBottles => PartialBottleListing?.Count ?? 0;
+
+        public int NumFullBottles{get;set;}
 
 		/// <summary>
 		/// Total number of physical bottles that are part of this line item
@@ -106,7 +103,7 @@ namespace Mise.Core.Common.Entities.Inventory
             newItem.NumFullBottles = NumFullBottles;
 			newItem.PartialBottleListing = PartialBottleListing != null 
 				? PartialBottleListing.Select (d => d).ToList ()
-				: new List<decimal> ();;
+				: new List<decimal> ();
 			newItem.Categories = Categories != null 
 				? Categories.Select (c => c).ToList () 
 				: new List<ItemCategory>();
@@ -137,11 +134,7 @@ namespace Mise.Core.Common.Entities.Inventory
 				|| (Categories != null && Categories.Any(c => c.ContainsSearchString(searchString)));
 		}
 			
-		public bool HasBeenMeasured {
-			get {
-				return MethodsMeasuredLast != MeasurementMethods.Unmeasured;
-			}
-		}
+		public bool HasBeenMeasured => MethodsMeasuredLast != MeasurementMethods.Unmeasured;
 
         public int InventoryPosition { get; set; }
 
@@ -150,10 +143,6 @@ namespace Mise.Core.Common.Entities.Inventory
 			return Categories;
 		}
 
-		public string CategoryDisplay {
-			get {
-				return Categories.Any () ? Categories.First ().Name : string.Empty;
-			}
-		}
+		public string CategoryDisplay => Categories.Any () ? Categories.First ().Name : string.Empty;
     }
 }
