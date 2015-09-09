@@ -93,10 +93,8 @@ namespace Mise.Inventory.ViewModels
 				private set{ SetValue (value); }
 		}
 
-		public bool AddToParEnabled{
-			get{return true;}
-		}
-		public IEnumerable<string> PossibleContainerNames{ get; set;}
+		public bool AddToParEnabled => true;
+	    public IEnumerable<string> PossibleContainerNames{ get; set;}
 
 		public IEnumerable<string> PossibleCategoryNames{get;set;}
 		#endregion
@@ -147,6 +145,8 @@ namespace Mise.Inventory.ViewModels
 				}
 				Processing = false;
 				AddAtPosition = null;
+                //we added, we need to update our beverage item cache
+			    await _biService.ReloadItemCache();
 				await Navigation.CloseItemAdd ();
 			} catch(Exception e){
 				HandleException (e);
@@ -158,7 +158,7 @@ namespace Mise.Inventory.ViewModels
 			//curretly only handles one level of subcats
 			PossibleCategories = _categoriesService.GetIABIngredientCategories ();
 
-			var containers = await _biService.GetAllPossibleContainerSizes ();
+			var containers = (await _biService.GetAllPossibleContainerSizes ()).ToList();
 			PossibleContainers = containers;
 			PossibleContainerNames = containers.Select (c => c.DisplayName);
 

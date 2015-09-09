@@ -17,6 +17,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services;
 using Mise.Core.Common.Entities;
 using Mise.Core.Entities.Restaurant;
+using Mise.Inventory.Services.Implementation;
 
 
 namespace Mise.Inventory.UnitTests.Services

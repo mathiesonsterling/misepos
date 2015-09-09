@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Repositories.Base;
-using Mise.Core.Common.Services;
-using Mise.Core.Entities.Base;
-using Mise.Core.ExtensionMethods;
-using Mise.Core.Services.UtilityServices;
-using Mise.Core.Services;
-using Mise.Core.ValueItems;
-using System.Linq.Expressions;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Common.Services.WebServices.Exceptions;
+using Mise.Core.Entities.Base;
+using Mise.Core.Services.UtilityServices;
+using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Repositories
 {
@@ -21,6 +17,7 @@ namespace Mise.Core.Client.Repositories
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TEventType"></typeparam>
+    /// <typeparam name="TConcreteStorageType">Actual concrete the entity is stored as (used to pass over the wire)</typeparam>
     public abstract class BaseEventSourcedClientRepository<TEntity, TEventType, TConcreteStorageType> 
 		: BaseEventSourcedRepository<TEntity, TEventType> 
         where TEntity : class, IEventStoreEntityBase<TEventType>, ICloneableEntity 
@@ -37,8 +34,6 @@ namespace Mise.Core.Client.Repositories
         }
 
         protected abstract Task<IEnumerable<TConcreteStorageType>> LoadFromWebservice(Guid? restaurantID);
-
-        protected virtual TimeSpan DelayToReload { get { return new TimeSpan(0, 0, 0, 1); } }
 
         /// <summary>
         /// The last restaurantID we got loaded with
@@ -109,7 +104,6 @@ namespace Mise.Core.Client.Repositories
             var toSend = bundle.Events;
             Logger.Log("Sending events to service", LogLevel.Debug);
 
-            commitRes = CommitResult.Error;
             try
             {
 				var sendRes = await _webService.SendEventsAsync(bundle.NewVersion as TConcreteStorageType, toSend).ConfigureAwait(false);
@@ -192,16 +186,6 @@ namespace Mise.Core.Client.Repositories
             SentSome,
             SentAll,
             Error
-        }
-
-
-        /// <summary>
-        /// Get the events of this type that are waiting to send
-        /// </summary>
-        protected Task<IEnumerable<TEventType>> GetOfflineEvents()
-        {
-            throw new NotImplementedException();
-            //TODO get them from teh DAL
         }
     }
 }
