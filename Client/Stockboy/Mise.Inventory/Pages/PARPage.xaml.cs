@@ -24,7 +24,7 @@ namespace Mise.Inventory.Pages
 
 		public override BaseViewModel ViewModel {
 			get {
-				return App.PARViewModel;
+				return App.ParViewModel;
 			}
 		}
 

@@ -37,7 +37,7 @@ namespace Mise.Inventory.ViewModels
 			        items = LineItems.ToList();
 			    }
 			    else
-			    {
+			    { 
 			        items = await LoadItems();
 			    }
 			    if(string.IsNullOrEmpty (SearchString) == false){
