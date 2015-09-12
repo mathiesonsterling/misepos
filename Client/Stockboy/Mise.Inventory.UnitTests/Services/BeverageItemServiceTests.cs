@@ -134,12 +134,9 @@ namespace Mise.Inventory.UnitTests.Services
 			var mockRORepos = new Mock<IReceivingOrderRepository> ();
 			mockRORepos.Setup (r => r.GetAll ())
 				.Returns (new List<IReceivingOrder> ());
-			var loginService = new Mock<ILoginService> ();
-			loginService.Setup (ls => ls.GetCurrentRestaurant ()).Returns (() => Task.FromResult (new Restaurant{ID = restaurantID} as IRestaurant));
 			var underTest = new BeverageItemService (mockLogger.Object, mockDevLoc, mockVendorRepos.Object, 
-				mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object, loginService.Object) 
-			{
-			};
+				                mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object); 
+
 
 			//ACT
 			var res = underTest.GetPossibleItems ().Result.ToList();
@@ -231,17 +228,13 @@ namespace Mise.Inventory.UnitTests.Services
 			var mockPARRepos = new Mock<IParRepository> ();
 			mockPARRepos.Setup (r => r.GetAll())
 				.Returns (new []{currentPar});
-
-			var mockLoginService = new Mock<ILoginService> ();
-			mockLoginService.Setup (mls => mls.GetCurrentRestaurant ())
-				.Returns (Task.FromResult (new Restaurant{RestaurantID = restaurantID, ID = restaurantID} as IRestaurant));
-
+			
 			var mockRORepos = new Mock<IReceivingOrderRepository> ();
 			mockRORepos.Setup (r => r.GetAll ())
 				.Returns (new List<IReceivingOrder> ());
 			
 			var underTest = new BeverageItemService (mockLogger.Object, mockDevLoc, mockVendorRepos.Object, 
-				mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object, mockLoginService.Object);
+				mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object);
 
 			//ACT
 			var res = underTest.GetPossibleItems ().Result.ToList();
@@ -340,17 +333,12 @@ namespace Mise.Inventory.UnitTests.Services
 			var mockPARRepos = new Mock<IParRepository> ();
 			mockPARRepos.Setup (r => r.GetCurrentPAR (restaurantID))
 				.Returns (Task.FromResult(currentPar));
-
-			var mockLoginService = new Mock<ILoginService> ();
-			mockLoginService.Setup (mls => mls.GetCurrentRestaurant ())
-				.Returns (Task.FromResult (new Restaurant{RestaurantID = restaurantID, ID = restaurantID} as IRestaurant));
-
+			
 			var mockRORepos = new Mock<IReceivingOrderRepository> ();
 			mockRORepos.Setup (r => r.GetAll ())
 				.Returns (new List<IReceivingOrder> ());
 			var underTest = new BeverageItemService (mockLogger.Object, mockDevLoc, mockVendorRepos.Object, 
-				mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object, mockLoginService.Object) {
-		};
+				                mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object);
 
 			//ACT
 			var res = underTest.FindItem ("inSearch").Result.ToList();
@@ -395,18 +383,13 @@ namespace Mise.Inventory.UnitTests.Services
 			var mockPARRepos = new Mock<IParRepository> ();
 			mockPARRepos.Setup (r => r.GetCurrentPAR (It.IsAny<Guid>()))
 				.Returns (Task.FromResult(currentPar));
-
-			var restaurantID = Guid.NewGuid ();
-			var mockLoginService = new Mock<ILoginService> ();
-			mockLoginService.Setup (mls => mls.GetCurrentRestaurant ())
-				.Returns (Task.FromResult (new Restaurant{RestaurantID = restaurantID, ID = restaurantID} as IRestaurant));
-
+			
 			var mockRORepos = new Mock<IReceivingOrderRepository> ();
 			mockRORepos.Setup (r => r.GetAll ())
 				.Returns (new List<IReceivingOrder> ());
 			
 			var underTest = new BeverageItemService (mockLogger.Object, mockDevLoc, mockVendorRepos.Object, 
-			mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object, mockLoginService.Object);
+				mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object);
 
 			//ACT
 			var res = underTest.GetPossibleItems ().Result;
@@ -427,17 +410,12 @@ namespace Mise.Inventory.UnitTests.Services
 
 			var mockPARRepos = new Mock<IParRepository> ();
 
-			var restaurantID = Guid.Empty;
-			var mockLoginService = new Mock<ILoginService> ();
-			mockLoginService.Setup (mls => mls.GetCurrentRestaurant ())
-				.Returns (Task.FromResult (new Restaurant{RestaurantID = restaurantID, ID = restaurantID} as IRestaurant));
-
 			var mockRORepos = new Mock<IReceivingOrderRepository> ();
 			mockRORepos.Setup (r => r.GetAll ())
 				.Returns (new List<IReceivingOrder> ());
 			
 			var underTest = new BeverageItemService (mockLogger.Object, mockDevLoc, mockVendorRepos.Object, 
-				mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object, mockLoginService.Object);
+				mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object);
 
 			//ACT
 			var res = await underTest.GetPossibleItems ();

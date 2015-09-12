@@ -20,7 +20,6 @@ namespace Mise.Inventory.Services.Implementation
 		readonly IReceivingOrderRepository _roRepository;
    		readonly ILogger _logger;
 		readonly IDeviceLocationService _deviceLocationService;
-		readonly ILoginService _loginService;
 
 		class ContainerAndTimes{
 			public ContainerAndTimes(LiquidContainer container, int times){
@@ -44,8 +43,7 @@ namespace Mise.Inventory.Services.Implementation
 			IVendorRepository vendorRepository, 
 			IParRepository parRepository, 
 			IInventoryRepository inventoryRepository,
-			IReceivingOrderRepository roRepository,
-			ILoginService loginService
+			IReceivingOrderRepository roRepository
 		)
 		{
 			_logger = logger;
@@ -53,7 +51,6 @@ namespace Mise.Inventory.Services.Implementation
 			_vendorRepository = vendorRepository;
 			_inventoryRepository = inventoryRepository;
 			_parRepository = parRepository;
-			_loginService = loginService;
 			_roRepository = roRepository;
 			_containersAndTimeUsed = GetDefaultContainers ();
 		}
@@ -111,13 +108,6 @@ namespace Mise.Inventory.Services.Implementation
 		async Task<IEnumerable<IBaseBeverageLineItem>> GetItemsFromRepositories(string searchString, int maxItems){
 			//get the items
 			var items = new List<IBaseBeverageLineItem> ();
-
-			var restaurant = await _loginService.GetCurrentRestaurant ();
-			if(restaurant == null)
-			{
-				_logger.Warn ("Call for items without a restaurant set");
-				return items;
-			}
 
 			try
 			{
