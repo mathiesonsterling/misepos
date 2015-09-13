@@ -1,50 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using Mise.Inventory.ViewModels;
 using Mise.Inventory.ViewModels.Reports;
 using Xamarin.Forms;
 
-namespace Mise.Inventory
+namespace Mise.Inventory.Pages.Reports
 {
-	public partial class SelectCompletedInventoriesPage : ContentPage
+	public partial class SelectCompletedInventoriesPage : BasePage
 	{
+		private ListView _lv;
 		public SelectCompletedInventoriesPage ()
 		{
-			var vm = App.SelectCompletedInventoryViewModel;
-			BindingContext = vm;
 			InitializeComponent ();
+			var vm = ViewModel as SelectCompletedInventoryViewModel;
 			vm.LoadItemsOnView = LoadItems;
 		}
 
-		protected override async void OnAppearing ()
-		{
-			var vm = BindingContext as SelectCompletedInventoryViewModel;
-			if (vm != null) {
-				await vm.OnAppearing ();
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.SelectCompletedInventoryViewModel;
 			}
 		}
 
-		private void LoadItems(){
-			stckInventories.Children.Clear ();
-			var vm = BindingContext as SelectCompletedInventoryViewModel;
-			if (vm != null) {
-				var template = new DataTemplate (typeof(TextCell));
-				template.SetBinding (TextCell.TextProperty, "DateCompleted");
-				template.SetBinding (TextCell.DetailProperty, "EmployeeName");
-				var lv = new ListView {
-					ItemsSource = vm.LineItems,
-					ItemTemplate = template,
-					HorizontalOptions = LayoutOptions.FillAndExpand
-				};
+		public override string PageName {
+			get {
+				return "SelectCompletedInventoriesPage";
+			}
+		}
 
-				lv.ItemTapped += async (sender, e) => {
-					var selectedVendor = e.Item as InventoryDisplayLine;
-					((ListView)sender).SelectedItem = null;
-					if (selectedVendor != null) {
-						await vm.SelectLineItem (selectedVendor);
-					}
-				};
-				stckInventories.Children.Add (lv);
+		#endregion
+
+		private void LoadItems(){
+			var vm = ViewModel as SelectCompletedInventoryViewModel;
+			if (vm != null) {
+				if (_lv == null) {
+					var template = new DataTemplate (typeof(TextCell));
+					template.SetBinding (TextCell.TextProperty, "DateCompleted");
+					template.SetBinding (TextCell.DetailProperty, "EmployeeName");
+					_lv = new ListView {
+						ItemTemplate = template,
+						HorizontalOptions = LayoutOptions.FillAndExpand
+					};
+
+					_lv.ItemTapped += async (sender, e) => {
+						var selectedVendor = e.Item as InventoryDisplayLine;
+						((ListView)sender).SelectedItem = null;
+						if (selectedVendor != null) {
+							await vm.SelectLineItem (selectedVendor);
+						}
+					};
+					stckInventories.Children.Add (_lv);
+				}
+				_lv.ItemsSource = vm.LineItems;
 			}
 		}
 	}
