@@ -13,6 +13,7 @@ using Mise.Inventory.ViewModels;
 using Mise.Inventory.Services;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Services;
+using Mise.Inventory.ViewModels.Modals;
 
 
 namespace Mise.Inventory.UnitTests.ViewModels
@@ -89,10 +90,19 @@ namespace Mise.Inventory.UnitTests.ViewModels
 
 			var logger = new Mock<ILogger> ();
 		    var insights = new Mock<IInsightsService>();
+
+		    var messageCalled = false;
+		    Func<ErrorMessage, Task> messageFunc = message =>
+		    {
+		        messageCalled = true;
+		        return Task.FromResult(false);
+		    };
+
 			var underTest = new LoginViewModel (logger.Object, loginService.Object, navigationService.Object, insights.Object)
 			{
 			    Username = "test@misepos.com",
-			    Password = "password"
+			    Password = "password",
+                DisplayMessage = messageFunc
 			};
 
 		    //ACT
@@ -102,10 +112,11 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			//ASSERT
 			loginService.Verify (ls => ls.LoginAsync (It.IsAny<EmailAddress> (), It.IsAny<Password> ()), Times.Once ());
 			navigationService.Verify (ns => ns.ShowMainMenu(), Times.Never (), "didnt go to main menu");
+            Assert.IsTrue(messageCalled);
 		}
 
 		[Test]
-		public async Task ShouldNavigateToMainOnLoginWithOneRestaurant()
+		public async Task ShouldNavigateToRestaurantLoadOnLoginWithOneRestaurant()
 		{
 			//ASSEMBLE
 			var loginService = new Mock<ILoginService> ();
@@ -132,7 +143,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
 
 			//ASSERT
 			loginService.Verify (ls => ls.LoginAsync (It.IsAny<EmailAddress> (), It.IsAny<Password> ()), Times.Once ());
-			appNavigation.Verify (ns => ns.ShowMainMenu(), Times.Once(), "didnt go to main menu");
+			appNavigation.Verify (ns => ns.ShowRestaurantLoading(), Times.Once(), "didnt go to main menu");
 			appNavigation.Verify (ns => ns.ShowSelectRestaurant (), Times.Never (), "select restaurant was called");
 		}
 
