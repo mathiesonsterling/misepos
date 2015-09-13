@@ -86,6 +86,11 @@ namespace Mise.Inventory.Services.Implementation
 			await _navi.PushAsync(_pages.GetPage (Pages.Login));
 		}
 
+		public async Task ShowRestaurantLoading ()
+		{
+			await _navi.PushAsync (_pages.GetPage (Pages.RestaurantLoading));
+		}
+
 		public async Task ShowCreatePurchaseOrder()
 		{
 			//until we have more stuff, go to review

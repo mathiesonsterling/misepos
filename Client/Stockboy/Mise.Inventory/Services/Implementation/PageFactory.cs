@@ -66,6 +66,8 @@ namespace Mise.Inventory.Services
                     return new SelectCompletedInventoriesPage();
                 case Pages.ReportResults:
                     return new ReportResultsPage();
+				case Pages.RestaurantLoading:
+					return new RestaurantLoadingPage ();
                 default:
                     throw new ArgumentException(string.Format("Unknown page type {0}", page));
             }

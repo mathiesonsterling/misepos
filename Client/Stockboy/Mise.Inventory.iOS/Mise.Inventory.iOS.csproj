@@ -239,6 +239,7 @@
     <BundleResource Include="Resources\Default-Portrait%402x.png" />
     <BundleResource Include="Resources\Default-Landscape%402x.png" />
     <BundleResource Include="Resources\Icon.png" />
+    <BundleResource Include="Resources\restaurantLoading.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />

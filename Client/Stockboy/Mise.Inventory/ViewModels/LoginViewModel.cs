@@ -154,7 +154,7 @@ namespace Mise.Inventory.ViewModels
 						Processing = true;
 			            await _loginService.SelectRestaurantForLoggedInEmployee(rests.First().ID);
 						Processing = false;
-			            await Navigation.ShowMainMenu();
+						await Navigation.ShowRestaurantLoading ();
 			            return;
 			        }
 			        if (numRests > 1)

@@ -167,16 +167,20 @@ namespace Mise.Inventory.Services.Implementation
 
 		public async Task LogOutAsync()
 		{
-			if (_currentEmployee != null) {
-				var ev = _eventFactory.CreateEmployeeLoggedOutOfInventoryAppEvent (_currentEmployee);
-				_employeeRepository.ApplyEvent (ev);
+			try{
+				if (_currentEmployee != null && _currentRestaurant != null) {
+					var ev = _eventFactory.CreateEmployeeLoggedOutOfInventoryAppEvent (_currentEmployee);
+					_employeeRepository.ApplyEvent (ev);
 
-				var id = _currentEmployee.ID;
-				await _employeeRepository.Commit (id);
+					var id = _currentEmployee.ID;
+					await _employeeRepository.Commit (id);
+				}
+			} catch(Exception e){
+				_logger.HandleException (e);
 			}
 
 			_currentEmployee = null;
-
+			_currentRestaurant = null;
 		    await _repositoryLoader.ClearAllRepositories();
 		    await _repositoryLoader.LoadRepositories(null);
 
@@ -214,25 +218,28 @@ namespace Mise.Inventory.Services.Implementation
 			_logger.Debug ("User selected restaurant");
 			_currentRestaurant = _restaurantRepository.GetByID (restaurantID);
 
-			if (_currentRestaurant != null) {
-				
-				_eventFactory.SetRestaurant (_currentRestaurant);
+		}
 
-				//load the repositories as well to reflect our new restaurant!
-			    await _repositoryLoader.LoadRepositories(_currentRestaurant.ID);
-
-				_logger.Debug ("Current restaurant is set, creating event");
-				var selEv = _eventFactory.CreateUserSelectedRestaurant (_currentEmployee, restaurantID);
-				_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
-				await _restaurantRepository.Commit (_currentRestaurant.ID);
-				_logger.Debug ("User selected restaurant event committed");
-
-				//store it in the DB
-				var restRecord = new RestaurantSelectRecord{RestaurantID = _currentRestaurant.ID};
-				await _keyValStorage.SetValue (LAST_RESTAURANT_ID_KEY, restRecord);
-			} else{
-				_logger.Error("Current restaurant is null!");
+		public async Task LoadSelectedRestaurant ()
+		{
+			if (_currentRestaurant == null) {
+				throw new InvalidOperationException ("No restaurant is selected");
 			}
+
+			_eventFactory.SetRestaurant (_currentRestaurant);
+
+			//load the repositories as well to reflect our new restaurant!
+			await _repositoryLoader.LoadRepositories(_currentRestaurant.ID);
+
+			_logger.Debug ("Current restaurant is set, creating event");
+			var selEv = _eventFactory.CreateUserSelectedRestaurant (_currentEmployee, _currentRestaurant.ID);
+			_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
+			await _restaurantRepository.Commit (_currentRestaurant.ID);
+			_logger.Debug ("User selected restaurant event committed");
+
+			//store it in the DB
+			var restRecord = new RestaurantSelectRecord{RestaurantID = _currentRestaurant.ID};
+			await _keyValStorage.SetValue (LAST_RESTAURANT_ID_KEY, restRecord);
 		}
 
 		public Task<IEmployee> GetCurrentEmployee ()

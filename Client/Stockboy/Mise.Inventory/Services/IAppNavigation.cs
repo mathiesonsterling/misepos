@@ -43,6 +43,8 @@ namespace Mise.Inventory.Services
 
 		Task ShowLogin();
 
+		Task ShowRestaurantLoading();
+
 		Task ShowCreatePurchaseOrder();
 
 		Task ShowReports();

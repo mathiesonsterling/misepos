@@ -21,7 +21,15 @@ namespace Mise.Inventory.Services
 
 		Task<IEnumerable<IRestaurant>> GetPossibleRestaurantsForLoggedInEmployee();
 
+		/// <summary>
+		/// Mark which restaurant a user wants to use
+		/// </summary>
+		/// <param name="restaurantID">Restaurant I.</param>
 		Task SelectRestaurantForLoggedInEmployee (Guid restaurantID);
+		/// <summary>
+		/// Load the information for the selected restaurant.  Allows this to be done on a seperate page
+		/// </summary>
+		Task LoadSelectedRestaurant();
 
 		Task LogOutAsync();
 

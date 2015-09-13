@@ -136,7 +136,7 @@ namespace Mise.Inventory
         public static ReportResultsViewModel ReportResultsViewModel => Resolve<ReportResultsViewModel> ();
 
         public static AuthorizeCreditCardViewModel AuthorizeCreditCardViewModel => Resolve<AuthorizeCreditCardViewModel>();
-
+		public static RestaurantLoadingViewModel RestaurantLoadingViewModel => Resolve<RestaurantLoadingViewModel>();
         #endregion
 
         private static T Resolve<T>()

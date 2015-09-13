@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="Mise.Inventory.Pages.RestaurantLoadingPage"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
+>
+	<ContentPage.Content>
+		<StackLayout>
+			<Label 
+				Text="Stockboy is doing his side work, and will be ready to go in just a moment . . . "
+				Style="{DynamicResource SubtitleStyle}"
+			>
+			</Label>
+			<Image 
+				Source="restaurantLoading.png"
+				HeightRequest = "200"
+			/>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+		</StackLayout>
+	</ContentPage.Content>
+</local:BasePage>
