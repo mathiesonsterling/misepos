@@ -19,7 +19,7 @@ namespace Mise.Inventory.Services.Implementation
 				"The State of Georgia was originally colonized with three prohibitions. No alcohol, no slavery, and no Catholics.",
 				"Scientists are researching a chemical/drug that dramatically reduces alcohol/BAC levels in the blood, which has the potential to be used to sober people up in a very short time.",
 				"The original Playboy Bunnies were required to be able to identify 143 brands of liquor and how to make 20 different cocktails as part of their job requirements.",
-				"Absinthe, The Green Fairy, was invented by the Swiss in the 19th century. Though it contains wormwood, it’s no more hallucinogenic than vodka or whiskey. Economics/politics are the true culprits for Absinthe once being banned across the world.",
+				"Absinthe was invented by the Swiss in the 19th century. Though it contains wormwood, it’s no more hallucinogenic than vodka or whiskey. Economics/politics are the true culprits for Absinthe once being banned across the world.",
 				"Walgreens pharmacy franchise grew from 20 to 400 stores during Prohibition due to liquor prescriptions. ",
 				"On Christmas Day 1826, cadets at the US Military Academy at West Point including future Confederacy President Jefferson Davis threw a booze-fueled party and eventual turned into mutiny that ended with 20 Court Martials.",
 				"Mountain Dew was made to be mixed with whiskey.",
@@ -37,7 +37,15 @@ namespace Mise.Inventory.Services.Implementation
 				"The most expensive scotch in the world is sold for $460,000 and that’s $14,000 per shot.",
 				"There is a cruise ship that runs between Stockholm and Helsinki with the primary purpose of purchasing and consuming cheap alcohol.",
 				"During prohibition, Herbert Hoover would go to the Belgian embassy to have martinis, as it was not illegal to possess alcohol on foreign soil.",
-				"Mississippi permits drivers to consume alcohol while driving. However, the driver must still stay below the 0.08% blood alcohol content limit for DUI."
+				"Mississippi permits drivers to consume alcohol while driving. However, the driver must still stay below the 0.08% blood alcohol content limit for DUI.",
+				"The word brandy is derived from the Dutch word brandewijn, which translates to 'burnt wine.'",
+				"Despite Kentucky producing 95 percent of the world's bourbon, none of it is currently made in Bourbon County.",
+				"Even though gin has been produced in the U.S. since colonial times, it wasn't a very popular liquor until the Prohibition era. The ease with which it could be made and the relatively low cost involved in producing it made gin an abundant favorite at illegal bars.",
+				"The name gin is derived from various languages' names for the juniper berry—where gin gets much of its flavor. In French, it's genièvre, while in Dutch it's jenever, and in Italian it's ginepro.",
+				"Stylists in the 1800s believed that rum held the secret to clean and healthy hair, and often advised their clients to wash and soak their hair in the tropical liquor. (Brandy was considered a slightly less effective alternative.)",
+				"Magellan reportedly spent more on sherry than he spent on weapons for his 1519 trip around the world.",
+				"True tequila (made from blue agave in specific regions of Mexico) never contains the infamous “worm,” though other types of mezcal (made from different agave plants) are occasionally sold with the larval form of a moth that lives on agave plants floating in the bottom of the bottle.",
+				"The word “vodka” is derived from the Slavic term voda, which translates to “little water.”"
 			};
 		}
 

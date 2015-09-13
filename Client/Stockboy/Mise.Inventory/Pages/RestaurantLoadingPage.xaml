@@ -16,6 +16,9 @@
 				Source="restaurantLoading.png"
 				HeightRequest = "200"
 			/>
+			<ScrollView>
+				<Label Text="{Binding FunFact}"></Label>
+			</ScrollView>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 		</StackLayout>
 	</ContentPage.Content>
