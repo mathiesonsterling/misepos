@@ -15,6 +15,7 @@ using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Entities.Vendors;
+using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities.Vendors.Events;
 
 namespace Mise.Core.Common.UnitTests.Events

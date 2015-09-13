@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Configuration;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.DTOs;
@@ -25,13 +24,13 @@ namespace MiseReporting.Controllers
     public class PurchaseOrderController : Controller
     {
         private readonly EntityDataTransportObjectFactory _dtoFactory;
-        private readonly IInventoryExportService _inventoryExportService;
-        private readonly string poType;
+        private readonly ICSVExportService _icsvExportService;
+        private readonly string _poType;
         public PurchaseOrderController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _inventoryExportService = new InventoryCSVExportService(new DummyLogger());
-            poType = typeof (PurchaseOrder).ToString();
+            _icsvExportService = new IcsvCSVExportService(new DummyLogger());
+            _poType = typeof (PurchaseOrder).ToString();
         }
 
         // GET: PurchaseOrder
@@ -58,7 +57,7 @@ namespace MiseReporting.Controllers
                 rest = _dtoFactory.FromDataStorageObject<Restaurant>(restAi.ToRestaurantDTO());
 
                 var poAIs = await db.AzureEntityStorages.Where(ai =>
-                    ai.MiseEntityType == poType && ai.RestaurantID.HasValue &&
+                    ai.MiseEntityType == _poType && ai.RestaurantID.HasValue &&
                     ai.RestaurantID.Value == restaurantId).ToListAsync();
 
                 var pos = poAIs.Select(GetFromAi);
@@ -91,7 +90,7 @@ namespace MiseReporting.Controllers
                         //do we have a RO linked to this?
                         //TODO lookup ROs when we have strong typed data!
 
-                        var poVM = new PurchaseOrderViewModel(poForVendor, vendor, emp, null);
+                        var poVM = new PurchaseOrderViewModel(po, poForVendor, vendor, emp, null);
                         vms.Add(poVM);
                     }
                 }
@@ -105,13 +104,32 @@ namespace MiseReporting.Controllers
         // GET: PurchaseOrder/Details/fjdjsk-ekd
         public async Task<ActionResult> Details(Guid poID, Guid poForVendorId)
         {
+            var forVendor = await GetPurchaseOrderPerVendor(poID, poForVendorId);
+
+            var vms = forVendor.GetLineItems().Select(li => new PurchaseOrderLineItemViewModel(li));
+
+            return View(vms);
+        }
+
+
+        public async Task<FileResult> GenerateCSV(Guid poID, Guid poForVendorId)
+        {
+            var forVendor = await GetPurchaseOrderPerVendor(poID, poForVendorId);
+            var bytes = await _icsvExportService.ExportPurchaseOrderToCSV(forVendor);
+
+            var outputStream = new MemoryStream(bytes);
+            return new FileStreamResult(outputStream, "text/csv") {FileDownloadName = "purchaseOrder.csv"};
+        }
+
+        private async Task<IPurchaseOrderPerVendor> GetPurchaseOrderPerVendor(Guid poID, Guid poForVendorId)
+        {
             AzureEntityStorage poAi;
             using (var db = new AzureNonTypedEntities())
             {
                 poAi =
                     await
                         db.AzureEntityStorages.FirstOrDefaultAsync(
-                            ai => ai.EntityID == poID && ai.MiseEntityType == poType);
+                            ai => ai.EntityID == poID && ai.MiseEntityType == _poType);
             }
             if (poAi == null)
             {
@@ -124,12 +142,8 @@ namespace MiseReporting.Controllers
             {
                 throw new ArgumentException("Can't find specific vendor PO for " + poForVendorId);
             }
-
-            var vms = forVendor.GetLineItems().Select(li => new PurchaseOrderLineItemViewModel(li));
-
-            return View(vms);
+            return forVendor;
         }
-
         /*
         // GET: PurchaseOrder/Create
         public ActionResult Create()

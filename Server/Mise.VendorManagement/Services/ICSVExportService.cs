@@ -8,7 +8,7 @@ using Mise.Core.Entities.Inventory;
 
 namespace Mise.VendorManagement.Services
 {
-    public interface IInventoryExportService
+    public interface ICSVExportService
     {
         /// <summary>
         /// Generates a CSV file with the items seperated by section
@@ -27,5 +27,7 @@ namespace Mise.VendorManagement.Services
         Task<byte[]> ExportParToCSV(IPar par);
 
         Task<byte[]> ExportReceivingOrderToCSV(IReceivingOrder ro);
+
+        Task<byte[]> ExportPurchaseOrderToCSV(IPurchaseOrderPerVendor poPerVendor);
     }
 }

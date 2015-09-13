@@ -21,12 +21,12 @@ namespace MiseReporting.Controllers
     public class ParsController : Controller
     {
         private readonly EntityDataTransportObjectFactory _dtoFactory;
-        private readonly IInventoryExportService _inventoryExportService;
+        private readonly ICSVExportService _icsvExportService;
 
         public ParsController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _inventoryExportService = new InventoryCSVExportService(new DummyLogger());
+            _icsvExportService = new IcsvCSVExportService(new DummyLogger());
         }
 
         // GET: Pars
@@ -132,7 +132,7 @@ namespace MiseReporting.Controllers
                 return null;
             }
             //transform inventory to memory stream, then to file
-            var bytes = await _inventoryExportService.ExportParToCSV(par);
+            var bytes = await _icsvExportService.ExportParToCSV(par);
             var outputStream = new MemoryStream(bytes);
             return new FileStreamResult(outputStream, "text/csv") { FileDownloadName = "Par.csv" };
         }

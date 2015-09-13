@@ -1,0 +1,15 @@
+﻿@model MiseVendorManagement.Models.VendorCSVImportFileViewModel
+
+<h2>Help us match the columns of your file to the Mise ones!</h2>
+
+<div>Item Name Column
+    <select name="itemname">
+        @foreach (var pc in @Model.ColumnNames)
+        {
+            <option>@pc</option>
+        }
+    </select>
+</div>
+
+<div></div>
+

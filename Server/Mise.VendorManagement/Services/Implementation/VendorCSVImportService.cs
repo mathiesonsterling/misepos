@@ -6,6 +6,7 @@ using CsvHelper;
 using Mise.Core.Common;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
+using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
@@ -21,28 +22,35 @@ namespace Mise.VendorManagement.Services.Implementation
         {
             _logger = logger;
             _maxFailures = maxFailures;
+
+            //load the possible categories
         }
-        private static Dictionary<decimal, decimal> _ozToCommonMlDic = new Dictionary<decimal, decimal>
+        private static readonly Dictionary<decimal, decimal> OzToCommonMlDic = new Dictionary<decimal, decimal>
         {
             {25.4M, 750},
             {33.8M, 1000},
             {12.7M, 375}
         }; 
-        public IEnumerable<string> GetColumnNames(string fileName)
+        public IEnumerable<string> GetColumnNames(MemoryStream stream)
         {
-            var csv = ReadFile(fileName);
+            var csv = ReadFile(stream);
 
             if (csv.Read())
             {
                 return csv.FieldHeaders.AsEnumerable();
             }
-            throw new ArgumentException("Cannot read file " + fileName);
+            throw new ArgumentException("Cannot read file ");
         }
 
-        public IEnumerable<string> GetPossibleCategoriesInFile(string fileName, string categoriesColumnName)
+        public IEnumerable<string> GetPossibleMatchesForColumnName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> GetPossibleCategoriesInFile(MemoryStream stream, string categoriesColumnName)
         {
             var res = new HashSet<string>();
-            var csv = ReadFile(fileName);
+            var csv = ReadFile(stream);
             while (csv.Read())
             {
                 var cat = csv.GetField<string>(categoriesColumnName);
@@ -76,11 +84,11 @@ namespace Mise.VendorManagement.Services.Implementation
             }
         }
 
-        public IEnumerable<VendorBeverageLineItem> ParseDataFile(string fileName, Guid vendorID, string itemNameColumn, string containerColumn,
+        public IEnumerable<VendorBeverageLineItem> ParseDataFile(MemoryStream file, Guid vendorID, string itemNameColumn, string containerColumn,
             LiquidAmountUnits containerUnit, string categoryColumn, IDictionary<string, ItemCategory> categoryMapping, string caseSizeColumn,
             string upcColumn, string priceColumn)
         {
-            var csv = ReadFile(fileName);
+            var csv = ReadFile(file);
 
             var i = 0;
             var numErrors = 0;
@@ -173,9 +181,9 @@ namespace Mise.VendorManagement.Services.Implementation
             if (unit == LiquidAmountUnits.OuncesLiquid)
             {
                 var ounces = containerSize;
-                if (_ozToCommonMlDic.ContainsKey(ounces))
+                if (OzToCommonMlDic.ContainsKey(ounces))
                 {
-                    ml = _ozToCommonMlDic[ounces];
+                    ml = OzToCommonMlDic[ounces];
                 }
                 else
                 {
@@ -193,9 +201,9 @@ namespace Mise.VendorManagement.Services.Implementation
             };
         }
 
-        private static CsvReader ReadFile(string fileName)
+        private static CsvReader ReadFile(MemoryStream stream)
         {
-            var fileReader = new StreamReader(fileName);
+            var fileReader = new StreamReader(stream);
             return new CsvReader(fileReader);
         }
 
