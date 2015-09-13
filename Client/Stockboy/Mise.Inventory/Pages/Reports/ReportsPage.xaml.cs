@@ -1,21 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Xamarin.Forms;
-
+﻿using Mise.Inventory.ViewModels;
 namespace Mise.Inventory.Pages.Reports
 {
-	public partial class ReportsPage : ContentPage
+	public partial class ReportsPage : BasePage
 	{
 		public ReportsPage()
 		{
-			BindingContext = App.ReportsViewModel;
 			InitializeComponent();
 		}
 
-		protected override void OnAppearing(){
-			Xamarin.Insights.Track("ScreenLoaded", new Dictionary<string, string>{{"ScreenName", "ReportsPage"}});
+		#region implemented abstract members of BasePage
+
+		public override BaseViewModel ViewModel {
+			get {
+				return App.ReportsViewModel;
+			}
 		}
+
+		public override string PageName {
+			get {
+				return "ReportsPage";
+			}
+		}
+
+		#endregion
+
 	}
 }
 
