@@ -192,6 +192,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ParLineItemViewModel.cs" />
     <Compile Include="Models\ParViewModel.cs" />
+    <Compile Include="Models\PurchaseOrderLineItemViewModel.cs" />
     <Compile Include="Models\PurchaseOrderViewModel.cs" />
     <Compile Include="Models\ReceivingOrderLineItemViewModel.cs" />
     <Compile Include="Models\ReceivingOrderViewModel.cs" />
@@ -264,6 +265,7 @@
     <Content Include="Views\ReceivingOrder\Index.cshtml" />
     <Content Include="Views\ReceivingOrder\Details.cshtml" />
     <Content Include="Views\PurchaseOrder\Index.cshtml" />
+    <Content Include="Views\PurchaseOrder\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

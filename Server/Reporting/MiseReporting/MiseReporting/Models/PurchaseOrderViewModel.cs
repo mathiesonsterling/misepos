@@ -9,7 +9,11 @@ namespace MiseReporting.Models
 {
     public class PurchaseOrderViewModel
     {
+        /// <summary>
+        /// Id of the purchase order PO id
+        /// </summary>
         public Guid Id { get; set; }
+        public Guid POId { get; set; }
 
         [DisplayName("Created Date")]
         public DateTime DateCreated { get; set; }

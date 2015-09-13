@@ -1,19 +1,22 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
-using Mise.Core.Entities.Vendors;
 
-
-namespace Mise.Inventory
+namespace Mise.Inventory.Services
 {
 	/// <summary>
 	/// Service that can provide all the possible beverage items we currently have
 	/// </summary>
 	public interface IBeverageItemService
 	{
+        /// <summary>
+        /// Lets the outside world tell us that we have added items, and need to reload
+        /// </summary>
+        /// <returns></returns>
+	    Task ReloadItemCache();
+
 		/// <summary>
 		/// Gets the items that we might want to know
 		/// This is

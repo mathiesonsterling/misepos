@@ -13,6 +13,7 @@ using Mise.Core.ValueItems;
 using Mise.Core.Common.Events;
 using System.Collections.Generic;
 using Mise.Core.Entities;
+using Mise.Inventory.Services;
 
 
 namespace Mise.Inventory.UnitTests
@@ -37,9 +38,10 @@ namespace Mise.Inventory.UnitTests
 			eventFactory.Setup (ef => ef.SetLastEventID (It.IsAny<IEnumerable<EventID>> ()))
 				.Callback<IEnumerable<EventID>> (en => eventIDs = en.ToList ());
 
-
+			var bevItemService = new Mock<IBeverageItemService> ();
+			bevItemService.Setup (b => b.ReloadItemCache ()).Returns (Task.FromResult (false));
 		    var underTest = new RepositoryLoader(empRepos.Object, invite.Object, vendRepos.Object, eventFactory.Object, restRepos.Object, parRepos.Object, invRepos.Object,
-		        roRepos.Object, poRepos.Object);
+		        roRepos.Object, poRepos.Object, bevItemService.Object);
 
 			var restID = Guid.NewGuid ();
 

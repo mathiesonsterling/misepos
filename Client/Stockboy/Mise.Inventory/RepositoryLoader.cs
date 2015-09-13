@@ -5,6 +5,7 @@ using System.Linq;
 using Mise.Core.Repositories;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Services.WebServices;
+using Mise.Inventory.Services;
 
 
 namespace Mise.Inventory
@@ -20,8 +21,11 @@ namespace Mise.Inventory
 	    private readonly IInventoryRepository _inventoryRepository;
 	    private readonly IReceivingOrderRepository _receivingOrderRepository;
         private readonly IPurchaseOrderRepository _purchaseOrderRepository;
-
-	    public RepositoryLoader(IEmployeeRepository employeeRepository, IApplicationInvitationRepository applicationInvitationRepository, IVendorRepository vendorRepository, IInventoryAppEventFactory inventoryAppEventFactory, IRestaurantRepository restaurantRepository, IParRepository parRepository, IInventoryRepository inventoryRepository, IReceivingOrderRepository receivingOrderRepository, IPurchaseOrderRepository purchaseOrderRepository)
+	    private readonly IBeverageItemService _beverageItemService;
+	    public RepositoryLoader(IEmployeeRepository employeeRepository, IApplicationInvitationRepository applicationInvitationRepository, 
+            IVendorRepository vendorRepository, IInventoryAppEventFactory inventoryAppEventFactory, IRestaurantRepository restaurantRepository, 
+            IParRepository parRepository, IInventoryRepository inventoryRepository, IReceivingOrderRepository receivingOrderRepository, 
+            IPurchaseOrderRepository purchaseOrderRepository, IBeverageItemService beverageItemService)
 	    {
 	        _employeeRepository = employeeRepository;
 	        _applicationInvitationRepository = applicationInvitationRepository;
@@ -32,6 +36,7 @@ namespace Mise.Inventory
 	        _inventoryRepository = inventoryRepository;
 	        _receivingOrderRepository = receivingOrderRepository;
 	        _purchaseOrderRepository = purchaseOrderRepository;
+	        _beverageItemService = beverageItemService;
 	    }
 
 	    public async Task LoadRepositories(Guid? restaurantID)
@@ -77,7 +82,9 @@ namespace Mise.Inventory
 			var lastIDs = repositories.Select(r => r.GetLastEventID());
 
 			eventFactory.SetLastEventID(lastIDs);
-			//done!
+
+	        await _beverageItemService.ReloadItemCache();
+	        //done!
 		}
 
 	    public async Task ClearAllRepositories()

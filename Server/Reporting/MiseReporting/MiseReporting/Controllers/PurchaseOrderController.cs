@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.DTOs;
@@ -25,19 +26,18 @@ namespace MiseReporting.Controllers
     {
         private readonly EntityDataTransportObjectFactory _dtoFactory;
         private readonly IInventoryExportService _inventoryExportService;
-
+        private readonly string poType;
         public PurchaseOrderController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
             _inventoryExportService = new InventoryCSVExportService(new DummyLogger());
+            poType = typeof (PurchaseOrder).ToString();
         }
 
         // GET: PurchaseOrder
         public async Task<ActionResult> Index(Guid restaurantId)
         {
             //get the purchase orders, but display them per vendor
-            RestaurantViewModel vm;
-            var poType = typeof (PurchaseOrder).ToString();
             var empType = typeof (Employee).ToString();
             var vendorType = typeof (Vendor).ToString();
             var roType = typeof (ReceivingOrder).ToString();
@@ -97,15 +97,37 @@ namespace MiseReporting.Controllers
                 }
             }
 
-            vm = new RestaurantViewModel(rest, vms);
+            var vm = new RestaurantViewModel(rest, vms);
 
             return View(vm);
         }
 
-        // GET: PurchaseOrder/Details/5
-        public ActionResult Details(int id)
+        // GET: PurchaseOrder/Details/fjdjsk-ekd
+        public async Task<ActionResult> Details(Guid poID, Guid poForVendorId)
         {
-            return View();
+            AzureEntityStorage poAi;
+            using (var db = new AzureNonTypedEntities())
+            {
+                poAi =
+                    await
+                        db.AzureEntityStorages.FirstOrDefaultAsync(
+                            ai => ai.EntityID == poID && ai.MiseEntityType == poType);
+            }
+            if (poAi == null)
+            {
+                throw new ArgumentException("No po of poID " + poID + " found");
+            }
+            var po = GetFromAi(poAi);
+
+            var forVendor = po.GetPurchaseOrderPerVendors().FirstOrDefault(poV => poV.ID == poForVendorId);
+            if (forVendor == null)
+            {
+                throw new ArgumentException("Can't find specific vendor PO for " + poForVendorId);
+            }
+
+            var vms = forVendor.GetLineItems().Select(li => new PurchaseOrderLineItemViewModel(li));
+
+            return View(vms);
         }
 
         /*
@@ -132,14 +154,14 @@ namespace MiseReporting.Controllers
         }
 
         // GET: PurchaseOrder/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int poID)
         {
             return View();
         }
 
         // POST: PurchaseOrder/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int poID, FormCollection collection)
         {
             try
             {
@@ -154,14 +176,14 @@ namespace MiseReporting.Controllers
         }
 
         // GET: PurchaseOrder/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int poID)
         {
             return View();
         }
 
         // POST: PurchaseOrder/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int poID, FormCollection collection)
         {
             try
             {

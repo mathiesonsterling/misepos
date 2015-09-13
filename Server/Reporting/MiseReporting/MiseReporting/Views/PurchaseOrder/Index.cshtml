@@ -5,6 +5,7 @@
 }
 
 <h2>Purchase Orders for @Model.Name</h2>
+Current Time is @Model.CurrentTime
 <!--
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -60,7 +61,7 @@
         </td>
         <td>
            <!-- @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |-->
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) 
+            @Html.ActionLink("Line Items", "Details", new { poID=item.POId, poForVendorId = item.Id }) 
            <!-- @Html.ActionLink("Delete", "Delete", new { id=item.Id }) -->
         </td>
     </tr>

@@ -109,7 +109,6 @@ namespace Mise.Inventory.ViewModels
 		/// </summary>
 		public async Task Login()
 		{
-		    var shownErrorMessage = false;
 			var result = LoginResult.Other;
 			try{
 				Processing = true;
@@ -128,7 +127,6 @@ namespace Mise.Inventory.ViewModels
 			        try
 			        {
 						await DisplayMessageModal ("Login Error", "Incorrect login information");
-			            shownErrorMessage = true;
 			        }
 			        catch (Exception e)
 			        {

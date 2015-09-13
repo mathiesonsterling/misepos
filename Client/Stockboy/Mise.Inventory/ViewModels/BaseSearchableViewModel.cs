@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using Mise.Core.Services.UtilityServices;
-using Mise.Inventory.ViewModels;
+using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 
 namespace Mise.Inventory.ViewModels
@@ -19,9 +18,9 @@ namespace Mise.Inventory.ViewModels
 				try{
 					if(e.PropertyName == "SearchString"){
 						if(LastSearchString != SearchString){
-							LastSearchString = SearchString;
 							await DoSearch ();
-						}
+                            LastSearchString = SearchString;
+                        }
 					}
 				} catch(Exception ex){
 					HandleException (ex);
@@ -31,8 +30,17 @@ namespace Mise.Inventory.ViewModels
 
 		protected async Task DoSearch(){
 			try{
-				var items = await LoadItems();
-				if(string.IsNullOrEmpty (SearchString) == false){
+                //are we part of the previous search?  if so, we don't need to reload all items
+			    ICollection<TLineItemType> items;
+			    if (string.IsNullOrWhiteSpace(LastSearchString) == false && SearchString.Contains(LastSearchString))
+			    {
+			        items = LineItems.ToList();
+			    }
+			    else
+			    { 
+			        items = await LoadItems();
+			    }
+			    if(string.IsNullOrEmpty (SearchString) == false){
 					//split the search into items
 					var searchTerms = SearchString.Split (' ');
 					foreach(var searchTerm in searchTerms){
@@ -43,10 +51,8 @@ namespace Mise.Inventory.ViewModels
 					}
 				}
 				LineItems = items;
-				if(LoadItemsOnView  != null){
-					LoadItemsOnView();
-				}
-				AfterSearchDone ();
+			    LoadItemsOnView?.Invoke();
+			    AfterSearchDone ();
 			} catch(Exception e){
 				HandleException (e);
 			}

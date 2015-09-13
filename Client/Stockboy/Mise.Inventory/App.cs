@@ -1,30 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using Mise.Core.Client.Services;
 using Mise.Core.Common.Events;
-using Mise.Core.Common.Services;
-using Mise.Core.Common.Services.WebServices;
-using Mise.Core.Entities.Base;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
+using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
+using Mise.Inventory.ViewModels;
 using Mise.Inventory.ViewModels.Reports;
 using Xamarin.Forms;
-
-using Mise.Inventory.Services;
-using Mise.Inventory.ViewModels;
-using Mise.Core.Services;
-using Mise.Core.Client.Services;
 
 namespace Mise.Inventory
 {
     public class App : Application
     {
         static IContainer _container;
-        public static Color AccentColor { get; private set; }
+        public static Color AccentColor { get; set; }
 
         /// <summary>
         /// The restaurant the application is dealing with.  If null, we're not yet registered!
@@ -32,9 +25,7 @@ namespace Mise.Inventory
         /// <value>The restaurant I.</value>
         private static Guid? RestaurantID { get; set; }
 
-		private IInsightsService _insights;
-
-		public static string DeviceID{ get; private set;}
+        public static string DeviceID{ get; private set;}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Mise.Inventory.App"/> class.
@@ -53,8 +44,8 @@ namespace Mise.Inventory
             {
                 throw new Exception("Cannot resolve navigation service");
             }
-            _insights = Resolve<IInsightsService>();
-            if (_insights == null)
+            var insights = Resolve<IInsightsService>();
+            if (insights == null)
             {
                 throw new Exception("Cannot resolve insights service");
             }
@@ -98,61 +89,54 @@ namespace Mise.Inventory
 
         #region View Models
 
-        public static AboutViewModel AboutViewModel { get { return Resolve<AboutViewModel>(); } }
+        public static AboutViewModel AboutViewModel => Resolve<AboutViewModel>();
 
-        public static InventoryViewModel InventoryViewModel { get { return Resolve<InventoryViewModel>(); } }
+        public static InventoryViewModel InventoryViewModel => Resolve<InventoryViewModel>();
 
-        public static ItemAddViewModel ItemAddViewModel { get { return Resolve<ItemAddViewModel>(); } }
+        public static ItemAddViewModel ItemAddViewModel => Resolve<ItemAddViewModel>();
 
-        public static ItemFindViewModel ItemFindViewModel { get { return Resolve<ItemFindViewModel>(); } }
+        public static ItemFindViewModel ItemFindViewModel => Resolve<ItemFindViewModel>();
 
-        public static ItemScanViewModel ItemScanViewModel { get { return Resolve<ItemScanViewModel>(); } }
+        public static ItemScanViewModel ItemScanViewModel => Resolve<ItemScanViewModel>();
 
-        public static LoginViewModel LoginViewModel { get { return Resolve<LoginViewModel>(); } }
+        public static LoginViewModel LoginViewModel => Resolve<LoginViewModel>();
 
-        public static MainMenuViewModel MainMenuViewModel { get { return Resolve<MainMenuViewModel>(); } }
+        public static MainMenuViewModel MainMenuViewModel => Resolve<MainMenuViewModel>();
 
-        public static EmployeesManageViewModel EmployeesManageViewModel { get { return Resolve<EmployeesManageViewModel>(); } }
+        public static EmployeesManageViewModel EmployeesManageViewModel => Resolve<EmployeesManageViewModel>();
 
-        public static ParViewModel PARViewModel { get { return Resolve<ParViewModel>(); } }
+        public static ParViewModel ParViewModel => Resolve<ParViewModel>();
 
-        public static ReceivingOrderViewModel ReceivingOrderViewModel { get { return Resolve<ReceivingOrderViewModel>(); } }
+        public static ReceivingOrderViewModel ReceivingOrderViewModel => Resolve<ReceivingOrderViewModel>();
 
-        public static RestaurantSelectViewModel RestaurantSelectViewModel { get { return Resolve<RestaurantSelectViewModel>(); } }
+        public static RestaurantSelectViewModel RestaurantSelectViewModel => Resolve<RestaurantSelectViewModel>();
 
-        public static SectionAddViewModel SectionAddViewModel { get { return Resolve<SectionAddViewModel>(); } }
+        public static SectionAddViewModel SectionAddViewModel => Resolve<SectionAddViewModel>();
 
-        public static SectionSelectViewModel SectionSelectViewModel { get { return Resolve<SectionSelectViewModel>(); } }
+        public static SectionSelectViewModel SectionSelectViewModel => Resolve<SectionSelectViewModel>();
 
-        public static VendorAddViewModel VendorAddViewModel { get { return Resolve<VendorAddViewModel>(); } }
+        public static VendorAddViewModel VendorAddViewModel => Resolve<VendorAddViewModel>();
 
-        public static VendorFindViewModel VendorFindViewModel { get { return Resolve<VendorFindViewModel>(); } }
+        public static VendorFindViewModel VendorFindViewModel => Resolve<VendorFindViewModel>();
 
-        public static InventoryVisuallyMeasureBottleViewModel InventoryVisuallyMeasureBottleViewModel { get { return Resolve<InventoryVisuallyMeasureBottleViewModel>(); } }
-        public static UpdateParLineItemViewModel UpdateParLineItemViewModel { get { return Resolve<UpdateParLineItemViewModel>(); } }
-        public static UpdateReceivingOrderLineItemViewModel UpdateReceivingOrderLineItemViewModel
-        {
-            get
-            {
-                return Resolve<UpdateReceivingOrderLineItemViewModel>();
-            }
-        }
-        public static PurchaseOrderReviewViewModel PurchaseOrderReviewViewModel { get { return Resolve<PurchaseOrderReviewViewModel>(); } }
+        public static InventoryVisuallyMeasureBottleViewModel InventoryVisuallyMeasureBottleViewModel => Resolve<InventoryVisuallyMeasureBottleViewModel>();
+        public static UpdateParLineItemViewModel UpdateParLineItemViewModel => Resolve<UpdateParLineItemViewModel>();
 
-        public static UserRegistrationViewModel UserRegistrationViewModel { get { return Resolve<UserRegistrationViewModel>(); } }
-        public static InvitationViewModel InvitationViewModel { get { return Resolve<InvitationViewModel>(); } }
-        public static RestaurantRegistrationViewModel RestaurantRegistrationViewModel { get { return Resolve<RestaurantRegistrationViewModel>(); } }
-        public static PurchaseOrderSelectViewModel PurchaseOrderSelectViewModel { get { return Resolve<PurchaseOrderSelectViewModel>(); } }
-        public static AccountRegistrationViewModel AccountRegistrationViewModel { get { return Resolve<AccountRegistrationViewModel>(); } }
+        public static UpdateReceivingOrderLineItemViewModel UpdateReceivingOrderLineItemViewModel => Resolve<UpdateReceivingOrderLineItemViewModel>();
+        public static PurchaseOrderReviewViewModel PurchaseOrderReviewViewModel => Resolve<PurchaseOrderReviewViewModel>();
 
-		public static ReportsViewModel ReportsViewModel { get { return Resolve<ReportsViewModel>(); } }
-		public static SelectCompletedInventoryViewModel SelectCompletedInventoryViewModel{ get { return Resolve<SelectCompletedInventoryViewModel> (); } }
-		public static ReportResultsViewModel ReportResultsViewModel{ get { return Resolve<ReportResultsViewModel> (); } }
+        public static UserRegistrationViewModel UserRegistrationViewModel => Resolve<UserRegistrationViewModel>();
+        public static InvitationViewModel InvitationViewModel => Resolve<InvitationViewModel>();
+        public static RestaurantRegistrationViewModel RestaurantRegistrationViewModel => Resolve<RestaurantRegistrationViewModel>();
+        public static PurchaseOrderSelectViewModel PurchaseOrderSelectViewModel => Resolve<PurchaseOrderSelectViewModel>();
+        public static AccountRegistrationViewModel AccountRegistrationViewModel => Resolve<AccountRegistrationViewModel>();
 
-        public static AuthorizeCreditCardViewModel AuthorizeCreditCardViewModel { get
-        {
-            return Resolve<AuthorizeCreditCardViewModel>();
-        } }
+        public static ReportsViewModel ReportsViewModel => Resolve<ReportsViewModel>();
+        public static SelectCompletedInventoryViewModel SelectCompletedInventoryViewModel => Resolve<SelectCompletedInventoryViewModel> ();
+        public static ReportResultsViewModel ReportResultsViewModel => Resolve<ReportResultsViewModel> ();
+
+        public static AuthorizeCreditCardViewModel AuthorizeCreditCardViewModel => Resolve<AuthorizeCreditCardViewModel>();
+
         #endregion
 
         private static T Resolve<T>()
@@ -204,16 +188,14 @@ namespace Mise.Inventory
                     _container.Resolve<IApplicationInvitationRepository>(), _container.Resolve<IVendorRepository>(),
                     _container.Resolve<IInventoryAppEventFactory>(), _container.Resolve<IRestaurantRepository>(),
                     _container.Resolve<IParRepository>(), _container.Resolve<IInventoryRepository>(),
-                    _container.Resolve<IReceivingOrderRepository>(), _container.Resolve<IPurchaseOrderRepository>());
+                    _container.Resolve<IReceivingOrderRepository>(), _container.Resolve<IPurchaseOrderRepository>(),
+                    _container.Resolve<IBeverageItemService>());
                 await loader.LoadRepositories(RestaurantID);
             }
             catch (Exception e)
             {
                 var logger = _container.Resolve<ILogger>();
-                if (logger != null)
-                {
-                    logger.HandleException(e);
-                }
+                logger?.HandleException(e);
                 throw;
             }
         }

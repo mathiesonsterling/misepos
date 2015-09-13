@@ -1,35 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-
-using Mise.Core.Repositories;
-using Mise.Core.Services;
-using Mise.Core.Entities.Inventory;
-using Mise.Core.Services.UtilityServices;
-using Mise.Core.ValueItems;
 using Mise.Core.Client.Services;
 using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Common.Events;
-
+using Mise.Core.Entities.Inventory;
+using Mise.Core.Repositories;
+using Mise.Core.Services.UtilityServices;
+using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
-using Mise.Inventory.Services;
-using Mise.Inventory.Services.Implementation;
-using Autofac.Core;
 
-
-namespace Mise.Inventory
+namespace Mise.Inventory.Services.Implementation
 {
 	public class BeverageItemService : IBeverageItemService
 	{
-		//TODO change this to use services rather that repositories!
 		readonly IVendorRepository _vendorRepository;
 		readonly IInventoryRepository _inventoryRepository;
 		readonly IParRepository _parRepository;
 		readonly IReceivingOrderRepository _roRepository;
    		readonly ILogger _logger;
 		readonly IDeviceLocationService _deviceLocationService;
-		readonly ILoginService _loginService;
 
 		class ContainerAndTimes{
 			public ContainerAndTimes(LiquidContainer container, int times){
@@ -37,7 +27,7 @@ namespace Mise.Inventory
 				TimesUsed = times;
 			}
 
-			public LiquidContainer Container{get;set;}
+			public LiquidContainer Container{get; }
 			public int TimesUsed{get;set;}
 		}
 
@@ -45,14 +35,15 @@ namespace Mise.Inventory
 		/// Stores how often our container is used, so we present items in that order
 		/// </summary>
 		readonly Dictionary<string, ContainerAndTimes> _containersAndTimeUsed;
+
+	    private IEnumerable<IBaseBeverageLineItem> _cachedItems; 
 		public BeverageItemService (
 			ILogger logger, 
 			IDeviceLocationService deviceLocationService,
 			IVendorRepository vendorRepository, 
 			IParRepository parRepository, 
 			IInventoryRepository inventoryRepository,
-			IReceivingOrderRepository roRepository,
-			ILoginService loginService
+			IReceivingOrderRepository roRepository
 		)
 		{
 			_logger = logger;
@@ -60,7 +51,6 @@ namespace Mise.Inventory
 			_vendorRepository = vendorRepository;
 			_inventoryRepository = inventoryRepository;
 			_parRepository = parRepository;
-			_loginService = loginService;
 			_roRepository = roRepository;
 			_containersAndTimeUsed = GetDefaultContainers ();
 		}
@@ -69,7 +59,7 @@ namespace Mise.Inventory
 		/// Gets our most typical containers
 		/// </summary>
 		/// <returns>The default containers.</returns>
-		private Dictionary<string, ContainerAndTimes> GetDefaultContainers()
+		private static Dictionary<string, ContainerAndTimes> GetDefaultContainers()
 		{
 		    var defaults = LiquidContainer.GetStandardBarSizes();
 
@@ -82,9 +72,20 @@ namespace Mise.Inventory
 		}
 		#region IBeverageItemService implementation
 
-		public Task<IEnumerable<IBaseBeverageLineItem>> GetPossibleItems (int maxItems = int.MaxValue)
+	    public async Task ReloadItemCache()
+	    {
+	        _cachedItems = await GetItemsFromRepositories(string.Empty, int.MaxValue);
+	    }
+
+	    public async Task<IEnumerable<IBaseBeverageLineItem>> GetPossibleItems (int maxItems = int.MaxValue)
 		{
-			return GetItemsFromRepositories (string.Empty, maxItems);
+            //TODO we need to invalidate the cache when an item is added
+		    if (_cachedItems == null || (_cachedItems.Any() == false))
+		    {
+		        _cachedItems = await GetItemsFromRepositories(string.Empty, maxItems);
+		    }
+
+		    return _cachedItems;
 		}
 
 		public async Task ExpandVendorSearchRegion (Distance newMaxDistance)
@@ -108,22 +109,12 @@ namespace Mise.Inventory
 			//get the items
 			var items = new List<IBaseBeverageLineItem> ();
 
-			var restaurant = await _loginService.GetCurrentRestaurant ();
-			if(restaurant == null)
-			{
-				_logger.Warn ("Call for items without a restaurant set");
-				return items;
-			}
-
 			try
 			{
-				//var deviceLocation = await _deviceLocationService.GetDeviceLocation();
-
 				var inventories = _inventoryRepository.GetAll ();
 				var pars = _parRepository.GetAll();
 				var vendorsWeHave = _vendorRepository.GetAll();
 				var allROs = _roRepository.GetAll ();
-				//var vendorsAround = await _vendorRepository.GetVendorsNotAssociatedWithRestaurantWithinRadius(restaurant.ID, deviceLocation);
 
 				if (pars != null) {
 					items.AddRange (pars.SelectMany(p => p.GetBeverageLineItems()));
@@ -159,7 +150,7 @@ namespace Mise.Inventory
 			}
 		}
 
-		static List<IBaseBeverageLineItem> AddInOrderIfNotAlreadyPresent(IList<IBaseBeverageLineItem> mainList, 
+		static List<IBaseBeverageLineItem> AddInOrderIfNotAlreadyPresent(IEnumerable<IBaseBeverageLineItem> mainList, 
 			IEnumerable<IBaseBeverageLineItem> toAdd){
 			var resList = new List<IBaseBeverageLineItem> (mainList);
 
