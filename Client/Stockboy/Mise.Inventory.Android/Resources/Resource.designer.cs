@@ -183,10 +183,13 @@ namespace Mise.Inventory.Android
 			public const int mise = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int splashscreen = 2130837508;
+			public const int restaurantLoading = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int StockboyLaunch = 2130837509;
+			public const int splashscreen = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int StockboyLaunch = 2130837510;
 			
 			static Drawable()
 			{

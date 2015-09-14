@@ -130,7 +130,7 @@ namespace Mise.Inventory
 			cb.RegisterType<PurchaseOrderService> ().As<IPurchaseOrderService> ().SingleInstance ();
 			cb.RegisterType<CategoriesService> ().As<ICategoriesService> ().SingleInstance ();
 			cb.RegisterType<ReportsService> ().As<IReportsService> ().SingleInstance ();
-
+			cb.RegisterType<FunFactService> ().As<IFunFactService> ().SingleInstance ();
 			// View Models
 			cb.RegisterType<AboutViewModel>().SingleInstance();
 			cb.RegisterType<InventoryViewModel>().SingleInstance();
@@ -160,6 +160,7 @@ namespace Mise.Inventory
 			cb.RegisterType<ReportResultsViewModel> ().SingleInstance ();
 			cb.RegisterType<SelectCompletedInventoryViewModel> ().SingleInstance ();
 			cb.RegisterType<AuthorizeCreditCardViewModel> ().SingleInstance ();
+			cb.RegisterType<RestaurantLoadingViewModel> ().SingleInstance ();
 		}
 	}
 }

@@ -1,10 +1,7 @@
-namespace MiseVendorManagement
-{
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
+using System.Data.Entity;
 
+namespace MiseVendorManagement.Database
+{
     public partial class AzureDB : DbContext
     {
         public AzureDB()
@@ -26,6 +23,6 @@ namespace MiseVendorManagement
                 .IsFixedLength();
         }
 
-        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorViewModel> VendorViewModels { get; set; }
+        public DbSet<Models.VendorViewModel> VendorViewModels { get; set; }
     }
 }

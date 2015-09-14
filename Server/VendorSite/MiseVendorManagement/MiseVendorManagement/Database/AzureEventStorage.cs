@@ -1,11 +1,9 @@
-namespace MiseVendorManagement
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace MiseVendorManagement.Database
+{
     [Table("stagingstockboymobileservice.AzureEventStorages")]
     public partial class AzureEventStorage
     {

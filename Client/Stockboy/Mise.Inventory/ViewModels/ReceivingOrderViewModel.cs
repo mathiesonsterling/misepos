@@ -82,7 +82,7 @@ namespace Mise.Inventory.ViewModels
 				return;
 			}
 
-			if(LineItems.Any() == false){
+			if((LineItems == null) || (LineItems.Any() == false)){
 				CanSave = false;
 				return;
 			}
@@ -215,6 +215,16 @@ namespace Mise.Inventory.ViewModels
 
 			var displayItems = items.OrderBy (li => li.DisplayName)
 				.Select (li => new ReceivingOrderDisplayLine (li)).ToList ();
+		    /*foreach (var li in displayItems)
+		    {
+		        if (li.Source.ZeroedOut == false &&
+		            (li.Source.LineItemPrice == null || li.Source.LineItemPrice.Equals(Money.None)))
+		        {
+		            FocusedItem = li;
+		            break;
+		        }
+		    }*/
+            
 			FocusedItem = displayItems.FirstOrDefault(li => 
 				li.Source.ZeroedOut == false 
 				&& (li.Source.LineItemPrice == null || li.Source.LineItemPrice.Equals(Money.None))

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Common.UnitTests.Tools;
 using NUnit.Framework;
 

@@ -23,12 +23,12 @@ namespace MiseReporting.Controllers
     public class ReceivingOrderController : Controller
     {
         private readonly EntityDataTransportObjectFactory _dtoFactory;
-        private readonly IInventoryExportService _inventoryExportService;
+        private readonly ICSVExportService _icsvExportService;
 
         public ReceivingOrderController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _inventoryExportService = new InventoryCSVExportService(new DummyLogger());
+            _icsvExportService = new IcsvCSVExportService(new DummyLogger());
         }
 
         // GET: ReceivingOrder
@@ -138,7 +138,7 @@ namespace MiseReporting.Controllers
             }
 
             //transform inventory to memory stream, then to file
-            var bytes = await _inventoryExportService.ExportReceivingOrderToCSV(ro);
+            var bytes = await _icsvExportService.ExportReceivingOrderToCSV(ro);
             var outputStream = new MemoryStream(bytes);
             return new FileStreamResult(outputStream, "text/csv") { FileDownloadName = fileName };
         }

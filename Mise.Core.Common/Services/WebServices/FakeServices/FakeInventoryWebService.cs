@@ -6,6 +6,7 @@ using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
+using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;

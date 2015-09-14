@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.ValueItems.Inventory;
@@ -11,20 +12,20 @@ namespace Mise.VendorManagement.Services
     /// </summary>
     public interface IVendorCSVImportService
     {
-        IEnumerable<string> GetColumnNames(string fileName);
+        IEnumerable<string> GetColumnNames(MemoryStream stream);
 
-        /// <summary>
+            /// <summary>
         /// Get all the values in the Categories column, so we can map them over to our Mise columns
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="stream"></param>
         /// <param name="categoriesColumnName"></param>
         /// <returns></returns>
-        IEnumerable<string> GetPossibleCategoriesInFile(string fileName, string categoriesColumnName);
+        IEnumerable<string> GetPossibleCategoriesInFile(MemoryStream stream, string categoriesColumnName);
 
         /// <summary>
         /// Given the columns and category mapping, convert everything in our file to a VendorBeverageLineItem
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="stream"></param>
         /// <param name="vendorID"></param>
         /// <param name="itemNameColumn"></param>
         /// <param name="containerColumn"></param>
@@ -35,7 +36,7 @@ namespace Mise.VendorManagement.Services
         /// <param name="upcColumn"></param>
         /// <param name="priceColumn"></param>
         /// <returns></returns>
-        IEnumerable<VendorBeverageLineItem> ParseDataFile(string fileName, Guid vendorID, string itemNameColumn, string containerColumn,
+        IEnumerable<VendorBeverageLineItem> ParseDataFile(MemoryStream stream, Guid vendorID, string itemNameColumn, string containerColumn,
             LiquidAmountUnits containerUnit, string categoryColumn, IDictionary<string, ItemCategory> categoryMapping, string caseSizeColumn, string upcColumn, string priceColumn);
     }
 }

@@ -29,5 +29,9 @@ namespace MiseVendorManagement.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorViewModel> VendorViewModels { get; set; }
+
+        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorCSVImportFileViewModel> VendorCSVImportFileViewModels { get; set; }
     }
 }

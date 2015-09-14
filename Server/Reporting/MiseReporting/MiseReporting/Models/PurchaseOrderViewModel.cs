@@ -31,13 +31,14 @@ namespace MiseReporting.Models
 
         public Guid? LinkedReceivingOrderId { get; set; }
 
-        public PurchaseOrderViewModel(IPurchaseOrderPerVendor po, IVendor vendor, IEmployee emp, IReceivingOrder linkedReceivingOrder)
+        public PurchaseOrderViewModel(IPurchaseOrder po, IPurchaseOrderPerVendor poForVendor, IVendor vendor, IEmployee emp, IReceivingOrder linkedReceivingOrder)
         {
-            Id = po.ID;
-            DateCreated = po.CreatedDate.ToLocalTime().DateTime;
-            LastUpdated = po.LastUpdatedDate.ToLocalTime().DateTime;
-            NumLineItems = po.GetLineItems().Count();
-            Status = po.Status.ToString();
+            POId = po.ID;
+            Id = poForVendor.ID;
+            DateCreated = poForVendor.CreatedDate.ToLocalTime().DateTime;
+            LastUpdated = poForVendor.LastUpdatedDate.ToLocalTime().DateTime;
+            NumLineItems = poForVendor.GetLineItems().Count();
+            Status = poForVendor.Status.ToString();
 
             if (vendor != null)
             {

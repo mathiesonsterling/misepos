@@ -19,6 +19,8 @@
 				HorizontalOptions="FillAndExpand"/>
 			<Button Text="Complete Section" Command="{Binding FinishSectionCommand}" 
 				IsEnabled ="{Binding CanComplete}" HorizontalOptions="FillAndExpand"/>
+			<Button Text="Remove All Items" Command="{Binding ClearSectionCommand}" 
+				IsEnabled="{Binding NotProcessing}" HorizontalOptions="FillAndExpand"/>
 		</StackLayout>
 	</ContentPage.Content>
 </local:BasePage>

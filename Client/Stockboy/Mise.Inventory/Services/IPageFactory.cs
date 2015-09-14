@@ -34,6 +34,7 @@ namespace Mise.Inventory.Services
         Reports,
 	    CompletedInventoriesSelect,
 	    ReportResults,
+		RestaurantLoading
 	}
 
 	public interface IPageFactory

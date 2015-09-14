@@ -8,6 +8,7 @@ using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities.Vendors;
+using MiseVendorManagement.Database;
 
 namespace MiseVendorManagement
 {

@@ -21,11 +21,11 @@ namespace MiseReporting.Controllers
     public class InventoriesController : Controller
     {
         private readonly EntityDataTransportObjectFactory _dtoFactory;
-        private readonly IInventoryExportService _inventoryExportService;
+        private readonly ICSVExportService _icsvExportService;
         public InventoriesController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _inventoryExportService = new InventoryCSVExportService(new DummyLogger());
+            _icsvExportService = new IcsvCSVExportService(new DummyLogger());
         }
 
         // GET: Inventories
@@ -128,7 +128,7 @@ namespace MiseReporting.Controllers
                 return null;
             }
             //transform inventory to memory stream, then to file
-            var bytes =  await _inventoryExportService.ExportInventoryToCsvBySection(inv);
+            var bytes =  await _icsvExportService.ExportInventoryToCsvBySection(inv);
             var outputStream = new MemoryStream(bytes);
             return new FileStreamResult(outputStream, "text/csv") {FileDownloadName = "inventoryBySections.csv"};
         }
@@ -158,7 +158,7 @@ namespace MiseReporting.Controllers
                 return null;
             }
             //transform inventory to memory stream, then to file
-            var bytes = await _inventoryExportService.ExportInventoryToCSVAggregated(inv);
+            var bytes = await _icsvExportService.ExportInventoryToCSVAggregated(inv);
             var outputStream = new MemoryStream(bytes);
             return new FileStreamResult(outputStream, "text/csv") { FileDownloadName = "RestaurantInventory.csv" };
         }

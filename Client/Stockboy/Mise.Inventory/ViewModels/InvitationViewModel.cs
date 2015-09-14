@@ -5,10 +5,8 @@ using System.Linq;
 using Mise.Core.Entities.People;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
-using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using Mise.Core.ValueItems;
-using Mise.Core.Services;
 
 
 namespace Mise.Inventory.ViewModels
