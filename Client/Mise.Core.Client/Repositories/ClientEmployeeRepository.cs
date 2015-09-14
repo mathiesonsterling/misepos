@@ -46,7 +46,7 @@ namespace Mise.Core.Client.Repositories
             }
 
             var wsEmp = await _webService.GetEmployeeByPrimaryEmailAndPassword(email, password);
-            if (wsEmp != null && wsEmp.ID != Guid.Empty)
+            if (wsEmp != null && wsEmp.Id != Guid.Empty)
             {
                 Cache.UpdateCache(wsEmp, ItemCacheStatus.Clean);
                 return wsEmp;
@@ -76,7 +76,7 @@ namespace Mise.Core.Client.Repositories
         /// <returns></returns>
         public override IEmployee ApplyEvents(IEnumerable<IEmployeeEvent> events)
         {
-            var oEvents = events.OrderBy(e => e.CreatedDate).ThenBy(e => e.EventOrderingID);
+            var oEvents = events.OrderBy(e => e.CreatedDate).ThenBy(e => e.EventOrder);
             var employeeID = oEvents.FirstOrDefault().EmployeeID;
 
             if (oEvents.Any() && oEvents.FirstOrDefault() != null)

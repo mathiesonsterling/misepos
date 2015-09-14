@@ -72,11 +72,11 @@ namespace Mise.Inventory.Services.Implementation
 			//TODO - check we don't get any name conflicts
 			var alreadyExists = _vendorRepository.GetAll().Any(v => v.IsSameVendor(_selectedVendor));
 			if(alreadyExists){
-				_vendorRepository.CancelTransaction (_selectedVendor.ID);
+				_vendorRepository.CancelTransaction (_selectedVendor.Id);
 				_selectedVendor = null;
 				throw new ArgumentException ("This vendor already exists!");
 			}
-			await _vendorRepository.Commit (_selectedVendor.ID);
+			await _vendorRepository.Commit (_selectedVendor.Id);
 
 			return _selectedVendor;
 		}
@@ -87,7 +87,7 @@ namespace Mise.Inventory.Services.Implementation
 		/// <param name="restaurant">Restaurant.</param>
 		public Task<IEnumerable<IVendor>> GetVendorsAssociatedWithRestaurant(IRestaurant restaurant)
 		{
-			return _vendorRepository.GetVendorsAssociatedWithRestaurant (restaurant.ID);
+			return _vendorRepository.GetVendorsAssociatedWithRestaurant (restaurant.Id);
 		}
 
 		public Task<IVendor> GetVendorWithLowestPriceForItem (IBaseBeverageLineItem li, decimal quantity, Guid? restaurantID)
@@ -146,7 +146,7 @@ namespace Mise.Inventory.Services.Implementation
 					}
 
 					if (item == null) {
-						_logger.Error ("Unable to resolve line item " + lineItem.DisplayName + " id " + lineItem.ID);
+						_logger.Error ("Unable to resolve line item " + lineItem.DisplayName + " id " + lineItem.Id);
 					} else {
 						//TODO - if we've got a price being reported that is GREATER than the public price, there's a problem!
 						var priceEv = _eventFactory.CreateRestaurantSetPriceEvent (emp, item, vendor, lineItem.UnitPrice);
@@ -154,7 +154,7 @@ namespace Mise.Inventory.Services.Implementation
 					}
 				}
 					
-				await _vendorRepository.Commit (vendor.ID);
+				await _vendorRepository.Commit (vendor.Id);
 			}
 		}
 	}

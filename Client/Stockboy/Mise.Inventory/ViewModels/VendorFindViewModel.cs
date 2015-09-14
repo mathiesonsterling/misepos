@@ -84,7 +84,7 @@ namespace Mise.Inventory.ViewModels
 						.ToList();
 				}
 			}
-			return items.OrderByDescending (v => v.GetRestaurantIDsAssociatedWithVendor ().Contains (rest.ID))
+			return items.OrderByDescending (v => v.GetRestaurantIDsAssociatedWithVendor ().Contains (rest.Id))
 				.ThenBy (v => v.Name).ToList();
 		}
 

@@ -49,7 +49,7 @@ namespace Mise.Core.Common.UnitTests.Tools
         public static Guid RestaurantID { get { return Guid.Empty; } }
         public static Restaurant GetRestaurant()
         {
-            return new Restaurant { ID = RestaurantID, Name = new RestaurantName("testRestaurant") };
+            return new Restaurant { Id = RestaurantID, Name = new RestaurantName("testRestaurant") };
         }
 
         public static Mock<IRestaurantTerminalService> GetTerminalService(bool printDupes = false)

@@ -94,7 +94,7 @@ namespace Mise.Inventory.Services.Implementation
         {
             if (employee != null)
             {
-                Identify(employee.ID, employee.PrimaryEmail, employee.Name, deviceID, false);
+                Identify(employee.Id, employee.PrimaryEmail, employee.Name, deviceID, false);
             }
             else
             {

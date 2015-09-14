@@ -24,7 +24,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var res = serializer.Deserialize<RestaurantAccount>(json);
             Assert.IsNotNull(res);
-            Assert.AreEqual(Guid.Empty, res.ID);
+            Assert.AreEqual(Guid.Empty, res.Id);
             Assert.AreEqual(0, res.GetPayments().Count());
         }
     }

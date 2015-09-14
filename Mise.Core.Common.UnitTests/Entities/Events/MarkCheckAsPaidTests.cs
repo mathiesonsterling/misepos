@@ -14,7 +14,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
 
         [Test]
 		public void TestMarkingCheckAsPaidClosesEmptyCheck(){
-			var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+			var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 			
 			var check = new RestaurantCheck{PaymentStatus = CheckPaymentStatus.Closing};
 
@@ -28,7 +28,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidDoesntCloseUnPaidCheck()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {
@@ -53,7 +53,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidClosesPaidCheckExactAmountCash()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {
@@ -77,7 +77,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidClosesPaidCheckOverAmountCash()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {
@@ -106,7 +106,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidDoesntClosePartiallyPaidCheckCash()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {
@@ -136,7 +136,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidClosesPaidCheckExactAmountCredit()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {
@@ -160,7 +160,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
 		[Test]
 		public void TestMarkingCheckAsPaidRejectedPaymentCantClose()
 		{
-			var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+			var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
 			var check = new RestaurantCheck
 			{
@@ -184,7 +184,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
 		[Test]
 		public void TestMarkingCheckAsPaidRejectedPaymentWithAValidOneCanClose()
 		{
-			var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+			var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
 			var check = new RestaurantCheck
 			{
@@ -210,7 +210,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidClosesPaidCheckOverAmountCredit()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {
@@ -239,7 +239,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidDoesntClosePartiallyPaidCheckCredit()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {
@@ -269,7 +269,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidClosesPaidCheckOverAmountCashAndCreditPending()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {
@@ -298,7 +298,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events
         [Test]
         public void TestMarkingCheckAsPaidClosesPaidCheckOverAmountCashAndCreditClosed()
         {
-            var checkEvent = new MarkCheckAsPaidEvent{EventOrderingID = new EventID()};
+            var checkEvent = new MarkCheckAsPaidEvent{EventOrder = new EventID()};
 
             var check = new RestaurantCheck
             {

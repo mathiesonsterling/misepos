@@ -17,23 +17,23 @@ namespace Mise.Core.Entities.Base
 		/// <summary>
 		/// Unique ID for the event
 		/// </summary>
-		Guid ID{get;}
+		Guid Id{get;}
 
         /// <summary>
         /// The restaurant where this event was generated.
         /// </summary>
-        Guid RestaurantID { get; }
+        Guid RestaurantId { get; }
 
 		/// <summary>
 		/// Ordering of the event.  This is in order and unique, but only for terminal and restaurant. 
 		/// </summary>
 		/// 
-		EventID EventOrderingID{ get; }
+		EventID EventOrder{ get; }
 
 		/// <summary>
 		/// The ID of the item that caused this event
 		/// </summary>
-		Guid CausedByID{get;}
+		Guid CausedById{get;}
 
 		/// <summary>
 		/// Date this event was created
@@ -45,7 +45,7 @@ namespace Mise.Core.Entities.Base
 		/// The ID of the device the event occurred on
 		/// </summary>
 		/// <value>The device I.</value>
-		string DeviceID{get;set;}
+		string DeviceId{get;set;}
 
         /// <summary>
         /// If true, this is a creation of either an entity or aggregate root, and should be processed first

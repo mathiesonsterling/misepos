@@ -21,7 +21,7 @@ namespace Mise.Core.Entities.Payments
 		public Guid EmployeeID{get;set;}
 
 		protected BasePayment(){
-			ID = Guid.NewGuid ();
+			Id = Guid.NewGuid ();
 		}
 	}
 }

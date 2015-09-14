@@ -11,7 +11,7 @@ namespace Mise.Core.Common.Events.Employee
 		protected BaseEmployeeEvent ()
 		{
 			CreatedDate = DateTime.UtcNow;
-			ID = Guid.NewGuid ();
+			Id = Guid.NewGuid ();
 		}
 
 
@@ -21,7 +21,7 @@ namespace Mise.Core.Common.Events.Employee
 			get{return _empID;}
 			set{
 				_empID = value;
-				CausedByID = value;
+				CausedById = value;
 			}
 		}
 
@@ -29,11 +29,11 @@ namespace Mise.Core.Common.Events.Employee
 		/// Device that this event occurred on
 		/// </summary>
 		/// <value>The device I.</value>
-		public string DeviceID {
+		public string DeviceId {
 			get;
 			set;
 		}
-		public Guid RestaurantID {
+		public Guid RestaurantId {
 			get;
 			set;
 		}
@@ -41,17 +41,17 @@ namespace Mise.Core.Common.Events.Employee
 		#endregion
 
 		#region IEntityEventBase implementation
-		public Guid ID{get;set;}
+		public Guid Id{get;set;}
 
 	    public abstract MiseEventTypes EventType { get;}
 
         public virtual bool IsEntityCreation { get { return false; } }
         public virtual bool IsAggregateRootCreation { get { return false; } }
-		public EventID EventOrderingID {
+		public EventID EventOrder {
 			get;
 			set;
 		}
-		public Guid CausedByID {
+		public Guid CausedById {
 			get;
 			set;
 		}

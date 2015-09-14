@@ -374,7 +374,7 @@ namespace Mise.Core.Common.Entities
             LastTouchedServerID = checkEvent.EmployeeID;
             //when this event was created was the last time we updated the check
             LastUpdatedDate = checkEvent.CreatedDate;
-            Revision = checkEvent.EventOrderingID;
+            Revision = checkEvent.EventOrder;
 
             ProcessSpecificEvent(checkEvent);
         }
@@ -476,7 +476,7 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenCreditCardTipAddedToCharge(CreditCardTipAddedToChargeEvent add)
         {
-            var payment = GetPayments().FirstOrDefault(p => p.ID == add.PaymentID) as ICreditCardPayment;
+            var payment = GetPayments().FirstOrDefault(p => p.Id == add.PaymentID) as ICreditCardPayment;
             if (payment == null)
             {
                 throw new ArgumentException("Cannot find payment " + add.PaymentID + " to add tip to");
@@ -497,7 +497,7 @@ namespace Mise.Core.Common.Entities
         {
             PaymentStatus = CheckPaymentStatus.PaymentPending;
 
-            var payment = GetPayments().FirstOrDefault(p => p.ID == closeReq.PaymentID) as ICreditCardPayment;
+            var payment = GetPayments().FirstOrDefault(p => p.Id == closeReq.PaymentID) as ICreditCardPayment;
             if (payment == null)
             {
                 throw new ArgumentException("Cannot find payment " + closeReq.PaymentID + " for CreditCardClose requested");
@@ -510,7 +510,7 @@ namespace Mise.Core.Common.Entities
         {
             var ccPayments = GetPayments().OfType<ICreditCardPayment>();
             //get the payment
-            var payment = ccPayments.FirstOrDefault(p => p.ID == auth.PaymentID);
+            var payment = ccPayments.FirstOrDefault(p => p.Id == auth.PaymentID);
             if (payment != null)
             {
                 //update the payment
@@ -527,7 +527,7 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenCreditCardAuthorizationStarted(CreditCardAuthorizationStartedEvent start)
         {
-            var payment = GetPayments().FirstOrDefault(p => p.ID == start.PaymentID);
+            var payment = GetPayments().FirstOrDefault(p => p.Id == start.PaymentID);
             if (payment == null)
             {
                 throw new ArgumentException("Cannot find payment of ID " + start.PaymentID + " for CreditCardAuthorizationStartedEvent");
@@ -545,7 +545,7 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenCreditCardAuthorizationCancelled(CreditCardAuthorizationCancelledEvent cancel)
         {
-            var payment = GetPayments().FirstOrDefault(p => p.ID == cancel.PaymentID) as ICreditCardPayment;
+            var payment = GetPayments().FirstOrDefault(p => p.Id == cancel.PaymentID) as ICreditCardPayment;
             if (payment == null)
             {
                 throw new ArgumentException("Cannot find payment with ID " + cancel.PaymentID);
@@ -561,7 +561,7 @@ namespace Mise.Core.Common.Entities
         {
             var ccPayments = GetPayments().OfType<ICreditCardPayment>();
             //get the payment
-            var payment = ccPayments.FirstOrDefault(p => p.ID == failed.PaymentID);
+            var payment = ccPayments.FirstOrDefault(p => p.Id == failed.PaymentID);
             if (payment != null)
             {
                 //update the payment
@@ -588,7 +588,7 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenCreditCardChargeCompleted(CreditCardChargeCompletedEvent complete)
         {
-            var payment = GetPayments().FirstOrDefault(p => p.ID == complete.PaymentID) as ICreditCardPayment;
+            var payment = GetPayments().FirstOrDefault(p => p.Id == complete.PaymentID) as ICreditCardPayment;
             if (payment == null)
             {
                 throw new ArgumentException("No payment found for CreditCardChargeCompletedEvent!");
@@ -622,7 +622,7 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenItemCompedGeneral(ItemCompedGeneralEvent compGeneral)
         {
-            var orderItem = OrderItems.FirstOrDefault(oi => oi.ID == compGeneral.OrderItemID);
+            var orderItem = OrderItems.FirstOrDefault(oi => oi.Id == compGeneral.OrderItemID);
             if (orderItem == null)
             {
                 throw new ArgumentException("OrderItem not found for ItemCompedGeneralEvent");
@@ -634,7 +634,7 @@ namespace Mise.Core.Common.Entities
             var payment = new CompItemPayment
             {
                 Amount = orderItem.Total,
-                CheckID = ID,
+                CheckID = Id,
                 CreatedDate = compGeneral.CreatedDate,
                 EmployeeID = compGeneral.EmployeeID,
                 Reason = compGeneral.Reason,
@@ -644,7 +644,7 @@ namespace Mise.Core.Common.Entities
         }
 
 		protected virtual void WhenOrderItemCompRemoved(ItemUncompedEvent uncomp){
-			var orderItem = OrderItems.FirstOrDefault(oi => oi.ID == uncomp.OrderItemID);
+			var orderItem = OrderItems.FirstOrDefault(oi => oi.Id == uncomp.OrderItemID);
 			if (orderItem == null)
 			{
 				throw new ArgumentException("OrderItem not found for ItemCompedGeneralEvent");
@@ -666,7 +666,7 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenDiscountRemovedFromCheck(DiscountRemovedFromCheckEvent remove)
         {
-            var discount = GetDiscounts().FirstOrDefault(d => d.ID == remove.DiscountID);
+            var discount = GetDiscounts().FirstOrDefault(d => d.Id == remove.DiscountID);
             if (discount != null)
             {
                 RemoveDiscount(discount);
@@ -687,7 +687,7 @@ namespace Mise.Core.Common.Entities
 
         #endregion
 		protected virtual void WhenOrderItemWasted(OrderItemWastedEvent wastedEvent){
-			var foundItems = OrderItems.Where(oi => oi.ID == wastedEvent.OrderItemToVoid.ID).ToList();
+			var foundItems = OrderItems.Where(oi => oi.Id == wastedEvent.OrderItemToVoid.Id).ToList();
 			foreach (var oi in foundItems)
 			{
 				RemoveOrderItem(oi);
@@ -695,7 +695,7 @@ namespace Mise.Core.Common.Entities
 		}
         protected virtual void WhenOrderItemVoided(OrderItemVoidedEvent voidedEvent)
         {
-            var foundItems = OrderItems.Where(oi => oi.ID == voidedEvent.OrderItemToVoid.ID).ToList();
+            var foundItems = OrderItems.Where(oi => oi.Id == voidedEvent.OrderItemToVoid.Id).ToList();
             foreach (var oi in foundItems)
             {
                 RemoveOrderItem(oi);
@@ -722,7 +722,7 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenOrderItemSetMemo(OrderItemSetMemoEvent memo)
         {
-            var orderItem = OrderItems.FirstOrDefault(oi => oi.ID == memo.OrderItemID);
+            var orderItem = OrderItems.FirstOrDefault(oi => oi.Id == memo.OrderItemID);
             if (orderItem != null)
             {
                 orderItem.Memo = memo.Memo;
@@ -755,8 +755,8 @@ namespace Mise.Core.Common.Entities
         protected virtual void WhenCheckCreated(CheckCreatedEvent created)
         {
             CreatedDate = created.CreatedDate;
-            ID = created.CheckID;
-            RestaurantID = created.RestaurantID;
+            Id = created.CheckID;
+            RestaurantID = created.RestaurantId;
             CreatedByServerID = created.EmployeeID;
             LastTouchedServerID = created.EmployeeID;
         }
@@ -785,7 +785,7 @@ namespace Mise.Core.Common.Entities
         protected virtual void WhenCheckOrderItemModified(OrderItemModifiedEvent mod)
         {
             //get the OI
-            var orderItem = OrderItems.FirstOrDefault(oi => oi.ID == mod.OrderItemID);
+            var orderItem = OrderItems.FirstOrDefault(oi => oi.Id == mod.OrderItemID);
             if (orderItem == null)
             {
                 return;
@@ -802,7 +802,7 @@ namespace Mise.Core.Common.Entities
         protected virtual void WhenOrderItemDeleted(OrderItemDeletedEvent deletedEvent)
         {
             //get the OI
-            var item = OrderItems.FirstOrDefault(oi => oi.ID == deletedEvent.OrderItemID);
+            var item = OrderItems.FirstOrDefault(oi => oi.Id == deletedEvent.OrderItemID);
             if (item == null)
             {
                 throw new ArgumentException("No OrderItem exists to delete!");

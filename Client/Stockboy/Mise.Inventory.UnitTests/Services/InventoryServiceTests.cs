@@ -31,17 +31,17 @@ namespace Mise.Inventory.UnitTests.Services
 		public async Task StartInventoryWithPreviousInventoryWithoutAnyItemsShouldStillCreate(){
 			var sectionID = Guid.NewGuid ();
 			var restaurant = new Restaurant {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				InventorySections = new List<RestaurantInventorySection>{
 					new RestaurantInventorySection {
 						Name = "testSec",
-						ID = sectionID
+						Id = sectionID
 					}
 				}
 			};
 
 			var emp = new Employee {
-				ID = Guid.NewGuid ()
+				Id = Guid.NewGuid ()
 			};
 
 			var loginService = new Mock<ILoginService> ();
@@ -53,14 +53,14 @@ namespace Mise.Inventory.UnitTests.Services
 			var logger = new Mock<ILogger> ();
 
 			var currentInventory = new Core.Common.Entities.Inventory.Inventory {
-				RestaurantID = restaurant.ID,
+				RestaurantID = restaurant.Id,
 				IsCurrent = true,
 				CreatedDate = DateTime.UtcNow,
 				Sections = new List<InventorySection>{
 					new InventorySection {
 						Name = "testSec",
 						RestaurantInventorySectionID = sectionID,
-						ID = Guid.NewGuid (),
+						Id = Guid.NewGuid (),
 						LineItems = new List<InventoryBeverageLineItem>()
 					}
 				}
@@ -82,7 +82,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 
 			//ACT
-			await invRepository.Load (restaurant.ID);
+			await invRepository.Load (restaurant.Id);
 
 			await underTest.StartNewInventory ();
 
@@ -99,17 +99,17 @@ namespace Mise.Inventory.UnitTests.Services
 			var restSectionID = Guid.NewGuid ();
 		    var invSectionID = Guid.NewGuid();
 			var restaurant = new Restaurant {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				InventorySections = new List<RestaurantInventorySection>{
 					new RestaurantInventorySection {
 						Name = "testSec",
-						ID = restSectionID
+						Id = restSectionID
 					}
 				}
 			};
 
 			var emp = new Employee {
-				ID = Guid.NewGuid ()
+				Id = Guid.NewGuid ()
 			};
 
 			var loginService = new Mock<ILoginService> ();
@@ -121,7 +121,7 @@ namespace Mise.Inventory.UnitTests.Services
 			var logger = new Mock<ILogger> ();
 
 			var currentInventory = new Core.Common.Entities.Inventory.Inventory {
-				RestaurantID = restaurant.ID,
+				RestaurantID = restaurant.Id,
 				IsCurrent = true,
 				CreatedDate = DateTime.UtcNow,
                 DateCompleted = DateTime.UtcNow,
@@ -129,7 +129,7 @@ namespace Mise.Inventory.UnitTests.Services
 					new InventorySection {
 						Name = "testSec",
 						RestaurantInventorySectionID = restSectionID,
-						ID = invSectionID,
+						Id = invSectionID,
 						LineItems = new List<InventoryBeverageLineItem>{
 							new InventoryBeverageLineItem {
 								DisplayName = "Item",
@@ -159,7 +159,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 
 			//ACT
-			await invRepository.Load (restaurant.ID);
+			await invRepository.Load (restaurant.Id);
 
 			await underTest.StartNewInventory ();
 
@@ -186,18 +186,18 @@ namespace Mise.Inventory.UnitTests.Services
 	        var invSectionID = Guid.NewGuid();
             var restaurant = new Restaurant
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 InventorySections = new List<RestaurantInventorySection>{
 					new RestaurantInventorySection {
 						Name = "testSec",
-						ID = restSectionID
+						Id = restSectionID
 					}
 				}
             };
 
             var emp = new Employee
             {
-                ID = Guid.NewGuid()
+                Id = Guid.NewGuid()
             };
 
             var loginService = new Mock<ILoginService>();
@@ -210,7 +210,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var currentInventory = new Core.Common.Entities.Inventory.Inventory
             {
-                RestaurantID = restaurant.ID,
+                RestaurantID = restaurant.Id,
                 IsCurrent = true,
                 CreatedDate = DateTime.UtcNow,
                 DateCompleted = DateTime.UtcNow,
@@ -218,7 +218,7 @@ namespace Mise.Inventory.UnitTests.Services
 					new InventorySection {
 						Name = "testSec",
 						RestaurantInventorySectionID = restSectionID,
-						ID = invSectionID,
+						Id = invSectionID,
 						LineItems = new List<InventoryBeverageLineItem>{
 							new InventoryBeverageLineItem {
 								DisplayName = "Item",
@@ -256,7 +256,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 
             //ACT
-            await invRepository.Load(restaurant.ID);
+            await invRepository.Load(restaurant.Id);
 
             await underTest.StartNewInventory();
 
@@ -283,17 +283,17 @@ namespace Mise.Inventory.UnitTests.Services
 		[Test]
 		public async Task AddSectionShouldAddToCurrentlyExistingInventory(){
 			var rest = new Restaurant {
-				ID = Guid.NewGuid ()
+				Id = Guid.NewGuid ()
 			};
 
 			var currentInventory = new Core.Common.Entities.Inventory.Inventory {
-				RestaurantID = rest.ID,
+				RestaurantID = rest.Id,
                 IsCurrent = true
 			};
 
 			var currentEmp = new Employee {
 				RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>{
-					{rest.ID, new List<MiseAppTypes>()}
+					{rest.Id, new List<MiseAppTypes>()}
 				}
 			};
 
@@ -320,7 +320,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 		    var loc = new Mock<IDeviceLocationService>();
             var restRepos = new ClientRestaurantRepository(logger.Object, restaurantWs.Object, loc.Object);
-            await restRepos.Load(rest.ID);
+            await restRepos.Load(rest.Id);
             
 			var inviteRepos = new Mock<IApplicationInvitationRepository> ();
             var reposLoader = new Mock<IRepositoryLoader>();
@@ -331,7 +331,7 @@ namespace Mise.Inventory.UnitTests.Services
 			loginService.SetCurrentRestaurant (rest);
 
 		    var insights = new Mock<IInsightsService>();
-            await inventoryRepos.Load(rest.ID);
+            await inventoryRepos.Load(rest.Id);
 
 			var underTest = new InventoryService (logger.Object, loginService, inventoryRepos, eventFact, insights.Object);
 

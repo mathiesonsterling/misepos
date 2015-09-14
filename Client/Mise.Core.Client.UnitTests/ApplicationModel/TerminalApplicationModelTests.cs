@@ -53,12 +53,12 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                     {
                         new MenuItemCategory
                         {
-                            ID = Guid.NewGuid(),
+                            Id = Guid.NewGuid(),
                             Name= "first"
                         },
                         new MenuItemCategory
                         {
-                            ID = catID,
+                            Id = catID,
                             Name = "second"
                         }
                     }
@@ -100,12 +100,12 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                     {
                         new MenuItemCategory
                         {
-                            ID = Guid.NewGuid(),
+                            Id = Guid.NewGuid(),
                             Name= "first"
                         },
                         new MenuItemCategory
                         {
-                            ID = Guid.NewGuid(),
+                            Id = Guid.NewGuid(),
                             Name = "second"
                         }
                     }
@@ -130,7 +130,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		public async Task SetCustomerSetsNameCorrectly()
 		{
 			var empID = Guid.NewGuid ();
-			var emp = new Employee{ Name = PersonName.TestName, ID = empID };
+			var emp = new Employee{ Name = PersonName.TestName, Id = empID };
 
 			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 			vm.SelectedEmployee = emp;
@@ -147,7 +147,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		[Test]
 		public async Task CreateNewTabCreatesWithServerID(){
 			var empID = Guid.NewGuid ();
-			var emp = new Employee{ Name = PersonName.TestName, ID = empID };
+			var emp = new Employee{ Name = PersonName.TestName, Id = empID };
 			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 			vm.SelectedEmployee = emp;
 
@@ -164,7 +164,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         public async Task CreateNewTabWithCreditCardPutsCardOnCheck()
         {
             var empID = Guid.NewGuid();
-            var emp = new Employee { Name = PersonName.TestName, ID = empID };
+            var emp = new Employee { Name = PersonName.TestName, Id = empID };
             var vm = (await ViewModelMockingTools.CreateViewModel(emp)).Item1;
             vm.SelectedEmployee = emp;
 
@@ -191,7 +191,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		public async Task AddCheckAndRetrieve()
 		{
 			var empID = Guid.NewGuid ();
-            var emp = new Employee { Name = PersonName.TestName, ID = empID };
+            var emp = new Employee { Name = PersonName.TestName, Id = empID };
 			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 
 			//ACT
@@ -216,7 +216,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		{
 		    var emp = new Employee {
 		        Name = PersonName.TestName,
-		        ID = Guid.Empty
+		        Id = Guid.Empty
 		    };
 		    var vm = (await ViewModelMockingTools.CreateViewModel(emp)).Item1;
 		    vm.SelectedEmployee = emp;
@@ -299,7 +299,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		[Test]
 		public void TestNoSale(){
 			var empID = Guid.NewGuid ();
-			var emp = new Employee{ Passcode = "1111", CurrentlyClockedInToPOS = false, ID=empID};
+			var emp = new Employee{ Passcode = "1111", CurrentlyClockedInToPOS = false, Id=empID};
 
 			var checkRepos = new Mock<ICheckRepository> ();
 			checkRepos.Setup (cr => cr.GetOpenChecks (null)).Returns (new List<ICheck>());

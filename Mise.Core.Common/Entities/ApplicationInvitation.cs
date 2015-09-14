@@ -12,7 +12,7 @@ namespace Mise.Core.Common.Entities
 		public ICloneableEntity Clone ()
 		{
 			return new ApplicationInvitation {
-				ID = ID,
+				Id = Id,
 				Revision = Revision,
 				CreatedDate = CreatedDate,
 				LastUpdatedDate = LastUpdatedDate,
@@ -73,20 +73,20 @@ namespace Mise.Core.Common.Entities
 				throw new InvalidOperationException ("Don't know how to handle event of type " + entityEvent.EventType);
 			}
 
-			Revision = entityEvent.EventOrderingID;
+			Revision = entityEvent.EventOrder;
 			LastUpdatedDate = entityEvent.CreatedDate;
 
 		}
 
 		void WhenInvitationMade (EmployeeInvitedToApplicationEvent ev)
 		{
-			ID = ev.InvitationID;
+			Id = ev.InvitationID;
 			CreatedDate = ev.CreatedDate;
 			Application = ev.Application;
-			RestaurantID = ev.RestaurantID;
+			RestaurantID = ev.RestaurantId;
 		    RestaurantName = ev.RestaurantName;
 			DestinationEmail = ev.EmailToInvite;
-			InvitingEmployeeID = ev.CausedByID;
+			InvitingEmployeeID = ev.CausedById;
 			Status = InvitationStatus.Created;
 		}
 

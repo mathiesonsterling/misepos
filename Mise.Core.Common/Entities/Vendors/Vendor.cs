@@ -154,7 +154,7 @@ namespace Mise.Core.Common.Entities.Vendors
         public void When(IVendorEvent entityEvent)
         {
             LastUpdatedDate = entityEvent.CreatedDate;
-            Revision = entityEvent.EventOrderingID;
+            Revision = entityEvent.EventOrder;
 	        switch (entityEvent.EventType)
 	        {
 	            case MiseEventTypes.VendorCreatedEvent:
@@ -182,9 +182,9 @@ namespace Mise.Core.Common.Entities.Vendors
 
 	    protected virtual void WhenRestaurantAssociatedWithVendor(RestaurantAssociatedWithVendorEvent entityEvent)
 	    {
-	        if (RestaurantsAssociatedIDs.Contains(entityEvent.RestaurantID) == false)
+	        if (RestaurantsAssociatedIDs.Contains(entityEvent.RestaurantId) == false)
 	        {
-	            RestaurantsAssociatedIDs.Add(entityEvent.RestaurantID);
+	            RestaurantsAssociatedIDs.Add(entityEvent.RestaurantId);
 	        }
 	    }
 
@@ -201,16 +201,16 @@ namespace Mise.Core.Common.Entities.Vendors
 	    protected virtual void WhenVendorCreated(VendorCreatedEvent created)
 	    {
             CreatedDate = created.CreatedDate;
-	        ID = created.VendorID;
-	        CreatedByEmployeeID = created.CausedByID;
+	        Id = created.VendorID;
+	        CreatedByEmployeeID = created.CausedById;
 
 			Name = created.Name;
 			StreetAddress = created.Address;
 			PhoneNumber = created.PhoneNumber;
 	        EmailToOrderFrom = created.Email;
 
-			if(RestaurantsAssociatedIDs.Contains (created.RestaurantID)==false){
-				RestaurantsAssociatedIDs.Add (created.RestaurantID);
+			if(RestaurantsAssociatedIDs.Contains (created.RestaurantId)==false){
+				RestaurantsAssociatedIDs.Add (created.RestaurantId);
 			}
 	    }
 
@@ -218,7 +218,7 @@ namespace Mise.Core.Common.Entities.Vendors
 		void WhenLineItemAdded (VendorAddNewLineItemEvent nLIEvent)
 		{
 			var newLI = new VendorBeverageLineItem {
-				ID = nLIEvent.LineItemID,
+				Id = nLIEvent.LineItemID,
 				CaseSize = nLIEvent.CaseSize,
 				Container = nLIEvent.Container,
 				CreatedDate = nLIEvent.CreatedDate,
@@ -226,26 +226,26 @@ namespace Mise.Core.Common.Entities.Vendors
 				LastTimePriceSet = nLIEvent.CreatedDate,
 				LastUpdatedDate = nLIEvent.CreatedDate,
 				MiseName = nLIEvent.MiseName,
-				Revision = nLIEvent.EventOrderingID,
+				Revision = nLIEvent.EventOrder,
 				UPC = nLIEvent.UPC,
-				VendorID = ID
+				VendorID = Id
 			};
 			VendorBeverageLineItems.Add (newLI);
 		}
 
 		void WhenLineItemPriceSet (VendorRestaurantSetsPriceForReceivedItemEvent ev)
 		{
-			var lineItem = VendorBeverageLineItems.FirstOrDefault (li => li.ID == ev.VendorLineItemID);
+			var lineItem = VendorBeverageLineItems.FirstOrDefault (li => li.Id == ev.VendorLineItemID);
 			if (lineItem == null) {
 				throw new InvalidOperationException ("No line item exists for ID " + ev.VendorLineItemID);
 			}
 
-		    lineItem.PricePerUnitForRestaurant[ev.RestaurantID] = ev.PricePerUnit;
+		    lineItem.PricePerUnitForRestaurant[ev.RestaurantId] = ev.PricePerUnit;
 		    lineItem.LastTimePriceSet = DateTime.UtcNow;
 
-			if (RestaurantsAssociatedIDs.Contains(ev.RestaurantID) == false)
+			if (RestaurantsAssociatedIDs.Contains(ev.RestaurantId) == false)
 			{
-				RestaurantsAssociatedIDs.Add(ev.RestaurantID);
+				RestaurantsAssociatedIDs.Add(ev.RestaurantId);
 			}
 		}
 

@@ -102,13 +102,13 @@ namespace Mise.Core.Common.Events.DTOs
             return new EventDataTransportObject
             {
                 EntityID = checkEvent.CheckID,
-                CausedByID = checkEvent.CausedByID,
+                CausedById = checkEvent.CausedById,
                 CreatedDate = checkEvent.CreatedDate,
-                EventOrderingID = checkEvent.EventOrderingID,
+                EventOrder = checkEvent.EventOrder,
                 EventType = checkEvent.EventType,
-                ID = checkEvent.ID,
+                Id = checkEvent.Id,
                 JSON = json,
-                RestaurantID = checkEvent.RestaurantID,
+                RestaurantId = checkEvent.RestaurantId,
                 SourceType = checkEvent.GetType(),
                 IsAggregateRootCreation = checkEvent.IsAggregateRootCreation,
                 IsEntityCreation = checkEvent.IsEntityCreation
@@ -121,13 +121,13 @@ namespace Mise.Core.Common.Events.DTOs
             return new EventDataTransportObject
             {
                 EntityID = empEvent.EmployeeID,
-                CausedByID = empEvent.CausedByID,
+                CausedById = empEvent.CausedById,
                 CreatedDate = empEvent.CreatedDate,
-                EventOrderingID = empEvent.EventOrderingID,
+                EventOrder = empEvent.EventOrder,
                 EventType = empEvent.EventType,
-                ID = empEvent.EmployeeID,
+                Id = empEvent.EmployeeID,
                 JSON = json,
-                RestaurantID = empEvent.RestaurantID,
+                RestaurantId = empEvent.RestaurantId,
                 SourceType = empEvent.GetType(),
                 IsAggregateRootCreation = empEvent.IsAggregateRootCreation,
                 IsEntityCreation = empEvent.IsEntityCreation
@@ -139,15 +139,15 @@ namespace Mise.Core.Common.Events.DTOs
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
 			{
-				CausedByID = ev.CausedByID,
+				CausedById = ev.CausedById,
 				CreatedDate = ev.CreatedDate,
-				EventOrderingID = ev.EventOrderingID,
+				EventOrder = ev.EventOrder,
 				EventType = ev.EventType,
-                DeviceID = ev.DeviceID,
-				ID = ev.ID,
+                DeviceId = ev.DeviceId,
+				Id = ev.Id,
 				JSON = json,
 				SourceType = ev.GetType(),
-				RestaurantID = ev.RestaurantID,
+				RestaurantId = ev.RestaurantId,
 				EntityID = ev.InventoryID,
                 IsAggregateRootCreation = ev.IsAggregateRootCreation,
                 IsEntityCreation = ev.IsEntityCreation
@@ -159,14 +159,14 @@ namespace Mise.Core.Common.Events.DTOs
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
 			{
-				CausedByID = ev.CausedByID,
+				CausedById = ev.CausedById,
 				CreatedDate = ev.CreatedDate,
-				EventOrderingID = ev.EventOrderingID,
+				EventOrder = ev.EventOrder,
 				EventType = ev.EventType,
-				ID = ev.ID,
+				Id = ev.Id,
 				JSON = json,
 				SourceType = ev.GetType(),
-				RestaurantID = ev.RestaurantID,
+				RestaurantId = ev.RestaurantId,
 				EntityID = ev.PurchaseOrderID,
                 IsAggregateRootCreation = ev.IsAggregateRootCreation,
                 IsEntityCreation = ev.IsEntityCreation
@@ -178,11 +178,11 @@ namespace Mise.Core.Common.Events.DTOs
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
 			{
-				CausedByID = ev.CausedByID,
+				CausedById = ev.CausedById,
 				CreatedDate = ev.CreatedDate,
-				EventOrderingID = ev.EventOrderingID,
+				EventOrder = ev.EventOrder,
 				EventType = ev.EventType,
-				ID = ev.ID,
+				Id = ev.Id,
 				JSON = json,
 				SourceType = ev.GetType(),
 				EntityID = ev.VendorID,
@@ -196,11 +196,11 @@ namespace Mise.Core.Common.Events.DTOs
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
 			{
-				CausedByID = ev.CausedByID,
+				CausedById = ev.CausedById,
 				CreatedDate = ev.CreatedDate,
-				EventOrderingID = ev.EventOrderingID,
+				EventOrder = ev.EventOrder,
 				EventType = ev.EventType,
-				ID = ev.ID,
+				Id = ev.Id,
 				JSON = json,
 				SourceType = ev.GetType(),
 				EntityID = ev.AccountID,
@@ -214,14 +214,14 @@ namespace Mise.Core.Common.Events.DTOs
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
 			{
-				CausedByID = ev.CausedByID,
+				CausedById = ev.CausedById,
 				CreatedDate = ev.CreatedDate,
-				EventOrderingID = ev.EventOrderingID,
+				EventOrder = ev.EventOrder,
 				EventType = ev.EventType,
-				ID = ev.ID,
+				Id = ev.Id,
 				JSON = json,
 				SourceType = ev.GetType(),
-				RestaurantID = ev.RestaurantID,
+				RestaurantId = ev.RestaurantId,
 				EntityID = ev.ReceivingOrderID,
                 IsAggregateRootCreation = ev.IsAggregateRootCreation,
                 IsEntityCreation = ev.IsEntityCreation
@@ -233,13 +233,13 @@ namespace Mise.Core.Common.Events.DTOs
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
 			{
-				CausedByID = ev.CausedByID,
+				CausedById = ev.CausedById,
 				CreatedDate = ev.CreatedDate,
-				EventOrderingID = ev.EventOrderingID,
+				EventOrder = ev.EventOrder,
 				EventType = ev.EventType,
-				ID = ev.ID,
+				Id = ev.Id,
 				JSON = json,
-				RestaurantID = ev.RestaurantID,
+				RestaurantId = ev.RestaurantId,
 				EntityID = ev.ParID,
 				SourceType = ev.GetType(),
                 IsAggregateRootCreation = ev.IsAggregateRootCreation,
@@ -252,15 +252,15 @@ namespace Mise.Core.Common.Events.DTOs
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
 			{
-				CausedByID = ev.CausedByID,
+				CausedById = ev.CausedById,
 				CreatedDate = ev.CreatedDate,
-				EventOrderingID = ev.EventOrderingID,
+				EventOrder = ev.EventOrder,
 				EventType = ev.EventType,
-				ID = ev.ID,
+				Id = ev.Id,
 				JSON = json,
 				SourceType = ev.GetType(),
-				RestaurantID = ev.RestaurantID,
-				EntityID = ev.RestaurantID,
+				RestaurantId = ev.RestaurantId,
+				EntityID = ev.RestaurantId,
                 IsAggregateRootCreation = ev.IsAggregateRootCreation,
                 IsEntityCreation = ev.IsEntityCreation
 			};
@@ -271,14 +271,14 @@ namespace Mise.Core.Common.Events.DTOs
 			var json = _jsonSerializer.Serialize(ev);
 			return new EventDataTransportObject
 			{
-				CausedByID = ev.CausedByID,
+				CausedById = ev.CausedById,
 				CreatedDate = ev.CreatedDate,
-				EventOrderingID = ev.EventOrderingID,
+				EventOrder = ev.EventOrder,
 				EventType = ev.EventType,
-				ID = ev.ID,
+				Id = ev.Id,
 				JSON = json,
 				SourceType = ev.GetType(),
-				RestaurantID = ev.RestaurantID,
+				RestaurantId = ev.RestaurantId,
 				EntityID = ev.InvitationID,
                 IsAggregateRootCreation = ev.IsAggregateRootCreation,
                 IsEntityCreation = ev.IsEntityCreation

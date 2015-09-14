@@ -16,7 +16,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Vendors
 
 			var createdEvent = new VendorCreatedEvent {
 				VendorID = Guid.NewGuid (),
-				CausedByID = Guid.NewGuid (),
+				CausedById = Guid.NewGuid (),
 				CreatedDate = DateTime.UtcNow
 			};
 
@@ -26,12 +26,12 @@ namespace Mise.Core.Common.UnitTests.Entities.Vendors
 			underTest.When (createdEvent);
 
 			//ASSERT
-			Assert.AreEqual (createdEvent.VendorID, underTest.ID, "ID");
+			Assert.AreEqual (createdEvent.VendorID, underTest.Id, "ID");
 			Assert.AreEqual (createdEvent.CreatedDate, underTest.CreatedDate, "Created Date");
 			Assert.AreEqual (createdEvent.CreatedDate, underTest.LastUpdatedDate, "last updated");
-            Assert.AreEqual(createdEvent.CausedByID, underTest.CreatedByEmployeeID, "EmployeeID");
+            Assert.AreEqual(createdEvent.CausedById, underTest.CreatedByEmployeeID, "EmployeeID");
             Assert.AreEqual(createdEvent.CreatedDate, underTest.LastUpdatedDate);
-            Assert.AreEqual(createdEvent.EventOrderingID, underTest.Revision);
+            Assert.AreEqual(createdEvent.EventOrder, underTest.Revision);
 		}
 
         [Test]
@@ -64,7 +64,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Vendors
             Assert.AreEqual("Brooklyn", underTest.StreetAddress.City.Name);
 
             Assert.AreEqual(addressEvent.CreatedDate, underTest.LastUpdatedDate);
-            Assert.AreEqual(addressEvent.EventOrderingID, underTest.Revision);
+            Assert.AreEqual(addressEvent.EventOrder, underTest.Revision);
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Vendors
             var restID = Guid.NewGuid();
             var associateRestaurantEvent = new RestaurantAssociatedWithVendorEvent
             {
-                RestaurantID = restID
+                RestaurantId = restID
             };
 
             //ACT
@@ -123,15 +123,15 @@ namespace Mise.Core.Common.UnitTests.Entities.Vendors
                 {
                     new VendorBeverageLineItem
                     {
-                        ID = Guid.NewGuid()
+                        Id = Guid.NewGuid()
                     },
                     new VendorBeverageLineItem
                     {
-                        ID = liId,
+                        Id = liId,
                     },
                     new VendorBeverageLineItem
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                     }
                 }
             };
@@ -141,12 +141,12 @@ namespace Mise.Core.Common.UnitTests.Entities.Vendors
             {
                 VendorLineItemID = liId,
                 PricePerUnit = costReported,
-                RestaurantID = restID
+                RestaurantId = restID
             };
 
             //ACT
             underTest.When(ev);
-            var li = underTest.VendorBeverageLineItems.FirstOrDefault(l => liId == l.ID);
+            var li = underTest.VendorBeverageLineItems.FirstOrDefault(l => liId == l.Id);
 
             //ASSERT
             Assert.NotNull(li);
@@ -167,7 +167,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Vendors
                 {
                     new VendorBeverageLineItem
                     {
-                        ID = liId,
+                        Id = liId,
                         PricePerUnitForRestaurant = new Dictionary<Guid, Money>{
                             {restID, new Money(100)}
                         },
@@ -182,7 +182,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Vendors
             {
                 VendorLineItemID = liId,
                 PricePerUnit = costReported,
-                RestaurantID = restID
+                RestaurantId = restID
             };
 
             //ACT

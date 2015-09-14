@@ -48,46 +48,46 @@ namespace Mise.Core.Common.Events
 
 		public OrderedOnCheckEvent CreateOrderedOnCheckEvent(OrderItem orderItem, IEmployee employee, ICheck check){
 			return new OrderedOnCheckEvent{
-				EventOrderingID = GetNextEventID (),
+				EventOrder = GetNextEventID (),
 				OrderItem = orderItem,
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 			};
 		}
 
 		public OrderItemModifiedEvent CreateOrderItemModifiedEvent(OrderItem orderItem, IEnumerable<MenuItemModifier> mods,
 			IEmployee employee, ICheck check){
 			return new OrderItemModifiedEvent {
-				EventOrderingID = GetNextEventID(),
-				EmployeeID = employee.ID,
-				CheckID = check.ID,
+				EventOrder = GetNextEventID(),
+				EmployeeID = employee.Id,
+				CheckID = check.Id,
 				Modifiers = mods,
-				OrderItemID = orderItem.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID
+				OrderItemID = orderItem.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public OrderItemSetMemoEvent CreateOrderItemSetMemoEvent(ICheck check, OrderItem orderItem, string memo, IEmployee employee){
 			return new OrderItemSetMemoEvent {
-                EventOrderingID = GetNextEventID(),
-				CheckID = check.ID,
+                EventOrder = GetNextEventID(),
+				CheckID = check.Id,
 				Memo = memo,
-				OrderItemID = orderItem.ID,
-			    DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				OrderItemID = orderItem.Id,
+			    DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				CreatedDate = DateTime.UtcNow,
-				EmployeeID = employee.ID
+				EmployeeID = employee.Id
 			};
 		}
 
 		public CheckCreatedEvent CreateCheckCreatedEvent(IEmployee emp){
 			return new CheckCreatedEvent {
-				EventOrderingID = GetNextEventID (),
+				EventOrder = GetNextEventID (),
 				CheckID = GetNextCheckID (),
-				EmployeeID = emp.ID,
-				RestaurantID = _restaurant.ID,
-				DeviceID = _DeviceID,
+				EmployeeID = emp.Id,
+				RestaurantId = _restaurant.Id,
+				DeviceId = _DeviceID,
 				CreatedDate = DateTime.UtcNow,
 			};
 		}
@@ -96,45 +96,45 @@ namespace Mise.Core.Common.Events
 	    {
 	        return new CheckCreatedWithCreditCardEvent
 	        {
-	            EventOrderingID = GetNextEventID(),
+	            EventOrder = GetNextEventID(),
 	            CheckID = GetNextCheckID(),
-	            EmployeeID = emp.ID,
-	            RestaurantID = _restaurant.ID,
-	            DeviceID = _DeviceID,
+	            EmployeeID = emp.Id,
+	            RestaurantId = _restaurant.Id,
+	            DeviceId = _DeviceID,
 	            CreatedDate = DateTime.UtcNow,
 	            CreditCard = card
 	        };
 	    }
 		public CheckSentEvent CreateCheckSentEvent(ICheck check, IEmployee emp){
 			return new CheckSentEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = emp.ID,
-				RestaurantID = _restaurant.ID,
-			    DeviceID = _DeviceID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = emp.Id,
+				RestaurantId = _restaurant.Id,
+			    DeviceId = _DeviceID,
 				CreatedDate = DateTime.UtcNow
 			};
 		}
 
 		public CustomerAssignedToCheckEvent CreateCustomerAssignedToTabEvent(ICheck check, CreditCard card){
 			return new CustomerAssignedToCheckEvent{
-                EventOrderingID = GetNextEventID(),
+                EventOrder = GetNextEventID(),
                 Customer = new Customer (card),
-				CheckID = check.ID,				
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID
+				CheckID = check.Id,				
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public CustomerAssignedToCheckEvent CreateCustomerAssignedToTabEvent(Guid checkID, PersonName name, IEmployee employee){
 			return new CustomerAssignedToCheckEvent
 			{
-				EventOrderingID = GetNextEventID(),
+				EventOrder = GetNextEventID(),
 				Customer = new Customer{ Name = name } ,
 				CheckID = checkID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
-				EmployeeID = employee.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
+				EmployeeID = employee.Id,
 			};
 		}
 			
@@ -143,11 +143,11 @@ namespace Mise.Core.Common.Events
 			Money amountPaid, Money change){
 
 			return new CashPaidOnCheckEvent {
-				EventOrderingID = GetNextEventID(),
-				CheckID = tab.ID,
-				EmployeeID = emp.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				EventOrder = GetNextEventID(),
+				CheckID = tab.Id,
+				EmployeeID = emp.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				AmountPaid = amountPaid,
 				AmountTendered = amountTendered,
 				ChangeGiven = change,
@@ -156,11 +156,11 @@ namespace Mise.Core.Common.Events
 			
 		public CompPaidDirectlyOnCheckEvent CreateCompPaidOnCheckEvent(ICheck tab, IEmployee emp, Money amt){
 			return new CompPaidDirectlyOnCheckEvent {
-				EventOrderingID = GetNextEventID(),
-				CheckID = tab.ID,
-				EmployeeID = emp.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				EventOrder = GetNextEventID(),
+				CheckID = tab.Id,
+				EmployeeID = emp.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				Amount = amt
 			};
 		}
@@ -169,13 +169,13 @@ namespace Mise.Core.Common.Events
 		public ItemCompedGeneralEvent CreateItemCompedEvent(ICheck check, IEmployee emp, OrderItem orderItem,
 			string reason){
 			return new ItemCompedGeneralEvent {
-                EventOrderingID = GetNextEventID(),
-				CheckID = check.ID,
+                EventOrder = GetNextEventID(),
+				CheckID = check.Id,
 				CreatedDate = DateTime.UtcNow,
-				EmployeeID = emp.ID,
-				OrderItemID = orderItem.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				EmployeeID = emp.Id,
+				OrderItemID = orderItem.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				Reason = reason,
 				Amount = orderItem.Total
 			};
@@ -183,42 +183,42 @@ namespace Mise.Core.Common.Events
 
 		public ItemUncompedEvent CreateItemUncompedEvent(ICheck check, IEmployee Employee, OrderItem orderItem){
 			return new ItemUncompedEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
 				CreatedDate = DateTime.UtcNow,
-				EmployeeID = Employee.ID,
-				OrderItemID = orderItem.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				EmployeeID = Employee.Id,
+				OrderItemID = orderItem.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				Amount = orderItem.Total
 			};
 		}
 		public MarkCheckAsPaidEvent CreateMarkCheckAsPaidEvent(ICheck check, IEmployee emp){
 			var isMultiple = check.GetPayments().Count()  > 1;
 			return new MarkCheckAsPaidEvent {
-				CheckID = check.ID,
-                EventOrderingID = GetNextEventID(),
+				CheckID = check.Id,
+                EventOrder = GetNextEventID(),
 				CreatedDate = DateTime.UtcNow,
-				EmployeeID = emp.ID,
+				EmployeeID = emp.Id,
 				IsSplitPayment = isMultiple,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public OrderItemVoidedEvent CreateOrderItemVoidedEvent(ICheck tab, IEmployee emp, IEmployee manager,
 		                                                               OrderItem orderItem,string reason){
 			return new OrderItemVoidedEvent {
-				CheckID = tab.ID,
-                EventOrderingID = GetNextEventID(),
+				CheckID = tab.Id,
+                EventOrder = GetNextEventID(),
 				CreatedDate = DateTime.UtcNow,
-				EmployeeID = emp != null ? emp.ID : Guid.Empty,
-				ManagerApprovedID = manager.ID,
+				EmployeeID = emp != null ? emp.Id : Guid.Empty,
+				ManagerApprovedID = manager.Id,
 				OrderItemToVoid = orderItem,
 				Reason = reason,
 				ServerPlacedID = orderItem.PlacedByID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				StatusWhenVoided = orderItem.Status,
 			};
 		}
@@ -226,86 +226,86 @@ namespace Mise.Core.Common.Events
 		public OrderItemWastedEvent CreateOrderItemWastedEvent(ICheck tab, IEmployee emp, IEmployee manager,
 			OrderItem orderItem,string reason){
 			return new OrderItemWastedEvent {
-				CheckID = tab.ID,
-                EventOrderingID = GetNextEventID(),
+				CheckID = tab.Id,
+                EventOrder = GetNextEventID(),
 				CreatedDate = DateTime.UtcNow,
-				EmployeeID = emp != null ? emp.ID : Guid.Empty,
-				ManagerApprovedID = manager.ID,
+				EmployeeID = emp != null ? emp.Id : Guid.Empty,
+				ManagerApprovedID = manager.Id,
 				OrderItemToVoid = orderItem,
 				Reason = reason,
 				ServerPlacedID = orderItem.PlacedByID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				StatusWhenVoided = orderItem.Status,
 			};
 		}
 
 		public BadLoginAttemptEvent CreateBadLoginEvent(string passcode, string functionName){
 			return new BadLoginAttemptEvent { 
-				EventOrderingID = GetNextEventID(),
+				EventOrder = GetNextEventID(),
 				PasscodeGiven = passcode, 
 				FunctionAttempted=functionName, 
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				CreatedDate = DateTime.UtcNow,
 			};
 		}
 
 		public InsufficientPermissionsEvent CreateInsufficientPermissionEvent(IEmployee emp, string functionName){
 			return new InsufficientPermissionsEvent {
-				EventOrderingID = GetNextEventID (),
+				EventOrder = GetNextEventID (),
 				FunctionAttempted = functionName,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				CreatedDate = DateTime.UtcNow,
-				EmployeeID = emp.ID,
+				EmployeeID = emp.Id,
 			};
 		}
 		public EmployeeClockedInEvent CreateEmployeeClockedInEvent(IEmployee thisEmp){
 			return new EmployeeClockedInEvent{
-                EventOrderingID = GetNextEventID(),
-				EmployeeID = thisEmp.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID
+                EventOrder = GetNextEventID(),
+				EmployeeID = thisEmp.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public EmployeeClockedOutEvent CreateEmployeeClockedOutEvent(IEmployee thisEmp){
 			return new EmployeeClockedOutEvent{ 
-                EventOrderingID = GetNextEventID(),
-				EmployeeID = thisEmp.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID
+                EventOrder = GetNextEventID(),
+				EmployeeID = thisEmp.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public NoSaleEvent CreateNoSaleEvent(IEmployee thisEmp){
 			return new NoSaleEvent { 
-                EventOrderingID = GetNextEventID(),
-				EmployeeID = thisEmp.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID
+                EventOrder = GetNextEventID(),
+				EmployeeID = thisEmp.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public OrderItemDeletedEvent CreateOrderItemDeletedEvent(ICheck check, OrderItem orderItem, IEmployee emp){
 			return new OrderItemDeletedEvent {
-				EventOrderingID = GetNextEventID(),
-				OrderItemID = orderItem.ID,
-				EmployeeID = emp.ID,
-				CheckID = check.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID
+				EventOrder = GetNextEventID(),
+				OrderItemID = orderItem.Id,
+				EmployeeID = emp.Id,
+				CheckID = check.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public CheckReopenedEvent CreateReopenCheckEvent(ICheck check, IEmployee emp){
 			return new CheckReopenedEvent {
-				EventOrderingID = GetNextEventID(),
-				EmployeeID = emp.ID,
-				CheckID = check.ID,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID
+				EventOrder = GetNextEventID(),
+				EmployeeID = emp.Id,
+				CheckID = check.Id,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
@@ -313,13 +313,13 @@ namespace Mise.Core.Common.Events
 		public CreditCardAddedForPaymentEvent CreateCreditCardAddedForPaymentEvent(ICheck check, IEmployee employee,
 			Money amount, CreditCard card){
 			return new CreditCardAddedForPaymentEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 				Amount = amount,
 				CreatedDate = DateTime.UtcNow,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				CreditCard = card
 			};
 		}
@@ -329,150 +329,150 @@ namespace Mise.Core.Common.Events
 	    {
 	        return new CreditCardAuthorizationStartedEvent
 	        {
-	            EventOrderingID = GetNextEventID(),
-	            CheckID = check.ID,
-	            EmployeeID = employee.ID,
-	            PaymentID = payment.ID,
+	            EventOrder = GetNextEventID(),
+	            CheckID = check.Id,
+	            EmployeeID = employee.Id,
+	            PaymentID = payment.Id,
 	        };
 	    }
 
 		public CreditCardAuthorizedEvent CreateCreditCardAuthorizedEvent(ICheck check, IEmployee employee, 
 			ICreditCardPayment payment, CreditCardAuthorizationCode authCode){
 			return new CreditCardAuthorizedEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 				Amount = payment.AmountCharged,
 				CreatedDate = DateTime.UtcNow,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				CreditCard = payment.Card,
 				AuthorizationCode = authCode,
-				PaymentID = payment.ID
+				PaymentID = payment.Id
 			};
 		}
 
 		public CreditCardFailedAuthorizationEvent CreateCreditCardFailedAuthorizationEvent(ICheck check, 
 			IEmployee employee, ICreditCardPayment payment, CreditCardAuthorizationCode authCode){
 			return new CreditCardFailedAuthorizationEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 				Amount = payment.AmountCharged,
 				CreatedDate = DateTime.UtcNow,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 				CreditCard = payment.Card,
 				AuthorizationCode = authCode,
-				PaymentID = payment.ID
+				PaymentID = payment.Id
 			};
 		}
 
 		public CreditCardChargeCompletedEvent CreateCreditCardCompletedEvent(ICheck check, IEmployee employee, 
 			ICreditCardPayment payment, CreditCardAuthorizationCode authCode, bool successfulCharge){
 			return new CreditCardChargeCompletedEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 				AmountPaid = payment.AmountCharged,
 				TipAmount = payment.TipAmount,
 				AuthorizationCode = authCode,
 				WasAuthorized = successfulCharge,
 				CreditCard = payment.Card,
-				PaymentID = payment.ID,
-				RestaurantID = _restaurant.ID,
-				DeviceID = _DeviceID
+				PaymentID = payment.Id,
+				RestaurantId = _restaurant.Id,
+				DeviceId = _DeviceID
 			};
 		}
 			
 		public CreditCardCloseRequestedEvent CreateCreditCardCloseRequestedEvent(ICheck check, IEmployee employee,
 			ICreditCardPayment payment){
 			return new CreditCardCloseRequestedEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 				AmountPaid = payment.AmountCharged,
 				TipAmount = payment.TipAmount,
-				PaymentID = payment.ID,
+				PaymentID = payment.Id,
 				CodeFromAuthorization = payment.AuthorizationResult,
 				CreditCard = payment.Card,
-				RestaurantID = _restaurant.ID,
-				DeviceID = _DeviceID
+				RestaurantId = _restaurant.Id,
+				DeviceId = _DeviceID
 			};
 		}
 
 		public CreditCardTipAddedToChargeEvent CreateCreditCardTipAddedToChargeEvent(ICheck check, IEmployee employee, ICreditCardPayment payment, Money tipAmount){
 			return new CreditCardTipAddedToChargeEvent {
-				EventOrderingID = GetNextEventID(),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				EventOrder = GetNextEventID(),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 				TipAmount = tipAmount,
-				PaymentID = payment.ID,
+				PaymentID = payment.Id,
 				CreditCard = payment.Card,
-				RestaurantID = _restaurant.ID,
-				DeviceID = _DeviceID
+				RestaurantId = _restaurant.Id,
+				DeviceId = _DeviceID
 			};
 		}
 
 		public CreditCardAuthorizationCancelledEvent CreditCardAuthorizationCancelled(ICheck check, IEmployee employee,
 			ICreditCardPayment payment, CreditCardAuthorizationCode newAuthCode){
 			return new CreditCardAuthorizationCancelledEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 				AuthorizationCode = newAuthCode,
 				WasRolledBack = newAuthCode.IsAuthorized,
-				PaymentID = payment.ID
+				PaymentID = payment.Id
 			};
 		}
 		#endregion
 
 		public DiscountAppliedToCheckEvent CreateDiscountAppliedToCheckEvent(ICheck check, IEmployee employee, DiscountAmount discount){
 			return new DiscountAppliedToCheckEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
 				DiscountAmount = discount,
 				CreatedDate = DateTime.UtcNow,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 			};
 		}
         public DiscountAppliedToCheckEvent CreateDiscountAppliedToCheckEvent(ICheck check, IEmployee employee, DiscountPercentage discount)
         {
             return new DiscountAppliedToCheckEvent
             {
-                EventOrderingID = GetNextEventID(),
-                CheckID = check.ID,
-                EmployeeID = employee.ID,
+                EventOrder = GetNextEventID(),
+                CheckID = check.Id,
+                EmployeeID = employee.Id,
                 DiscountPercentage = discount,
                 CreatedDate = DateTime.UtcNow,
-                DeviceID = _DeviceID,
-                RestaurantID = _restaurant.ID,
+                DeviceId = _DeviceID,
+                RestaurantId = _restaurant.Id,
             };
         }
         public DiscountAppliedToCheckEvent CreateDiscountAppliedToCheckEvent(ICheck check, IEmployee employee, DiscountPercentageAfterMinimumCashTotal discount)
         {
             return new DiscountAppliedToCheckEvent
             {
-                EventOrderingID = GetNextEventID(),
-                CheckID = check.ID,
-                EmployeeID = employee.ID,
+                EventOrder = GetNextEventID(),
+                CheckID = check.Id,
+                EmployeeID = employee.Id,
                 DiscountPercentageAfterMinimumCashTotal = discount,
                 CreatedDate = DateTime.UtcNow,
-                DeviceID = _DeviceID,
-                RestaurantID = _restaurant.ID,
+                DeviceId = _DeviceID,
+                RestaurantId = _restaurant.Id,
             };
         }
 		public DiscountRemovedFromCheckEvent CreateDiscountRemovedFromCheckEvent(ICheck check, IEmployee employee, IDiscount discount){
 			return new DiscountRemovedFromCheckEvent {
-				EventOrderingID = GetNextEventID (),
-				CheckID = check.ID,
-				EmployeeID = employee.ID,
-				DiscountID = discount.ID,
+				EventOrder = GetNextEventID (),
+				CheckID = check.Id,
+				EmployeeID = employee.Id,
+				DiscountID = discount.Id,
 				CreatedDate = DateTime.UtcNow,
-				DeviceID = _DeviceID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _DeviceID,
+				RestaurantId = _restaurant.Id,
 			};
 		}
 	}

@@ -45,53 +45,53 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void Setup(){
 			var restID = Guid.NewGuid ();
 			_underTest = new InventoryAppEventFactory ("testDevice", MiseAppTypes.UnitTests);
-			_rest = new Restaurant{ ID = restID };
+			_rest = new Restaurant{ Id = restID };
 			_underTest.SetRestaurant (_rest);
 
-			_restSec = new RestaurantInventorySection{ ID = Guid.NewGuid (), RestaurantID = restID };
+			_restSec = new RestaurantInventorySection{ Id = Guid.NewGuid (), RestaurantID = restID };
 
-			_emp = new Employee{ ID = Guid.NewGuid () };
+			_emp = new Employee{ Id = Guid.NewGuid () };
 
-			_inv = new Inventory{ ID = Guid.NewGuid (), RestaurantID = restID };
-			_invSection = new InventorySection{ ID = Guid.NewGuid (), InventoryID = _inv.ID };
-			_invLI = new InventoryBeverageLineItem{ ID = Guid.NewGuid () };
+			_inv = new Inventory{ Id = Guid.NewGuid (), RestaurantID = restID };
+			_invSection = new InventorySection{ Id = Guid.NewGuid (), InventoryID = _inv.Id };
+			_invLI = new InventoryBeverageLineItem{ Id = Guid.NewGuid () };
 			_parLI = new ParBeverageLineItem {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				UPC = "119292",
 				DisplayName = "testLI",
 			};
 
-			_par = new Par{ ID = Guid.NewGuid (), RestaurantID = restID };
+			_par = new Par{ Id = Guid.NewGuid (), RestaurantID = restID };
 
-			_po = new PurchaseOrder{ ID = Guid.NewGuid(), RestaurantID = restID };
+			_po = new PurchaseOrder{ Id = Guid.NewGuid(), RestaurantID = restID };
 
-			_ro = new ReceivingOrder{ ID = Guid.NewGuid (), RestaurantID = restID };
-			_roLI = new ReceivingOrderLineItem{ ID = Guid.NewGuid (), RestaurantID = restID };
+			_ro = new ReceivingOrder{ Id = Guid.NewGuid (), RestaurantID = restID };
+			_roLI = new ReceivingOrderLineItem{ Id = Guid.NewGuid (), RestaurantID = restID };
 
-			_vendor = new Vendor{ ID = Guid.NewGuid (), RestaurantsAssociatedIDs = new List<Guid>{ restID } };
-			_vLI = new VendorBeverageLineItem{ ID = Guid.NewGuid (), VendorID = _vendor.ID };
+			_vendor = new Vendor{ Id = Guid.NewGuid (), RestaurantsAssociatedIDs = new List<Guid>{ restID } };
+			_vLI = new VendorBeverageLineItem{ Id = Guid.NewGuid (), VendorID = _vendor.Id };
 		}
 
 		#region ID and Date tests
 		void TestCommonFieldsWithRest(IEntityEventBase ev){
 			TestCommonFields (ev);
-			Assert.AreEqual (_rest.ID, ev.RestaurantID, "RestaurantID");
+			Assert.AreEqual (_rest.Id, ev.RestaurantId, "RestaurantID");
 		}
 
 		void TestInventoryEvent(IInventoryEvent ev){
 			TestCommonFieldsWithRest (ev);
 			Assert.AreNotEqual (Guid.Empty, ev.InventoryID);
-			Assert.AreEqual (_inv.ID, ev.InventoryID, "InventoryID");
+			Assert.AreEqual (_inv.Id, ev.InventoryID, "InventoryID");
 		}
 
 		void TestCommonFields(IEntityEventBase ev){
-			Assert.AreNotEqual (Guid.Empty, ev.ID, "ID");
-			Assert.AreNotEqual (Guid.Empty, ev.CausedByID, "CausedByID");
-			Assert.AreEqual (_emp.ID, ev.CausedByID, "CausedByID");
+			Assert.AreNotEqual (Guid.Empty, ev.Id, "ID");
+			Assert.AreNotEqual (Guid.Empty, ev.CausedById, "CausedByID");
+			Assert.AreEqual (_emp.Id, ev.CausedById, "CausedByID");
 			Assert.NotNull (ev.CreatedDate, "CreatedDate");
 			Assert.GreaterOrEqual (ev.CreatedDate, DateTimeOffset.UtcNow.AddHours (-1));
-			Assert.AreEqual ("testDevice", ev.DeviceID, "DeviceID");
-			Assert.NotNull (ev.EventOrderingID, "ordering ID");
+			Assert.AreEqual ("testDevice", ev.DeviceId, "DeviceID");
+			Assert.NotNull (ev.EventOrder, "ordering ID");
 		}
 
 		void TestParEvent(IParEvent ev){
@@ -133,13 +133,13 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void CreateEmployee(){
 			var ev = _underTest.CreateEmployeeCreatedEvent (EmailAddress.TestEmail, Password.TestPassword, PersonName.TestName, MiseAppTypes.UnitTests);
 
-            Assert.AreNotEqual(Guid.Empty, ev.ID, "ID");
-            Assert.AreNotEqual(Guid.Empty, ev.CausedByID, "CausedByID");
-            Assert.AreEqual(ev.EmployeeID, ev.CausedByID, "CausedByID");
+            Assert.AreNotEqual(Guid.Empty, ev.Id, "ID");
+            Assert.AreNotEqual(Guid.Empty, ev.CausedById, "CausedByID");
+            Assert.AreEqual(ev.EmployeeID, ev.CausedById, "CausedByID");
             Assert.NotNull(ev.CreatedDate, "CreatedDate");
             Assert.GreaterOrEqual(ev.CreatedDate, DateTimeOffset.UtcNow.AddHours(-1));
-            Assert.AreEqual("testDevice", ev.DeviceID, "DeviceID");
-            Assert.NotNull(ev.EventOrderingID, "ordering ID");
+            Assert.AreEqual("testDevice", ev.DeviceId, "DeviceID");
+            Assert.NotNull(ev.EventOrder, "ordering ID");
         }
 
 		[Test]
@@ -203,7 +203,7 @@ namespace Mise.Core.Common.UnitTests.Events
 				null, _invSection, 23, _inv);
 
 			TestInventoryEvent (ev);
-			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
+			Assert.AreEqual (_invSection.Id, ev.InventorySectionID);
 			Assert.AreEqual (23, ev.InventoryPosition);
 			Assert.AreEqual (_parLI.DisplayName, ev.DisplayName);
 			Assert.AreEqual (_parLI.UPC, ev.UPC);
@@ -236,9 +236,9 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void LineItemDeleted(){
 			var ev = _underTest.CreateInventoryLineItemDeletedEvent (_emp, _inv, _invSection, _invLI);
 			TestInventoryEvent (ev);
-			Assert.AreEqual (_inv.ID, ev.InventoryID);
-			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
-			Assert.AreEqual (_invLI.ID, ev.InventoryLineItemID);
+			Assert.AreEqual (_inv.Id, ev.InventoryID);
+			Assert.AreEqual (_invSection.Id, ev.InventorySectionID);
+			Assert.AreEqual (_invLI.Id, ev.InventoryLineItemID);
 		}
 
 		[Test]
@@ -251,15 +251,15 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void InventoryNewSection(){
 			var ev = _underTest.CreateInventoryNewSectionAddedEvent (_emp, _inv, _restSec);
 			TestInventoryEvent (ev);
-			Assert.AreNotEqual (_restSec.ID, ev.SectionID);
-			Assert.AreEqual (_restSec.ID, ev.RestaurantSectionId);
+			Assert.AreNotEqual (_restSec.Id, ev.SectionID);
+			Assert.AreEqual (_restSec.Id, ev.RestaurantSectionId);
 		}
 
 		[Test]
 		public void InventoryLineItemMoved(){
 			var ev = _underTest.CreateInventoryLineItemMovedToNewPositionEvent (_emp, _inv, _invSection, _invLI, 5);
 			TestInventoryEvent (ev);
-			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
+			Assert.AreEqual (_invSection.Id, ev.InventorySectionID);
 			Assert.AreEqual (5, ev.NewPositionWanted);
 		}
 
@@ -281,15 +281,15 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void CompleteSection(){
 			var ev = _underTest.CreateInventorySectionCompletedEvent (_emp, _inv, _invSection);
 			TestInventoryEvent (ev);
-			Assert.AreEqual (_invSection.ID, ev.InventorySectionID);
-			Assert.AreNotEqual (_restSec.ID, ev.InventorySectionID);
+			Assert.AreEqual (_invSection.Id, ev.InventorySectionID);
+			Assert.AreNotEqual (_restSec.Id, ev.InventorySectionID);
 		}
 
 		[Test]
 		public void NewRestaurant(){
 			var ev = _underTest.CreateNewRestaurantRegisteredOnAppEvent (_emp, RestaurantName.TestName, StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber);
 			TestCommonFields (ev);
-			Assert.AreNotEqual (Guid.Empty, ev.RestaurantID);
+			Assert.AreNotEqual (Guid.Empty, ev.RestaurantId);
 		}
 
 		[Test]
@@ -316,7 +316,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void ParLineItemQuantityUpdated(){
-			var ev = _underTest.CreatePARLineItemQuantityUpdatedEvent (_emp, _par, _parLI.ID, 10);
+			var ev = _underTest.CreatePARLineItemQuantityUpdatedEvent (_emp, _par, _parLI.Id, 10);
 			TestParEvent (ev);
 			Assert.AreEqual (10, ev.UpdatedQuantity);
 		}
@@ -325,7 +325,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void ParLineItemDeleted(){
 			var ev = _underTest.CreateParLineItemDeletedEvent (_emp, _par, _parLI);
 			TestParEvent (ev);
-			Assert.AreEqual (_parLI.ID, ev.LineItemId);
+			Assert.AreEqual (_parLI.Id, ev.LineItemId);
 		}
 
 		[Test]
@@ -354,7 +354,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void PurchaseOrderSentToVendor(){
-			var ev = _underTest.CreatePurchaseOrderSentToVendorEvent (_emp, _po, _vendor.ID);
+			var ev = _underTest.CreatePurchaseOrderSentToVendorEvent (_emp, _po, _vendor.Id);
 			TestPurchaseOrderEvent (ev);
 		}
 
@@ -374,7 +374,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void ReceivingOrderCreated(){
 			var ev = _underTest.CreateReceivingOrderCreatedEvent (_emp, _vendor);
 			TestReceivingOrderEvent (ev);
-			Assert.AreEqual (_vendor.ID, ev.VendorID);
+			Assert.AreEqual (_vendor.Id, ev.VendorID);
 		}
 
 		[Test]
@@ -398,8 +398,8 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void RecevingOrderLineItemZeroedOut(){
-			var ev = _underTest.CreateReceivingOrderLineItemZeroedOutEvent (_emp, _ro, _roLI.ID);
-			Assert.AreEqual (_roLI.ID, ev.LineItemID);
+			var ev = _underTest.CreateReceivingOrderLineItemZeroedOutEvent (_emp, _ro, _roLI.Id);
+			Assert.AreEqual (_roLI.Id, ev.LineItemID);
 			TestReceivingOrderEvent (ev);
 		}
 
@@ -407,20 +407,20 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void RestaurantSetPriceForVendor(){
 			var ev = _underTest.CreateRestaurantSetPriceEvent (_emp, _vLI, _vendor, Money.MiseMonthlyFee);
 			TestVendorEvent (ev);
-			Assert.AreEqual (_vLI.ID, ev.VendorLineItemID);
-			Assert.AreEqual (_rest.ID, ev.RestaurantID, "rest ID");
+			Assert.AreEqual (_vLI.Id, ev.VendorLineItemID);
+			Assert.AreEqual (_rest.Id, ev.RestaurantId, "rest ID");
 		}
 
 		[Test]
 		public void ReceivingOrderLineItemUpdated(){
-			var ev = _underTest.CreateROLineItemUpdateQuantityEvent (_emp, _ro, _roLI.ID, 100, Money.None);
+			var ev = _underTest.CreateROLineItemUpdateQuantityEvent (_emp, _ro, _roLI.Id, 100, Money.None);
 			TestReceivingOrderEvent (ev);
 			Assert.AreEqual (100, ev.UpdatedQuantity);
 		}
 
 		[Test]
 		public void RestaurantSelected(){
-			var ev = _underTest.CreateUserSelectedRestaurant (_emp, _rest.ID);
+			var ev = _underTest.CreateUserSelectedRestaurant (_emp, _rest.Id);
 			TestCommonFieldsWithRest (ev);
 		}
 
@@ -441,7 +441,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void InventorySectionStartedByEmployee(){
 			var ev = _underTest.CreateInventorySectionStartedByEmployeeEvent (_emp, _inv, _invSection);
 			TestInventoryEvent (ev);
-			Assert.AreEqual (_invSection.ID, ev.InventorySectionId);
+			Assert.AreEqual (_invSection.Id, ev.InventorySectionId);
 		}
 		#endregion
 	}

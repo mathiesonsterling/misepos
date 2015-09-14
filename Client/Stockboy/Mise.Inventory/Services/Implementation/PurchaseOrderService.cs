@@ -91,13 +91,13 @@ namespace Mise.Inventory.Services.Implementation
 
 			    if (diff > 0) {
 					//see if we have a vendor
-					var vendor = await _vendorService.GetVendorWithLowestPriceForItem(parLI, diff, rest.ID);
+					var vendor = await _vendorService.GetVendorWithLowestPriceForItem(parLI, diff, rest.Id);
 
 					var numBottles = (int)Math.Ceiling (diff);
 					//make an event
 					var realLI = parLI as ParBeverageLineItem;
 					var addLIEvent = _eventFactory.CreatePOLineItemAddedFromInventoryCalcEvent (emp, _currentPO, realLI,
-						numBottles, null, vendor != null ? vendor.ID : (Guid?)null);
+						numBottles, null, vendor != null ? vendor.Id : (Guid?)null);
 
 					poEvents.Add (addLIEvent);
 				}
@@ -134,7 +134,7 @@ namespace Mise.Inventory.Services.Implementation
 				_eventFactory.CreatePurchaseOrderSentToVendorEvent (emp, _currentPO, vendorID));
 
 			_currentPO = _poRepository.ApplyEvents (events);
-			await _poRepository.Commit (order.ID);
+			await _poRepository.Commit (order.Id);
 		}
 
 		#endregion
@@ -143,7 +143,7 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			var res = (
                 from po in _poRepository.GetAll() 
-                let perVend = po.GetPurchaseOrderPerVendors().Any(pov => pov.VendorID.HasValue && pov.VendorID.Value == vendor.ID && pov.IsExpectingShipments()) 
+                let perVend = po.GetPurchaseOrderPerVendors().Any(pov => pov.VendorID.HasValue && pov.VendorID.Value == vendor.Id && pov.IsExpectingShipments()) 
                 where perVend 
                 select po
             ).ToList();
@@ -163,7 +163,7 @@ namespace Mise.Inventory.Services.Implementation
 
                 _poRepository.ApplyEvent(events);
 
-                await _poRepository.Commit(po.ID);
+                await _poRepository.Commit(po.Id);
             }
         }
 

@@ -23,12 +23,12 @@ namespace Mise.Inventory.UnitTests.ViewModels
 
 		    var po = new PurchaseOrder
 		    {
-		        ID = Guid.NewGuid(),
+		        Id = Guid.NewGuid(),
                 PurchaseOrdersPerVendor = new List<PurchaseOrderPerVendor>
                 {
                     new PurchaseOrderPerVendor
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                     }
                 }
 		    };

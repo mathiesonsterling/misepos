@@ -21,7 +21,7 @@ namespace Mise.Core.Common.Entities.DTOs
 			{
 				var restEnt = ((IRestaurantEntityBase)entity);
 				if(restEnt.RestaurantID == Guid.Empty && entity is IRestaurant){
-					restaurantID = entity.ID;
+					restaurantID = entity.Id;
 				} else{
 					restaurantID = restEnt.RestaurantID;
 				}
@@ -29,7 +29,7 @@ namespace Mise.Core.Common.Entities.DTOs
             return new RestaurantEntityDataTransportObject
             {
                 CreatedDate = entity.CreatedDate,
-                ID = entity.ID,
+                Id = entity.Id,
                 JSON = json,
                 LastUpdatedDate = entity.LastUpdatedDate,
 				RestaurantID = restaurantID,

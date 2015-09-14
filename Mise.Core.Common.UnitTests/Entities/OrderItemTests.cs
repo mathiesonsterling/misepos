@@ -55,7 +55,7 @@ namespace Mise.Core.Common.UnitTests.Entities
 	        var updateDate = DateTime.UtcNow;
 	        var oi = new OrderItem
 	        {
-	            ID = id,
+	            Id = id,
 	            CreatedDate = createDate,
 	            LastUpdatedDate = updateDate,
 	            EmployeeWhoComped = empID,
@@ -86,7 +86,7 @@ namespace Mise.Core.Common.UnitTests.Entities
 
             //ASSERT
             Assert.IsNotNull(res);
-            Assert.AreEqual(id, res.ID);
+            Assert.AreEqual(id, res.Id);
             Assert.AreEqual(restid, res.RestaurantID);
             Assert.IsTrue(res.IsComped);
             Assert.IsTrue(res.IsOrdering);

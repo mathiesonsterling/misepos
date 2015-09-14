@@ -18,13 +18,13 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
         {
             var ro = new ReceivingOrder
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Revision = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1011},
                 LineItems = new List<ReceivingOrderLineItem>
                 {
                     new ReceivingOrderLineItem
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         MiseName = "testLI",
                         LineItemPrice = new Money(100.0M),
                         Quantity = 1012,
@@ -42,7 +42,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             //ASSERT
             Assert.NotNull(res);
-            Assert.AreEqual(ro.ID, res.ID);
+            Assert.AreEqual(ro.Id, res.Id);
 
             var roLi = ro.GetBeverageLineItems().First();
             var resLi = res.GetBeverageLineItems().First();
@@ -60,9 +60,9 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 		public void CreateEventShouldCreateWithCorrectStatus(){
 			var cEv = new ReceivingOrderCreatedEvent {
 				ReceivingOrderID = Guid.NewGuid (),
-				CausedByID = Guid.NewGuid (),
+				CausedById = Guid.NewGuid (),
 				CreatedDate = DateTimeOffset.UtcNow,
-				EventOrderingID = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 12}
+				EventOrder = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 12}
 			};
 
 			var underTest = new ReceivingOrder ();
@@ -72,11 +72,11 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
 			//ASSERT
 			Assert.AreEqual(ReceivingOrderStatus.Created,underTest.Status, "currently processing");
-			Assert.AreEqual (cEv.ReceivingOrderID, underTest.ID);
-			Assert.AreEqual (cEv.CausedByID, underTest.ReceivedByEmployeeID);
+			Assert.AreEqual (cEv.ReceivingOrderID, underTest.Id);
+			Assert.AreEqual (cEv.CausedById, underTest.ReceivedByEmployeeID);
 			Assert.AreEqual (cEv.CreatedDate, underTest.CreatedDate );
 			Assert.AreEqual (cEv.CreatedDate, underTest.LastUpdatedDate);
-			Assert.AreEqual (cEv.EventOrderingID.OrderingID, underTest.Revision.OrderingID);
+			Assert.AreEqual (cEv.EventOrder.OrderingID, underTest.Revision.OrderingID);
 		}
 
 		[Test]
@@ -88,10 +88,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
 			var ev = new ReceivingOrderCompletedEvent
 			{
-				CausedByID = Guid.NewGuid (),
+				CausedById = Guid.NewGuid (),
 				CreatedDate = DateTimeOffset.UtcNow,
-				RestaurantID = Guid.NewGuid (),
-				EventOrderingID = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 10102}
+				RestaurantId = Guid.NewGuid (),
+				EventOrder = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 10102}
 			};
 
 			//ACT
@@ -99,7 +99,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
 			//Assert
 			Assert.AreEqual(ReceivingOrderStatus.Completed, underTest.Status);
-			Assert.AreNotEqual (ev.CausedByID, underTest.ReceivedByEmployeeID);
+			Assert.AreNotEqual (ev.CausedById, underTest.ReceivedByEmployeeID);
 		}
     }
 }

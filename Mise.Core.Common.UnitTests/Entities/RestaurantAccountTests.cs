@@ -16,14 +16,14 @@ namespace Mise.Core.Common.UnitTests.Entities
         {
             var account = new RestaurantAccount
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 AccountHolderName = PersonName.TestName,
                 BillingCycle = new TimeSpan(30, 0, 0, 0),
                 Charges = new List<AccountCharge>
                 {
                     new AccountCharge
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         Amount = new Money(10.0M),
                         App = MiseAppTypes.POSMobile
                     }
@@ -40,7 +40,7 @@ namespace Mise.Core.Common.UnitTests.Entities
                 {
                     new AccountCreditCardPayment
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         Amount = new Money(11.19M)
                     }
                 },
@@ -55,11 +55,11 @@ namespace Mise.Core.Common.UnitTests.Entities
 
             //ASSERT
             Assert.NotNull(res);
-            Assert.AreEqual(account.ID, res.ID);
+            Assert.AreEqual(account.Id, res.Id);
             Assert.AreEqual(account.AccountHolderName, res.AccountHolderName);
             Assert.AreEqual(account.BillingCycle, res.BillingCycle);
             Assert.AreEqual(account.Charges.Count(), res.Charges.Count(), "num charges");
-            Assert.AreEqual(account.Charges.First().ID, res.Charges.First().ID, "charge ID");
+            Assert.AreEqual(account.Charges.First().Id, res.Charges.First().Id, "charge ID");
             Assert.AreEqual(account.Charges.First().App, res.Charges.First().App);
             Assert.AreEqual(account.Charges.First().Amount, res.Charges.First().Amount);
             Assert.AreEqual(account.CreatedDate, res.CreatedDate, "Created Date");
@@ -78,7 +78,7 @@ namespace Mise.Core.Common.UnitTests.Entities
         {
             var underTest = new AccountCredit
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Status = PaymentProcessingStatus.CreditNeedsProcessing
             };
 

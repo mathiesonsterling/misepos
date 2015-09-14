@@ -30,7 +30,7 @@ namespace Mise.Core.Common.Events
 		public Guid? RestaurantID {
 			get {
 				if (_restaurant != null) {
-					return _restaurant.ID;
+					return _restaurant.Id;
 				}
 				return null;
 			}
@@ -86,19 +86,19 @@ namespace Mise.Core.Common.Events
 	    {
             return new ReceivingOrderLineItemAddedEvent
             {
-				ID = Guid.NewGuid (),
-                CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+                CausedById = emp.Id,
                 CreatedDate = GetDate(),
-                RestaurantID = _restaurant.ID,
-                EventOrderingID = GetNextEventID(),
-                DeviceID = _deviceID,
+                RestaurantId = _restaurant.Id,
+                EventOrder = GetNextEventID(),
+                DeviceId = _deviceID,
                 UPC = source.UPC,
                 Container = source.Container,
                 CaseSize = source.CaseSize,
 				MiseName = source.MiseName,
                 DisplayName = source.DisplayName,
 				Quantity = quantity,
-				ReceivingOrderID = ro.ID,
+				ReceivingOrderID = ro.Id,
 				Categories = source.GetCategories () != null
 					? source.GetCategories ().Cast<ItemCategory>()
 					: new List<ItemCategory>(),
@@ -110,18 +110,18 @@ namespace Mise.Core.Common.Events
 			string upc, IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, IReceivingOrder ro)
 		{
 			return new ReceivingOrderLineItemAddedEvent {
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				RestaurantID = _restaurant.ID,
-				EventOrderingID = GetNextEventID (),
-				DeviceID = _deviceID,
+				RestaurantId = _restaurant.Id,
+				EventOrder = GetNextEventID (),
+				DeviceId = _deviceID,
 				UPC = upc,
 				Container = container,
 				CaseSize = caseSize,
 				DisplayName = name,
 				Quantity = quantity,
-				ReceivingOrderID = ro.ID,
+				ReceivingOrderID = ro.Id,
 				Categories = categories,
                 LineItemID = Guid.NewGuid()
 			};
@@ -132,12 +132,12 @@ namespace Mise.Core.Common.Events
 			IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				RestaurantID = _restaurant.ID,
-				EventOrderingID = GetNextEventID(),
-				DeviceID = _deviceID,
+				RestaurantId = _restaurant.Id,
+				EventOrder = GetNextEventID(),
+				DeviceId = _deviceID,
 				UPC = source.UPC,
 				Container = source.Container,
 				CaseSize = source.CaseSize,
@@ -146,8 +146,8 @@ namespace Mise.Core.Common.Events
 				Quantity = quantity,
 				VendorBoughtFrom = vendorID,
 				RestaurantInventorySectionID = section.RestaurantInventorySectionID,
-                InventorySectionID = section.ID,
-				InventoryID = inventory.ID,
+                InventorySectionID = section.Id,
+				InventoryID = inventory.Id,
 				Categories = source.GetCategories ().Cast<ItemCategory>(),
                 InventoryPosition =  inventoryPosition,
                 LineItemID = Guid.NewGuid()
@@ -158,16 +158,16 @@ namespace Mise.Core.Common.Events
 			IInventorySection sec, IInventoryBeverageLineItem li)
 		{
 			return new InventoryLineItemDeletedEvent {
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate (),
-				EventOrderingID = GetNextEventID (),
-				DeviceID = _deviceID,
-				RestaurantID = _restaurant.ID,
+				EventOrder = GetNextEventID (),
+				DeviceId = _deviceID,
+				RestaurantId = _restaurant.Id,
 
-				InventoryID = inv.ID,
-				InventorySectionID = sec.ID,
-				InventoryLineItemID = li.ID
+				InventoryID = inv.Id,
+				InventorySectionID = sec.Id,
+				InventoryLineItemID = li.Id
 			};
 		}
 
@@ -175,16 +175,16 @@ namespace Mise.Core.Common.Events
 			IInventorySection sec, IInventoryBeverageLineItem li, int newPosition)
 		{
 			return new InventoryLineItemMovedToNewPositionEvent {
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate (),
-				EventOrderingID = GetNextEventID (),
-				DeviceID = _deviceID,
-				RestaurantID = _restaurant.ID,
+				EventOrder = GetNextEventID (),
+				DeviceId = _deviceID,
+				RestaurantId = _restaurant.Id,
 
-				InventoryID = inv.ID,
-				InventorySectionID = sec.ID,
-				LineItemID = li.ID,
+				InventoryID = inv.Id,
+				InventorySectionID = sec.Id,
+				LineItemID = li.Id,
 				NewPositionWanted = newPosition
 			};
 		}
@@ -192,13 +192,13 @@ namespace Mise.Core.Common.Events
 	    public PARCreatedEvent CreatePARCreatedEvent (IEmployee emp)
 		{
 			return new PARCreatedEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				ParID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				RestaurantID = _restaurant.ID
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				RestaurantId = _restaurant.Id
 			};
 		}			
 
@@ -206,19 +206,19 @@ namespace Mise.Core.Common.Events
 			int? quantity, IPar par)
 		{
 			return new PARLineItemAddedEvent {
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				RestaurantID = _restaurant.ID,
-				EventOrderingID = GetNextEventID(),
-				DeviceID = _deviceID,
+				RestaurantId = _restaurant.Id,
+				EventOrder = GetNextEventID(),
+				DeviceId = _deviceID,
 				UPC = source.UPC,
 				MiseName = source.MiseName,
 				Container = source.Container,
 				CaseSize = source.CaseSize,
 				DisplayName = source.DisplayName,
 				Quantity = quantity,
-				ParID = par.ID,
+				ParID = par.Id,
 				Categories = source.GetCategories () != null 
 					? source.GetCategories ().Cast<ItemCategory>() 
 					: new List<ItemCategory>(),
@@ -230,18 +230,18 @@ namespace Mise.Core.Common.Events
 			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, IPar par)
 		{
 			return new PARLineItemAddedEvent {
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				RestaurantID = _restaurant.ID,
-				EventOrderingID = GetNextEventID(),
-				DeviceID = _deviceID,
+				RestaurantId = _restaurant.Id,
+				EventOrder = GetNextEventID(),
+				DeviceId = _deviceID,
 				UPC = upc,
 				Container = container,
 				CaseSize = caseSize,
 				DisplayName = name,
 				Quantity = quantity,
-				ParID = par.ID,
+				ParID = par.Id,
 				Categories = categories,
                 LineItemID = Guid.NewGuid()
 			};
@@ -250,14 +250,14 @@ namespace Mise.Core.Common.Events
 		public ParLineItemDeletedEvent CreateParLineItemDeletedEvent (IEmployee emp, IPar par, IParBeverageLineItem li)
 		{
 			return new ParLineItemDeletedEvent{
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate (),
-				RestaurantID = _restaurant.ID,
-				EventOrderingID = GetNextEventID (),
-				DeviceID = _deviceID,
-				ParID = par.ID,
-				LineItemId = li.ID
+				RestaurantId = _restaurant.Id,
+				EventOrder = GetNextEventID (),
+				DeviceId = _deviceID,
+				ParID = par.Id,
+				LineItemId = li.Id
 			};
 		}
 
@@ -265,13 +265,13 @@ namespace Mise.Core.Common.Events
 			Guid lineItemID, decimal quantity)
 		{
 			return new PARLineItemQuantityUpdatedEvent {
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				RestaurantID = _restaurant.ID,
-				EventOrderingID = GetNextEventID (),
-				DeviceID = _deviceID,
-				ParID = par.ID,
+				RestaurantId = _restaurant.Id,
+				EventOrder = GetNextEventID (),
+				DeviceId = _deviceID,
+				ParID = par.Id,
 				UpdatedQuantity = quantity,
 				LineItemID = lineItemID
 			};
@@ -282,12 +282,12 @@ namespace Mise.Core.Common.Events
             IInventorySection section, int inventoryPosisiton, IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
-                ID = Guid.NewGuid(),
-				CausedByID = emp.ID,
+                Id = Guid.NewGuid(),
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				RestaurantID = _restaurant.ID,
-				EventOrderingID = GetNextEventID (),
-				DeviceID = _deviceID,
+				RestaurantId = _restaurant.Id,
+				EventOrder = GetNextEventID (),
+				DeviceId = _deviceID,
 				UPC = upc,
 				DisplayName = name,
 				Container = container,
@@ -295,8 +295,8 @@ namespace Mise.Core.Common.Events
 				Quantity = quantity,
 				VendorBoughtFrom = vendorID,
 				RestaurantInventorySectionID = section.RestaurantInventorySectionID,
-                InventorySectionID = section.ID,
-				InventoryID = inventory.ID,
+                InventorySectionID = section.Id,
+				InventoryID = inventory.Id,
 				Categories = categories,
                 InventoryPosition = inventoryPosisiton,
                 LineItemID = Guid.NewGuid()
@@ -307,14 +307,14 @@ namespace Mise.Core.Common.Events
 	    {
 	        return new ReceivingOrderCreatedEvent
 	        {
-	            CausedByID = emp.ID,
+	            CausedById = emp.Id,
 	            CreatedDate = GetDate(),
-	            DeviceID = _deviceID,
+	            DeviceId = _deviceID,
 	            ReceivingOrderID = Guid.NewGuid(),
-	            EventOrderingID = GetNextEventID(),
-	            ID = Guid.NewGuid(),
-	            RestaurantID = _restaurant.ID,
-				VendorID = vendor.ID,
+	            EventOrder = GetNextEventID(),
+	            Id = Guid.NewGuid(),
+	            RestaurantId = _restaurant.Id,
+				VendorID = vendor.Id,
 	        };
 	    }
 
@@ -322,14 +322,14 @@ namespace Mise.Core.Common.Events
 			IReceivingOrder ro, IPurchaseOrder po)
 		{
 			return new ReceivingOrderAssociatedWithPOEvent {
-				CausedByID = emp.ID,
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				ReceivingOrderID = ro.ID,
-				EventOrderingID = GetNextEventID (),
-				ID = Guid.NewGuid (),
-				RestaurantID = _restaurant.ID,
-				PurchaseOrderID = po.ID,
+				DeviceId = _deviceID,
+				ReceivingOrderID = ro.Id,
+				EventOrder = GetNextEventID (),
+				Id = Guid.NewGuid (),
+				RestaurantId = _restaurant.Id,
+				PurchaseOrderID = po.Id,
 				PurchaseOrderSentDate = po.CreatedDate
 			};
 		}
@@ -337,13 +337,13 @@ namespace Mise.Core.Common.Events
 		public ReceivingOrderCompletedEvent CreateReceivingOrderCompletedEvent(IEmployee emp, IReceivingOrder ro, 
 			DateTimeOffset dateReceived, string notes, string invoiceID){
 			return new ReceivingOrderCompletedEvent {
-				CausedByID = emp.ID,
-				ReceivingOrderID = ro.ID,
+				CausedById = emp.Id,
+				ReceivingOrderID = ro.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				ID = Guid.NewGuid (),
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				Id = Guid.NewGuid (),
+				RestaurantId = _restaurant.Id,
 
 				Notes = notes,
 				InvoiceID = invoiceID,
@@ -355,13 +355,13 @@ namespace Mise.Core.Common.Events
 			IReceivingOrder ro, Guid lineItemID, int quantity, Money pricePerBottle)
 		{
 			return new ReceivingOrderLineItemQuantityUpdatedEvent {
-				CausedByID = emp.ID,
-				ReceivingOrderID = ro.ID,
+				CausedById = emp.Id,
+				ReceivingOrderID = ro.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				ID = Guid.NewGuid (),
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				Id = Guid.NewGuid (),
+				RestaurantId = _restaurant.Id,
 				LineItemID = lineItemID,
 				UpdatedQuantity = quantity,
 				LineItemPrice = pricePerBottle
@@ -371,13 +371,13 @@ namespace Mise.Core.Common.Events
 		public ReceivingOrderLineItemZeroedOutEvent CreateReceivingOrderLineItemZeroedOutEvent (IEmployee emp, IReceivingOrder ro, Guid lineItemID)
 		{
 			return new ReceivingOrderLineItemZeroedOutEvent {
-				CausedByID = emp.ID,
-				ReceivingOrderID = ro.ID,
+				CausedById = emp.Id,
+				ReceivingOrderID = ro.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				ID = Guid.NewGuid (),
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				Id = Guid.NewGuid (),
+				RestaurantId = _restaurant.Id,
 				LineItemID = lineItemID,
 			};
 		}
@@ -385,37 +385,37 @@ namespace Mise.Core.Common.Events
 		public ReceivingOrderLineItemDeletedEvent CreateReceivingOrderLineItemDeletedEvent (IEmployee emp, IReceivingOrder receivingOrder, IReceivingOrderLineItem lineItem)
 		{
 			return new ReceivingOrderLineItemDeletedEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				CreatedDate = GetDate (),
-				CausedByID = emp.ID,
-				EventOrderingID = GetNextEventID (),
-				DeviceID = _deviceID,
-				RestaurantID = _restaurant.ID,
+				CausedById = emp.Id,
+				EventOrder = GetNextEventID (),
+				DeviceId = _deviceID,
+				RestaurantId = _restaurant.Id,
 
-				ReceivingOrderID = receivingOrder.ID,
-				LineItemId = lineItem.ID
+				ReceivingOrderID = receivingOrder.Id,
+				LineItemId = lineItem.Id
 			};
 		}
 
 		public EmployeeLoggedIntoInventoryAppEvent CreateEmployeeLoggedIntoInventoryAppEvent(IEmployee emp)
 		{
 			return new EmployeeLoggedIntoInventoryAppEvent {
-				ID = Guid.NewGuid(),
-				EmployeeID = emp.ID,
+				Id = Guid.NewGuid(),
+				EmployeeID = emp.Id,
 				CreatedDate = GetDate (),
-				EventOrderingID = GetNextEventID(),
-				DeviceID = _deviceID,
+				EventOrder = GetNextEventID(),
+				DeviceId = _deviceID,
 			};
 		}
 
 		public EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(IEmployee emp)
 		{
 			return new EmployeeRegisteredForInventoryAppEvent {
-				ID = Guid.NewGuid(),
-				EventOrderingID = GetNextEventID(),
-				DeviceID = _deviceID,
+				Id = Guid.NewGuid(),
+				EventOrder = GetNextEventID(),
+				DeviceId = _deviceID,
                 CreatedDate = GetDate (),
-				EmployeeID = emp.ID,
+				EmployeeID = emp.Id,
 
 			};
 		}
@@ -423,25 +423,25 @@ namespace Mise.Core.Common.Events
 		public EmployeeLoggedOutOfInventoryAppEvent CreateEmployeeLoggedOutOfInventoryAppEvent(IEmployee emp)
 		{
 			return new EmployeeLoggedOutOfInventoryAppEvent {
-				ID = Guid.NewGuid(),
+				Id = Guid.NewGuid(),
 				CreatedDate = GetDate(),
-				EventOrderingID = GetNextEventID(),
-				DeviceID = _deviceID,
-				EmployeeID = emp.ID,
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID
+				EventOrder = GetNextEventID(),
+				DeviceId = _deviceID,
+				EmployeeID = emp.Id,
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public InventoryCreatedEvent CreateInventoryCreatedEvent (IEmployee emp)
 		{
 		    return new InventoryCreatedEvent {
-				ID = Guid.NewGuid(),
+				Id = Guid.NewGuid(),
 				CreatedDate = GetDate (),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
 				InventoryID = Guid.NewGuid ()
 			};
 		}
@@ -449,15 +449,15 @@ namespace Mise.Core.Common.Events
 		public InventoryNewSectionAddedEvent CreateInventoryNewSectionAddedEvent (IEmployee emp, IInventory inventory, IRestaurantInventorySection restSection)
 		{
 			return new InventoryNewSectionAddedEvent {
-				ID = Guid.NewGuid(),
+				Id = Guid.NewGuid(),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID(),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
-				InventoryID = inventory.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID(),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
+				InventoryID = inventory.Id,
 
-				RestaurantSectionId = restSection.ID,
+				RestaurantSectionId = restSection.Id,
 				Name = restSection.Name,
                 SectionID = Guid.NewGuid()
 			};
@@ -466,54 +466,54 @@ namespace Mise.Core.Common.Events
 		public InventorySectionStartedByEmployeeEvent CreateInventorySectionStartedByEmployeeEvent (IEmployee emp, IInventory inventory, IInventorySection section)
 		{
 			return new InventorySectionStartedByEmployeeEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				CreatedDate = GetDate (),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
-				InventoryID = inventory.ID,
-				InventorySectionId = section.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
+				InventoryID = inventory.Id,
+				InventorySectionId = section.Id,
 			};
 		}
 
 		public InventorySectionCompletedEvent CreateInventorySectionCompletedEvent (IEmployee emp, IInventory inventory, IInventorySection section)
 		{
 			return new InventorySectionCompletedEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
-				InventoryID = inventory.ID,
-                InventorySectionID = section.ID
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
+				InventoryID = inventory.Id,
+                InventorySectionID = section.Id
 			};
 		}
 
 		public InventorySectionClearedEvent CreateInventorySectionClearedEvent (IEmployee emp, IInventory inventory, IInventorySection sec)
 		{
 			return new InventorySectionClearedEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				CreatedDate = GetDate (),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
-				InventoryID = inventory.ID,
-				SectionId = sec.ID
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
+				InventoryID = inventory.Id,
+				SectionId = sec.Id
 			};
 		}
 
 		public InventorySectionAddedToRestaurantEvent CreateInventorySectionAddedToRestaurantEvent (IEmployee emp, string newSectionName, bool isDefaultSection, bool allowsPartialBottles)
 		{
 			return new InventorySectionAddedToRestaurantEvent {
-				ID = Guid.NewGuid(),
+				Id = Guid.NewGuid(),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID(),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID(),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
 
 				SectionName = newSectionName,
 				SectionID = Guid.NewGuid(),
@@ -526,14 +526,14 @@ namespace Mise.Core.Common.Events
 			IInventorySection section, InventoryBeverageLineItem li, int numFullBottles, IEnumerable<decimal> partialBottlePercentages, LiquidAmount amtMeasured)
 		{
 			return new InventoryLiquidItemMeasuredEvent {
-				ID = Guid.NewGuid (),
-				InventoryID = inventory.ID,
+				Id = Guid.NewGuid (),
+				InventoryID = inventory.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
-				InventorySectionID = section.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
+				InventorySectionID = section.Id,
 
 				AmountMeasured = amtMeasured,
 				NumFullBottlesMeasured = numFullBottles,
@@ -544,38 +544,38 @@ namespace Mise.Core.Common.Events
 
 		public InventoryMadeCurrentEvent CreateInventoryMadeCurrentEvent(IEmployee emp, IInventory inventory){
 			return new InventoryMadeCurrentEvent {
-				ID = Guid.NewGuid (),
-				InventoryID = inventory.ID,
+				Id = Guid.NewGuid (),
+				InventoryID = inventory.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id
 			};
 		}
 		public InventoryCompletedEvent CreateInventoryCompletedEvent (IEmployee emp, IInventory inventory)
 		{
 			return new InventoryCompletedEvent {
-				ID = Guid.NewGuid (),
-				InventoryID = inventory.ID,
+				Id = Guid.NewGuid (),
+				InventoryID = inventory.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public PurchaseOrderCreatedEvent CreatePurchaseOrderCreatedEvent (IEmployee emp)
 		{
 			return new PurchaseOrderCreatedEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				PurchaseOrderID = Guid.NewGuid(),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
 
 				EmployeeCreatingName = emp.DisplayName,
 			};
@@ -585,13 +585,13 @@ namespace Mise.Core.Common.Events
 			ParBeverageLineItem baseItem, int? numBottles, LiquidAmount amtDesired, Guid? vendorID)
 		{
 			return new PurchaseOrderLineItemAddedFromInventoryCalculationEvent {
-				ID = Guid.NewGuid (),
-				PurchaseOrderID = po.ID,
+				Id = Guid.NewGuid (),
+				PurchaseOrderID = po.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
 
 				AmountNeeded = amtDesired,
 				NumBottlesNeeded = numBottles,
@@ -605,13 +605,13 @@ namespace Mise.Core.Common.Events
 		public PurchaseOrderSentToVendorEvent CreatePurchaseOrderSentToVendorEvent (IEmployee emp, IPurchaseOrder po, Guid vendorID)
 		{
 			return new PurchaseOrderSentToVendorEvent {
-				ID = Guid.NewGuid (),
-				PurchaseOrderID = po.ID,
+				Id = Guid.NewGuid (),
+				PurchaseOrderID = po.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
 				VendorID = vendorID,
 			};
 		}
@@ -620,28 +620,28 @@ namespace Mise.Core.Common.Events
 	        IReceivingOrder ro, PurchaseOrderStatus status)
 	    {
 			return new PurchaseOrderRecievedFromVendorEvent {
-				ID = Guid.NewGuid (),
-				CausedByID = emp.ID,
+				Id = Guid.NewGuid (),
+				CausedById = emp.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				PurchaseOrderID = po.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				PurchaseOrderID = po.Id,
 				Status = status,
-				ReceivingOrderID = ro.ID,
-				RestaurantID = _restaurant.ID
+				ReceivingOrderID = ro.Id,
+				RestaurantId = _restaurant.Id
 			};
 	    }
 
 	    public VendorCreatedEvent CreateVendorCreatedEvent (IEmployee emp, string name, StreetAddress address, PhoneNumber phone, EmailAddress email)
 		{
 			return new VendorCreatedEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				VendorID = Guid.NewGuid (),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
 
 				Name = name,
 				Address = address,
@@ -653,13 +653,13 @@ namespace Mise.Core.Common.Events
 		public VendorAddNewLineItemEvent CreateVendorLineItemAddedEvent (IEmployee emp, IBaseBeverageLineItem source, IVendor v)
 		{
 			return new VendorAddNewLineItemEvent {
-				ID = Guid.NewGuid (),
-				VendorID = v.ID,
+				Id = Guid.NewGuid (),
+				VendorID = v.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
 				UPC = source.UPC,
 				DisplayName = source.DisplayName,
 				MiseName = source.MiseName,
@@ -672,15 +672,15 @@ namespace Mise.Core.Common.Events
 		public VendorRestaurantSetsPriceForReceivedItemEvent CreateRestaurantSetPriceEvent (IEmployee emp, IVendorBeverageLineItem li, IVendor v, Money pricePerUnit)
 		{
 			return new VendorRestaurantSetsPriceForReceivedItemEvent {
-				ID = Guid.NewGuid(),
-				VendorID = v.ID,
+				Id = Guid.NewGuid(),
+				VendorID = v.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID(),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID(),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
 
-				VendorLineItemID = li.ID,
+				VendorLineItemID = li.Id,
 				PricePerUnit = pricePerUnit
 			};
 		}
@@ -688,13 +688,13 @@ namespace Mise.Core.Common.Events
 		public EmployeeInvitedToApplicationEvent CreateEmployeeInvitedToApplicationEvent (IEmployee emp, EmailAddress destEmail, MiseAppTypes app, RestaurantName restName)
 		{
 			return new EmployeeInvitedToApplicationEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				InvitationID = Guid.NewGuid (),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID,
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
                 RestaurantName = restName,
 				EmailToInvite = destEmail,
 				Application = app
@@ -704,26 +704,26 @@ namespace Mise.Core.Common.Events
 		public EmployeeAcceptsInvitationEvent CreateEmployeeAcceptsInvitationEvent (IApplicationInvitation invite, IEmployee emp)
 		{
 			return new EmployeeAcceptsInvitationEvent {
-				ID = Guid.NewGuid (),
-				InvitationID = invite.ID,
+				Id = Guid.NewGuid (),
+				InvitationID = invite.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
 		public EmployeeRejectsInvitationEvent CreateEmployeeRejectsInvitiationEvent (IApplicationInvitation invite, IEmployee emp)
 		{
 			return new EmployeeRejectsInvitationEvent {
-				ID = Guid.NewGuid (),
-				InvitationID = invite.ID,
+				Id = Guid.NewGuid (),
+				InvitationID = invite.Id,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
-				CausedByID = emp.ID,
-				RestaurantID = _restaurant.ID
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id
 			};
 		}
 
@@ -731,12 +731,12 @@ namespace Mise.Core.Common.Events
 		{
 		    var empID = Guid.NewGuid();
 			return new EmployeeCreatedEvent {
-				ID = Guid.NewGuid(),
-                CausedByID = empID,
+				Id = Guid.NewGuid(),
+                CausedById = empID,
 				EmployeeID = empID,
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID(),
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID(),
 				Email = email,
                 Name = name,
 				Password = password,
@@ -747,13 +747,13 @@ namespace Mise.Core.Common.Events
 		public PlaceholderRestaurantCreatedEvent CreatePlaceholderRestaurantCreatedEvent (IEmployee emp)
 		{
 			return new PlaceholderRestaurantCreatedEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
                 CreatedDate = GetDate(),
-                DeviceID = _deviceID,
-                EventOrderingID = GetNextEventID(),
+                DeviceId = _deviceID,
+                EventOrder = GetNextEventID(),
 
-				CausedByID = emp.ID,
-                RestaurantID = Guid.NewGuid()
+				CausedById = emp.Id,
+                RestaurantId = Guid.NewGuid()
 			};
 		}
 
@@ -762,13 +762,13 @@ namespace Mise.Core.Common.Events
 	    {
 	        return new NewRestaurantRegisteredOnAppEvent
 	        {
-	            ID = Guid.NewGuid(),
+	            Id = Guid.NewGuid(),
 	            CreatedDate = GetDate(),
-	            DeviceID = _deviceID,
-	            EventOrderingID = GetNextEventID(),
+	            DeviceId = _deviceID,
+	            EventOrder = GetNextEventID(),
 
-	            CausedByID = emp.ID,
-	            RestaurantID = Guid.NewGuid(),
+	            CausedById = emp.Id,
+	            RestaurantId = Guid.NewGuid(),
 	            Name = name,
 	            StreetAddress = address,
 	            PhoneNumber = phone,
@@ -777,27 +777,27 @@ namespace Mise.Core.Common.Events
 
 		public EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent(IEmployee emp, IRestaurant rest){
 			return new EmployeeRegistersRestaurantEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
 
-				CausedByID = emp.ID,
-				RestaurantID = rest.ID,
-				EmployeeID = emp.ID
+				CausedById = emp.Id,
+				RestaurantId = rest.Id,
+				EmployeeID = emp.Id
 			};
 		}
 
 		public UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID)
 		{
 			return new UserSelectedRestaurant {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
 
-				CausedByID = emp.ID,
-				RestaurantID = restaurantID,
+				CausedById = emp.Id,
+				RestaurantId = restaurantID,
 			};
 		}
 
@@ -805,12 +805,12 @@ namespace Mise.Core.Common.Events
 			Guid accountID, EmailAddress email, PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name)
 		{
 			return new AccountRegisteredFromMobileDeviceEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				CreatedDate = GetDate(),
-				DeviceID = _deviceID,
-				EventOrderingID = GetNextEventID (),
+				DeviceId = _deviceID,
+				EventOrder = GetNextEventID (),
 
-				CausedByID = emp.ID,
+				CausedById = emp.Id,
 				AccountID = accountID,
 				Email = email,
 				ReferralCode = code,

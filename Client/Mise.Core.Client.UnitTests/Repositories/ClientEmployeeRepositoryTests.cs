@@ -20,7 +20,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		[Test]
 		public void EmployeeRepositoryHandlesBadLoginEvent(){
 			var blEvent = new BadLoginAttemptEvent {
-				EventOrderingID = new EventID (),
+				EventOrder = new EventID (),
 				EmployeeID = new Guid (),
 				PasscodeGiven = "2293"
 			};

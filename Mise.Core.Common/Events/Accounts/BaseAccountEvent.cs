@@ -15,17 +15,17 @@ namespace Mise.Core.Common.Events.Accounts
         public virtual bool IsEntityCreation { get { return false; } }
         public virtual bool IsAggregateRootCreation { get { return false; }}
 
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Should likely be ignored?
         /// </summary>
-        public Guid RestaurantID { get{throw new InvalidOperationException("RestaurantID on AccountEvent");} }
+        public Guid RestaurantId { get{throw new InvalidOperationException("RestaurantID on AccountEvent");} }
 
-        public EventID EventOrderingID { get; set; }
-        public Guid CausedByID { get; set; }
+        public EventID EventOrder { get; set; }
+        public Guid CausedById { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
-        public string DeviceID { get; set; }
+        public string DeviceId { get; set; }
         public Guid AccountID { get; set; }
     }
 }

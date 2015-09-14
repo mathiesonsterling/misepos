@@ -78,7 +78,7 @@ namespace Mise.Inventory.ViewModels.Reports
 			if(rest == null){
 				throw new InvalidOperationException ("Cannot do report without a selected restaurant");
 			}
-			var hasPriorInv = await _inventoryService.HasInventoryPriorToDate (rest.ID, StartDate);
+			var hasPriorInv = await _inventoryService.HasInventoryPriorToDate (rest.Id, StartDate);
 			if(hasPriorInv == false){
 				var userRes = await AskUserQuestionModal("No prior inventory", 
 					              "There's not a starting inventory before the dates you selected.  Your results will only depend on items you received, and might not be accurrate.  Continue?");

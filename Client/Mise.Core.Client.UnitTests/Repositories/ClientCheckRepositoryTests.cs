@@ -26,14 +26,14 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			var checkID = Guid.NewGuid();
 			var ccev = new CheckCreatedEvent{
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
 				CheckID = checkID,
 			};
 
 			//create customer and add it!
 			var custEv = new CustomerAssignedToCheckEvent
 			{ 
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
 				CheckID = checkID,
                 Customer = new Customer { Name = PersonName.TestName } 
 			};
@@ -64,17 +64,17 @@ namespace Mise.Core.Client.UnitTests.Repositories
             var service = MockingTools.GetTerminalService();
 
 			var checkID =Guid.NewGuid();
-            var ccev = new CheckCreatedEvent { CheckID = checkID, EventOrderingID = new EventID() };
+            var ccev = new CheckCreatedEvent { CheckID = checkID, EventOrder = new EventID() };
 
             var custEv = new CustomerAssignedToCheckEvent { 
-				EventOrderingID = new EventID(),
+				EventOrder = new EventID(),
                 Customer = new Customer { Name = PersonName.TestName }, 
 				CheckID = checkID 
 			};
 
 		    var oiID = Guid.NewGuid();
 			var orderItem = new OrderItem {
-				ID = oiID,
+				Id = oiID,
 				Memo = string.Empty,
 			};
 
@@ -84,7 +84,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			    CheckID = checkID,
                 OrderItem = orderItem,
                 EmployeeID = empID,
-                EventOrderingID = new EventID()
+                EventOrder = new EventID()
 			};
 
 			var events = new List<ICheckEvent>{ ccev, custEv, orderEv };
@@ -98,7 +98,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			//ACT
 			var memoEvent = new OrderItemSetMemoEvent {
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
 				CheckID = checkID,
 				Memo = "memoTest",
 				OrderItemID = oiID
@@ -122,11 +122,11 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		{
 		    var service = MockingTools.GetTerminalService();
 
-            var ccev = new CheckCreatedEvent { EventOrderingID = new EventID(), CheckID = Guid.NewGuid(), EmployeeID = Guid.NewGuid() };
+            var ccev = new CheckCreatedEvent { EventOrder = new EventID(), CheckID = Guid.NewGuid(), EmployeeID = Guid.NewGuid() };
 
 			//create customer and add it!
             var custEv = new CustomerAssignedToCheckEvent { 
-				EventOrderingID = new EventID(),
+				EventOrder = new EventID(),
                 Customer = new Customer { Name = PersonName.TestName } 
 			};
 
@@ -139,7 +139,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var check = repos.ApplyEvents (events);
 			Assert.IsNotNull (check);
 
-			repos.CancelTransaction (check.ID);
+			repos.CancelTransaction (check.Id);
 
 			var got = repos.GetAll ();
 			Assert.IsNotNull (got);
@@ -154,14 +154,14 @@ namespace Mise.Core.Client.UnitTests.Repositories
 		    var checkID = Guid.NewGuid();
 		    var empID = Guid.NewGuid();
 			var ccev = new CheckCreatedEvent {
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
 				CheckID = checkID,
 				EmployeeID = empID
             };
 
 			//create customer and add it!
 			var custEv = new CustomerAssignedToCheckEvent {
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
 				CheckID = checkID,
                 Customer = new Customer { Name = PersonName.TestName },
 				EmployeeID = empID
@@ -178,7 +178,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			Assert.IsNotNull (check);
 			Assert.IsTrue (repos.Dirty, "repository is dirty");
 
-			await repos.Commit (check.ID);
+			await repos.Commit (check.Id);
 			Assert.IsFalse (repos.Dirty, "repository is clean");
 
 			var got = repos.GetAll ().ToList();
@@ -187,7 +187,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			Assert.AreEqual (check, got.FirstOrDefault ());
 			Assert.AreEqual (empID, got.First ().LastTouchedServerID);
 
-			repos.CancelTransaction (check.ID);
+			repos.CancelTransaction (check.Id);
 
 			var gotAgain = repos.GetAll ();
 			Assert.IsNotNull (gotAgain);
@@ -209,10 +209,10 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 			//ACT
 			for(var i = 0; i < numTimes;i++){
-                var ccev = new CheckCreatedEvent { EventOrderingID = new EventID(), CheckID = Guid.NewGuid() };
+                var ccev = new CheckCreatedEvent { EventOrder = new EventID(), CheckID = Guid.NewGuid() };
 
 				//create customer and add it!
-                var custEv = new CustomerAssignedToCheckEvent { EventOrderingID = new EventID(), Customer = new Customer { Name = new PersonName("test","TEST"+ i )} };
+                var custEv = new CustomerAssignedToCheckEvent { EventOrder = new EventID(), Customer = new Customer { Name = new PersonName("test","TEST"+ i )} };
 
 		        var events = new List<ICheckEvent>{ ccev, custEv};
 
@@ -236,10 +236,10 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 		    var empID = Guid.NewGuid();
 		    var checkID = Guid.NewGuid();
-            var ccev = new CheckCreatedEvent { EventOrderingID = new EventID(), CheckID = checkID, EmployeeID = empID };
+            var ccev = new CheckCreatedEvent { EventOrder = new EventID(), CheckID = checkID, EmployeeID = empID };
 			var custEv = new CustomerAssignedToCheckEvent
 			{
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
                 CheckID = checkID,
 				Customer = new Customer{Name = PersonName.TestName}, EmployeeID = empID 
             };
@@ -258,13 +258,13 @@ namespace Mise.Core.Client.UnitTests.Repositories
 
 		    var check2ID = Guid.NewGuid();
 			var ccev2 = new CheckCreatedEvent{ CheckID = check2ID,
-                EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1 }, 
+                EventOrder = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1 }, 
 				CreatedDate = DateTime.UtcNow,
 				EmployeeID  = empID};
 			var custEv2 = new CustomerAssignedToCheckEvent{
                 CheckID = check2ID,
                 Customer = new Customer { Name = PersonName.TestName },
-                EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 2 }, 
+                EventOrder = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 2 }, 
 				CreatedDate = DateTime.UtcNow,
 				EmployeeID = empID
 			};
@@ -273,7 +273,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
 			var check2 = repos.ApplyEvents (events2);
 			await repos.Commit (ccev2.CheckID);
 			Assert.IsNotNull (check2);
-			Assert.AreNotEqual (check.ID, check2.ID);
+			Assert.AreNotEqual (check.Id, check2.Id);
 
 			var got2 = repos.GetAll ().ToList();
 			Assert.AreEqual (2, got2.Count ());
