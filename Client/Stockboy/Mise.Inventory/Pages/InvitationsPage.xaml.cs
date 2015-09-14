@@ -16,22 +16,16 @@ namespace Mise.Inventory.Pages
 		{
 			InitializeComponent ();
 			var vm = ViewModel as InvitationViewModel;
-			vm.LoadDataOnView = LoadItems;
+		    vm.LoadItemsOnView = LoadItems;
 		}
 
 		#region implemented abstract members of BasePage
-		public override BaseViewModel ViewModel {
-			get {
-				return App.InvitationViewModel;
-			}
-		}
-		public override String PageName {
-			get {
-				return "InvitationsPage";
-			}
-		}
-		#endregion			
+		public override BaseViewModel ViewModel => App.InvitationViewModel;
+	    public override string PageName => "InvitationsPage";
 
+	    #endregion			
+
+        /*
 		private void LoadItems(){
 			var vm = App.InvitationViewModel;
 			foreach(var invite in vm.InvitesForUser){
@@ -42,9 +36,8 @@ namespace Mise.Inventory.Pages
 
 				stckInvites.Children.Add (container);
 			}
-		}
-		/*
-		private void LoadItemsNew(){
+		}*/
+		private void LoadItems(){
 			var vm = ViewModel as InvitationViewModel;
 			if (vm != null) {
 				if (_lv == null) {
@@ -56,17 +49,17 @@ namespace Mise.Inventory.Pages
 					};
 
 					_lv.ItemTapped += async (sender, e) => {
-						var selectedSection = e.Item as IApplicationInvitation;
-						((ListView)sender).SelectedItem = null;
-						if (selectedSection != null) {
-							await vm.SelectLineItem (selectedSection);
+						var selected = e.Item as IApplicationInvitation;
+						//((ListView)sender).SelectedItem = null;
+						if (selected != null) {
+							await vm.SelectLineItem (selected);
 						}
 					};
 					stckInvites.Children.Add (_lv);
 				}
 				_lv.ItemsSource = vm.InvitesForUser;
 			}
-		}*/
+		}
 	}
 }
 

@@ -99,6 +99,13 @@ namespace Mise.Core.Common.Entities
 		{
 			Status = InvitationStatus.Rejected;
 		}
+
+	    public bool ContainsSearchString(string searchString)
+	    {
+	        return RestaurantName.ContainsSearchString(searchString) ||
+                    (DestinationEmail != null && DestinationEmail.ContainsSearchString(searchString)) ||
+	               Status.ToString().ToUpper().Contains(searchString.ToUpper());
+	    }
 	}
 }
 
