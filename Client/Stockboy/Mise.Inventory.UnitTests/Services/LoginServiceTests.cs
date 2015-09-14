@@ -153,7 +153,7 @@ namespace Mise.Inventory.UnitTests.Services
 		}
 
 	    [Test]
-	    public async Task SetRestaurantSetsForEventFactoryAndReloadsRepositories()
+	    public async Task LoadRestaurantSetsForEventFactoryAndReloadsRepositories()
 	    {
 	        var restID = Guid.NewGuid();
 	        var moqRestaurantRepos = new Mock<IRestaurantRepository>();
@@ -181,6 +181,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
 	        await underTest.SelectRestaurantForLoggedInEmployee(restID);
+            await underTest.LoadSelectedRestaurant();
 
             //ASSERT
             moqEventFactory.Verify(ef => ef.SetRestaurant(myRest), Times.Once);

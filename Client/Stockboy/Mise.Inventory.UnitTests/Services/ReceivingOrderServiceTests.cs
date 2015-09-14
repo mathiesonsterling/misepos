@@ -404,6 +404,9 @@ namespace Mise.Inventory.UnitTests.Services
                         new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
+            ws.Setup(w => w.SendEventsAsync(It.IsAny<ReceivingOrder>(), It.IsAny<IEnumerable<IReceivingOrderEvent>>()))
+                .Returns(Task.FromResult(true));
+
             var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object);
             await roRepos.Load(Guid.NewGuid());
 

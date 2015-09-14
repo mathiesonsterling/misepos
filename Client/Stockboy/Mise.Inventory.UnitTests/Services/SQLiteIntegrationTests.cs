@@ -15,6 +15,7 @@ using Mise.Core.Common.Services.Implementation.Serialization;
 
 namespace Mise.Inventory.UnitTests.Services
 {
+    [Ignore]
 	[TestFixture]
 	public class SQLiteIntegrationTests
 	{

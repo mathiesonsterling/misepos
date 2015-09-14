@@ -77,6 +77,12 @@ namespace Mise.Inventory.Services.Implementation
 			return Task.FromResult (inv);
 		}
 
+	    public Task SetCurrentInventory(IInventory inventory)
+	    {
+	        _selectedInventoryID = inventory.Id;
+	        return Task.FromResult(false);
+	    }
+
 		public Task<IEnumerable<IInventoryBeverageLineItem>> GetLineItemsForCurrentSection ()
 		{
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);

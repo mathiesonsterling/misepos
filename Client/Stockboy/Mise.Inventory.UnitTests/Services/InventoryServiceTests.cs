@@ -9,6 +9,7 @@ using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities;
+using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant;
@@ -135,7 +136,7 @@ namespace Mise.Inventory.UnitTests.Services
 								DisplayName = "Item",
 								MiseName = "MiseItem",
 								Container = LiquidContainer.Bottle12oz,
-								InventoryPosition = 3,
+								InventoryPosition = 30,
 								NumFullBottles = 10
 							}
 						}
@@ -175,12 +176,12 @@ namespace Mise.Inventory.UnitTests.Services
 			Assert.AreSame ("MiseItem", li.MiseName);
 			Assert.NotNull (li.Container);
 			Assert.True (li.Container.Equals (LiquidContainer.Bottle12oz), "Container equals");
-			Assert.AreEqual (3, li.InventoryPosition, "Inventory position");
+			Assert.AreEqual (30, li.InventoryPosition, "Inventory position");
 			Assert.AreEqual (0, li.Quantity, "Quantity is zero");
 		}
 
 	    [Test]
-	    public async Task ItemsWithZeroQuantityShouldNotBeCopied()
+	    public async Task ItemsWithZeroQuantityShouldBeCopied()
 	    {
             var restSectionID = Guid.NewGuid();
 	        var invSectionID = Guid.NewGuid();
@@ -208,6 +209,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var logger = new Mock<ILogger>();
 
+	        var firstItemId = Guid.NewGuid();
             var currentInventory = new Core.Common.Entities.Inventory.Inventory
             {
                 RestaurantID = restaurant.Id,
@@ -221,6 +223,7 @@ namespace Mise.Inventory.UnitTests.Services
 						Id = invSectionID,
 						LineItems = new List<InventoryBeverageLineItem>{
 							new InventoryBeverageLineItem {
+                                Id = firstItemId,
 								DisplayName = "Item",
 								MiseName = "MiseItem",
 								Container = LiquidContainer.Bottle12oz,
@@ -265,15 +268,7 @@ namespace Mise.Inventory.UnitTests.Services
             //ASSERT
             Assert.NotNull(res);
             Assert.AreEqual(1, res.GetSections().Count());
-            Assert.AreEqual(1, res.GetBeverageLineItems().Count());
-
-            var li = res.GetBeverageLineItems().First();
-            Assert.AreEqual("Item", li.DisplayName);
-            Assert.AreSame("MiseItem", li.MiseName);
-            Assert.NotNull(li.Container);
-            Assert.True(li.Container.Equals(LiquidContainer.Bottle12oz), "Container equals");
-            Assert.AreEqual(3, li.InventoryPosition, "Inventory position");
-            Assert.AreEqual(0, li.Quantity, "Quantity is zero");
+            Assert.AreEqual(2, res.GetBeverageLineItems().Count());
 	    }
 
 		/// <summary>
@@ -287,6 +282,7 @@ namespace Mise.Inventory.UnitTests.Services
 			};
 
 			var currentInventory = new Core.Common.Entities.Inventory.Inventory {
+                Id = Guid.NewGuid(),
 				RestaurantID = rest.Id,
                 IsCurrent = true
 			};
@@ -301,7 +297,9 @@ namespace Mise.Inventory.UnitTests.Services
 			var ws = new Mock<IInventoryWebService> ();
 			ws.Setup(w => w.GetInventoriesForRestaurant(It.IsAny<Guid>()))
 				.Returns(Task.FromResult(new List<Core.Common.Entities.Inventory.Inventory>{currentInventory}.AsEnumerable()));
-					
+		    ws.Setup(w => w.SendEventsAsync(It.IsAny<Core.Common.Entities.Inventory.Inventory>(), It.IsAny<IEnumerable<IInventoryEvent>>()))
+		        .Returns(Task.FromResult(true));
+            			
             var inventoryRepos = new ClientInventoryRepository(logger.Object, ws.Object);
 			var eventFact = new InventoryAppEventFactory ("test", MiseAppTypes.UnitTests);
 			eventFact.SetRestaurant (rest);
@@ -334,8 +332,9 @@ namespace Mise.Inventory.UnitTests.Services
             await inventoryRepos.Load(rest.Id);
 
 			var underTest = new InventoryService (logger.Object, loginService, inventoryRepos, eventFact, insights.Object);
-
+         
 			//ACT
+		    await underTest.SetCurrentInventory(currentInventory);
 			await underTest.AddNewSection("testSection", false, false);
 
 			//ASSERT
