@@ -23,7 +23,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
             var paymentID = Guid.NewGuid();
             var barTab = new RestaurantCheck
             {
-                ID = checkID,
+                Id = checkID,
                 PaymentStatus = CheckPaymentStatus.Closing,
             };
             barTab.AddOrderItem(new OrderItem
@@ -35,7 +35,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
             });
             barTab.AddPayment(new CreditCardPayment
             {
-                ID = paymentID,
+                Id = paymentID,
                 Card = new CreditCard
                 {
                 }
@@ -43,12 +43,12 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 
             var addedEv = new CreditCardAuthorizationStartedEvent
             {
-                EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1 },
+                EventOrder = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1 },
                 CheckID = checkID,
                 EmployeeID = Guid.Empty,
                 CreatedDate = DateTime.Now,
-                DeviceID = Guid.Empty.ToString (),
-                RestaurantID = Guid.Empty,
+                DeviceId = Guid.Empty.ToString (),
+                RestaurantId = Guid.Empty,
                 CreditCard = MockingTools.GetCreditCard(),
                 PaymentID = paymentID
 

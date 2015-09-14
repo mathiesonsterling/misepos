@@ -185,7 +185,7 @@ namespace Mise.Core.Common.Repositories.Base
         public static IEnumerable<TEventType> OrderEventsOld(IEnumerable<TEventType> events)
         {
             var oEvents = events.OrderBy(e => e.CreatedDate)
-                .ThenBy(e => e.EventOrderingID);
+                .ThenBy(e => e.EventOrder);
             return oEvents;
         }
 
@@ -193,7 +193,7 @@ namespace Mise.Core.Common.Repositories.Base
         {
             //get the events that all came from the same application first
             var appGroups = from ev in events
-                            group ev by new { ev.EventOrderingID.AppInstanceCode, ev.DeviceID } into appG
+                            group ev by new { ev.EventOrder.AppInstanceCode, DeviceID = ev.DeviceId } into appG
                             select new
                             {
                                 AppInstanceCode = appG.Key.AppInstanceCode,
@@ -215,7 +215,7 @@ namespace Mise.Core.Common.Repositories.Base
                 var orderedItems = group.Items
                     .OrderByDescending(ev => ev.IsAggregateRootCreation)
                     .ThenByDescending(ev => ev.IsEntityCreation)
-                    .ThenBy(ev => ev.EventOrderingID.OrderingID);
+                    .ThenBy(ev => ev.EventOrder.OrderingID);
                 res.AddRange(orderedItems);
             }
 

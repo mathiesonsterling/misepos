@@ -17,7 +17,7 @@ namespace Mise.Core.Common.Entities.Inventory
         {
             return new RestaurantInventorySection
             {
-                ID = ID,
+                Id = Id,
                 LastUpdatedDate = LastUpdatedDate,
                 CreatedDate = CreatedDate,
                 RestaurantID = RestaurantID,

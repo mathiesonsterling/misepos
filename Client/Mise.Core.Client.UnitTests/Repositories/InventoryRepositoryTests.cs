@@ -41,9 +41,9 @@ namespace Mise.Core.Client.UnitTests.Repositories
             var entID = Guid.NewGuid();
             var createEvent = new InventoryCreatedEvent
             {
-                CausedByID = Guid.NewGuid(),
+                CausedById = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                EventOrderingID = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0},
+                EventOrder = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0},
                 InventoryID = entID,
             };
      
@@ -63,9 +63,9 @@ namespace Mise.Core.Client.UnitTests.Repositories
             //Update
             var completed = new InventoryCompletedEvent
             {
-                CausedByID = Guid.NewGuid(),
+                CausedById = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                EventOrderingID = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0},
+                EventOrder = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0},
                 InventoryID = entID
             };
 
@@ -78,7 +78,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
             //Get again
             var secondGet = underTest.GetByID(entID);
             Assert.NotNull(secondGet);
-            Assert.AreEqual(entID, secondGet.ID);
+            Assert.AreEqual(entID, secondGet.Id);
 
             //check our WS called out correctly!
             Assert.AreEqual(2, inventoryEventsPassed.Count);
@@ -100,9 +100,9 @@ namespace Mise.Core.Client.UnitTests.Repositories
             var entID = Guid.NewGuid();
             var createEvent = new InventoryCreatedEvent
             {
-                CausedByID = Guid.NewGuid(),
+                CausedById = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0 },
+                EventOrder = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0 },
                 InventoryID = entID,
             };
 
@@ -122,9 +122,9 @@ namespace Mise.Core.Client.UnitTests.Repositories
             //Update
             var completed = new InventoryCompletedEvent
             {
-                CausedByID = Guid.NewGuid(),
+                CausedById = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0 },
+                EventOrder = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 0 },
                 InventoryID = entID
             };
 
@@ -136,7 +136,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
             //Get again
             var secondGet = underTest.GetByID(entID);
             Assert.NotNull(secondGet);
-            Assert.AreEqual(entID, secondGet.ID);
+            Assert.AreEqual(entID, secondGet.Id);
 
             //check our WS called out correctly!
             Assert.AreEqual(1, inventoryEventsPassed.Count, "Only one event should have been sent");

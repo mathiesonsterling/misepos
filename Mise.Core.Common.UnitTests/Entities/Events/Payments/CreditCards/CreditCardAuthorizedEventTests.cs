@@ -19,7 +19,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 			var paymentID = Guid.NewGuid ();
 
 			var barTab = new RestaurantCheck {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				PaymentStatus = CheckPaymentStatus.PaymentPending,
 			};
 			barTab.AddOrderItem(new OrderItem {
@@ -29,7 +29,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 			});
 			barTab.AddPayment(
 				new CreditCardPayment{
-					ID = paymentID,
+					Id = paymentID,
 					CheckID = Guid.Empty,
 					AmountCharged = new Money(10.0M),
 					PaymentProcessingStatus = PaymentProcessingStatus.SentForBaseAuthorization
@@ -41,9 +41,9 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 				PaymentProviderName = "test"
 			};
 			var ev = new CreditCardAuthorizedEvent {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				CheckID = Guid.Empty,
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
 				PaymentID = paymentID,
 				Amount = new Money(10.0M),
 				AuthorizationCode = authCode,
@@ -74,7 +74,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 			var paymentID = Guid.NewGuid ();
 
 			var barTab = new RestaurantCheck {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				PaymentStatus = CheckPaymentStatus.PaymentPending,
 			};
 			barTab.AddOrderItem (new OrderItem {
@@ -84,7 +84,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 			});
 			barTab.AddPayment(
 				new CreditCardPayment{
-					ID = paymentID,
+					Id = paymentID,
 					CheckID = Guid.Empty,
 					AmountCharged = new Money(10.0M),
 					PaymentProcessingStatus = PaymentProcessingStatus.SentForBaseAuthorization
@@ -92,8 +92,8 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 			);
 
 			var ev = new CreditCardAuthorizedEvent {
-				ID = Guid.Empty,
-                EventOrderingID = new EventID(),
+				Id = Guid.Empty,
+                EventOrder = new EventID(),
 				CheckID = Guid.Empty,
 				PaymentID = Guid.NewGuid (),
 				Amount = new Money(10.0M),

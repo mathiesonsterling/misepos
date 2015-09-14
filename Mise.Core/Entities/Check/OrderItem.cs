@@ -69,7 +69,7 @@ namespace Mise.Core.Entities.Check
 				//if we have any required modified on the menu item, and we don't have an instance of them
 				return MenuItem.PossibleModifiers
 					.Where (m => m.Required)
-					.Any (m => _modifiers.Select (oiM => oiM.ID).Contains (m.ID) == false);
+					.Any (m => _modifiers.Select (oiM => oiM.Id).Contains (m.Id) == false);
 			} 
 		}
 
@@ -93,7 +93,7 @@ namespace Mise.Core.Entities.Check
             var newOI = new OrderItem
                             {
 				CreatedDate = CreatedDate, 
-				ID = ID, 
+				Id = Id, 
 				MenuItem = MenuItem, 
 				Status = Status,
 				EmployeeWhoComped =  EmployeeWhoComped,

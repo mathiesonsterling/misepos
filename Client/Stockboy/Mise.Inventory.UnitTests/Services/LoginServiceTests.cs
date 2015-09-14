@@ -38,7 +38,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 			var accountRepos = new Mock<IAccountRepository> ();
 			var restaurant = new Restaurant {
-				ID = Guid.NewGuid()
+				Id = Guid.NewGuid()
 			};
 			var evFactory = new InventoryAppEventFactory ("testDEvice", MiseAppTypes.UnitTests);
 			evFactory.SetRestaurant (restaurant);
@@ -63,15 +63,15 @@ namespace Mise.Inventory.UnitTests.Services
 		[Test]
 		public void TestLoginWithValidEmailAndPasswordReturnsEmployee(){
 			var moqRepos = new Mock<IEmployeeRepository> ();
-			var emp = new Employee{ ID = Guid.NewGuid () };
+			var emp = new Employee{ Id = Guid.NewGuid () };
 			moqRepos.Setup(r => r.GetByEmailAndPassword(It.IsAny<EmailAddress>(), It.IsAny<Password>()))
 				.Returns(() => Task<IEmployee>.Factory.StartNew (()=> emp));
-			moqRepos.Setup (r => r.Commit (emp.ID)).Returns (Task.Factory.StartNew (() => CommitResult.SentToServer));
+			moqRepos.Setup (r => r.Commit (emp.Id)).Returns (Task.Factory.StartNew (() => CommitResult.SentToServer));
 			moqRepos.Setup (r => r.ApplyEvent (It.IsAny<IEmployeeEvent> ())).Returns (emp);
 			var moqLogger = new Mock<ILogger> ();
 
 			var restaurant = new Restaurant {
-				ID = Guid.NewGuid()
+				Id = Guid.NewGuid()
 			};
 			var evFactory = new InventoryAppEventFactory ("testDevice", MiseAppTypes.UnitTests);
 			evFactory.SetRestaurant (restaurant);
@@ -92,23 +92,23 @@ namespace Mise.Inventory.UnitTests.Services
 			Assert.IsNotNull(task);
 			var res = task.Result;
 			Assert.IsNotNull(res);
-			Assert.AreEqual (emp.ID, res.ID);
+			Assert.AreEqual (emp.Id, res.Id);
 		}
 
 		[Test]
 		public async void GetInvitesReturnsStockboyInvitesOnly(){
 			var moqRepos = new Mock<IEmployeeRepository> ();
             var email = new EmailAddress { Value = "test@test.com" };
-			var emp = new Employee{ ID = Guid.NewGuid (), Emails = new List<EmailAddress>{email}};
+			var emp = new Employee{ Id = Guid.NewGuid (), Emails = new List<EmailAddress>{email}};
 
 			moqRepos.Setup(r => r.GetByEmailAndPassword(It.IsAny<EmailAddress>(), It.IsAny<Password>()))
 				.Returns(() => Task<IEmployee>.Factory.StartNew (()=> emp));
-			moqRepos.Setup (r => r.Commit (emp.ID)).Returns (Task.Factory.StartNew (() => CommitResult.SentToServer));
+			moqRepos.Setup (r => r.Commit (emp.Id)).Returns (Task.Factory.StartNew (() => CommitResult.SentToServer));
 			moqRepos.Setup (r => r.ApplyEvent (It.IsAny<IEmployeeEvent> ())).Returns (emp);
 			var moqLogger = new Mock<ILogger> ();
 
 			var restaurant = new Restaurant {
-				ID = Guid.NewGuid()
+				Id = Guid.NewGuid()
 			};
 			var evFactory = new InventoryAppEventFactory ("testDevice", MiseAppTypes.UnitTests);
 			evFactory.SetRestaurant (restaurant);
@@ -120,12 +120,12 @@ namespace Mise.Inventory.UnitTests.Services
 				.Returns (
 					new List<IApplicationInvitation>{
 						new ApplicationInvitation {
-							ID = goodID,
+							Id = goodID,
 							DestinationEmail = email,
 							Application = MiseAppTypes.StockboyMobile
 						},
 						new ApplicationInvitation{
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DestinationEmail = email,
 							Application = MiseAppTypes.UnitTests
 						}
@@ -148,19 +148,19 @@ namespace Mise.Inventory.UnitTests.Services
 
 			var invite = inviteRes.FirstOrDefault ();
 			Assert.NotNull (invite);
-			Assert.AreEqual (goodID, invite.ID);
+			Assert.AreEqual (goodID, invite.Id);
 			Assert.AreEqual (MiseAppTypes.StockboyMobile, invite.Application);
 		}
 
 	    [Test]
-	    public async Task SetRestaurantSetsForEventFactoryAndReloadsRepositories()
+	    public async Task LoadRestaurantSetsForEventFactoryAndReloadsRepositories()
 	    {
 	        var restID = Guid.NewGuid();
 	        var moqRestaurantRepos = new Mock<IRestaurantRepository>();
 
 	        var myRest = new Restaurant
 	        {
-	            ID = restID
+	            Id = restID
 	        };
 	        moqRestaurantRepos.Setup(mr => mr.GetByID(restID)).Returns(myRest);
 	        moqRestaurantRepos.Setup(mr => mr.ApplyEvent(It.IsAny<IRestaurantEvent>())).Returns(myRest);
@@ -181,6 +181,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ACT
 	        await underTest.SelectRestaurantForLoggedInEmployee(restID);
+            await underTest.LoadSelectedRestaurant();
 
             //ASSERT
             moqEventFactory.Verify(ef => ef.SetRestaurant(myRest), Times.Once);
@@ -193,10 +194,10 @@ namespace Mise.Inventory.UnitTests.Services
 		public async Task AddNewSectionWithSameNameThrowsCaseInsensitive(){
 			var restID = Guid.NewGuid ();
 			var restaurant = new Restaurant {
-				ID = restID,
+				Id = restID,
 				InventorySections = new List<RestaurantInventorySection>{
 					new RestaurantInventorySection {
-						ID = Guid.NewGuid (),
+						Id = Guid.NewGuid (),
 						Name = "TestSection"
 					}
 				}

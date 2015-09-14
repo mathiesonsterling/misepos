@@ -70,7 +70,7 @@ namespace Mise.Inventory.ViewModels.Reports
             {
 				Processing = true;
                 //make the report, and send the request
-				var inventoryId = lineItem.Source.ID;
+				var inventoryId = lineItem.Source.Id;
 				var currentRequest = await _reportsService.GetCurrentReportRequest ();
 				if (currentRequest == null) {
 					throw new InvalidOperationException ("No current request found");

@@ -31,10 +31,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 		public void TestCheckEmpty(){
 			var checkID = Guid.NewGuid ();
 			var barTab = new RestaurantCheck{
-				ID = checkID,
+				Id = checkID,
 				CreatedDate = DateTime.Now,
 				Customer = new Customer {
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					Name = PersonName.TestName,
 					LastUpdatedDate = DateTime.Today,
 					CreatedDate = DateTime.Today,
@@ -61,11 +61,11 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var checkID = Guid.NewGuid();
             var barTab = new RestaurantCheck
             {
-                ID = checkID,
+                Id = checkID,
                 CreatedDate = DateTime.Now,
                 Customer = new Customer
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = PersonName.TestName,
                     LastUpdatedDate = DateTime.Today,
                     CreatedDate = DateTime.Today,
@@ -109,11 +109,11 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var checkID = Guid.NewGuid();
             var barTab = new RestaurantCheck
             {
-                ID = checkID,
+                Id = checkID,
                 CreatedDate = DateTime.Now,
                 Customer = new Customer
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = PersonName.TestName,
                     LastUpdatedDate = DateTime.Today,
                     CreatedDate = DateTime.Today,
@@ -161,11 +161,11 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var checkID = Guid.NewGuid();
             var barTab = new RestaurantCheck
             {
-                ID = checkID,
+                Id = checkID,
                 CreatedDate = DateTime.Now,
                 Customer = new Customer
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = PersonName.TestName,
                     LastUpdatedDate = DateTime.Today,
                     CreatedDate = DateTime.Today,
@@ -211,7 +211,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 		{
 		    var date = DateTimeOffset.UtcNow;
 			var customer = new Customer {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				Name = PersonName.TestName,
 				LastUpdatedDate = date,
 				CreatedDate =date,
@@ -244,9 +244,9 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 		[Test]
 		public void TestOrderItem(){
 			var oi = new OrderItem {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				MenuItem = new MenuItem {
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					Price = new Money (1.05M),
 					DisplayWeight = 10,
 					Name = "testMI",
@@ -271,7 +271,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 		public void TestEmployee(){
 			var id = Guid.NewGuid ();
 			var emp = new Employee {
-				ID = id,
+				Id = id,
 				Name = PersonName.TestName,
 				CompBudget = new Money (10.0M),
 				CurrentlyClockedInToPOS = true,
@@ -286,7 +286,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
 			var res = _jsonSer.Deserialize<Employee> (json);
 			Assert.IsNotNull (res);
-			Assert.AreEqual (id, emp.ID);
+			Assert.AreEqual (id, emp.Id);
 			Assert.AreEqual ("Testy", res.Name.FirstName);
 			Assert.AreEqual ("McTesterson", res.Name.LastName);
 			Assert.AreEqual (10.0M, res.CompBudget.Dollars);

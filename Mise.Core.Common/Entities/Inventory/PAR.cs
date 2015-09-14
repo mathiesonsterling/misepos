@@ -54,15 +54,15 @@ namespace Mise.Core.Common.Entities.Inventory
 			}
 
 			LastUpdatedDate = entityEvent.CreatedDate;
-			Revision = entityEvent.EventOrderingID;
+			Revision = entityEvent.EventOrder;
         }
 
 		void WhenParCreated (PARCreatedEvent pARCreatedEvent)
 		{
-			ID = pARCreatedEvent.ParID;
+			Id = pARCreatedEvent.ParID;
 			CreatedDate = pARCreatedEvent.CreatedDate;
-			CreatedByEmployeeID = pARCreatedEvent.CausedByID;
-			RestaurantID = pARCreatedEvent.RestaurantID;
+			CreatedByEmployeeID = pARCreatedEvent.CausedById;
+			RestaurantID = pARCreatedEvent.RestaurantId;
 			IsCurrent = true;
 		}
 
@@ -70,11 +70,11 @@ namespace Mise.Core.Common.Entities.Inventory
 		{
 			//make the li
 			var li = new ParBeverageLineItem {
-				ID = pARLineItemAddedEvent.LineItemID,
+				Id = pARLineItemAddedEvent.LineItemID,
 				CreatedDate = pARLineItemAddedEvent.CreatedDate,
 				LastUpdatedDate = pARLineItemAddedEvent.CreatedDate,
-				Revision = pARLineItemAddedEvent.EventOrderingID,
-				RestaurantID = pARLineItemAddedEvent.RestaurantID,
+				Revision = pARLineItemAddedEvent.EventOrder,
+				RestaurantID = pARLineItemAddedEvent.RestaurantId,
 
 				MiseName = pARLineItemAddedEvent.MiseName,
 				UPC = pARLineItemAddedEvent.UPC,
@@ -92,7 +92,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
 		void WhenLineItemDeleted (ParLineItemDeletedEvent ev)
 		{
-			var lineItem = ParLineItems.FirstOrDefault (li => li.ID == ev.LineItemId);
+			var lineItem = ParLineItems.FirstOrDefault (li => li.Id == ev.LineItemId);
 			if(lineItem == null){
 				throw new InvalidOperationException ("Can't find line item with ID " + ev.LineItemId);
 			}
@@ -102,7 +102,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
 		void WhenLineItemQuantityUpdated (PARLineItemQuantityUpdatedEvent pEvent)
 		{
-			var li = ParLineItems.FirstOrDefault (l => l.ID == pEvent.LineItemID);
+			var li = ParLineItems.FirstOrDefault (l => l.Id == pEvent.LineItemID);
 			if(li == null){
 				throw new InvalidOperationException ("Can't find line item with ID " + pEvent.LineItemID);
 			}

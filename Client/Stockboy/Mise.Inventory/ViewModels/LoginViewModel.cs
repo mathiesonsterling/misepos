@@ -152,7 +152,7 @@ namespace Mise.Inventory.ViewModels
 			        {
 			            //set our restaurant
 						Processing = true;
-			            await _loginService.SelectRestaurantForLoggedInEmployee(rests.First().ID);
+			            await _loginService.SelectRestaurantForLoggedInEmployee(rests.First().Id);
 						Processing = false;
 						await Navigation.ShowRestaurantLoading ();
 			            return;

@@ -95,17 +95,17 @@ namespace Mise.Core.Common.Entities.Inventory
 	        }
 
 			LastUpdatedDate = entityEvent.CreatedDate;
-			Revision = entityEvent.EventOrderingID;
+			Revision = entityEvent.EventOrder;
 	    }
 
 	    protected virtual void WhenReceivingOrderCreated(ReceivingOrderCreatedEvent entityEvent)
 	    {
-	        ID = entityEvent.ReceivingOrderID;
-	        ReceivedByEmployeeID = entityEvent.CausedByID;
+	        Id = entityEvent.ReceivingOrderID;
+	        ReceivedByEmployeeID = entityEvent.CausedById;
 	        CreatedDate = entityEvent.CreatedDate;
 	        Status = ReceivingOrderStatus.Created;
 			VendorID = entityEvent.VendorID;
-			RestaurantID = entityEvent.RestaurantID;
+			RestaurantID = entityEvent.RestaurantId;
 	    }
 
 		void WhenReceivingOrderAssociatedWithPurchaseOrder (ReceivingOrderAssociatedWithPOEvent ev)
@@ -117,11 +117,11 @@ namespace Mise.Core.Common.Entities.Inventory
 		void WhenReceivingOrderLineItemAdded (ReceivingOrderLineItemAddedEvent roEvent)
 		{
 			var newLI = new ReceivingOrderLineItem {
-				ID = roEvent.LineItemID,
+				Id = roEvent.LineItemID,
 				CreatedDate = roEvent.CreatedDate,
 				LastUpdatedDate = roEvent.CreatedDate,
-				Revision = roEvent.EventOrderingID,
-				RestaurantID = roEvent.RestaurantID,
+				Revision = roEvent.EventOrder,
+				RestaurantID = roEvent.RestaurantId,
 					
 				DisplayName = roEvent.DisplayName,
 				CaseSize = roEvent.CaseSize,
@@ -141,10 +141,10 @@ namespace Mise.Core.Common.Entities.Inventory
 			var perUnitPrice = quEvent.UpdatedQuantity > 0 
 				? new Money(quEvent.LineItemPrice.Dollars/quEvent.UpdatedQuantity) 
 				: Money.None;
-			var li = LineItems.FirstOrDefault (l => l.ID == quEvent.LineItemID);
+			var li = LineItems.FirstOrDefault (l => l.Id == quEvent.LineItemID);
 			if(li != null){
 				li.Quantity = quEvent.UpdatedQuantity;
-				li.Revision = quEvent.EventOrderingID;
+				li.Revision = quEvent.EventOrder;
 				li.LastUpdatedDate = quEvent.CreatedDate;
 				li.LineItemPrice= quEvent.LineItemPrice;
 				li.UnitPrice = perUnitPrice;
@@ -154,7 +154,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
 		void WhenLineItemDeleted (ReceivingOrderLineItemDeletedEvent ev)
 		{
-			var lineItem = LineItems.FirstOrDefault (l => l.ID == ev.LineItemId);
+			var lineItem = LineItems.FirstOrDefault (l => l.Id == ev.LineItemId);
 			if(lineItem == null){
 				throw new ArgumentException ("No line item found for ID " + ev.LineItemId);
 			}
@@ -164,11 +164,11 @@ namespace Mise.Core.Common.Entities.Inventory
 
 		void WhenLIZeroedOut (ReceivingOrderLineItemZeroedOutEvent ev)
 		{
-			var li = LineItems.FirstOrDefault (l => l.ID == ev.LineItemID);
+			var li = LineItems.FirstOrDefault (l => l.Id == ev.LineItemID);
 			li.Quantity = 0;
 			li.LineItemPrice = Money.None;
 			li.UnitPrice = Money.None;
-			li.Revision = ev.EventOrderingID;
+			li.Revision = ev.EventOrder;
 			li.LastUpdatedDate = ev.CreatedDate;
 			li.ZeroedOut = true;
 		}

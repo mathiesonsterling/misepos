@@ -27,14 +27,14 @@ namespace Mise.Inventory.UnitTests.ViewModels
             {
                 new ReceivingOrderLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
                     Container = LiquidContainer.Can12oz
                 },
                 new ReceivingOrderLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
                     Container = LiquidContainer.Bottle750ML
                 }
@@ -71,7 +71,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
             {
                 new ReceivingOrderLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
                     Container = LiquidContainer.Can12oz,
@@ -82,7 +82,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 },
                 new ReceivingOrderLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
                     Container = LiquidContainer.Bottle750ML,
                     Categories = new List<ItemCategory>
@@ -123,7 +123,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
             {
                 new ReceivingOrderLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
                     Container = LiquidContainer.Can12oz,
@@ -134,7 +134,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 },
                 new ReceivingOrderLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
                     Container = LiquidContainer.Bottle750ML,
                     Categories = new List<ItemCategory>

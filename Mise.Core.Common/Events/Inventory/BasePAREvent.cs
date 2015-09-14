@@ -7,12 +7,12 @@ namespace Mise.Core.Common.Events.Inventory
 	public abstract class BasePAREvent : IParEvent
 	{
 		public Guid ParID { get; set; }
-		public Guid ID { get; set; }
-		public Guid RestaurantID { get; set; }
-		public EventID EventOrderingID { get; set; }
-		public Guid CausedByID { get; set; }
+		public Guid Id { get; set; }
+		public Guid RestaurantId { get; set; }
+		public EventID EventOrder { get; set; }
+		public Guid CausedById { get; set; }
 		public DateTimeOffset CreatedDate { get; set; }
-		public string DeviceID{get;set;}
+		public string DeviceId{get;set;}
 		public abstract MiseEventTypes EventType { get; }
         public virtual bool IsEntityCreation { get { return false; } }
         public virtual bool IsAggregateRootCreation { get { return false; } }

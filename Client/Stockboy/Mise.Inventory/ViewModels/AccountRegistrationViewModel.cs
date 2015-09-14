@@ -102,7 +102,7 @@ namespace Mise.Inventory.ViewModels
 				await _loginService.CommitRestaurantRegistrationWithoutAccount ();
 				var emp = await _loginService.GetCurrentEmployee ();
 				if(emp != null){
-					_insights.Track("Delayed Registration", "EmpID", emp.ID.ToString ());
+					_insights.Track("Delayed Registration", "EmpID", emp.Id.ToString ());
 				}
 				await Navigation.ShowMainMenu ();
 			} catch(Exception e){

@@ -7,14 +7,14 @@ namespace Mise.Core
 {
 	public class EntityBase : IEntityBase
 	{
-		public virtual Guid ID{ get; set;}
+		public virtual Guid Id{ get; set;}
 		public DateTimeOffset CreatedDate{get;set;}
 		public DateTimeOffset LastUpdatedDate{get;set;}
 		public EventID Revision{ get; set; }
 
 		public bool Equals(IEntityBase other)
 		{
-			return ID.Equals(other.ID) && Revision.Equals(other.Revision);
+			return Id.Equals(other.Id) && Revision.Equals(other.Revision);
 		}
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Mise.Core
         protected virtual T CloneEntityBase<T>(T newItem) where T : EntityBase
         {
             newItem.CreatedDate = CreatedDate;
-            newItem.ID = ID;
+            newItem.Id = Id;
             newItem.LastUpdatedDate = LastUpdatedDate;
             newItem.Revision = Revision;
 

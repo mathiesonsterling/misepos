@@ -47,7 +47,7 @@ namespace Mise.Core.Common.Entities.Inventory
 		public void When (IPurchaseOrderEvent entityEvent)
 		{
 		    LastUpdatedDate = entityEvent.CreatedDate;
-		    Revision = entityEvent.EventOrderingID;
+		    Revision = entityEvent.EventOrder;
 
 		    switch (entityEvent.EventType)
 		    {
@@ -71,9 +71,9 @@ namespace Mise.Core.Common.Entities.Inventory
 
         void WhenPurchaseOrderCreated(PurchaseOrderCreatedEvent entityEvent)
         {
-            ID = entityEvent.PurchaseOrderID;
-            RestaurantID = entityEvent.RestaurantID;
-            CreatedByEmployeeID = entityEvent.CausedByID;
+            Id = entityEvent.PurchaseOrderID;
+            RestaurantID = entityEvent.RestaurantId;
+            CreatedByEmployeeID = entityEvent.CausedById;
             CreatedDate = entityEvent.CreatedDate;
 
 			CreatedByName = entityEvent.EmployeeCreatingName;
@@ -108,8 +108,8 @@ namespace Mise.Core.Common.Entities.Inventory
 
 			//todo - if we have already an item with same MiseName, DispalyName, container, VendorID, then add?
 			var newLI = new PurchaseOrderLineItem {
-				ID = ev.LineItemID,
-				Revision = ev.EventOrderingID,
+				Id = ev.LineItemID,
+				Revision = ev.EventOrder,
 				CreatedDate = ev.CreatedDate,
 				LastUpdatedDate = ev.CreatedDate,
 

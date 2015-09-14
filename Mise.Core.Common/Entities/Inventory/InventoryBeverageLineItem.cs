@@ -140,10 +140,11 @@ namespace Mise.Core.Common.Entities.Inventory
         public int InventoryPosition { get; set; }
 
         public List<ItemCategory> Categories{get;set;}
-		public IEnumerable<ICategory> GetCategories(){
-			return Categories;
+		public IEnumerable<ICategory> GetCategories()
+		{
+		    return Categories ?? (Categories = new List<ItemCategory>());
 		}
 
-		public string CategoryDisplay => Categories.Any () ? Categories.First ().Name : string.Empty;
+        public string CategoryDisplay => Categories.Any () ? Categories.First ().Name : string.Empty;
     }
 }

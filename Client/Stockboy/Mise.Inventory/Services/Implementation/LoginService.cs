@@ -97,14 +97,14 @@ namespace Mise.Inventory.Services.Implementation
 					//we need to also get our restaurants - if there's only one, pick that!
 					var rests = (await GetPossibleRestaurantsForLoggedInEmployee()).ToList();
 					if(rests.Count() == 1){
-						await SelectRestaurantForLoggedInEmployee(rests.First().ID);
+						await SelectRestaurantForLoggedInEmployee(rests.First().Id);
 					} else {
 						//did we store the last restuarant?
 						var lastRestRecord = _keyValStorage.GetValue<RestaurantSelectRecord>(LAST_RESTAURANT_ID_KEY);
 						if(lastRestRecord != null){
 							var rest = _restaurantRepository.GetByID(lastRestRecord.RestaurantID);
 							if(rest != null){
-								await SelectRestaurantForLoggedInEmployee(rest.ID);
+								await SelectRestaurantForLoggedInEmployee(rest.Id);
 							} else {
 								_currentEmployee = null;
 							}
@@ -145,7 +145,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 			var loginEvent = _eventFactory.CreateEmployeeLoggedIntoInventoryAppEvent(emp);
 			_employeeRepository.ApplyEvent(loginEvent);
-			await _employeeRepository.Commit(emp.ID);
+			await _employeeRepository.Commit(emp.Id);
 
 			_currentEmployee = emp;
 
@@ -172,7 +172,7 @@ namespace Mise.Inventory.Services.Implementation
 					var ev = _eventFactory.CreateEmployeeLoggedOutOfInventoryAppEvent (_currentEmployee);
 					_employeeRepository.ApplyEvent (ev);
 
-					var id = _currentEmployee.ID;
+					var id = _currentEmployee.Id;
 					await _employeeRepository.Commit (id);
 				}
 			} catch(Exception e){
@@ -229,16 +229,16 @@ namespace Mise.Inventory.Services.Implementation
 			_eventFactory.SetRestaurant (_currentRestaurant);
 
 			//load the repositories as well to reflect our new restaurant!
-			await _repositoryLoader.LoadRepositories(_currentRestaurant.ID);
+			await _repositoryLoader.LoadRepositories(_currentRestaurant.Id);
 
 			_logger.Debug ("Current restaurant is set, creating event");
-			var selEv = _eventFactory.CreateUserSelectedRestaurant (_currentEmployee, _currentRestaurant.ID);
+			var selEv = _eventFactory.CreateUserSelectedRestaurant (_currentEmployee, _currentRestaurant.Id);
 			_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
-			await _restaurantRepository.Commit (_currentRestaurant.ID);
+			await _restaurantRepository.Commit (_currentRestaurant.Id);
 			_logger.Debug ("User selected restaurant event committed");
 
 			//store it in the DB
-			var restRecord = new RestaurantSelectRecord{RestaurantID = _currentRestaurant.ID};
+			var restRecord = new RestaurantSelectRecord{RestaurantID = _currentRestaurant.Id};
 			await _keyValStorage.SetValue (LAST_RESTAURANT_ID_KEY, restRecord);
 		}
 
@@ -273,7 +273,7 @@ namespace Mise.Inventory.Services.Implementation
 						isDefaultInventorySection, hasPartialBottles);
 
 				_currentRestaurant = _restaurantRepository.ApplyEvent(secEvent);
-				var res = await _restaurantRepository.Commit (_currentRestaurant.ID);
+				var res = await _restaurantRepository.Commit (_currentRestaurant.Id);
 				if(res == CommitResult.Error){
 					throw new Exception ("Error committing new section!");
 				}
@@ -293,7 +293,7 @@ namespace Mise.Inventory.Services.Implementation
 					MiseAppTypes.StockboyMobile, res.Name);
 				var invite = _inviteRepository.ApplyEvent (ev);
 
-				return _inviteRepository.Commit (invite.ID);
+				return _inviteRepository.Commit (invite.Id);
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;
@@ -334,8 +334,8 @@ namespace Mise.Inventory.Services.Implementation
 				_inviteRepository.ApplyEvent (acceptEv);
 				_currentEmployee = _employeeRepository.ApplyEvent (acceptEv);
 
-				await _inviteRepository.Commit (invite.ID);
-				await _employeeRepository.Commit (_currentEmployee.ID);
+				await _inviteRepository.Commit (invite.Id);
+				await _employeeRepository.Commit (_currentEmployee.Id);
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;
@@ -348,7 +348,7 @@ namespace Mise.Inventory.Services.Implementation
 				var ev = _eventFactory.CreateEmployeeRejectsInvitiationEvent (invite, _currentEmployee);
 
 			     _inviteRepository.ApplyEvent (ev);
-				return _inviteRepository.Commit (invite.ID);
+				return _inviteRepository.Commit (invite.Id);
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;
@@ -364,7 +364,7 @@ namespace Mise.Inventory.Services.Implementation
 			    var registerEvent = _eventFactory.CreateEmployeeRegisteredForInventoryAppEvent(_currentEmployee);
 			    _currentEmployee = _employeeRepository.ApplyEvent(registerEvent);
 
-			    await _employeeRepository.CommitOnlyImmediately(_currentEmployee.ID);
+			    await _employeeRepository.CommitOnlyImmediately(_currentEmployee.Id);
 
 
 				//reload invitations from the server, we'll need to know this information!
@@ -386,7 +386,7 @@ namespace Mise.Inventory.Services.Implementation
 
 				//we do need to commit our repositories!
 				if(_restaurantRepository.Dirty){
-					await _restaurantRepository.Commit (_currentRestaurant.ID);
+					await _restaurantRepository.Commit (_currentRestaurant.Id);
 				}
 			} catch(Exception e){
 				_logger.HandleException (e);
@@ -402,7 +402,7 @@ namespace Mise.Inventory.Services.Implementation
 				_currentRestaurant = _restaurantRepository.ApplyEvent (ev);
 
 				//don't commit here - we want to do so only when we register our account, in case there's a problem
-				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.ID);
+				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.Id);
 
 				//set our system to use this new restaurant!
 				_eventFactory.SetRestaurant (_currentRestaurant);
@@ -412,7 +412,7 @@ namespace Mise.Inventory.Services.Implementation
 
 				_currentEmployee = _employeeRepository.ApplyEvent (empEvent);
 
-				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.ID);
+				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.Id);
 
 				return _currentRestaurant;
 			} catch(Exception e){
@@ -424,13 +424,13 @@ namespace Mise.Inventory.Services.Implementation
 		public async Task CommitRestaurantRegistrationWithoutAccount ()
 		{
 			if(_employeeRepository.Dirty){
-				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.ID);
+				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.Id);
 			}
 
 			if(_restaurantRepository.Dirty){
-				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.ID);
+				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.Id);
 
-				await _restaurantRepository.Load(_currentRestaurant.ID);
+				await _restaurantRepository.Load(_currentRestaurant.Id);
 			}
 		}
 
@@ -477,16 +477,16 @@ namespace Mise.Inventory.Services.Implementation
 					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName);
 
 				var acct = _accountRepository.ApplyEvent (ev);
-				await _accountRepository.CommitOnlyImmediately (acct.ID);
+				await _accountRepository.CommitOnlyImmediately (acct.Id);
 
 				if(_employeeRepository.Dirty){
-					await _employeeRepository.CommitOnlyImmediately (_currentEmployee.ID);
+					await _employeeRepository.CommitOnlyImmediately (_currentEmployee.Id);
 				}
 
 				if(_restaurantRepository.Dirty){
-					await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.ID);
+					await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.Id);
 
-					await _restaurantRepository.Load(_currentRestaurant.ID);
+					await _restaurantRepository.Load(_currentRestaurant.Id);
 				}
 
 				return acct;

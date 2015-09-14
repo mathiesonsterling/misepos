@@ -35,7 +35,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments
 			var empID = Guid.NewGuid ();
             var ev = new CashPaidOnCheckEvent
             {
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
                 AmountPaid = new Money(100.0M),
                 ChangeGiven = Money.None,
 				EmployeeID = empID
@@ -58,7 +58,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments
 			var empID = Guid.NewGuid ();
 			var ev = new CashPaidOnCheckEvent
 			{
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
 				AmountPaid = new Money(10.0M),
 				ChangeGiven = Money.None,
 				EmployeeID = empID
@@ -80,7 +80,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments
 			var empID = Guid.NewGuid ();
             var ev = new CashPaidOnCheckEvent
             {
-                EventOrderingID = new EventID(),
+                EventOrder = new EventID(),
                 AmountPaid = new Money(110.0M),
                 ChangeGiven = new Money(10.0M),
 				EmployeeID = empID

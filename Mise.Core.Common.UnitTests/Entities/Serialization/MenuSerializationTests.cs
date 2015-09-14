@@ -82,17 +82,17 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 		static MenuItemModifierGroup GetMenuItemModifierGroup()
 		{
 			return new MenuItemModifierGroup{
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				DisplayName = "testgroup",
 				Required = false,
 				Exclusive = true,
 				Modifiers = new List<MenuItemModifier> {
-					new MenuItemModifier{ID = Guid.NewGuid (), Name = "Up"},
-					new MenuItemModifier{ID = Guid.NewGuid (), Name = "Neat"},
-					new MenuItemModifier{ID = Guid.NewGuid (), Name="Rocks"},
-					new MenuItemModifier{ID = Guid.NewGuid (), Name = "Shot"},
-					new MenuItemModifier{ID = Guid.NewGuid (), Name = "Tall"},
-					new MenuItemModifier{ID = Guid.NewGuid (), Name = "Double", PriceMultiplier = 1.5M}
+					new MenuItemModifier{Id = Guid.NewGuid (), Name = "Up"},
+					new MenuItemModifier{Id = Guid.NewGuid (), Name = "Neat"},
+					new MenuItemModifier{Id = Guid.NewGuid (), Name="Rocks"},
+					new MenuItemModifier{Id = Guid.NewGuid (), Name = "Shot"},
+					new MenuItemModifier{Id = Guid.NewGuid (), Name = "Tall"},
+					new MenuItemModifier{Id = Guid.NewGuid (), Name = "Double", PriceMultiplier = 1.5M}
 				}
 			};
 		}
@@ -117,7 +117,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
         public void TestMenuItem(SerializationType type)
         {
 			var mi = new MenuItem {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				ButtonName = "bname",
 				OIListName = "oilistname",
 				Name = "name",

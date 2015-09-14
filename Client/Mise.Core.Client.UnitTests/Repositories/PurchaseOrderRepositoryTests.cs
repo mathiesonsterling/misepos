@@ -38,8 +38,8 @@ namespace Mise.Core.Client.UnitTests.Repositories
             {
                 PurchaseOrderID = entID,
                 CreatedDate = DateTime.UtcNow,
-                EventOrderingID = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1},
-                RestaurantID = Guid.NewGuid()
+                EventOrder = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1},
+                RestaurantId = Guid.NewGuid()
             };
 
             //ACT
@@ -50,7 +50,7 @@ namespace Mise.Core.Client.UnitTests.Repositories
             //ASSERT
             Assert.NotNull(res);
             Assert.AreEqual(1, got.Count);
-            Assert.AreEqual(entID, got.First().ID);
+            Assert.AreEqual(entID, got.First().Id);
 
             Assert.AreEqual(CommitResult.SentToServer, commitRes);
 

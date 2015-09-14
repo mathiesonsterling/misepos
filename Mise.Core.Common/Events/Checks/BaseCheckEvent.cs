@@ -21,23 +21,23 @@ namespace Mise.Core.Common.Events.Checks
 			set;
 		}
 
-		public Guid CausedByID{ get; set; }
+		public Guid CausedById{ get; set; }
 
 		private Guid _empID;
 		public Guid EmployeeID {
 			get{return _empID;}
 			set{
 				_empID = value;
-				CausedByID = value;
+				CausedById = value;
 			}
 		}
 
-		public string DeviceID {
+		public string DeviceId {
 			get;
 			set;
 		}
 
-		public Guid RestaurantID {
+		public Guid RestaurantId {
 			get;
 			set;
 		}
@@ -45,9 +45,9 @@ namespace Mise.Core.Common.Events.Checks
 		#endregion
 
 		#region IEntityEvent implementation
-		public Guid ID{ get; set;}
+		public Guid Id{ get; set;}
 
-		public EventID EventOrderingID {
+		public EventID EventOrder {
 			get;
 			set;
 		}
@@ -66,7 +66,7 @@ namespace Mise.Core.Common.Events.Checks
 		protected BaseCheckEvent()
 		{
 			CreatedDate = DateTime.UtcNow;
-			ID = Guid.NewGuid ();
+			Id = Guid.NewGuid ();
 		}
 	}
 }

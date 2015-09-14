@@ -31,11 +31,11 @@ namespace Mise.Inventory.UnitTests.Services
         public void GeneratePOWithoutInventoryShouldThrowException()
         {
             var restID = Guid.NewGuid();
-            var rest = new Restaurant { ID = restID };
+            var rest = new Restaurant { Id = restID };
 
             var emp = new Employee
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>{
 					{restID, new List<MiseAppTypes>()}
 				}
@@ -53,11 +53,11 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var par = new Par
             {
-                ID = Guid.NewGuid(),
-                RestaurantID = rest.ID,
+                Id = Guid.NewGuid(),
+                RestaurantID = rest.Id,
                 ParLineItems = new List<ParBeverageLineItem>{
 					new ParBeverageLineItem{
-						ID = Guid.NewGuid(),
+						Id = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
 						Container = container,
@@ -109,11 +109,11 @@ namespace Mise.Inventory.UnitTests.Services
         public async Task GeneratePOWithInventoryShouldMakeANewPOBasedOnDifferences()
         {
             var restID = Guid.NewGuid();
-            var rest = new Restaurant { ID = restID };
+            var rest = new Restaurant { Id = restID };
 
             var emp = new Employee
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>{
 					{restID, new List<MiseAppTypes>()}
 				}
@@ -131,11 +131,11 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var par = new Par
             {
-                ID = Guid.NewGuid(),
-                RestaurantID = rest.ID,
+                Id = Guid.NewGuid(),
+                RestaurantID = rest.Id,
                 ParLineItems = new List<ParBeverageLineItem>{
 					new ParBeverageLineItem{
-						ID = Guid.NewGuid(),
+						Id = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
 						Container = container,
@@ -174,7 +174,7 @@ namespace Mise.Inventory.UnitTests.Services
 						LineItems = new List<InventoryBeverageLineItem>{
 							//partially held item
 							new InventoryBeverageLineItem{
-								ID = Guid.NewGuid(),
+								Id = Guid.NewGuid(),
 								RestaurantID = restID,
 								CaseSize = 1,
 								Container = container,
@@ -221,7 +221,7 @@ namespace Mise.Inventory.UnitTests.Services
             Assert.NotNull(res);
             //check all our items came through
             Assert.AreEqual(restID, res.RestaurantID);
-            Assert.AreEqual(emp.ID, res.CreatedByEmployeeID, "created by");
+            Assert.AreEqual(emp.Id, res.CreatedByEmployeeID, "created by");
 
             var lines = res.GetPurchaseOrderLineItems().ToList();
             Assert.AreEqual(2, lines.Count());
@@ -242,11 +242,11 @@ namespace Mise.Inventory.UnitTests.Services
         public async Task InventoryInDifferentSectionsAddsUpToBeSubtractedFromPar()
         {
             var restID = Guid.NewGuid();
-            var rest = new Restaurant { ID = restID };
+            var rest = new Restaurant { Id = restID };
 
             var emp = new Employee
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>{
 					{restID, new List<MiseAppTypes>()}
 				}
@@ -264,11 +264,11 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var par = new Par
             {
-                ID = Guid.NewGuid(),
-                RestaurantID = rest.ID,
+                Id = Guid.NewGuid(),
+                RestaurantID = rest.Id,
                 ParLineItems = new List<ParBeverageLineItem>{
 					new ParBeverageLineItem{
-						ID = Guid.NewGuid(),
+						Id = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
 						Container = container,
@@ -295,7 +295,7 @@ namespace Mise.Inventory.UnitTests.Services
 						LineItems = new List<InventoryBeverageLineItem>{
 							//partially held item
 							new InventoryBeverageLineItem{
-								ID = Guid.NewGuid(),
+								Id = Guid.NewGuid(),
 								RestaurantID = restID,
 								CaseSize = 1,
 								Container = container,
@@ -349,7 +349,7 @@ namespace Mise.Inventory.UnitTests.Services
             Assert.NotNull(res);
             //check all our items came through
             Assert.AreEqual(restID, res.RestaurantID);
-            Assert.AreEqual(emp.ID, res.CreatedByEmployeeID, "created by");
+            Assert.AreEqual(emp.Id, res.CreatedByEmployeeID, "created by");
 
             var lines = res.GetPurchaseOrderLineItems().ToList();
             Assert.AreEqual(1, lines.Count());
@@ -363,12 +363,12 @@ namespace Mise.Inventory.UnitTests.Services
         public async Task ROsAreOnlyCountedAgainstPOIfReceviedAfterLastInventoryDate()
         {
             var restID = Guid.NewGuid();
-            var rest = new Restaurant { ID = restID };
+            var rest = new Restaurant { Id = restID };
 
             var dateOfInventory = DateTime.UtcNow.AddDays(-2);
             var emp = new Employee
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>{
 					{restID, new List<MiseAppTypes>()}
 				}
@@ -386,11 +386,11 @@ namespace Mise.Inventory.UnitTests.Services
             };
             var par = new Par
             {
-                ID = Guid.NewGuid(),
-                RestaurantID = rest.ID,
+                Id = Guid.NewGuid(),
+                RestaurantID = rest.Id,
                 ParLineItems = new List<ParBeverageLineItem>{
 					new ParBeverageLineItem{
-						ID = Guid.NewGuid(),
+						Id = Guid.NewGuid(),
 						RestaurantID = restID,
 						CaseSize = 1,
 						Container = container,
@@ -417,7 +417,7 @@ namespace Mise.Inventory.UnitTests.Services
 						LineItems = new List<InventoryBeverageLineItem>{
 							//partially held item
 							new InventoryBeverageLineItem{
-								ID = Guid.NewGuid(),
+								Id = Guid.NewGuid(),
 								RestaurantID = restID,
 								CaseSize = 1,
 								Container = container,
@@ -454,7 +454,7 @@ namespace Mise.Inventory.UnitTests.Services
 		            {
 		                new ReceivingOrderLineItem
 		                {
-		                    ID = Guid.NewGuid(),
+		                    Id = Guid.NewGuid(),
 		                    RestaurantID = restID,
 		                    CaseSize = 1,
 		                    Container = container,
@@ -471,7 +471,7 @@ namespace Mise.Inventory.UnitTests.Services
 		            {
 		                new ReceivingOrderLineItem
 		                {
-		                    ID = Guid.NewGuid(),
+		                    Id = Guid.NewGuid(),
 		                    RestaurantID = restID,
 		                    CaseSize = 1,
 		                    Container = container,
@@ -501,7 +501,7 @@ namespace Mise.Inventory.UnitTests.Services
             Assert.NotNull(res);
             //check all our items came through
             Assert.AreEqual(restID, res.RestaurantID);
-            Assert.AreEqual(emp.ID, res.CreatedByEmployeeID, "created by");
+            Assert.AreEqual(emp.Id, res.CreatedByEmployeeID, "created by");
 
             var lines = res.GetPurchaseOrderLineItems().ToList();
             Assert.AreEqual(1, lines.Count());

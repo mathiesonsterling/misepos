@@ -30,7 +30,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                         {
                             new InventoryBeverageLineItem
                             {
-                                ID = Guid.NewGuid(),
+                                Id = Guid.NewGuid(),
                                 Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1},
                                 VendorBoughtFrom = Guid.NewGuid(),
                                 UPC = "11111"
@@ -48,7 +48,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             Assert.AreEqual(2, res.Count());
 
             var li = underTest.Sections.First().GetInventoryBeverageLineItemsInSection().First();
-            Assert.AreEqual(res.First().ID, li.ID);
+            Assert.AreEqual(res.First().Id, li.Id);
             Assert.IsTrue(res.First().Revision.Equals(li.Revision));
 
         }
@@ -61,7 +61,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             var completedEvent = new InventoryCompletedEvent
             {
-                CausedByID = Guid.NewGuid(),
+                CausedById = Guid.NewGuid(),
                 CreatedDate = DateTimeOffset.UtcNow,
             };
 
@@ -78,12 +78,12 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
         {
             var underTest = new Common.Entities.Inventory.Inventory
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Sections = new List<InventorySection>
                 {
                     new InventorySection
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         Name = "Test section",
                         LineItems = new List<InventoryBeverageLineItem>()
                     }
@@ -92,11 +92,11 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             var addEvent = new InventoryNewSectionAddedEvent
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                InventoryID = underTest.ID,
+                InventoryID = underTest.Id,
                 Name = "Updated section",
-                SectionID = underTest.Sections.First().ID,
+                SectionID = underTest.Sections.First().Id,
             };
 
             //ACT
@@ -121,33 +121,33 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             var restSections = new List<IRestaurantInventorySection>{
                 new RestaurantInventorySection
             {
-                ID = id2,
+                Id = id2,
                 Name = "section2"
             },new RestaurantInventorySection
                     {
-                        ID = id1,
+                        Id = id1,
                         Name = "section1"
                     }
             };
             
             var create = new InventoryCreatedEvent
             {
-                CausedByID = empID,
+                CausedById = empID,
                 CreatedDate = DateTimeOffset.UtcNow,
                 InventoryID = invID,
-                RestaurantID = restID,
+                RestaurantId = restID,
             };
 
             var addSections = restSections.Select(rs => new InventoryNewSectionAddedEvent
             {
-                CausedByID = empID,
+                CausedById = empID,
                 CreatedDate = DateTimeOffset.UtcNow,
                 InventoryID = invID,
-                RestaurantID = restID,
-                RestaurantSectionId = rs.ID,
+                RestaurantId = restID,
+                RestaurantSectionId = rs.Id,
                 SectionID = Guid.NewGuid(),
                 Name = rs.Name,
-                ID = Guid.NewGuid()
+                Id = Guid.NewGuid()
             });
             //ACT
             underTest.When(create);
@@ -157,7 +157,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 underTest.When(addSec);
             }
             //ASSERT
-            Assert.AreEqual(underTest.ID, create.InventoryID);
+            Assert.AreEqual(underTest.Id, create.InventoryID);
             Assert.AreEqual(underTest.CreatedDate, create.CreatedDate);
             Assert.AreEqual(restID, underTest.RestaurantID, "RestaurantID");
             Assert.AreEqual(create.CreatedDate, underTest.CreatedDate);
@@ -184,7 +184,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             var inventoryEvent = new InventoryLiquidItemMeasuredEvent
             {
-                CausedByID = Guid.NewGuid(),
+                CausedById = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 InventoryID = Guid.NewGuid(),
 				AmountMeasured = new LiquidAmount {Milliliters = 375},
@@ -228,14 +228,14 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 {
                     new InventorySection
                     {
-                        ID = invSectionID,
+                        Id = invSectionID,
                         RestaurantInventorySectionID = restSectionID,
                         Name = "newSection",
                         LineItems = new List<InventoryBeverageLineItem>
                         {
                             new InventoryBeverageLineItem
                             {
-                                ID = liID,
+                                Id = liID,
                                 Container = LiquidContainer.Bottle750ML
                             }
                         }
@@ -245,7 +245,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             var inventoryEvent = new InventoryLiquidItemMeasuredEvent
             {
-                CausedByID = Guid.NewGuid(),
+                CausedById = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 InventoryID = Guid.NewGuid(),
 				AmountMeasured = LiquidAmount.SevenFiftyMillilters,
@@ -253,7 +253,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 NumFullBottlesMeasured = 10,
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    ID = liID,
+                    Id = liID,
                     Container = LiquidContainer.Bottle750ML,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 0,
@@ -309,7 +309,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             var liID = Guid.NewGuid();
             var lineItem = new InventoryBeverageLineItem
             {
-                ID = liID,
+                Id = liID,
                 Container = LiquidContainer.Bottle330ml
             };
 
@@ -317,7 +317,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             underTest.Sections.Add(
                 new InventorySection
                 {
-                    ID = sectionID,
+                    Id = sectionID,
                     LineItems = new List<InventoryBeverageLineItem> { lineItem}
                 });
 
@@ -326,7 +326,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 				AmountMeasured = new LiquidAmount {Milliliters = -10000},
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    ID = liID,
+                    Id = liID,
                 },
                 InventorySectionID = sectionID
             };
@@ -355,14 +355,14 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             underTest.Sections.Add(
                 new InventorySection
                 {
-                    ID = sectionID
+                    Id = sectionID
                 });
             var invEvent = new InventoryLiquidItemMeasuredEvent
             {
                 AmountMeasured = new LiquidAmount { Milliliters = 1000 },
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     DisplayName = "testItem"
                 },
                 InventorySectionID = sectionID,
@@ -393,20 +393,20 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 CreatedByEmployeeID = Guid.NewGuid(),
                 CreatedDate = DateTimeOffset.UtcNow.AddDays(-1),
                 LastUpdatedDate = DateTimeOffset.UtcNow,
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 DateCompleted = DateTimeOffset.UtcNow,
                 RestaurantID = Guid.NewGuid(),
                 IsCurrent = true,
                 Sections = new List<InventorySection>{
                     new InventorySection{
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         RestaurantInventorySectionID = Guid.NewGuid(),
                         Name = "merg",
                         LineItems = new List<InventoryBeverageLineItem>
                         {
                             new InventoryBeverageLineItem
                             {
-                                ID = Guid.NewGuid(),
+                                Id = Guid.NewGuid(),
                                 LastUpdatedDate = DateTime.UtcNow,
                                 Revision = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1},
                                 CreatedDate = DateTime.UtcNow,
@@ -431,7 +431,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             Assert.AreEqual(underTest.CreatedByEmployeeID, clone.CreatedByEmployeeID);
             Assert.AreEqual(underTest.CreatedDate, clone.CreatedDate);
             Assert.AreEqual(underTest.IsCurrent, clone.IsCurrent);
-            Assert.AreEqual(underTest.ID, clone.ID);
+            Assert.AreEqual(underTest.Id, clone.Id);
             Assert.AreEqual(underTest.DateCompleted, clone.DateCompleted);
             Assert.AreEqual(underTest.LastUpdatedDate, clone.LastUpdatedDate);
             Assert.AreEqual(underTest.RestaurantID, clone.RestaurantID);
@@ -439,7 +439,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             var clonedBIs = clone.GetBeverageLineItems().ToList();
             foreach (var item in underTest.GetBeverageLineItems())
             {
-                var clonedItem = clonedBIs.FirstOrDefault(bi => bi.ID == item.ID);
+                var clonedItem = clonedBIs.FirstOrDefault(bi => bi.Id == item.Id);
                 Assert.NotNull(clonedItem);
 
                 Assert.AreEqual(item.CurrentAmount, clonedItem.CurrentAmount);
@@ -449,7 +449,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             }
 
             Assert.AreEqual(underTest.Sections.First().Name, clone.Sections.First().Name);
-            Assert.AreEqual(underTest.GetSections().First().ID, clone.GetSections().First().ID, "Section ID");
+            Assert.AreEqual(underTest.GetSections().First().Id, clone.GetSections().First().Id, "Section ID");
         }
 
         [Test]
@@ -480,8 +480,8 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             var addEvent = new InventoryLineItemAddedEvent
             {
-                CausedByID = Guid.NewGuid(),
-                EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1 },
+                CausedById = Guid.NewGuid(),
+                EventOrder = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1 },
                 DisplayName = "addedItem",
                 InventoryID = Guid.NewGuid(),
                 Quantity = 1,
@@ -489,7 +489,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 {
                     new ItemCategory
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         Name ="testCat"
                     }
                 }
@@ -515,17 +515,17 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 		public void DeleteEventShouldRemoveLineItem(){
 			var liID = Guid.NewGuid ();
 			var underTest = new Common.Entities.Inventory.Inventory {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				Sections = new List<InventorySection> {
 					new InventorySection {
-						ID = Guid.NewGuid (),
+						Id = Guid.NewGuid (),
 						LineItems = new List<InventoryBeverageLineItem> {
 							new InventoryBeverageLineItem {
-								ID = liID,
+								Id = liID,
 								DisplayName = "testItem"
 							},
 							new InventoryBeverageLineItem {
-								ID = Guid.NewGuid (),
+								Id = Guid.NewGuid (),
 								DisplayName = "notDel"
 							}
 						}
@@ -534,9 +534,9 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 			};
 
 			var delEv = new InventoryLineItemDeletedEvent {
-				ID = Guid.NewGuid (),
-				InventoryID = underTest.ID,
-				InventorySectionID = underTest.Sections.First ().ID,
+				Id = Guid.NewGuid (),
+				InventoryID = underTest.Id,
+				InventorySectionID = underTest.Sections.First ().Id,
 				InventoryLineItemID = liID
 			};
 

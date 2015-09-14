@@ -15,7 +15,7 @@ namespace Mise.Core.Common
 
 		#endregion
 
-		public Guid EmployeeID{get{return CausedByID;}}
+		public Guid EmployeeID{get{return CausedById;}}
 	}
 }
 

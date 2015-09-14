@@ -15,10 +15,10 @@ namespace Mise.Core.Common.UnitTests.Entities
 		[Test]
 		public void TestCreateFromEvents(){
 			var checkID = Guid.NewGuid ();
-			var tab = new RestaurantCheck {ID = checkID, CreatedByServerID = Guid.Empty, LastTouchedServerID = Guid.Empty};
+			var tab = new RestaurantCheck {Id = checkID, CreatedByServerID = Guid.Empty, LastTouchedServerID = Guid.Empty};
 
 			Assert.AreEqual (Guid.Empty, tab.CreatedByServerID);
-			Assert.AreEqual (checkID, tab.ID);
+			Assert.AreEqual (checkID, tab.Id);
 		}
 
 
@@ -28,15 +28,15 @@ namespace Mise.Core.Common.UnitTests.Entities
 			var checkID = Guid.NewGuid ();
 			var oiFirstID = Guid.NewGuid ();
 			var tab = new RestaurantCheck{
-				ID = checkID,
+				Id = checkID,
 				OrderItems = new List<OrderItem >{
 					new OrderItem{
-						ID = oiFirstID
+						Id = oiFirstID
 					},
 					new OrderItem{
-						ID = Guid.NewGuid (),
+						Id = Guid.NewGuid (),
 						MenuItem = new MenuItem{
-							ID = Guid.NewGuid ()
+							Id = Guid.NewGuid ()
 						}
 					}
 				}
@@ -44,9 +44,9 @@ namespace Mise.Core.Common.UnitTests.Entities
 			var res = tab.Clone () as ICheck;
 
             Assert.IsNotNull(res);
-			Assert.AreEqual (checkID, res.ID);
+			Assert.AreEqual (checkID, res.Id);
 			Assert.AreEqual (2, res.OrderItems.Count ());
-			Assert.AreEqual (oiFirstID, res.OrderItems.First ().ID);
+			Assert.AreEqual (oiFirstID, res.OrderItems.First ().Id);
 		}
 	}
 }

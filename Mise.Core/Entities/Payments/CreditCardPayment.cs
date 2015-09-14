@@ -11,7 +11,7 @@ namespace Mise.Core.Entities.Payments
 	    {
 	        return new CreditCardPayment
 	        {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 CheckID = CheckID,
                 EmployeeID = EmployeeID,
 	            AmountCharged = AmountCharged,

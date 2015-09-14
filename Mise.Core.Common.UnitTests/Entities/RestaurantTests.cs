@@ -31,7 +31,7 @@ namespace Mise.Core.Common.UnitTests.Entities
             {
                 AccountID = Guid.NewGuid(),
                 CreatedDate = DateTimeOffset.UtcNow,
-                ID = restID,
+                Id = restID,
 
                 InventorySections = new List<RestaurantInventorySection>
                 {
@@ -39,7 +39,7 @@ namespace Mise.Core.Common.UnitTests.Entities
                     {
                         AllowsPartialBottles = true,
                         CreatedDate = DateTimeOffset.UtcNow.AddDays(-1),
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         RestaurantID = restID,
                         LastUpdatedDate = DateTimeOffset.UtcNow,
                         Name = "testSec",
@@ -57,8 +57,8 @@ namespace Mise.Core.Common.UnitTests.Entities
             Assert.AreEqual("testSec", res.InventorySections.First().Name, "Section name");
             Assert.AreEqual(underTest.InventorySections.First().AllowsPartialBottles, 
                 res.InventorySections.First().AllowsPartialBottles, "Allows partial bottles");
-            Assert.AreEqual(underTest.InventorySections.First().ID,
-                res.InventorySections.First().ID, "Section ID");
+            Assert.AreEqual(underTest.InventorySections.First().Id,
+                res.InventorySections.First().Id, "Section ID");
         }
 
         [Test]
@@ -70,8 +70,8 @@ namespace Mise.Core.Common.UnitTests.Entities
             var ev = new InventorySectionAddedToRestaurantEvent
             {
                 CreatedDate = date,
-                DeviceID = "blerg",
-                EventOrderingID = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101},
+                DeviceId = "blerg",
+                EventOrder = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101},
                 SectionID = Guid.NewGuid(),
                 SectionName = "testBar",
                 AllowsPartialBottles = true
@@ -100,7 +100,7 @@ namespace Mise.Core.Common.UnitTests.Entities
                 {
                     new RestaurantInventorySection
                     {
-                        ID = sectionID,
+                        Id = sectionID,
                         Name = "mainBar"
                     }
                 }
@@ -110,8 +110,8 @@ namespace Mise.Core.Common.UnitTests.Entities
             var ev = new InventorySectionAddedToRestaurantEvent
             {
                 CreatedDate = date,
-                DeviceID = "blerg",
-                EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101 },
+                DeviceId = "blerg",
+                EventOrder = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101 },
                 SectionID = sectionID,
                 SectionName = "testBar",
 
@@ -136,9 +136,9 @@ namespace Mise.Core.Common.UnitTests.Entities
             var date = DateTimeOffset.UtcNow;
             var ev = new PlaceholderRestaurantCreatedEvent
             {
-                EventOrderingID = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101},
+                EventOrder = new EventID { AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101},
                 CreatedDate = date,
-                RestaurantID = Guid.NewGuid()
+                RestaurantId = Guid.NewGuid()
             };
 
             //ACT
@@ -148,9 +148,9 @@ namespace Mise.Core.Common.UnitTests.Entities
             Assert.IsNull(underTest.AccountID);
             Assert.AreEqual(date, underTest.CreatedDate);
             Assert.AreEqual(date, underTest.LastUpdatedDate);
-            Assert.AreEqual(ev.EventOrderingID.OrderingID, underTest.Revision.OrderingID);
-            Assert.AreEqual(ev.RestaurantID, underTest.ID);
-            Assert.AreEqual(ev.RestaurantID, underTest.RestaurantID);
+            Assert.AreEqual(ev.EventOrder.OrderingID, underTest.Revision.OrderingID);
+            Assert.AreEqual(ev.RestaurantId, underTest.Id);
+            Assert.AreEqual(ev.RestaurantId, underTest.RestaurantID);
         }
     }
 }

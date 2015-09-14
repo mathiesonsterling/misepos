@@ -18,12 +18,12 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 			var paymentID = Guid.NewGuid ();
 
 			var barTab = new RestaurantCheck {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				PaymentStatus = CheckPaymentStatus.PaymentApprovedWithoutTip,
 			};
 			barTab.AddPayment(
 				new CreditCardPayment{
-					ID = paymentID,
+					Id = paymentID,
 					CheckID = Guid.Empty,
 					AmountCharged = new Money(100.0M),
 					TipAmount = new Money(10.0M),
@@ -32,8 +32,8 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 			);
 
 			var ev = new CreditCardCloseRequestedEvent {
-				ID = Guid.Empty,
-                EventOrderingID = new EventID(),
+				Id = Guid.Empty,
+                EventOrder = new EventID(),
 				CheckID = Guid.Empty,
 				PaymentID = paymentID,
 				AmountPaid = new Money(100.0M),
@@ -58,13 +58,13 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.Payments.CreditCards
 		public void TestNoPaymentThrowsException(){
 			//ASSEMBLE
 			var barTab = new RestaurantCheck {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				PaymentStatus = CheckPaymentStatus.PaymentApprovedWithoutTip,
 			};
 
 			var ev = new CreditCardCloseRequestedEvent {
-				ID = Guid.Empty,
-                EventOrderingID = new EventID(),
+				Id = Guid.Empty,
+                EventOrder = new EventID(),
 				CheckID = Guid.Empty,
 				AmountPaid = new Money(100.0M),
 				TipAmount = new Money(10.0M),

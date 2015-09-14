@@ -14,7 +14,7 @@ namespace Mise.Core.Entities.Payments
         {
             return new CompItemPayment
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 CheckID = CheckID,
                 EmployeeID = EmployeeID,
                 Amount = Amount,

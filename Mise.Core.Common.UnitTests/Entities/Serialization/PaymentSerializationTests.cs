@@ -23,7 +23,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 			var checkID = Guid.NewGuid ();
 			var empID = Guid.NewGuid ();
 			var cp = new CashPayment {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				AmountPaid = new Money (10.0M),
 				AmountTendered = new Money (50.0M),
 				ChangeGiven = new Money (40.0M),

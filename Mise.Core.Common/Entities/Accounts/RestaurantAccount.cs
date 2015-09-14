@@ -101,12 +101,12 @@ namespace Mise.Core.Common.Entities.Accounts
             }
 
             LastUpdatedDate = entityEvent.CreatedDate;
-            Revision = entityEvent.EventOrderingID;
+            Revision = entityEvent.EventOrder;
         }
 
         protected virtual void WhenRegisteredFromMobile(AccountRegisteredFromMobileDeviceEvent ev)
         {
-            ID = ev.AccountID;
+            Id = ev.AccountID;
             PrimaryEmail = ev.Email;
             AccountHolderName = ev.AccountHolderName;
             BillingCycle = new TimeSpan(30, 0, 0, 0);

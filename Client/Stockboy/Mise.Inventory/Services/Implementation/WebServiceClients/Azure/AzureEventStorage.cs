@@ -18,8 +18,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
         public AzureEventStorage(EventDataTransportObject dto)
         {
             MiseEventType = dto.EventType.ToString();
-            EventID = dto.ID;
-            id = dto.ID.ToString();
+            EventID = dto.Id;
+            id = dto.Id.ToString();
             EventDate = dto.CreatedDate;
             JSON = dto.JSON;
         }

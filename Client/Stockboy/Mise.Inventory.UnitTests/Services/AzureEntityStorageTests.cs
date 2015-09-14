@@ -18,7 +18,7 @@ namespace Mise.Inventory.UnitTests.Services
         {
             var source = new RestaurantEntityDataTransportObject
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 RestaurantID = Guid.NewGuid(),
                 CreatedDate = DateTimeOffset.UtcNow,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
@@ -29,7 +29,7 @@ namespace Mise.Inventory.UnitTests.Services
             var underTest = new AzureEntityStorage(source);
 
             //ASSERT
-            Assert.AreEqual(source.ID, underTest.EntityID);
+            Assert.AreEqual(source.Id, underTest.EntityID);
             Assert.AreEqual(source.RestaurantID, underTest.RestaurantID, "restID");
             Assert.AreEqual(source.LastUpdatedDate, underTest.LastUpdatedDate, "date");
         }

@@ -43,7 +43,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var newRO = new ReceivingOrder
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Status = ReceivingOrderStatus.Created,
                 RestaurantID = restID,
                 VendorID = vendorID
@@ -58,7 +58,7 @@ namespace Mise.Inventory.UnitTests.Services
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             evFac.SetRestaurant(new Restaurant
             {
-                ID = restID
+                Id = restID
             });
 
             var loginServ = new Mock<ILoginService>();
@@ -71,7 +71,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendServ = new Mock<IVendorService>();
             vendServ.Setup(vs => vs.GetSelectedVendor())
-                .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
+                .Returns(Task.FromResult(new Vendor { Id = vendorID } as IVendor));
 
 			var insights = new Mock<IInsightsService> ();
             var underTest = new ReceivingOrderService(logger.Object, mockRORepos.Object,  evFac,
@@ -82,8 +82,8 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ASSERT
             Assert.NotNull(res);
-            Assert.AreNotEqual(roID, res.ID);
-            Assert.AreNotEqual(otherID, res.ID);
+            Assert.AreNotEqual(roID, res.Id);
+            Assert.AreNotEqual(otherID, res.Id);
             Assert.AreEqual(ReceivingOrderStatus.Created, res.Status);
             Assert.AreEqual(restID, res.RestaurantID);
             Assert.AreEqual(newRO, res);
@@ -184,7 +184,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendServ = new Mock<IVendorService>();
             vendServ.Setup(vs => vs.GetSelectedVendor())
-                .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
+                .Returns(Task.FromResult(new Vendor { Id = vendorID } as IVendor));
 			var insights = new Mock<IInsightsService> ();
             var underTest = new ReceivingOrderService(logger.Object, mockRORepos.Object,  
 				evFac.Object, loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
@@ -225,7 +225,7 @@ namespace Mise.Inventory.UnitTests.Services
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
             evFac.SetRestaurant(new Restaurant
             {
-                ID = restID
+                Id = restID
             });
 
             var poServ = new Mock<IPurchaseOrderService>();
@@ -238,7 +238,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendServ = new Mock<IVendorService>();
             vendServ.Setup(vs => vs.GetSelectedVendor())
-                .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
+                .Returns(Task.FromResult(new Vendor { Id = vendorID } as IVendor));
 			var insights = new Mock<IInsightsService> ();
             var underTest = new ReceivingOrderService(logger.Object, roRepos, evFac,
 				loginServ.Object, vendServ.Object, poServ.Object, insights.Object);
@@ -250,8 +250,8 @@ namespace Mise.Inventory.UnitTests.Services
 
             //ASSERT
             Assert.NotNull(res);
-            Assert.AreNotEqual(roID, res.ID);
-            Assert.AreNotEqual(otherID, res.ID);
+            Assert.AreNotEqual(roID, res.Id);
+            Assert.AreNotEqual(otherID, res.Id);
             Assert.AreEqual(ReceivingOrderStatus.Created, res.Status);
             Assert.AreEqual(restID, res.RestaurantID);
 
@@ -281,7 +281,7 @@ namespace Mise.Inventory.UnitTests.Services
                         {
                             new ReceivingOrder
                             {
-                                ID = roID,
+                                Id = roID,
                                 Status = ReceivingOrderStatus.Created,
                                 VendorID = vendorID,
                                 RestaurantID = restID
@@ -295,7 +295,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
-            evFac.SetRestaurant(new Restaurant{ID = restID});
+            evFac.SetRestaurant(new Restaurant{Id = restID});
 
             var loginServ = new Mock<ILoginService>();
             loginServ.Setup(ls => ls.GetCurrentEmployee())
@@ -304,7 +304,7 @@ namespace Mise.Inventory.UnitTests.Services
             var poServ = new Mock<IPurchaseOrderService>();
             var vendServ = new Mock<IVendorService>();
             vendServ.Setup(vs => vs.GetSelectedVendor())
-                .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
+                .Returns(Task.FromResult(new Vendor { Id = vendorID } as IVendor));
             vendServ.Setup(
                 vs => vs.AddLineItemsToVendorIfDontExist(vendorID, It.IsAny<IEnumerable<IReceivingOrderLineItem>>()))
                 .Returns(Task.FromResult(true));
@@ -351,7 +351,7 @@ namespace Mise.Inventory.UnitTests.Services
             await roRepos.Load(Guid.NewGuid());
 
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
-            evFac.SetRestaurant(new Restaurant { ID = restID });
+            evFac.SetRestaurant(new Restaurant { Id = restID });
 
             var loginServ = new Mock<ILoginService>();
             loginServ.Setup(ls => ls.GetCurrentEmployee())
@@ -364,7 +364,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendServ = new Mock<IVendorService>();
             vendServ.Setup(vs => vs.GetSelectedVendor())
-                .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
+                .Returns(Task.FromResult(new Vendor { Id = vendorID } as IVendor));
             vendServ.Setup(
 				vs => vs.AddLineItemsToVendorIfDontExist(vendorID, It.IsAny<IEnumerable<IReceivingOrderLineItem>>()))
                 .Returns(Task.FromResult(true));
@@ -404,11 +404,14 @@ namespace Mise.Inventory.UnitTests.Services
                         new List<ReceivingOrder>().AsEnumerable()
                     )
                 );
+            ws.Setup(w => w.SendEventsAsync(It.IsAny<ReceivingOrder>(), It.IsAny<IEnumerable<IReceivingOrderEvent>>()))
+                .Returns(Task.FromResult(true));
+
             var roRepos = new ClientReceivingOrderRepository(logger.Object, ws.Object);
             await roRepos.Load(Guid.NewGuid());
 
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
-            evFac.SetRestaurant(new Restaurant { ID = restID });
+            evFac.SetRestaurant(new Restaurant { Id = restID });
 
             var loginServ = new Mock<ILoginService>();
             loginServ.Setup(ls => ls.GetCurrentEmployee())
@@ -423,7 +426,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendServ = new Mock<IVendorService>();
             vendServ.Setup(vs => vs.GetSelectedVendor())
-                .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
+                .Returns(Task.FromResult(new Vendor { Id = vendorID } as IVendor));
             vendServ.Setup(
 				vs => vs.AddLineItemsToVendorIfDontExist(vendorID, It.IsAny<IEnumerable<IReceivingOrderLineItem>>()))
                 .Returns(Task.FromResult(true));
@@ -455,7 +458,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 		    var ro = new ReceivingOrder
 		    {
-		        ID = roID,
+		        Id = roID,
                 VendorID = vendorID,
                 Status = ReceivingOrderStatus.Created,
 		        Notes = null
@@ -473,7 +476,7 @@ namespace Mise.Inventory.UnitTests.Services
 		        .Callback<IReceivingOrderEvent>(ev => givenEvent = ev as ReceivingOrderCompletedEvent);
 
             var evFac = new InventoryAppEventFactory("test", MiseAppTypes.UnitTests);
-            evFac.SetRestaurant(new Restaurant { ID = restID });
+            evFac.SetRestaurant(new Restaurant { Id = restID });
 
             var loginServ = new Mock<ILoginService>();
             loginServ.Setup(ls => ls.GetCurrentEmployee())
@@ -491,7 +494,7 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendServ = new Mock<IVendorService>();
             vendServ.Setup(vs => vs.GetSelectedVendor())
-                .Returns(Task.FromResult(new Vendor { ID = vendorID } as IVendor));
+                .Returns(Task.FromResult(new Vendor { Id = vendorID } as IVendor));
             vendServ.Setup(
 				vs => vs.AddLineItemsToVendorIfDontExist(vendorID, It.IsAny<IEnumerable<IReceivingOrderLineItem>>()))
                 .Returns(Task.FromResult(true));
@@ -518,7 +521,7 @@ namespace Mise.Inventory.UnitTests.Services
             //create a PO for the same vendor
             var po = new PurchaseOrder
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 PurchaseOrdersPerVendor = new List<PurchaseOrderPerVendor>
                 {
                     new PurchaseOrderPerVendor
@@ -528,7 +531,7 @@ namespace Mise.Inventory.UnitTests.Services
                         {
                             new PurchaseOrderLineItem
                             {
-                                ID = Guid.NewGuid(),
+                                Id = Guid.NewGuid(),
                                 DisplayName = "testItem",
                                 Container =
                                     new LiquidContainer

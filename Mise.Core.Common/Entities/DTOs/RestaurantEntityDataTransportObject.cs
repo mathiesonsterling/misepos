@@ -12,7 +12,7 @@ namespace Mise.Core.Common.Entities.DTOs
     {
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset LastUpdatedDate { get; set; }
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
         public Guid? RestaurantID { get; set; }
         public EventID Revision { get; set; }
 
@@ -30,7 +30,7 @@ namespace Mise.Core.Common.Entities.DTOs
 
         public bool Equals(IEntityBase other)
         {
-            return ID.Equals(other.ID) && Revision.Equals(other.Revision);
+            return Id.Equals(other.Id) && Revision.Equals(other.Revision);
         }
     }
 }

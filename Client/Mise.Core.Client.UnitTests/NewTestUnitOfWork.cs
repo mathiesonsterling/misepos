@@ -21,10 +21,10 @@ namespace Mise.Core.Client.UnitTests
 			var checkRes = true;
 			var empRes = true;
 			if (check != null) {
-				checkRes = CheckRepository.StartTransaction (check.ID);
+				checkRes = CheckRepository.StartTransaction (check.Id);
 			}
 			if(employee != null){
-				empRes = EmployeeRepository.StartTransaction (employee.ID);
+				empRes = EmployeeRepository.StartTransaction (employee.Id);
 			}
 
 			return checkRes && empRes;
@@ -33,17 +33,17 @@ namespace Mise.Core.Client.UnitTests
 		public async Task Commit (Guid terminalID, IEmployee employee, ICheck check)
 		{
 			if (employee != null) {
-				await EmployeeRepository.Commit (employee.ID).ConfigureAwait (false);
+				await EmployeeRepository.Commit (employee.Id).ConfigureAwait (false);
 			}
 			if (check != null) {
-				await CheckRepository.Commit (check.ID).ConfigureAwait(false);
+				await CheckRepository.Commit (check.Id).ConfigureAwait(false);
 			}
 		}
 
 		public Task Cancel (Guid terminalID, IEmployee employee, ICheck check)
 		{
-			CheckRepository.CancelTransaction (check.ID);
-			EmployeeRepository.CancelTransaction (employee.ID);
+			CheckRepository.CancelTransaction (check.Id);
+			EmployeeRepository.CancelTransaction (employee.Id);
 
 			return Task.FromResult (true);
 		}

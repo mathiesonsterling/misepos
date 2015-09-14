@@ -119,7 +119,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 //load our categories from the menu
                 TopCat = _terminalSettings.TopLevelCategoryID.ToString() == Guid.Empty.ToString()
                     ? Menu.Categories.FirstOrDefault()
-                    : Menu.Categories.FirstOrDefault(c => _terminalSettings.TopLevelCategoryID == c.ID);
+                    : Menu.Categories.FirstOrDefault(c => _terminalSettings.TopLevelCategoryID == c.Id);
                 if (TopCat == null)
                 {
                     throw new Exception("Cannot find category of type " + _terminalSettings.TopLevelCategoryID);
@@ -252,8 +252,8 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
         private async void LoadRepositories(ClientCheckRepository checkRepos,
             ClientEmployeeRepository employeeRepository)
         {
-            await checkRepos.Load(_restaurant.ID);
-            await employeeRepository.Load(_restaurant.ID);
+            await checkRepos.Load(_restaurant.Id);
+            await employeeRepository.Load(_restaurant.Id);
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             var clockinEvent = _eventFactory.CreateEmployeeClockedInEvent(thisEmp);
             SelectedEmployee = _employeeRepository.ApplyEvents(new List<IEmployeeEvent> { clockinEvent });
             LastSelectedEmployee = SelectedEmployee;
-			_unitOfWork.Commit (_terminalSettings.ID, SelectedEmployee, null);
+			_unitOfWork.Commit (_terminalSettings.Id, SelectedEmployee, null);
             return true;
         }
 
@@ -354,12 +354,12 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             var clockoutEvent = _eventFactory.CreateEmployeeClockedOutEvent(thisEmp);
             SelectedEmployee = _employeeRepository.ApplyEvents(new List<IEmployeeEvent> { clockoutEvent });
 
-            if (thisEmp.ID == SelectedEmployee.ID)
+            if (thisEmp.Id == SelectedEmployee.Id)
             {
                 SelectedEmployee = null;
             }
 
-            if (LastSelectedEmployee != null && LastSelectedEmployee.ID == thisEmp.ID)
+            if (LastSelectedEmployee != null && LastSelectedEmployee.Id == thisEmp.Id)
             {
                 LastSelectedEmployee = null;
             }
@@ -422,7 +422,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
 					return CurrentTerminalViewTypeToDisplay;
 				}
 				SelectedCheck = check;
-				var startedTrans = _unitOfWork.Start (_terminalSettings.ID, SelectedEmployee, SelectedCheck);
+				var startedTrans = _unitOfWork.Start (_terminalSettings.Id, SelectedEmployee, SelectedCheck);
 				if (startedTrans == false) {
 					_logger.Log ("Cannot start transaction");
 					throw new InvalidOperationException ("Cannot start transaction!");
@@ -513,13 +513,13 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
         {
             if (SelectedCheck != null)
             {
-                var cancelRes = _unitOfWork.Cancel(_terminalSettings.ID, SelectedEmployee, SelectedCheck);
+                var cancelRes = _unitOfWork.Cancel(_terminalSettings.Id, SelectedEmployee, SelectedCheck);
 				cancelRes.Wait ();
                 SelectedCheck.PaymentStatus = CheckPaymentStatus.Closing;
                 CurrentTerminalViewTypeToDisplay = TerminalViewTypes.ViewChecks;
                 //reload our check, since it's changed back in the repository
-                SelectedCheck = _checkRepository.GetByID(SelectedCheck.ID);
-                SelectedEmployee = _employeeRepository.GetByID(SelectedEmployee.ID);
+                SelectedCheck = _checkRepository.GetByID(SelectedCheck.Id);
+                SelectedEmployee = _employeeRepository.GetByID(SelectedEmployee.Id);
             }
         }
 
@@ -527,7 +527,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
         {
             if (SelectedCheck != null)
             {
-                var commitTask = _unitOfWork.Commit(_terminalSettings.ID, SelectedEmployee, SelectedCheck);
+                var commitTask = _unitOfWork.Commit(_terminalSettings.Id, SelectedEmployee, SelectedCheck);
 				commitTask.GetAwaiter ().GetResult ();
                 CurrentTerminalViewTypeToDisplay = TerminalViewTypes.ViewChecks;
                 return true;
@@ -564,7 +564,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
         {
             var reEvent = _eventFactory.CreateReopenCheckEvent(SelectedCheck, SelectedEmployee);
             SelectedCheck = _checkRepository.ApplyEvent(reEvent);
-            _unitOfWork.Commit(_terminalSettings.ID, SelectedEmployee, SelectedCheck);
+            _unitOfWork.Commit(_terminalSettings.Id, SelectedEmployee, SelectedCheck);
             CurrentTerminalViewTypeToDisplay = TerminalViewTypes.OrderOnCheck;
             return SelectedCheck;
         }
@@ -600,7 +600,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             {
                 //close us out!
                 //TODO figure a way to get this to be aysnc!
-                _unitOfWork.Commit(_terminalSettings.ID, SelectedEmployee, SelectedCheck);
+                _unitOfWork.Commit(_terminalSettings.Id, SelectedEmployee, SelectedCheck);
 
                 //determine if we're going to display change or not
                 CurrentTerminalViewTypeToDisplay = SelectedCheck.GetPayments().Any(p => p.OpensCashDrawer)
@@ -631,7 +631,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             }
 
 
-            _unitOfWork.DoWhenRepositoryIsAvailable(_terminalSettings.ID,
+            _unitOfWork.DoWhenRepositoryIsAvailable(_terminalSettings.Id,
                 SelectedEmployee, SelectedCheck, (emp, check) =>
                 {
                     foreach (var ccPayment in ccPayments)
@@ -658,7 +658,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                                     }
                                     //update the check selected if it still is - we might have moved on
                                     var res = _checkRepository.ApplyEvent(authEvent);
-                                    if (SelectedCheck != null && SelectedCheck.ID == res.ID)
+                                    if (SelectedCheck != null && SelectedCheck.Id == res.Id)
                                     {
                                         SelectedCheck = res;
                                     }
@@ -845,7 +845,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                     var reverseAuthEvent = _eventFactory.CreditCardAuthorizationCancelled(selCheck, selEmployee, rPayment, authCode);
                     var check = _checkRepository.ApplyEvent(reverseAuthEvent);
 
-                    _unitOfWork.Commit(_terminalSettings.ID, selEmployee, selCheck);
+                    _unitOfWork.Commit(_terminalSettings.Id, selEmployee, selCheck);
                     //determine if we have other payments or not
                     CurrentTerminalViewTypeToDisplay = TerminalViewTypes.ViewChecks;
 
@@ -1003,7 +1003,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             var cat = SelectedCategory ?? TopCat;
 
             //are we in the main?
-            return cat.MenuItems.Any(m => m.ID == item.ID)
+            return cat.MenuItems.Any(m => m.Id == item.Id)
                 ? SelectedCategory
                 : cat.SubCategories.FirstOrDefault(subCat => MenuItemIsInCatRecursive(subCat, item));
 
@@ -1011,7 +1011,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
 
         bool MenuItemIsInCatRecursive(MenuItemCategory cat, MenuItem item)
         {
-            return cat.MenuItems.Any(m => m.ID == item.ID) || cat.SubCategories.Any(subCat => MenuItemIsInCatRecursive(subCat, item));
+            return cat.MenuItems.Any(m => m.Id == item.Id) || cat.SubCategories.Any(subCat => MenuItemIsInCatRecursive(subCat, item));
 
         }
 
@@ -1030,16 +1030,16 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 {
                     return null;
                 }
-                return TopCat.SubCategories.Any(c => c.ID == SelectedCategory.ID)
+                return TopCat.SubCategories.Any(c => c.Id == SelectedCategory.Id)
                     ? null
-                    : GetCategoryParentRecursively(TopCat, SelectedCategory.ID);
+                    : GetCategoryParentRecursively(TopCat, SelectedCategory.Id);
 
             }
         }
 
         static MenuItemCategory GetCategoryParentRecursively(MenuItemCategory current, Guid childCatID)
         {
-            if (current.SubCategories.Any(c => c.ID == childCatID))
+            if (current.SubCategories.Any(c => c.Id == childCatID))
             {
                 return current;
             }
@@ -1123,11 +1123,11 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 var uniqueItems = new Dictionary<Guid, MenuItem> ();
 
                 foreach (var oi in itemsWithoutModsOnCheck
-                    .Where(oi => uniqueItems.ContainsKey(oi.MenuItem.ID) == false)
+                    .Where(oi => uniqueItems.ContainsKey(oi.MenuItem.Id) == false)
                     .OrderByDescending (o => o.CreatedDate))
                 {
-					if (uniqueItems.ContainsKey (oi.MenuItem.ID) == false) {
-						uniqueItems.Add (oi.MenuItem.ID, oi.MenuItem);
+					if (uniqueItems.ContainsKey (oi.MenuItem.Id) == false) {
+						uniqueItems.Add (oi.MenuItem.Id, oi.MenuItem);
 					}
                 }
                 return uniqueItems.Values;
@@ -1159,8 +1159,8 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             {
                 CreatedDate = DateTime.UtcNow,
                 MenuItem = drink,
-                PlacedByID = SelectedEmployee.ID,
-                ID = Guid.NewGuid(),
+                PlacedByID = SelectedEmployee.Id,
+                Id = Guid.NewGuid(),
             };
             if (drink.Destinations != null)
             {
@@ -1445,7 +1445,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             if (check != null)
             {
                 SelectedCheck = check;
-				var commitTask = _unitOfWork.Commit (_terminalSettings.ID, SelectedEmployee, SelectedCheck)
+				var commitTask = _unitOfWork.Commit (_terminalSettings.Id, SelectedEmployee, SelectedCheck)
 					.ContinueWith (task => {
 
 					//destinations will be taken care of on restaurant server
@@ -1471,7 +1471,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             if (check != null)
             {
                 SelectedCheck = check;
-				var commitTask = _unitOfWork.Commit (_terminalSettings.ID, SelectedEmployee, SelectedCheck);
+				var commitTask = _unitOfWork.Commit (_terminalSettings.Id, SelectedEmployee, SelectedCheck);
 
                 //destinations will be taken care of on restaurant server
                 if (_terminalSettings.PrintKitchenDupes && LocalPrinterService != null)
@@ -1483,7 +1483,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 CurrentTerminalViewTypeToDisplay = TerminalViewTypes.ViewChecks;
 				return commitTask;
             }
-            throw new ArgumentException("Error applying sent check event to check " + SelectedCheck.ID);
+            throw new ArgumentException("Error applying sent check event to check " + SelectedCheck.Id);
         }
 
         /// <summary>
@@ -1493,10 +1493,10 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
         {
             if (SelectedCheck != null)
             {
-                _unitOfWork.Cancel(_terminalSettings.ID, SelectedEmployee, SelectedCheck);
+                _unitOfWork.Cancel(_terminalSettings.Id, SelectedEmployee, SelectedCheck);
                 if (SelectedEmployee != null)
                 {
-                    SelectedEmployee = _employeeRepository.GetByID(SelectedEmployee.ID);
+                    SelectedEmployee = _employeeRepository.GetByID(SelectedEmployee.Id);
                 }
             }
             CurrentTerminalViewTypeToDisplay = TerminalViewTypes.ViewChecks;

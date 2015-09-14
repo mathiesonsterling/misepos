@@ -15,17 +15,17 @@ namespace Mise.Core.Common.Events.DTOs
         /// <param name="toClone"></param>
 	    public EventDataTransportObject(EventDataTransportObject toClone)
         {
-            CausedByID = toClone.CausedByID;
+            CausedById = toClone.CausedById;
             CreatedDate = toClone.CreatedDate;
-            DeviceID = toClone.DeviceID;
+            DeviceId = toClone.DeviceId;
             EntityID = toClone.EntityID;
-            EventOrderingID = toClone.EventOrderingID;
+            EventOrder = toClone.EventOrder;
             EventType = toClone.EventType;
-            ID = toClone.ID;
+            Id = toClone.Id;
             ItemCacheStatus = toClone.ItemCacheStatus;
             JSON = toClone.JSON;
             LastUpdatedDate = toClone.LastUpdatedDate;
-            RestaurantID = toClone.RestaurantID;
+            RestaurantId = toClone.RestaurantId;
             SourceType = toClone.SourceType;
             IsAggregateRootCreation = toClone.IsAggregateRootCreation;
             IsEntityCreation = toClone.IsEntityCreation;
@@ -47,17 +47,17 @@ namespace Mise.Core.Common.Events.DTOs
 
 		public MiseEventTypes EventType { get; set; }
 
-		public Guid ID { get; set; }
+		public Guid Id { get; set; }
 
-		public Guid RestaurantID { get; set; }
+		public Guid RestaurantId { get; set; }
 
-		public EventID EventOrderingID { get; set; }
+		public EventID EventOrder { get; set; }
 
-		public Guid CausedByID { get; set; }
+		public Guid CausedById { get; set; }
 
 		public DateTimeOffset CreatedDate { get; set; }
 
-		public string DeviceID { get; set; }
+		public string DeviceId { get; set; }
 
 		public DateTimeOffset LastUpdatedDate { get; set; }
 

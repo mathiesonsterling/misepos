@@ -68,16 +68,16 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 
             foreach (var e in dtos)
             {
-                if (_eventDB.ContainsKey(e.ID))
+                if (_eventDB.ContainsKey(e.Id))
                 {
                     //overwrite the item, but make sure the times to send stays up to date
-                    var item = _eventDB[e.ID];
+                    var item = _eventDB[e.Id];
                     e.TimesAttemptedToSend = item.TimesAttemptedToSend++;
-                    _eventDB[e.ID] = e;
+                    _eventDB[e.Id] = e;
                 }
                 else
                 {
-                    _eventDB.Add(e.ID, e);
+                    _eventDB.Add(e.Id, e);
                 }
             }
 
@@ -86,7 +86,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 
 	    public Task MarkEventsAsSent(IEnumerable<IEntityEventBase> events)
 	    {
-	        foreach (var dbo in from ev in events where _eventDB.ContainsKey(ev.ID) select _eventDB[ev.ID])
+	        foreach (var dbo in from ev in events where _eventDB.ContainsKey(ev.Id) select _eventDB[ev.Id])
 	        {
 	            dbo.HasBeenSent = true;
 	        }
@@ -128,7 +128,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 				res = new MiseTerminalDevice {
 					TopLevelCategoryID = Guid.Empty,
 					CreatedDate = DateTimeOffset.UtcNow,
-					ID = Guid.NewGuid(), 
+					Id = Guid.NewGuid(), 
 					RequireEmployeeSignIn = false,
 					TableDropChecks = false,
 					CreditCardReaderType = CreditCardReaderType.AudioReader,
@@ -158,7 +158,7 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 		private bool UpsertEntities<T>(IEnumerable<T> entities) where T :class, IEntityBase, new()
 		{
 			var dbEnts = entities.Select(ent => new DatabaseEntityItem {
-				ID = ent.ID,
+				ID = ent.Id,
 				Status = ItemCacheStatus.ClientDB,
 				JSON = _serializer.Serialize(ent),
 				RevisionNumber = ent.Revision,
