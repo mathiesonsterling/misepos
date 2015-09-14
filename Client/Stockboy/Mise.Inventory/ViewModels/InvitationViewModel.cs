@@ -83,8 +83,11 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		async void Reject(){
-			try{
+			try
+			{
+			    Processing = true;
 				await _loginService.RejectInvitation (_selectedInvitation);
+			    Processing = false;
 				await Navigation.ShowMainMenu ();
 			} catch(Exception e){
 				HandleException (e);
