@@ -6,5 +6,9 @@
 	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
 >
 	<ContentPage.Content>
+     <StackLayout>
+       <Picker x:Name="pickerStart" Title="Start Inventory"/>
+       <Picker x:Name="pickerEnd" Title="End Inventory"/>
+     </StackLayout>
 	</ContentPage.Content>
 </local:BasePage>

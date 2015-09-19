@@ -105,7 +105,7 @@ namespace Mise.Inventory.Services.Implementation
 		/// <returns>The items from repositories.</returns>
 		/// <param name="searchString">Search string.</param>
 		/// <param name = "maxItems"></param>
-		async Task<IEnumerable<IBaseBeverageLineItem>> GetItemsFromRepositories(string searchString, int maxItems){
+		Task<IEnumerable<IBaseBeverageLineItem>> GetItemsFromRepositories(string searchString, int maxItems){
 			//get the items
 			var items = new List<IBaseBeverageLineItem> ();
 
@@ -141,9 +141,9 @@ namespace Mise.Inventory.Services.Implementation
 						tuple.TimesUsed++;
 				    }
 				}
-				return filtItems
+				return Task.FromResult(filtItems
 					.OrderBy (i => i.DisplayName)
-					.Take (maxItems);
+					.Take (maxItems));
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;

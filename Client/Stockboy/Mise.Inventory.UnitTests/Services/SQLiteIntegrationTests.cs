@@ -34,11 +34,12 @@ namespace Mise.Inventory.UnitTests.Services
 	            tryAgain = true;
 	        }
 
-	        if (tryAgain)
+	        if (!tryAgain)
 	        {
-                await Task.Delay(1000);
-	            _underTest = TestUtilities.GetTestSQLDB();
+	            return;
 	        }
+	        await Task.Delay(1000);
+	        _underTest = TestUtilities.GetTestSQLDB();
 	    }
 
 		[Test]

@@ -30,10 +30,9 @@ namespace DeveloperTools.Commands
                 .OrderByDescending(ai => ai.LastUpdatedDate)
                 .ToEnumerableAsync();
 
-            var lastInvAI = inventories.FirstOrDefault();
-
+            var lastInvAi = inventories.First();
             Report("Transforming from JSON to inventories");
-            var lastInv = _entityDataTransportObjectFactory.FromDataStorageObject<Inventory>(lastInvAI.ToRestaurantDTO());
+            var lastInv = _entityDataTransportObjectFactory.FromDataStorageObject<Inventory>(lastInvAi.ToRestaurantDTO());
 
             Report("Getting restaurant for inventory");
 

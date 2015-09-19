@@ -213,11 +213,11 @@ namespace Mise.Inventory.Services.Implementation
 			return results;
 		}
 
-		public async Task SelectRestaurantForLoggedInEmployee (Guid restaurantID)
+		public Task SelectRestaurantForLoggedInEmployee (Guid restaurantID)
 		{
 			_logger.Debug ("User selected restaurant");
 			_currentRestaurant = _restaurantRepository.GetByID (restaurantID);
-
+		    return Task.FromResult(true);
 		}
 
 		public async Task LoadSelectedRestaurant ()
