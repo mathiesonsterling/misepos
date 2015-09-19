@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.ValueItems.Inventory;
+using System.Dynamic;
+
+
 namespace Mise.Core.ValueItems.Reports
 {
     public class ReportRequest : IEquatable<ReportRequest>
@@ -21,11 +24,12 @@ namespace Mise.Core.ValueItems.Reports
             MaxResults = maxResults;
 			LiquidUnit = unit;
         }
-
+			
         public ReportTypes Type { get; private set; }
 
         public DateTimeOffset? StartDate { get; private set; }
         public DateTimeOffset? EndDate { get; private set; }
+
         /// <summary>
         /// If set, the specific entity this is tied to
         /// </summary>

@@ -36,7 +36,7 @@ namespace Mise.Inventory.iOS.Services
 		public void Identify (Mise.Core.Entities.People.IEmployee employee, string deviceID)
 		{
 			if(employee != null){
-				Identify (employee.ID, employee.PrimaryEmail, employee.Name, deviceID, false);
+				Identify (employee.Id, employee.PrimaryEmail, employee.Name, deviceID, false);
 			} else {
 				Identify (null, null, null, deviceID, true);
 			}

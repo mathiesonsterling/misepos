@@ -207,6 +207,10 @@
     <Compile Include="ViewModels\RestaurantLoadingViewModel.cs" />
     <Compile Include="Services\IFunFactService.cs" />
     <Compile Include="Services\Implementation\FunFactService.cs" />
+    <Compile Include="Pages\Reports\ReportsByInventoryPage.xaml.cs">
+      <DependentUpon>ReportsByInventoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Reports\ReportsByInventoryViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.3.6376\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -389,6 +393,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\RestaurantLoadingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Reports\ReportsByInventoryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

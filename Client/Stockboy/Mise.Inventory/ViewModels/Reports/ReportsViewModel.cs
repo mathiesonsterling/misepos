@@ -13,7 +13,7 @@ namespace Mise.Inventory.ViewModels.Reports
 	public class ReportsViewModel : BaseViewModel
 	{
 	    private readonly IReportsService _reportsService;
-		private readonly IInventoryService _inventoryService;
+		protected readonly IInventoryService _inventoryService;
 		private readonly ILoginService _loginService;
 		public ReportsViewModel(IAppNavigation navigation, ILogger logger, 
 			IReportsService reportsService, IInventoryService inventoryService, ILoginService loginService) : base(navigation, logger)

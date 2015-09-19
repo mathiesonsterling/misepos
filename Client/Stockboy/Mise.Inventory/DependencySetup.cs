@@ -144,6 +144,7 @@ namespace Mise.Inventory
 			cb.RegisterType<ReceivingOrderViewModel>().SingleInstance();
 		    cb.RegisterType<UpdateReceivingOrderLineItemViewModel>().SingleInstance();
 			cb.RegisterType<ReportsViewModel>().SingleInstance();
+			cb.RegisterType<ReportsByInventoryViewModel> ().SingleInstance ();
 			cb.RegisterType<RestaurantSelectViewModel>().SingleInstance();
 			cb.RegisterType<SectionAddViewModel>().SingleInstance();
 			cb.RegisterType<SectionSelectViewModel>().SingleInstance();
