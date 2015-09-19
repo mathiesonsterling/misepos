@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
+using Mise.Core.Services;
 using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Core.Common.Services.Implementation
@@ -325,7 +326,13 @@ namespace Mise.Core.Common.Services.Implementation
 
 	        return LiquidContainerShape.DefaultBottleShape;
 	    }
-		#endregion
+
+	    public IEnumerable<ICategory> GetPossibleCategories(string givenCategory)
+	    {
+	        return _allCats.Where(c => c.Name.Contains(givenCategory) || givenCategory.Contains(c.Name));
+	    }
+
+	    #endregion
 	}
 }
 

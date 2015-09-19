@@ -25,7 +25,6 @@ namespace Mise.Core.Server.Services.Implementation
     /// </summary>
     public class FakeInventoryServiceDAL : IEntityDAL
     {
-        private const MiseAppTypes FAKE_APP_CODE = MiseAppTypes.DummyData;
         #region Fields
 
         private List<IInventory> _restaurauntInventories;
@@ -57,12 +56,12 @@ namespace Mise.Core.Server.Services.Implementation
             _invitations = new List<IApplicationInvitation>();
             foreach (var rest in _restaurants)
             {
-                _employees.AddRange(await fakeInventoryWebService.GetEmployeesForRestaurant(rest.ID));
-                _vendors.AddRange(await fakeInventoryWebService.GetVendorsAssociatedWithRestaurant(rest.ID));
-                _restaurauntInventories.AddRange(await fakeInventoryWebService.GetInventoriesForRestaurant(rest.ID));
-                _receivingOrders.AddRange(await fakeInventoryWebService.GetReceivingOrdersForRestaurant(rest.ID));
-                _pars.AddRange(await fakeInventoryWebService.GetPARsForRestaurant(rest.ID));
-                _invitations.AddRange(await fakeInventoryWebService.GetInvitationsForRestaurant(rest.ID));
+                _employees.AddRange(await fakeInventoryWebService.GetEmployeesForRestaurant(rest.Id));
+                _vendors.AddRange(await fakeInventoryWebService.GetVendorsAssociatedWithRestaurant(rest.Id));
+                _restaurauntInventories.AddRange(await fakeInventoryWebService.GetInventoriesForRestaurant(rest.Id));
+                _receivingOrders.AddRange(await fakeInventoryWebService.GetReceivingOrdersForRestaurant(rest.Id));
+                _pars.AddRange(await fakeInventoryWebService.GetPARsForRestaurant(rest.Id));
+                _invitations.AddRange(await fakeInventoryWebService.GetInvitationsForRestaurant(rest.Id));
             }
         }
         public FakeInventoryServiceDAL()
@@ -94,7 +93,7 @@ namespace Mise.Core.Server.Services.Implementation
                 AppsOnAccount = new List<MiseAppTypes> {MiseAppTypes.StockboyMobile},
                 BillingCycle = TimeSpan.MaxValue,
                 CreatedDate = DateTime.UtcNow,
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 CurrentCard = null,
                 PrimaryEmail = email,
                 Emails = new List<EmailAddress> {email},
@@ -123,7 +122,7 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task<IRestaurant> GetRestaurantAsync(Guid restaurantID)
         {
-            return Task.FromResult(_restaurants.FirstOrDefault(r => r.ID == restaurantID) as IRestaurant);
+            return Task.FromResult(_restaurants.FirstOrDefault(r => r.Id == restaurantID) as IRestaurant);
         }
 
         public Task<IEnumerable<IRestaurant>> GetRestaurantsAsync()
@@ -133,7 +132,7 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task AddRestaurantAsync(IRestaurant restaurant)
         {
-            if (_restaurants.Select(r => r.ID).Contains(restaurant.ID) == false)
+            if (_restaurants.Select(r => r.Id).Contains(restaurant.Id) == false)
             {
                 _restaurants.Add(restaurant as Restaurant);
             }
@@ -207,7 +206,7 @@ namespace Mise.Core.Server.Services.Implementation
         {
             return Task.Run(() =>
             {
-                var existing = _employees.FirstOrDefault(emp => employee.ID == emp.ID);
+                var existing = _employees.FirstOrDefault(emp => employee.Id == emp.Id);
                 if (existing == null) return;
 
                 _employees.Remove(existing);
@@ -233,7 +232,7 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task AddInventoryAsync(IInventory inventory)
         {
-            if (_restaurauntInventories.Select(ri => ri.ID).Contains(inventory.ID) == false)
+            if (_restaurauntInventories.Select(ri => ri.Id).Contains(inventory.Id) == false)
             {
                 _restaurauntInventories.Add(inventory);
             }
@@ -242,7 +241,7 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task UpdateInventoryAsync(IInventory inventory)
         {
-            var foundInv = _restaurauntInventories.FirstOrDefault(ri => ri.ID == inventory.ID);
+            var foundInv = _restaurauntInventories.FirstOrDefault(ri => ri.Id == inventory.Id);
             if (foundInv != null)
             {
                 _restaurauntInventories.Remove(foundInv);
@@ -308,7 +307,7 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersAsync(IVendor vendor)
         {
-            return Task.FromResult( _receivingOrders.Where(ro => ro.VendorID == vendor.ID));
+            return Task.FromResult( _receivingOrders.Where(ro => ro.VendorID == vendor.Id));
         }
 
         public Task UpdatePARAsync(IPar arg)
@@ -354,7 +353,7 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task UpdateApplicationInvitation(IApplicationInvitation invite)
         {
-            var exIn = _invitations.FirstOrDefault(i => i.ID == invite.ID);
+            var exIn = _invitations.FirstOrDefault(i => i.Id == invite.Id);
             _invitations.Remove(exIn);
             _invitations.Add(exIn);
 
@@ -363,7 +362,7 @@ namespace Mise.Core.Server.Services.Implementation
 
         public Task UpdatePARLineItemAsync(IParBeverageLineItem lineItem)
         {
-            var par = _pars.FirstOrDefault(p => p.GetBeverageLineItems().Select(pLi => pLi.ID).Contains(lineItem.ID));
+            var par = _pars.FirstOrDefault(p => p.GetBeverageLineItems().Select(pLi => pLi.Id).Contains(lineItem.Id));
             if (par != null)
             {
                 var downCast = par as Par;
@@ -371,7 +370,7 @@ namespace Mise.Core.Server.Services.Implementation
                 {
                     return Task.FromResult(false);
                 }
-                var oldLI = downCast.ParLineItems.FirstOrDefault(l => l.ID == lineItem.ID);
+                var oldLI = downCast.ParLineItems.FirstOrDefault(l => l.Id == lineItem.Id);
                 downCast.ParLineItems.Remove(oldLI);
                 downCast.ParLineItems.Add(lineItem as ParBeverageLineItem);
                 return Task.FromResult(true);

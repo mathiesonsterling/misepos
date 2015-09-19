@@ -40,9 +40,10 @@ namespace DeveloperTools.Commands
             var fileName = await GetFileNameForRestaurant(table, lastInv, "Inventory");
 
             Report("Exporting items to CSV");
-            var service = new InventoryCSVExportService(_logger);
 
-            var bytes = await service.ExportInventoryToCsv(lastInv);
+            var service = new CSVExportService(_logger);
+
+            var bytes = await service.ExportInventoryToCsvBySection(lastInv);
 
             Report("Writing CSV to file");
             using (var file = new FileStream(fileName, FileMode.Create))
