@@ -29,7 +29,7 @@ namespace Mise.Inventory.ViewModels.Reports
 			EndInventory = null;
 
 			//load the inventories into the possibles
-			CompletedInventories = await _inventoryService.GetCompletedInventoriesForCurrentRestaurant (null, null);
+			CompletedInventories = await InventoryService.GetCompletedInventoriesForCurrentRestaurant (null, null);
 		}
 
 		#endregion
@@ -38,20 +38,6 @@ namespace Mise.Inventory.ViewModels.Reports
 			get{ return GetValue<IEnumerable<IInventory>> (); }
 			private set{ SetValue (value); }
 		}
-
-		public IInventory StartInventory{get{return GetValue<IInventory>();}
-			set{ 
-				StartDate = value.DateCompleted.Value.DateTime;
-				SetValue(value);
-			}
-		}
-		public IInventory EndInventory{
-			get{
-				return GetValue<IInventory> ();
-			}
-			set{ 
-				SetValue (value); }}
-
 	}
 }
 

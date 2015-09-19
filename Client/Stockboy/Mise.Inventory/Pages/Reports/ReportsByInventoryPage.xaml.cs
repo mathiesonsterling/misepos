@@ -13,11 +13,38 @@ namespace Mise.Inventory.Pages.Reports
 		public ReportsByInventoryPage ()
 		{
 			InitializeComponent ();
-            pickerStart.SelectedIndexChanged += (sender, args) =>
-            {
-                
-            }
+		    pickerStart.SelectedIndexChanged += (sender, args) =>
+            { 
+                var vm = ViewModel as ReportsByInventoryViewModel;
+                if (vm != null)
+                {
+                    vm.StartInventory = SelectItem(pickerStart);
+                }
+		    };
+
+		    pickerEnd.SelectedIndexChanged += (sender, args) =>
+		    {
+		        var vm = ViewModel as ReportsByInventoryViewModel;
+		        if (vm != null)
+		        {
+		            vm.EndInventory = SelectItem(pickerEnd);
+		        }
+		    };
 		}
+
+	    private IInventory SelectItem(Picker picker)
+	    {
+            if (_possibleInventories != null)
+            {
+                var selectedString = picker.Items[picker.SelectedIndex];
+                if (_possibleInventories.ContainsKey(selectedString))
+                {
+                    var selected = _possibleInventories[selectedString];
+                    return selected;
+                }
+            }
+	        return null;
+	    }
 
 		public override BaseViewModel ViewModel => App.ReportsByInventoryViewModel;
 
