@@ -10,11 +10,11 @@ using Mise.Core.Services.UtilityServices;
 
 namespace Mise.VendorManagement.Services.Implementation
 {
-    public class IcsvCSVExportService : BaseCsvWriter, ICSVExportService
+    public class CSVExportService : BaseCsvWriter, ICSVExportService
     {
         private readonly ILogger _logger;
 
-        public IcsvCSVExportService(ILogger logger)
+        public CSVExportService(ILogger logger)
         {
             _logger = logger;
         }

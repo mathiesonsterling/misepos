@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
-using Mise.Core.Common;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.DTOs;
@@ -22,15 +19,13 @@ namespace DeveloperTools.Commands
     class PopulateInventorySqlServerDBCommand : BaseProgressReportingCommand
     {
         private readonly ILogger _logger;
-        private readonly Uri _uri;
         private readonly bool _addDemo;
 
         private readonly IMobileServiceClient _client;
         private readonly EntityDataTransportObjectFactory _entityDataTransportObjectFactory;
-        public PopulateInventorySqlServerDBCommand(IProgress<ProgressReport> progress, ILogger logger, Uri uri, BuildLevel level) : base(progress)
+        public PopulateInventorySqlServerDBCommand(IProgress<ProgressReport> progress, ILogger logger, BuildLevel level) : base(progress)
         {
             _logger = logger;
-            _uri = uri;
             _addDemo = level == BuildLevel.Development;
 
             var mobileServiceLocation = AzureServiceLocator.GetAzureMobileServiceLocation(level);
@@ -54,9 +49,9 @@ namespace DeveloperTools.Commands
 
             public void Add(RestaurantEntityDataTransportObject dto)
             {
-                if (ContainsKey(dto.ID) == false)
+                if (ContainsKey(dto.Id) == false)
                 {
-                    Add(dto.ID, dto);
+                    Add(dto.Id, dto);
                 }
             }
         } 
@@ -85,7 +80,7 @@ namespace DeveloperTools.Commands
             var rests = (await fakeService.GetRestaurantsAsync()).ToList();
             if (_addDemo == false)
             {
-                rests = rests.Where(r => r.ID != Guid.Empty).ToList();
+                rests = rests.Where(r => r.Id != Guid.Empty).ToList();
             }
             var restDTOs = rests
                 .Select(r => r as Restaurant)
@@ -97,7 +92,7 @@ namespace DeveloperTools.Commands
             var vendors = await fakeService.GetVendorsAsync();
             if (_addDemo == false)
             {
-                vendors = vendors.Where(v => v.ID != Guid.Empty);
+                vendors = vendors.Where(v => v.Id != Guid.Empty);
             }
             var vendDTOs = vendors
                 .Select(v => v as Vendor)
@@ -107,10 +102,10 @@ namespace DeveloperTools.Commands
 
             foreach (var rest in rests)
             {
-                var emps = await fakeService.GetEmployeesAsync(rest.ID);
+                var emps = await fakeService.GetEmployeesAsync(rest.Id);
                 foreach (var emp in emps)
                 {
-                    if (emp.ID == Guid.Empty)
+                    if (emp.Id == Guid.Empty)
                     {
                         throw new Exception("Employee does not have ID");
                     }
@@ -128,10 +123,10 @@ namespace DeveloperTools.Commands
                 Report("Added employees to " + rest.Name.ShortName);
 
 
-                var inventories = await fakeService.GetInventoriesAsync(rest.ID);
+                var inventories = await fakeService.GetInventoriesAsync(rest.Id);
                 foreach (var inv in inventories)
                 {
-                    if (inv.ID == Guid.Empty)
+                    if (inv.Id == Guid.Empty)
                     {
                         throw new Exception("Inventory does not have ID");
                     }
@@ -140,22 +135,22 @@ namespace DeveloperTools.Commands
                 }
                 Report("Added inventories to " + rest.Name.ShortName);
 
-                var ros = await fakeService.GetReceivingOrdersAsync(rest.ID);
+                var ros = await fakeService.GetReceivingOrdersAsync(rest.Id);
                 foreach (var ro in ros)
                 {
-                    if (ro.ID == Guid.Empty)
+                    if (ro.Id == Guid.Empty)
                     {
                         throw new Exception("RO does not have ID");
                     }
-                    var actualRO = ro as ReceivingOrder;
-                    allDTOs.Add(_entityDataTransportObjectFactory.ToDataTransportObject(actualRO));
+                    var actualReceivingOrder = ro as ReceivingOrder;
+                    allDTOs.Add(_entityDataTransportObjectFactory.ToDataTransportObject(actualReceivingOrder));
                 }
                 //pgBar.Value += perRestAmt / NUM_INNER_STEPS;
                 Report("Added receiving orders to " + rest.Name.ShortName);
-                var pos = await fakeService.GetPurchaseOrdersAsync(rest.ID);
+                var pos = await fakeService.GetPurchaseOrdersAsync(rest.Id);
                 foreach (var po in pos.Select(p => p as PurchaseOrder))
                 {
-                    if (po.ID == Guid.Empty)
+                    if (po.Id == Guid.Empty)
                     {
                         throw new Exception("PO does not have ID");
                     }
@@ -164,10 +159,10 @@ namespace DeveloperTools.Commands
                 }
                 Report("Added purchase orders to " + rest.Name.ShortName);
                 //pgBar.Value += perRestAmt / NUM_INNER_STEPS;
-                var pars = await fakeService.GetPARsAsync(rest.ID);
+                var pars = await fakeService.GetPARsAsync(rest.Id);
                 foreach (var par in pars.Select(p => p as Par))
                 {
-                    if (par.ID == Guid.Empty)
+                    if (par.Id == Guid.Empty)
                     {
                         throw new Exception("PAR does not have ID");
                     }

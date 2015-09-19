@@ -17,6 +17,7 @@ using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
 using Mise.Core.Common;
 using Mise.Core.Common.Services.WebServices;
+using Mise.Core.Services;
 using Mise.Inventory.ViewModels.Reports;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 

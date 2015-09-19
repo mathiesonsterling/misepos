@@ -39,9 +39,8 @@ namespace DeveloperTools.Commands
             var fileName = await GetFileNameForRestaurant(table, lastPar, "Par");
 
             Report("Export items to CSV");
-            var service = new ParCsvExportService(_logger);
-
-            await service.ExportParToCsvFile(fileName, lastPar);
+            var service = new CSVExportService(_logger);
+            await service.ExportParToCSV(lastPar);
 
             Finish();
         }

@@ -8,6 +8,7 @@ using Mise.Core.ValueItems.Inventory;
 using System.Threading.Tasks;
 using Mise.Core;
 using Mise.Core.Entities.Inventory;
+using Mise.Core.Services;
 using Xamarin.Forms;
 
 namespace Mise.Inventory.ViewModels
