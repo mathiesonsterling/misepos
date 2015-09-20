@@ -32,9 +32,37 @@ namespace Mise.Inventory.ViewModels.Reports
 			CompletedInventories = await InventoryService.GetCompletedInventoriesForCurrentRestaurant (null, null);
 		}
 
-		#endregion
+        #endregion
 
-		public IEnumerable<IInventory> CompletedInventories {
+        public IInventory StartInventory
+        {
+            get { return GetValue<IInventory>(); }set{SetValue(value);}
+        }
+
+        public IInventory EndInventory
+        {
+            get{return GetValue<IInventory>();}set{SetValue(value);}
+        }
+
+	    protected override async Task DoGenericRequestFor(ReportTypes type)
+	    {
+            try
+            {
+                Processing = true;
+                var unit = (LiquidAmountUnits)Enum.Parse(typeof(LiquidAmountUnits), LiquidUnit);
+
+                var request = new ReportRequest(type, StartInventory, EndInventory, null, null, unit);
+                await ReportsService.SetCurrentReportRequest(request);
+                Processing = false;
+                await Navigation.ShowReportResults();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+            }
+        }
+
+	    public IEnumerable<IInventory> CompletedInventories {
 			get{ return GetValue<IEnumerable<IInventory>> (); }
 			private set{ SetValue (value); }
 		}

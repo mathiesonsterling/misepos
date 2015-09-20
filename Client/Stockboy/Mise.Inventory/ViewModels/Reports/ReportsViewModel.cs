@@ -13,14 +13,14 @@ namespace Mise.Inventory.ViewModels.Reports
 {
 	public class ReportsViewModel : BaseViewModel
 	{
-	    private readonly IReportsService _reportsService;
+	    protected readonly IReportsService ReportsService;
 		protected readonly IInventoryService InventoryService;
 		private readonly ILoginService _loginService;
 		public ReportsViewModel(IAppNavigation navigation, ILogger logger, 
 			IReportsService reportsService, IInventoryService inventoryService, ILoginService loginService) : base(navigation, logger)
 		{
 			_loginService = loginService;
-		    _reportsService = reportsService;
+		    ReportsService = reportsService;
 			InventoryService = inventoryService;
 		    StartDate = new DateTime(2015, 1, 1);
 			EndDate = DateTime.Now.AddDays(1);
@@ -45,28 +45,6 @@ namespace Mise.Inventory.ViewModels.Reports
         public DateTime StartDate { get { return GetValue<DateTime>(); } set { SetValue(value);} }
         public DateTime EndDate { get { return GetValue<DateTime>(); } set { SetValue(value);} }
 
-        public IInventory StartInventory
-        {
-            get { return GetValue<IInventory>(); }
-            set
-            {
-                StartDate = value.DateCompleted.Value.DateTime;
-                SetValue(value);
-            }
-        }
-        public IInventory EndInventory
-        {
-            get
-            {
-                return GetValue<IInventory>();
-            }
-            set
-            {
-                EndDate = value.DateCompleted.Value.DateTime;
-                SetValue(value);
-            }
-        }
-
         public string LiquidUnit{get{return GetValue<string> ();}set{ SetValue (value); }}
         #endregion
 
@@ -87,7 +65,7 @@ namespace Mise.Inventory.ViewModels.Reports
                 //set our request to limit dates
 				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
 	            var request = new ReportRequest(ReportTypes.CompletedInventory, StartDate, EndDate, null, null, unit);
-	            await _reportsService.SetCurrentReportRequest(request);
+	            await ReportsService.SetCurrentReportRequest(request);
 	            Processing = false;
                 await Navigation.ShowSelectCompletedInventory();
 	        }
@@ -115,13 +93,13 @@ namespace Mise.Inventory.ViewModels.Reports
 
 	    #endregion
 
-		private async Task DoGenericRequestFor(ReportTypes type){
+		protected virtual async Task DoGenericRequestFor(ReportTypes type){
 			try{
 				Processing = true;
 				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
 		
 				var request = new ReportRequest (type, StartDate, EndDate, null, null, unit);
-				await _reportsService.SetCurrentReportRequest (request);
+				await ReportsService.SetCurrentReportRequest (request);
 				Processing = false;
 				await Navigation.ShowReportResults ();
 			}
