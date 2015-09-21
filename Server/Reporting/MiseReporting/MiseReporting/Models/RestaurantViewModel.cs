@@ -28,7 +28,7 @@ namespace MiseReporting.Models
 
         public RestaurantViewModel(IRestaurant rest)
         {
-            Id = rest.ID;
+            Id = rest.Id;
 
             if (rest.StreetAddress?.City != null && rest.StreetAddress.State != null)
             {

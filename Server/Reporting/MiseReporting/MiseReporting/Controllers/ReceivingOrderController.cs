@@ -28,7 +28,7 @@ namespace MiseReporting.Controllers
         public ReceivingOrderController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _icsvExportService = new IcsvCSVExportService(new DummyLogger());
+            _icsvExportService = new CSVExportService(new DummyLogger());
         }
 
         // GET: ReceivingOrder

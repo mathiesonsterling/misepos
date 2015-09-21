@@ -33,7 +33,7 @@ namespace MiseReporting.Models
             }
             LastUpdated = source.LastUpdatedDate.LocalDateTime;
             DateCreated = source.CreatedDate.LocalDateTime;
-            Id = source.ID;
+            Id = source.Id;
 
             if (emp != null)
             {

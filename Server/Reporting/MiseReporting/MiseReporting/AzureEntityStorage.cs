@@ -42,7 +42,7 @@ namespace MiseReporting
             return new RestaurantEntityDataTransportObject
             {
                 SourceType = Type.GetType(MiseEntityType),
-                ID = EntityID,
+                Id = EntityID,
                 RestaurantID = RestaurantID,
                 JSON = EntityJSON,
                 LastUpdatedDate = LastUpdatedDate

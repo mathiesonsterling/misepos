@@ -26,7 +26,7 @@ namespace MiseReporting.Controllers
         public ParsController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _icsvExportService = new IcsvCSVExportService(new DummyLogger());
+            _icsvExportService = new CSVExportService(new DummyLogger());
         }
 
         // GET: Pars

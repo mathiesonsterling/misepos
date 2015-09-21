@@ -26,7 +26,7 @@ namespace MiseReporting.Models
 
         protected BaseBeverageLineItemViewModel(IBaseBeverageLineItem source)
         {
-            Id = source.ID;
+            Id = source.Id;
             Name = source.DisplayName;
             UPC = source.UPC;
             if (source.Container != null)

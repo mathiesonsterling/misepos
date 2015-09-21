@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Vendors;
@@ -29,7 +26,7 @@ namespace MiseReporting.Models
 
         public ReceivingOrderViewModel(IReceivingOrder ro, IVendor vendor, IEmployee emp)
         {
-            Id = ro.ID;
+            Id = ro.Id;
             DateCreated = ro.CreatedDate.ToLocalTime().DateTime;
             LastUpdated = ro.CreatedDate.ToLocalTime().DateTime;
             InvoiceId = ro.InvoiceID;

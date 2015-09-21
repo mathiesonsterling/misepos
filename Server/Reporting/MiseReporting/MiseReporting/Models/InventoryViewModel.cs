@@ -32,7 +32,7 @@ namespace MiseReporting.Models
             DateCreated = source.CreatedDate.ToLocalTime().LocalDateTime;
             DateCreatedUTC = source.CreatedDate.DateTime;
 
-            Id = source.ID;
+            Id = source.Id;
             NumLineItems = source.GetBeverageLineItems().Count();
         }
     }

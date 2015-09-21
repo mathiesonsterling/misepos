@@ -25,7 +25,7 @@ namespace MiseReporting.Controllers
         public InventoriesController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _icsvExportService = new IcsvCSVExportService(new DummyLogger());
+            _icsvExportService = new CSVExportService(new DummyLogger());
         }
 
         // GET: Inventories
