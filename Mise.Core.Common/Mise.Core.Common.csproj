@@ -54,6 +54,7 @@
     <Compile Include="Entities\DTOs\EntityDataTransportObjectFactory.cs" />
     <Compile Include="Entities\Reports\AmountUsedInTimeReport.cs" />
     <Compile Include="Entities\Reports\BaseReport.cs" />
+    <Compile Include="Entities\Reports\COGsReport.cs" />
     <Compile Include="Entities\Reports\CompletedInventoryReport.cs" />
     <Compile Include="Events\Accounts\AccountRegisteredFromMobileDeviceEvent.cs" />
     <Compile Include="Events\Accounts\BaseAccountEvent.cs" />
