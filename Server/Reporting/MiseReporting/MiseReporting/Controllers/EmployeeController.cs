@@ -130,6 +130,10 @@ namespace MiseReporting.Controllers
                 {
                     //get the original to get the restaurants for now
                     var orign = db.AzureEntityStorages.FirstOrDefault(a => a.EntityID == emp.Id);
+                    if (orign == null)
+                    {
+                        throw new ArgumentException("No employee found for id " + empId);
+                    }
                     var originalEmp = _dtoFactory.FromDataStorageObject<Employee>(orign.ToRestaurantDTO());
                     db.AzureEntityStorages.Remove(orign);
 
@@ -237,15 +241,7 @@ namespace MiseReporting.Controllers
 
         private AzureEntityStorage ViewModelToAi(EmployeeViewModel emp, Password origPassword)
         {
-            Password password;
-            if (string.IsNullOrEmpty(emp.Password) == false)
-            {
-                password = new Password(emp.Password);
-            }
-            else
-            {
-                password = origPassword;
-            }
+            var password = string.IsNullOrEmpty(emp.Password) == false ? new Password(emp.Password) : origPassword;
 
             var name = new PersonName(emp.FirstName, emp.MiddleName, emp.LastName);
             var email = new EmailAddress(emp.Email);
