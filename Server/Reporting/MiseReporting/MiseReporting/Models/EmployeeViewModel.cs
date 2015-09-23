@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Mise.Core.Entities;
+using System.Web.Mvc;
 using Mise.Core.Entities.People;
 
 namespace MiseReporting.Models
@@ -21,18 +22,27 @@ namespace MiseReporting.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        public IEnumerable<RestaurantViewModel> RestaurantsWorkedAt { get; set; } 
+        public IEnumerable<RestaurantViewModel> Restaurants{ get; set; }
+
+        [DisplayName("Restaurants Worked At")]
+        public string RestaurantsDisplay
+        {
+            get
+            {
+                return Restaurants != null ? string.Join(",", Restaurants.Select(r => r.Name)) : string.Empty;
+            }
+        }
 
         public IEnumerable<RestaurantViewModel> PossibleRestaurants { get; set; }
-         
-        public string RestaurantsDisplay { get { return string.Join(",", RestaurantsWorkedAt.Select(r => r.Name)); } }
+
+        public IEnumerable<Guid> PostedRestaurantGuids { get; set; }
 
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         public EmployeeViewModel() { }
 
-        public EmployeeViewModel(IEmployee emp, IEnumerable<RestaurantViewModel> restaurantsWorkedAt)
+        public EmployeeViewModel(IEmployee emp, IEnumerable<RestaurantViewModel> restaurants)
         {
             Id = emp.Id;
             if (emp.Name == null)
@@ -45,9 +55,9 @@ namespace MiseReporting.Models
 
             Email = emp.PrimaryEmail.Value;
 
-            RestaurantsWorkedAt = restaurantsWorkedAt;
+            Restaurants = restaurants;
 
-            Password = emp.Password != null ? "********" : string.Empty;
+            Password = string.Empty;
         }
     }
 }

@@ -119,7 +119,7 @@ namespace Mise.Core.Common.Entities
 			set;
 		}
 
-		public IList<EmailAddress> Emails {
+	    public IList<EmailAddress> Emails {
 			get;
 			set;
 		}

@@ -48,5 +48,17 @@ namespace MiseReporting
                 LastUpdatedDate = LastUpdatedDate
             };
         }
+
+        public AzureEntityStorage() { }
+
+        public AzureEntityStorage(RestaurantEntityDataTransportObject dto)
+        {
+            Id = dto.Id.ToString();
+            MiseEntityType = dto.SourceType.ToString();
+            EntityID = dto.Id;
+            RestaurantID = dto.RestaurantID;
+            EntityJSON = dto.JSON;
+            LastUpdatedDate = dto.LastUpdatedDate;
+        }
     }
 }
