@@ -53,6 +53,8 @@ namespace MiseVendorManagement.Models
 
         public IEnumerable<string> PossibleStates { get; private set; }
 
+        public IEnumerable<VendorItemForSaleViewModel> ItemsForSale { get; private set; }
+         
         public VendorViewModel()
         {
             PossibleStates = Mise.Core.ValueItems.State.GetUSStates().Select(s => s.Name).OrderBy(s => s);
@@ -61,7 +63,7 @@ namespace MiseVendorManagement.Models
 
         public VendorViewModel(IVendor v) : this()
         {
-            Id = v.ID;
+            Id = v.Id;
             Name = v.Name;
             if (v.StreetAddress != null)
             {
@@ -83,6 +85,8 @@ namespace MiseVendorManagement.Models
                 PhoneNumber = v.PhoneNumber.Number;
             }
             HasItems = v.GetItemsVendorSells().Any();
+            ItemsForSale = v.GetItemsVendorSells().Select(li => new VendorItemForSaleViewModel(li));
         }
+
     }
 }

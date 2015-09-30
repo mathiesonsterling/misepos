@@ -126,7 +126,7 @@ namespace MiseVendorManagement.Controllers
             {
                 CreatedDate = DateTimeOffset.UtcNow,
                 EmailToOrderFrom = new EmailAddress(vm.Email),
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 LastUpdatedDate = DateTimeOffset.UtcNow,
                 Name = vm.Name,
                 PhoneNumber = new PhoneNumber(vm.PhoneAreaCode, vm.PhoneNumber),

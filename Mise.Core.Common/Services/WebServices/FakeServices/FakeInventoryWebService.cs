@@ -237,7 +237,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 
 		List<Vendor> CreateVendors(Guid restID, Guid marketingID)
 		{
-		    var ml750 = LiquidContainer.Bottle750ML;
+		    var ml750 = LiquidContainer.Bottle750Ml;
 			var ml118 = new LiquidContainer {
 				AmountContained = new LiquidAmount{ Milliliters = 118 }
 			};
@@ -427,7 +427,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			
 		List<Par> CreatePars(Guid restID, Guid empID)
 		{
-		    var container = LiquidContainer.Bottle750ML;
+		    var container = LiquidContainer.Bottle750Ml;
 			var lis750 = new Dictionary<string, string> {
 
 				{"Ayelsbury Duck","1"},

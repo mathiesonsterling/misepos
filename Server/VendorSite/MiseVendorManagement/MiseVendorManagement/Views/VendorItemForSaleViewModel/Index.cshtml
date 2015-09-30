@@ -1,0 +1,68 @@
+﻿@model MiseVendorManagement.Models.VendorViewModel
+
+@{
+    ViewBag.Title = "Items offered";
+}
+
+<h2>Items sold by @Model.Name</h2>
+<p>
+    @Html.ActionLink("Create New", "Create", new {vendorId = @Model.Id})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            UPC
+        </th>
+        <th>
+            Container
+        </th>
+        <th>
+            Published Price
+        </th>
+        <th>
+            Case Size
+        </th>
+        <th>
+            Container Size in ML
+        </th>
+        <th>
+            Categories
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.ItemsForSale) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UPC)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContainerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PublicPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CaseSize)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContainerSizeML)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Categories)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { vendorId = item.VendorId, lineItemId = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { vendorId = item.VendorId, lineItemId = item.Id})
+            @Html.ActionLink("Delete", "Delete", new { vendorId = item.VendorId, lineItemId = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

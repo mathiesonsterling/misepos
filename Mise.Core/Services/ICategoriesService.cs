@@ -23,6 +23,12 @@ namespace Mise.Core.Services
         /// <param name="givenCategory"></param>
         /// <returns></returns>
 	    IEnumerable<ICategory> GetPossibleCategories(string givenCategory);
+
+        /// <summary>
+        /// Gets all categories where we can add an item to
+        /// </summary>
+        /// <returns></returns>
+	    IEnumerable<ICategory> GetAssignableCategories();
 	}
 }
 

@@ -57,41 +57,36 @@ namespace MiseVendorManagement
             });
         }
 
-        public Task InsertVendor(Vendor vendor)
+        public async Task InsertVendor(Vendor vendor)
         {
-            return Task.Run(() =>
-            {
-                var dto = _entityFactory.ToDataTransportObject(vendor);
-                var azureEnt = new AzureEntityStorage(dto);
+            var dto = _entityFactory.ToDataTransportObject(vendor);
+            var azureEnt = new AzureEntityStorage(dto);
 
-                using (var db = new AzureDB())
-                {
-                    db.AzureEntityStorages.Add(azureEnt);
-                }
-            });
+            using (var db = new AzureDB())
+            {
+                db.AzureEntityStorages.Add(azureEnt);
+                await db.SaveChangesAsync();
+            }
         }
 
-        public Task UpdateVendor(Vendor vendor)
+        public async Task UpdateVendor(Vendor vendor)
         {
-            return Task.Run(() =>
+            using (var db = new AzureDB())
             {
-                using (var db = new AzureDB())
+                var oldVer = db.AzureEntityStorages.FirstOrDefault(ai => ai.EntityID == vendor.Id && ai.MiseEntityType == _vendorType);
+                if (oldVer == null)
                 {
-                    var oldVer = db.AzureEntityStorages.FirstOrDefault(ai => ai.EntityID == vendor.ID && ai.MiseEntityType == _vendorType);
-                    if (oldVer == null)
-                    {
-                        throw new InvalidOperationException("Cannot find vendor to update in DB");
-                    }
-
-                    var newVerDTO = _entityFactory.ToDataTransportObject(vendor);
-
-                    oldVer.EntityJSON = newVerDTO.JSON;
-                    oldVer.LastUpdatedDate = newVerDTO.LastUpdatedDate;
-                    
-                    db.Entry(oldVer).State = EntityState.Modified;
-                    return db.SaveChangesAsync();
+                    throw new InvalidOperationException("Cannot find vendor to update in DB");
                 }
-            });
+
+                var newVerDTO = _entityFactory.ToDataTransportObject(vendor);
+
+                oldVer.EntityJSON = newVerDTO.JSON;
+                oldVer.LastUpdatedDate = newVerDTO.LastUpdatedDate;
+                    
+                db.Entry(oldVer).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
         }
     }
 }
