@@ -76,11 +76,15 @@ namespace MiseReporting.Controllers
 
         // POST: Employee/Create
         [HttpPost]
-        public async Task<ActionResult> Create(Guid empId, FormCollection formCollection)
+        public async Task<ActionResult> Create(FormCollection formCollection)
         {
             try
             {
                 var emp = FormCollectionToVM(formCollection);
+                if (emp.Id == Guid.Empty)
+                {
+                    emp.Id = Guid.NewGuid();
+                }
                 var ai = ViewModelToAi(emp, null);
 
                 using (var db = new AzureNonTypedEntities())
@@ -177,7 +181,6 @@ namespace MiseReporting.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
                 using (var db = new AzureNonTypedEntities())
                 {
                     var existing = await db.AzureEntityStorages.Where(ai => ai.EntityID == empId).FirstOrDefaultAsync();
@@ -200,10 +203,16 @@ namespace MiseReporting.Controllers
         {
             var selectedGuids = collection["PostedRestaurantGuids"].Split(new[] { ',' });
             var guids = selectedGuids.Where(s => string.IsNullOrEmpty(s) == false).Select(Guid.Parse);
+
+            Guid id;
+            if (Guid.TryParse(collection["id"], out id) == false)
+            {
+                id = Guid.Empty;
+            }
             //get the AI
             var emp = new EmployeeViewModel
             {
-                Id = Guid.Parse(collection["Id"]),
+                Id = id,
                 FirstName = collection["FirstName"],
                 MiddleName = collection["MiddleName"],
                 LastName = collection["LastName"],

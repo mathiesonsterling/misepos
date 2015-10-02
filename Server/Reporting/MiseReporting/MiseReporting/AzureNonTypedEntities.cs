@@ -29,5 +29,7 @@ namespace MiseReporting
         public System.Data.Entity.DbSet<MiseReporting.Models.PurchaseOrderViewModel> PurchaseOrderViewModels { get; set; }
 
         public System.Data.Entity.DbSet<MiseReporting.Models.EmployeeViewModel> EmployeeViewModels { get; set; }
+
+        public System.Data.Entity.DbSet<MiseReporting.Models.RestaurantViewModel> RestaurantViewModels { get; set; }
     }
 }

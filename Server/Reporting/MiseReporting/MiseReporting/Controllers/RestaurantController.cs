@@ -15,19 +15,20 @@ namespace MiseReporting.Controllers
     {
 
         private readonly EntityDataTransportObjectFactory _dtoFactory;
+        private readonly string _restType;
         public RestaurantController()
         {
+            _restType = typeof(Restaurant).ToString();
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
         }
 
         // GET: Restaurant
         public async Task<ActionResult> Index()
         {
-            var restType = typeof (Restaurant).ToString();
             var viewModels = new List<RestaurantViewModel>();
             using (var db = new AzureNonTypedEntities())
             {
-                var restAIs = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == restType).ToListAsync();
+                var restAIs = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _restType).ToListAsync();
                 var dtos = restAIs.Select(ai => ai.ToRestaurantDTO());
                 var rests = dtos.Select(dto => _dtoFactory.FromDataStorageObject<Restaurant>(dto));
                 var vms = rests.Select(r => new RestaurantViewModel(r));
@@ -38,9 +39,94 @@ namespace MiseReporting.Controllers
         }
 
         // GET: Restaurant/Details/5
-        public ActionResult Details(Guid id) 
+        public async Task<ActionResult> Details(Guid id)
         {
-            return View();
+            var restVM = await GetVMForId(id);
+
+            return View(restVM);
+        }
+
+
+        public ActionResult Create()
+        {
+            var vm = new RestaurantViewModel
+            {
+            };
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(RestaurantViewModel vm)
+        {
+            try
+            {
+                if (ModelState.IsValid == false)
+                {
+                    return View(vm);
+                }
+
+                //TODO check we're not duplicating
+                vm.Id = Guid.NewGuid();
+                var ent = vm.ToEntity();
+                var dto = _dtoFactory.ToDataTransportObject(ent);
+                var ai = new AzureEntityStorage(dto);
+
+                using (var db = new AzureNonTypedEntities())
+                {
+                    db.AzureEntityStorages.Add(ai);
+                    await db.SaveChangesAsync();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                return View();
+            }
+        }
+
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var vm = await GetVMForId(id);
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(RestaurantViewModel vm)
+        {
+            try
+            {
+                var id = vm.Id;
+                using (var db = new AzureNonTypedEntities())
+                {//delete all items for the restaurant as well
+                    var items = await db.AzureEntityStorages.Where(ai => ai.RestaurantID == id).ToListAsync();
+                    foreach (var item in items)
+                    {
+                        item.Deleted = true;
+                        db.Entry(item).State = EntityState.Modified;
+                        db.AzureEntityStorages.Remove(item);
+                    }
+                    await db.SaveChangesAsync();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                return View();
+            } 
+        }
+
+        private async Task<RestaurantViewModel> GetVMForId(Guid id)
+        {
+            RestaurantViewModel restVM;
+            using (var db = new AzureNonTypedEntities())
+            {
+                var restAI = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _restType && ai.EntityID == id)
+                    .FirstOrDefaultAsync();
+                var dto = restAI.ToRestaurantDTO();
+                restVM = new RestaurantViewModel(_dtoFactory.FromDataStorageObject<Restaurant>(dto));
+            }
+            return restVM;
         }
     }
 }
