@@ -18,6 +18,7 @@
 					</StackLayout>
           <Entry Placeholder="Email for Orders" Text="{Binding Email}" Keyboard="Email"/>
 					<Entry Placeholder="Street Number" Text="{Binding StreetAddressNumber}" Keyboard="Numeric"/>
+					<Entry Placeholder="Street Direction" Text="{Binding StreetDirection}"/>
 					<Entry Placeholder="Street" Text="{Binding StreetName}"/>
 					<Entry Placeholder="City" Text="{Binding City}"/>
 					<StackLayout Orientation="Horizontal">

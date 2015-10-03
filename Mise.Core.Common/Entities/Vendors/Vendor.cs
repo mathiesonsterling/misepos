@@ -129,6 +129,13 @@ namespace Mise.Core.Common.Entities.Vendors
 	            return false;
 	        }
 
+			if (v.Name == Name && v.StreetAddress != null 
+				&& v.StreetAddress.City.Equals(StreetAddress.City)
+				&& v.StreetAddress.State.Equals(StreetAddress.State)
+			) {
+				return true;
+			}
+
 	        if (v.StreetAddress == null && StreetAddress != null)
 	        {
 	            return false;

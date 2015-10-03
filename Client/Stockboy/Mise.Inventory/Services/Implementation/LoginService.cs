@@ -98,6 +98,7 @@ namespace Mise.Inventory.Services.Implementation
 					var rests = (await GetPossibleRestaurantsForLoggedInEmployee()).ToList();
 					if(rests.Count() == 1){
 						await SelectRestaurantForLoggedInEmployee(rests.First().Id);
+						await LoadSelectedRestaurant();
 					} else {
 						//did we store the last restuarant?
 						var lastRestRecord = _keyValStorage.GetValue<RestaurantSelectRecord>(LAST_RESTAURANT_ID_KEY);
@@ -105,6 +106,7 @@ namespace Mise.Inventory.Services.Implementation
 							var rest = _restaurantRepository.GetByID(lastRestRecord.RestaurantID);
 							if(rest != null){
 								await SelectRestaurantForLoggedInEmployee(rest.Id);
+								await LoadSelectedRestaurant();
 							} else {
 								_currentEmployee = null;
 							}

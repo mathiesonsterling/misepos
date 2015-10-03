@@ -27,7 +27,7 @@
     <MtouchI18n>
     </MtouchI18n>
     <MtouchArch>i386</MtouchArch>
-    <CodesignProvision>8a95c115-f2ca-409d-8055-3ed15268c99f</CodesignProvision>
+    <CodesignProvision>710bafcd-6f9a-4e3e-a608-8f91bc25d0d4</CodesignProvision>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">

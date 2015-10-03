@@ -269,8 +269,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToEnumerableAsync ();
 
 			//todo figure out a better way to do this on the server
+			//todo also remove to List when debugging is done!
 			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
-				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto));
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto)).ToList();
 			var filtered = vendors.Where(v => v.GetRestaurantIDsAssociatedWithVendor ().Contains (restaurantID)).ToList();
 
 			return filtered;

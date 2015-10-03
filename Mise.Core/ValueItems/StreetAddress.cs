@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 namespace Mise.Core.ValueItems
 {
 	public class StreetAddress : IEquatable<StreetAddress>, ITextSearchable
@@ -121,7 +121,27 @@ namespace Mise.Core.ValueItems
 
         public bool Equals(State other)
         {
-            return Name.Equals(other.Name);
+			if (other == null) {
+				return false;
+			}
+
+			var realThis = this;
+			if (Abbreviation == null) {
+				realThis = GetUSStates().FirstOrDefault(s => s.Name == Name || s.Abbreviation == Name);
+				if(realThis == null){
+					realThis = this;
+				}
+			}
+
+			var realOther = other;
+			if(other.Abbreviation == null)
+			{
+				realOther = GetUSStates ().FirstOrDefault (s => s.Name == other.Name || s.Abbreviation == other.Name);
+				if (realOther == null) {
+					realOther = other;
+				}
+			}
+			return realThis.Name == realOther.Name || realThis.Abbreviation == realOther.Abbreviation;
         }
 
         public bool ContainsSearchString(string searchString)
