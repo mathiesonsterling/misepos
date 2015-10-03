@@ -10,10 +10,10 @@ namespace MiseReporting.Controllers
 {
     public class RestaurantController : Controller
     {
-        private readonly InventoryDAL _dal;
+        private readonly ManagementDAL _dal;
         public RestaurantController()
         {
-            _dal = new InventoryDAL();
+            _dal = new ManagementDAL();
         }
 
         // GET: Restaurant

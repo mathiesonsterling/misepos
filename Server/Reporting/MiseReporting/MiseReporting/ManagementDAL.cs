@@ -2,31 +2,35 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Common.Events.ApplicationInvitations;
+using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant;
+using Mise.Core.Entities.Vendors;
 
 namespace MiseReporting
 {
-    public class InventoryDAL
+    public class ManagementDAL
     {
         private readonly EntityDataTransportObjectFactory _entityFactory;
         private readonly string _invType;
         private readonly string _empType;
         private readonly string _restType;
-        public InventoryDAL()
+        private readonly string _roType;
+        private readonly string _vendorType;
+        public ManagementDAL()
         {
             _entityFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
             _invType = typeof (Inventory).ToString();
             _empType = typeof (Employee).ToString();
             _restType = typeof (Restaurant).ToString();
+            _roType = typeof (ReceivingOrder).ToString();
+            _vendorType = typeof (Vendor).ToString();
         }
 
         public async Task<IEnumerable<IInventory>> GetInventoriesForRestaurant(Guid restaurantId)
@@ -141,6 +145,18 @@ namespace MiseReporting
             }
         }
 
+        public async Task<IEmployee> GetEmployeeById(Guid id)
+        {
+            AzureEntityStorage ai;
+            using (var db = new AzureNonTypedEntities())
+            {
+                ai =
+                    await
+                        db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _empType && a.EntityID == id);
+            }
+            return _entityFactory.FromDataStorageObject<Employee>(ai.ToRestaurantDTO());
+        }
+
         public async Task<IEmployee> GetEmployeeWhoCreatedInventory(IInventory inv)
         {
             AzureEntityStorage ai;
@@ -169,6 +185,40 @@ namespace MiseReporting
                 var emps = dtos.Select(dto => _entityFactory.FromDataStorageObject<Employee>(dto));
                 return emps;
             }
+        }
+
+        public async Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersForRestaurant(Guid restaurantId)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                var ais = await
+                    db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _roType && ai.RestaurantID == restaurantId)
+                        .ToListAsync();
+                var dtos = ais.Select(ai => ai.ToRestaurantDTO());
+                var ros = dtos.Select(dto => _entityFactory.FromDataStorageObject<ReceivingOrder>(dto));
+
+                return ros;
+            }
+        }
+
+        public async Task<IReceivingOrder> GetReceivingOrderById(Guid id)
+        {
+            AzureEntityStorage ai = null;
+            using (var db = new AzureNonTypedEntities())
+            {
+                ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _roType && a.EntityID == id);
+            }
+            return _entityFactory.FromDataStorageObject<ReceivingOrder>(ai.ToRestaurantDTO());
+        }
+
+        public async Task<IVendor> GetVendorById(Guid id)
+        {
+            AzureEntityStorage ai;
+            using (var db = new AzureNonTypedEntities())
+            {
+                ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _vendorType && a.EntityID == id);
+            }
+            return _entityFactory.FromDataStorageObject<Vendor>(ai.ToRestaurantDTO());
         }
     }
 }

@@ -17,11 +17,11 @@ namespace MiseReporting.Controllers
     public class InventoriesController : Controller
     {
         private readonly ICSVExportService _icsvExportService;
-        private readonly InventoryDAL _dal;
+        private readonly ManagementDAL _dal;
         public InventoriesController()
         {
             _icsvExportService = new CSVExportService(new DummyLogger());
-            _dal = new InventoryDAL();
+            _dal = new ManagementDAL();
         }
 
         // GET: Inventories
