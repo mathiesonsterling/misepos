@@ -55,7 +55,6 @@ namespace MiseVendorManagement.Controllers
                 {
                     return View(vm);
                 }
-                {
                     var vendor = VendorVMToVendor(vm);
 
                     //TODO get geolocation here
@@ -63,7 +62,6 @@ namespace MiseVendorManagement.Controllers
                     //store this
                     await _dal.InsertVendor(vendor);
                     return RedirectToAction("Index");
-                }
             }
             catch
             {

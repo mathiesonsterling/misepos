@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
@@ -20,6 +21,8 @@ namespace MiseReporting.Models
 
         public InventoryViewModel() { }
 
+        public IEnumerable<InventoryLineItemViewModel> LineItems { get; set; }
+         
         public InventoryViewModel(IInventory source, IEmployee emp)
         {
             DateCompleted = source.DateCompleted?.LocalDateTime;

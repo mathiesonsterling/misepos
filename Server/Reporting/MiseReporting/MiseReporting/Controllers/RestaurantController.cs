@@ -49,9 +49,7 @@ namespace MiseReporting.Controllers
 
         public ActionResult Create()
         {
-            var vm = new RestaurantViewModel
-            {
-            };
+            var vm = new RestaurantViewModel();
             return View(vm);
         }
 
@@ -106,6 +104,17 @@ namespace MiseReporting.Controllers
                         db.Entry(item).State = EntityState.Modified;
                         db.AzureEntityStorages.Remove(item);
                     }
+
+                    //also get all employees that are listed here and remove the call for them
+                    var empType = typeof (Employee).ToString();
+                    var empAIs = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(id.ToString())).ToListAsync();
+                    var dtos = empAIs.Select(ai => ai.ToRestaurantDTO());
+                    var emps = dtos.Select(dto => _dtoFactory.FromDataStorageObject<Employee>(dto));
+                    foreach (var emp in emps.Where(emp => emp.RestaurantsAndAppsAllowed.ContainsKey(id)))
+                    {
+                        emp.RestaurantsAndAppsAllowed.Remove(id);
+                    }
+
                     await db.SaveChangesAsync();
                 }
                 return RedirectToAction("Index");
