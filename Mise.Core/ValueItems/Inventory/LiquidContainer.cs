@@ -10,7 +10,7 @@ namespace Mise.Core.ValueItems.Inventory
     {
         #region Standard sizes
 
-        public static LiquidContainer Bottle750Ml => new LiquidContainer { 
+        public static LiquidContainer Bottle750ML => new LiquidContainer { 
             AmountContained = new LiquidAmount { Milliliters = 750 }, 
             DisplayName = "750ml Bottle"
         };
@@ -131,7 +131,7 @@ namespace Mise.Core.ValueItems.Inventory
         {
             return new List<LiquidContainer>
             {
-                Bottle750Ml,
+                Bottle750ML,
                 Bottle375ML,
                 Bottle330ml,
                 Bottle1L,

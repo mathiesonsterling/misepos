@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 
 using Mise.Inventory.ViewModels;
+using Mise.Core.ValueItems;
+
+
 namespace Mise.Inventory.Pages
 {
 	public partial class VendorAddPage : BasePage
@@ -11,6 +14,13 @@ namespace Mise.Inventory.Pages
 		public VendorAddPage()
 		{
 			InitializeComponent();
+
+			var vm = ViewModel as VendorAddViewModel;
+			pckState.SelectedIndexChanged += (sender, e) => {
+				var selectedItem = pckState.Items [pckState.SelectedIndex];
+				vm.State = selectedItem;
+			};
+			vm.SelectStateOnView = SelectState;
 		}
 
 		#region implemented abstract members of BasePage
@@ -29,18 +39,23 @@ namespace Mise.Inventory.Pages
 
 		#endregion
 
-		protected override void OnAppearing(){
+		protected override async void OnAppearing(){
 			var vm = ViewModel as VendorAddViewModel;
 			if (vm != null) {
 				pckState.Items.Clear ();
 				foreach (var state in vm.States) {
 					pckState.Items.Add (state.Abbreviation);
 				}
+			}
+			await vm.OnAppearing ();
+		}
 
-				pckState.SelectedIndexChanged += (sender, e) => {
-					var selectedItem = pckState.Items [pckState.SelectedIndex];
-					vm.State = selectedItem;
-				};
+		public void SelectState(State state){
+			if (state == null) {
+				return;
+			}
+			if (pckState.Items.Contains (state.Abbreviation)) {
+				pckState.SelectedIndex = pckState.Items.IndexOf (state.Abbreviation);
 			}
 		}
 	}
