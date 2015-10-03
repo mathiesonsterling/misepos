@@ -52,23 +52,6 @@ namespace MiseReporting
             }
         }
 
-        public async Task<IEmployee> GetEmployeeWhoCreatedInventory(IInventory inv)
-        {
-            AzureEntityStorage ai;
-            using (var db = new AzureNonTypedEntities())
-            {
-                ai = await db.AzureEntityStorages.FirstOrDefaultAsync(
-                            a => a.MiseEntityType == _empType && a.EntityID == inv.CreatedByEmployeeID);
-            }
-
-            if (ai == null)
-            {
-                return null;
-            }
-
-            var dto = ai.ToRestaurantDTO();
-            return _entityFactory.FromDataStorageObject<Employee>(dto);
-        }
 
         public async Task<IInventoryBeverageLineItem> GetInventoryLineItem(Guid inventoryId, Guid lineItemId)
         {
@@ -120,6 +103,17 @@ namespace MiseReporting
             }
         }
 
+        public async Task<IEnumerable<IRestaurant>> GetAllRestaurants()
+        {
+            IEnumerable<AzureEntityStorage> ais;
+            using (var db = new AzureNonTypedEntities())
+            {
+                ais = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _restType).ToListAsync();
+            }
+            var dtos = ais.Select(ai => ai.ToRestaurantDTO());
+            return dtos.Select(dto => _entityFactory.FromDataStorageObject<Restaurant>(dto));
+        }
+
         public async Task<IRestaurant> GetRestaurantById(Guid restaurantId)
         {
             AzureEntityStorage ai;
@@ -133,6 +127,48 @@ namespace MiseReporting
                 throw new ArgumentException("Error, cannot find restaurant " + restaurantId);
             }
             return _entityFactory.FromDataStorageObject<Restaurant>(ai.ToRestaurantDTO());
+        }
+
+        public async Task InsertRestaurant(Restaurant rest)
+        {
+            var dto = _entityFactory.ToDataTransportObject(rest);
+            var ai = new AzureEntityStorage(dto);
+
+            using (var db = new AzureNonTypedEntities())
+            {
+                db.AzureEntityStorages.Add(ai);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEmployee> GetEmployeeWhoCreatedInventory(IInventory inv)
+        {
+            AzureEntityStorage ai;
+            using (var db = new AzureNonTypedEntities())
+            {
+                ai = await db.AzureEntityStorages.FirstOrDefaultAsync(
+                            a => a.MiseEntityType == _empType && a.EntityID == inv.CreatedByEmployeeID);
+            }
+
+            if (ai == null)
+            {
+                return null;
+            }
+
+            var dto = ai.ToRestaurantDTO();
+            return _entityFactory.FromDataStorageObject<Employee>(dto);
+        }
+
+        public async Task<IEnumerable<IEmployee>> GetAllEmployeesContaining(string search)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                var empAIs = await db.AzureEntityStorages.Where(
+                            ai => ai.MiseEntityType == _empType && ai.EntityJSON.Contains(search)).ToListAsync();
+                var dtos = empAIs.Select(ai => ai.ToRestaurantDTO());
+                var emps = dtos.Select(dto => _entityFactory.FromDataStorageObject<Employee>(dto));
+                return emps;
+            }
         }
     }
 }
