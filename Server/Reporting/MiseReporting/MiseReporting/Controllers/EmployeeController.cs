@@ -9,6 +9,7 @@ using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
+using Mise.Core.Entities.People;
 using Mise.Core.ValueItems;
 using MiseReporting.Models;
 
@@ -16,31 +17,25 @@ namespace MiseReporting.Controllers
 {
     public class EmployeeController : Controller
     {
+        private readonly ManagementDAL _dal;
         private readonly EntityDataTransportObjectFactory _dtoFactory;
-        private readonly string _empType;
-        private readonly string _restType;
         public EmployeeController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _empType = typeof(Employee).ToString();
-            _restType = typeof(Restaurant).ToString();
+            _dal = new ManagementDAL();
         }
 
         // GET: Employee
         public async Task<ActionResult> Index()
         {
+            var emps = await _dal.GetAllEmployees();
             var vms = new List<EmployeeViewModel>();
-            using (var db = new AzureNonTypedEntities())
+            foreach (var emp in emps)
             {
-                var emps = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _empType && (ai.Deleted == false)).ToListAsync();
-                //populate the vendors?
-
-                foreach (var ai in emps)
-                {
-                    var vm = await HydrateEmployeeVM(ai, db);
-                    vms.Add(vm);
-                }
+                var vm = await GetEmployeeVM(emp);
+                vms.Add(vm);
             }
+
             return View(vms.OrderBy(vm=> vm.LastName).ThenBy(vm => vm.FirstName).ThenBy(vm => vm.RestaurantsDisplay));
         }
 
@@ -48,29 +43,18 @@ namespace MiseReporting.Controllers
         // GET: Employee/Details/5
         public async Task<ActionResult> Details(Guid empId)
         {
-            using (var db = new AzureNonTypedEntities())
-            {
-                var emp =
-                    await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _empType && ai.EntityID == empId).FirstOrDefaultAsync();
-
-                if (emp == null)
-                {
-                    throw new ArgumentException("No employee found for id " + empId);
-                }
-                var vm = await HydrateEmployeeVM(emp, db);
-                return View(vm);
-            }
+            var emp = await _dal.GetEmployeeById(empId);
+            var vm = await GetEmployeeVM(emp);
+            return View(vm);
         }
 
         // GET: Employee/Create
         public async Task<ActionResult> Create()
         {
-            using (var db = new AzureNonTypedEntities())
-            {
-                var restVms = await GetPossibleRestaurantVms(db);
-                var vm = new EmployeeViewModel {PossibleRestaurants = restVms};
-                return View(vm);
-            }
+            var rests = await _dal.GetAllRestaurants();
+            var restVms = rests.Select(r => new RestaurantViewModel(r));
+            var vm = new EmployeeViewModel {PossibleRestaurants = restVms};
+            return View(vm);
         }
 
 
@@ -102,22 +86,11 @@ namespace MiseReporting.Controllers
         }
 
         // GET: Employee/Edit/5
-        public async Task<ActionResult> Edit(Guid empId) 
+        public async Task<ActionResult> Edit(Guid empId)
         {
-            using (var db = new AzureNonTypedEntities())
-            {
-                var emp = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _empType && ai.EntityID == empId)
-                            .FirstOrDefaultAsync();
-
-                if (emp == null)
-                {
-                    throw new ArgumentException("No employee found for id " + empId);
-                }
-                var vm = await HydrateEmployeeVM(emp, db);
-                //get possible restaurants
-                vm.PossibleRestaurants = await GetPossibleRestaurantVms(db);
-                return View(vm);
-            }
+            var emp = await _dal.GetEmployeeById(empId);
+            var vm = await GetEmployeeVM(emp);
+            return View(vm);
         }
 
         // POST: Employee/Edit/5
@@ -128,7 +101,7 @@ namespace MiseReporting.Controllers
             try
             {
                 emp = FormCollectionToVM(collection);
-
+                var originalEmp = await _dal.GetEmployeeById(empId);
 
                 using (var db = new AzureNonTypedEntities())
                 {
@@ -138,7 +111,6 @@ namespace MiseReporting.Controllers
                     {
                         throw new ArgumentException("No employee found for id " + empId);
                     }
-                    var originalEmp = _dtoFactory.FromDataStorageObject<Employee>(orign.ToRestaurantDTO());
                     db.AzureEntityStorages.Remove(orign);
 
                     var ai = ViewModelToAi(emp, originalEmp.Password);
@@ -147,7 +119,7 @@ namespace MiseReporting.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 if (emp == null)
                 {
@@ -161,18 +133,9 @@ namespace MiseReporting.Controllers
         // GET: Employee/Delete/5
         public async Task<ActionResult> Delete(Guid empId)
         {
-            using (var db = new AzureNonTypedEntities())
-            {
-                var emp = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _empType && ai.EntityID == empId)
-                            .FirstOrDefaultAsync();
-
-                if (emp == null)
-                {
-                    throw new ArgumentException("No employee found for id " + empId);
-                }
-                var vm = await HydrateEmployeeVM(emp, db);
-                return View(vm);
-            }
+            var emp = await _dal.GetEmployeeById(empId);
+            var vm = await GetEmployeeVM(emp);
+            return View(vm);
         }
 
         // POST: Employee/Delete/5
@@ -201,7 +164,7 @@ namespace MiseReporting.Controllers
 
         private static EmployeeViewModel FormCollectionToVM(NameValueCollection collection)
         {
-            var selectedGuids = collection["PostedRestaurantGuids"].Split(new[] { ',' });
+            var selectedGuids = collection["PostedRestaurantGuids"].Split(',');
             var guids = selectedGuids.Where(s => string.IsNullOrEmpty(s) == false).Select(Guid.Parse);
 
             Guid id;
@@ -226,27 +189,24 @@ namespace MiseReporting.Controllers
             return emp;
         }
 
-        private async Task<EmployeeViewModel> HydrateEmployeeVM(AzureEntityStorage ai, AzureNonTypedEntities db)
+        private async Task<EmployeeViewModel> GetEmployeeVM(IEmployee emp)
         {
-            var emp = _dtoFactory.FromDataStorageObject<Employee>(ai.ToRestaurantDTO());
-            var empRestaurant = emp.GetRestaurantIDs().Where(id => id != Guid.Empty).ToList();
+            var empRestaurants = emp.GetRestaurantIDs().Where(id => id != Guid.Empty).ToList();
 
-            var restAi = await db.AzureEntityStorages.Where(
-                a => a.MiseEntityType == _restType && empRestaurant.Contains(a.EntityID)).ToListAsync();
-            var rests = restAi.Select(r => _dtoFactory.FromDataStorageObject<Restaurant>(r.ToRestaurantDTO()));
-            var restVm = rests.Select(r => new RestaurantViewModel(r));
+            var rests = new List<RestaurantViewModel>();
+            foreach (var restId in empRestaurants)
+            {
+                var rest = await _dal.GetRestaurantById(restId);
+                if (rest != null)
+                {
+                    var vm = new RestaurantViewModel(rest);
+                    rests.Add(vm);
+                }
+            }
 
-            var vm = new EmployeeViewModel(emp, restVm);
-            return vm;
+            return new EmployeeViewModel(emp, rests);
         }
 
-        private async Task<IEnumerable<RestaurantViewModel>> GetPossibleRestaurantVms(AzureNonTypedEntities db)
-        {
-            var restAIs = await db.AzureEntityStorages.Where(a => a.MiseEntityType == _restType).ToListAsync();
-            var rests = restAIs.Select(ra => _dtoFactory.FromDataStorageObject<Restaurant>(ra.ToRestaurantDTO()));
-            var restVms = rests.Select(r => new RestaurantViewModel(r));
-            return restVms.OrderBy(rv => rv.Name);
-        }
 
         private AzureEntityStorage ViewModelToAi(EmployeeViewModel emp, Password origPassword)
         {

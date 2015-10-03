@@ -128,7 +128,7 @@ namespace MiseReporting
             }
             if (ai == null)
             {
-                throw new ArgumentException("Error, cannot find restaurant " + restaurantId);
+                return null;
             }
             return _entityFactory.FromDataStorageObject<Restaurant>(ai.ToRestaurantDTO());
         }
@@ -145,6 +145,15 @@ namespace MiseReporting
             }
         }
 
+        public async Task<IEnumerable<IEmployee>> GetAllEmployees()
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                var ais = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _empType && (ai.Deleted == false)).ToListAsync();
+                var dtos = ais.Select(ai => ai.ToRestaurantDTO());
+                return dtos.Select(dto => _entityFactory.FromDataStorageObject<Employee>(dto));
+            }
+        }
         public async Task<IEmployee> GetEmployeeById(Guid id)
         {
             AzureEntityStorage ai;
