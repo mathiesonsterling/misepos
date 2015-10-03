@@ -332,6 +332,12 @@ namespace Mise.Core.Common.Services.Implementation
 	        return _allCats.Where(c => c.Name.Contains(givenCategory) || givenCategory.Contains(c.Name));
 	    }
 
+	    public IEnumerable<ICategory> GetAssignableCategories()
+	    {
+	        var parentCats = _allCats.Where(c => c.ParentCategoryID != null).Select(c => c.ParentCategoryID).Distinct().ToList();
+	        return _allCats.Where(c => parentCats.Contains(c.Id) == false && c.ParentCategoryID.HasValue);
+	    }
+
 	    #endregion
 	}
 }

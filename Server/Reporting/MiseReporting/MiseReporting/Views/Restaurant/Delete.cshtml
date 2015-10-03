@@ -1,13 +1,14 @@
-﻿@model MiseVendorManagement.Models.VendorViewModel
+﻿@model MiseReporting.Models.RestaurantViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Delete";
 }
 
-<h2>Details</h2>
+<h2>Delete</h2>
 
+<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>VendorViewModel</h4>
+    <h4>RestaurantViewModel</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -27,6 +28,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.UnitNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UnitNumber)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.StreetDirection)
         </dt>
 
@@ -35,11 +44,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UnitNumber)
+            @Html.DisplayNameFor(model => model.StreetName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UnitNumber)
+            @Html.DisplayFor(model => model.StreetName)
         </dd>
 
         <dt>
@@ -75,49 +84,21 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.CurrentTime)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneAreaCode)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneAreaCode)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.StreetName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StreetName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.HasItems)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.HasItems)
+            @Html.DisplayFor(model => model.CurrentTime)
         </dd>
 
     </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new {id = Model.Id}) |
-    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

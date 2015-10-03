@@ -191,7 +191,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 InventorySectionID = Guid.NewGuid(),
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
-                    Container = LiquidContainer.Bottle750ML,
+                    Container = LiquidContainer.Bottle750Ml,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 10,
                     MethodsMeasuredLast = MeasurementMethods.VisualEstimate
@@ -236,7 +236,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                             new InventoryBeverageLineItem
                             {
                                 Id = liID,
-                                Container = LiquidContainer.Bottle750ML
+                                Container = LiquidContainer.Bottle750Ml
                             }
                         }
                     }
@@ -254,7 +254,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 BeverageLineItem = new InventoryBeverageLineItem
                 {
                     Id = liID,
-                    Container = LiquidContainer.Bottle750ML,
+                    Container = LiquidContainer.Bottle750Ml,
                     CreatedDate = DateTime.UtcNow.AddDays(-1),
                     NumFullBottles = 0,
                     MethodsMeasuredLast = MeasurementMethods.VisualEstimate

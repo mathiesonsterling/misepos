@@ -1,46 +1,105 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities;
-using Mise.Core.Common.Entities.DTOs;
-using Mise.Core.Common.Services.Implementation.Serialization;
 using MiseReporting.Models;
 
 namespace MiseReporting.Controllers
 {
     public class RestaurantController : Controller
     {
-
-        private readonly EntityDataTransportObjectFactory _dtoFactory;
+        private readonly ManagementDAL _dal;
         public RestaurantController()
         {
-            _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
+            _dal = new ManagementDAL();
         }
 
         // GET: Restaurant
         public async Task<ActionResult> Index()
         {
-            var restType = typeof (Restaurant).ToString();
-            var viewModels = new List<RestaurantViewModel>();
-            using (var db = new AzureNonTypedEntities())
-            {
-                var restAIs = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == restType).ToListAsync();
-                var dtos = restAIs.Select(ai => ai.ToRestaurantDTO());
-                var rests = dtos.Select(dto => _dtoFactory.FromDataStorageObject<Restaurant>(dto));
-                var vms = rests.Select(r => new RestaurantViewModel(r));
-                viewModels.AddRange(vms);
-            }
+            var rests = await _dal.GetAllRestaurants();
+            var vms = rests.Select(r => new RestaurantViewModel(r));
 
-            return View(viewModels.OrderBy(r => r.Name));
+            return View(vms.OrderBy(r => r.Name));
         }
 
         // GET: Restaurant/Details/5
-        public ActionResult Details(Guid id) 
+        public async Task<ActionResult> Details(Guid id)
         {
-            return View();
+            var rest = await _dal.GetRestaurantById(id);
+            var restVM = new RestaurantViewModel(rest);
+            return View(restVM);
+        }
+
+
+        public ActionResult Create()
+        {
+            var vm = new RestaurantViewModel();
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(RestaurantViewModel vm)
+        {
+            try
+            {
+                if (ModelState.IsValid == false)
+                {
+                    return View(vm);
+                }
+
+                //TODO check we're not duplicating
+                vm.Id = Guid.NewGuid();
+                var ent = vm.ToEntity();
+                await _dal.InsertRestaurant(ent);
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return View();
+            }
+        }
+
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var ent = await _dal.GetRestaurantById(id);
+            var vm = new RestaurantViewModel(ent);
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(RestaurantViewModel vm)
+        {
+            try
+            {
+                var id = vm.Id;
+                using (var db = new AzureNonTypedEntities())
+                {//delete all items for the restaurant as well
+                    var items = await db.AzureEntityStorages.Where(ai => ai.RestaurantID == id).ToListAsync();
+                    foreach (var item in items)
+                    {
+                        item.Deleted = true;
+                        db.Entry(item).State = EntityState.Modified;
+                        db.AzureEntityStorages.Remove(item);
+                    }
+
+                    //also get all employees that are listed here and remove the call for them
+                    var emps = (await _dal.GetAllEmployeesContaining(id.ToString())).Cast<Employee>();
+                    foreach (var emp in emps.Where(emp => emp.RestaurantsAndAppsAllowed.ContainsKey(id)))
+                    {
+                        emp.RestaurantsAndAppsAllowed.Remove(id);
+                    }
+
+                    await db.SaveChangesAsync();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return View();
+            } 
         }
     }
 }
