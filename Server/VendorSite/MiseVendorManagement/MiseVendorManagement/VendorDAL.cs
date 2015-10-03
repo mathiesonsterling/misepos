@@ -70,7 +70,7 @@ namespace MiseVendorManagement
         {
             using (var db = new AzureDB())
             {
-                var oldVer = db.AzureEntityStorages.FirstOrDefault(ai => ai.EntityID == vendor.Id && ai.MiseEntityType == _vendorType);
+                var oldVer = await db.AzureEntityStorages.FirstOrDefaultAsync(ai => ai.EntityID == vendor.Id && ai.MiseEntityType == _vendorType);
                 if (oldVer == null)
                 {
                     throw new InvalidOperationException("Cannot find vendor to update in DB");
@@ -85,5 +85,16 @@ namespace MiseVendorManagement
                 await db.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteVendor(Guid id)
+        {
+            using (var db = new AzureDB())
+            {
+                var ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.EntityID == id && a.MiseEntityType == _vendorType);
+
+                db.AzureEntityStorages.Remove(ai);
+                await db.SaveChangesAsync();
+            }
+        }  
     }
 }

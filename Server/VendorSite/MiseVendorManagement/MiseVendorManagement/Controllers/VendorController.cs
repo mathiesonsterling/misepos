@@ -96,19 +96,20 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: Vendor/Delete/5
-        public ActionResult Delete(Guid id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            return View();
+            var vendor = await _dal.GetVendor(id);
+            var vm = new VendorViewModel(vendor);
+            return View(vm);
         }
 
         // POST: Vendor/Delete/5
         [HttpPost]
-        public ActionResult Delete(Guid id, FormCollection collection)
+        public async Task<ActionResult> Delete(Guid id, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
+                await _dal.DeleteVendor(id);
                 return RedirectToAction("Index");
             }
             catch
