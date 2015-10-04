@@ -12,6 +12,7 @@
        <ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 	   <Button Command="{Binding CompletedInventoriesCommand}" Text="Completed Inventories"/>
 	   <Button Command="{Binding AmountUsedCommand}" Text="Amount Used"/>
+	   <Button Command="{Binding CostOfGoodsSoldCommand}" Text="COGS"/>
      </StackLayout>
 	</ContentPage.Content>
 </local:BasePage>

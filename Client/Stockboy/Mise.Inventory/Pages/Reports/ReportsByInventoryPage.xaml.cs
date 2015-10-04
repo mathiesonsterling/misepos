@@ -57,12 +57,19 @@ namespace Mise.Inventory.Pages.Reports
 		        var vm = ViewModel as ReportsByInventoryViewModel;
 		        if (vm != null)
 		        {
-					pickerStart.SelectedIndex = 0;
-					pickerEnd.SelectedIndex = 0;
-					pickerStart.Items.Clear();
-					pickerEnd.Items.Clear();
 					if(vm.CompletedInventories.Any())
 					{
+						try{
+							pickerStart.SelectedIndex = 0;
+							pickerStart.Items.Clear();
+						} catch{
+						}
+
+						try{
+							pickerEnd.SelectedIndex = 0;
+							pickerEnd.Items.Clear();
+						} catch{
+						}
 		                var possibleInvs = vm.CompletedInventories;
 						_possibleInventories = possibleInvs.Where(i => i.DateCompleted.HasValue)
 							.ToDictionary(i => i.DateCompleted.Value.LocalDateTime.ToString());
@@ -84,7 +91,6 @@ namespace Mise.Inventory.Pages.Reports
 		        }
 			} catch(Exception e)
 			{
-				throw;
 			}
 	    }
 	}

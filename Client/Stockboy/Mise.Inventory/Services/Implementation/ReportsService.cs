@@ -71,8 +71,9 @@ namespace Mise.Inventory.Services.Implementation
                 case ReportTypes.COGS:
                     var inventories = _inventoryRepository.GetAll()
                             .Where(inv =>
-                                    inv.DateCompleted >= _currentRequest.StartDate &&
-                                    inv.DateCompleted <= _currentRequest.EndDate);
+									inv.DateCompleted.HasValue &&
+                                    inv.DateCompleted.Value >= _currentRequest.StartDate &&
+                                    inv.DateCompleted.Value <= _currentRequest.EndDate);
                     var rosInPeriod = _receivingOrderRepository.GetAll()
                         .Where(ro =>
                                 ro.DateReceived >= _currentRequest.StartDate &&

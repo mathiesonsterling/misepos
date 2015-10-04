@@ -57,6 +57,10 @@ namespace Mise.Inventory.ViewModels.Reports
 			get{return new Command (AmountUsed, () => NotProcessing);}
 		}
 
+		public ICommand CostOfGoodsSoldCommand{
+			get{return new Command(CostOfGoodsSold, () => NotProcessing);}
+		}
+
 	    private async void CompletedInventories()
 	    {
 	        try
@@ -91,6 +95,9 @@ namespace Mise.Inventory.ViewModels.Reports
 			await DoGenericRequestFor (ReportTypes.AmountUsed);
 		}
 
+		private async void CostOfGoodsSold(){
+			await DoGenericRequestFor (ReportTypes.COGS);
+		}
 	    #endregion
 
 		protected virtual async Task DoGenericRequestFor(ReportTypes type){

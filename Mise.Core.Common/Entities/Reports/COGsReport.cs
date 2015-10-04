@@ -24,6 +24,15 @@ namespace Mise.Core.Common.Entities.Reports
 
         public override ReportTypes ReportType => ReportTypes.COGS;
 
+		private string GetBevItemKey(IBaseBeverageLineItem li)
+		{
+			return li.DisplayName + "::" 
+				+ li.UPC + "::" 
+				+ li.Container != null ? 
+					li.Container.DisplayName + ":" + li.Container.AmountContained.Milliliters 
+					: "nocon";
+		}
+
         protected override ReportResult CreateReport()
         {
             //get the first pair of inventories
@@ -46,9 +55,22 @@ namespace Mise.Core.Common.Entities.Reports
                 }
             }
 
+			//combine all items from periods
+			var allItems = new Dictionary<string, Tuple<IBaseBeverageLineItem, Money>>();
+			foreach (var res in results) {
+				var key = GetBevItemKey (res.Item1);
+
+				if (allItems.ContainsKey (key)) {
+					var existing = allItems [key];
+					existing = new Tuple<IBaseBeverageLineItem, Money> (existing.Item1, existing.Item2.Add (res.Item2));
+				} else {
+					allItems.Add(key, res);
+				}
+			}
+
             //translate each of the items
             var items =
-                results.Select(
+				allItems.Values.Select(
                     r => new ReportResultLineItem(r.Item1.DisplayName, r.Item1.Container.DisplayName, r.Item2.Dollars, r.Item2.Dollars < 0));
 
             return new ReportResult(ReportTypes.COGS, "COGs report", items, results.Sum(r => r.Item2.Dollars));
@@ -79,7 +101,8 @@ namespace Mise.Core.Common.Entities.Reports
                 var priceStack = new List<PriceAmount>();
                 //get the start amount
                 var startLI =
-                    start.GetBeverageLineItems().Where(li => BeverageLineItemEquator.AreSameBeverageLineItem(li, endLI));
+					start.GetBeverageLineItems().Where(li => BeverageLineItemEquator.AreSameBeverageLineItem(li, endLI)).ToList();
+
 
                 Money firstROPrice = null;
                 PriceAmount firstAmount = null;
@@ -101,9 +124,9 @@ namespace Mise.Core.Common.Entities.Reports
                             firstROPrice = roLIs.First().UnitPrice;
                             firstAmount = new PriceAmount
                             {
-                                LineItem = startLI.First(),
+                                LineItem = endLI,
                                 Price = firstROPrice,
-                                Amount = startLI.Sum(li => li.Quantity)
+								Amount = startLI.Any() ? startLI.Sum(li => li.Quantity) : 0
                             };
                             priceStack.Add(firstAmount);
                         }
@@ -111,12 +134,12 @@ namespace Mise.Core.Common.Entities.Reports
                         priceStack.Add(priceAmount);
                     }
 
-                    if (priceStack.Any() == false)
+					if (priceStack.Any() == false && startLI.Any())
                     {
-                        //we didn't have any ROs, so we don't have a price
+                        //we didn't have any ROs, so we don't have a price, but we do have start items!
                         firstAmount = new PriceAmount
                         {
-                            LineItem = startLI.First(),
+                            LineItem = endLI,
                             Price = startLI.First().PricePaid,
                             Amount = startLI.Sum(li => li.Quantity)
                         };
@@ -124,38 +147,33 @@ namespace Mise.Core.Common.Entities.Reports
                     }
 
                     //get our amoutn used
-                    var amountIn = priceStack.Sum(ps => ps.Amount);
-                    var amountAtEnd = endLI.Quantity;
-                    var amountUsed = amountAtEnd - amountIn;
+					if (priceStack.Any ()) {
+						var amountIn = priceStack.Sum (ps => ps.Amount);
+						var amountAtEnd = endLI.Quantity;
+						var amountUsed = amountIn - amountAtEnd;
 
-                    //ok, now get the price for each, starting at the begining
-                    var quantityLeft = amountUsed;
-                    var totalCost = Money.None;
-                    foreach (var ps in priceStack)
-                    {
-                        if (quantityLeft > 0)
-                        {
-                            if (quantityLeft > ps.Amount)
-                            {
-                                if (ps.Price != null)
-                                {
-                                    totalCost.Add(ps.Price.Multiply(ps.Amount));
-                                    quantityLeft -= ps.Amount;
-                                }
-                            }
-                            else
-                            {
-                                //get just the remainder
-                                if (ps.Price != null)
-                                {
-                                    totalCost.Add(ps.Price.Multiply(quantityLeft));
-                                    quantityLeft = 0;
-                                }
-                            }
-                        }
-                    }
+						//ok, now get the price for each, starting at the begining
+						var quantityLeft = amountUsed;
+						var totalCost = Money.None;
+						foreach (var ps in priceStack) {
+							if (quantityLeft > 0) {
+								if (quantityLeft > ps.Amount) {
+									if (ps.Price != null) {
+										totalCost = totalCost.Add (ps.Price.Multiply (ps.Amount));
+										quantityLeft -= ps.Amount;
+									}
+								} else {
+									//get just the remainder
+									if (ps.Price != null) {
+										totalCost = totalCost.Add (ps.Price.Multiply (quantityLeft));
+										quantityLeft = 0;
+									}
+								}
+							}
+						}
 
-                    results.Add(new Tuple<IBaseBeverageLineItem, Money>(endLI, totalCost));
+						results.Add (new Tuple<IBaseBeverageLineItem, Money> (endLI, totalCost));
+					}
                 }
             }
 
