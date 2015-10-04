@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MiseVendorManagement.Database
 {
-    [Table("stagingstockboymobileservice.AzureEventStorages")]
+    [Table("stockboymobileservice.AzureEventStorages")]
     public partial class AzureEventStorage
     {
         public string Id { get; set; }
