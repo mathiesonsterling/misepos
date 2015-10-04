@@ -9,6 +9,9 @@
      <StackLayout>
        <Picker x:Name="pickerStart" Title="Start Inventory"/>
        <Picker x:Name="pickerEnd" Title="End Inventory"/>
+       <ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+	   <Button Command="{Binding CompletedInventoriesCommand}" Text="Completed Inventories"/>
+	   <Button Command="{Binding AmountUsedCommand}" Text="Amount Used"/>
      </StackLayout>
 	</ContentPage.Content>
 </local:BasePage>

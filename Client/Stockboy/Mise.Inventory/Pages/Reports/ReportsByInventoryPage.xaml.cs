@@ -52,21 +52,40 @@ namespace Mise.Inventory.Pages.Reports
 
 	    protected override void OnAppearing()
 	    {
-	        base.OnAppearing();
-	        var vm = ViewModel as ReportsByInventoryViewModel;
-	        if (vm != null)
-	        {
-                var possibleInvs = vm.CompletedInventories;
-	            _possibleInventories = possibleInvs.ToDictionary(i => i.DateCompleted.ToString());
+			try{
+		        base.OnAppearing();
+		        var vm = ViewModel as ReportsByInventoryViewModel;
+		        if (vm != null)
+		        {
+					pickerStart.SelectedIndex = 0;
+					pickerEnd.SelectedIndex = 0;
+					pickerStart.Items.Clear();
+					pickerEnd.Items.Clear();
+					if(vm.CompletedInventories.Any())
+					{
+		                var possibleInvs = vm.CompletedInventories;
+						_possibleInventories = possibleInvs.Where(i => i.DateCompleted.HasValue)
+							.ToDictionary(i => i.DateCompleted.Value.LocalDateTime.ToString());
 
-                pickerStart.Items.Clear();
-                pickerEnd.Items.Clear();
-	            foreach (var p in _possibleInventories.Keys)
-	            {
-	                pickerStart.Items.Add(p);
-	                pickerEnd.Items.Add(p);
-	            }
-	        }
+			            foreach (var p in _possibleInventories.Keys)
+			            {
+			                pickerStart.Items.Add(p);
+			                pickerEnd.Items.Add(p);
+			            }
+
+						if(pickerEnd.Items.Count > 1){
+							pickerEnd.SelectedIndex = pickerEnd.Items.Count - 1;
+							if(pickerStart.Items.Count > 1)
+							{
+								pickerStart.SelectedIndex = pickerStart.Items.Count - 2;
+							}
+						}
+					}
+		        }
+			} catch(Exception e)
+			{
+				throw;
+			}
 	    }
 	}
 }

@@ -26,9 +26,14 @@ namespace Mise.Inventory.Pages.Reports
 				return "ReportResultsPage";
 			}
 		}
-
+			
 		#endregion
-
+		protected override async void OnAppearing ()
+		{
+			var vm = ViewModel as ReportResultsViewModel;
+			await vm.OnAppearing ();
+			LoadItems ();
+		}
 		private void LoadItems(){
 			var vm = ViewModel as ReportResultsViewModel;
 			if (vm != null) {

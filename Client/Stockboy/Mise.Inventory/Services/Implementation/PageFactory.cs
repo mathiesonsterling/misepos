@@ -60,8 +60,8 @@ namespace Mise.Inventory.Services
                     return new AccountRegistrationPage();
 				case Pages.AuthorizeCreditCard:
 					return new AuthorizeCreditCardPage ();
-                case Pages.Reports:
-                    return new ReportsPage();
+				case Pages.Reports:
+					return new ReportsByInventoryPage ();
                 case Pages.CompletedInventoriesSelect:
                     return new SelectCompletedInventoriesPage();
                 case Pages.ReportResults:
