@@ -10,6 +10,7 @@
 	    	<ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand">
 					<StackLayout x:Name="stckItems" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></StackLayout>
 			</ScrollView>
+			<Label Text="No results for this report!" IsVisible="{Binding NoItems}"/>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 		</StackLayout>
 	</ContentPage.Content>
