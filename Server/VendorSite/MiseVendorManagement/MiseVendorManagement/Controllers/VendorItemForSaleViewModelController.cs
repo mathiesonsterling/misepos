@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -9,6 +10,7 @@ using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
+using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
@@ -53,12 +55,13 @@ namespace MiseVendorManagement.Controllers
             var newVm = new VendorItemForSaleViewModel
             {
                 VendorId = vendorId,
-                PossibleCategories = _categoriesService.GetAssignableCategories().OrderBy(c => c.Name),
+                PossibleCategories = GetPossibleCategories(),
                 CaseSize = 1,
                 ContainerSizeML = 750M
             };
             return View(newVm);
         }
+
 
         // POST: VendorItemForSaleViewModel/Create
         [HttpPost]
@@ -66,7 +69,7 @@ namespace MiseVendorManagement.Controllers
         {
             try
             {
-                var lineItem = GetLineItemFromFormCollection(vendorId, collection);
+                var lineItem = GetLineItemFromFormCollection(vendorId, collection, Guid.NewGuid());
 
                 var v = await _dal.GetVendor(vendorId);
                 var vendor = v as Vendor;
@@ -84,20 +87,30 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: VendorItemForSaleViewModel/Edit/5
-        public ActionResult Edit(Guid vendorId, Guid lineItemId)
+        public async Task<ActionResult> Edit(Guid vendorId, Guid lineItemId)
         {
-            return View();
+            var vendor = await _dal.GetVendor(vendorId);
+            var lineItem = vendor.GetItemsVendorSells().FirstOrDefault(li => li.Id == lineItemId);
+
+            var vm = new VendorItemForSaleViewModel(lineItem)
+            {
+                PossibleCategories = GetPossibleCategories()
+            };
+            return View(vm);
         }
 
         // POST: VendorItemForSaleViewModel/Edit/5
         [HttpPost]
-        public ActionResult Edit(Guid vendorId, Guid lineItemId, FormCollection collection)
+        public async Task<ActionResult> Edit(Guid vendorId, Guid Id, FormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
 
-                return RedirectToAction("Index");
+                var newLineItem = GetLineItemFromFormCollection(vendorId, collection, Id);
+                await _dal.UpdateVendorLineItem(newLineItem);
+                
+                //assign categories
+                return RedirectToAction("Index", new RouteValueDictionary { {"vendorId", vendorId} });
             }
             catch
             {
@@ -143,7 +156,7 @@ namespace MiseVendorManagement.Controllers
         /// <param name="vendorId"></param>
         /// <param name="fc"></param>
         /// <returns></returns>
-        private VendorBeverageLineItem GetLineItemFromFormCollection(Guid vendorId, FormCollection fc)
+        private VendorBeverageLineItem GetLineItemFromFormCollection(Guid vendorId, FormCollection fc, Guid lineItemId)
         {
             var cats = fc["PostedCategoryGuids"].Split(',');
             var guids = cats.Where(s => string.IsNullOrWhiteSpace(s) == false).Select(Guid.Parse).ToList();
@@ -165,7 +178,7 @@ namespace MiseVendorManagement.Controllers
                 Categories = actualCats,
                 CreatedDate = DateTimeOffset.UtcNow,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
-                Id = Guid.NewGuid(),
+                Id = lineItemId,
                 VendorID = vendorId,
                 DisplayName = fc["Name"],
                 MiseName = fc["Name"],
@@ -175,6 +188,11 @@ namespace MiseVendorManagement.Controllers
                 LastTimePriceSet = DateTimeOffset.UtcNow,
                 Revision = new EventID(MiseAppTypes.VendorManagement, _orderId++)
             };
+        }
+
+        private IEnumerable<ICategory> GetPossibleCategories()
+        {
+            return _categoriesService.GetAssignableCategories().OrderBy(c => c.Name);
         }
     }
 }

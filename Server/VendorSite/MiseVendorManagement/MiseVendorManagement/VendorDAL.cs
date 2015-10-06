@@ -85,6 +85,25 @@ namespace MiseVendorManagement
             }
         }
 
+        public async Task UpdateVendorLineItem(VendorBeverageLineItem li)
+        {
+            using (var db = new AzureDB())
+            {
+                var vendor = await GetVendor(li.VendorID);
+                var downCast = vendor as Vendor;
+
+                var oldLineItem = downCast.VendorBeverageLineItems.FirstOrDefault(l => l.Id == li.Id);
+                if (oldLineItem == null)
+                {
+                    throw new ArgumentException("Cannot find line item in vendor");
+                }
+                downCast.VendorBeverageLineItems.Remove(oldLineItem);
+                downCast.VendorBeverageLineItems.Add(li);
+
+                await UpdateVendor(downCast);
+            }
+        } 
+
         public async Task DeleteVendor(Guid id)
         {
             using (var db = new AzureDB())

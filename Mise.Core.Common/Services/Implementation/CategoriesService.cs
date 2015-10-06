@@ -21,7 +21,7 @@ namespace Mise.Core.Common.Services.Implementation
 			Vodka, Gin,
 			Rum, RumDark, RumLight, SpicedRum,
 			Agave, AgaveMezcal, AgaveTequila,
-			Brandy, Liqueur, LiquerAmaro,
+			Brandy, Liqueur, LiquerAmaro, LiquerGeneric,
 			WineFortified, WineRed, WineRose, WineSparkling, WineWhite,
 			NonAlcoholic, Food,
 			BeerDraft, BeerPackage
@@ -126,13 +126,13 @@ namespace Mise.Core.Common.Services.Implementation
 		};
 
 	    public static ItemCategory WhiskeyWorld => new ItemCategory {
-	        Name = "Whisky (world)",
+	        Name = "Whisky (World)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse ("9949f991-0ed2-4ec5-96db-c21f5ce0e54c")
 	    };
 
 	    public static ItemCategory WhiskeyIrish => new ItemCategory {
-	        Name = "Irish Whiskey",
+	        Name = "Whiskey (Irish)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse ("1916f019-d98c-4f13-bc3c-0cf44bfa6f22")
 	    };
@@ -209,7 +209,7 @@ namespace Mise.Core.Common.Services.Implementation
 
 	    public static ItemCategory LiquerGeneric => new ItemCategory
 	    {
-	        Name = "Liquer",
+	        Name = "Liqueur",
 	        ParentCategoryID = Liqueur.Id,
 	        Id = Guid.Parse("abb08632-0d61-463c-94c3-982f974423f1")
 	    };
