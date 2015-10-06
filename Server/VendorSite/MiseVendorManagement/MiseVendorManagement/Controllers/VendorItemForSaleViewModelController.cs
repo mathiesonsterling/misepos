@@ -163,7 +163,7 @@ namespace MiseVendorManagement.Controllers
             var actualCats = _categoriesService.GetAssignableCategories().Where(c => guids.Contains(c.Id)).Cast<ItemCategory>().ToList();
 
             var amtInMl = decimal.Parse(fc["ContainerSizeML"]);
-            var container = new LiquidContainer {AmountContained = new LiquidAmount {Milliliters = amtInMl} };
+            var container = GetContainerForAmount(amtInMl);
 
             Money price = null;
             var priceV = fc["PublicPrice"];
@@ -193,6 +193,12 @@ namespace MiseVendorManagement.Controllers
         private IEnumerable<ICategory> GetPossibleCategories()
         {
             return _categoriesService.GetAssignableCategories().OrderBy(c => c.Name);
+        }
+
+        private LiquidContainer GetContainerForAmount(decimal ml)
+        {
+            var found = LiquidContainer.GetStandardBarSizes().FirstOrDefault(s => s.AmountContained.Milliliters == ml);
+            return found ?? new LiquidContainer {AmountContained = new LiquidAmount {Milliliters = ml}};
         }
     }
 }
