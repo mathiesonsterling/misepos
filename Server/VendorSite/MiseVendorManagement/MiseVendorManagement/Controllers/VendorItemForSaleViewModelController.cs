@@ -54,7 +54,8 @@ namespace MiseVendorManagement.Controllers
             {
                 VendorId = vendorId,
                 PossibleCategories = _categoriesService.GetAssignableCategories().OrderBy(c => c.Name),
-                CaseSize = 1
+                CaseSize = 1,
+                ContainerSizeML = 750M
             };
             return View(newVm);
         }
@@ -135,7 +136,7 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
-        private static int orderId = 0;
+        private static int _orderId = 0;
         /// <summary>
         /// TODO change this to event at some time?
         /// </summary>
@@ -172,7 +173,7 @@ namespace MiseVendorManagement.Controllers
                 Container = container,
                 PublicPricePerUnit = price,
                 LastTimePriceSet = DateTimeOffset.UtcNow,
-                Revision = new EventID(MiseAppTypes.VendorManagement, orderId++)
+                Revision = new EventID(MiseAppTypes.VendorManagement, _orderId++)
             };
         }
     }

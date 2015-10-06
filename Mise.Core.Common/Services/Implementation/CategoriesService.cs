@@ -92,6 +92,12 @@ namespace Mise.Core.Common.Services.Implementation
             ParentCategoryID = Liquor.Id
         };
 
+	    public static ItemCategory RumLight => new ItemCategory
+	    {
+	        Name = "Rum",
+	        Id = Guid.Parse("cfb0cefa-925a-4799-831b-31e6e3b166a7"),
+	        ParentCategoryID = Rum.Id
+	    };
         public static ItemCategory RumDark => new ItemCategory
         {
             Name = "Dark Rum",
