@@ -85,7 +85,7 @@ namespace MiseVendorManagement.Models
                 PhoneNumber = v.PhoneNumber.Number;
             }
             HasItems = v.GetItemsVendorSells().Any();
-            ItemsForSale = v.GetItemsVendorSells().Select(li => new VendorItemForSaleViewModel(li));
+            ItemsForSale = v.GetItemsVendorSells().Select(li => new VendorItemForSaleViewModel(li)).OrderBy(l => l.Name);
         }
 
     }

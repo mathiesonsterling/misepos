@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Mise.Core.Common;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
-using Mise.Core.Entities.Vendors;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
-using MiseVendorManagement.Database;
 using MiseVendorManagement.Models;
 
 namespace MiseVendorManagement.Controllers
@@ -58,7 +53,8 @@ namespace MiseVendorManagement.Controllers
             var newVm = new VendorItemForSaleViewModel
             {
                 VendorId = vendorId,
-                PossibleCategories = _categoriesService.GetAssignableCategories()
+                PossibleCategories = _categoriesService.GetAssignableCategories().OrderBy(c => c.Name),
+                CaseSize = 1
             };
             return View(newVm);
         }
@@ -109,20 +105,29 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: VendorItemForSaleViewModel/Delete/5
-        public ActionResult Delete(Guid vendorId, Guid lineItemId)
+        public async Task<ActionResult> Delete(Guid vendorId, Guid lineItemId)
         {
-            return View();
+            var vendor = await _dal.GetVendor(vendorId);
+            var li = vendor.GetItemsVendorSells().FirstOrDefault(l => l.Id == lineItemId);
+            var vm = new VendorItemForSaleViewModel(li);
+
+            return View(vm);
         }
 
         // POST: VendorItemForSaleViewModel/Delete/5
         [HttpPost]
-        public ActionResult Delete(Guid vendorId, Guid lineItemId, FormCollection collection)
+        public async Task<ActionResult> Delete(Guid vendorId, Guid lineItemId, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
+                var vendor = await _dal.GetVendor(vendorId);
+                var downCast = vendor as Vendor;
+                var lineItem = downCast.VendorBeverageLineItems.FirstOrDefault(li => li.Id == lineItemId);
 
-                return RedirectToAction("Index");
+                downCast.VendorBeverageLineItems.Remove(lineItem);
+                await _dal.UpdateVendor(downCast);
+
+                return RedirectToAction("Index", new RouteValueDictionary { {"vendorId", vendorId} });
             }
             catch
             {
