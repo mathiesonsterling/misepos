@@ -211,9 +211,11 @@ namespace MiseVendorManagement.Controllers
                 price = new Money(decimal.Parse(priceV));
             }
 
+            var caseSize = 1;
+            int.TryParse(fc["CaseSize"], out caseSize);
             return new VendorBeverageLineItem
             {
-                CaseSize = int.Parse(fc["CaseSize"]),
+                CaseSize = caseSize,
                 Categories = actualCats,
                 CreatedDate = DateTimeOffset.UtcNow,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
