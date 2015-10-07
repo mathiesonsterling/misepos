@@ -22,12 +22,48 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: Vendor
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string sortOrder)
         {
+            ViewBag.NameSortParam = sortOrder == "name" ? "name_desc" : "name";
+            ViewBag.CitySortParam = sortOrder == "city" ? "city_desc" : "city";
+            ViewBag.StateSortParam = sortOrder == "state" ? "state_desc" : "state";
+            ViewBag.EmailSortParam = sortOrder == "email" ? "email_desc" : "email";
+
             //get all our vendors
             var vendors = await _dal.GetAllVendors();
             var viewModels = vendors.Select(v => new VendorViewModel(v));
-            return View(viewModels.OrderBy(v => v.State).ThenBy(v => v.City).ThenBy(v => v.Name));
+
+            switch (sortOrder)
+            {
+                case "city":
+                    viewModels = viewModels.OrderBy(v => v.City).ThenBy(v => v.Name);
+                    break;
+                case "city_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.City).ThenBy(v => v.Name);
+                    break;
+                case "state":
+                    viewModels = viewModels.OrderBy(v => v.State).ThenBy(v => v.Name);
+                    break;
+                case "state_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.State).ThenBy(v => v.Name);
+                    break;
+                case "email":
+                    viewModels = viewModels.OrderBy(v => v.Email).ThenBy(v => v.Name);
+                    break;
+                case "email_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.Email).ThenBy(v => v.Name);
+                    break;
+                case "name_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.Name);
+                    break;
+                case "name":
+                    viewModels = viewModels.OrderBy(v => v.Name);
+                    break;
+                default:
+                    viewModels = viewModels.OrderBy(v => v.State).ThenBy(v => v.City).ThenBy(v => v.Name);
+                    break;
+            }
+            return View(viewModels);
         }
 
         // GET: Vendor/Details/5
