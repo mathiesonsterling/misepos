@@ -27,7 +27,7 @@
             Phone
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.HasItems)
+            @Html.ActionLink("Num Items", "Index", new {sortOrder = ViewBag.NumItemsSortParam})
         </th>
         <th></th>
     </tr>
@@ -50,7 +50,7 @@
             @Html.DisplayFor(modelItem => item.PhoneNumberDisplay)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.HasItems)
+            @Html.DisplayFor(modelItem => item.NumItems)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

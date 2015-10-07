@@ -28,6 +28,7 @@ namespace MiseVendorManagement.Controllers
             ViewBag.CitySortParam = sortOrder == "city" ? "city_desc" : "city";
             ViewBag.StateSortParam = sortOrder == "state" ? "state_desc" : "state";
             ViewBag.EmailSortParam = sortOrder == "email" ? "email_desc" : "email";
+            ViewBag.NumItemsSortParam = sortOrder == "numitems" ? "numitems_desc" : "numitems";
 
             //get all our vendors
             var vendors = await _dal.GetAllVendors();
@@ -58,6 +59,12 @@ namespace MiseVendorManagement.Controllers
                     break;
                 case "name":
                     viewModels = viewModels.OrderBy(v => v.Name);
+                    break;
+                case "numitems":
+                    viewModels = viewModels.OrderBy(v => v.NumItems).ThenBy(v => v.Name);
+                    break;
+                case "numitems_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.NumItems).ThenBy(v => v.Name);
                     break;
                 default:
                     viewModels = viewModels.OrderBy(v => v.State).ThenBy(v => v.City).ThenBy(v => v.Name);
