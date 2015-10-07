@@ -11,7 +11,7 @@
 <table class="table">
     <tr>
         <th>
-            Name
+            @Html.ActionLink("Name", "Index", new {vendorId = @Model.Id, sortOrder = ViewBag.NameSortParm})
         </th>
         <th>
             UPC
@@ -26,10 +26,11 @@
             Case Size
         </th>
         <th>
+            @Html.ActionLink("Container Size in ML", "Index", new { vendorId = @Model.Id, sortOrder = ViewBag.SizeSortParam})
             Container Size in ML
         </th>
         <th>
-            Categories
+            @Html.ActionLink("Categories", "Index", new { vendorId = @Model.Id, sortOrder = ViewBag.CategorySortParm })
         </th>
         <th></th>
     </tr>

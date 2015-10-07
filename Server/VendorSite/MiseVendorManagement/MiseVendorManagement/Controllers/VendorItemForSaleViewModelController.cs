@@ -31,11 +31,43 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: VendorItemForSaleViewModel
-        public async Task<ActionResult> Index(Guid vendorId)
+        public async Task<ActionResult> Index(Guid vendorId, string sortOrder)
         {
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.CategorySortParm = sortOrder == "category" ? "category_desc" : "category";
+            ViewBag.SizeSortParam = sortOrder == "size" ? "size_desc" : "size";
             var vendor = await _dal.GetVendor(vendorId);
             var vm = new VendorViewModel(vendor);
 
+            if (string.IsNullOrEmpty(sortOrder) == false)
+            {
+                switch (sortOrder)
+                {
+                    case "category":
+                        vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.Categories).ThenBy(li => li.Name);
+                        break;
+                    case "category_desc":
+                        vm.ItemsForSale = vm.ItemsForSale.OrderByDescending(li => li.Categories).ThenBy(li => li.Name);
+                        break;
+                    case "container":
+                        vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.ContainerName).ThenBy(li => li.Name);
+                        break;
+                    case "size":
+                        vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.ContainerSizeML).ThenBy(li => li.Name);
+                        break;
+                    case "size_desc":
+                        vm.ItemsForSale =
+                            vm.ItemsForSale.OrderByDescending(li => li.ContainerSizeML).ThenBy(li => li.Name);
+                        break;
+                    case "name_desc":
+                        vm.ItemsForSale = vm.ItemsForSale.OrderByDescending(li => li.Name).ThenBy(li => li.Name);
+                        break;
+                    case "name":
+                    default:
+                        vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.Name).ThenBy(li => li.Name);
+                        break;
+                }
+            }
             return View(vm);
         }
 
@@ -70,9 +102,20 @@ namespace MiseVendorManagement.Controllers
             try
             {
                 var lineItem = GetLineItemFromFormCollection(vendorId, collection, Guid.NewGuid());
+                if (lineItem.Categories.Any() == false)
+                {
+                    throw new ArgumentException("Cannot create an item without categories!");
+                }
 
                 var v = await _dal.GetVendor(vendorId);
-                var vendor = v as Vendor;
+                //check if it already exists
+                if (v.GetItemsVendorSells()
+                    .Any(li => BeverageLineItemEquator.AreSameBeverageLineItem(lineItem, li)))
+                {
+                    throw new ArgumentException("Item already exists for this vendor!");
+                }
+
+                var vendor = (Vendor)v;
                 vendor.VendorBeverageLineItems.Add(lineItem);
 
                 //save it
@@ -195,7 +238,7 @@ namespace MiseVendorManagement.Controllers
             return _categoriesService.GetAssignableCategories().OrderBy(c => c.Name);
         }
 
-        private LiquidContainer GetContainerForAmount(decimal ml)
+        private static LiquidContainer GetContainerForAmount(decimal ml)
         {
             var found = LiquidContainer.GetStandardBarSizes().FirstOrDefault(s => s.AmountContained.Milliliters == ml);
             return found ?? new LiquidContainer {AmountContained = new LiquidAmount {Milliliters = ml}};

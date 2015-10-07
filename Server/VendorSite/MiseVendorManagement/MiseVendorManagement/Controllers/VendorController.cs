@@ -27,7 +27,7 @@ namespace MiseVendorManagement.Controllers
             //get all our vendors
             var vendors = await _dal.GetAllVendors();
             var viewModels = vendors.Select(v => new VendorViewModel(v));
-            return View(viewModels);
+            return View(viewModels.OrderBy(v => v.State).ThenBy(v => v.City).ThenBy(v => v.Name));
         }
 
         // GET: Vendor/Details/5
