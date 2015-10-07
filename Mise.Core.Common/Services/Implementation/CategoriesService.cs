@@ -16,13 +16,16 @@ namespace Mise.Core.Common.Services.Implementation
 		private readonly List<ItemCategory> _allCats = new List<ItemCategory>{
 			BeerWineLiquor, Consumables, Operationals, Unknown,
 			Beer, Wine, Liquor,
-			Whiskey, WhiskeyAmerican, WhiskeyBourbon, WhiskeyCanadian, WhiskeyRye, WhiskeyScotch, 
-			WhiskeyWorld, WhiskeyIrish,
+			Whiskey, WhiskeyAmerican, WhiskeyBourbon, WhiskeyCanadian, WhiskeyRye,
+            WhiskeyScotch, ScotchSingleMalt, ScotchBlended, ScotchGrain, ScotchSMCampbeltown, ScotchSMHighland, ScotchSMIslands,
+            ScotchSMIslay, ScotchSMLowland, ScotchSMSpeyside,
+			WhiskeyWorld, WhiskeyIrish, WhiskeyAmericanCorn, WhiskeyAmericanSingleMalt,
 			Vodka, Gin,
-			Rum, RumDark, RumTraditional, SpicedRum, RumAgricole,
+			Rum, RumDark, RumTraditional, SpicedRum, RumAgricole, Cachaca,
 			Agave, AgaveMezcal, AgaveTequila,
-			Brandy, Liqueur, LiquerAmaro, LiquerGeneric,
-			WineFortified, WineRed, WineRose, WineSparkling, WineWhite,
+			Brandy, BrandyMisc, EauDeVie, Cognac, Pisco,
+            Liqueur, LiquerAmaro, LiquerGeneric,
+			WineFortified, WineRed, WineRose, WineSparkling, WineWhite, Sake,
             AromatizedWine, Vermouth, MiscAromatizedWine,
 			NonAlcoholic, Food,
 			BeerDraft, BeerPackage
@@ -154,26 +157,111 @@ namespace Mise.Core.Common.Services.Implementation
 	    public static ItemCategory WhiskeyScotch => new ItemCategory {
 	        Name = "Scotch",
 	        ParentCategoryID = Whiskey.Id,
-	        Id = Guid.Parse ("aec4cf62-094d-4d51-9003-042e361f7cb2")
+	        Id = Guid.Parse ("aec4cf62-094d-4d51-9003-042e361f7cb2"),
+            IsAssignable = true
 	    };
 
-	    public static ItemCategory WhiskeyBourbon => new ItemCategory
+	    public static ItemCategory ScotchSingleMalt => new ItemCategory
+	    {
+	        Name = "Scotch (Single Malt)",
+	        ParentCategoryID = WhiskeyScotch.Id,
+	        Id = Guid.Parse("b7ae838a-6335-4501-b97c-56e7e9be37aa"),
+            IsAssignable = true
+	    };
+
+	    public static ItemCategory ScotchSMHighland => new ItemCategory
+	    {
+	        Name = "Scotch (SM Highlands)",
+	        ParentCategoryID = ScotchSingleMalt.Id,
+	        Id = Guid.Parse("6efedaea-32a7-4058-816f-7676e9238710"),
+	        IsAssignable = true
+	    };
+
+        public static ItemCategory ScotchSMSpeyside => new ItemCategory
+        {
+            Name = "Scotch (SM Speyside)",
+            ParentCategoryID = ScotchSingleMalt.Id,
+            Id = Guid.Parse("97abc4bd-22de-4e5a-a40c-d642bf6119f6"),
+            IsAssignable = true
+        };
+
+        public static ItemCategory ScotchSMCampbeltown => new ItemCategory
+        {
+            Name = "Scotch (SM Campbeltown)",
+            ParentCategoryID = ScotchSingleMalt.Id,
+            Id = Guid.Parse("c7de68ae-bcef-4fe9-b120-7cdf90b0072d"),
+            IsAssignable = true
+        };
+
+        public static ItemCategory ScotchSMIslands => new ItemCategory
+        {
+            Name = "Scotch (SM Islands)",
+            ParentCategoryID = ScotchSingleMalt.Id,
+            Id = Guid.Parse("2b83edb1-4c21-454a-80c6-25d3569b4ae3"),
+            IsAssignable = true
+        };
+
+        public static ItemCategory ScotchSMIslay => new ItemCategory
+        {
+            Name = "Scotch (SM Islay)",
+            ParentCategoryID = ScotchSingleMalt.Id,
+            Id = Guid.Parse("bd32d58f-d002-49d4-a1f6-8823ee0e1292"),
+            IsAssignable = true
+        };
+
+        public static ItemCategory ScotchSMLowland => new ItemCategory
+        {
+            Name = "Scotch (SM Lowland)",
+            ParentCategoryID = ScotchSingleMalt.Id,
+            Id = Guid.Parse("b6aced85-4c57-4b1b-83ae-23946100571b"),
+            IsAssignable = true
+        };
+
+	    public static ItemCategory ScotchBlended => new ItemCategory
+	    {
+	        Name = "Scotch (Blended)",
+	        ParentCategoryID = WhiskeyScotch.Id,
+	        Id = Guid.Parse("4af047e0-3f22-4df7-8ed8-13d78789a458")
+	    };
+
+	    public static ItemCategory ScotchGrain => new ItemCategory
+	    {
+	        Name = "Scotch (Grain)",
+	        ParentCategoryID = WhiskeyScotch.Id,
+	        Id = Guid.Parse("e376e21b-8f82-4514-885a-896bd0eb3694")
+	    };
+
+        public static ItemCategory WhiskeyBourbon => new ItemCategory
 	    {
 	        Name = "Bourbon",
-	        ParentCategoryID = WhiskeyAmerican.Id,
+	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse("d2552894-1979-4e90-9604-dca3f54e0a8d")
 	    };
 
 	    public static ItemCategory WhiskeyRye => new ItemCategory
 	    {
-	        Name = "Rye",
+	        Name = "Whiskey (Rye)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse("ed526b32-efcd-48e7-8c73-f5027e5ad0df")
 	    };
 
+	    public static ItemCategory WhiskeyAmericanSingleMalt => new ItemCategory
+	    {
+	        Name = "Whiskey (American Single Malt)",
+            ParentCategoryID = Whiskey.Id,
+            Id = Guid.Parse("10a2ae32-4756-4838-988f-a6d87de67ac7")
+	    };
+
+	    public static ItemCategory WhiskeyAmericanCorn => new ItemCategory
+	    {
+	        Name = "Whiskey (Corn)",
+	        ParentCategoryID = Whiskey.Id,
+	        Id = Guid.Parse("e4e7a71f-861e-4f64-ae57-74034bb367eb")
+	    };
+
 	    public static ItemCategory WhiskeyCanadian => new ItemCategory
 	    {
-	        Name = "Canadian Whiskey",
+	        Name = "Whiskey (Canadian)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse("92b3ad51-7c1a-4363-9bc6-a85cf75e0b38")
 	    };
@@ -203,6 +291,33 @@ namespace Mise.Core.Common.Services.Implementation
 	        ParentCategoryID = Liquor.Id
 	    };
 
+	    public static ItemCategory BrandyMisc => new ItemCategory
+	    {
+	        Name = "Brandy",
+	        Id = Guid.Parse("fbcbe907-4a71-45f3-a43b-756aaeedc853"),
+	        ParentCategoryID = Brandy.Id
+	    };
+
+	    public static ItemCategory Cognac => new ItemCategory
+	    {
+	        Name = "Cognac",
+	        Id = Guid.Parse("85f40201-4510-4023-982b-64daa554a77d"),
+	        ParentCategoryID = Brandy.Id
+	    };
+
+	    public static ItemCategory EauDeVie => new ItemCategory
+	    {
+	        Name = "Eau de Vie",
+	        Id = Guid.Parse("c2ec7e2c-a231-4878-b248-9f5c567f8157"),
+	        ParentCategoryID = Brandy.Id,
+	    };
+
+	    public static ItemCategory Pisco => new ItemCategory
+	    {
+	        Name = "Pisco",
+	        Id = Guid.Parse("42d49164-5ebc-476e-a286-aea21a97950e"),
+	        ParentCategoryID = Brandy.Id
+	    };
 	    public static ItemCategory Liqueur => new ItemCategory {
 	        Name = "Liqueur",
 	        Id = Guid.Parse ("435f5bf7-4828-42fe-838a-59cf5e86e0be"),
@@ -278,7 +393,14 @@ namespace Mise.Core.Common.Services.Implementation
 	        Id = Guid.Parse("8d7c893f-07af-4d2a-b6a7-ca13af6ca876")
 	    };
 
-	    public static ItemCategory NonAlcoholic => new ItemCategory {
+	    public static ItemCategory Sake => new ItemCategory
+	    {
+            Name = "Sake",
+            ParentCategoryID = Wine.Id,
+            Id = Guid.Parse("08610c03-efc4-4d70-be4b-d95c1ba9102d")
+	    };
+
+        public static ItemCategory NonAlcoholic => new ItemCategory {
 	        Name = "Non Alcoholic",
 	        Id = Guid.Parse ("115952ae-b81a-424d-be99-61d51804011c"),
 	        ParentCategoryID = Consumables.Id
@@ -377,7 +499,7 @@ namespace Mise.Core.Common.Services.Implementation
 	    public IEnumerable<ICategory> GetAssignableCategories()
 	    {
 	        var parentCats = _allCats.Where(c => c.ParentCategoryID != null).Select(c => c.ParentCategoryID).Distinct().ToList();
-	        return _allCats.Where(c => parentCats.Contains(c.Id) == false && c.ParentCategoryID.HasValue);
+	        return _allCats.Where(c => c.IsAssignable || (parentCats.Contains(c.Id) == false && c.ParentCategoryID.HasValue));
 	    }
 
 	    #endregion

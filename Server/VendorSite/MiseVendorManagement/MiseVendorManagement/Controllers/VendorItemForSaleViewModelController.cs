@@ -4,11 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation;
-using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
@@ -22,12 +20,10 @@ namespace MiseVendorManagement.Controllers
     {
         private readonly VendorDAL _dal;
         private readonly ICategoriesService _categoriesService;
-        private readonly EntityDataTransportObjectFactory _dtoFactory;
         public VendorItemForSaleViewModelController()
         {
             _dal = new VendorDAL();
             _categoriesService = new CategoriesService();
-            _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
         }
 
         // GET: VendorItemForSaleViewModel
@@ -119,7 +115,7 @@ namespace MiseVendorManagement.Controllers
 
                 return RedirectToAction("Index", new RouteValueDictionary { {"vendorId", vendorId} });
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return View();
             }
@@ -175,6 +171,10 @@ namespace MiseVendorManagement.Controllers
             {
                 var vendor = await _dal.GetVendor(vendorId);
                 var downCast = vendor as Vendor;
+                if (downCast == null)
+                {
+                    throw new InvalidOperationException("Vendor cannot be translated, please contact development");
+                }
                 var lineItem = downCast.VendorBeverageLineItems.FirstOrDefault(li => li.Id == lineItemId);
 
                 downCast.VendorBeverageLineItems.Remove(lineItem);
@@ -188,12 +188,14 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
-        private static int _orderId = 0;
+        private static int _orderId;
+
         /// <summary>
         /// TODO change this to event at some time?
         /// </summary>
         /// <param name="vendorId"></param>
         /// <param name="fc"></param>
+        /// <param name="lineItemId"></param>
         /// <returns></returns>
         private VendorBeverageLineItem GetLineItemFromFormCollection(Guid vendorId, FormCollection fc, Guid lineItemId)
         {
@@ -211,7 +213,7 @@ namespace MiseVendorManagement.Controllers
                 price = new Money(decimal.Parse(priceV));
             }
 
-            var caseSize = 1;
+            int caseSize;
             int.TryParse(fc["CaseSize"], out caseSize);
             return new VendorBeverageLineItem
             {
