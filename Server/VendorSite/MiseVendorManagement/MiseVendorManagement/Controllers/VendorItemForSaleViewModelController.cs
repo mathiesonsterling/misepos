@@ -39,34 +39,30 @@ namespace MiseVendorManagement.Controllers
             var vendor = await _dal.GetVendor(vendorId);
             var vm = new VendorViewModel(vendor);
 
-            if (string.IsNullOrEmpty(sortOrder) == false)
+            switch (sortOrder)
             {
-                switch (sortOrder)
-                {
-                    case "category":
-                        vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.Categories).ThenBy(li => li.Name);
-                        break;
-                    case "category_desc":
-                        vm.ItemsForSale = vm.ItemsForSale.OrderByDescending(li => li.Categories).ThenBy(li => li.Name);
-                        break;
-                    case "container":
-                        vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.ContainerName).ThenBy(li => li.Name);
-                        break;
-                    case "size":
-                        vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.ContainerSizeML).ThenBy(li => li.Name);
-                        break;
-                    case "size_desc":
-                        vm.ItemsForSale =
-                            vm.ItemsForSale.OrderByDescending(li => li.ContainerSizeML).ThenBy(li => li.Name);
-                        break;
-                    case "name_desc":
-                        vm.ItemsForSale = vm.ItemsForSale.OrderByDescending(li => li.Name).ThenBy(li => li.Name);
-                        break;
-                    case "name":
-                    default:
-                        vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.Name).ThenBy(li => li.Name);
-                        break;
-                }
+                case "category":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.Categories).ThenBy(li => li.Name);
+                    break;
+                case "category_desc":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderByDescending(li => li.Categories).ThenBy(li => li.Name);
+                    break;
+                case "container":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.ContainerName).ThenBy(li => li.Name);
+                    break;
+                case "size":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.ContainerSizeML).ThenBy(li => li.Name);
+                    break;
+                case "size_desc":
+                    vm.ItemsForSale =
+                        vm.ItemsForSale.OrderByDescending(li => li.ContainerSizeML).ThenBy(li => li.Name);
+                    break;
+                case "name_desc":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderByDescending(li => li.Name).ThenBy(li => li.Name);
+                    break;
+                default:
+                    vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.Name);
+                    break;
             }
             return View(vm);
         }

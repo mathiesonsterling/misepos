@@ -55,7 +55,7 @@ namespace MiseVendorManagement.Controllers
                 {
                     return View(vm);
                 }
-                    var vendor = VendorVMToVendor(vm);
+                    var vendor = VendorVMToVendor(vm, new Guid());
 
                     //TODO get geolocation here
 
@@ -84,7 +84,7 @@ namespace MiseVendorManagement.Controllers
         {
             try
             {
-                var updated = VendorVMToVendor(vm);
+                var updated = VendorVMToVendor(vm, vm.Id);
                 await _dal.UpdateVendor(updated);
                 
                 return RedirectToAction("Index");
@@ -118,14 +118,14 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
-        private static Vendor VendorVMToVendor(VendorViewModel vm)
+        private static Vendor VendorVMToVendor(VendorViewModel vm, Guid vendorId)
         {
             //convert this to a vendor!
             var vendor = new Vendor
             {
                 CreatedDate = DateTimeOffset.UtcNow,
                 EmailToOrderFrom = new EmailAddress(vm.Email),
-                Id = Guid.NewGuid(),
+                Id = vendorId,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
                 Name = vm.Name,
                 PhoneNumber = new PhoneNumber(vm.PhoneAreaCode, vm.PhoneNumber),

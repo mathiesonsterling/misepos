@@ -48,6 +48,8 @@ namespace MiseVendorManagement.Models
         [DisplayName("Phone Number")]
         public string PhoneNumber { get; set; }
 
+        [DisplayName("Phone Number")]
+        public string PhoneNumberDisplay { get; set; }
 
         public bool HasItems { get; set; }
 
@@ -83,6 +85,7 @@ namespace MiseVendorManagement.Models
             {
                 PhoneAreaCode = v.PhoneNumber.AreaCode;
                 PhoneNumber = v.PhoneNumber.Number;
+                PhoneNumberDisplay = v.PhoneNumber.ToFormattedString();
             }
             HasItems = v.GetItemsVendorSells().Any();
             ItemsForSale = v.GetItemsVendorSells().Select(li => new VendorItemForSaleViewModel(li));

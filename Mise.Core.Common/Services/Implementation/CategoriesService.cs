@@ -19,10 +19,11 @@ namespace Mise.Core.Common.Services.Implementation
 			Whiskey, WhiskeyAmerican, WhiskeyBourbon, WhiskeyCanadian, WhiskeyRye, WhiskeyScotch, 
 			WhiskeyWorld, WhiskeyIrish,
 			Vodka, Gin,
-			Rum, RumDark, RumLight, SpicedRum,
+			Rum, RumDark, RumTraditional, SpicedRum, RumAgricole,
 			Agave, AgaveMezcal, AgaveTequila,
 			Brandy, Liqueur, LiquerAmaro, LiquerGeneric,
 			WineFortified, WineRed, WineRose, WineSparkling, WineWhite,
+            AromatizedWine, Vermouth, MiscAromatizedWine,
 			NonAlcoholic, Food,
 			BeerDraft, BeerPackage
 		};
@@ -92,10 +93,17 @@ namespace Mise.Core.Common.Services.Implementation
             ParentCategoryID = Liquor.Id
         };
 
-	    public static ItemCategory RumLight => new ItemCategory
+	    public static ItemCategory RumTraditional => new ItemCategory
 	    {
 	        Name = "Rum",
 	        Id = Guid.Parse("cfb0cefa-925a-4799-831b-31e6e3b166a7"),
+	        ParentCategoryID = Rum.Id
+	    };
+
+	    public static ItemCategory RumAgricole => new ItemCategory
+	    {
+	        Name = "Rhum Agricole",
+	        Id = Guid.Parse("58503cb2-0f1a-4c10-ae8d-728b1c2bdce0"),
 	        ParentCategoryID = Rum.Id
 	    };
         public static ItemCategory RumDark => new ItemCategory
@@ -213,13 +221,36 @@ namespace Mise.Core.Common.Services.Implementation
 	        ParentCategoryID = Liqueur.Id,
 	        Id = Guid.Parse("abb08632-0d61-463c-94c3-982f974423f1")
 	    };
-	    public static ItemCategory WineFortified => new ItemCategory {
-	        Name = "Fortified Wine",
-	        ParentCategoryID = Wine.Id,
-	        Id = Guid.Parse ("d3ad99ed-96b0-47e5-8044-e7886870b1a1")
+
+	    public static ItemCategory AromatizedWine => new ItemCategory
+	    {
+	        Name = "Aromatized Wine",
+	        ParentCategoryID = BeerWineLiquor.Id,
+	        Id = Guid.Parse("1db18c0e-f28d-46a1-a864-7a2bf77b1a3f")
 	    };
 
-	    public static ItemCategory WineWhite => new ItemCategory
+	    public static ItemCategory MiscAromatizedWine => new ItemCategory
+	    {
+	        Name = "Misc. Aromatized Wine",
+	        ParentCategoryID = AromatizedWine.Id,
+	        Id = Guid.Parse("6cf38037-dff9-47aa-a578-aad1063bb41f")
+	    };
+
+	    public static ItemCategory Vermouth => new ItemCategory
+	    {
+            Name = "Vermouth",
+            ParentCategoryID = AromatizedWine.Id,
+            Id = Guid.Parse("6a4a4be4-1da5-4451-8da6-22bbfdaaec80")
+	    };
+
+        public static ItemCategory WineFortified => new ItemCategory
+        {
+            Name = "Fortified Wine",
+            ParentCategoryID = Wine.Id,
+            Id = Guid.Parse("d3ad99ed-96b0-47e5-8044-e7886870b1a1")
+        };
+
+        public static ItemCategory WineWhite => new ItemCategory
 	    {
 	        Name = "White Wine",
 	        ParentCategoryID = Wine.Id,
