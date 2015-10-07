@@ -169,7 +169,8 @@ namespace MiseVendorManagement.Controllers
                 Verified = false,
                 StreetAddress =
                     new StreetAddress(vm.StreetAddressNumber, vm.StreetDirection, vm.StreetName, vm.City, vm.State, vm.Country,
-                        vm.ZipCode)
+                        vm.ZipCode),
+                Website = new Uri(vm.Website)
             };
             return vendor;
         }

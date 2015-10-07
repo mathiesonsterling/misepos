@@ -17,6 +17,8 @@ namespace Mise.Core.Common.Entities.Vendors
 
 	    public EmailAddress EmailToOrderFrom { get; set; }
 
+	    public Uri Website { get; set; }
+
 	    public PhoneNumber PhoneNumber{get;set;}
 
 		public string Detail {

@@ -75,8 +75,14 @@ namespace MiseVendorManagement
                     throw new InvalidOperationException("Cannot find vendor to update in DB");
                 }
 
-                var newVerDTO = _entityFactory.ToDataTransportObject(vendor);
+                //store the line items!
+                if (vendor.VendorBeverageLineItems.Any() == false)
+                {
+                    var oldDeser = _entityFactory.FromDataStorageObject<Vendor>(oldVer.ToRestaurantDTO());
+                    vendor.VendorBeverageLineItems = oldDeser.VendorBeverageLineItems.Select(li => li).ToList();
+                }
 
+                var newVerDTO = _entityFactory.ToDataTransportObject(vendor);
                 oldVer.EntityJSON = newVerDTO.JSON;
                 oldVer.LastUpdatedDate = newVerDTO.LastUpdatedDate;
                     

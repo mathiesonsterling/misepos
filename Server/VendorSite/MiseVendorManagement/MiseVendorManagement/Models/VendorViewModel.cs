@@ -42,6 +42,9 @@ namespace MiseVendorManagement.Models
 
         public string Email { get; set; }
 
+        [Url]
+        public string Website { get; set; }
+
         [DisplayName("Area Code")]
         public string PhoneAreaCode { get; set; }
 
@@ -87,6 +90,11 @@ namespace MiseVendorManagement.Models
                 PhoneNumber = v.PhoneNumber.Number;
                 PhoneNumberDisplay = v.PhoneNumber.ToFormattedString();
             }
+            if (v.Website != null)
+            {
+                Website = v.Website.AbsoluteUri;
+            }
+
             HasItems = v.GetItemsVendorSells().Any();
             ItemsForSale = v.GetItemsVendorSells().Select(li => new VendorItemForSaleViewModel(li));
         }
