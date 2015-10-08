@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CsvHelper;
-using Mise.Core.Common;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation;
@@ -99,7 +98,7 @@ namespace Mise.VendorManagement.Services.Implementation
                 {
                     var newItem = new VendorBeverageLineItem
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         CreatedDate = DateTime.UtcNow,
                         LastUpdatedDate = DateTime.UtcNow,
                         Revision = new EventID {AppInstanceCode = MiseAppTypes.VendorManagement, OrderingID = i++},
@@ -152,7 +151,7 @@ namespace Mise.VendorManagement.Services.Implementation
                         if (string.IsNullOrEmpty(priceRaw) == false)
                         {
                             var priceFor = priceRaw.Replace("$", "").Trim();
-                            var price = 0.0M;
+                            decimal price;
                             if (decimal.TryParse(priceFor, out price))
                             {
                                 newItem.PublicPricePerUnit = new Money(price);
@@ -177,7 +176,7 @@ namespace Mise.VendorManagement.Services.Implementation
 
         private static LiquidContainer CreateContainer(decimal containerSize, LiquidAmountUnits unit)
         {
-            decimal ml = 0;
+            decimal ml;
             if (unit == LiquidAmountUnits.OuncesLiquid)
             {
                 var ounces = containerSize;

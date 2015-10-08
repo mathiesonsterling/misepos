@@ -9,6 +9,7 @@ using Mise.Core.Common;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
+using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Vendors;
@@ -61,11 +62,15 @@ namespace DeveloperTools.Commands
             //we need to create the new vendor
             //TODO this should come from UI at some point
             var catService = new CategoriesService();
-            var mappings = catService.GetAllKnownCategoryMappings();
+            var mappings = new Dictionary<string, ItemCategory>();
 
             var vendorID = Guid.NewGuid();
             Report("Parsing file " + _fileName);
-            var lineItems = importService.ParseDataFile(_fileName, vendorID, "Spirit", "Unit Volume",
+
+            var fileStream = File.OpenRead(_fileName);
+            var memStream = new MemoryStream();
+            fileStream.CopyTo(memStream);
+            var lineItems = importService.ParseDataFile(memStream, vendorID, "Spirit", "Unit Volume",
                 LiquidAmountUnits.OuncesLiquid, "Category", mappings, null, null, null).ToList();
             Report("Parsed " + lineItems.Count() + " from file");
 
@@ -92,7 +97,7 @@ namespace DeveloperTools.Commands
                 LastUpdatedDate = DateTime.UtcNow,
                 Revision = eventID,
                 EmailToOrderFrom = _vendorEmail,
-                ID = vendorID,
+                Id = vendorID,
                 Name = _vendorName,
                 StreetAddress = _vendorStreetAddress,
                 Verified = true,

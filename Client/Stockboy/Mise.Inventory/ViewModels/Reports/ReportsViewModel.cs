@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Mise.Core.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems.Reports;
 
@@ -12,15 +13,15 @@ namespace Mise.Inventory.ViewModels.Reports
 {
 	public class ReportsViewModel : BaseViewModel
 	{
-	    private readonly IReportsService _reportsService;
-		private readonly IInventoryService _inventoryService;
+	    protected readonly IReportsService ReportsService;
+		protected readonly IInventoryService InventoryService;
 		private readonly ILoginService _loginService;
 		public ReportsViewModel(IAppNavigation navigation, ILogger logger, 
 			IReportsService reportsService, IInventoryService inventoryService, ILoginService loginService) : base(navigation, logger)
 		{
 			_loginService = loginService;
-		    _reportsService = reportsService;
-			_inventoryService = inventoryService;
+		    ReportsService = reportsService;
+			InventoryService = inventoryService;
 		    StartDate = new DateTime(2015, 1, 1);
 			EndDate = DateTime.Now.AddDays(1);
 			LiquidUnit = LiquidAmountUnits.Milliliters.ToString ();
@@ -30,7 +31,7 @@ namespace Mise.Inventory.ViewModels.Reports
         {
             //do we have a first item
 			Processing = true;
-			var firstInventory = await _inventoryService.GetFirstCompletedInventory ();
+			var firstInventory = await InventoryService.GetFirstCompletedInventory ();
 			if (firstInventory != null) {
 				StartDate = firstInventory.DateCompleted.Value.AddMinutes (1).LocalDateTime;
 				if (StartDate.AddDays(1) > EndDate) {
@@ -43,7 +44,8 @@ namespace Mise.Inventory.ViewModels.Reports
         #region Fields
         public DateTime StartDate { get { return GetValue<DateTime>(); } set { SetValue(value);} }
         public DateTime EndDate { get { return GetValue<DateTime>(); } set { SetValue(value);} }
-		public string LiquidUnit{get{return GetValue<string> ();}set{ SetValue (value); }}
+
+        public string LiquidUnit{get{return GetValue<string> ();}set{ SetValue (value); }}
         #endregion
 
         #region Commands
@@ -55,6 +57,10 @@ namespace Mise.Inventory.ViewModels.Reports
 			get{return new Command (AmountUsed, () => NotProcessing);}
 		}
 
+		public ICommand CostOfGoodsSoldCommand{
+			get{return new Command(CostOfGoodsSold, () => NotProcessing);}
+		}
+
 	    private async void CompletedInventories()
 	    {
 	        try
@@ -63,7 +69,7 @@ namespace Mise.Inventory.ViewModels.Reports
                 //set our request to limit dates
 				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
 	            var request = new ReportRequest(ReportTypes.CompletedInventory, StartDate, EndDate, null, null, unit);
-	            await _reportsService.SetCurrentReportRequest(request);
+	            await ReportsService.SetCurrentReportRequest(request);
 	            Processing = false;
                 await Navigation.ShowSelectCompletedInventory();
 	        }
@@ -78,7 +84,7 @@ namespace Mise.Inventory.ViewModels.Reports
 			if(rest == null){
 				throw new InvalidOperationException ("Cannot do report without a selected restaurant");
 			}
-			var hasPriorInv = await _inventoryService.HasInventoryPriorToDate (rest.ID, StartDate);
+			var hasPriorInv = await InventoryService.HasInventoryPriorToDate (rest.Id, StartDate);
 			if(hasPriorInv == false){
 				var userRes = await AskUserQuestionModal("No prior inventory", 
 					              "There's not a starting inventory before the dates you selected.  Your results will only depend on items you received, and might not be accurrate.  Continue?");
@@ -89,15 +95,18 @@ namespace Mise.Inventory.ViewModels.Reports
 			await DoGenericRequestFor (ReportTypes.AmountUsed);
 		}
 
+		private async void CostOfGoodsSold(){
+			await DoGenericRequestFor (ReportTypes.COGS);
+		}
 	    #endregion
 
-		private async Task DoGenericRequestFor(ReportTypes type){
+		protected virtual async Task DoGenericRequestFor(ReportTypes type){
 			try{
 				Processing = true;
 				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
 		
 				var request = new ReportRequest (type, StartDate, EndDate, null, null, unit);
-				await _reportsService.SetCurrentReportRequest (request);
+				await ReportsService.SetCurrentReportRequest (request);
 				Processing = false;
 				await Navigation.ShowReportResults ();
 			}

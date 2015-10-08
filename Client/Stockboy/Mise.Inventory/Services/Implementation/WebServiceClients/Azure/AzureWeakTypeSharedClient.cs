@@ -269,8 +269,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var ais = await table.Where (ai => ai.MiseEntityType == vendType.ToString ()).ToEnumerableAsync ();
 
 			//todo figure out a better way to do this on the server
+			//todo also remove to List when debugging is done!
 			var vendors = ais.Select(ai => ai.ToRestaurantDTO ())
-				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto));
+				.Select (dto => _entityDTOFactory.FromDataStorageObject<Vendor> (dto)).ToList();
 			var filtered = vendors.Where(v => v.GetRestaurantIDsAssociatedWithVendor ().Contains (restaurantID)).ToList();
 
 			return filtered;
@@ -339,7 +340,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			} else {
 				var real = _entityDTOFactory.FromDataStorageObject<Restaurant> (dto);
 				if (real == null) {
-					throw new Exception ("Error rehydrating item ID " + dto.ID);
+					throw new Exception ("Error rehydrating item ID " + dto.Id);
 				}
 				return real;
 			}
@@ -420,7 +421,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			return true;
 			var table = GetEventTable ();
 
-			var dtoIDs = dtos.Select (dto => dto.ID).ToList();
+			var dtoIDs = dtos.Select (dto => dto.Id).ToList();
 			var existingEvents = await table.Where(ev => dtoIDs.Contains (ev.EventID)).ToEnumerableAsync ();
 
 			//get those that exist and those that don't
@@ -450,7 +451,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			var table = GetEntityTable();
 
 			//does this exist?
-			var existing = (await table.Where(ai => ai.EntityID == dto.ID).ToEnumerableAsync ()).FirstOrDefault ();
+			var existing = (await table.Where(ai => ai.EntityID == dto.Id).ToEnumerableAsync ()).FirstOrDefault ();
 			if(existing != null){
 				//update is not firing, do NOT know why, but we'll do this in the meantime
 				try{
@@ -555,7 +556,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				} else {
 					var real = _entityDTOFactory.FromDataStorageObject<T> (dto);
 					if (real == null) {
-						throw new Exception ("Error rehydrating item ID " + dto.ID);
+						throw new Exception ("Error rehydrating item ID " + dto.Id);
 					}
 					realItems.Add (real);
 				}

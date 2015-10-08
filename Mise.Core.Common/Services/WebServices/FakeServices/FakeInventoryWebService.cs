@@ -46,12 +46,12 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			_emps = CreateEmployees (restID, townsendID, qaID, marketingID, sleazyHomeID);
 			_vendors = CreateVendors (restID, marketingID);
 
-			var empID = _emps.First ().ID;
+			var empID = _emps.First ().Id;
 			_pars = CreatePars (restID, empID);
 			_inventories = CreateInventories ();
 
-			var purchaseOrders = CreatePurchaseOrders (restID, empID, _vendors.First().ID);
-			_receivingOrders = CreateReceivingOrders (restID, empID, purchaseOrders.FirstOrDefault().ID);
+			var purchaseOrders = CreatePurchaseOrders (restID, empID, _vendors.First().Id);
+			_receivingOrders = CreateReceivingOrders (restID, empID, purchaseOrders.FirstOrDefault().Id);
 
 		    _invitations = CreateInvitations();
 		}
@@ -65,12 +65,12 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					AccountID = accountID,
 					Name = new RestaurantName("MainTestRestaurant"),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 2},
-					ID = restID,
+					Id = restID,
 					InventorySections = new List<RestaurantInventorySection>
 					{
 						new RestaurantInventorySection
 						{
-							ID = Guid.NewGuid(),
+							Id = Guid.NewGuid(),
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 2},
 							Name="Stock Room",
 							RestaurantID = restID
@@ -91,7 +91,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					AccountID = null,
 					Name = new RestaurantName("The Townsend", "Townsend"),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
-					ID = townsendID,
+					Id = townsendID,
                     InventorySections = new List<RestaurantInventorySection>(),
                     StreetAddress = new StreetAddress("718", "", "Congress Ave", "Austin", "Texas", Country.UnitedStates.Name, "78701"),
                     PhoneNumber = new PhoneNumber("512", "887-8778"),
@@ -101,7 +101,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                     AccountID = null,
                     Name = new RestaurantName("Relapse", "Relapse"),
                     Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 102},
-                    ID = qaID,
+                    Id = qaID,
                     InventorySections = new List<RestaurantInventorySection>(),
                     StreetAddress = new StreetAddress("699", "", "Ocean Ave", "Brooklyn", "New York", Country.UnitedStates.Name, "11226"),
                     PhoneNumber = new PhoneNumber("111", "222-3344")
@@ -110,11 +110,11 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					AccountID = null,
 					Name = new RestaurantName("Couch Party USA", "Couch Party"),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1020},
-					ID = marketingID,
+					Id = marketingID,
 					InventorySections = new List<RestaurantInventorySection>{
 						new RestaurantInventorySection
 						{
-							ID = Guid.NewGuid(),
+							Id = Guid.NewGuid(),
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 2},
 							Name="Stock Room",
 							RestaurantID = marketingID
@@ -129,7 +129,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                     AccountID = null,
                     Name = new RestaurantName ("The Long Suffering Wife", "Suffering Wife"),
                     Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 10200},
-                    ID = sleazyHomeID,
+                    Id = sleazyHomeID,
                     StreetAddress = new StreetAddress("1415", "", "Beckett St", "Austin", "Texas", Country.UnitedStates.Name, "78757"),
                     PhoneNumber = new PhoneNumber("718", "9867204")
                 }
@@ -147,7 +147,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			{
                 new Employee
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = new PersonName("QA", "Tester"),
                     CreatedDate = DateTime.UtcNow,
                     LastUpdatedDate = DateTime.UtcNow,
@@ -161,7 +161,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                 },
                 new Employee
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = new PersonName("Justin", "Elliott"),
                     CreatedDate = DateTime.UtcNow,
                     LastUpdatedDate = DateTime.UtcNow,
@@ -176,7 +176,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                     Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 10}
                 },
 				new Employee {
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					Name = new PersonName("Emily", "Perkins"),
 					CreatedDate = DateTime.UtcNow,
 					LastUpdatedDate = DateTime.UtcNow,
@@ -189,7 +189,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				},
 				new Employee
 				{
-					ID = Guid.NewGuid(),
+					Id = Guid.NewGuid(),
                     Name = new PersonName("Mise", "Development"),
                     Passcode = "1111",
 					CompBudget = new Money(50.0M),
@@ -213,14 +213,14 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					PrimaryEmail = new EmailAddress{Value = "test@misepos.com"},
 					Emails = new List<EmailAddress>{ new EmailAddress{Value = "test@misepos.com"} },
 					Password = new Password("test"),
-					ID = Guid.NewGuid(),
+					Id = Guid.NewGuid(),
                     Name = new PersonName("Testy", "McTesterson"),
 					RestaurantsAndAppsAllowed = testRestaurantList,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 120201}
 				},
                 new Employee
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     CreatedDate = DateTime.UtcNow,
                     Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 102020},
                     PrimaryEmail = new EmailAddress("bobking4321@gmail.com"),
@@ -253,7 +253,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			{
 				new Vendor
 				{
-					ID = Guid.Empty,
+					Id = Guid.Empty,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 					Name = "Bob's Liquor Barn",
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>(),
@@ -270,14 +270,14 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				},
 				new Vendor 
 				{
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
 					Name = "Siegal's",
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Mount Gay Black Barrel",
 							MiseName = "mountgayblackbarrel750ml",
 							Container = ml750,
@@ -288,7 +288,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						new VendorBeverageLineItem{
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Cointreau",
 							MiseName = "cointreau750ml",
 							Container = ml750,
@@ -299,7 +299,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Bruichladdich Port Charlotte SB",
 							MiseName = "bruichladdichportcharlottesb",
 							Container = ml750,
@@ -310,7 +310,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Pimms",
 							MiseName = "pimms750ml",
 							Container = ml750,
@@ -321,7 +321,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						new VendorBeverageLineItem{
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Botanist Gin",
 							MiseName = "botanistgin750ml",
 							Container = ml750,
@@ -332,7 +332,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Angostura Bitters",
 							MiseName = "angosturabitters118ml",
 							Container = ml118,
@@ -343,7 +343,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Cointreau Guignolet",
 							MiseName = "cointreauguignolet375ml",
 							Container = ml375,
@@ -354,7 +354,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Old Granddad 80 Proof",
 							MiseName = "oldgranddad80proof1750ml",
 							Container = l175,
@@ -368,14 +368,14 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					RestaurantsAssociatedIDs = new List<Guid>{marketingID}
 				},
 				new Vendor{
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
 					Name = "FreshPoint",
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 1,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Perfect Puree Passionfruit",
 							MiseName = "perfectpureepassionfruit30oz",
 							Container = oz30,
@@ -389,7 +389,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					RestaurantsAssociatedIDs = new List<Guid>{marketingID}
 				},
 				new Vendor{
-					ID = favoriteID,
+					Id = favoriteID,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
 					Name = "Favorite Brands",
 					//13755 Diplomat Dr #100
@@ -401,7 +401,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							CaseSize = 12,
-							ID = Guid.NewGuid (),
+							Id = Guid.NewGuid (),
 							DisplayName = "Underberg",
 							Container = ml20,
                             VendorID = favoriteID,
@@ -418,7 +418,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 		    {
 		        foreach (var li in v.VendorBeverageLineItems)
 		        {
-		            li.VendorID = v.ID;
+		            li.VendorID = v.Id;
 		        }
 		    }
 
@@ -581,7 +581,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					CaseSize = null,
 					Container = container,
 					DisplayName = key,
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 					MiseName = key + "750ml",
 					Quantity = int.Parse (lis750[key]),
@@ -598,7 +598,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
 					CreatedByEmployeeID = empID,
 					CreatedDate = DateTimeOffset.UtcNow,
-					ID = Guid.NewGuid(),
+					Id = Guid.NewGuid(),
 					RestaurantID = restID,
 					IsCurrent = true,
 					LastUpdatedDate = DateTime.UtcNow,
@@ -614,7 +614,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			{
 				new PurchaseOrder
 				{
-					ID = Guid.NewGuid(),
+					Id = Guid.NewGuid(),
 					CreatedDate = DateTimeOffset.UtcNow,
 					CreatedByEmployeeID = empID,
 					RestaurantID = restID,
@@ -626,7 +626,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							{
 								new PurchaseOrderLineItem
 								{
-									ID = Guid.NewGuid(),
+									Id = Guid.NewGuid(),
 									Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 10101},
 									UPC = "1112j2jdjjdsss",
 									MiseName = "testPOLineItem",
@@ -656,7 +656,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			{
 				new ReceivingOrder
 				{
-					ID = Guid.NewGuid(),
+					Id = Guid.NewGuid(),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 					CreatedDate = DateTimeOffset.UtcNow,
 					Status = ReceivingOrderStatus.Created,
@@ -669,7 +669,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					{
 						new ReceivingOrderLineItem
 						{
-							ID = Guid.NewGuid(),
+							Id = Guid.NewGuid(),
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 							RestaurantID = restID,
 							CaseSize = null,
@@ -713,7 +713,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 
 		public Task<Employee> GetEmployeeByID (Guid id)
 		{
-			var emp = _emps.FirstOrDefault (e => e.ID == id);
+			var emp = _emps.FirstOrDefault (e => e.Id == id);
 			return Task.FromResult (emp);
 		}
 
@@ -731,7 +731,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 
 		public Task<Restaurant> GetRestaurant (Guid restaurantID)
 		{
-			return Task.FromResult (_restaurants.FirstOrDefault (r => r.ID == restaurantID));
+			return Task.FromResult (_restaurants.FirstOrDefault (r => r.Id == restaurantID));
 		}
 
 		#region IEventStoreWebService implementation
@@ -830,11 +830,11 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
             {
                 var invite = new ApplicationInvitation
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     DestinationEmail = new EmailAddress { Value = "joe@test.com" },
-                    InvitingEmployeeID = fromEmp.ID,
+                    InvitingEmployeeID = fromEmp.Id,
                     InvitingEmployeeName = fromEmp.Name,
-                    RestaurantID = rest.ID,
+                    RestaurantID = rest.Id,
                     RestaurantName = rest.Name,
                     Application = MiseAppTypes.StockboyMobile,
                     Revision = new EventID { AppInstanceCode = FAKE_APP_CODE, OrderingID = 10203 },

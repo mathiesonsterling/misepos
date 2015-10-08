@@ -16,7 +16,7 @@ namespace Mise.Core.Common.UnitTests.Entities
         {
             var employee = new Employee();
 
-            var ev = new InsufficientPermissionsEvent{EventOrderingID = new EventID()};
+            var ev = new InsufficientPermissionsEvent{EventOrder = new EventID()};
 
             //ACT
             employee.When(ev);
@@ -30,7 +30,7 @@ namespace Mise.Core.Common.UnitTests.Entities
         {
             var employee = new Employee();
 
-            var ev = new NoSaleEvent{EventOrderingID = new EventID()};
+            var ev = new NoSaleEvent{EventOrder = new EventID()};
 
             //ACT
             employee.When(ev);
@@ -56,7 +56,7 @@ namespace Mise.Core.Common.UnitTests.Entities
         {
             var employee = new Employee
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 LastTimeLoggedIntoInventoryApp = DateTime.Now,
                 CurrentlyLoggedIntoInventoryApp = true,
                 CurrentlyClockedInToPOS = true,
@@ -69,7 +69,7 @@ namespace Mise.Core.Common.UnitTests.Entities
             //Assert
             Assert.IsNotNull(res, "No exception thrown!");
             Assert.AreEqual(employee.CurrentlyLoggedIntoInventoryApp, res.CurrentlyLoggedIntoInventoryApp);
-            Assert.AreEqual(employee.ID, res.ID);
+            Assert.AreEqual(employee.Id, res.Id);
             Assert.AreEqual(employee.LastTimeLoggedIntoInventoryApp, res.LastTimeLoggedIntoInventoryApp);
             Assert.AreEqual(employee.Password, res.Password);
         }

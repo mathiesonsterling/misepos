@@ -10,216 +10,123 @@ namespace Mise.Core.ValueItems.Inventory
     {
         #region Standard sizes
 
-        public static LiquidContainer Bottle750ML
-        {
-            get { return new LiquidContainer { 
-					AmountContained = new LiquidAmount { Milliliters = 750 }, 
-					DisplayName = "750ml Bottle"
-				}; }
-        }
+        public static LiquidContainer Bottle750ML => new LiquidContainer { 
+            AmountContained = new LiquidAmount { Milliliters = 750 }, 
+            DisplayName = "750ml Bottle"
+        };
 
-        public static LiquidContainer Bottle1L
-        {
-            get { return new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 1000 }, 
-					DisplayName = "1L Bottle"
-				}; 
-			}
-        }
+        public static LiquidContainer Bottle1L => new LiquidContainer { AmountContained = new LiquidAmount { Milliliters = 1000 }, 
+            DisplayName = "1L Bottle"
+        };
 
         /// <summary>
         /// Handle of booze
         /// </summary>
-        public static LiquidContainer Bottle1_75ML
+        public static LiquidContainer Bottle1_75ML => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = new LiquidAmount {Milliliters = 1750M},
-                    DisplayName = "1.75L Bottle"
-                };
-            }
-        }
-        public static LiquidContainer Bottle375ML
-        {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = new LiquidAmount {Milliliters = 375},
-                    DisplayName = "375ml Bottle"
-                };
-            }
-        }
+            AmountContained = new LiquidAmount {Milliliters = 1750M},
+            DisplayName = "1.75L Bottle"
+        };
 
-        public static LiquidContainer Can12oz
+        public static LiquidContainer Bottle375ML => new LiquidContainer
         {
-            get { return new LiquidContainer { 
-					AmountContained = LiquidAmount.FromLiquidOunces(12.0M), 
-					DisplayName = "12oz Can",
-					Shape = LiquidContainerShape.DefaultCanShape
-				}; 
-			}
-        }
+            AmountContained = new LiquidAmount {Milliliters = 375},
+            DisplayName = "375ml Bottle"
+        };
 
-        public static LiquidContainer Can16oz
-        {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
-                    DisplayName = "16oz Can",
-					Shape = LiquidContainerShape.DefaultCanShape
-                };
-            }
-        }
+        public static LiquidContainer Can12oz => new LiquidContainer { 
+            AmountContained = LiquidAmount.FromLiquidOunces(12.0M), 
+            DisplayName = "12oz Can",
+            Shape = LiquidContainerShape.DefaultCanShape
+        };
 
-        public static LiquidContainer Can10oz
+        public static LiquidContainer Can16oz => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = LiquidAmount.FromLiquidOunces(10.0M),
-                    DisplayName = "10oz Bottle",
-					Shape = LiquidContainerShape.DefaultCanShape
-                };
-            }
-        }
+            AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
+            DisplayName = "16oz Can",
+            Shape = LiquidContainerShape.DefaultCanShape
+        };
 
-        public static LiquidContainer Can250ml
+        public static LiquidContainer Can10oz => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = new LiquidAmount {Milliliters = 250M},
-                    DisplayName = "250ml Can",
-					Shape = LiquidContainerShape.DefaultCanShape
-                };
-            }
-        }
-        public static LiquidContainer Bottle12oz
-        {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = LiquidAmount.FromLiquidOunces(12.0M),
-                    DisplayName = "12oz Bottle",
-					Shape = LiquidContainerShape.DefaultBeerBottleShape	
-                };
-            }
-        }
+            AmountContained = LiquidAmount.FromLiquidOunces(10.0M),
+            DisplayName = "10oz Bottle",
+            Shape = LiquidContainerShape.DefaultCanShape
+        };
 
-        public static LiquidContainer Bottle16oz
+        public static LiquidContainer Can250ml => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
-                    DisplayName = "16oz Bottle",
-					Shape = LiquidContainerShape.DefaultBeerBottleShape	
-                };
-            }
-        }
+            AmountContained = new LiquidAmount {Milliliters = 250M},
+            DisplayName = "250ml Can",
+            Shape = LiquidContainerShape.DefaultCanShape
+        };
 
-        public static LiquidContainer Bottle7oz
+        public static LiquidContainer Bottle12oz => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = LiquidAmount.FromLiquidOunces(7.0M),
-                    DisplayName = "7oz Bottle",
-					Shape = LiquidContainerShape.DefaultBeerBottleShape	
-                };
-            }
-        }
+            AmountContained = LiquidAmount.FromLiquidOunces(12.0M),
+            DisplayName = "12oz Bottle",
+            Shape = LiquidContainerShape.DefaultBeerBottleShape	
+        };
 
-        public static LiquidContainer Bottle40oz
+        public static LiquidContainer Bottle16oz => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = LiquidAmount.FromLiquidOunces(40M),
-                    DisplayName = "40oz Bottle",
-					Shape = LiquidContainerShape.DefaultBeerBottleShape	
-                };
-            }
-        }
-        public static LiquidContainer Bottle330ml
+            AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
+            DisplayName = "16oz Bottle",
+            Shape = LiquidContainerShape.DefaultBeerBottleShape	
+        };
+
+        public static LiquidContainer Bottle7oz => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = new LiquidAmount { Milliliters = 330 },
-                    DisplayName = "330ml Bottle"
-                };
-            }
-        }
+            AmountContained = LiquidAmount.FromLiquidOunces(7.0M),
+            DisplayName = "7oz Bottle",
+            Shape = LiquidContainerShape.DefaultBeerBottleShape	
+        };
 
-        public static LiquidContainer Bottle500ml
+        public static LiquidContainer Bottle40oz => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = new LiquidAmount { Milliliters = 500 },
-                    DisplayName = "500ml Bottle"
-                };
-            }
-        }
+            AmountContained = LiquidAmount.FromLiquidOunces(40M),
+            DisplayName = "40oz Bottle",
+            Shape = LiquidContainerShape.DefaultBeerBottleShape	
+        };
 
-        public static LiquidContainer Keg
+        public static LiquidContainer Bottle330ml => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = new LiquidAmount {Milliliters = 58673.8827M},
-					DisplayName = "Keg (Half Barrel)",
-					Shape = LiquidContainerShape.DefaultKegShape
-                };
-            }
-        }
+            AmountContained = new LiquidAmount { Milliliters = 330 },
+            DisplayName = "330ml Bottle"
+        };
 
-        public static LiquidContainer HalfKeg
+        public static LiquidContainer Bottle500ml => new LiquidContainer
         {
-            get
-            {
-                return new LiquidContainer
-                {
-                    AmountContained = new LiquidAmount {Milliliters = 29336.94135M},
-					DisplayName = "Pony Keg (Quarter Barrel)",
-					Shape = LiquidContainerShape.DefaultKegShape
-                };
-            }
-        }
+            AmountContained = new LiquidAmount { Milliliters = 500 },
+            DisplayName = "500ml Bottle"
+        };
 
-		public static LiquidContainer TorpedoKeg{
-			get{
-				return new LiquidContainer {
-					AmountContained = new LiquidAmount{ Milliliters = 19800M },
-					DisplayName = "Sixth Barrel",
-					Shape = LiquidContainerShape.DefaultKegShape
-				};
-			}
-		}
+        public static LiquidContainer Keg => new LiquidContainer
+        {
+            AmountContained = new LiquidAmount {Milliliters = 58673.8827M},
+            DisplayName = "Keg (Half Barrel)",
+            Shape = LiquidContainerShape.DefaultKegShape
+        };
 
-		public static LiquidContainer ImportKeg
-		{
-			get{return new LiquidContainer {
-					AmountContained = new LiquidAmount{Milliliters = 50000M},
-					DisplayName = "Import Keg (50L)",
-					Shape = LiquidContainerShape.DefaultKegShape
-				};
-			}
-		}
+        public static LiquidContainer HalfKeg => new LiquidContainer
+        {
+            AmountContained = new LiquidAmount {Milliliters = 29336.94135M},
+            DisplayName = "Pony Keg (Quarter Barrel)",
+            Shape = LiquidContainerShape.DefaultKegShape
+        };
+
+        public static LiquidContainer TorpedoKeg => new LiquidContainer {
+            AmountContained = new LiquidAmount{ Milliliters = 19800M },
+            DisplayName = "Sixth Barrel",
+            Shape = LiquidContainerShape.DefaultKegShape
+        };
+
+        public static LiquidContainer ImportKeg => new LiquidContainer {
+            AmountContained = new LiquidAmount{Milliliters = 50000M},
+            DisplayName = "Import Keg (50L)",
+            Shape = LiquidContainerShape.DefaultKegShape
+        };
+
         public static IEnumerable<LiquidContainer> GetStandardBarSizes()
         {
             return new List<LiquidContainer>

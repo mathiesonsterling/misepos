@@ -33,5 +33,7 @@ namespace MiseVendorManagement.Models
         public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorViewModel> VendorViewModels { get; set; }
 
         public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorCSVImportFileViewModel> VendorCSVImportFileViewModels { get; set; }
+
+        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorItemForSaleViewModel> VendorItemForSaleViewModels { get; set; }
     }
 }

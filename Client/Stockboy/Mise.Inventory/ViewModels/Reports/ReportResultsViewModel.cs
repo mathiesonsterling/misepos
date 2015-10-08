@@ -53,6 +53,7 @@ namespace Mise.Inventory.ViewModels.Reports
         }
 
         public string Title { get { return GetValue<string>(); } set { SetValue(value); } }
+		public bool NoItems{ get { return GetValue<bool> (); } set { SetValue (value); } }
 
         public override async Task OnAppearing()
         {
@@ -63,6 +64,7 @@ namespace Mise.Inventory.ViewModels.Reports
                 var result = await _reportsService.RunCurrentReport();
 
                 LineItems = result.LineItems.Select(li => new LineItemDisplayAdapter(li));
+				NoItems = LineItems.Any() == false;
                 Title = result.Title;
 				Processing = false;
             }

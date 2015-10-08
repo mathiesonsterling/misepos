@@ -22,18 +22,15 @@ namespace MiseVendorManagement
             _vendorType = typeof (Vendor).ToString();
         }
 
-        public Task<IEnumerable<IVendor>> GetAllVendors()
+        public async Task<IEnumerable<IVendor>> GetAllVendors()
         {
-            return Task.Run(() =>
+            using (var db = new AzureDB())
             {
-                using (var db = new AzureDB())
-                {
-                    var ais = db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _vendorType).ToList();
-                    var dtos = ais.Select(ai => ai.ToRestaurantDTO());
-                    var vendors = dtos.Select(dto => _entityFactory.FromDataStorageObject<Vendor>(dto));
-                    return vendors.Cast<IVendor>();
-                }
-            });
+                var ais = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _vendorType).ToListAsync();
+                var dtos = ais.Select(ai => ai.ToRestaurantDTO());
+                var vendors = dtos.Select(dto => _entityFactory.FromDataStorageObject<Vendor>(dto));
+                return vendors.Cast<IVendor>();
+            }
         }
 
         public Task<IVendor> GetVendor(Guid vendorId)
@@ -57,41 +54,47 @@ namespace MiseVendorManagement
             });
         }
 
-        public Task InsertVendor(Vendor vendor)
+        public async Task InsertVendor(Vendor vendor)
         {
-            return Task.Run(() =>
-            {
-                var dto = _entityFactory.ToDataTransportObject(vendor);
-                var azureEnt = new AzureEntityStorage(dto);
+            var dto = _entityFactory.ToDataTransportObject(vendor);
+            var azureEnt = new AzureEntityStorage(dto);
 
-                using (var db = new AzureDB())
-                {
-                    db.AzureEntityStorages.Add(azureEnt);
-                }
-            });
+            using (var db = new AzureDB())
+            {
+                db.AzureEntityStorages.Add(azureEnt);
+                await db.SaveChangesAsync();
+            }
         }
 
-        public Task UpdateVendor(Vendor vendor)
+        public async Task UpdateVendor(Vendor vendor)
         {
-            return Task.Run(() =>
+            using (var db = new AzureDB())
             {
-                using (var db = new AzureDB())
+                var oldVer = await db.AzureEntityStorages.FirstOrDefaultAsync(ai => ai.EntityID == vendor.Id && ai.MiseEntityType == _vendorType);
+                if (oldVer == null)
                 {
-                    var oldVer = db.AzureEntityStorages.FirstOrDefault(ai => ai.EntityID == vendor.ID && ai.MiseEntityType == _vendorType);
-                    if (oldVer == null)
-                    {
-                        throw new InvalidOperationException("Cannot find vendor to update in DB");
-                    }
+                    throw new InvalidOperationException("Cannot find vendor to update in DB");
+                }
 
-                    var newVerDTO = _entityFactory.ToDataTransportObject(vendor);
+                var newVerDTO = _entityFactory.ToDataTransportObject(vendor);
 
-                    oldVer.EntityJSON = newVerDTO.JSON;
-                    oldVer.LastUpdatedDate = newVerDTO.LastUpdatedDate;
+                oldVer.EntityJSON = newVerDTO.JSON;
+                oldVer.LastUpdatedDate = newVerDTO.LastUpdatedDate;
                     
-                    db.Entry(oldVer).State = EntityState.Modified;
-                    return db.SaveChangesAsync();
-                }
-            });
+                db.Entry(oldVer).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
         }
+
+        public async Task DeleteVendor(Guid id)
+        {
+            using (var db = new AzureDB())
+            {
+                var ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.EntityID == id && a.MiseEntityType == _vendorType);
+
+                db.AzureEntityStorages.Remove(ai);
+                await db.SaveChangesAsync();
+            }
+        }  
     }
 }

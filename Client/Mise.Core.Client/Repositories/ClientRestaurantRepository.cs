@@ -55,7 +55,7 @@ namespace Mise.Core.Client.Repositories
 
         public override Guid GetEntityID(IRestaurantEvent ev)
         {
-            return ev.RestaurantID;
+            return ev.RestaurantId;
         }
 
         protected override async Task<IEnumerable<Restaurant>> LoadFromWebservice(Guid? restaurantID)

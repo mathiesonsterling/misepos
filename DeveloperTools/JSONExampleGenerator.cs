@@ -43,12 +43,12 @@ namespace DeveloperTools
         {
             var oi = new OrderItem
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 Revision = new EventID{AppInstanceCode = MiseAppTypes.DummyData, OrderingID = 100},
                 MenuItem = new MenuItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = "miTest",
                     DisplayWeight = 100,
                     Price = new Money(1.99M),

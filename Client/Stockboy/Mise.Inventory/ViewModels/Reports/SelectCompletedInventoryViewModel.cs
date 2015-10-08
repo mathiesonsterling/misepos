@@ -6,7 +6,6 @@ using Mise.Core;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
 using Mise.Core.ExtensionMethods;
-using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.Repositories;
@@ -70,7 +69,7 @@ namespace Mise.Inventory.ViewModels.Reports
             {
 				Processing = true;
                 //make the report, and send the request
-				var inventoryId = lineItem.Source.ID;
+				var inventoryId = lineItem.Source.Id;
 				var currentRequest = await _reportsService.GetCurrentReportRequest ();
 				if (currentRequest == null) {
 					throw new InvalidOperationException ("No current request found");

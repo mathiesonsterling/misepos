@@ -16,7 +16,7 @@ namespace Mise.Core.Entities.Base
         /// Unique ID for the entity, in a DDD sense
         /// </summary>
         /// <value>The I.</value>
-        Guid ID { get; }
+        Guid Id { get; }
 
         /// <summary>
         /// The event number that this entity represents up to - the last event that is reflected here

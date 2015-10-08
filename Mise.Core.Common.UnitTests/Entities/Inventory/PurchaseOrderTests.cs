@@ -19,7 +19,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             {
                 CreatedByEmployeeID = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow.AddDays(-3),
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 LastUpdatedDate = DateTime.UtcNow,
                 RestaurantID = Guid.NewGuid(),
                 Revision = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1},
@@ -29,14 +29,14 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 			{
 			                    new PurchaseOrderLineItem
 			                    {
-			                        ID = Guid.NewGuid(),
+			                        Id = Guid.NewGuid(),
 			                        Quantity = 1,
 			                        MiseName = "test1",
 			                        UPC = "1111"
 			                    },
 			                    new PurchaseOrderLineItem
 			                    {
-			                        ID = Guid.NewGuid(),
+			                        Id = Guid.NewGuid(),
 			                        Quantity = 13,
 			                        MiseName = "test2",
 			                        UPC = "2222"
@@ -53,7 +53,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             Assert.IsNotNull(clone);
             Assert.AreEqual(underTest.CreatedByEmployeeID, clone.CreatedByEmployeeID);
             Assert.AreEqual(underTest.CreatedDate, underTest.CreatedDate);
-            Assert.AreEqual(underTest.ID, clone.ID);
+            Assert.AreEqual(underTest.Id, clone.Id);
             Assert.AreEqual(underTest.LastUpdatedDate, clone.LastUpdatedDate);
             Assert.AreEqual(underTest.RestaurantID, clone.RestaurantID);
 
@@ -78,20 +78,20 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             {
                 PurchaseOrderID = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                CausedByID = Guid.NewGuid(),
-                EventOrderingID = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 12},
-                RestaurantID = Guid.NewGuid()
+                CausedById = Guid.NewGuid(),
+                EventOrder = new EventID {AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 12},
+                RestaurantId = Guid.NewGuid()
             };
 
             //ACT
             underTest.When(create);
 
             //ASSERT
-            Assert.AreEqual(create.PurchaseOrderID, underTest.ID, "ID");
+            Assert.AreEqual(create.PurchaseOrderID, underTest.Id, "ID");
             Assert.AreEqual(create.CreatedDate, underTest.LastUpdatedDate, "Last Updated");
             Assert.AreEqual(create.CreatedDate, underTest.CreatedDate, "Created Date");
-            Assert.AreEqual(create.RestaurantID, underTest.RestaurantID);
-            Assert.AreEqual(create.CausedByID, underTest.CreatedByEmployeeID);
+            Assert.AreEqual(create.RestaurantId, underTest.RestaurantID);
+            Assert.AreEqual(create.CausedById, underTest.CreatedByEmployeeID);
         }
 		/*
         [Test]

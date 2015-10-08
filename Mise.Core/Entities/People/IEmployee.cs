@@ -100,7 +100,6 @@ namespace Mise.Core.Entities.People
         bool CurrentlyLoggedIntoInventoryApp { get; set; }
 
         EmailAddress PrimaryEmail { get; set; }
-
     }
 
 }

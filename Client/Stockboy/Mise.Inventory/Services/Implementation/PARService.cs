@@ -78,7 +78,7 @@ namespace Mise.Inventory.Services.Implementation
 			var curr = await GetCurrentPAR ();
 			if (curr != null) {
 				try{
-					await _parRepository.Commit (curr.ID);
+					await _parRepository.Commit (curr.Id);
 				} catch(Exception e){
 					_logger.HandleException (e);
 					throw;
@@ -102,7 +102,7 @@ namespace Mise.Inventory.Services.Implementation
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 			var par = await GetCurrentPAR ().ConfigureAwait (false);
 
-			var updateEv = _eventFactory.CreatePARLineItemQuantityUpdatedEvent (emp, par, lineItem.ID, newQuantity);
+			var updateEv = _eventFactory.CreatePARLineItemQuantityUpdatedEvent (emp, par, lineItem.Id, newQuantity);
 			_currentPar = _parRepository.ApplyEvent (updateEv);
             ReportNumItemsInTransaction();
 		}
@@ -138,7 +138,7 @@ namespace Mise.Inventory.Services.Implementation
         {
             if (_currentPar != null)
             {
-                var numItems = _parRepository.GetNumberOfEventsInTransacitonForEntity(_currentPar.ID);
+                var numItems = _parRepository.GetNumberOfEventsInTransacitonForEntity(_currentPar.Id);
                 if (numItems > REPORT_NUMBER_OF_EVENTS_THRESHOLD)
                 {
                     var insightsParam = new Dictionary<string, string>

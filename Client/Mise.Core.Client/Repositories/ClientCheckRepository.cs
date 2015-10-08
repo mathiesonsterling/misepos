@@ -45,7 +45,7 @@ namespace Mise.Core.Client.Repositories
 
         public IEnumerable<ICheck> GetOpenChecks(IEmployee employee)
         {
-            return employee == null ? GetOpenChecks() : GetOpenChecks().Where(c => c.LastTouchedServerID == employee.ID);
+            return employee == null ? GetOpenChecks() : GetOpenChecks().Where(c => c.LastTouchedServerID == employee.Id);
         }
 
         public IEnumerable<ICheck> GetChecksPriorToZ()

@@ -28,7 +28,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
             invService.Setup(s => s.GetCurrentInventorySection())
                 .Returns(
                     Task.FromResult(
-                        new InventorySection {RestaurantInventorySectionID = sectionID, ID = Guid.NewGuid()} as
+                        new InventorySection {RestaurantInventorySectionID = sectionID, Id = Guid.NewGuid()} as
                             IInventorySection));
 
             //return objects out of order
@@ -36,23 +36,23 @@ namespace Mise.Inventory.UnitTests.ViewModels
             {
                 new InventoryBeverageLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     InventoryPosition = 2,
                     DisplayName = "secondItem"
                 },
                 new InventoryBeverageLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     InventoryPosition = 1,
                     DisplayName = "firstItem"
                 },
 				new InventoryBeverageLineItem {
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					InventoryPosition = 4,
 					DisplayName = "fourthItem"
 				},
 				new InventoryBeverageLineItem {
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					InventoryPosition = 3,
 					DisplayName = "thirdItem"
 				}
@@ -87,23 +87,23 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			{
 				new InventoryBeverageLineItem
 				{
-					ID = Guid.NewGuid(),
+					Id = Guid.NewGuid(),
 					InventoryPosition = 2,
 					DisplayName = "secondItem"
 				},
 				new InventoryBeverageLineItem
 				{
-					ID = Guid.NewGuid(),
+					Id = Guid.NewGuid(),
 					InventoryPosition = 1,
 					DisplayName = "firstItem"
 				},
 				new InventoryBeverageLineItem {
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					InventoryPosition = 4,
 					DisplayName = "fourthItem"
 				},
 				new InventoryBeverageLineItem {
-					ID = Guid.NewGuid (),
+					Id = Guid.NewGuid (),
 					InventoryPosition = 3,
 					DisplayName = "thirdItem"
 				}
@@ -133,14 +133,14 @@ namespace Mise.Inventory.UnitTests.ViewModels
             {
                 new InventoryBeverageLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
                     Container = new LiquidContainer {DisplayName = "12oz Can", AmountContained = LiquidAmount.FromLiquidOunces(12.0M )}
                 },
                 new InventoryBeverageLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
                     Container = new LiquidContainer{AmountContained = new LiquidAmount{Milliliters = 750}}
                 }
@@ -172,7 +172,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
             {
                 new InventoryBeverageLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
                     Container = new LiquidContainer {DisplayName = "12oz Can", AmountContained = LiquidAmount.FromLiquidOunces(12.0M )},
@@ -183,7 +183,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 },
                 new InventoryBeverageLineItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
                     Container = LiquidContainer.Bottle750ML
                 }

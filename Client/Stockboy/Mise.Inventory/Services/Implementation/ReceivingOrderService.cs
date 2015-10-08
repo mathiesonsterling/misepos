@@ -61,7 +61,7 @@ namespace Mise.Inventory.Services.Implementation
 			if(_currentRO != null){
 				//cancel the current RO
 			}
-			if(po.GetPurchaseOrderPerVendors ().Select(pov => pov.VendorID).Contains (vendor.ID) == false){
+			if(po.GetPurchaseOrderPerVendors ().Select(pov => pov.VendorID).Contains (vendor.Id) == false){
 				throw new InvalidOperationException("Selected vendor does not match PurchaseOrder vendor");
 			}
 				
@@ -73,7 +73,7 @@ namespace Mise.Inventory.Services.Implementation
 			_currentRO = _receivingOrderRepository.ApplyEvent (associated);
 
 			var vendorSections = po.GetPurchaseOrderPerVendors ()
-				.Where (pov => pov.VendorID.HasValue && pov.VendorID.Value == vendor.ID);
+				.Where (pov => pov.VendorID.HasValue && pov.VendorID.Value == vendor.Id);
 			foreach(var vs in vendorSections){
 				foreach(var li in vs.GetLineItems ()){
 					var liEvent = _eventFactory.CreateReceivingOrderLineItemAddedEvent (emp, li, li.Quantity, 
@@ -184,8 +184,8 @@ namespace Mise.Inventory.Services.Implementation
 			if(_roToComplete.PurchaseOrderID.HasValue){
 				await _poService.MarkItemsAsReceivedForPurchaseOrder (_roToComplete, status).ConfigureAwait (false);
 			}
-			await _receivingOrderRepository.Commit (_roToComplete.ID).ConfigureAwait (false);
-			_insights.Track ("Receiving Order Committed", "RO ID", _roToComplete.ID.ToString ());
+			await _receivingOrderRepository.Commit (_roToComplete.Id).ConfigureAwait (false);
+			_insights.Track ("Receiving Order Committed", "RO ID", _roToComplete.Id.ToString ());
 		    _roToComplete = null;
 		}
 
@@ -222,14 +222,14 @@ namespace Mise.Inventory.Services.Implementation
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
 			var order = _currentRO;
 
-			var updateEv = _eventFactory.CreateROLineItemUpdateQuantityEvent (emp, order, li.ID, newQuantity, pricePerBottle);
+			var updateEv = _eventFactory.CreateROLineItemUpdateQuantityEvent (emp, order, li.Id, newQuantity, pricePerBottle);
 			_currentRO = _receivingOrderRepository.ApplyEvent (updateEv);
 		}
 
 		public async Task ZeroOutLineItem (IReceivingOrderLineItem li)
 		{
 			var emp = await _loginService.GetCurrentEmployee ().ConfigureAwait (false);
-			var ev = _eventFactory.CreateReceivingOrderLineItemZeroedOutEvent (emp, _currentRO, li.ID);
+			var ev = _eventFactory.CreateReceivingOrderLineItemZeroedOutEvent (emp, _currentRO, li.Id);
 			_currentRO = _receivingOrderRepository.ApplyEvent (ev);
 		}
 

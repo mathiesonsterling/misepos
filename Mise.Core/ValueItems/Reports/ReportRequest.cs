@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.ValueItems.Inventory;
+using System.Dynamic;
+using Mise.Core.Entities.Inventory;
+
+
 namespace Mise.Core.ValueItems.Reports
 {
     public class ReportRequest : IEquatable<ReportRequest>
@@ -22,10 +26,22 @@ namespace Mise.Core.ValueItems.Reports
 			LiquidUnit = unit;
         }
 
+        public ReportRequest(ReportTypes type, IInventory startInventory, IInventory endInventory, Guid? entityID,
+            int? maxResults, LiquidAmountUnits unit = LiquidAmountUnits.Milliliters) : this(type, startInventory.DateCompleted, endInventory.DateCompleted, entityID,
+                maxResults, unit)
+        {
+            StartInventory = startInventory;
+            EndInventory = endInventory;
+        }
+
         public ReportTypes Type { get; private set; }
 
         public DateTimeOffset? StartDate { get; private set; }
         public DateTimeOffset? EndDate { get; private set; }
+
+        public IInventory StartInventory { get; private set; }
+        public IInventory EndInventory { get; private set; }
+
         /// <summary>
         /// If set, the specific entity this is tied to
         /// </summary>

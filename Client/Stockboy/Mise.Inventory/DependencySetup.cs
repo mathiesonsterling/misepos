@@ -17,6 +17,7 @@ using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
 using Mise.Core.Common;
 using Mise.Core.Common.Services.WebServices;
+using Mise.Core.Services;
 using Mise.Inventory.ViewModels.Reports;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 
@@ -144,6 +145,7 @@ namespace Mise.Inventory
 			cb.RegisterType<ReceivingOrderViewModel>().SingleInstance();
 		    cb.RegisterType<UpdateReceivingOrderLineItemViewModel>().SingleInstance();
 			cb.RegisterType<ReportsViewModel>().SingleInstance();
+			cb.RegisterType<ReportsByInventoryViewModel> ().SingleInstance ();
 			cb.RegisterType<RestaurantSelectViewModel>().SingleInstance();
 			cb.RegisterType<SectionAddViewModel>().SingleInstance();
 			cb.RegisterType<SectionSelectViewModel>().SingleInstance();

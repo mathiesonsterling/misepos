@@ -25,7 +25,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var res = serializer.Deserialize<Vendor>(json);
 
-            Assert.AreEqual(Guid.Empty, res.ID);
+            Assert.AreEqual(Guid.Empty, res.Id);
             Assert.IsNotNull(res);
         }
 
@@ -42,7 +42,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var emp = new Vendor
             {
-                ID = id,
+                Id = id,
                 CreatedDate = created,
                 LastUpdatedDate = date,
                 Name = "testVendor",
@@ -67,7 +67,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             //assert
             Assert.IsNotNull(res);
-            Assert.AreEqual(id, res.ID);
+            Assert.AreEqual(id, res.Id);
             Assert.IsNotNull(res.CreatedDate);
             Assert.AreEqual(created.DayOfYear, res.CreatedDate.DayOfYear, "Created Date");
 

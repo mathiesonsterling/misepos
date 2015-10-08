@@ -17,7 +17,7 @@ namespace Mise.Core.Common.UnitTests
 		public void TestInventoryCreatedEvent(SerializationType type){
 			var serializer = SerializerFactory.GetJSONSerializer(type);
 			var ev = new InventoryCreatedEvent {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 			};
 
 			//ACT
@@ -26,7 +26,7 @@ namespace Mise.Core.Common.UnitTests
 
 			var res = serializer.Deserialize<InventoryCreatedEvent> (json);
 			Assert.NotNull (res);
-			Assert.AreEqual (ev.ID, res.ID);
+			Assert.AreEqual (ev.Id, res.Id);
 		}
 	}
 }

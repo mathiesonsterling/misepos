@@ -25,6 +25,11 @@
         /// Imported for vendor via CSV upload
         /// </summary>
         VendorManagement,
+
+        /// <summary>
+        /// Reporting site
+        /// </summary>
+        ManagementWebsite,
 	}
 }
 

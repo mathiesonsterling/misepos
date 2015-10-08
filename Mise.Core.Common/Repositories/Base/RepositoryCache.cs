@@ -58,15 +58,15 @@ namespace Mise.Core.Common.Repositories.Base
 				throw new ArgumentException("Cannot update with null!");
 			}
 
-			if( _cache.ContainsKey(item.ID))
+			if( _cache.ContainsKey(item.Id))
 			{
-				_cache [item.ID].Object = item;
-				_cache[item.ID].Status = status;
+				_cache [item.Id].Object = item;
+				_cache[item.Id].Status = status;
 			}
 			else
 			{
 				var cacheItem = new CacheObject { Object = item, Status = status };
-				_cache.Add(item.ID, cacheItem);
+				_cache.Add(item.Id, cacheItem);
 			}
 		}
 

@@ -1,0 +1,68 @@
+﻿@model MiseVendorManagement.Models.VendorItemForSaleViewModel
+
+<div>
+    <h4>VendorItemForSaleViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PublicPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PublicPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CaseSize)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CaseSize)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UPC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UPC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContainerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContainerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContainerSizeML)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContainerSizeML)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Categories)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Categories)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { vendorId = Model.VendorId, lineItemId = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

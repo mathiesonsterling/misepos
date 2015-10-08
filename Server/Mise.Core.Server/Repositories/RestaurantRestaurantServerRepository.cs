@@ -29,7 +29,7 @@ namespace Mise.Core.Server.Repositories
 
 	    public Guid GetEntityID(IRestaurantEvent ev)
 	    {
-	        return ev.RestaurantID;
+	        return ev.RestaurantId;
 	    }
 
 	    public Task<CommitResult> CommitOnlyImmediately(Guid entityID)

@@ -22,6 +22,9 @@ namespace MiseReporting.Models
         [DisplayName("Number Partial")]
         public decimal PartialBottles { get; set; }
 
+        [DisplayName("Price Paid")]
+        public decimal? PricePaid { get; set; }
+
         public InventoryLineItemViewModel()
         {
             
@@ -33,6 +36,7 @@ namespace MiseReporting.Models
             Total = li.Quantity;
             FullBottles = li.NumFullBottles;
             PartialBottles = li.NumPartialBottles;
+            PricePaid = li.PricePaid?.Dollars;
         }
     }
 }

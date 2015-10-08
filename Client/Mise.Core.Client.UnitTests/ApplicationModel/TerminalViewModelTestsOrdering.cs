@@ -56,7 +56,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             var fakeTab1 = new RestaurantCheck
             {
                 OrderItems = new List<OrderItem> {orderItem},
-                ID = Guid.NewGuid()
+                Id = Guid.NewGuid()
             };
 
 
@@ -80,7 +80,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			var empID = Guid.NewGuid ();
 			var emp = new Employee {
 				Name = PersonName.TestName,
-				ID = empID
+				Id = empID
 			};
 
 		    var printerService = new Mock<IPrinterService>();
@@ -122,7 +122,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             var checkID = Guid.NewGuid();
             var tab = new RestaurantCheck
             {
-                ID = checkID,
+                Id = checkID,
                 OrderItems = new List<OrderItem > { orderItem },
                 Customer = new Customer { Name = PersonName.TestName }
             };
@@ -146,7 +146,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 			var emp = new Employee {
 				Name = PersonName.TestName,
-				ID = Guid.NewGuid ()
+				Id = Guid.NewGuid ()
 			};
 
 			var vm = ViewModelMockingTools.CreateViewModel (emp, checkRepos, empRepos, new Mock<ICashDrawerService>().Object,service.Object);
@@ -174,8 +174,8 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 		    var oiID = Guid.NewGuid();
 		    var checkID = Guid.NewGuid();
-			var oi = new OrderItem{ ID = oiID, Status = OrderItemStatus.Added, MenuItem = new MenuItem{ID = Guid.NewGuid()} };
-			var tab = new RestaurantCheck {ID = checkID, OrderItems = new List<OrderItem > {oi}};
+			var oi = new OrderItem{ Id = oiID, Status = OrderItemStatus.Added, MenuItem = new MenuItem{Id = Guid.NewGuid()} };
+			var tab = new RestaurantCheck {Id = checkID, OrderItems = new List<OrderItem > {oi}};
 
 			var emp = new Employee{ Passcode = "1111", CurrentlyClockedInToPOS = false };
 			/*service.Setup (s => s.GetEmployees ()).Returns (new List<IEmployee>{
@@ -225,8 +225,8 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		    var oiID = Guid.NewGuid();
 		    var checkID = Guid.NewGuid();
 		    var miID = Guid.NewGuid();
-			var oi = new OrderItem{ ID = oiID, Status = OrderItemStatus.Added, MenuItem = new MenuItem{ID = miID} };
-			var tab = new RestaurantCheck {ID = checkID, OrderItems = new List<OrderItem > {oi}};
+			var oi = new OrderItem{ Id = oiID, Status = OrderItemStatus.Added, MenuItem = new MenuItem{Id = miID} };
+			var tab = new RestaurantCheck {Id = checkID, OrderItems = new List<OrderItem > {oi}};
 		    var checkRepos = new Mock<ICheckRepository> ();
 			checkRepos.Setup (cr => cr.GetOpenChecks (null)).Returns (new List<ICheck>{ tab });
 			checkRepos.Setup (cr => cr.ApplyEvent (It.IsAny<ICheckEvent> ())).Returns (tab);
@@ -259,8 +259,8 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 		    var serverID = Guid.NewGuid();
 		    var mgrID = Guid.NewGuid();
-			var emp = new Employee{ID=serverID, Passcode = "1111", CurrentlyClockedInToPOS = false };
-			var manager = new Employee{ID = mgrID, Passcode = "2222", CurrentlyClockedInToPOS = false, WhenICanVoid = new List<OrderItemStatus>{OrderItemStatus.Added, OrderItemStatus.Sent}};
+			var emp = new Employee{Id=serverID, Passcode = "1111", CurrentlyClockedInToPOS = false };
+			var manager = new Employee{Id = mgrID, Passcode = "2222", CurrentlyClockedInToPOS = false, WhenICanVoid = new List<OrderItemStatus>{OrderItemStatus.Added, OrderItemStatus.Sent}};
 			service.Setup (s => s.GetEmployeesAsync ()).Returns (Task.Factory.StartNew (() => new List<Employee>{emp}.AsEnumerable ()));
 			service.Setup (s => s.NotifyDestinationOfVoid(It.IsAny<OrderDestination>(), It.IsAny<OrderItem >()));
 
@@ -269,8 +269,8 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
             var oiID = Guid.NewGuid();
 		    var checkID = Guid.NewGuid();
-			var oi = new OrderItem{ ID = oiID, Status = OrderItemStatus.Sent, PlacedByID = emp.ID}; 
-			var tab = new RestaurantCheck {ID = checkID, OrderItems = new List<OrderItem > {oi}};
+			var oi = new OrderItem{ Id = oiID, Status = OrderItemStatus.Sent, PlacedByID = emp.Id}; 
+			var tab = new RestaurantCheck {Id = checkID, OrderItems = new List<OrderItem > {oi}};
 
 		    ICheckEvent checkEventsSent = null;
 			var checkRepos = new Mock<ICheckRepository> ();
@@ -301,7 +301,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
 			var eventOI = eventSent.OrderItemToVoid;
 			Assert.IsNotNull (eventOI, "has order item on event");
-			Assert.AreEqual (oiID, eventOI.ID);
+			Assert.AreEqual (oiID, eventOI.Id);
 			Assert.AreEqual(OrderItemStatus.Sent, eventOI.Status);
 		}
 
@@ -324,8 +324,8 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
             var oiID = Guid.NewGuid();
             var checkID = Guid.NewGuid();
-			var oi = new OrderItem{ ID = oiID, Status = OrderItemStatus.Sent };
-			var tab = new RestaurantCheck {ID = checkID, OrderItems = new List<OrderItem > {oi}};
+			var oi = new OrderItem{ Id = oiID, Status = OrderItemStatus.Sent };
+			var tab = new RestaurantCheck {Id = checkID, OrderItems = new List<OrderItem > {oi}};
 		    var checkRepos = new Mock<ICheckRepository> ();
 			checkRepos.Setup (cr => cr.GetOpenChecks (null)).Returns (new List<ICheck>{ tab });
 
@@ -348,7 +348,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			var evSent = eventsSent.First() as InsufficientPermissionsEvent;
 			Assert.IsNotNull (evSent, "Event as InsufficientPermissions is null");
 			Assert.AreEqual("void", evSent.FunctionAttempted);
-			Assert.IsNull(evSent.DeviceID);
+			Assert.IsNull(evSent.DeviceId);
 		}
 
         //[Ignore("Still flaky, investigate why!")]
@@ -357,12 +357,12 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		{
 
 		    var miID = Guid.NewGuid();
-			var menuItem = new MenuItem{ID=miID, ButtonName = "test"};
+			var menuItem = new MenuItem{Id=miID, ButtonName = "test"};
 		
 
 			var emp = new Employee {
 				Name = PersonName.TestName,
-				ID = Guid.NewGuid ()
+				Id = Guid.NewGuid ()
 			};
 			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 
@@ -392,7 +392,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		{
 			var emp = new Employee {
 				Name = PersonName.TestName,
-				ID = Guid.NewGuid ()
+				Id = Guid.NewGuid ()
 			};
 			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 
@@ -418,7 +418,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		{
 			var emp = new Employee {
 				Name = PersonName.TestName,
-				ID = Guid.NewGuid ()
+				Id = Guid.NewGuid ()
 			};
 			var vm = (await ViewModelMockingTools.CreateViewModel (emp)).Item1;
 			vm.SelectedCategory = new MenuItemCategory{
@@ -439,13 +439,13 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			var orderItem = new OrderItem {Status = OrderItemStatus.Added};
 		    var barTab = new RestaurantCheck
 		    {
-                ID = Guid.Empty,
+                Id = Guid.Empty,
 		        OrderItems = new List<OrderItem> {orderItem}
 		    };
 				
 			var emp = new Employee {
 				Name = PersonName.TestName,
-				ID = Guid.NewGuid ()
+				Id = Guid.NewGuid ()
 			};
 
 			var service = MockingTools.GetTerminalServiceWithMenu();
@@ -482,7 +482,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         {
             var emp = new Employee
             {
-                ID = Guid.Empty,
+                Id = Guid.Empty,
                 CompBudget = new Money(20.0M)
             };
             var items = await ViewModelMockingTools.CreateViewModel(emp);
@@ -497,7 +497,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             vm.DrinkClicked(
                 new MenuItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = "TestItem",
                     Price = new Money(10.0M)
                 }

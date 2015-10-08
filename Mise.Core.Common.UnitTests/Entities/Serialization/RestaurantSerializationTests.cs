@@ -22,7 +22,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var rest = new Restaurant
             {
-                ID = Guid.NewGuid()
+                Id = Guid.NewGuid()
             };
 
             var json = serializer.Serialize(rest);
@@ -30,7 +30,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var res = serializer.Deserialize<Restaurant>(json);
 
-            Assert.AreNotEqual(Guid.Empty, res.ID);
+            Assert.AreNotEqual(Guid.Empty, res.Id);
             Assert.IsNotNull(res);
         }
 
@@ -46,7 +46,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var updateDate = DateTimeOffset.UtcNow;
             var rest = new Restaurant
             {
-                ID = id,
+                Id = id,
                 AccountID = actId,
                 CreatedDate = createdDate,
                 LastUpdatedDate = updateDate,
@@ -77,7 +77,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                 {
                     new RestaurantInventorySection
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         Name = "mainBar",
                         Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101},
                         Beacon = new Beacon
@@ -87,7 +87,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                     },
                     new RestaurantInventorySection
                     {
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         Name = "stockRoom"
                     }
                 }
@@ -98,10 +98,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var res = serializer.Deserialize<Restaurant>(json);
 
-            Assert.AreNotEqual(Guid.Empty, res.ID);
+            Assert.AreNotEqual(Guid.Empty, res.Id);
             Assert.IsNotNull(res);
 
-            Assert.AreEqual(id, res.ID);
+            Assert.AreEqual(id, res.Id);
             Assert.AreEqual(actId, res.AccountID);
             Assert.AreEqual(createdDate, res.CreatedDate);
             Assert.AreEqual(updateDate, res.LastUpdatedDate);
@@ -136,7 +136,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var rest = new Restaurant
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 DiscountAmounts = new List<DiscountAmount>{
 
                     new DiscountAmount
@@ -160,7 +160,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var res = serializer.Deserialize<Restaurant>(json);
 
-            Assert.AreNotEqual(Guid.Empty, res.ID);
+            Assert.AreNotEqual(Guid.Empty, res.Id);
             Assert.IsNotNull(res);
             Assert.IsNotNull(res.GetPossibleDiscounts());
             Assert.AreEqual(2, res.GetPossibleDiscounts().Count(), "num payments");

@@ -93,6 +93,7 @@ namespace Mise.Inventory.Services
 	    Task<IEnumerable<IInventory>> GetCompletedInventoriesForCurrentRestaurant(DateTimeOffset? start, DateTimeOffset? end);
 
 		Task<bool> HasInventoryPriorToDate (Guid restaurantID, DateTimeOffset date);
+	    Task SetCurrentInventory(IInventory inventory);
 	}
 }
 

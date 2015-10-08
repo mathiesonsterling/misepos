@@ -30,19 +30,19 @@ namespace DeveloperTools.Commands
                 .OrderByDescending(ai => ai.LastUpdatedDate)
                 .ToEnumerableAsync();
 
-            var lastInvAI = inventories.FirstOrDefault();
-
+            var lastInvAi = inventories.First();
             Report("Transforming from JSON to inventories");
-            var lastInv = _entityDataTransportObjectFactory.FromDataStorageObject<Inventory>(lastInvAI.ToRestaurantDTO());
+            var lastInv = _entityDataTransportObjectFactory.FromDataStorageObject<Inventory>(lastInvAi.ToRestaurantDTO());
 
             Report("Getting restaurant for inventory");
 
             var fileName = await GetFileNameForRestaurant(table, lastInv, "Inventory");
 
             Report("Exporting items to CSV");
-            var service = new InventoryCSVExportService(_logger);
 
-            var bytes = await service.ExportInventoryToCsv(lastInv);
+            var service = new CSVExportService(_logger);
+
+            var bytes = await service.ExportInventoryToCsvBySection(lastInv);
 
             Report("Writing CSV to file");
             using (var file = new FileStream(fileName, FileMode.Create))

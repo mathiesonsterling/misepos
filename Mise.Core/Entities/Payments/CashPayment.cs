@@ -9,7 +9,7 @@ namespace Mise.Core.Entities.Payments
 	    {
 	        return new CashPayment
 	        {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 CheckID = CheckID,
                 EmployeeID = EmployeeID,
 	            AmountPaid = AmountPaid,

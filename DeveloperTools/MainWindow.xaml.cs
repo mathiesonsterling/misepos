@@ -61,7 +61,7 @@ namespace DeveloperTools
                 try
                 {
                     var buildLevel = DBChoices.GetBuildLevelSelected(selItem.Key);
-                    var populateInventoryCommand = new PopulateInventorySqlServerDBCommand(progress, silentLogger, uri, buildLevel);
+                    var populateInventoryCommand = new PopulateInventorySqlServerDBCommand(progress, silentLogger, buildLevel);
                     await populateInventoryCommand.Execute();
                     MessageBox.Show("GraphDB is now populated!");
                 }

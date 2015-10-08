@@ -24,7 +24,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             var res = serializer.Deserialize<Employee>(json);
 
-            Assert.AreEqual(Guid.Empty, res.ID);
+            Assert.AreEqual(Guid.Empty, res.Id);
             Assert.IsNotNull(res);
         }
 
@@ -38,7 +38,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 			var restID = Guid.NewGuid ();
             var emp = new Employee()
             {
-                ID = id,
+                Id = id,
                 CompBudget = new Money(10.0M),
                 CreatedDate = DateTime.Now,
                 CurrentlyClockedInToPOS = true,
@@ -67,7 +67,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             //assert
             Assert.IsNotNull(res);
-            Assert.AreEqual(id, res.ID);
+            Assert.AreEqual(id, res.Id);
             Assert.AreEqual(2, res.Emails.Count());
             Assert.IsNotNull(res.RestaurantsAndAppsAllowed.First());
             Assert.AreEqual(restID, res.RestaurantsAndAppsAllowed.First().Key);

@@ -29,7 +29,7 @@ namespace MiseReporting.Controllers
         public PurchaseOrderController()
         {
             _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
-            _icsvExportService = new IcsvCSVExportService(new DummyLogger());
+            _icsvExportService = new CSVExportService(new DummyLogger());
             _poType = typeof (PurchaseOrder).ToString();
         }
 
@@ -137,7 +137,7 @@ namespace MiseReporting.Controllers
             }
             var po = GetFromAi(poAi);
 
-            var forVendor = po.GetPurchaseOrderPerVendors().FirstOrDefault(poV => poV.ID == poForVendorId);
+            var forVendor = po.GetPurchaseOrderPerVendors().FirstOrDefault(poV => poV.Id == poForVendorId);
             if (forVendor == null)
             {
                 throw new ArgumentException("Can't find specific vendor PO for " + poForVendorId);

@@ -205,10 +205,10 @@ namespace Mise.Inventory.UnitTests.ViewModels
                 .Returns(Task.FromResult(
                     new List<IRestaurant> { new Restaurant
                     {
-                        ID = goodRest
+                        Id = goodRest
                     }, new Restaurant
                     {
-                        ID = defaultRest
+                        Id = defaultRest
                     }
                     }.AsEnumerable()
                 ));

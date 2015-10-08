@@ -53,7 +53,7 @@ namespace Mise.Core.Entities.Menu
 
 		public IEnumerable<MenuItemModifier> GetDefaultModifiers() {
 				var ids = PossibleModifiers.Where (pm => pm.DefaultItemID.HasValue).Select(pm => pm.DefaultItemID.Value).ToList();
-				var mods = PossibleModifiers.SelectMany(pm => pm.Modifiers).Where(m => ids.Contains(m.ID));
+				var mods = PossibleModifiers.SelectMany(pm => pm.Modifiers).Where(m => ids.Contains(m.Id));
 				return mods;
 		}
 			

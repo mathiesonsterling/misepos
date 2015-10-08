@@ -82,7 +82,7 @@ namespace Mise.Inventory.ViewModels
 				} else {
 					FullInventory = true;
 					var rest = await _loginService.GetCurrentRestaurant();
-					_insights.Track("Fully stocked when creating PO", new Dictionary<string, string>{{"Restaurant ID", rest.ID.ToString ()}});
+					_insights.Track("Fully stocked when creating PO", new Dictionary<string, string>{{"Restaurant ID", rest.Id.ToString ()}});
 				}
 			} catch(Exception e){
 				HandleException (e);
@@ -97,7 +97,7 @@ namespace Mise.Inventory.ViewModels
 			if (_po == null) {
 				throw new Exception ("Error, could not create Purchase Order");
 			}
-			_insights.Track("Created Purchase Order", new Dictionary<string, string>{{"PO ID", _po.ID.ToString ()}});
+			_insights.Track("Created Purchase Order", new Dictionary<string, string>{{"PO ID", _po.Id.ToString ()}});
 			var rest = await _loginService.GetCurrentRestaurant ();
 			var poByVs = _po.GetPurchaseOrderPerVendors ();
 
@@ -107,7 +107,7 @@ namespace Mise.Inventory.ViewModels
 			foreach(var poByV in poByVs){
 				IVendor vendor = null;
 				if(poByV.VendorID.HasValue){
-					vendor = vendors.FirstOrDefault (v => v.ID == poByV.VendorID.Value);
+					vendor = vendors.FirstOrDefault (v => v.Id == poByV.VendorID.Value);
 				}
 
 				var newItem = new VendorAndItems {

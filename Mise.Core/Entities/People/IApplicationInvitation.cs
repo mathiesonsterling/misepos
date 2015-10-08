@@ -28,7 +28,7 @@ namespace Mise.Core.Entities.People
 	/// <summary>
 	/// Represents an invitation to use a MiseApplication for a restaurant
 	/// </summary>
-	public interface IApplicationInvitation : IEventStoreEntityBase<IApplicationInvitationEvent>, IRestaurantEntityBase
+	public interface IApplicationInvitation : IEventStoreEntityBase<IApplicationInvitationEvent>, IRestaurantEntityBase, ITextSearchable
 	{
 		/// <summary>
 		/// Which application this is for

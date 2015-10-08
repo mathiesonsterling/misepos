@@ -28,17 +28,17 @@ namespace Mise.Inventory.Services.Implementation
 
             public SQLiteDatabaseEventItem(EventDataTransportObject dto, bool? hasBeenSent)
             {
-                ID = dto.ID;
-                CausedByID = dto.CausedByID;
+                ID = dto.Id;
+                CausedByID = dto.CausedById;
                 CreatedDate = dto.CreatedDate;
-                DeviceID = dto.DeviceID;
+                DeviceID = dto.DeviceId;
                 EntityID = dto.EntityID;
-                EventOrderingID = dto.EventOrderingID.ToDatabaseString();
+                EventOrderingID = dto.EventOrder.ToDatabaseString();
                 EventType = dto.EventType.ToString();
                 ItemCacheStatus = dto.ItemCacheStatus.ToString();
                 JSON = dto.JSON;
                 LastUpdatedDate = dto.LastUpdatedDate;
-                RestaurantID = dto.RestaurantID;
+                RestaurantID = dto.RestaurantId;
                 SourceType = dto.SourceType.ToString();
 
                 HasBeenSent = hasBeenSent;
@@ -53,18 +53,18 @@ namespace Mise.Inventory.Services.Implementation
             {
                 return new EventDataTransportObject
                 {
-                    ID = ID,
+                    Id = ID,
                     SourceType = Type.GetType(SourceType),
-                    CausedByID = CausedByID,
+                    CausedById = CausedByID,
                     CreatedDate = CreatedDate,
-                    DeviceID = DeviceID,
+                    DeviceId = DeviceID,
                     EntityID = EntityID,
-                    EventOrderingID = new EventID(EventOrderingID),
+                    EventOrder = new EventID(EventOrderingID),
                     EventType = (MiseEventTypes)Enum.Parse(typeof(MiseEventTypes), EventType),
                     ItemCacheStatus = (ItemCacheStatus)Enum.Parse(typeof(ItemCacheStatus), ItemCacheStatus),
                     JSON = JSON,
                     LastUpdatedDate = LastUpdatedDate,
-                    RestaurantID = RestaurantID,
+                    RestaurantId = RestaurantID,
                 };
             }
 
@@ -123,7 +123,7 @@ namespace Mise.Inventory.Services.Implementation
 	        {
 	            CreatedDate = dto.CreatedDate;
 	            LastUpdatedDate = dto.LastUpdatedDate;
-	            ID = dto.ID;
+	            ID = dto.Id;
 	            RestaurantID = dto.RestaurantID;
 	            Revision = dto.Revision.ToDatabaseString();
 	            ItemCacheStatus = dto.ItemCacheStatus.ToString();
@@ -137,7 +137,7 @@ namespace Mise.Inventory.Services.Implementation
 	            {
 	                CreatedDate = CreatedDate,
 	                LastUpdatedDate = LastUpdatedDate,
-	                ID = ID,
+	                Id = ID,
 	                RestaurantID = RestaurantID,
 	                Revision = new EventID(Revision),
 	                ItemCacheStatus = (ItemCacheStatus) Enum.Parse(typeof (ItemCacheStatus), ItemCacheStatus),
@@ -293,7 +293,7 @@ namespace Mise.Inventory.Services.Implementation
 
 		public Task ReAddFailedSendEvents (IEnumerable<EventDataTransportObject> stillFailing){
 			return Task.Run (() => {
-				var ids = stillFailing.Select (sf => sf.ID);
+				var ids = stillFailing.Select (sf => sf.Id);
 				lock (_dbLock) {
 					var dbItems = _db.Table<SQLiteDatabaseEventItem> ()
 					.Where (dbEv => ids.Contains (dbEv.ID));
@@ -335,7 +335,7 @@ namespace Mise.Inventory.Services.Implementation
 					return;
 				}
 
-				var ids = events.Where(ev => ev != null).Select(ev => ev.ID);
+				var ids = events.Where(ev => ev != null).Select(ev => ev.Id);
 	            lock (_dbLock)
 	            {
 					foreach(var id in ids){

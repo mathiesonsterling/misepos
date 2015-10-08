@@ -35,7 +35,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var id = Guid.NewGuid();
             var mtd = new MiseTerminalDevice
             {
-                ID = id,
+                Id = id,
 
             };
 
@@ -46,7 +46,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var res = serializer.Deserialize<MiseTerminalDevice>(json);
 
             Assert.IsNotNull(res);
-            Assert.AreEqual(id, res.ID);
+            Assert.AreEqual(id, res.Id);
 
         }
 
@@ -61,7 +61,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             {
                 TopLevelCategoryID = Guid.Empty,
                 CreatedDate = DateTime.Now,
-                ID = id,
+                Id = id,
                 RequireEmployeeSignIn = false,
                 TableDropChecks = false,
                 CreditCardReaderType = CreditCardReaderType.CameraReader,

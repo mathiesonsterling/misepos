@@ -44,7 +44,7 @@ namespace Mise.Inventory.ViewModels
 			Processing = true;
 			try{
 				var rest = PossibleRestaurants.FirstOrDefault (r => r.Name != null && r.Name.Equals (name));
-				await _loginService.SelectRestaurantForLoggedInEmployee(rest.ID);
+				await _loginService.SelectRestaurantForLoggedInEmployee(rest.Id);
 				Processing = false;
 				//now go to main menu
 				await Navigation.ShowRestaurantLoading ();

@@ -18,9 +18,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
         public AzureEntityStorage(RestaurantEntityDataTransportObject dto)
         {
-            id = dto.ID.ToString();
+            id = dto.Id.ToString();
             MiseEntityType = dto.SourceType.ToString();
-            EntityID = dto.ID;
+            EntityID = dto.Id;
             RestaurantID = dto.RestaurantID;
             EntityJSON = dto.JSON;
             LastUpdatedDate = dto.LastUpdatedDate;
@@ -31,7 +31,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
             return new RestaurantEntityDataTransportObject
             {
                 SourceType = Type.GetType(MiseEntityType),
-                ID = EntityID,
+                Id = EntityID,
                 RestaurantID = RestaurantID,
                 JSON = EntityJSON,
                 LastUpdatedDate = LastUpdatedDate

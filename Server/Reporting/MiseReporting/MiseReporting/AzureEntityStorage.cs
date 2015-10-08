@@ -42,11 +42,23 @@ namespace MiseReporting
             return new RestaurantEntityDataTransportObject
             {
                 SourceType = Type.GetType(MiseEntityType),
-                ID = EntityID,
+                Id = EntityID,
                 RestaurantID = RestaurantID,
                 JSON = EntityJSON,
                 LastUpdatedDate = LastUpdatedDate
             };
+        }
+
+        public AzureEntityStorage() { }
+
+        public AzureEntityStorage(RestaurantEntityDataTransportObject dto)
+        {
+            Id = dto.Id.ToString();
+            MiseEntityType = dto.SourceType.ToString();
+            EntityID = dto.Id;
+            RestaurantID = dto.RestaurantID;
+            EntityJSON = dto.JSON;
+            LastUpdatedDate = dto.LastUpdatedDate;
         }
     }
 }

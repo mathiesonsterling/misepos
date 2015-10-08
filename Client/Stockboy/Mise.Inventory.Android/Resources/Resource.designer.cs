@@ -71,10 +71,10 @@ namespace Mise.Inventory.Android
 			global::XLabs.Forms.Resource.Style.CalendarCell_CalendarDate = global::Mise.Inventory.Android.Resource.Style.CalendarCell_CalendarDate;
 			global::XLabs.Forms.Resource.Style.CalendarCell_DayHeader = global::Mise.Inventory.Android.Resource.Style.CalendarCell_DayHeader;
 			global::XLabs.Forms.Resource.Style.CalendarTitle = global::Mise.Inventory.Android.Resource.Style.CalendarTitle;
-			global::Xamarin.Forms.Platform.Resource.String.ApplicationName = global::Mise.Inventory.Android.Resource.String.ApplicationName;
-			global::Xamarin.Forms.Platform.Resource.String.Hello = global::Mise.Inventory.Android.Resource.String.Hello;
 			global::Mindscape.Raygun4Net.Xamarin.Android.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
 			global::ModernHttpClient.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
+			global::Xamarin.Forms.Platform.Resource.String.ApplicationName = global::Mise.Inventory.Android.Resource.String.ApplicationName;
+			global::Xamarin.Forms.Platform.Resource.String.Hello = global::Mise.Inventory.Android.Resource.String.Hello;
 		}
 		
 		public partial class Attribute
@@ -263,11 +263,11 @@ namespace Mise.Inventory.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040002
-			public const int ApplicationName = 2130968578;
-			
 			// aapt resource value: 0x7f040001
-			public const int Hello = 2130968577;
+			public const int ApplicationName = 2130968577;
+			
+			// aapt resource value: 0x7f040000
+			public const int Hello = 2130968576;
 			
 			// aapt resource value: 0x7f040007
 			public const int app_name = 2130968583;
@@ -281,8 +281,8 @@ namespace Mise.Inventory.Android
 			// aapt resource value: 0x7f040004
 			public const int invalid_date = 2130968580;
 			
-			// aapt resource value: 0x7f040000
-			public const int library_name = 2130968576;
+			// aapt resource value: 0x7f040002
+			public const int library_name = 2130968578;
 			
 			// aapt resource value: 0x7f040005
 			public const int month_name_format = 2130968581;

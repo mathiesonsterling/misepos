@@ -50,7 +50,7 @@ namespace Mise.Inventory.ViewModels
         }
 
 
-        public Guid ID { get { return Source.ID; } }
+        public Guid ID { get { return Source.Id; } }
 
     }
 }

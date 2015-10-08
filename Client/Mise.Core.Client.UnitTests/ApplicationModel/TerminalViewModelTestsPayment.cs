@@ -32,7 +32,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             var checkID = Guid.NewGuid();
             var closingCheck = new RestaurantCheck
             {
-                ID = checkID,
+                Id = checkID,
                 PaymentStatus = CheckPaymentStatus.Closing,
                 Customer = new Customer { Name = PersonName.TestName },
             };
@@ -46,7 +46,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             empRepos.Setup(r => r.GetAll()).Returns(new List<IEmployee>());
 			empRepos.Setup (r => r.StartTransaction (It.IsAny<Guid> ())).Returns (true);
 
-			var emp = new Employee { Name = new PersonName("testEmp", "last"), ID = Guid.NewGuid () };
+			var emp = new Employee { Name = new PersonName("testEmp", "last"), Id = Guid.NewGuid () };
 			var vm = ViewModelMockingTools.CreateViewModel (emp, checkRepos, empRepos.Object);
 
             //ACT
@@ -62,7 +62,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             var emp = new Employee
             {
                 Name = PersonName.TestName,
-                ID = empID
+                Id = empID
             };
 		    var items = await ViewModelMockingTools.CreateViewModel(emp);
 		    var vm = items.Item1;
@@ -75,7 +75,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             vm.DrinkClicked(
                 new MenuItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = "TestItem",
                     Price = new Money(10.0M)
                 }
@@ -98,7 +98,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         {
             var emp = new Employee
             {
-                ID = Guid.Empty,
+                Id = Guid.Empty,
                 CompBudget = new Money(10.0M)
             };
 
@@ -114,7 +114,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             vm.DrinkClicked(
                 new MenuItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = "TestItem",
                     Price = new Money(10.0M)
                 }
@@ -148,7 +148,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		public async Task CancelPaymentsWithoutTotalGoesToClosed()
         {
 			var emp = new Employee {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
 
@@ -190,7 +190,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		public async Task SavePaymentSetsOnCheckAndEmployee()
         {
 			var emp = new Employee {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
 
@@ -206,7 +206,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             vm.DrinkClicked(
                 new MenuItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = "TestItem",
                     Price = new Money(10.0M)
                 }
@@ -238,7 +238,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
         {
             var emp = new Employee
             {
-                ID = Guid.Empty,
+                Id = Guid.Empty,
                 CompBudget = new Money(10.0M)
             };
 
@@ -253,7 +253,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
             var mi = new MenuItem
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Name = "TestItem",
                 Price = new Money(10.0M)
             };
@@ -286,14 +286,14 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		[Test]
 		public async Task CreateAndPayCheckWithCreditCard(){
 			var emp = new Employee {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
 
 			var vm = (await ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp));
 
 			var mi = new MenuItem {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				Price = new Money (100.0M),
 				Name = "testMI"
 			};
@@ -345,14 +345,14 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		[Test]
 		public async Task CantCloseCheckWithPaymentStillRemaining(){
 			var emp = new Employee {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
 			var vm = await ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp);
      
 
 			var mi = new MenuItem {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				Price = new Money (100.0M),
 				Name = "testMI"
 			};
@@ -395,14 +395,14 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 		[Test]
 		public async Task CancelAuthOnCard(){
 			var emp = new Employee {
-				ID = Guid.Empty,
+				Id = Guid.Empty,
 				CompBudget = new Money (10.0M)
 			};
 					
 			var vm = await ViewModelMockingTools.CreateViewModelWithEmployeeAndCreditCardProcessor (emp);
 
 			var mi = new MenuItem {
-				ID = Guid.NewGuid (),
+				Id = Guid.NewGuid (),
 				Price = new Money (100.0M),
 				Name = "testMI"
 			};
@@ -466,7 +466,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 	    {
             var emp = new Employee
             {
-                ID = Guid.Empty,
+                Id = Guid.Empty,
                 CompBudget = new Money(10.0M)
             };
 
@@ -474,7 +474,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 
             var mi = new MenuItem
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Price = new Money(91.1M),
                 Name = "testMI"
             };
@@ -519,7 +519,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             Assert.IsNotNull(passedCheck, "Have not been given a check by credit card callback");
 
             Assert.AreEqual(CheckPaymentStatus.PaymentRejected, passedCheck.PaymentStatus, "Check is in PaymentReject");
-            Assert.AreEqual(passedCheck.ID, vm.SelectedCheck.ID);
+            Assert.AreEqual(passedCheck.Id, vm.SelectedCheck.Id);
             Assert.AreEqual(CheckPaymentStatus.PaymentRejected, vm.SelectedCheck.PaymentStatus);
 
 	        var payments = passedCheck.GetPayments().ToList();
@@ -542,7 +542,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
                 Thread.Sleep(100);
             }
             Assert.IsNotNull(cashCheck);
-            Assert.AreEqual(cashCheck.ID, vm.SelectedCheck.ID);
+            Assert.AreEqual(cashCheck.Id, vm.SelectedCheck.Id);
             Assert.AreEqual(CheckPaymentStatus.Closed, cashCheck.PaymentStatus, "Check given has closed payment status");
             Assert.AreEqual(CheckPaymentStatus.Closed, vm.SelectedCheck.PaymentStatus, "Selected check has closed payment status");
             //test it doesn't show up as an open check either
@@ -558,7 +558,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 	    {
             var emp = new Employee
             {
-                ID = Guid.Empty,
+                Id = Guid.Empty,
                 CompBudget = new Money(10.0M)
             };
 	        var vm = (await ViewModelMockingTools.CreateViewModel(emp)).Item1;
@@ -571,7 +571,7 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             vm.DrinkClicked(
                 new MenuItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Name = "TestItem",
                     Price = new Money(10.0M)
                 }

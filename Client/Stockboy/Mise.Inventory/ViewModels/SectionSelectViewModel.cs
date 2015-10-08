@@ -107,7 +107,7 @@ namespace Mise.Inventory.ViewModels
                 Processing = true;
                 var emp = await _loginService.GetCurrentEmployee();
        
-                if (lineItem.Completed && lineItem.LastCompletedBy != emp.ID)
+                if (lineItem.Completed && lineItem.LastCompletedBy != emp.Id)
                 {
                     var userResponse =
                         await AskUserQuestionModal ("Already counted!",

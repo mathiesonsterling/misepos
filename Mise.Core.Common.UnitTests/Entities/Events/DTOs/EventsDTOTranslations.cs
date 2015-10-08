@@ -29,7 +29,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CashPaidOnCheckEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -40,10 +40,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11
             };
 
@@ -69,7 +69,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CheckCreatedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -77,10 +77,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
             };
 
@@ -103,7 +103,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CustomerAssignedToCheckEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -111,12 +111,12 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-				DeviceID = Guid.NewGuid().ToString(),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+				DeviceId = Guid.NewGuid().ToString(),
                 VersionGeneratedFrom = 11,
-                Customer = new Customer { Name = PersonName.TestName, ID = Guid.NewGuid() }
+                Customer = new Customer { Name = PersonName.TestName, Id = Guid.NewGuid() }
             };
 
             var fact = new EventDataTransportObjectFactory(new JsonNetSerializer());
@@ -131,7 +131,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             Assert.IsNotNull(deser);
             Assert.IsNotNull(deser.Customer);
             Assert.AreEqual(origEvent.Customer.Name, deser.Customer.Name);
-            Assert.AreEqual(origEvent.Customer.ID, deser.Customer.ID);
+            Assert.AreEqual(origEvent.Customer.Id, deser.Customer.Id);
         }
 
         [Test]
@@ -142,7 +142,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CheckReopenedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -150,10 +150,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 
             };
@@ -178,7 +178,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CheckSentEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
 					AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -186,10 +186,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
 
             };
@@ -213,7 +213,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CompPaidDirectlyOnCheckEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
 					AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -221,10 +221,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 Amount = new Money(10M)
             };
@@ -256,7 +256,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CreditCardAddedForPaymentEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
 					AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -264,10 +264,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 Amount = new Money(10M),
                 CreditCard = GetCreditCard(),
@@ -297,7 +297,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CreditCardAuthorizationStartedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
 					AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -305,10 +305,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 CreditCard = GetCreditCard(),
                 PaymentID = Guid.NewGuid()
@@ -335,7 +335,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CreditCardAuthorizedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
 					AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -343,10 +343,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 CreditCard = GetCreditCard(),
                 PaymentID = Guid.NewGuid(),
@@ -381,7 +381,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CreditCardAuthorizationCancelledEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
 					AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -389,10 +389,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 CreditCard = GetCreditCard(),
                 PaymentID = Guid.NewGuid(),
@@ -423,7 +423,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CreditCardChargeCompletedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
 					AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -431,10 +431,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 CreditCard = GetCreditCard(),
                 PaymentID = Guid.NewGuid(),
@@ -463,7 +463,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CreditCardCloseRequestedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
 					AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -471,10 +471,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 CreditCard = GetCreditCard(),
                 PaymentID = Guid.NewGuid(),
@@ -507,7 +507,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CreditCardFailedAuthorizationEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -515,10 +515,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 CreditCard = GetCreditCard(),
                 PaymentID = Guid.NewGuid(),
@@ -549,7 +549,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new CreditCardTipAddedToChargeEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -557,10 +557,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 CreditCard = GetCreditCard(),
                 PaymentID = Guid.NewGuid(),
@@ -591,7 +591,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new DiscountAppliedToCheckEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -599,14 +599,14 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 DiscountPercentage = new DiscountPercentage
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Percentage = .1M,
                     Name ="testCop"
                 }
@@ -623,7 +623,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             AssertCheckEventsAreEqual(deser, origEvent);
             Assert.IsNotNull(deser);
             Assert.IsNotNull(deser.Discount);
-            Assert.AreEqual(origEvent.Discount.ID, deser.Discount.ID);
+            Assert.AreEqual(origEvent.Discount.Id, deser.Discount.Id);
             Assert.AreEqual(origEvent.DiscountPercentage.Percentage, deser.DiscountPercentage.Percentage);
         }
 
@@ -635,7 +635,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new DiscountRemovedFromCheckEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -643,10 +643,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 DiscountID = Guid.NewGuid() 
             };
@@ -673,7 +673,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new ItemCompedGeneralEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -681,10 +681,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 Amount = new Money(1M),
                 OrderItemID = Guid.NewGuid(),
@@ -723,7 +723,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new ItemUncompedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -731,10 +731,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 Amount = new Money(1M),
                 OrderItemID = Guid.NewGuid(),
@@ -770,7 +770,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new MarkCheckAsPaidEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -778,10 +778,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 IsSplitPayment = true
             };
@@ -807,7 +807,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new OrderItemDeletedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -815,10 +815,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 OrderItemID = Guid.NewGuid()
             };
@@ -844,7 +844,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new OrderItemModifiedEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -852,21 +852,21 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 OrderItemID = Guid.NewGuid(),
                 Modifiers = new List<MenuItemModifier>
                 {
                     new MenuItemModifier
                     {
-                        ID = Guid.NewGuid()
+                        Id = Guid.NewGuid()
                     },
                     new MenuItemModifier
                     {
-                        ID = Guid.NewGuid()
+                        Id = Guid.NewGuid()
                     }
                 }
             };
@@ -893,7 +893,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new OrderItemSetMemoEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -901,10 +901,10 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 OrderItemID = Guid.NewGuid(),
                 Memo = "testy"
@@ -932,7 +932,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             var empID = Guid.NewGuid();
             var origEvent = new OrderedOnCheckEvent
             {
-                EventOrderingID = new EventID
+                EventOrder = new EventID
                 {
                     AppInstanceCode = MiseAppTypes.UnitTests,
                     OrderingID = 100
@@ -940,14 +940,14 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
                 CheckID = checkID,
                 CreatedDate = createdDate,
                 EmployeeID = empID,
-                CausedByID = empID,
-                RestaurantID = Guid.NewGuid(),
-                ID = Guid.NewGuid(),
-                DeviceID = Guid.NewGuid().ToString (),
+                CausedById = empID,
+                RestaurantId = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
+                DeviceId = Guid.NewGuid().ToString (),
                 VersionGeneratedFrom = 11,
                 OrderItem = new OrderItem
                 {
-                    ID = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     MenuItem = new MenuItem
                     {
                         Name = "testMenuItem"
@@ -965,8 +965,8 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
             //ASSERT
             AssertCheckEventsAreEqual(deser, origEvent);
             Assert.IsNotNull(deser);
-            Assert.AreEqual(origEvent.OrderItem.ID, deser.OrderItem.ID);
-            Assert.AreEqual(origEvent.OrderItem.MenuItem.ID, deser.OrderItem.MenuItem.ID);
+            Assert.AreEqual(origEvent.OrderItem.Id, deser.OrderItem.Id);
+            Assert.AreEqual(origEvent.OrderItem.MenuItem.Id, deser.OrderItem.MenuItem.Id);
 
         }
         #region Helper Methods
@@ -978,11 +978,11 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
         private static void AssertCheckEventsAreEqual(ICheckEvent deser, ICheckEvent origEvent)
         {
             Assert.IsNotNull(deser);
-            Assert.AreEqual(origEvent.EventOrderingID.OrderingID, deser.EventOrderingID.OrderingID);
+            Assert.AreEqual(origEvent.EventOrder.OrderingID, deser.EventOrder.OrderingID);
             Assert.AreEqual(origEvent.CheckID, deser.CheckID, "CheckID");
             Assert.AreEqual(origEvent.CreatedDate, deser.CreatedDate);
             Assert.AreEqual(origEvent.EmployeeID, deser.EmployeeID, "EmployeeID");
-            Assert.AreEqual(origEvent.CausedByID, deser.CausedByID, "CausedBy");
+            Assert.AreEqual(origEvent.CausedById, deser.CausedById, "CausedBy");
             Assert.AreEqual(origEvent.EventType, deser.EventType);
         }
 

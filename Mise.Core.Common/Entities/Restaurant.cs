@@ -136,14 +136,14 @@ namespace Mise.Core.Common.Entities
             }
 
             LastUpdatedDate = entityEvent.CreatedDate;
-            Revision = entityEvent.EventOrderingID;
+            Revision = entityEvent.EventOrder;
         }
 
 	    private void WhenNewRestaurantCreatedOnApp(NewRestaurantRegisteredOnAppEvent ev)
 	    {
 	        Name = ev.Name;
-	        ID = ev.RestaurantID;
-			RestaurantID = ev.RestaurantID;
+	        Id = ev.RestaurantId;
+			RestaurantID = ev.RestaurantId;
 	        CreatedDate = ev.CreatedDate;
 	        StreetAddress = ev.StreetAddress;
 	        PhoneNumber = ev.PhoneNumber;
@@ -152,24 +152,24 @@ namespace Mise.Core.Common.Entities
 	    private void WhenPlaceholderRestaurantCreated(PlaceholderRestaurantCreatedEvent entityEvent)
         {
             AccountID = null;
-            ID = entityEvent.RestaurantID;
-            RestaurantID = entityEvent.RestaurantID;
+            Id = entityEvent.RestaurantId;
+            RestaurantID = entityEvent.RestaurantId;
             CreatedDate = entityEvent.CreatedDate;
         }
 
         private void WhenInventorySectionAdded(InventorySectionAddedToRestaurantEvent entityEvent)
         {
-            var section = InventorySections.FirstOrDefault(s => s.ID == entityEvent.SectionID);
+            var section = InventorySections.FirstOrDefault(s => s.Id == entityEvent.SectionID);
             if (section != null) return;
 
             section = new RestaurantInventorySection
             {
-                ID = entityEvent.SectionID,
+                Id = entityEvent.SectionID,
                 Name = entityEvent.SectionName,
                 CreatedDate = entityEvent.CreatedDate,
                 LastUpdatedDate = entityEvent.CreatedDate,
-                Revision = entityEvent.EventOrderingID,
-                RestaurantID = entityEvent.RestaurantID,
+                Revision = entityEvent.EventOrder,
+                RestaurantID = entityEvent.RestaurantId,
 				AllowsPartialBottles = entityEvent.AllowsPartialBottles
             };
             InventorySections.Add(section);

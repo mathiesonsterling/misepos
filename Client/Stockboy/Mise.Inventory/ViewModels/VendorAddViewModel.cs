@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Linq;
+using System.Windows.Input;
 using System.Collections.Generic;
 
 using Mise.Core.Repositories;
@@ -40,14 +42,24 @@ namespace Mise.Inventory.ViewModels
 
         public override async Task OnAppearing()
         {
-            Email = string.Empty;
-            Name = string.Empty;
             //get our restaurant to populate some of the address
             var rest = await _loginService.GetCurrentRestaurant();
             if (rest != null && rest.StreetAddress != null)
             {
                 City = rest.StreetAddress.City.Name;
                 State = rest.StreetAddress.State.Name;
+				if (SelectStateOnView != null) {
+					if (rest.StreetAddress.State != null) {
+						var state = rest.StreetAddress.State;
+						if (string.IsNullOrEmpty (state.Abbreviation)) {
+							var usState = Mise.Core.ValueItems.State.GetUSStates ().FirstOrDefault (s => s.Name == state.Name);
+							if (usState != null) {
+								state = usState;
+							}
+						}
+						SelectStateOnView (state);
+					}
+				}
             }
         }
 
@@ -57,6 +69,7 @@ namespace Mise.Inventory.ViewModels
 
         public string Email { get { return GetValue<string>(); } set { SetValue(value); } }
         public string StreetAddressNumber { get { return GetValue<string>(); } set { SetValue(value); } }
+		public string StreetDirection{get{ return GetValue<string> (); }set{SetValue(value);}}
         public string StreetName { get { return GetValue<string>(); } set { SetValue(value); } }
         public string City { get { return GetValue<string>(); } set { SetValue(value); } }
         public string State { get { return GetValue<string>(); } set { SetValue(value); } }
@@ -67,6 +80,7 @@ namespace Mise.Inventory.ViewModels
         #endregion
 
 		public IEnumerable<State> States{get{return Mise.Core.ValueItems.State.GetUSStates ();}}
+		public Action<State> SelectStateOnView{ get; set; }
         #region commands
 
         public ICommand AddVendorCommand
@@ -78,15 +92,21 @@ namespace Mise.Inventory.ViewModels
 
         async void AddVendor()
         {
-            //make our address
-            Processing = true;
-            var address = MakeAddress();
-            var phone = MakePhoneNumber();
-            var email = MakeEmail();
-            await _vendorService.AddVendor(Name, address, phone, email);
-            Processing = false;
-            //go back (pop it)
-            await Navigation.CloseVendorAdd();
+			try{
+            	//make our address
+	            Processing = true;
+	            var address = MakeAddress();
+	            var phone = MakePhoneNumber();
+	            var email = MakeEmail();
+	            await _vendorService.AddVendor(Name, address, phone, email);
+				Email = string.Empty;
+				Name = string.Empty;
+	            //go back (pop it)
+	            await Navigation.CloseVendorAdd();
+			}catch(Exception e){
+				HandleException (e);
+			}
+			Processing = false;
         }
 
         public StreetAddress MakeAddress()
@@ -98,7 +118,7 @@ namespace Mise.Inventory.ViewModels
                 && (string.IsNullOrWhiteSpace(State) == false)
                 && (string.IsNullOrWhiteSpace(Zip) == false))
             {
-                return new StreetAddress(StreetAddressNumber, "", StreetName, City, State,
+                return new StreetAddress(StreetAddressNumber, StreetDirection, StreetName, City, State,
                     Country.UnitedStates.Name, Zip);
             }
             return null;

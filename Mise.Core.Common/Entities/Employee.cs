@@ -119,7 +119,7 @@ namespace Mise.Core.Common.Entities
 			set;
 		}
 
-		public IList<EmailAddress> Emails {
+	    public IList<EmailAddress> Emails {
 			get;
 			set;
 		}
@@ -230,7 +230,7 @@ namespace Mise.Core.Common.Entities
                 default:
                     throw new ArgumentException("Employee object cannot process event of type " + empEvent.EventType);
 	        }
-			Revision = empEvent.EventOrderingID;
+			Revision = empEvent.EventOrder;
 			LastUpdatedDate = empEvent.CreatedDate;
 	    }
 
@@ -241,7 +241,7 @@ namespace Mise.Core.Common.Entities
 
 	    void WhenEmployeeCreated (EmployeeCreatedEvent ecEV)
 		{
-			ID = ecEV.EmployeeID;
+			Id = ecEV.EmployeeID;
 			CreatedDate = ecEV.CreatedDate;
 	        Name = ecEV.Name;
 			if (Emails == null) {
@@ -249,7 +249,7 @@ namespace Mise.Core.Common.Entities
 			}
 			Emails.Add (ecEV.Email);
 			PrimaryEmail = ecEV.Email;
-			Revision = ecEV.EventOrderingID;
+			Revision = ecEV.EventOrder;
 			Password = ecEV.Password;
 			OAuthToken = ecEV.OAuthToken;
 	        //RestaurantsAndAppsAllowed[ecEV.RestaurantID] = new[] {ecEV.AppType};
@@ -257,27 +257,27 @@ namespace Mise.Core.Common.Entities
 
         protected virtual void WhenEmployeeRegisteredForInventoryAppEvent(EmployeeRegisteredForInventoryAppEvent empEvent)
 	    {
-            if (RestaurantsAndAppsAllowed.ContainsKey(empEvent.RestaurantID) == false)
+            if (RestaurantsAndAppsAllowed.ContainsKey(empEvent.RestaurantId) == false)
             {
-				RestaurantsAndAppsAllowed.Add (empEvent.RestaurantID, new List<MiseAppTypes> ());
+				RestaurantsAndAppsAllowed.Add (empEvent.RestaurantId, new List<MiseAppTypes> ());
             }
-			RestaurantsAndAppsAllowed [empEvent.RestaurantID].Add (MiseAppTypes.StockboyMobile);
+			RestaurantsAndAppsAllowed [empEvent.RestaurantId].Add (MiseAppTypes.StockboyMobile);
 	    }
 
 		void WhenEmployeeAcceptsInvitation (EmployeeAcceptsInvitationEvent ev)
 		{
-			if(RestaurantsAndAppsAllowed.ContainsKey (ev.RestaurantID) == false){
-				RestaurantsAndAppsAllowed.Add (ev.RestaurantID, new List<MiseAppTypes> ());
+			if(RestaurantsAndAppsAllowed.ContainsKey (ev.RestaurantId) == false){
+				RestaurantsAndAppsAllowed.Add (ev.RestaurantId, new List<MiseAppTypes> ());
 			}
-			RestaurantsAndAppsAllowed [ev.RestaurantID].Add (ev.Application);
+			RestaurantsAndAppsAllowed [ev.RestaurantId].Add (ev.Application);
 		}
 
 		void WhenEmployeeRegistersRestaurant (EmployeeRegistersRestaurantEvent ev)
 		{
-			if(RestaurantsAndAppsAllowed.ContainsKey (ev.RestaurantID) == false){
-				RestaurantsAndAppsAllowed.Add (ev.RestaurantID, new List<MiseAppTypes> ());
+			if(RestaurantsAndAppsAllowed.ContainsKey (ev.RestaurantId) == false){
+				RestaurantsAndAppsAllowed.Add (ev.RestaurantId, new List<MiseAppTypes> ());
 			}
-			RestaurantsAndAppsAllowed [ev.RestaurantID].Add (ev.ApplicationUsed);
+			RestaurantsAndAppsAllowed [ev.RestaurantId].Add (ev.ApplicationUsed);
 		}
 
         protected virtual void WhenEmployeeLoggedOutOfInventoryApp(EmployeeLoggedOutOfInventoryAppEvent empEvent)
@@ -288,7 +288,7 @@ namespace Mise.Core.Common.Entities
         protected virtual void WhenEmployeeLoggedIntoInventoryApp(EmployeeLoggedIntoInventoryAppEvent empEvent)
         {
             CurrentlyLoggedIntoInventoryApp = true;
-            LastDeviceIDLoggedInWith = empEvent.DeviceID;
+            LastDeviceIDLoggedInWith = empEvent.DeviceId;
             LastTimeLoggedIntoInventoryApp = empEvent.CreatedDate;
         }
 

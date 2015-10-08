@@ -22,7 +22,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
 			var res = serializer.Deserialize<Common.Entities.Inventory.Inventory>(json);
 
-			Assert.AreEqual(Guid.Empty, res.ID);
+			Assert.AreEqual(Guid.Empty, res.Id);
 			Assert.IsNotNull(res);
 		}
 
@@ -34,24 +34,24 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var serializer = SerializerFactory.GetJSONSerializer(type);
             var underTest = new Common.Entities.Inventory.Inventory
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Sections = new List<InventorySection>
                 {
                     new InventorySection
                     {
                         CreatedDate = DateTime.UtcNow,
                         LastUpdatedDate = DateTime.UtcNow,
-                        ID = Guid.NewGuid(), 
+                        Id = Guid.NewGuid(), 
                         LineItems = new List<InventoryBeverageLineItem>
                         {
                             new InventoryBeverageLineItem
                             {
-                                ID = Guid.NewGuid(),
+                                Id = Guid.NewGuid(),
                                 Categories = new List<ItemCategory>
                                 {
                                     new ItemCategory
                                     {
-                                        ID = catID,
+                                        Id = catID,
                                         IsCustomCategory = false,
                                         ParentCategoryID = Guid.NewGuid(),
                                         Name = "testCat"
@@ -70,7 +70,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var res = serializer.Deserialize<Common.Entities.Inventory.Inventory>(json);
 
             Assert.NotNull(res);
-            Assert.AreEqual(underTest.ID, res.ID);
+            Assert.AreEqual(underTest.Id, res.Id);
 	        var sections = underTest.Sections;
             Assert.AreEqual(1, sections.Count);
 
@@ -81,7 +81,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             Assert.NotNull(cats);
             Assert.AreEqual(2, cats.Count);
 
-	        var firstCat = cats.FirstOrDefault(c => c.ID == catID);
+	        var firstCat = cats.FirstOrDefault(c => c.Id == catID);
             Assert.NotNull(firstCat);
             Assert.AreEqual("testCat", firstCat.Name);
 	    }
@@ -97,24 +97,24 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var secLI = Guid.NewGuid();
             var underTest = new Common.Entities.Inventory.Inventory
             {
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 Sections = new List<InventorySection>
                 {
                     new InventorySection
                     {
                         CreatedDate = DateTime.UtcNow,
                         LastUpdatedDate = DateTime.UtcNow,
-                        ID = Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         LineItems = new List<InventoryBeverageLineItem>
                         {
                             new InventoryBeverageLineItem
                             {
-                                ID = firstLIid,
+                                Id = firstLIid,
                                 Categories = new List<ItemCategory>
                                 {
                                     new ItemCategory
                                     {
-                                        ID = catID,
+                                        Id = catID,
                                         IsCustomCategory = false,
                                         ParentCategoryID = Guid.NewGuid(),
                                         Name = "testCat"
@@ -125,7 +125,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                             },
                             new InventoryBeverageLineItem
                             {
-                                ID = secLI,
+                                Id = secLI,
                                 Categories = new List<ItemCategory>
                                 {
                                     CategoriesService.Agave
@@ -143,15 +143,15 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var res = serializer.Deserialize<Common.Entities.Inventory.Inventory>(json);
 
             Assert.NotNull(res);
-            Assert.AreEqual(underTest.ID, res.ID);
+            Assert.AreEqual(underTest.Id, res.Id);
 
             var items = underTest.GetBeverageLineItems().ToList();
-            var firstLI = items.First(li => li.ID == firstLIid);
+            var firstLI = items.First(li => li.Id == firstLIid);
             Assert.NotNull(firstLI);
             Assert.AreEqual(1, firstLI.GetPartialBottlePercentages().Count());
             Assert.AreEqual(0.4M, firstLI.GetPartialBottlePercentages().First());
 
-            var secondLI = items.First(li => li.ID == secLI);
+            var secondLI = items.First(li => li.Id == secLI);
             Assert.NotNull(secondLI);
             Assert.AreEqual(2, secondLI.GetPartialBottlePercentages().Count());
             Assert.AreEqual(2, secondLI.NumPartialBottles);

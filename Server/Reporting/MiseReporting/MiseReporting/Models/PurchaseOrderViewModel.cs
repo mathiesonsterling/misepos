@@ -33,8 +33,8 @@ namespace MiseReporting.Models
 
         public PurchaseOrderViewModel(IPurchaseOrder po, IPurchaseOrderPerVendor poForVendor, IVendor vendor, IEmployee emp, IReceivingOrder linkedReceivingOrder)
         {
-            POId = po.ID;
-            Id = poForVendor.ID;
+            POId = po.Id;
+            Id = poForVendor.Id;
             DateCreated = poForVendor.CreatedDate.ToLocalTime().DateTime;
             LastUpdated = poForVendor.LastUpdatedDate.ToLocalTime().DateTime;
             NumLineItems = poForVendor.GetLineItems().Count();
@@ -52,7 +52,7 @@ namespace MiseReporting.Models
 
             if (linkedReceivingOrder != null)
             {
-                LinkedReceivingOrderId = linkedReceivingOrder.ID;
+                LinkedReceivingOrderId = linkedReceivingOrder.Id;
             }
         }
     }
