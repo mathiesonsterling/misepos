@@ -15,6 +15,8 @@
 				</StackLayout>
 			</ScrollView>
 			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button Text="Join Restaurant" Command="{Binding AcceptCommand}" HorizontalOptions="CenterAndExpand" IsEnabled="{Binding HasSelection}"/>
+			<Button Text="Reject" Command="{Binding RejectCommand}" HorizontalOptions="CenterAndExpand" IsEnabled="{Binding HasSelection}"/>
 		</StackLayout>
 	</ContentPage.Content>
 </local:BasePage>

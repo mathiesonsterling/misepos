@@ -338,6 +338,9 @@ namespace Mise.Inventory.Services.Implementation
 
 				await _inviteRepository.Commit (invite.Id);
 				await _employeeRepository.Commit (_currentEmployee.Id);
+
+				await SelectRestaurantForLoggedInEmployee(acceptEv.RestaurantId);
+				await LoadSelectedRestaurant();
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;

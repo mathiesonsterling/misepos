@@ -42,14 +42,14 @@ namespace Mise.Inventory.Pages
 			if (vm != null) {
 				if (_lv == null) {
 					var template = new DataTemplate (typeof(TextCell));
-					template.SetBinding (TextCell.TextProperty, "RestaurantName");
+					template.SetBinding (TextCell.TextProperty, "DisplayName");
 					_lv = new ListView {
 						ItemTemplate = template,
 						HorizontalOptions = LayoutOptions.FillAndExpand
 					};
 
 					_lv.ItemTapped += async (sender, e) => {
-						var selected = e.Item as IApplicationInvitation;
+						var selected = e.Item as InvitationDisplayModel;
 						//((ListView)sender).SelectedItem = null;
 						if (selected != null) {
 							await vm.SelectLineItem (selected);
@@ -57,7 +57,7 @@ namespace Mise.Inventory.Pages
 					};
 					stckInvites.Children.Add (_lv);
 				}
-				_lv.ItemsSource = vm.InvitesForUser;
+				_lv.ItemsSource = vm.LineItems;
 			}
 		}
 	}
