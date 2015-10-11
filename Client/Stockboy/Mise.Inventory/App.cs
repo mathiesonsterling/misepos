@@ -66,6 +66,7 @@ namespace Mise.Inventory
 			AttemptToLoginSavedEmployee (appNavigation);
             
         }
+			
 
 		static async void LoadDeviceID ()
 		{
@@ -82,9 +83,20 @@ namespace Mise.Inventory
 			DeviceID = item.ToString ();
 		}
 
-        protected override void OnSleep()
+        protected override async void OnSleep()
         {
+			try{
 			//TODO fire a sync if we're online and need one
+
+			//check if we have unsaved work!
+				var inventoryRepos = Resolve<IInventoryRepository>();
+				if (inventoryRepos != null && inventoryRepos.Dirty) {
+					await inventoryRepos.CommitAll ();
+				}
+			} catch(Exception e){
+				var logger = _container.Resolve<ILogger>();
+				logger?.HandleException(e);
+			}
         }
 
         #region View Models

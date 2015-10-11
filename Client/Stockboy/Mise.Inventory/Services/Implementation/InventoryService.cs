@@ -182,6 +182,8 @@ namespace Mise.Inventory.Services.Implementation
 			var emp = await _loginService.GetCurrentEmployee ();
 
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+
+			//TODO - if we've waited too long between items, autosave
 			var categories = new []{ category as ItemCategory };
 
 			var section = GetSelectedSection ();
@@ -248,7 +250,13 @@ namespace Mise.Inventory.Services.Implementation
 			inv = _inventoryRepository.ApplyEvent (compEv);
 
             //let's commit here to reduce transaction size
-			 await _inventoryRepository.Commit(inv.Id).ConfigureAwait(false);
+			await SaveInventory();
+		}
+
+		public async Task SaveInventory ()
+		{
+			var currInventory = _inventoryRepository.GetByID (_selectedInventoryID.Value);
+			await _inventoryRepository.Commit (currInventory.Id).ConfigureAwait (false);
 		}
 
 		public async Task ClearCurrentSection ()
@@ -270,7 +278,7 @@ namespace Mise.Inventory.Services.Implementation
 
 			_inventoryRepository.ApplyEvent (compEv);
 
-			await _inventoryRepository.Commit (inv.Id).ConfigureAwait (false);
+			await SaveInventory ();
 
 			_insights.Track("Completed Inventory", "Inventory ID", inv.Id.ToString ());
 			_lastCompletedInventory = inv;
