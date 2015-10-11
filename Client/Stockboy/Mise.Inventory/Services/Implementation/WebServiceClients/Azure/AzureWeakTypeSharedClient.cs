@@ -40,7 +40,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private readonly EntityDataTransportObjectFactory _entityDTOFactory;
 		private readonly IDeviceConnectionService _deviceConnectionService;
 		private bool _needsSynch = false;
-		private DateTimeOffset? _lastTimePushed;
 		public AzureWeakTypeSharedClient (ILogger logger, IJSONSerializer serializer, IMobileServiceClient client,
 		IDeviceConnectionService devConnectionService)
 		{
@@ -477,7 +476,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		private async Task<bool> AttemptPush(){
 			try{
 				await _client.SyncContext.PushAsync ();
-				_lastTimePushed = DateTimeOffset.UtcNow;
 				return true;
 			} catch(MobileServicePushFailedException me){
 				//could mean we're offline!

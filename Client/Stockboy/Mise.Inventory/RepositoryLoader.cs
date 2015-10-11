@@ -5,6 +5,7 @@ using System.Linq;
 using Mise.Core.Repositories;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Services.WebServices;
+using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 
 
@@ -12,6 +13,7 @@ namespace Mise.Inventory
 {
 	public class RepositoryLoader : IRepositoryLoader
 	{
+		private readonly ILogger _logger;
 	    private readonly IEmployeeRepository _employeeRepository;
 	    private readonly IApplicationInvitationRepository _applicationInvitationRepository;
 	    private readonly IVendorRepository _vendorRepository;
@@ -22,11 +24,15 @@ namespace Mise.Inventory
 	    private readonly IReceivingOrderRepository _receivingOrderRepository;
         private readonly IPurchaseOrderRepository _purchaseOrderRepository;
 	    private readonly IBeverageItemService _beverageItemService;
-	    public RepositoryLoader(IEmployeeRepository employeeRepository, IApplicationInvitationRepository applicationInvitationRepository, 
-            IVendorRepository vendorRepository, IInventoryAppEventFactory inventoryAppEventFactory, IRestaurantRepository restaurantRepository, 
-            IParRepository parRepository, IInventoryRepository inventoryRepository, IReceivingOrderRepository receivingOrderRepository, 
+		public RepositoryLoader(ILogger logger,
+			IEmployeeRepository employeeRepository, IApplicationInvitationRepository applicationInvitationRepository, 
+            IVendorRepository vendorRepository, IInventoryAppEventFactory inventoryAppEventFactory, 
+			IRestaurantRepository restaurantRepository, 
+            IParRepository parRepository, IInventoryRepository inventoryRepository, 
+			IReceivingOrderRepository receivingOrderRepository, 
             IPurchaseOrderRepository purchaseOrderRepository, IBeverageItemService beverageItemService)
 	    {
+			_logger = logger;
 	        _employeeRepository = employeeRepository;
 	        _applicationInvitationRepository = applicationInvitationRepository;
 	        _vendorRepository = vendorRepository;
@@ -97,6 +103,42 @@ namespace Mise.Inventory
 	        await _receivingOrderRepository.Clear();
 	        await _purchaseOrderRepository.Clear();
 	    }
+
+		public async Task SaveOnSleep ()
+		{
+			//we want to attempt all our saves, regardless if the first fails
+			List<Task> commits = new List<Task> ();
+			Exception e = null;
+			if (_inventoryRepository.Dirty) {
+				var t= _inventoryRepository.CommitAll ();
+				commits.Add(t);
+			}
+				
+			if (_parRepository.Dirty) {
+				var t= _parRepository.CommitAll ();
+				commits.Add (t);
+			}
+				
+			if (_receivingOrderRepository.Dirty) {
+				var t = _receivingOrderRepository.CommitAll ();
+				commits.Add (t);
+			}
+
+			foreach (var c in commits) {
+				try{
+					await c.ConfigureAwait (false);
+				} catch(Exception ex){
+					_logger.HandleException (ex);
+					if (e == null) {
+						e = ex;
+					}
+				}
+			}
+
+			if (e != null) {
+				throw e;
+			}
+		}
 	}
 }
 
