@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mise.Core.Entities.Vendors;
 
 namespace MiseVendorManagement.Models
@@ -42,18 +40,24 @@ namespace MiseVendorManagement.Models
 
         public string Email { get; set; }
 
+        [Url]
+        public string Website { get; set; }
+
         [DisplayName("Area Code")]
         public string PhoneAreaCode { get; set; }
 
         [DisplayName("Phone Number")]
         public string PhoneNumber { get; set; }
 
+        [DisplayName("Phone Number")]
+        public string PhoneNumberDisplay { get; set; }
 
-        public bool HasItems { get; set; }
+        [DisplayName("Items")]
+        public int NumItems { get; set; }
 
         public IEnumerable<string> PossibleStates { get; private set; }
 
-        public IEnumerable<VendorItemForSaleViewModel> ItemsForSale { get; private set; }
+        public IEnumerable<VendorItemForSaleViewModel> ItemsForSale { get; set; }
          
         public VendorViewModel()
         {
@@ -83,8 +87,14 @@ namespace MiseVendorManagement.Models
             {
                 PhoneAreaCode = v.PhoneNumber.AreaCode;
                 PhoneNumber = v.PhoneNumber.Number;
+                PhoneNumberDisplay = v.PhoneNumber.ToFormattedString();
             }
-            HasItems = v.GetItemsVendorSells().Any();
+            if (v.Website != null)
+            {
+                Website = v.Website.AbsoluteUri;
+            }
+
+            NumItems = v.GetItemsVendorSells().Count();
             ItemsForSale = v.GetItemsVendorSells().Select(li => new VendorItemForSaleViewModel(li));
         }
 

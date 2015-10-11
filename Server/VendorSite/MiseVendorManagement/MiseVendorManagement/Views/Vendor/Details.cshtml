@@ -82,6 +82,9 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
 
+        <dt>@Html.DisplayNameFor(m => m.Website)</dt>
+        <dd>@Html.DisplayFor(m => m.Website)</dd>
+
         <dt>
             @Html.DisplayNameFor(model => model.PhoneAreaCode)
         </dt>
@@ -107,11 +110,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.HasItems)
+            @Html.DisplayNameFor(model => model.NumItems)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.HasItems)
+            @Html.DisplayFor(model => model.NumItems)
         </dd>
 
     </dl>

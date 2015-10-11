@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Vendors;
@@ -76,8 +75,14 @@ namespace MiseVendorManagement
                     throw new InvalidOperationException("Cannot find vendor to update in DB");
                 }
 
-                var newVerDTO = _entityFactory.ToDataTransportObject(vendor);
+                //store the line items!
+                if (vendor.VendorBeverageLineItems.Any() == false)
+                {
+                    var oldDeser = _entityFactory.FromDataStorageObject<Vendor>(oldVer.ToRestaurantDTO());
+                    vendor.VendorBeverageLineItems = oldDeser.VendorBeverageLineItems.Select(li => li).ToList();
+                }
 
+                var newVerDTO = _entityFactory.ToDataTransportObject(vendor);
                 oldVer.EntityJSON = newVerDTO.JSON;
                 oldVer.LastUpdatedDate = newVerDTO.LastUpdatedDate;
                     
@@ -85,6 +90,25 @@ namespace MiseVendorManagement
                 await db.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateVendorLineItem(VendorBeverageLineItem li)
+        {
+            using (var db = new AzureDB())
+            {
+                var vendor = await GetVendor(li.VendorID);
+                var downCast = vendor as Vendor;
+
+                var oldLineItem = downCast.VendorBeverageLineItems.FirstOrDefault(l => l.Id == li.Id);
+                if (oldLineItem == null)
+                {
+                    throw new ArgumentException("Cannot find line item in vendor");
+                }
+                downCast.VendorBeverageLineItems.Remove(oldLineItem);
+                downCast.VendorBeverageLineItems.Add(li);
+
+                await UpdateVendor(downCast);
+            }
+        } 
 
         public async Task DeleteVendor(Guid id)
         {

@@ -11,7 +11,7 @@
 <table class="table">
     <tr>
         <th>
-            Name
+            @Html.ActionLink("Name", "Index", new {vendorId = @Model.Id, sortOrder = ViewBag.NameSortParm})
         </th>
         <th>
             UPC
@@ -26,10 +26,10 @@
             Case Size
         </th>
         <th>
-            Container Size in ML
+            @Html.ActionLink("Container Size in ML", "Index", new { vendorId = @Model.Id, sortOrder = ViewBag.SizeSortParam})
         </th>
         <th>
-            Categories
+            @Html.ActionLink("Categories", "Index", new { vendorId = @Model.Id, sortOrder = ViewBag.CategorySortParm })
         </th>
         <th></th>
     </tr>
@@ -59,7 +59,7 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { vendorId = item.VendorId, lineItemId = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { vendorId = item.VendorId, lineItemId = item.Id})
+            @Html.ActionLink("Details", "Details", new { vendorId = item.VendorId, lineItemId = item.Id}) |
             @Html.ActionLink("Delete", "Delete", new { vendorId = item.VendorId, lineItemId = item.Id })
         </td>
     </tr>

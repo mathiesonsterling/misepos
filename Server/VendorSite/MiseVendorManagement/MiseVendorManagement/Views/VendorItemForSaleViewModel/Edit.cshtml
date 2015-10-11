@@ -1,19 +1,35 @@
 ﻿@using MvcCheckBoxList.Model
 @model MiseVendorManagement.Models.VendorItemForSaleViewModel
 
+@{
+    ViewBag.Title = "Edit";
+}
 
-@using (Html.BeginForm()) 
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Add a new item carried by this vendor</h4>
+        <h4>VendorItemForSaleViewModel</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
         <div class="form-group" style="display: none">
             @Html.LabelFor(model => model.VendorId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.VendorId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VendorId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display: none">
+            @Html.LabelFor(model => model.Id, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Id, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.Id, "", new {@class = "text-danger"})
             </div>
         </div>
 
@@ -22,6 +38,14 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Name, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.Name, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PublicPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PublicPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PublicPrice, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -40,14 +64,14 @@
                 @Html.ValidationMessageFor(model => model.UPC, "", new { @class = "text-danger" })
             </div>
         </div>
-        <!--
+
         <div class="form-group">
             @Html.LabelFor(model => model.ContainerName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ContainerName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ContainerName, "", new { @class = "text-danger" })
             </div>
-        </div>-->
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.ContainerSizeML, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -56,45 +80,26 @@
                 @Html.ValidationMessageFor(model => model.ContainerSizeML, "", new { @class = "text-danger" })
             </div>
         </div>
-        <!--
-        <div class="form-group">
-            @Html.LabelFor(model => model.Categories, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Categories, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.Categories, "", new {@class = "text-danger"})
-            </div>
-        </div>-->
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PublicPrice, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PublicPrice, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.PublicPrice, "", new {@class = "text-danger"})
-            </div>
-        </div>
 
         <div class="form-group">
             <span class="control-label col-md-2">Categories</span>
             <div class="col-md-10">
                 @Html.CheckBoxListFor(model => model.PostedCategoryGuids,
-                model=> Model.PossibleCategories,
+                model => Model.PossibleCategories,
                 c => c.Id,
                 c => c.Name,
                 model => model.SelectedCategories, Position.Vertical)
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default"/>
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index", new {vendorId = @Model.VendorId})
+    @Html.ActionLink("Back to List", "Index", new { vendorId = @Model.VendorId })
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

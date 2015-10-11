@@ -18,6 +18,8 @@ namespace Mise.Core.Entities.Vendors
         /// The email that people send their PO orders to currently
         /// </summary>
         EmailAddress EmailToOrderFrom { get; }
+        Uri Website { get; }
+
         PhoneNumber PhoneNumber { get; }
         Guid? CreatedByEmployeeID { get; set; }
 

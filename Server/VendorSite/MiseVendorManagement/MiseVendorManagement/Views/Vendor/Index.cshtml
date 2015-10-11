@@ -12,25 +12,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.ActionLink("Name", "Index", new {sortOrder = ViewBag.NameSortParam})
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.ActionLink("City", "Index", new {sortOrder = ViewBag.CitySortParam})
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.State)
+            @Html.ActionLink("State", "Index", new {sortOrder = ViewBag.StateSortParam})
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.ActionLink("Email", "Index", new {sortOrder = ViewBag.EmailSortParam})
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PhoneAreaCode)
+            Phone
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.HasItems)
+            @Html.ActionLink("Num Items", "Index", new {sortOrder = ViewBag.NumItemsSortParam})
         </th>
         <th></th>
     </tr>
@@ -50,13 +47,10 @@
             @Html.DisplayFor(modelItem => item.Email)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PhoneAreaCode)
+            @Html.DisplayFor(modelItem => item.PhoneNumberDisplay)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PhoneNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.HasItems)
+            @Html.DisplayFor(modelItem => item.NumItems)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

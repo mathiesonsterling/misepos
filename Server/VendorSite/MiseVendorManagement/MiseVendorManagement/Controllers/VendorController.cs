@@ -22,11 +22,54 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: Vendor
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string sortOrder)
         {
+            ViewBag.NameSortParam = sortOrder == "name" ? "name_desc" : "name";
+            ViewBag.CitySortParam = sortOrder == "city" ? "city_desc" : "city";
+            ViewBag.StateSortParam = sortOrder == "state" ? "state_desc" : "state";
+            ViewBag.EmailSortParam = sortOrder == "email" ? "email_desc" : "email";
+            ViewBag.NumItemsSortParam = sortOrder == "numitems" ? "numitems_desc" : "numitems";
+
             //get all our vendors
             var vendors = await _dal.GetAllVendors();
             var viewModels = vendors.Select(v => new VendorViewModel(v));
+
+            switch (sortOrder)
+            {
+                case "city":
+                    viewModels = viewModels.OrderBy(v => v.City).ThenBy(v => v.Name);
+                    break;
+                case "city_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.City).ThenBy(v => v.Name);
+                    break;
+                case "state":
+                    viewModels = viewModels.OrderBy(v => v.State).ThenBy(v => v.Name);
+                    break;
+                case "state_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.State).ThenBy(v => v.Name);
+                    break;
+                case "email":
+                    viewModels = viewModels.OrderBy(v => v.Email).ThenBy(v => v.Name);
+                    break;
+                case "email_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.Email).ThenBy(v => v.Name);
+                    break;
+                case "name_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.Name);
+                    break;
+                case "name":
+                    viewModels = viewModels.OrderBy(v => v.Name);
+                    break;
+                case "numitems":
+                    viewModels = viewModels.OrderBy(v => v.NumItems).ThenBy(v => v.Name);
+                    break;
+                case "numitems_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.NumItems).ThenBy(v => v.Name);
+                    break;
+                default:
+                    viewModels = viewModels.OrderBy(v => v.State).ThenBy(v => v.City).ThenBy(v => v.Name);
+                    break;
+            }
             return View(viewModels);
         }
 
@@ -55,7 +98,7 @@ namespace MiseVendorManagement.Controllers
                 {
                     return View(vm);
                 }
-                    var vendor = VendorVMToVendor(vm);
+                    var vendor = VendorVMToVendor(vm, new Guid());
 
                     //TODO get geolocation here
 
@@ -84,7 +127,7 @@ namespace MiseVendorManagement.Controllers
         {
             try
             {
-                var updated = VendorVMToVendor(vm);
+                var updated = VendorVMToVendor(vm, vm.Id);
                 await _dal.UpdateVendor(updated);
                 
                 return RedirectToAction("Index");
@@ -118,14 +161,14 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
-        private static Vendor VendorVMToVendor(VendorViewModel vm)
+        private static Vendor VendorVMToVendor(VendorViewModel vm, Guid vendorId)
         {
             //convert this to a vendor!
             var vendor = new Vendor
             {
                 CreatedDate = DateTimeOffset.UtcNow,
                 EmailToOrderFrom = new EmailAddress(vm.Email),
-                Id = Guid.NewGuid(),
+                Id = vendorId,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
                 Name = vm.Name,
                 PhoneNumber = new PhoneNumber(vm.PhoneAreaCode, vm.PhoneNumber),
@@ -133,7 +176,8 @@ namespace MiseVendorManagement.Controllers
                 Verified = false,
                 StreetAddress =
                     new StreetAddress(vm.StreetAddressNumber, vm.StreetDirection, vm.StreetName, vm.City, vm.State, vm.Country,
-                        vm.ZipCode)
+                        vm.ZipCode),
+                Website = new Uri(vm.Website)
             };
             return vendor;
         }

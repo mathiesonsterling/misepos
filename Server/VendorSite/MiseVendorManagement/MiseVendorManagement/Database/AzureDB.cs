@@ -23,6 +23,6 @@ namespace MiseVendorManagement.Database
                 .IsFixedLength();
         }
 
-        public DbSet<Models.VendorViewModel> VendorViewModels { get; set; }
+        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorItemForSaleViewModel> VendorItemForSaleViewModels { get; set; }
     }
 }

@@ -2,21 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Mise.Core.Common;
-using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation;
-using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
-using Mise.Core.Entities.Vendors;
+using Mise.Core.Entities.Inventory;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
-using MiseVendorManagement.Database;
 using MiseVendorManagement.Models;
 
 namespace MiseVendorManagement.Controllers
@@ -25,20 +20,46 @@ namespace MiseVendorManagement.Controllers
     {
         private readonly VendorDAL _dal;
         private readonly ICategoriesService _categoriesService;
-        private readonly EntityDataTransportObjectFactory _dtoFactory;
         public VendorItemForSaleViewModelController()
         {
             _dal = new VendorDAL();
             _categoriesService = new CategoriesService();
-            _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
         }
 
         // GET: VendorItemForSaleViewModel
-        public async Task<ActionResult> Index(Guid vendorId)
+        public async Task<ActionResult> Index(Guid vendorId, string sortOrder)
         {
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.CategorySortParm = sortOrder == "category" ? "category_desc" : "category";
+            ViewBag.SizeSortParam = sortOrder == "size" ? "size_desc" : "size";
             var vendor = await _dal.GetVendor(vendorId);
             var vm = new VendorViewModel(vendor);
 
+            switch (sortOrder)
+            {
+                case "category":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.Categories).ThenBy(li => li.Name);
+                    break;
+                case "category_desc":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderByDescending(li => li.Categories).ThenBy(li => li.Name);
+                    break;
+                case "container":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.ContainerName).ThenBy(li => li.Name);
+                    break;
+                case "size":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.ContainerSizeML).ThenBy(li => li.Name);
+                    break;
+                case "size_desc":
+                    vm.ItemsForSale =
+                        vm.ItemsForSale.OrderByDescending(li => li.ContainerSizeML).ThenBy(li => li.Name);
+                    break;
+                case "name_desc":
+                    vm.ItemsForSale = vm.ItemsForSale.OrderByDescending(li => li.Name).ThenBy(li => li.Name);
+                    break;
+                default:
+                    vm.ItemsForSale = vm.ItemsForSale.OrderBy(li => li.Name);
+                    break;
+            }
             return View(vm);
         }
 
@@ -58,10 +79,13 @@ namespace MiseVendorManagement.Controllers
             var newVm = new VendorItemForSaleViewModel
             {
                 VendorId = vendorId,
-                PossibleCategories = _categoriesService.GetAssignableCategories()
+                PossibleCategories = GetPossibleCategories(),
+                CaseSize = 1,
+                ContainerSizeML = 750M
             };
             return View(newVm);
         }
+
 
         // POST: VendorItemForSaleViewModel/Create
         [HttpPost]
@@ -69,10 +93,21 @@ namespace MiseVendorManagement.Controllers
         {
             try
             {
-                var lineItem = GetLineItemFromFormCollection(vendorId, collection);
+                var lineItem = GetLineItemFromFormCollection(vendorId, collection, Guid.NewGuid());
+                if (lineItem.Categories.Any() == false)
+                {
+                    throw new ArgumentException("Cannot create an item without categories!");
+                }
 
                 var v = await _dal.GetVendor(vendorId);
-                var vendor = v as Vendor;
+                //check if it already exists
+                if (v.GetItemsVendorSells()
+                    .Any(li => BeverageLineItemEquator.AreSameBeverageLineItem(lineItem, li)))
+                {
+                    throw new ArgumentException("Item already exists for this vendor!");
+                }
+
+                var vendor = (Vendor)v;
                 vendor.VendorBeverageLineItems.Add(lineItem);
 
                 //save it
@@ -80,27 +115,37 @@ namespace MiseVendorManagement.Controllers
 
                 return RedirectToAction("Index", new RouteValueDictionary { {"vendorId", vendorId} });
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return View();
             }
         }
 
         // GET: VendorItemForSaleViewModel/Edit/5
-        public ActionResult Edit(Guid vendorId, Guid lineItemId)
+        public async Task<ActionResult> Edit(Guid vendorId, Guid lineItemId)
         {
-            return View();
+            var vendor = await _dal.GetVendor(vendorId);
+            var lineItem = vendor.GetItemsVendorSells().FirstOrDefault(li => li.Id == lineItemId);
+
+            var vm = new VendorItemForSaleViewModel(lineItem)
+            {
+                PossibleCategories = GetPossibleCategories()
+            };
+            return View(vm);
         }
 
         // POST: VendorItemForSaleViewModel/Edit/5
         [HttpPost]
-        public ActionResult Edit(Guid vendorId, Guid lineItemId, FormCollection collection)
+        public async Task<ActionResult> Edit(Guid vendorId, Guid Id, FormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
 
-                return RedirectToAction("Index");
+                var newLineItem = GetLineItemFromFormCollection(vendorId, collection, Id);
+                await _dal.UpdateVendorLineItem(newLineItem);
+                
+                //assign categories
+                return RedirectToAction("Index", new RouteValueDictionary { {"vendorId", vendorId} });
             }
             catch
             {
@@ -109,20 +154,33 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: VendorItemForSaleViewModel/Delete/5
-        public ActionResult Delete(Guid vendorId, Guid lineItemId)
+        public async Task<ActionResult> Delete(Guid vendorId, Guid lineItemId)
         {
-            return View();
+            var vendor = await _dal.GetVendor(vendorId);
+            var li = vendor.GetItemsVendorSells().FirstOrDefault(l => l.Id == lineItemId);
+            var vm = new VendorItemForSaleViewModel(li);
+
+            return View(vm);
         }
 
         // POST: VendorItemForSaleViewModel/Delete/5
         [HttpPost]
-        public ActionResult Delete(Guid vendorId, Guid lineItemId, FormCollection collection)
+        public async Task<ActionResult> Delete(Guid vendorId, Guid lineItemId, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
+                var vendor = await _dal.GetVendor(vendorId);
+                var downCast = vendor as Vendor;
+                if (downCast == null)
+                {
+                    throw new InvalidOperationException("Vendor cannot be translated, please contact development");
+                }
+                var lineItem = downCast.VendorBeverageLineItems.FirstOrDefault(li => li.Id == lineItemId);
 
-                return RedirectToAction("Index");
+                downCast.VendorBeverageLineItems.Remove(lineItem);
+                await _dal.UpdateVendor(downCast);
+
+                return RedirectToAction("Index", new RouteValueDictionary { {"vendorId", vendorId} });
             }
             catch
             {
@@ -130,21 +188,23 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
-        private static int orderId = 0;
+        private static int _orderId;
+
         /// <summary>
         /// TODO change this to event at some time?
         /// </summary>
         /// <param name="vendorId"></param>
         /// <param name="fc"></param>
+        /// <param name="lineItemId"></param>
         /// <returns></returns>
-        private VendorBeverageLineItem GetLineItemFromFormCollection(Guid vendorId, FormCollection fc)
+        private VendorBeverageLineItem GetLineItemFromFormCollection(Guid vendorId, FormCollection fc, Guid lineItemId)
         {
             var cats = fc["PostedCategoryGuids"].Split(',');
             var guids = cats.Where(s => string.IsNullOrWhiteSpace(s) == false).Select(Guid.Parse).ToList();
             var actualCats = _categoriesService.GetAssignableCategories().Where(c => guids.Contains(c.Id)).Cast<ItemCategory>().ToList();
 
             var amtInMl = decimal.Parse(fc["ContainerSizeML"]);
-            var container = new LiquidContainer {AmountContained = new LiquidAmount {Milliliters = amtInMl} };
+            var container = GetContainerForAmount(amtInMl);
 
             Money price = null;
             var priceV = fc["PublicPrice"];
@@ -153,13 +213,15 @@ namespace MiseVendorManagement.Controllers
                 price = new Money(decimal.Parse(priceV));
             }
 
+            int caseSize;
+            int.TryParse(fc["CaseSize"], out caseSize);
             return new VendorBeverageLineItem
             {
-                CaseSize = int.Parse(fc["CaseSize"]),
+                CaseSize = caseSize,
                 Categories = actualCats,
                 CreatedDate = DateTimeOffset.UtcNow,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
-                Id = Guid.NewGuid(),
+                Id = lineItemId,
                 VendorID = vendorId,
                 DisplayName = fc["Name"],
                 MiseName = fc["Name"],
@@ -167,8 +229,19 @@ namespace MiseVendorManagement.Controllers
                 Container = container,
                 PublicPricePerUnit = price,
                 LastTimePriceSet = DateTimeOffset.UtcNow,
-                Revision = new EventID(MiseAppTypes.VendorManagement, orderId++)
+                Revision = new EventID(MiseAppTypes.VendorManagement, _orderId++)
             };
+        }
+
+        private IEnumerable<ICategory> GetPossibleCategories()
+        {
+            return _categoriesService.GetAssignableCategories().OrderBy(c => c.Name);
+        }
+
+        private static LiquidContainer GetContainerForAmount(decimal ml)
+        {
+            var found = LiquidContainer.GetStandardBarSizes().FirstOrDefault(s => s.AmountContained.Milliliters == ml);
+            return found ?? new LiquidContainer {AmountContained = new LiquidAmount {Milliliters = ml}};
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,10 +20,17 @@ namespace MiseVendorManagement.Models
         public VendorItemForSaleViewModel() { }
 
         public IEnumerable<Guid> PostedCategoryGuids { get; set; }
+
+        [NotMapped]
         public IEnumerable<ICategory> PossibleCategories { get; set; }
+
+        [NotMapped]
         public IEnumerable<ICategory> SelectedCategories { get; set; }
 
+        [NotMapped]
         public Container Container { get; set; }
+
+        [NotMapped]
         public IEnumerable<Container> PossibleContainers { get; set; }
          
         public VendorItemForSaleViewModel(IVendorBeverageLineItem li) : base(li)

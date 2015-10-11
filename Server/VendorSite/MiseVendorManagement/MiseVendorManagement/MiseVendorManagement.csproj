@@ -329,6 +329,8 @@
     <Content Include="Views\VendorItemForSaleViewModel\Details.cshtml" />
     <Content Include="Views\VendorItemForSaleViewModel\Create.cshtml" />
     <Content Include="Views\Vendor\Delete.cshtml" />
+    <Content Include="Views\VendorItemForSaleViewModel\Delete.cshtml" />
+    <Content Include="Views\VendorItemForSaleViewModel\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

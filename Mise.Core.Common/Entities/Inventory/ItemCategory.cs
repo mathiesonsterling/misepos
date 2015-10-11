@@ -21,7 +21,9 @@ namespace Mise.Core.Common.Entities.Inventory
 			set;
 		}
 
-		public bool ContainsSearchString (string searchString)
+	    public bool IsAssignable { get; set; }
+
+	    public bool ContainsSearchString (string searchString)
 		{
 		    return (false == string.IsNullOrEmpty(Name)) && Name.ToUpper().Contains (searchString.ToUpper());
 		}

@@ -77,6 +77,14 @@ namespace Mise.Core.ValueItems
 	        return cleanArea.Contains(searchString) || cleanNum.Contains(searchString);
 	    }
 
+	    public string ToFormattedString()
+	    {
+	        if (Number.Length != 7)
+	        {
+	            return $"({AreaCode}) {Number}";
+	        }
+	        return $"({AreaCode}) {Number.Substring(0, 3)}-{Number.Substring(3, 4)}";
+	    }
 	    public static PhoneNumber TestPhoneNumber
 	    {
 	        get
