@@ -710,7 +710,8 @@ namespace Mise.Core.Common.Events
 				DeviceId = _deviceID,
 				EventOrder = GetNextEventID (),
 				CausedById = emp.Id,
-				RestaurantId = _restaurant.Id
+				RestaurantId = invite.RestaurantID,
+				EmployeeID = emp.Id
 			};
 		}
 
@@ -723,7 +724,8 @@ namespace Mise.Core.Common.Events
 				DeviceId = _deviceID,
 				EventOrder = GetNextEventID (),
 				CausedById = emp.Id,
-				RestaurantId = _restaurant.Id
+				RestaurantId = invite.RestaurantID,
+				EmployeeID = emp.Id
 			};
 		}
 

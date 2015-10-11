@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Windows.Input;
 using Mise.Core.Entities.People;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
@@ -11,7 +12,35 @@ using Mise.Core.ValueItems;
 
 namespace Mise.Inventory.ViewModels
 {
-	public class InvitationViewModel : BaseSearchableViewModel<IApplicationInvitation>
+	public class InvitationDisplayModel : BaseDisplayLine<IApplicationInvitation>
+	{
+		public InvitationDisplayModel(IApplicationInvitation source) : base(source){
+		}
+
+		#region implemented abstract members of BaseDisplayLine
+		public override string DisplayName {
+			get {
+				return Source.RestaurantName != null 
+					? Source.RestaurantName.FullName
+						: "Error Unfound Restaurant";
+			}
+		}
+
+		#region implemented abstract members of BaseDisplayLine
+
+		public override string DetailDisplay {
+			get {
+				return Source.InvitingEmployeeName != null
+					? Source.InvitingEmployeeName.ToSingleString()
+						: string.Empty;
+			}
+		}
+
+		#endregion
+		#endregion
+	}
+
+	public class InvitationViewModel : BaseSearchableViewModel<InvitationDisplayModel>
 	{
 
 		readonly ILoginService _loginService;
@@ -44,30 +73,28 @@ namespace Mise.Inventory.ViewModels
             }
 	    }
 
-	    protected override async Task<ICollection<IApplicationInvitation>> LoadItems()
+	    protected override async Task<ICollection<InvitationDisplayModel>> LoadItems()
 	    {
-            var items = (await _loginService.GetInvitationsForCurrentEmployee()).ToList();
-	        return items;
+            var items = await _loginService.GetInvitationsForCurrentEmployee();
+			return items.Select(i => new InvitationDisplayModel(i)).ToList();
 	    }
 
 	    protected override void AfterSearchDone()
 	    {
 	    }
 
-        public override Task SelectLineItem(IApplicationInvitation lineItem)
+        public override Task SelectLineItem(InvitationDisplayModel lineItem)
         {
-            _selectedInvitation = lineItem;
-            HasSelection = lineItem != null;
+            _selectedInvitation = lineItem.Source;
+            HasSelection = lineItem.Source != null;
             return Task.FromResult(true);
         }
 
-        public IEnumerable<IApplicationInvitation> InvitesForUser{ get; set;}
-
 		public EmailAddress Email{get;set;}
 
-		public Command AcceptCommand => new Command(Accept);
+		public ICommand AcceptCommand => new Command(Accept);
 
-	    public Command RejectCommand => new Command(Reject);
+	    public ICommand RejectCommand => new Command(Reject);
 
 	    async void Accept ()
 		{
