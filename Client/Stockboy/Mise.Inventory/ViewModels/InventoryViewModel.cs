@@ -116,6 +116,10 @@ namespace Mise.Inventory.ViewModels
 		public ICommand ClearSectionCommand{
 			get{return new Command (ClearSection, () => NotProcessing);}
 		}
+
+		public ICommand SaveCommand{
+			get{ return new Command (Save, () => NotProcessing); }
+		}
 		#endregion
 
 		public override async Task SelectLineItem(InventoryLineItemDisplayLine lineItem){
@@ -272,6 +276,14 @@ namespace Mise.Inventory.ViewModels
 					Processing = false;
 					await DoSearch ();
 				}
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+
+		async void Save(){
+			try{
+				await _inventoryService.SaveInventory();
 			} catch(Exception e){
 				HandleException (e);
 			}

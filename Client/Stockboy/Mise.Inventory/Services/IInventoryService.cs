@@ -78,6 +78,12 @@ namespace Mise.Inventory.Services
 	    Task SetCurrentInventorySection(IInventorySection section);
 		Task<int> GetInventoryPositionAfterCurrentItem ();
 
+		/// <summary>
+		/// Saves the inventory in its current state
+		/// </summary>
+		/// <returns>The inventory.</returns>
+		Task SaveInventory();
+
 		Task MarkSectionAsComplete ();
 		Task ClearCurrentSection();
 
