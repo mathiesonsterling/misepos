@@ -104,7 +104,7 @@ namespace Mise.Inventory.ViewModels
 				if(emp != null){
 					_insights.Track("Delayed Registration", "EmpID", emp.Id.ToString ());
 				}
-				await Navigation.ShowMainMenu ();
+				await Navigation.ShowRestaurantLoading();
 			} catch(Exception e){
 				HandleException (e);
 			}

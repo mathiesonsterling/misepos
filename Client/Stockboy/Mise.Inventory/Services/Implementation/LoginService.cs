@@ -445,6 +445,8 @@ namespace Mise.Inventory.Services.Implementation
 
 				await _restaurantRepository.Load(_currentRestaurant.Id);
 			}
+
+			await SelectRestaurantForLoggedInEmployee (_currentRestaurant.Id);
 		}
 
 		private class RegisterAccountInfo{
