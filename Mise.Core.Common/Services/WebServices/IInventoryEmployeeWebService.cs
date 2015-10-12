@@ -30,6 +30,8 @@ namespace Mise.Core.Common.Services.WebServices
 		/// <param name="email">Email.</param>
 		/// <param name = "password"></param>
 		Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password);
+
+		Task<bool> IsEmailRegistered (EmailAddress email);
 	}
 }
 

@@ -13,6 +13,7 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Inventory.Services.Implementation
 {
@@ -26,7 +27,7 @@ namespace Mise.Inventory.Services.Implementation
 		readonly IClientKeyValueStorage _keyValStorage;
 		readonly ILogger _logger;
 	    private readonly IRepositoryLoader _repositoryLoader;
-
+		private readonly IInventoryEmployeeWebService _employeeWebService;
 		IEmployee _currentEmployee;
 		IRestaurant _currentRestaurant;
 
@@ -48,7 +49,9 @@ namespace Mise.Inventory.Services.Implementation
 		                    IInventoryAppEventFactory eventFactory,
 							IClientKeyValueStorage keyValStorage,
 		                    ILogger logger,
-            IRepositoryLoader repositoryLoader
+            				IRepositoryLoader repositoryLoader,
+							IInventoryEmployeeWebService employeeWebService
+							
             )
 		{
 			_employeeRepository = employeeRepository;
@@ -59,6 +62,7 @@ namespace Mise.Inventory.Services.Implementation
 			_keyValStorage = keyValStorage;
 			_logger = logger;
 		    _repositoryLoader = repositoryLoader;
+			_employeeWebService = employeeWebService;
 		}
 
 		const string LOGGED_IN_EMPLOYEE_KEY = "LoggedInEmployee";
@@ -363,6 +367,14 @@ namespace Mise.Inventory.Services.Implementation
 		public async Task<IEmployee> RegisterEmployee (EmailAddress email, Password password, PersonName name)
 		{
 			try{
+				//check if this email is already registered!
+
+				var alreadyRegistered = await _employeeWebService.IsEmailRegistered(email);
+
+				if(alreadyRegistered){
+					throw new InvalidOperationException("Email " + email.Value + " is already registered!");
+				}
+
 				var ev = _eventFactory.CreateEmployeeCreatedEvent (email, password, name, MiseAppTypes.StockboyMobile);
 
 				_currentEmployee = _employeeRepository.ApplyEvent (ev);

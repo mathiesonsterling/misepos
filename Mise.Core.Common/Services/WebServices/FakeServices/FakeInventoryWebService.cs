@@ -697,6 +697,15 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			return Task.FromResult(_emps.AsEnumerable());
 		}
 
+		public Task<bool> IsEmailRegistered (EmailAddress email)
+		{
+			var exists = _emps.Any (emp => 
+				emp.GetEmailAddresses ().Any (em => em != null && em.Equals (email))
+				|| (emp.PrimaryEmail != null && emp.PrimaryEmail.Equals (email)));
+
+			return Task.FromResult (exists);
+		}
+
 		public Task<IEnumerable<Employee>> GetEmployeesForRestaurant(Guid restaurantID)
 		{
 			return Task.FromResult(_emps.Where(e => e.GetRestaurantIDs().Contains(restaurantID)));
