@@ -324,7 +324,7 @@ namespace Mise.Inventory.UnitTests.Services
             var reposLoader = new Mock<IRepositoryLoader>();
             reposLoader.Setup(rl => rl.LoadRepositories(It.IsAny<Guid?>())).Returns(Task.FromResult(false));
             var loginService = new LoginService(empRepos.Object, restRepos, inviteRepos.Object, null, 
-				eventFact, null, logger.Object, reposLoader.Object, null);
+				eventFact, null, logger.Object, reposLoader.Object);
 			loginService.SetCurrentEmployee (currentEmp);
 			loginService.SetCurrentRestaurant (rest);
 

@@ -26,5 +26,6 @@ namespace Mise.Core.Repositories
 		/// <param name="password">Password.</param>
 		Task<IEmployee> GetByEmailAndPassword (EmailAddress email, Password password);
 
+		Task<bool> IsEmailRegistered (EmailAddress email);
     }
 }

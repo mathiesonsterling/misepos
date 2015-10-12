@@ -48,7 +48,7 @@ namespace Mise.Inventory.UnitTests.Services
 		    var reposLoader = new Mock<IRepositoryLoader>();
 		    reposLoader.Setup(rl => rl.LoadRepositories(It.IsAny<Guid?>())).Returns(Task.FromResult(false));
 			var underTest = new LoginService (moqRepos.Object, moqRestRepos.Object, inviteRepos.Object, accountRepos.Object, 
-				evFactory, mockKeyClient.Object, moqLogger.Object, reposLoader.Object, null);
+				evFactory, mockKeyClient.Object, moqLogger.Object, reposLoader.Object);
 
 			var badEmail = new EmailAddress{ Value = "bob@Qfuck.com" };
 			var password = new Password ();
@@ -82,7 +82,7 @@ namespace Mise.Inventory.UnitTests.Services
             reposLoader.Setup(rl => rl.LoadRepositories(It.IsAny<Guid?>())).Returns(Task.FromResult(false));
 
 			var underTest = new LoginService (moqRepos.Object, moqRestRepos.Object,inviteRepos.Object, null, 
-				evFactory, null, moqLogger.Object, reposLoader.Object, null);
+				evFactory, null, moqLogger.Object, reposLoader.Object);
 
 			var badEmail = new EmailAddress{ Value = "bob@Qfuck.com" };
 			var password = new Password ();
@@ -136,7 +136,7 @@ namespace Mise.Inventory.UnitTests.Services
             reposLoader.Setup(rl => rl.LoadRepositories(It.IsAny<Guid?>())).Returns(Task.FromResult(false));
 
 			var underTest = new LoginService (moqRepos.Object, moqRestRepos.Object,inviteRepos.Object, null, 
-				evFactory, null, moqLogger.Object, reposLoader.Object, null);
+				evFactory, null, moqLogger.Object, reposLoader.Object);
 
 			//ACT
 			var loginRes = await underTest.LoginAsync (new EmailAddress{Value="actor@test.com"}, 
@@ -179,7 +179,7 @@ namespace Mise.Inventory.UnitTests.Services
 			keyValStorage.Setup (s => s.SetValue (It.IsAny<string> (), It.IsAny<LoginService.RestaurantSelectRecord> ()))
 				.Returns (Task.FromResult (true));
 	        var underTest = new LoginService(null, moqRestaurantRepos.Object, null, null, moqEventFactory.Object, 
-				keyValStorage.Object, logger.Object, reposLoader.Object, null);
+				keyValStorage.Object, logger.Object, reposLoader.Object);
 
             //ACT
 	        await underTest.SelectRestaurantForLoggedInEmployee(restID);
@@ -218,7 +218,7 @@ namespace Mise.Inventory.UnitTests.Services
 				.Returns (Task.FromResult (true));
 			
 			var underTest = new LoginService (null, restRepos.Object, null, null, evFactory, null, 
-				logger.Object, reposLoader.Object, null);
+				logger.Object, reposLoader.Object);
 			underTest.SetCurrentRestaurant (restaurant);
 
 			//ACT
@@ -239,10 +239,10 @@ namespace Mise.Inventory.UnitTests.Services
 
 		[Test]
 		public async Task RegisteringAlreadyHeldEmailThrows(){
-			var webService = new Mock<IInventoryEmployeeWebService> ();
-			webService.Setup (ws => ws.IsEmailRegistered (It.IsAny<EmailAddress> ())).ReturnsAsync (false);
+			var empRepos = new Mock<IEmployeeRepository> ();
+			empRepos.Setup (ws => ws.IsEmailRegistered (It.IsAny<EmailAddress> ())).ReturnsAsync (false);
 
-			var underTest = new LoginService (null, null, null, null, null, null, null, null, webService.Object);
+			var underTest = new LoginService (empRepos.Object, null, null, null, null, null, null, null);
 
 			//ACT
 			Exception exception = null;
@@ -254,7 +254,7 @@ namespace Mise.Inventory.UnitTests.Services
 
 			//ASSERT
 			Assert.NotNull(exception);
-			webService.Verify(ws => ws.IsEmailRegistered(It.IsAny<EmailAddress>()), Times.Once());
+			empRepos.Verify(ws => ws.IsEmailRegistered(It.IsAny<EmailAddress>()), Times.Once());
 		}
 	}
 }
