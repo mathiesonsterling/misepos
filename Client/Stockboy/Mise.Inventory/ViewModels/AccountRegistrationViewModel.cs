@@ -25,11 +25,13 @@ namespace Mise.Inventory.ViewModels
 			_loginService = loginService;
 			_insights = insights;
 
+			//TODO change to valid form once CC processing is working
+			CanRegister = false;
 			PropertyChanged += (sender, e) => {
 				try{
 					if(e.PropertyName != "CanRegister"){
 						//check credit card, etc are valid
-						CanRegister = IsFormValid ();
+						//CanRegister = IsFormValid ();
 					}
 				} catch(Exception ex){
 					HandleException (ex);
