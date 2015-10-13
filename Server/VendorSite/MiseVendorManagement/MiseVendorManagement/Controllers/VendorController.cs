@@ -84,7 +84,11 @@ namespace MiseVendorManagement.Controllers
         // GET: Vendor/Create
         public ActionResult Create()
         {
-            return View();
+            var vm = new VendorViewModel
+            {
+                Country = Country.UnitedStates.Name
+            };
+            return View(vm);
         }
 
         // POST: Vendor/Create

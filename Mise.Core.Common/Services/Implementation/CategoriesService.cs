@@ -17,8 +17,8 @@ namespace Mise.Core.Common.Services.Implementation
 			BeerWineLiquor, Consumables, Operationals, Unknown,
 			Beer, Wine, Liquor,
 			Whiskey, WhiskeyAmerican, WhiskeyBourbon, WhiskeyCanadian, WhiskeyRye,
-            WhiskeyScotch, ScotchSingleMalt, ScotchBlended, ScotchGrain, ScotchSMCampbeltown, ScotchSMHighland, ScotchSMIslands,
-            ScotchSMIslay, ScotchSMLowland, ScotchSMSpeyside,
+            WhiskeyScotch, ScotchSingleMalt, ScotchBlended, ScotchGrain, ScotchSingleMaltCampbeltown, ScotchSingleMaltHighland, ScotchSingleMaltIslands,
+            ScotchSingleMaltIslay, ScotchSingleMaltLowland, ScotchSingleMaltSpeyside,
 			WhiskeyWorld, WhiskeyIrish, WhiskeyAmericanCorn, WhiskeyAmericanSingleMalt,
 			Vodka, Gin,
 			Rum, RumDark, RumTraditional, SpicedRum, RumAgricole, Cachaca,
@@ -169,7 +169,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
 	    };
 
-	    public static ItemCategory ScotchSMHighland => new ItemCategory
+	    public static ItemCategory ScotchSingleMaltHighland => new ItemCategory
 	    {
 	        Name = "Scotch (SM Highlands)",
 	        ParentCategoryID = ScotchSingleMalt.Id,
@@ -177,7 +177,7 @@ namespace Mise.Core.Common.Services.Implementation
 	        IsAssignable = true
 	    };
 
-        public static ItemCategory ScotchSMSpeyside => new ItemCategory
+        public static ItemCategory ScotchSingleMaltSpeyside => new ItemCategory
         {
             Name = "Scotch (SM Speyside)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -185,7 +185,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-        public static ItemCategory ScotchSMCampbeltown => new ItemCategory
+        public static ItemCategory ScotchSingleMaltCampbeltown => new ItemCategory
         {
             Name = "Scotch (SM Campbeltown)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -193,7 +193,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-        public static ItemCategory ScotchSMIslands => new ItemCategory
+        public static ItemCategory  ScotchSingleMaltIslands => new ItemCategory
         {
             Name = "Scotch (SM Islands)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -201,7 +201,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-        public static ItemCategory ScotchSMIslay => new ItemCategory
+        public static ItemCategory ScotchSingleMaltIslay => new ItemCategory
         {
             Name = "Scotch (SM Islay)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -209,7 +209,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-        public static ItemCategory ScotchSMLowland => new ItemCategory
+        public static ItemCategory ScotchSingleMaltLowland => new ItemCategory
         {
             Name = "Scotch (SM Lowland)",
             ParentCategoryID = ScotchSingleMalt.Id,
