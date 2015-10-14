@@ -102,6 +102,7 @@
     <Compile Include="Entities\Serialization\InventoryEventsSerializationTests.cs" />
     <Compile Include="ValueItems\EmailAddressTests.cs" />
     <Compile Include="Events\InventoryAppEventFactoryTests.cs" />
+    <Compile Include="Entities\Reports\COGReportTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -130,5 +131,6 @@
   -->
   <ItemGroup>
     <Folder Include="Events\" />
+    <Folder Include="Entities\Reports\" />
   </ItemGroup>
 </Project>
