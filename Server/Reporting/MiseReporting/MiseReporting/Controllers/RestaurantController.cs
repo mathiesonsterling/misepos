@@ -4,11 +4,10 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Security;
 using Mise.Core.Common.Entities;
+using Mise.Core.ValueItems;
 using MiseReporting.Models;
-using Mono.Security.X509;
-
+using Microsoft.AspNet.Identity;
 namespace MiseReporting.Controllers
 {
     public class RestaurantController : Controller
@@ -19,7 +18,7 @@ namespace MiseReporting.Controllers
             _dal = new ManagementDAL();
         }
 
-        [Authorize]
+        [Authorize(Roles= "MiseAdmin")]
         // GET: Restaurant
         public async Task<ActionResult> Index()
         {
@@ -32,9 +31,7 @@ namespace MiseReporting.Controllers
         [Authorize]
         public async Task<ActionResult> IndexForUser()
         {
-            var currUser = Membership.GetUser(true);
-
-            var email = new Mise.Core.ValueItems.EmailAddress(currUser.Email);
+            var email = new EmailAddress(User.Identity.Name);
             var userManager = new MiseUserServices();
             var restsICanSee = await userManager.GetRestaurantIdsForEmail(email);
 
@@ -42,8 +39,11 @@ namespace MiseReporting.Controllers
             foreach (var restId in restsICanSee)
             {
                 var rest = await _dal.GetRestaurantById(restId);
-                var vm = new RestaurantViewModel(rest);
-                vms.Add(vm);
+                if (rest != null)
+                {
+                    var vm = new RestaurantViewModel(rest);
+                    vms.Add(vm);
+                }
             }
 
             return View("Index", vms.OrderBy(r => r.Name));

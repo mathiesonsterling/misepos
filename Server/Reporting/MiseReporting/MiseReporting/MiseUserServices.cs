@@ -23,7 +23,9 @@ namespace MiseReporting
             var emp = await _dal.GetEmployeeWithEmail(email);
             if (emp != null)
             {
-                var restIdsFromEmp = emp.GetRestaurantIDs(MiseAppTypes.ManagementWebsite);
+                //TODO eventually restrict this to just ManagementWebsite ones!
+                //var restIdsFromEmp = emp.GetRestaurantIDs(MiseAppTypes.ManagementWebsite);
+                var restIdsFromEmp = emp.GetRestaurantIDs();
                 res.AddRange(restIdsFromEmp);
             }
 

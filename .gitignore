@@ -67,3 +67,5 @@ UCosmic.Www.Mvc.Publish.xml
 Server/Databases/Mise.Database.SQLitePCL/obj/
 Client/Stockboy/Stockboy.sln.DotSettings
 Client/Stockboy/LatestBuild
+Server/Reporting/MiseReporting/MiseReporting/App_Data/aspnet-MiseReporting-20150814114606.mdf
+Server/Reporting/MiseReporting/MiseReporting/App_Data/aspnet-MiseReporting-20150814114606_log.ldf
