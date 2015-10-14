@@ -1,15 +1,19 @@
+using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using MiseReporting.Models;
+
 namespace MiseReporting
 {
-    using System;
-    using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-
-    public partial class AzureNonTypedEntities : DbContext
+    public class AzureNonTypedEntities : IdentityDbContext<ApplicationUser>
     {
         public AzureNonTypedEntities()
             : base("name=AzureNonTypedEntities")
         {
+        }
+
+        public static AzureNonTypedEntities Create()
+        {
+            return new AzureNonTypedEntities();
         }
 
         public virtual DbSet<AzureEntityStorage> AzureEntityStorages { get; set; }
@@ -26,12 +30,12 @@ namespace MiseReporting
                 .IsFixedLength();
         }
 
-        public System.Data.Entity.DbSet<MiseReporting.Models.PurchaseOrderViewModel> PurchaseOrderViewModels { get; set; }
+        public DbSet<PurchaseOrderViewModel> PurchaseOrderViewModels { get; set; }
 
-        public System.Data.Entity.DbSet<MiseReporting.Models.EmployeeViewModel> EmployeeViewModels { get; set; }
+        public DbSet<EmployeeViewModel> EmployeeViewModels { get; set; }
 
-        public System.Data.Entity.DbSet<MiseReporting.Models.RestaurantViewModel> RestaurantViewModels { get; set; }
+        public DbSet<RestaurantViewModel> RestaurantViewModels { get; set; }
 
-        public System.Data.Entity.DbSet<MiseReporting.Models.InventoryLineItemViewModel> InventoryLineItemViewModels { get; set; }
+        public DbSet<InventoryLineItemViewModel> InventoryLineItemViewModels { get; set; }
     }
 }

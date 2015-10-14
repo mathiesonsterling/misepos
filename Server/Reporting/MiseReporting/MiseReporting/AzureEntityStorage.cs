@@ -1,13 +1,10 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Mise.Core.Common.Entities.DTOs;
 
 namespace MiseReporting
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
     [Table("stockboymobileservice.AzureEntityStorages")]
     public partial class AzureEntityStorage
     {

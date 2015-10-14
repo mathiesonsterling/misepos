@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Security;
 using Mise.Core.Common.Entities;
 using MiseReporting.Models;
+using Mono.Security.X509;
 
 namespace MiseReporting.Controllers
 {
@@ -16,6 +19,7 @@ namespace MiseReporting.Controllers
             _dal = new ManagementDAL();
         }
 
+        [Authorize]
         // GET: Restaurant
         public async Task<ActionResult> Index()
         {
@@ -25,6 +29,27 @@ namespace MiseReporting.Controllers
             return View(vms.OrderBy(r => r.Name));
         }
 
+        [Authorize]
+        public async Task<ActionResult> IndexForUser()
+        {
+            var currUser = Membership.GetUser(true);
+
+            var email = new Mise.Core.ValueItems.EmailAddress(currUser.Email);
+            var userManager = new MiseUserServices();
+            var restsICanSee = await userManager.GetRestaurantIdsForEmail(email);
+
+            var vms = new List<RestaurantViewModel>();
+            foreach (var restId in restsICanSee)
+            {
+                var rest = await _dal.GetRestaurantById(restId);
+                var vm = new RestaurantViewModel(rest);
+                vms.Add(vm);
+            }
+
+            return View("Index", vms.OrderBy(r => r.Name));
+        }
+
+        [Authorize]
         // GET: Restaurant/Details/5
         public async Task<ActionResult> Details(Guid id)
         {

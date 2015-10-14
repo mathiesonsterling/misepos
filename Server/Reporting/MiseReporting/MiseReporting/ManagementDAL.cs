@@ -4,14 +4,17 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation.Serialization;
+using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Vendors;
+using Mise.Core.ValueItems;
 
 namespace MiseReporting
 {
@@ -133,6 +136,19 @@ namespace MiseReporting
             return _entityFactory.FromDataStorageObject<Restaurant>(ai.ToRestaurantDTO());
         }
 
+        public async Task<IEnumerable<IRestaurant>> GetRestaurantsUnderAccont(IAccount acct)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                var ais = await db.AzureEntityStorages.Where(
+                            a => a.MiseEntityType == _restType && a.MiseEntityType.Contains(acct.Id.ToString())).ToListAsync();
+
+                var dtos = ais.Select(ai => ai.ToRestaurantDTO());
+                var rests = dtos.Select(dto => _entityFactory.FromDataStorageObject<Restaurant>(dto));
+                return rests.Where(r => r.AccountID.HasValue && r.AccountID.Value == acct.Id);
+            }
+        }
+
         public async Task InsertRestaurant(Restaurant rest)
         {
             var dto = _entityFactory.ToDataTransportObject(rest);
@@ -196,6 +212,21 @@ namespace MiseReporting
             }
         }
 
+        public async Task<IEmployee> GetEmployeeWithEmail(EmailAddress email)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                var empAIs = await db.AzureEntityStorages.Where(
+                    ai => ai.MiseEntityType == _empType && ai.EntityJSON.Contains(email.Value)).ToListAsync();
+
+                var dtos = empAIs.Select(ai => ai.ToRestaurantDTO());
+                var emps = dtos.Select(dto => _entityFactory.FromDataStorageObject<Employee>(dto));
+                return emps.FirstOrDefault(emp => (emp.PrimaryEmail != null && emp.PrimaryEmail.Equals(email))
+                                                  || emp.GetEmailAddresses().Any(em => em.Equals(email))
+                    );
+            }
+        }
+
         public async Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersForRestaurant(Guid restaurantId)
         {
             using (var db = new AzureNonTypedEntities())
@@ -228,6 +259,33 @@ namespace MiseReporting
                 ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _vendorType && a.EntityID == id);
             }
             return _entityFactory.FromDataStorageObject<Vendor>(ai.ToRestaurantDTO());
+        }
+
+        public async Task<IEnumerable<IAccount>> GetAccountsByEmail(EmailAddress email)
+        {
+            var miseAcctType = typeof (MiseEmployeeAccount).ToString();
+            var restAcctType = typeof (RestaurantAccount).ToString();
+
+            var res = new List<IAccount>();
+            using (var db = new AzureNonTypedEntities())
+            {
+                var miseAcctAis = await
+                    db.AzureEntityStorages.Where(
+                        ai => ai.MiseEntityType == miseAcctType && ai.EntityJSON.Contains(email.Value)).ToListAsync();
+                var miseAccts =
+                    miseAcctAis.Select(
+                        a => _entityFactory.FromDataStorageObject<MiseEmployeeAccount>(a.ToRestaurantDTO()));
+                res.AddRange(miseAccts);
+
+                //get the rest accounts
+                var restAcctAis = await db.AzureEntityStorages.Where(
+                        ai => ai.MiseEntityType == restAcctType && ai.EntityJSON.Contains(email.Value)).ToListAsync();
+                var restAccts =
+                    restAcctAis.Select(a => _entityFactory.FromDataStorageObject<RestaurantAccount>(a.ToRestaurantDTO()));
+                res.AddRange(restAccts);
+            }
+
+            return res;
         }
     }
 }
