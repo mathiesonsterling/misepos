@@ -55,8 +55,16 @@ namespace MiseVendorManagement
 
         public async Task InsertVendor(Vendor vendor)
         {
+            var existing = await GetAllVendors();
+            var alreadyHere = existing.Any(v => v.Name == vendor.Name && v.StreetAddress.Equals(vendor.StreetAddress));
+            if (alreadyHere)
+            {
+                throw new InvalidOperationException("Vendor already exists at specified location!");
+            }
+
             var dto = _entityFactory.ToDataTransportObject(vendor);
             var azureEnt = new AzureEntityStorage(dto);
+
 
             using (var db = new AzureDB())
             {

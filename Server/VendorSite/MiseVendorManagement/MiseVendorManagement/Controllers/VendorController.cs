@@ -102,7 +102,7 @@ namespace MiseVendorManagement.Controllers
                 {
                     return View(vm);
                 }
-                    var vendor = VendorVMToVendor(vm, new Guid());
+                    var vendor = VendorVMToVendor(vm, Guid.NewGuid());
 
                     //TODO get geolocation here
 
