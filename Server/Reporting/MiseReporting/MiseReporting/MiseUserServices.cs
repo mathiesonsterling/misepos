@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Mise.Core.Entities;
 using Mise.Core.ValueItems;
 
 namespace MiseReporting
 {
     public class MiseUserServices
     {
-        private ManagementDAL _dal;
-
+        private readonly ManagementDAL _dal;
         public MiseUserServices()
         {
             _dal = new ManagementDAL();

@@ -58,7 +58,7 @@ namespace MiseReporting.Controllers
             return View(restVM);
         }
 
-
+        [Authorize]
         public ActionResult Create()
         {
             var vm = new RestaurantViewModel();
@@ -87,6 +87,7 @@ namespace MiseReporting.Controllers
             }
         }
 
+        [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
             var ent = await _dal.GetRestaurantById(id);
@@ -94,31 +95,14 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Delete(RestaurantViewModel vm)
         {
             try
             {
                 var id = vm.Id;
-                using (var db = new AzureNonTypedEntities())
-                {//delete all items for the restaurant as well
-                    var items = await db.AzureEntityStorages.Where(ai => ai.RestaurantID == id).ToListAsync();
-                    foreach (var item in items)
-                    {
-                        item.Deleted = true;
-                        db.Entry(item).State = EntityState.Modified;
-                        db.AzureEntityStorages.Remove(item);
-                    }
-
-                    //also get all employees that are listed here and remove the call for them
-                    var emps = (await _dal.GetAllEmployeesContaining(id.ToString())).Cast<Employee>();
-                    foreach (var emp in emps.Where(emp => emp.RestaurantsAndAppsAllowed.ContainsKey(id)))
-                    {
-                        emp.RestaurantsAndAppsAllowed.Remove(id);
-                    }
-
-                    await db.SaveChangesAsync();
-                }
+                await _dal.DeleteRestaurant(id);
                 return RedirectToAction("Index");
             }
             catch (Exception)
