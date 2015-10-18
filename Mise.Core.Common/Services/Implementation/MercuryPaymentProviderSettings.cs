@@ -12,7 +12,7 @@ namespace Mise.Core.Common.Services.Implementation
 		public string WebServiceUrl{
 			get{
 				return _isDevelopment
-					? "https://hc.mercurydev.net/hcws/hcservice.asmx"
+					? "https://w1.mercurycert.net/ws/ws.asmx?WSDL"
 						: "https://hc.mercurypay.com/hcws/hcservice.asmx";
 			}
 		}

@@ -48,7 +48,7 @@ namespace Mise.Inventory.Services
 		Task AcceptInvitation (IApplicationInvitation invite);
 		Task RejectInvitation (IApplicationInvitation invite);
 		Task<IEnumerable<IApplicationInvitation>> GetInvitationsForCurrentEmployee ();
-		Task<IEnumerable<IApplicationInvitation>> GetPendingInvitationsForRestaurant(Guid restaurantID);
+		Task<IEnumerable<IApplicationInvitation>> GetPendingInvitationsForRestaurant();
 
 		/// <summary>
 		/// Makes a single employee restaurant for a user that registers

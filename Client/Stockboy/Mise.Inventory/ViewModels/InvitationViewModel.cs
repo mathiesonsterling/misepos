@@ -57,20 +57,7 @@ namespace Mise.Inventory.ViewModels
 	        _selectedInvitation = null;
 	        HasSelection = false;
 	        await base.OnAppearing();
-	        if (LineItems.Any() == false)
-	        {
-                //do we have a restaurant?
-                var rest = await _loginService.GetCurrentRestaurant();
-                if (rest != null)
-                {
-                    await Navigation.ShowMainMenu();
-                }
-                else
-                {
-                    //go to our registration screen
-                    await Navigation.ShowRestaurantRegistration();
-                }
-            }
+			await NavigateBasedOnLineItems ();
 	    }
 
 	    protected override async Task<ICollection<InvitationDisplayModel>> LoadItems()
@@ -115,9 +102,27 @@ namespace Mise.Inventory.ViewModels
 			    Processing = true;
 				await _loginService.RejectInvitation (_selectedInvitation);
 			    Processing = false;
-				await Navigation.ShowMainMenu ();
+
+				//if we have more invitations, stay here.  Otherwise pop back one
+				await DoSearch();
+				await NavigateBasedOnLineItems();
 			} catch(Exception e){
 				HandleException (e);
+			}
+		}
+
+		async Task NavigateBasedOnLineItems ()
+		{
+			if (LineItems.Any () == false) {
+				//do we have a restaurant?
+				var rest = await _loginService.GetCurrentRestaurant ();
+				if (rest != null) {
+					await Navigation.ShowMainMenu ();
+				}
+				else {
+					//go to our registration screen
+					await Navigation.ShowRestaurantRegistration ();
+				}
 			}
 		}
 	}

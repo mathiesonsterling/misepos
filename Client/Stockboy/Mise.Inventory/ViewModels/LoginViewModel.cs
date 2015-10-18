@@ -139,19 +139,28 @@ namespace Mise.Inventory.ViewModels
 
 					_insightsService.Identify(employee, App.DeviceID);
 
+					//check first if we have new invites
+					//do we have invites?
+					Processing = true;
+					var invites = await _loginService.GetInvitationsForCurrentEmployee();
+					if (invites.Any())
+					{
+						Processing = false;
+						await Navigation.ShowInvitations();
+					}
+
 			        //do we have more than one restaurant?
-			        Processing = true;
 			        var restsE = await _loginService.GetPossibleRestaurantsForLoggedInEmployee();
 
 			        var rests = restsE.ToList();
 			        var numRests = rests.Count();
 
 			        _insightsService.Track("User Logged In", new Dictionary<string, string> {{"Email", email.Value}});
-			        Processing = false;
+				
+
 			        if (numRests == 1)
 			        {
 			            //set our restaurant
-						Processing = true;
 			            await _loginService.SelectRestaurantForLoggedInEmployee(rests.First().Id);
 						Processing = false;
 						await Navigation.ShowRestaurantLoading ();
@@ -159,6 +168,7 @@ namespace Mise.Inventory.ViewModels
 			        }
 			        if (numRests > 1)
 			        {
+						Processing = false;
 			            await Navigation.ShowSelectRestaurant();
 			            return;
 			        }
@@ -166,23 +176,13 @@ namespace Mise.Inventory.ViewModels
 			        //if less than one, we need to register with one
 			        if (numRests == 0)
 			        {
-			            //do we have invites?
-						Processing = true;
-			            var invites = await _loginService.GetInvitationsForCurrentEmployee();
 						Processing = false;
-			            if (invites.Any())
-			            {
-			                await Navigation.ShowInvitations();
-			            }
-			            else
-			            {
-							//double check this
-							var userConf = await AskUserQuestionModal ("No Restaurant Found", 
-								"We don't show any restaurants assigned to this user.  This could be a server error.  Do you want to register a new restaurant?");
-							if(userConf){
-								await Navigation.ShowRestaurantRegistration();
-							} 
-			            }
+						//double check this
+						var userConf = await AskUserQuestionModal ("No Restaurant Found", 
+							"We don't show any restaurants assigned to this user.  This could be a server error.  Do you want to register a new restaurant?");
+						if(userConf){
+							await Navigation.ShowRestaurantRegistration();
+						} 
 			        }
 			    }
 			} 

@@ -309,7 +309,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 
 		    var allInvites = _inviteRepository.GetAll();
-		    var items = allInvites.Where(i => i.Application == MiseAppTypes.StockboyMobile);
+			var items = allInvites.Where(i => i.Application == MiseAppTypes.StockboyMobile && i.Status == InvitationStatus.Sent);
 
 		    var empEmails = _currentEmployee.GetEmailAddresses ().ToList();
 		    var res = items.Where(item => empEmails.Any(e => e.Equals(item.DestinationEmail))).ToList();
@@ -318,11 +318,11 @@ namespace Mise.Inventory.Services.Implementation
 			return Task.FromResult (res.AsEnumerable());
 		}
 
-		public Task<IEnumerable<IApplicationInvitation>> GetPendingInvitationsForRestaurant (Guid restaurantID)
+		public Task<IEnumerable<IApplicationInvitation>> GetPendingInvitationsForRestaurant ()
 		{
 			var items = _inviteRepository.GetAll ()
 				.Where (i => i.Application == MiseAppTypes.StockboyMobile)
-				.Where (i => i.RestaurantID == restaurantID);
+				.Where (i => i.RestaurantID == _currentRestaurant.Id);
 
 			return Task.FromResult (items);
 		}
