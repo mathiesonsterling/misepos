@@ -28,9 +28,29 @@ namespace MiseVendorManagement
                 var ais = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _vendorType).ToListAsync();
                 var dtos = ais.Select(ai => ai.ToRestaurantDTO());
                 var vendors = dtos.Select(dto => _entityFactory.FromDataStorageObject<Vendor>(dto));
-                return vendors.Cast<IVendor>();
+                return vendors;
             }
         }
+
+        public async Task<IEnumerable<IVendor>> GetVendors(string searchString)
+        {
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return await GetAllVendors();
+            }
+
+            using (var db = new AzureDB())
+            {
+                var ais =
+                    await
+                        db.AzureEntityStorages.Where(
+                            ai => ai.MiseEntityType == _vendorType && ai.EntityJSON.Contains(searchString))
+                            .ToListAsync();
+                var dtos = ais.Select(ai => ai.ToRestaurantDTO());
+                var vendors = dtos.Select(dto => _entityFactory.FromDataStorageObject<Vendor>(dto));
+                return vendors;
+            }
+        } 
 
         public Task<IVendor> GetVendor(Guid vendorId)
         {

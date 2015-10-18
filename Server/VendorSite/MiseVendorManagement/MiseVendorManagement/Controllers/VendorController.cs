@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Vendors;
-using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
 using Mise.Core.ValueItems;
 using MiseVendorManagement.Models;
@@ -22,7 +18,7 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: Vendor
-        public async Task<ActionResult> Index(string sortOrder)
+        public async Task<ActionResult> Index(string sortOrder, string searchString)
         {
             ViewBag.NameSortParam = sortOrder == "name" ? "name_desc" : "name";
             ViewBag.CitySortParam = sortOrder == "city" ? "city_desc" : "city";
@@ -31,7 +27,7 @@ namespace MiseVendorManagement.Controllers
             ViewBag.NumItemsSortParam = sortOrder == "numitems" ? "numitems_desc" : "numitems";
 
             //get all our vendors
-            var vendors = await _dal.GetAllVendors();
+            var vendors = await _dal.GetVendors(searchString);
             var viewModels = vendors.Select(v => new VendorViewModel(v));
 
             switch (sortOrder)
