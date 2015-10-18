@@ -33,6 +33,7 @@ namespace MiseReporting.Controllers
             _poType = typeof (PurchaseOrder).ToString();
         }
 
+        [Authorize]
         // GET: PurchaseOrder
         public async Task<ActionResult> Index(Guid restaurantId)
         {
@@ -101,6 +102,7 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        [Authorize]
         // GET: PurchaseOrder/Details/fjdjsk-ekd
         public async Task<ActionResult> Details(Guid poID, Guid poForVendorId)
         {
@@ -111,7 +113,7 @@ namespace MiseReporting.Controllers
             return View(vms);
         }
 
-
+        [Authorize]
         public async Task<FileResult> GenerateCSV(Guid poID, Guid poForVendorId)
         {
             var forVendor = await GetPurchaseOrderPerVendor(poID, poForVendorId);

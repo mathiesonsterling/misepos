@@ -56,7 +56,7 @@ namespace MiseReporting.Models
             Email = emp.PrimaryEmail.Value;
 
             Restaurants = restaurants;
-
+            PostedRestaurantGuids = new List<Guid>();
             Password = string.Empty;
         }
     }

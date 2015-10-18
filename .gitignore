@@ -69,3 +69,7 @@ Client/Stockboy/Stockboy.sln.DotSettings
 Client/Stockboy/LatestBuild
 Server/Reporting/MiseReporting/MiseReporting/App_Data/aspnet-MiseReporting-20150814114606.mdf
 Server/Reporting/MiseReporting/MiseReporting/App_Data/aspnet-MiseReporting-20150814114606_log.ldf
+Admin/MiseAdminWebsite/App_Data/aspnet-MiseAdminWebsite-20150802063049.mdf
+Admin/MiseAdminWebsite/App_Data/aspnet-MiseAdminWebsite-20150802063049_log.ldf
+Server/VendorSite/MiseVendorManagement/MiseVendorManagement/App_Data/aspnet-MiseVendorManagement-20150816120322.mdf
+Server/VendorSite/MiseVendorManagement/MiseVendorManagement/App_Data/aspnet-MiseVendorManagement-20150816120322_log.ldf

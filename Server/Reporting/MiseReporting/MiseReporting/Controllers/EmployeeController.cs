@@ -6,8 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities;
-using Mise.Core.Common.Entities.DTOs;
-using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
 using Mise.Core.Entities.People;
 using Mise.Core.ValueItems;
@@ -18,13 +16,12 @@ namespace MiseReporting.Controllers
     public class EmployeeController : Controller
     {
         private readonly ManagementDAL _dal;
-        private readonly EntityDataTransportObjectFactory _dtoFactory;
         public EmployeeController()
         {
-            _dtoFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
             _dal = new ManagementDAL();
         }
 
+        [Authorize(Roles = "MiseAdmin")]
         // GET: Employee
         public async Task<ActionResult> Index()
         {
@@ -39,7 +36,7 @@ namespace MiseReporting.Controllers
             return View(vms.OrderBy(vm=> vm.LastName).ThenBy(vm => vm.FirstName).ThenBy(vm => vm.RestaurantsDisplay));
         }
 
-
+        [Authorize]
         // GET: Employee/Details/5
         public async Task<ActionResult> Details(Guid empId)
         {
@@ -48,6 +45,7 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        [Authorize]
         // GET: Employee/Create
         public async Task<ActionResult> Create()
         {
@@ -58,6 +56,7 @@ namespace MiseReporting.Controllers
         }
 
 
+        [Authorize]
         // POST: Employee/Create
         [HttpPost]
         public async Task<ActionResult> Create(FormCollection formCollection)
@@ -69,13 +68,8 @@ namespace MiseReporting.Controllers
                 {
                     emp.Id = Guid.NewGuid();
                 }
-                var ai = ViewModelToAi(emp, null);
-
-                using (var db = new AzureNonTypedEntities())
-                {
-                    db.AzureEntityStorages.Add(ai);
-                    await db.SaveChangesAsync();
-                }
+                var empEntity = ViewModelToEmp(emp, Guid.NewGuid(), null);
+                await _dal.CreateEmployee(empEntity);
 
                 return RedirectToAction("Index");
             }
@@ -85,14 +79,20 @@ namespace MiseReporting.Controllers
             }
         }
 
+        [Authorize]
         // GET: Employee/Edit/5
         public async Task<ActionResult> Edit(Guid empId)
         {
             var emp = await _dal.GetEmployeeById(empId);
             var vm = await GetEmployeeVM(emp);
+            var rests = await _dal.GetAllRestaurants();
+            var restVms = rests.Select(r => new RestaurantViewModel(r));
+            vm.PossibleRestaurants = restVms;
+
             return View(vm);
         }
 
+        [Authorize]
         // POST: Employee/Edit/5
         [HttpPost]
         public async Task<ActionResult> Edit(Guid empId, FormCollection collection)
@@ -103,20 +103,9 @@ namespace MiseReporting.Controllers
                 emp = FormCollectionToVM(collection);
                 var originalEmp = await _dal.GetEmployeeById(empId);
 
-                using (var db = new AzureNonTypedEntities())
-                {
-                    //get the original to get the restaurants for now
-                    var orign = db.AzureEntityStorages.FirstOrDefault(a => a.EntityID == emp.Id);
-                    if (orign == null)
-                    {
-                        throw new ArgumentException("No employee found for id " + empId);
-                    }
-                    db.AzureEntityStorages.Remove(orign);
+                var empEntity = ViewModelToEmp(emp, empId, originalEmp.Password);
+                await _dal.UpdateEmployee(empEntity);
 
-                    var ai = ViewModelToAi(emp, originalEmp.Password);
-                    db.AzureEntityStorages.Add(ai);
-                    await db.SaveChangesAsync();
-                }
                 return RedirectToAction("Index");
             }
             catch(Exception)
@@ -129,7 +118,7 @@ namespace MiseReporting.Controllers
             }
         }
 
-
+        [Authorize]
         // GET: Employee/Delete/5
         public async Task<ActionResult> Delete(Guid empId)
         {
@@ -138,6 +127,7 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        [Authorize]
         // POST: Employee/Delete/5
         [HttpPost]
         public async Task<ActionResult> Delete(Guid empId, FormCollection formCollection)
@@ -208,7 +198,7 @@ namespace MiseReporting.Controllers
         }
 
 
-        private AzureEntityStorage ViewModelToAi(EmployeeViewModel emp, Password origPassword)
+        private static Employee ViewModelToEmp(EmployeeViewModel emp, Guid empId, Password origPassword)
         {
             var password = string.IsNullOrEmpty(emp.Password) == false ? new Password(emp.Password) : origPassword;
 
@@ -221,7 +211,7 @@ namespace MiseReporting.Controllers
             {
                 CreatedDate = DateTimeOffset.UtcNow,
                 LastUpdatedDate = DateTimeOffset.UtcNow,
-                Id = Guid.NewGuid(),
+                Id = empId,
                 Revision = new EventID(MiseAppTypes.ManagementWebsite, 0),
                 DisplayName = name.ToSingleString(),
                 Name = name,
@@ -233,10 +223,7 @@ namespace MiseReporting.Controllers
                 Emails = new List<EmailAddress> { email },
                 RestaurantsAndAppsAllowed = restaurants
             };
-
-            var dto = _dtoFactory.ToDataTransportObject(empEntity);
-            var ai = new AzureEntityStorage(dto);
-            return ai;
+            return empEntity;
         }
     }
 }

@@ -368,6 +368,37 @@ namespace MiseReporting
             }
         }
 
+        public async Task CreateEmployee(Employee emp)
+        {
+            var dto = _entityFactory.ToDataTransportObject(emp);
+            var ai = new AzureEntityStorage(dto);
+
+            using (var db = new AzureNonTypedEntities())
+            {
+                db.AzureEntityStorages.Add(ai);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateEmployee(Employee emp)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                //get the original to get the restaurants for now
+                var orign = db.AzureEntityStorages.FirstOrDefault(a => a.EntityID == emp.Id);
+                if (orign == null)
+                {
+                    throw new ArgumentException("No employee found for id " + emp.Id);
+                }
+                db.AzureEntityStorages.Remove(orign);
+
+                var dto = _entityFactory.ToDataTransportObject(emp);
+                var ai = new AzureEntityStorage(dto);
+                db.AzureEntityStorages.Add(ai);
+                await db.SaveChangesAsync();
+            }
+        }
+
         public async Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersForRestaurant(Guid restaurantId)
         {
             var cached = SubItemCache.GetForRestaurant<IReceivingOrder>(restaurantId);
