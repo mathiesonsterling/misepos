@@ -309,7 +309,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void ParLineItemAddedDirect(){
 			var ev = _underTest.CreatePARLineItemAddedEvent (_emp, "testITem", "upc",
 				new List<ItemCategory>{ CategoriesService.Beer },
-				100, LiquidContainer.Bottle330ml, 1000, _par
+				100, LiquidContainer.Bottle330ML, 1000, _par
 			);
 			TestParEvent (ev);
 		}

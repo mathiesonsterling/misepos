@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mise.Core.ValueItems.Inventory
 {
@@ -34,68 +31,75 @@ namespace Mise.Core.ValueItems.Inventory
             DisplayName = "375ml Bottle"
         };
 
-        public static LiquidContainer Can12oz => new LiquidContainer { 
+        public static LiquidContainer Can12Oz => new LiquidContainer { 
             AmountContained = LiquidAmount.FromLiquidOunces(12.0M), 
             DisplayName = "12oz Can",
             Shape = LiquidContainerShape.DefaultCanShape
         };
 
-        public static LiquidContainer Can16oz => new LiquidContainer
+        public static LiquidContainer Can16Oz => new LiquidContainer
         {
             AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
             DisplayName = "16oz Can",
             Shape = LiquidContainerShape.DefaultCanShape
         };
 
-        public static LiquidContainer Can10oz => new LiquidContainer
+        public static LiquidContainer Can10Oz => new LiquidContainer
         {
             AmountContained = LiquidAmount.FromLiquidOunces(10.0M),
             DisplayName = "10oz Bottle",
             Shape = LiquidContainerShape.DefaultCanShape
         };
 
-        public static LiquidContainer Can250ml => new LiquidContainer
+        public static LiquidContainer Can250ML => new LiquidContainer
         {
             AmountContained = new LiquidAmount {Milliliters = 250M},
             DisplayName = "250ml Can",
             Shape = LiquidContainerShape.DefaultCanShape
         };
 
-        public static LiquidContainer Bottle12oz => new LiquidContainer
+        public static LiquidContainer Bottle12Oz => new LiquidContainer
         {
-            AmountContained = LiquidAmount.FromLiquidOunces(12.0M),
+            AmountContained = new LiquidAmount {Milliliters = 354.882M },
             DisplayName = "12oz Bottle",
             Shape = LiquidContainerShape.DefaultBeerBottleShape	
         };
 
-        public static LiquidContainer Bottle16oz => new LiquidContainer
+        public static LiquidContainer Bottle16Oz => new LiquidContainer
         {
-            AmountContained = LiquidAmount.FromLiquidOunces(16.0M),
+            AmountContained = new LiquidAmount {Milliliters = 473.176M },
             DisplayName = "16oz Bottle",
             Shape = LiquidContainerShape.DefaultBeerBottleShape	
         };
 
-        public static LiquidContainer Bottle7oz => new LiquidContainer
+        public static LiquidContainer Bottle7Oz => new LiquidContainer
         {
             AmountContained = LiquidAmount.FromLiquidOunces(7.0M),
             DisplayName = "7oz Bottle",
             Shape = LiquidContainerShape.DefaultBeerBottleShape	
         };
 
-        public static LiquidContainer Bottle40oz => new LiquidContainer
+        public static LiquidContainer Bottle40Oz => new LiquidContainer
         {
             AmountContained = LiquidAmount.FromLiquidOunces(40M),
             DisplayName = "40oz Bottle",
             Shape = LiquidContainerShape.DefaultBeerBottleShape	
         };
 
-        public static LiquidContainer Bottle330ml => new LiquidContainer
+        public static LiquidContainer Bottle4OzBitters => new LiquidContainer
+        {
+            AmountContained = new LiquidAmount {Milliliters = 118.294M},
+            DisplayName = "4oz Bottle (Bitters)",
+            Shape = LiquidContainerShape.DefaultBottleShape
+        };
+
+        public static LiquidContainer Bottle330ML => new LiquidContainer
         {
             AmountContained = new LiquidAmount { Milliliters = 330 },
             DisplayName = "330ml Bottle"
         };
 
-        public static LiquidContainer Bottle500ml => new LiquidContainer
+        public static LiquidContainer Bottle500ML => new LiquidContainer
         {
             AmountContained = new LiquidAmount { Milliliters = 500 },
             DisplayName = "500ml Bottle"
@@ -133,23 +137,24 @@ namespace Mise.Core.ValueItems.Inventory
             {
                 Bottle750ML,
                 Bottle375ML,
-                Bottle330ml,
+                Bottle330ML,
                 Bottle1L,
                 Bottle1_75ML,
-                Bottle500ml,
+                Bottle500ML,
                 Bottle1L,
-                Bottle12oz,
-                Can12oz,
-                Bottle16oz,
-                Bottle7oz,
-                Can16oz,
-                Can10oz,
-                Bottle40oz,
+                Bottle12Oz,
+                Can12Oz,
+                Bottle16Oz,
+                Bottle7Oz,
+                Can16Oz,
+                Can10Oz,
+                Bottle40Oz,
                 Keg,
                 HalfKeg,
 				ImportKeg,
 				TorpedoKeg,
-                Can250ml
+                Can250ML,
+                Bottle4OzBitters
             };
         }
         #endregion
