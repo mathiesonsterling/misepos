@@ -135,7 +135,7 @@ namespace Mise.Inventory.UnitTests.Services
 							new InventoryBeverageLineItem {
 								DisplayName = "Item",
 								MiseName = "MiseItem",
-								Container = LiquidContainer.Bottle12oz,
+								Container = LiquidContainer.Bottle12Oz,
 								InventoryPosition = 30,
 								NumFullBottles = 10
 							}
@@ -175,7 +175,7 @@ namespace Mise.Inventory.UnitTests.Services
 			Assert.AreEqual ("Item", li.DisplayName);
 			Assert.AreSame ("MiseItem", li.MiseName);
 			Assert.NotNull (li.Container);
-			Assert.True (li.Container.Equals (LiquidContainer.Bottle12oz), "Container equals");
+			Assert.True (li.Container.Equals (LiquidContainer.Bottle12Oz), "Container equals");
 			Assert.AreEqual (30, li.InventoryPosition, "Inventory position");
 			Assert.AreEqual (0, li.Quantity, "Quantity is zero");
 		}
@@ -226,7 +226,7 @@ namespace Mise.Inventory.UnitTests.Services
                                 Id = firstItemId,
 								DisplayName = "Item",
 								MiseName = "MiseItem",
-								Container = LiquidContainer.Bottle12oz,
+								Container = LiquidContainer.Bottle12Oz,
 								InventoryPosition = 3,
 								NumFullBottles = 10
 							},

@@ -24,6 +24,7 @@ namespace MiseReporting.Controllers
             _dal = new ManagementDAL();
         }
 
+        [Authorize]
         // GET: Inventories
         public async Task<ActionResult> Index(Guid restaurantId)
         {
@@ -43,6 +44,7 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        [Authorize]
         public async Task<ActionResult> Details(Guid inventoryId)
         {
             var inventory = await _dal.GetInventoryById(inventoryId);
@@ -57,6 +59,7 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        [Authorize]
         public async Task<ActionResult> EditLineItem(Guid inventoryId, Guid lineItemId)
         {
             var li = await _dal.GetInventoryLineItem(inventoryId, lineItemId);
@@ -64,6 +67,7 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> EditLineItem(Guid inventoryId, Guid lineItemId, FormCollection collection)
         {
@@ -86,6 +90,7 @@ namespace MiseReporting.Controllers
             }
         }
 
+        [Authorize]
         // GET: Inventories/Details/5
         public async Task<FileResult> GenerateRawCSV(Guid id)
         { 
@@ -103,6 +108,7 @@ namespace MiseReporting.Controllers
             return new FileStreamResult(outputStream, "text/csv") {FileDownloadName = "inventoryBySections.csv"};
         }
 
+        [Authorize]
         // GET: Inventories/Details/5
         public async Task<FileResult> GenerateAggregatedCSV(Guid id)
         {

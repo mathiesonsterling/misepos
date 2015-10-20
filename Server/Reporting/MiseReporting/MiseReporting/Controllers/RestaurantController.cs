@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities;
+using Mise.Core.ValueItems;
 using MiseReporting.Models;
-
+using Microsoft.AspNet.Identity;
 namespace MiseReporting.Controllers
 {
     public class RestaurantController : Controller
@@ -16,6 +18,7 @@ namespace MiseReporting.Controllers
             _dal = new ManagementDAL();
         }
 
+        [Authorize(Roles= "MiseAdmin")]
         // GET: Restaurant
         public async Task<ActionResult> Index()
         {
@@ -25,6 +28,28 @@ namespace MiseReporting.Controllers
             return View(vms.OrderBy(r => r.Name));
         }
 
+        [Authorize]
+        public async Task<ActionResult> IndexForUser()
+        {
+            var email = new EmailAddress(User.Identity.Name);
+            var userManager = new MiseUserServices();
+            var restsICanSee = await userManager.GetRestaurantIdsForEmail(email);
+
+            var vms = new List<RestaurantViewModel>();
+            foreach (var restId in restsICanSee)
+            {
+                var rest = await _dal.GetRestaurantById(restId);
+                if (rest != null)
+                {
+                    var vm = new RestaurantViewModel(rest);
+                    vms.Add(vm);
+                }
+            }
+
+            return View("Index", vms.OrderBy(r => r.Name));
+        }
+
+        [Authorize]
         // GET: Restaurant/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
@@ -33,7 +58,7 @@ namespace MiseReporting.Controllers
             return View(restVM);
         }
 
-
+        [Authorize]
         public ActionResult Create()
         {
             var vm = new RestaurantViewModel();
@@ -62,6 +87,7 @@ namespace MiseReporting.Controllers
             }
         }
 
+        [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
             var ent = await _dal.GetRestaurantById(id);
@@ -69,31 +95,14 @@ namespace MiseReporting.Controllers
             return View(vm);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Delete(RestaurantViewModel vm)
         {
             try
             {
                 var id = vm.Id;
-                using (var db = new AzureNonTypedEntities())
-                {//delete all items for the restaurant as well
-                    var items = await db.AzureEntityStorages.Where(ai => ai.RestaurantID == id).ToListAsync();
-                    foreach (var item in items)
-                    {
-                        item.Deleted = true;
-                        db.Entry(item).State = EntityState.Modified;
-                        db.AzureEntityStorages.Remove(item);
-                    }
-
-                    //also get all employees that are listed here and remove the call for them
-                    var emps = (await _dal.GetAllEmployeesContaining(id.ToString())).Cast<Employee>();
-                    foreach (var emp in emps.Where(emp => emp.RestaurantsAndAppsAllowed.ContainsKey(id)))
-                    {
-                        emp.RestaurantsAndAppsAllowed.Remove(id);
-                    }
-
-                    await db.SaveChangesAsync();
-                }
+                await _dal.DeleteRestaurant(id);
                 return RedirectToAction("Index");
             }
             catch (Exception)

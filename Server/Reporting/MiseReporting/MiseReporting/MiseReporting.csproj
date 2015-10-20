@@ -218,6 +218,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ManagementDAL.cs" />
+    <Compile Include="MiseUserServices.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BaseBeverageLineItemViewModel.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />

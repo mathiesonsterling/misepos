@@ -240,7 +240,8 @@ namespace MiseVendorManagement.Controllers
 
         private static LiquidContainer GetContainerForAmount(decimal ml)
         {
-            var found = LiquidContainer.GetStandardBarSizes().FirstOrDefault(s => s.AmountContained.Milliliters == ml);
+            var amt = new LiquidAmount {Milliliters = ml};
+            var found = LiquidContainer.GetStandardBarSizes().FirstOrDefault(s => s.AmountContained.Equals(amt));
             return found ?? new LiquidContainer {AmountContained = new LiquidAmount {Milliliters = ml}};
         }
     }

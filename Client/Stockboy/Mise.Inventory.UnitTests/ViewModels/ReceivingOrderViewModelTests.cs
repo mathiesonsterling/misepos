@@ -30,7 +30,8 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     Id = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
-                    Container = LiquidContainer.Can12oz
+                    Container = LiquidContainer.Can12Oz
+
                 },
                 new ReceivingOrderLineItem
                 {
@@ -74,7 +75,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     Id = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
-                    Container = LiquidContainer.Can12oz,
+                    Container = LiquidContainer.Can12Oz,
                     Categories = new List<ItemCategory>
                     {
                         CategoriesService.Beer
@@ -126,7 +127,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     Id = Guid.NewGuid(),
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
-                    Container = LiquidContainer.Can12oz,
+                    Container = LiquidContainer.Can12Oz,
                     Categories = new List<ItemCategory>
                     {
                         CategoriesService.Beer

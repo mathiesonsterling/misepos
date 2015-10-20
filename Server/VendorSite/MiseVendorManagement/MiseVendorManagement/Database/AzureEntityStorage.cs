@@ -53,7 +53,8 @@ namespace MiseVendorManagement.Database
                 Id = EntityID,
                 RestaurantID = RestaurantID,
                 JSON = EntityJSON,
-                LastUpdatedDate = LastUpdatedDate
+                LastUpdatedDate = LastUpdatedDate,
+                CreatedDate = CreatedAt
             };
         }
     }
