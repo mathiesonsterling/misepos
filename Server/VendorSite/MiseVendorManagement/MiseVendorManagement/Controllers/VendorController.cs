@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Vendors;
-using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities;
 using Mise.Core.ValueItems;
 using MiseVendorManagement.Models;
@@ -22,16 +18,16 @@ namespace MiseVendorManagement.Controllers
         }
 
         // GET: Vendor
-        public async Task<ActionResult> Index(string sortOrder)
+        public async Task<ActionResult> Index(string sortOrder, string searchString)
         {
             ViewBag.NameSortParam = sortOrder == "name" ? "name_desc" : "name";
             ViewBag.CitySortParam = sortOrder == "city" ? "city_desc" : "city";
             ViewBag.StateSortParam = sortOrder == "state" ? "state_desc" : "state";
-            ViewBag.EmailSortParam = sortOrder == "email" ? "email_desc" : "email";
+            ViewBag.WebsiteSortParam = sortOrder == "website" ? "website_desc" : "website";
             ViewBag.NumItemsSortParam = sortOrder == "numitems" ? "numitems_desc" : "numitems";
 
             //get all our vendors
-            var vendors = await _dal.GetAllVendors();
+            var vendors = await _dal.GetVendors(searchString);
             var viewModels = vendors.Select(v => new VendorViewModel(v));
 
             switch (sortOrder)
@@ -48,11 +44,11 @@ namespace MiseVendorManagement.Controllers
                 case "state_desc":
                     viewModels = viewModels.OrderByDescending(v => v.State).ThenBy(v => v.Name);
                     break;
-                case "email":
-                    viewModels = viewModels.OrderBy(v => v.Email).ThenBy(v => v.Name);
+                case "website":
+                    viewModels = viewModels.OrderBy(v => v.Website).ThenBy(v => v.Name);
                     break;
-                case "email_desc":
-                    viewModels = viewModels.OrderByDescending(v => v.Email).ThenBy(v => v.Name);
+                case "website_desc":
+                    viewModels = viewModels.OrderByDescending(v => v.Website).ThenBy(v => v.Name);
                     break;
                 case "name_desc":
                     viewModels = viewModels.OrderByDescending(v => v.Name);
@@ -102,7 +98,7 @@ namespace MiseVendorManagement.Controllers
                 {
                     return View(vm);
                 }
-                    var vendor = VendorVMToVendor(vm, new Guid());
+                    var vendor = VendorVMToVendor(vm, Guid.NewGuid());
 
                     //TODO get geolocation here
 

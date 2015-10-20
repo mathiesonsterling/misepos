@@ -5,7 +5,7 @@ namespace MiseReporting
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    public partial class AzureNonTypedEntities : DbContext
+    public class AzureNonTypedEntities : DbContext
     {
         public AzureNonTypedEntities()
             : base("name=AzureNonTypedEntities")

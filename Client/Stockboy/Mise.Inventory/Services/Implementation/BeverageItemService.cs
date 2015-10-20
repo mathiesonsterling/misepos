@@ -134,12 +134,7 @@ namespace Mise.Inventory.Services.Implementation
 				//update our containers here!
 				foreach (var container in filtItems.Select(item => item.Container))
 				{
-				    if(_containersAndTimeUsed.ContainsKey (container.DisplayName) == false){
-						_containersAndTimeUsed.Add(container.DisplayName, new ContainerAndTimes (container, 1));
-				    } else{
-				        var tuple = _containersAndTimeUsed [container.DisplayName];
-						tuple.TimesUsed++;
-				    }
+				    IncrementContainerTimeUsed (container);
 				}
 				return Task.FromResult(filtItems
 					.OrderBy (i => i.DisplayName)
@@ -147,6 +142,29 @@ namespace Mise.Inventory.Services.Implementation
 			} catch(Exception e){
 				_logger.HandleException (e);
 				throw;
+			}
+		}
+
+		void IncrementContainerTimeUsed (LiquidContainer container)
+		{
+			if (_containersAndTimeUsed.ContainsKey (container.DisplayName) == false) {
+				//only add this if it is NOT equal to a default one in size!
+				var defaults = LiquidContainer.GetStandardBarSizes ();
+				var standardSize = defaults.FirstOrDefault (c => c.Equals (container));
+				if (standardSize == null) {
+					var matchedDefault = defaults.FirstOrDefault (c => c.AmountContained.GetInMilliliters () == container.AmountContained.GetInMilliliters ());
+					if (matchedDefault == null) {
+						_containersAndTimeUsed.Add (container.DisplayName, new ContainerAndTimes (container, 1));
+					} else {
+						IncrementContainerTimeUsed (matchedDefault);
+					}
+				} else {
+					_containersAndTimeUsed.Add (container.DisplayName, new ContainerAndTimes (container, 1));
+				}
+			}
+			else {
+				var tuple = _containersAndTimeUsed [container.DisplayName];
+				tuple.TimesUsed++;
 			}
 		}
 
