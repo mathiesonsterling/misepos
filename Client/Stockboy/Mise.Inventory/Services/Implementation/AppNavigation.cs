@@ -248,6 +248,11 @@ namespace Mise.Inventory.Services.Implementation
 			await _navi.PushAsync (_pages.GetPage (Pages.RegisterUser));
 		}
 
+		public Task ShowSettings ()
+		{
+			throw new NotImplementedException ();
+		}
+
 		public async Task CloseInventoryVisuallyMeasureItem ()
 		{
 			await App.InventoryViewModel.OnAppearing ();
