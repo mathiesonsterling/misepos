@@ -5,5 +5,8 @@
 	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
 	x:Class="Mise.Inventory.Pages.SettingsPage">
 	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<Button Command="{Binding ChangePasswordCommand}" Text="Change Password" HorizontalOptions="FillAndExpand"/>
+		</StackLayout>
 	</ContentPage.Content>
 </local:BasePage>

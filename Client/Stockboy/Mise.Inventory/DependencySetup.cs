@@ -164,6 +164,7 @@ namespace Mise.Inventory
 			cb.RegisterType<AuthorizeCreditCardViewModel> ().SingleInstance ();
 			cb.RegisterType<RestaurantLoadingViewModel> ().SingleInstance ();
 			cb.RegisterType<SettingsViewModel> ().SingleInstance ();
+			cb.RegisterType<ChangePasswordViewModel> ().SingleInstance ();
 		}
 	}
 }

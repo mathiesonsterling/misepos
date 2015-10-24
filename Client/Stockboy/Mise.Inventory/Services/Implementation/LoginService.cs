@@ -510,5 +510,23 @@ namespace Mise.Inventory.Services.Implementation
 				throw;
 			}
 	    }
+
+		public async Task ChangePasswordForCurrentEmployee (Password oldPassword, Password newPassword)
+		{
+			var emp = await GetCurrentEmployee ();
+
+			if (newPassword == null) {
+				throw new ArgumentException ("Password is null");
+			}
+
+			if (!emp.Password.Equals (oldPassword)) {
+				throw new ArgumentException ("Old password is not correct!");
+			}
+
+			var ev = _eventFactory.CreateEmployeePasswordChangedEvent (emp, newPassword);
+
+			_currentEmployee = _employeeRepository.ApplyEvent (ev);
+			await _employeeRepository.Commit (_currentEmployee.Id);
+		}
 	}
 }

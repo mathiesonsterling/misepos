@@ -248,9 +248,14 @@ namespace Mise.Inventory.Services.Implementation
 			await _navi.PushAsync (_pages.GetPage (Pages.RegisterUser));
 		}
 
-		public Task ShowSettings ()
+		public async Task ShowSettings ()
 		{
-			throw new NotImplementedException ();
+			await _navi.PushAsync(_pages.GetPage(Pages.Settings));
+		}
+
+		public async Task ShowChangePassword ()
+		{
+			await _navi.PushAsync(_pages.GetPage(Pages.ChangePassword));
 		}
 
 		public async Task CloseInventoryVisuallyMeasureItem ()

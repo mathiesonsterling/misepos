@@ -433,6 +433,20 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
+		public EmployeePasswordChangedEvent CreateEmployeePasswordChangedEvent (IEmployee emp, Password newPassword)
+		{
+			return new EmployeePasswordChangedEvent {
+				Id = Guid.NewGuid (),
+				CreatedDate = GetDate (),
+				EventOrder = GetNextEventID (),
+				DeviceId = _deviceID,
+				EmployeeID = emp.Id,
+				CausedById = emp.Id,
+				RestaurantId = _restaurant.Id,
+				NewPassword = newPassword
+			};
+		}
+
 		public InventoryCreatedEvent CreateInventoryCreatedEvent (IEmployee emp)
 		{
 		    return new InventoryCreatedEvent {

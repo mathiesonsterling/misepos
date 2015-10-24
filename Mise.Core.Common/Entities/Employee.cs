@@ -227,6 +227,9 @@ namespace Mise.Core.Common.Entities
 				case MiseEventTypes.EmployeeRegistersRestaurant:
 					WhenEmployeeRegistersRestaurant ((EmployeeRegistersRestaurantEvent)empEvent);
 					break;
+				case MiseEventTypes.EmployeePasswordChanged:
+					WhenEmployeePasswordChanged ((EmployeePasswordChangedEvent)empEvent);
+					break;
                 default:
                     throw new ArgumentException("Employee object cannot process event of type " + empEvent.EventType);
 	        }
@@ -238,6 +241,10 @@ namespace Mise.Core.Common.Entities
 	    {
 	        //nothing to do for now
 	    }
+
+		private void WhenEmployeePasswordChanged(EmployeePasswordChangedEvent empEvent){
+			Password = empEvent.NewPassword;
+		}
 
 	    void WhenEmployeeCreated (EmployeeCreatedEvent ecEV)
 		{

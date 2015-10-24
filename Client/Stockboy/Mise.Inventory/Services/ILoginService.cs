@@ -82,5 +82,7 @@ namespace Mise.Inventory.Services
 		/// <returns>The register account.</returns>
 		/// <param name="card">Card.</param>
 		Task<IAccount> CompleteRegisterAccount(CreditCard card);
+
+		Task ChangePasswordForCurrentEmployee (Password oldPassword, Password newPassword);
 	}
 }

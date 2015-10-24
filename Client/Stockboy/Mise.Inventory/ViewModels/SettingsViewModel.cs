@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
+
+using Xamarin.Forms;
 namespace Mise.Inventory.ViewModels
 {
 	public class SettingsViewModel : BaseViewModel
@@ -16,6 +19,11 @@ namespace Mise.Inventory.ViewModels
 			return Task.FromResult (false);
 		}
 		#endregion
+
+		public ICommand ChangePasswordCommand{ get { return new Command (ChangePassword, () => NotProcessing); } }
+
+		public async void ChangePassword(){
+		}
 	}
 }
 
