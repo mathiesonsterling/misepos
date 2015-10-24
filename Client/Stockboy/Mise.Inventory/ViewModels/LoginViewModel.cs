@@ -48,6 +48,7 @@ namespace Mise.Inventory.ViewModels
 			if (emp != null) {
 				await Navigation.ShowMainMenu ();
 			}
+			Processing = false;
 		}
 
         public bool CanLogin { get { return GetValue<bool>(); } private set { SetValue(value);} }
