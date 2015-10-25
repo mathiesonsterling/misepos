@@ -12,21 +12,26 @@ namespace Mise.Core.ValueItems
 			Number = string.Empty;	
 		}
 
-		public CreditCardNumber(string number, int csv, int billingZip){
+        public CreditCardNumber(string number, int csv, ZipCode billingZip, int month, int year){
 			Number = number;
-			CSV = csv;
+			CVC = csv;
 			BillingZip = billingZip;
 		}
 
 		public string Number{ get; set;}
-		public int CSV{get;set;}
-		public int BillingZip{ get; set;}
+		public int CVC{get;set;}
+		public ZipCode BillingZip{ get; set;}
+		public int ExpMonth { get; set; }
+		public int ExpYear { get; set; }
 
 		#region IEquatable implementation
 
 		public bool Equals (CreditCardNumber other)
 		{
-			return Number == other.Number && CSV == other.CSV;
+			return Number == other.Number 
+				&& CVC == other.CVC 
+				&& ExpMonth == other.ExpMonth 
+				&& ExpYear == other.ExpYear;
 		}
 
 		#endregion

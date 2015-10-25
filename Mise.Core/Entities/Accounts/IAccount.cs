@@ -27,13 +27,6 @@ namespace Mise.Core.Entities.Accounts
 
 		PhoneNumber PhoneNumber{get;}
 
-
-	    /// <summary>
-	    /// Tell us how often we charge this account
-	    /// </summary>
-	    /// <returns></returns>
-        TimeSpan BillingCycle { get; }
-
         /// <summary>
         /// Credit card we're currently using for payment
         /// </summary>
@@ -52,6 +45,11 @@ namespace Mise.Core.Entities.Accounts
 
         MiseAccountStatus Status { get; }
         MiseAccountTypes AccountType { get; }
+        MisePaymentPlan PaymentPlan{ get; }
+        /// <summary>
+        /// If true, we've setup the billing with our provider.  If not, we still need to!
+        /// </summary>
+        bool PaymentPlanSetupWithProvider{get;}
 
         IEnumerable<MiseAppTypes> AppsOnAccount { get; }
             

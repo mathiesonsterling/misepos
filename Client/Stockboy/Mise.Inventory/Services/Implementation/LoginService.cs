@@ -485,11 +485,11 @@ namespace Mise.Inventory.Services.Implementation
 		public async Task<IAccount> RegisterAccount (EmailAddress email, ReferralCode code, PersonName accountName, 
 			PhoneNumber phone, MiseAppTypes app, CreditCardNumber cardDetails)
 		{
-			//auth the credit card
+			//auth the credit card.  We'll create the subscription on the server?
 			CreditCard card = await _ccProcessor.SendCardToProcessorForSubscription(accountName, cardDetails);
 
 			var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, Guid.NewGuid (), email,
-				         phone, card, code, app, accountName);
+				         phone, card, code, app, accountName, MisePaymentPlan.StockboyBasicMonthly);
 
 			var acct = _accountRepository.ApplyEvent (ev);
 			await _accountRepository.CommitOnlyImmediately (acct.Id);
@@ -517,7 +517,7 @@ namespace Mise.Inventory.Services.Implementation
 				//commit account registry
 				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, _currentRegistrationInProcess.AccountID,
 					_currentRegistrationInProcess.Email, _currentRestaurant.PhoneNumber, card, _currentRegistrationInProcess.Referral, 
-					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName);
+					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName, MisePaymentPlan.StockboyBasicMonthly);
 
 				var acct = _accountRepository.ApplyEvent (ev);
 				await _accountRepository.CommitOnlyImmediately (acct.Id);

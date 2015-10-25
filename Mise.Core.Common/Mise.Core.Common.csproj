@@ -203,6 +203,8 @@
     <Compile Include="Events\Inventory\InventorySectionStartedByEmployeeEvent.cs" />
     <Compile Include="Events\Employee\EmployeePasswordChangedEvent.cs" />
     <Compile Include="Services\Implementation\StripePaymentProviderSettings.cs" />
+    <Compile Include="Services\Implementation\StripePaymentProcessorService.cs" />
+    <Compile Include="Services\IClientStripeFacade.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

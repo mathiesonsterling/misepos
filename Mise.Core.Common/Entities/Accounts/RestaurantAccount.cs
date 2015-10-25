@@ -41,6 +41,12 @@ namespace Mise.Core.Common.Entities.Accounts
             get { return MiseAccountTypes.Restaurant; }
         }
 
+        public MisePaymentPlan PaymentPlan
+        {
+            get;
+            set;
+        }
+
         public IEnumerable<MiseAppTypes> AppsOnAccount { get; set; }
 
         public ICollection<AccountCharge> Charges { get; set; } 
@@ -114,7 +120,7 @@ namespace Mise.Core.Common.Entities.Accounts
             Emails = new List<EmailAddress> {ev.Email};
             PhoneNumber = ev.PhoneNumber;
             Status = MiseAccountStatus.NotActivated;
-
+            PaymentPlan = ev.PaymentPlan;
             if (ev.ReferralCode != null)
             {
                 

@@ -110,7 +110,7 @@ namespace Mise.Core.Common.Events
 		UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID);
 
 		AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, Guid accountID, EmailAddress email, 
-			PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name);
+			PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name, MisePaymentPlan paymentPlan);
         #endregion
 
     }

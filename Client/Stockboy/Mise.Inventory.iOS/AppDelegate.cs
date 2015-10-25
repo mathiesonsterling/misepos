@@ -11,6 +11,7 @@ using Xamarin.Forms.Platform.iOS;
 using XLabs.Forms;
 
 using Mise.Core.Common;
+using Mise.Core.Common.Services.Implementation;
 namespace Mise.Inventory.iOS
 {
 	[Register("AppDelegate")]

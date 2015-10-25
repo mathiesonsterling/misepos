@@ -818,7 +818,8 @@ namespace Mise.Core.Common.Events
 		}
 
 		public AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, 
-			Guid accountID, EmailAddress email, PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name)
+			Guid accountID, EmailAddress email, PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, 
+            PersonName name, MisePaymentPlan paymentPlan)
 		{
 			return new AccountRegisteredFromMobileDeviceEvent {
 				Id = Guid.NewGuid (),
@@ -833,7 +834,8 @@ namespace Mise.Core.Common.Events
 				PhoneNumber = phone,
 				AccountType = MiseAccountTypes.Restaurant,
 				AccountHolderName = name,
-				AppType = app
+				AppType = app,
+                PaymentPlan = paymentPlan
 			};
 		}
 	}

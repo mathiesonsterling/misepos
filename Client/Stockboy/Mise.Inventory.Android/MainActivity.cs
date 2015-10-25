@@ -12,6 +12,7 @@ using Mise.Inventory;
 
 using XLabs.Forms;
 using Mise.Core.Common;
+using Mise.Core.Common.Services.Implementation;
 namespace Mise.Inventory.Android
 {
 	[Activity(
