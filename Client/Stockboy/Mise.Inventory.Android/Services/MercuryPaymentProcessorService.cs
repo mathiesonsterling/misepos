@@ -155,6 +155,11 @@ namespace Mise.Inventory.Android.Services
 			}
 		}
 		#endregion
+
+		public Task<CreditCard> SendCardToProcessorForSubscription (PersonName cardName, CreditCardNumber number)
+		{
+			throw new InvalidOperationException ("Mercury requires webpage processing");
+		}
 	}
 }
 

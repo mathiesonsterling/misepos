@@ -351,6 +351,34 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		#region IInventoryEmployeeWebService implementation
 
+		public async Task<bool> IsEmailRegistered (EmailAddress email)
+		{
+			var empType = typeof(Employee).ToString ();
+			var table = GetEntityTable ();
+			try{
+				await AttemptPull ("allEmployees", null);
+			} 	catch(MobileServicePushFailedException pe){
+				//check the push result to see if this is deletion of a mod that we can ignore
+				_logger.HandleException (pe);
+				throw;
+			}
+
+			var ais = await table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(email.Value)).ToEnumerableAsync ();
+
+			foreach (var ai in ais) {
+				var desered = _entityDTOFactory.FromDataStorageObject<Employee> (ai.ToRestaurantDTO());
+				if (desered != null) {
+					if ((desered.PrimaryEmail != null && desered.PrimaryEmail.Equals (email))
+					   || (desered.GetEmailAddresses ().Any (em => em.Equals (email)))) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+
+		}
+
 		public async Task<IEnumerable<Employee>> GetEmployeesAsync ()
 		{
 			var empType = typeof(Employee).ToString ();
@@ -377,9 +405,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
-			//TODO change this to do the query on server, or at least limit it somehow
 			try{
-				var items = (await GetEmployeesAsync ()).ToList();
+				var table = GetEntityTable();
+
+				var empType = typeof(Employee).ToString ();
+				var ais = await table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(email.Value)).ToEnumerableAsync ();
+				var items = ais.Select(ai => _entityDTOFactory.FromDataStorageObject<Employee>(ai.ToRestaurantDTO()));
+
 				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
 					&& e.Password != null && e.Password.Equals (password));
 

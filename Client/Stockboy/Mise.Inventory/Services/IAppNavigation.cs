@@ -71,6 +71,10 @@ namespace Mise.Inventory.Services
 
 		Task ShowAuthorizeCreditCard ();
 
+		Task ShowSettings();
+
+		Task ShowChangePassword();
+
 		/// <summary>
 		/// Shows the invitations.
 		/// </summary>

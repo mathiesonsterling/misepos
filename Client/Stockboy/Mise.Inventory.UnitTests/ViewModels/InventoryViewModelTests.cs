@@ -77,7 +77,6 @@ namespace Mise.Inventory.UnitTests.ViewModels
 		[Test]
 		public async Task InventoryLineItemsShouldBeOrderedByInventoryPositionAfterSearch()
 		{
-			var sectionID = Guid.NewGuid();
 			var appNav = new Mock<IAppNavigation>();
 
 			var invService = new Mock<IInventoryService>();

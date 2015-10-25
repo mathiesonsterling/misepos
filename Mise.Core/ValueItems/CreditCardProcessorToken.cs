@@ -11,6 +11,7 @@ namespace Mise.Core.ValueItems
         FakeProcessor,
         Mercury,
         BluePay,
+		Stripe,
     }
 
     public class CreditCardProcessorToken : IEquatable<CreditCardProcessorToken>

@@ -23,6 +23,7 @@ namespace Mise.Inventory.ViewModels
 		protected BaseViewModel(IAppNavigation navigationService, ILogger logger){
 			Navigation = navigationService;
 			Logger = logger;
+			NotProcessing = true;
 		}
 
 		protected void HandleException(Exception e){
@@ -69,8 +70,15 @@ namespace Mise.Inventory.ViewModels
 		/// Allows a view model to show if we're currently processing
 		/// </summary>
 		/// <value><c>true</c> if processing; otherwise, <c>false</c>.</value>
-		public bool Processing{ get { return GetValue<bool> (); } protected set { SetValue (value); } }
-		public bool NotProcessing{ get { return Processing == false; } }
+		public bool Processing{ get { 
+				return GetValue<bool> (); 
+			} 
+			protected set {
+				NotProcessing = !value;
+				SetValue (value); 
+			} 
+		}
+		public bool NotProcessing{ get { return GetValue<bool> (); } private set { SetValue (value); } }
 		public Color ActivityColor{ get { return Color.Accent; } }
 
 		/// <summary>

@@ -15,7 +15,7 @@ using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent, Employee>, IEmployeeRepository
+	public class ClientEmployeeRepository : BaseEventSourcedClientRepository<IEmployee, IEmployeeEvent, Employee>, IEmployeeRepository
     {
         readonly IInventoryEmployeeWebService _webService;
         public ClientEmployeeRepository(IInventoryEmployeeWebService webService, ILogger logger)
@@ -130,5 +130,20 @@ namespace Mise.Core.Client.Repositories
 
             return bundle == null ? null : bundle.NewVersion;
         }
+
+		public Task<bool> IsEmailRegistered (EmailAddress email)
+		{
+			//check if our local already has this
+			var exists = GetAll().Any (emp => 
+				emp.GetEmailAddresses ().Any (em => em != null && em.Equals (email))
+				|| (emp.PrimaryEmail != null && emp.PrimaryEmail.Equals (email)));
+
+			if (exists) {
+				return Task.FromResult(true);
+			}
+
+			//if not, check on server
+			return _webService.IsEmailRegistered (email);
+		}
     }
 }

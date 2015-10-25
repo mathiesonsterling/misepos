@@ -34,7 +34,9 @@ namespace Mise.Inventory.Services
         Reports,
 	    CompletedInventoriesSelect,
 	    ReportResults,
-		RestaurantLoading
+		RestaurantLoading,
+		Settings,
+		ChangePassword
 	}
 
 	public interface IPageFactory

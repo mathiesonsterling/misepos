@@ -26,7 +26,7 @@ namespace Mise.Inventory.Services.Implementation
 		readonly IClientKeyValueStorage _keyValStorage;
 		readonly ILogger _logger;
 	    private readonly IRepositoryLoader _repositoryLoader;
-
+		private readonly ICreditCardProcessorService _ccProcessor;
 		IEmployee _currentEmployee;
 		IRestaurant _currentRestaurant;
 
@@ -48,7 +48,8 @@ namespace Mise.Inventory.Services.Implementation
 		                    IInventoryAppEventFactory eventFactory,
 							IClientKeyValueStorage keyValStorage,
 		                    ILogger logger,
-            IRepositoryLoader repositoryLoader
+            				IRepositoryLoader repositoryLoader,
+							ICreditCardProcessorService ccService
             )
 		{
 			_employeeRepository = employeeRepository;
@@ -59,6 +60,7 @@ namespace Mise.Inventory.Services.Implementation
 			_keyValStorage = keyValStorage;
 			_logger = logger;
 		    _repositoryLoader = repositoryLoader;
+			_ccProcessor = ccService;
 		}
 
 		const string LOGGED_IN_EMPLOYEE_KEY = "LoggedInEmployee";
@@ -309,7 +311,7 @@ namespace Mise.Inventory.Services.Implementation
 			}
 
 		    var allInvites = _inviteRepository.GetAll();
-		    var items = allInvites.Where(i => i.Application == MiseAppTypes.StockboyMobile);
+			var items = allInvites.Where(i => i.Application == MiseAppTypes.StockboyMobile && i.Status == InvitationStatus.Sent);
 
 		    var empEmails = _currentEmployee.GetEmailAddresses ().ToList();
 		    var res = items.Where(item => empEmails.Any(e => e.Equals(item.DestinationEmail))).ToList();
@@ -318,11 +320,11 @@ namespace Mise.Inventory.Services.Implementation
 			return Task.FromResult (res.AsEnumerable());
 		}
 
-		public Task<IEnumerable<IApplicationInvitation>> GetPendingInvitationsForRestaurant (Guid restaurantID)
+		public Task<IEnumerable<IApplicationInvitation>> GetPendingInvitationsForRestaurant ()
 		{
 			var items = _inviteRepository.GetAll ()
 				.Where (i => i.Application == MiseAppTypes.StockboyMobile)
-				.Where (i => i.RestaurantID == restaurantID);
+				.Where (i => i.RestaurantID == _currentRestaurant.Id);
 
 			return Task.FromResult (items);
 		}
@@ -363,6 +365,14 @@ namespace Mise.Inventory.Services.Implementation
 		public async Task<IEmployee> RegisterEmployee (EmailAddress email, Password password, PersonName name)
 		{
 			try{
+				//check if this email is already registered!
+
+				var alreadyRegistered = await _employeeRepository.IsEmailRegistered(email);
+
+				if(alreadyRegistered){
+					throw new InvalidOperationException("Email " + email.Value + " is already registered!");
+				}
+
 				var ev = _eventFactory.CreateEmployeeCreatedEvent (email, password, name, MiseAppTypes.StockboyMobile);
 
 				_currentEmployee = _employeeRepository.ApplyEvent (ev);
@@ -437,7 +447,10 @@ namespace Mise.Inventory.Services.Implementation
 
 				await _restaurantRepository.Load(_currentRestaurant.Id);
 			}
+
+			await SelectRestaurantForLoggedInEmployee (_currentRestaurant.Id);
 		}
+			
 
 		private class RegisterAccountInfo{
 			public EmailAddress Email;
@@ -469,6 +482,31 @@ namespace Mise.Inventory.Services.Implementation
 	        return Task.FromResult(accountID);
 	    }
 
+		public async Task<IAccount> RegisterAccount (EmailAddress email, ReferralCode code, PersonName accountName, 
+			PhoneNumber phone, MiseAppTypes app, CreditCardNumber cardDetails)
+		{
+			//auth the credit card.  We'll create the subscription on the server?
+			CreditCard card = await _ccProcessor.SendCardToProcessorForSubscription(accountName, cardDetails);
+
+			var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, Guid.NewGuid (), email,
+				         phone, card, code, app, accountName, MisePaymentPlan.StockboyBasicMonthly);
+
+			var acct = _accountRepository.ApplyEvent (ev);
+			await _accountRepository.CommitOnlyImmediately (acct.Id);
+
+			if(_employeeRepository.Dirty){
+				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.Id);
+			}
+
+			if(_restaurantRepository.Dirty){
+				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.Id);
+
+				await _restaurantRepository.Load(_currentRestaurant.Id);
+			}
+
+			return acct;
+		}
+
 	    public async Task<IAccount> CompleteRegisterAccount(CreditCard card)
 	    {
 			if (_currentRegistrationInProcess == null) {
@@ -479,7 +517,7 @@ namespace Mise.Inventory.Services.Implementation
 				//commit account registry
 				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, _currentRegistrationInProcess.AccountID,
 					_currentRegistrationInProcess.Email, _currentRestaurant.PhoneNumber, card, _currentRegistrationInProcess.Referral, 
-					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName);
+					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName, MisePaymentPlan.StockboyBasicMonthly);
 
 				var acct = _accountRepository.ApplyEvent (ev);
 				await _accountRepository.CommitOnlyImmediately (acct.Id);
@@ -500,5 +538,23 @@ namespace Mise.Inventory.Services.Implementation
 				throw;
 			}
 	    }
+
+		public async Task ChangePasswordForCurrentEmployee (Password oldPassword, Password newPassword)
+		{
+			var emp = await GetCurrentEmployee ();
+
+			if (newPassword == null) {
+				throw new ArgumentException ("Password is null");
+			}
+
+			if (!emp.Password.Equals (oldPassword)) {
+				throw new ArgumentException ("Old password is not correct!");
+			}
+
+			var ev = _eventFactory.CreateEmployeePasswordChangedEvent (emp, newPassword);
+
+			_currentEmployee = _employeeRepository.ApplyEvent (ev);
+			await _employeeRepository.Commit (_currentEmployee.Id);
+		}
 	}
 }

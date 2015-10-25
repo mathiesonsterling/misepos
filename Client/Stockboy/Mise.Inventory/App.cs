@@ -140,6 +140,7 @@ namespace Mise.Inventory
         public static RestaurantRegistrationViewModel RestaurantRegistrationViewModel => Resolve<RestaurantRegistrationViewModel>();
         public static PurchaseOrderSelectViewModel PurchaseOrderSelectViewModel => Resolve<PurchaseOrderSelectViewModel>();
         public static AccountRegistrationViewModel AccountRegistrationViewModel => Resolve<AccountRegistrationViewModel>();
+		public static AccountRegistrationWithCreditCardViewModel AccountRegistrationWithCreditCardViewModel => Resolve<AccountRegistrationWithCreditCardViewModel>();
 
         public static ReportsViewModel ReportsViewModel => Resolve<ReportsViewModel>();
 		public static ReportsByInventoryViewModel ReportsByInventoryViewModel => Resolve<ReportsByInventoryViewModel>();
@@ -148,6 +149,8 @@ namespace Mise.Inventory
 
         public static AuthorizeCreditCardViewModel AuthorizeCreditCardViewModel => Resolve<AuthorizeCreditCardViewModel>();
 		public static RestaurantLoadingViewModel RestaurantLoadingViewModel => Resolve<RestaurantLoadingViewModel>();
+		public static SettingsViewModel SettingsViewModel => Resolve<SettingsViewModel>();
+		public static ChangePasswordViewModel ChangePasswordViewModel => Resolve<ChangePasswordViewModel>();
 		#endregion
 
         private static T Resolve<T>()

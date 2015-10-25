@@ -117,7 +117,8 @@ namespace Mise.Core.Common.UnitTests.Events
 		[Test]	
 		public void AccountReg(){
 			var ev = _underTest.CreateAccountRegisteredFromMobileDeviceEvent (_emp, Guid.NewGuid (), EmailAddress.TestEmail,
-				         PhoneNumber.TestPhoneNumber, new CreditCard (), ReferralCode.TestReferralCode, MiseAppTypes.UnitTests, PersonName.TestName);
+				         PhoneNumber.TestPhoneNumber, new CreditCard (), ReferralCode.TestReferralCode, MiseAppTypes.UnitTests, PersonName.TestName,
+                        MisePaymentPlan.StockboyBasicMonthly);
 
 			TestCommonFields (ev);
 		}
