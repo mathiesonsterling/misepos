@@ -202,6 +202,7 @@
     <Compile Include="Events\Inventory\InventorySectionClearedEvent.cs" />
     <Compile Include="Events\Inventory\InventorySectionStartedByEmployeeEvent.cs" />
     <Compile Include="Events\Employee\EmployeePasswordChangedEvent.cs" />
+    <Compile Include="Services\Implementation\StripePaymentProviderSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

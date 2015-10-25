@@ -211,6 +211,9 @@
     <Reference Include="MR.Gestures">
       <HintPath>..\packages\MR.Gestures.1.2.4\lib\Xamarin.iOS10\MR.Gestures.dll</HintPath>
     </Reference>
+    <Reference Include="Stripe">
+      <HintPath>..\Components\stripe-1.0.7\lib\ios-unified\Stripe.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mise.Inventory\Mise.Inventory.csproj">
@@ -321,6 +324,10 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="modernhttpclient">
       <Version>2.4.2</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="stripe">
+      <Version>1.0.7</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>

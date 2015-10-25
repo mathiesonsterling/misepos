@@ -1,7 +1,7 @@
 ﻿using System;
 using Mise.Core.Entities.Payments;
 
-namespace Mise.Core
+namespace Mise.Core.ValueItems
 {
 	/// <summary>
 	/// Represents a credit card number, CSV, and other information.  Cannot be stored ever!

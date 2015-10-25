@@ -7,7 +7,7 @@ using Mise.Core.Entities.Restaurant;
 using System;
 using System.Collections.Generic;
 using Mise.Core.Entities.Inventory;
-
+using Mise.Core;
 namespace Mise.Inventory.Services
 {
 	/// <summary>
@@ -82,6 +82,18 @@ namespace Mise.Inventory.Services
 		/// <returns>The register account.</returns>
 		/// <param name="card">Card.</param>
 		Task<IAccount> CompleteRegisterAccount(CreditCard card);
+
+		/// <summary>
+		/// Registers the account in a single call
+		/// </summary>
+		/// <returns>The account.</returns>
+		/// <param name="email">Email.</param>
+		/// <param name="code">Code.</param>
+		/// <param name="accountName">Account name.</param>
+		/// <param name="app">App.</param>
+		/// <param name="cardDetails">Card details.</param>
+		Task<IAccount> RegisterAccount (EmailAddress email, ReferralCode code, PersonName accountName, PhoneNumber phone, 
+			MiseAppTypes app, CreditCardNumber cardDetails);
 
 		Task ChangePasswordForCurrentEmployee (Password oldPassword, Password newPassword);
 	}

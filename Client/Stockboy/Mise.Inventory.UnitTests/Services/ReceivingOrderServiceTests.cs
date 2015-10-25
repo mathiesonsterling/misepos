@@ -167,8 +167,6 @@ namespace Mise.Inventory.UnitTests.Services
         {
             var vendorID = Guid.NewGuid();
             var otherVendorID = Guid.NewGuid();
-            var roID = Guid.NewGuid();
-            var restID = Guid.NewGuid();
 
             var mockRORepos = new Mock<IReceivingOrderRepository>();
 

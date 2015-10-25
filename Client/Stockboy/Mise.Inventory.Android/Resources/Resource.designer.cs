@@ -75,6 +75,24 @@ namespace Mise.Inventory.Android
 			global::ModernHttpClient.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Resource.String.ApplicationName = global::Mise.Inventory.Android.Resource.String.ApplicationName;
 			global::Xamarin.Forms.Platform.Resource.String.Hello = global::Mise.Inventory.Android.Resource.String.Hello;
+			global::Stripe.Resource.Drawable.amex = global::Mise.Inventory.Android.Resource.Drawable.amex;
+			global::Stripe.Resource.Drawable.credit = global::Mise.Inventory.Android.Resource.Drawable.credit;
+			global::Stripe.Resource.Drawable.cvc = global::Mise.Inventory.Android.Resource.Drawable.cvc;
+			global::Stripe.Resource.Drawable.diners = global::Mise.Inventory.Android.Resource.Drawable.diners;
+			global::Stripe.Resource.Drawable.discover = global::Mise.Inventory.Android.Resource.Drawable.discover;
+			global::Stripe.Resource.Drawable.jcb = global::Mise.Inventory.Android.Resource.Drawable.jcb;
+			global::Stripe.Resource.Drawable.maestro = global::Mise.Inventory.Android.Resource.Drawable.maestro;
+			global::Stripe.Resource.Drawable.mastercard = global::Mise.Inventory.Android.Resource.Drawable.mastercard;
+			global::Stripe.Resource.Drawable.visa = global::Mise.Inventory.Android.Resource.Drawable.visa;
+			global::Stripe.Resource.Id.stripeCvc = global::Mise.Inventory.Android.Resource.Id.stripeCvc;
+			global::Stripe.Resource.Id.stripeExpiration = global::Mise.Inventory.Android.Resource.Id.stripeExpiration;
+			global::Stripe.Resource.Id.stripeImage = global::Mise.Inventory.Android.Resource.Id.stripeImage;
+			global::Stripe.Resource.Id.stripeLastFour = global::Mise.Inventory.Android.Resource.Id.stripeLastFour;
+			global::Stripe.Resource.Id.stripeLayoutOne = global::Mise.Inventory.Android.Resource.Id.stripeLayoutOne;
+			global::Stripe.Resource.Id.stripeLayoutTwo = global::Mise.Inventory.Android.Resource.Id.stripeLayoutTwo;
+			global::Stripe.Resource.Id.stripeNumber = global::Mise.Inventory.Android.Resource.Id.stripeNumber;
+			global::Stripe.Resource.Layout.stripeviewlayout = global::Mise.Inventory.Android.Resource.Layout.stripeviewlayout;
+			global::Stripe.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
 		}
 		
 		public partial class Attribute
@@ -174,22 +192,49 @@ namespace Mise.Inventory.Android
 			public const int ad16 = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int calendar_bg_selector = 2130837505;
+			public const int amex = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int launcher = 2130837506;
+			public const int calendar_bg_selector = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int mise = 2130837507;
+			public const int credit = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int restaurantLoading = 2130837508;
+			public const int cvc = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int splashscreen = 2130837509;
+			public const int diners = 2130837509;
 			
 			// aapt resource value: 0x7f020006
-			public const int StockboyLaunch = 2130837510;
+			public const int discover = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int jcb = 2130837511;
+			
+			// aapt resource value: 0x7f020008
+			public const int launcher = 2130837512;
+			
+			// aapt resource value: 0x7f020009
+			public const int maestro = 2130837513;
+			
+			// aapt resource value: 0x7f02000a
+			public const int mastercard = 2130837514;
+			
+			// aapt resource value: 0x7f02000b
+			public const int mise = 2130837515;
+			
+			// aapt resource value: 0x7f02000c
+			public const int restaurantLoading = 2130837516;
+			
+			// aapt resource value: 0x7f02000d
+			public const int splashscreen = 2130837517;
+			
+			// aapt resource value: 0x7f02000e
+			public const int StockboyLaunch = 2130837518;
+			
+			// aapt resource value: 0x7f02000f
+			public const int visa = 2130837519;
 			
 			static Drawable()
 			{
@@ -215,6 +260,27 @@ namespace Mise.Inventory.Android
 			
 			// aapt resource value: 0x7f080002
 			public const int right_arrow = 2131230722;
+			
+			// aapt resource value: 0x7f08000b
+			public const int stripeCvc = 2131230731;
+			
+			// aapt resource value: 0x7f08000a
+			public const int stripeExpiration = 2131230730;
+			
+			// aapt resource value: 0x7f080005
+			public const int stripeImage = 2131230725;
+			
+			// aapt resource value: 0x7f080009
+			public const int stripeLastFour = 2131230729;
+			
+			// aapt resource value: 0x7f080006
+			public const int stripeLayoutOne = 2131230726;
+			
+			// aapt resource value: 0x7f080008
+			public const int stripeLayoutTwo = 2131230728;
+			
+			// aapt resource value: 0x7f080007
+			public const int stripeNumber = 2131230727;
 			
 			// aapt resource value: 0x7f080000
 			public const int title = 2131230720;
@@ -248,7 +314,10 @@ namespace Mise.Inventory.Android
 			public const int month = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int week = 2130903045;
+			public const int stripeviewlayout = 2130903045;
+			
+			// aapt resource value: 0x7f030006
+			public const int week = 2130903046;
 			
 			static Layout()
 			{
@@ -263,11 +332,11 @@ namespace Mise.Inventory.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int ApplicationName = 2130968577;
+			// aapt resource value: 0x7f040002
+			public const int ApplicationName = 2130968578;
 			
-			// aapt resource value: 0x7f040000
-			public const int Hello = 2130968576;
+			// aapt resource value: 0x7f040001
+			public const int Hello = 2130968577;
 			
 			// aapt resource value: 0x7f040007
 			public const int app_name = 2130968583;
@@ -281,8 +350,8 @@ namespace Mise.Inventory.Android
 			// aapt resource value: 0x7f040004
 			public const int invalid_date = 2130968580;
 			
-			// aapt resource value: 0x7f040002
-			public const int library_name = 2130968578;
+			// aapt resource value: 0x7f040000
+			public const int library_name = 2130968576;
 			
 			// aapt resource value: 0x7f040005
 			public const int month_name_format = 2130968581;

@@ -26,6 +26,7 @@ namespace Mise.Inventory.Services.Implementation
 		readonly IClientKeyValueStorage _keyValStorage;
 		readonly ILogger _logger;
 	    private readonly IRepositoryLoader _repositoryLoader;
+		private readonly ICreditCardProcessorService _ccProcessor;
 		IEmployee _currentEmployee;
 		IRestaurant _currentRestaurant;
 
@@ -47,8 +48,8 @@ namespace Mise.Inventory.Services.Implementation
 		                    IInventoryAppEventFactory eventFactory,
 							IClientKeyValueStorage keyValStorage,
 		                    ILogger logger,
-            				IRepositoryLoader repositoryLoader
-							
+            				IRepositoryLoader repositoryLoader,
+							ICreditCardProcessorService ccService
             )
 		{
 			_employeeRepository = employeeRepository;
@@ -59,6 +60,7 @@ namespace Mise.Inventory.Services.Implementation
 			_keyValStorage = keyValStorage;
 			_logger = logger;
 		    _repositoryLoader = repositoryLoader;
+			_ccProcessor = ccService;
 		}
 
 		const string LOGGED_IN_EMPLOYEE_KEY = "LoggedInEmployee";
@@ -448,6 +450,7 @@ namespace Mise.Inventory.Services.Implementation
 
 			await SelectRestaurantForLoggedInEmployee (_currentRestaurant.Id);
 		}
+			
 
 		private class RegisterAccountInfo{
 			public EmailAddress Email;
@@ -478,6 +481,31 @@ namespace Mise.Inventory.Services.Implementation
 
 	        return Task.FromResult(accountID);
 	    }
+
+		public async Task<IAccount> RegisterAccount (EmailAddress email, ReferralCode code, PersonName accountName, 
+			PhoneNumber phone, MiseAppTypes app, CreditCardNumber cardDetails)
+		{
+			//auth the credit card
+			CreditCard card = await _ccProcessor.SendCardToProcessorForSubscription(accountName, cardDetails);
+
+			var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, Guid.NewGuid (), email,
+				         phone, card, code, app, accountName);
+
+			var acct = _accountRepository.ApplyEvent (ev);
+			await _accountRepository.CommitOnlyImmediately (acct.Id);
+
+			if(_employeeRepository.Dirty){
+				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.Id);
+			}
+
+			if(_restaurantRepository.Dirty){
+				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.Id);
+
+				await _restaurantRepository.Load(_currentRestaurant.Id);
+			}
+
+			return acct;
+		}
 
 	    public async Task<IAccount> CompleteRegisterAccount(CreditCard card)
 	    {
