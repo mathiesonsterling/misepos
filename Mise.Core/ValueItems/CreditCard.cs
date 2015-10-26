@@ -69,7 +69,8 @@ namespace Mise.Core.ValueItems
 			|| MaskedCardNumber.ToUpper ().Replace("X", "").Contains (searchString.ToUpper ());
         }
 
-		public static bool CardNumberIsValid(string num){
+		public static bool CardNumberIsValid(string value){
+            var num = value.Trim().Replace("-", "").Replace(" ", "");
 			return string.IsNullOrEmpty (num) == false
 			&& num.Length > 12 && num.Length < 17;
 		}

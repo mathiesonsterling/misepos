@@ -84,7 +84,7 @@ namespace Mise.Inventory.ViewModels
 			res = res && !string.IsNullOrWhiteSpace (Number);
             res = res && CreditCard.CardNumberIsValid(Number);
 			res = res && !string.IsNullOrWhiteSpace(CSV) && !string.IsNullOrWhiteSpace(ZipCode);
-            res = res && ExpYear >= DateTime.Now.Year;
+            res = res && (ExpYear >= DateTime.Now.Year || (ExpYear < 2000 && ExpYear >= DateTime.Now.Year - 2000));
 			return res;
 		}
 

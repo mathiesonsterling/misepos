@@ -16,6 +16,8 @@ namespace Mise.Core.ValueItems
 			Number = number;
 			CVC = csv;
 			BillingZip = billingZip;
+            ExpMonth = month;
+            ExpYear = year;
 		}
 
 		public string Number{ get; set;}
