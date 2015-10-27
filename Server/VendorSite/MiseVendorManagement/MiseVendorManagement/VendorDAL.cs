@@ -200,6 +200,7 @@ namespace MiseVendorManagement
                 await db.SaveChangesAsync();
             }
 
+            HttpRuntime.Cache.Remove(id.ToString());
             var ids = CachedList;
             CachedList?.Remove(id);
         }  

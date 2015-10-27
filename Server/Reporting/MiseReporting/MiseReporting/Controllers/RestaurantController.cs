@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Mise.Core.Common.Entities;
 using Mise.Core.ValueItems;
 using MiseReporting.Models;
-using Microsoft.AspNet.Identity;
+
 namespace MiseReporting.Controllers
 {
     public class RestaurantController : Controller

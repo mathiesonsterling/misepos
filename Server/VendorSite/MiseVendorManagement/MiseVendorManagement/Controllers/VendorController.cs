@@ -17,6 +17,7 @@ namespace MiseVendorManagement.Controllers
             _dal = new VendorDAL();
         }
 
+        [Authorize(Roles = "MiseAdmin")]
         // GET: Vendor
         public async Task<ActionResult> Index(string sortOrder, string searchString)
         {
@@ -69,6 +70,7 @@ namespace MiseVendorManagement.Controllers
             return View(viewModels);
         }
 
+        [Authorize(Roles = "MiseAdmin, VendorAccount")]
         // GET: Vendor/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
@@ -77,6 +79,7 @@ namespace MiseVendorManagement.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles = "MiseAdmin, VendorAccount")]
         // GET: Vendor/Create
         public ActionResult Create()
         {
@@ -87,6 +90,7 @@ namespace MiseVendorManagement.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles = "MiseAdmin, VendorAccount")]
         // POST: Vendor/Create
         [HttpPost]
         public async Task<ActionResult> Create(VendorViewModel vm)
@@ -112,7 +116,7 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
-
+        [Authorize(Roles = "MiseAdmin, VendorAccount")]
         // GET: Vendor/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
@@ -121,6 +125,7 @@ namespace MiseVendorManagement.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles = "MiseAdmin, VendorAccount")]
         // POST: Vendor/Edit/5
         [HttpPost]
         public async Task<ActionResult> Edit(VendorViewModel vm)
@@ -138,6 +143,7 @@ namespace MiseVendorManagement.Controllers
             }
         }
 
+        [Authorize(Roles = "MiseAdmin, VendorAccount")]
         // GET: Vendor/Delete/5
         public async Task<ActionResult> Delete(Guid id)
         {
@@ -146,6 +152,7 @@ namespace MiseVendorManagement.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles = "MiseAdmin, VendorAccount")]
         // POST: Vendor/Delete/5
         [HttpPost]
         public async Task<ActionResult> Delete(Guid id, FormCollection collection)

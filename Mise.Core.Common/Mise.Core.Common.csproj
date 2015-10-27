@@ -41,6 +41,7 @@
     <Compile Include="Entities\Accounts\AccountCreditCardPayment.cs" />
     <Compile Include="Entities\Accounts\MiseEmployeeAccount.cs" />
     <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
+    <Compile Include="Entities\Accounts\VendorAccount.cs" />
     <Compile Include="Entities\DTOs\IEntityDataTransportObjectFactory.cs" />
     <Compile Include="Entities\Inventory\InventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\InventorySection.cs" />
