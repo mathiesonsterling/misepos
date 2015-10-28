@@ -113,16 +113,19 @@ namespace Mise.Inventory.ViewModels
 				var cardNumber = new CreditCardNumber(Number, csvN, zipE, ExpMonth, ExpYear);
 
 				Processing = true;
+                CanRegister = false;
 				//store our info here, we'll complete it once the webpage returns
 				_insights.Track ("User Began Registration", "Email", email.Value);
 				await _loginService.RegisterAccount(email, refCode, name, null, MiseAppTypes.StockboyMobile, cardNumber); 
 				Processing = false;
+                CanRegister = true;
 
 				//go to the webpage
 				await Navigation.ShowAuthorizeCreditCard();
 
 			} catch(Exception e){
 				HandleException (e);
+                CanRegister = true;
 			}
 		}
 

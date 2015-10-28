@@ -78,22 +78,23 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<bool> SendEventsAsync (RestaurantAccount updatedEntity, IEnumerable<IAccountEvent> events)
 		{
-			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 
 			var entRes = await StoreEntity (updatedEntity);
-			var evRes = await SendEventDTOs (dtos);
+            /*
+            var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
+			var evRes = await SendEventDTOs (dtos);*/
 
-			return entRes && evRes;
+			return entRes;
 		}
 
 		public async Task<bool> SendEventsAsync (ApplicationInvitation updatedEntity, IEnumerable<Mise.Core.Entities.Restaurant.Events.IApplicationInvitationEvent> events)
 		{
-			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
-
 			var entRes = await StoreEntity(updatedEntity);
+            /*
+            var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 			var evRes = await SendEventDTOs (dtos);
-
-			return entRes && evRes;
+*/
+			return entRes;
 		}
 
 		public async Task<bool> SendEventsAsync (PurchaseOrder updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IPurchaseOrderEvent> events)
@@ -118,22 +119,22 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<bool> SendEventsAsync (ReceivingOrder updatedEntity, IEnumerable<Mise.Core.Entities.Vendors.Events.IReceivingOrderEvent> events)
 		{
-			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
-
 			var entRes = await StoreEntity (updatedEntity);
+            /*
+            var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 			var evRes = await SendEventDTOs (dtos);
-
-			return entRes && evRes;
+*/
+			return entRes;
 		}
 
 		public async Task<bool> SendEventsAsync (Core.Common.Entities.Inventory.Inventory updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IInventoryEvent> events)
 		{
-			var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
-
 			var entRes = await StoreEntity (updatedEntity);
+            /*
+            var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 			var evRes = await SendEventDTOs (dtos);
-
-			return entRes && evRes;
+*/
+			return entRes;
 		}
 
 		#region IApplicationInvitationWebService implementation
@@ -450,6 +451,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 	
 			//TODO actually store the events at some point
 			return true;
+
 			var table = GetEventTable ();
 
 			var dtoIDs = dtos.Select (dto => dto.Id).ToList();

@@ -775,7 +775,7 @@ namespace Mise.Core.Common.Events
 
 	    public NewRestaurantRegisteredOnAppEvent CreateNewRestaurantRegisteredOnAppEvent(IEmployee emp, RestaurantName name,
 	        StreetAddress address, PhoneNumber phone)
-	    {
+        {
 	        return new NewRestaurantRegisteredOnAppEvent
 	        {
 	            Id = Guid.NewGuid(),
