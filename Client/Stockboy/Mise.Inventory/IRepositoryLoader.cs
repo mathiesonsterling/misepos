@@ -9,5 +9,7 @@ namespace Mise.Inventory
         Task LoadRepositories(Guid? restaurantID);
 
         Task ClearAllRepositories();
+
+		Task SaveOnSleep();
     }
 }

@@ -6,6 +6,7 @@ using Moq;
 using Mise.Core.Repositories;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Services.UtilityServices;
 
 using Autofac;
 using Mise.Core.Entities.Menu;
@@ -40,7 +41,10 @@ namespace Mise.Inventory.UnitTests
 
 			var bevItemService = new Mock<IBeverageItemService> ();
 			bevItemService.Setup (b => b.ReloadItemCache ()).Returns (Task.FromResult (false));
-		    var underTest = new RepositoryLoader(empRepos.Object, invite.Object, vendRepos.Object, eventFactory.Object, restRepos.Object, parRepos.Object, invRepos.Object,
+
+			var logger = new Mock<ILogger> ();
+		    var underTest = new RepositoryLoader(logger.Object, empRepos.Object, invite.Object, vendRepos.Object, 
+				eventFactory.Object, restRepos.Object, parRepos.Object, invRepos.Object,
 		        roRepos.Object, poRepos.Object, bevItemService.Object);
 
 			var restID = Guid.NewGuid ();
@@ -72,6 +76,41 @@ namespace Mise.Inventory.UnitTests
 			return mock;
 		}
 			
+		[Test]
+		public async Task SaveShouldCallAllRepositoriesEvenWithExceptions(){
+			var inventoryRepos = new Mock<IInventoryRepository> ();
+			inventoryRepos.Setup (r => r.CommitAll ()).ThrowsAsync (new InvalidOperationException ());
+			inventoryRepos.Setup (r => r.Dirty).Returns (true);
+
+			var parRepos = new Mock<IParRepository> ();
+			parRepos.Setup (r => r.CommitAll ()).ThrowsAsync (new InvalidOperationException ());
+			parRepos.Setup (r => r.Dirty).Returns (true);
+
+			var roRepos = new Mock<IReceivingOrderRepository> ();
+			roRepos.Setup (r => r.CommitAll ()).ThrowsAsync (new InvalidOperationException ());
+			roRepos.Setup (r => r.Dirty).Returns (true);
+
+			var logger = new Mock<ILogger> ();
+
+			var underTest = new RepositoryLoader (logger.Object, null, null, null, null, null, parRepos.Object,
+				                inventoryRepos.Object, roRepos.Object, null, null);
+
+			//ACT
+			Exception thrown = null;
+			try{
+				await underTest.SaveOnSleep();
+			} catch(Exception e){
+				thrown = e;
+			}
+
+			//ASSERT
+			Assert.NotNull(thrown);
+			inventoryRepos.Verify(r => r.CommitAll(), Times.Once());
+			parRepos.Verify (r => r.CommitAll (), Times.Once ());
+			roRepos.Verify (r => r.CommitAll (), Times.Once ());
+
+			logger.Verify (l => l.HandleException (It.IsAny<Exception> (), LogLevel.Error), Times.AtLeast (3));
+		}
 	}
 }
 

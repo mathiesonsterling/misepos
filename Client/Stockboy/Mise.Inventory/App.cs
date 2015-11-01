@@ -66,6 +66,7 @@ namespace Mise.Inventory
 			AttemptToLoginSavedEmployee (appNavigation);
             
         }
+			
 
 		static async void LoadDeviceID ()
 		{
@@ -82,9 +83,18 @@ namespace Mise.Inventory
 			DeviceID = item.ToString ();
 		}
 
-        protected override void OnSleep()
+        protected override async void OnSleep()
         {
-			//TODO fire a sync if we're online and need one
+			try{
+				//TODO fire a sync if we're online and need one
+
+				//check if we have unsaved work!
+				var reposLoader = GetLoader();
+				await reposLoader.SaveOnSleep();
+			} catch(Exception e){
+				var logger = _container.Resolve<ILogger>();
+				logger?.HandleException(e);
+			}
         }
 
         #region View Models
@@ -185,12 +195,7 @@ namespace Mise.Inventory
         {
             try
             {
-                var loader = new RepositoryLoader(_container.Resolve<IEmployeeRepository>(),
-                    _container.Resolve<IApplicationInvitationRepository>(), _container.Resolve<IVendorRepository>(),
-                    _container.Resolve<IInventoryAppEventFactory>(), _container.Resolve<IRestaurantRepository>(),
-                    _container.Resolve<IParRepository>(), _container.Resolve<IInventoryRepository>(),
-                    _container.Resolve<IReceivingOrderRepository>(), _container.Resolve<IPurchaseOrderRepository>(),
-                    _container.Resolve<IBeverageItemService>());
+				var loader = GetLoader();
                 await loader.LoadRepositories(RestaurantID);
             }
             catch (Exception e)
@@ -200,5 +205,16 @@ namespace Mise.Inventory
                 throw;
             }
         }
+
+		static IRepositoryLoader GetLoader(){
+			return new RepositoryLoader(
+				_container.Resolve<ILogger>(),
+				_container.Resolve<IEmployeeRepository>(),
+				_container.Resolve<IApplicationInvitationRepository>(), _container.Resolve<IVendorRepository>(),
+				_container.Resolve<IInventoryAppEventFactory>(), _container.Resolve<IRestaurantRepository>(),
+				_container.Resolve<IParRepository>(), _container.Resolve<IInventoryRepository>(),
+				_container.Resolve<IReceivingOrderRepository>(), _container.Resolve<IPurchaseOrderRepository>(),
+				_container.Resolve<IBeverageItemService>());
+		}
     }
 }
