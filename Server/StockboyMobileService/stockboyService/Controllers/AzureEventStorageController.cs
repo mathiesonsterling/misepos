@@ -4,7 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.OData;
 using Microsoft.WindowsAzure.Mobile.Service;
-using Mise.Core.Server.Windows.DataObjects;
+using stockboyService.DataObjects;
 using stockboyService.Models;
 
 namespace stockboyService.Controllers

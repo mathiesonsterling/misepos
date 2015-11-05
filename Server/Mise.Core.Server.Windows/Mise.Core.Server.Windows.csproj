@@ -208,8 +208,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataObjects\AzureEntityStorage.cs" />
-    <Compile Include="DataObjects\AzureEventStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Implementation\SimpleReferralCodeService.cs" />
     <Compile Include="Services\IReferralCodeService.cs" />

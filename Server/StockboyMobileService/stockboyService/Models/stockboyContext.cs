@@ -3,6 +3,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using Microsoft.WindowsAzure.Mobile.Service;
 using Microsoft.WindowsAzure.Mobile.Service.Tables;
+using stockboyService.DataObjects;
 
 namespace stockboyService.Models
 {
@@ -38,9 +39,11 @@ namespace stockboyService.Models
                     "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
         }
 
-        public DbSet<Mise.Core.Server.Windows.DataObjects.AzureEntityStorage> AzureEntityStorages { get; set; }
+        public DbSet<AzureEntityStorage> AzureEntityStorages { get; set; }
 
-        public System.Data.Entity.DbSet<Mise.Core.Server.Windows.DataObjects.AzureEventStorage> AzureEventStorages { get; set; }
+        public DbSet<AzureEventStorage> AzureEventStorages { get; set; }
+
+        public System.Data.Entity.DbSet<stockboyService.DataObjects.Restaurant> Restaurants { get; set; }
     }
 
 }
