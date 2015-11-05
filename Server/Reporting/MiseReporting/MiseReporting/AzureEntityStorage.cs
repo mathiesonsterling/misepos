@@ -5,12 +5,10 @@ using Mise.Core.Common.Entities.DTOs;
 
 namespace MiseReporting
 {
-    [Table("stockboymobileservice.AzureEntityStorages")]
+    [Table("stockboy.AzureEntityStorages")]
     public partial class AzureEntityStorage
     {
         public string Id { get; set; }
-
-        public string BuildLevel { get; set; }
 
         public string MiseEntityType { get; set; }
 
