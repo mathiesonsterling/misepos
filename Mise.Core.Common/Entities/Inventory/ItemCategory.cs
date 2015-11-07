@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
@@ -6,7 +9,7 @@ namespace Mise.Core.Common.Entities.Inventory
 	/// <summary>
 	/// Category for inventory items
 	/// </summary>
-	public class ItemCategory : EntityBase, ICategory
+	public class ItemCategory : EntityBase, IInventoryCategory
 	{
 		public Guid? ParentCategoryID {
 			get;
@@ -27,6 +30,11 @@ namespace Mise.Core.Common.Entities.Inventory
 		{
 		    return (false == string.IsNullOrEmpty(Name)) && Name.ToUpper().Contains (searchString.ToUpper());
 		}
+
+        public List<LiquidContainer> PreferredContainers{ get; set; }
+        public IEnumerable<LiquidContainer> GetPreferredContainers(){
+            return PreferredContainers;
+        }
 	}
 }
 

@@ -410,6 +410,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				var table = GetEntityTable();
 
 				var empType = typeof(Employee).ToString ();
+
 				var ais = await table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(email.Value)).ToEnumerableAsync ();
 				var items = ais.Select(ai => _entityDTOFactory.FromDataStorageObject<Employee>(ai.ToRestaurantDTO()));
 

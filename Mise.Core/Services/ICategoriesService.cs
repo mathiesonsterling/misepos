@@ -15,20 +15,20 @@ namespace Mise.Core.Services
 
 		IEnumerable<ICategory> GetCustomCategoriesForRestaurant (Guid restaurantID);
 
-	    LiquidContainerShape GetShapeForCategory(ICategory cat);
+	    LiquidContainerShape GetShapeForCategory(IInventoryCategory cat);
 
         /// <summary>
         /// Given the value an outside source has, get the possible categories it could refer to
         /// </summary>
         /// <param name="givenCategory"></param>
         /// <returns></returns>
-	    IEnumerable<ICategory> GetPossibleCategories(string givenCategory);
+	    IEnumerable<IInventoryCategory> GetPossibleCategories(string givenCategory);
 
         /// <summary>
         /// Gets all categories where we can add an item to
         /// </summary>
         /// <returns></returns>
-	    IEnumerable<ICategory> GetAssignableCategories();
+	    IEnumerable<IInventoryCategory> GetAssignableCategories();
 	}
 }
 
