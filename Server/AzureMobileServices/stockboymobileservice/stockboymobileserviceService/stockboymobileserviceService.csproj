@@ -215,6 +215,8 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\mobile-stockboymobile.pubxml" />
     <None Include="Properties\PublishProfiles\mobile-stockboymobileservice.pubxml" />
+    <None Include="Properties\PublishProfiles\stockboymobile - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\stockboymobile - Web Deploy.pubxml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
