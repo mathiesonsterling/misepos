@@ -206,6 +206,10 @@
     <Compile Include="Migrations\201511050633386_InitialAgain.Designer.cs">
       <DependentUpon>201511050633386_InitialAgain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511070354033_FixStreetAddress.cs" />
+    <Compile Include="Migrations\201511070354033_FixStreetAddress.Designer.cs">
+      <DependentUpon>201511070354033_FixStreetAddress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\stockboyContext.cs" />
     <Compile Include="ScheduledJobs\SampleJob.cs" />
@@ -236,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511050633386_InitialAgain.resx">
       <DependentUpon>201511050633386_InitialAgain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511070354033_FixStreetAddress.resx">
+      <DependentUpon>201511070354033_FixStreetAddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

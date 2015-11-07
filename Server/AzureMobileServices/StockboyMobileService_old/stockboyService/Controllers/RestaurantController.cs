@@ -9,6 +9,7 @@ using stockboyService.Models;
 
 namespace stockboyService.Controllers
 {
+    /*
     public class RestaurantController : TableController<Restaurant>
     {
         protected override void Initialize(HttpControllerContext controllerContext)
@@ -48,6 +49,6 @@ namespace stockboyService.Controllers
         {
              return DeleteAsync(id);
         }
-
-    }
+        
+    }*/
 }
