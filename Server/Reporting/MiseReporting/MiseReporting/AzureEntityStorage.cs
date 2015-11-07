@@ -5,7 +5,7 @@ using Mise.Core.Common.Entities.DTOs;
 
 namespace MiseReporting
 {
-    [Table("stockboy.AzureEntityStorages")]
+    [Table("AzureEntityStorages", Schema = "stockboymobile")]
     public class AzureEntityStorage
     {
         public string Id { get; set; }

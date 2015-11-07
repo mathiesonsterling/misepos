@@ -6,7 +6,7 @@ namespace MiseReporting
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("stockboy.AzureEventStorages")]
+    [Table("AzureEventStorages", Schema = "stockboymobile")]
     public class AzureEventStorage
     {
         public string Id { get; set; }
