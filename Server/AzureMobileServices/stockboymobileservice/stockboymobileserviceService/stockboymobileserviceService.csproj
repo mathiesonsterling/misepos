@@ -192,6 +192,15 @@
     <Compile Include="DataObjects\AzureEntityStorage.cs" />
     <Compile Include="DataObjects\AzureEventStorage.cs" />
     <Compile Include="DataObjects\TodoItem.cs" />
+    <Compile Include="Migrations\201511070438304_InitialCreate.cs" />
+    <Compile Include="Migrations\201511070438304_InitialCreate.Designer.cs">
+      <DependentUpon>201511070438304_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511072147434_Initial.cs" />
+    <Compile Include="Migrations\201511072147434_Initial.Designer.cs">
+      <DependentUpon>201511072147434_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\stockboymobileserviceContext.cs" />
     <Compile Include="ScheduledJobs\SampleJob.cs" />
     <Compile Include="Global.asax.cs">
@@ -201,7 +210,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -217,6 +228,14 @@
     <None Include="Properties\PublishProfiles\mobile-stockboymobileservice.pubxml" />
     <None Include="Properties\PublishProfiles\stockboymobile - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\stockboymobile - Web Deploy.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511070438304_InitialCreate.resx">
+      <DependentUpon>201511070438304_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511072147434_Initial.resx">
+      <DependentUpon>201511072147434_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
