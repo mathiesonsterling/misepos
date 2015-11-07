@@ -1,4 +1,5 @@
 ﻿using System;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory

@@ -27,9 +27,21 @@ namespace stockboyService.DataObjects
         public Guid RestaurantID { get; set ;}
 
         public Guid? AccountID { get; set; }
-        public RestaurantName Name { get; set; }
-        public StreetAddress StreetAddress { get; set; }
-        public PhoneNumber PhoneNumber { get; set; }
+
+        public string RestaurantFullName { get; set; }
+        public string RestaurantShortName { get; set; }
+
+        public string StreetAddressNumber { get; set; }
+        public string Street { get; set; }
+        public string StreetDirection { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public string ZipCode { get; set; }
+
+        public int AreaCode { get; set; }
+        public int Number { get; set; }
+
 
         public int NumberOfActiveCashRegisters { get; set; }
         public int NumberOfActiveCreditRegisters { get; set; }
