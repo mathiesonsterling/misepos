@@ -13,7 +13,7 @@ namespace Mise.Inventory.iOS
 		static void Main(string[] args)
 		{
 			Xamarin.Insights.Initialize ("ed66b318e3febcdfc08ca11d6c20e33c79f2f434");
-			Mindscape.Raygun4Net.RaygunClient.Attach ("2ZV9A+X5sb5dNz4klhTD8A==");
+			//Mindscape.Raygun4Net.RaygunClient.Attach ("2ZV9A+X5sb5dNz4klhTD8A==");
 			// if you want to use a different Application Delegate class from "AppDelegate"
 			// you can specify it here.
 			UIApplication.Main(args, null, "AppDelegate");

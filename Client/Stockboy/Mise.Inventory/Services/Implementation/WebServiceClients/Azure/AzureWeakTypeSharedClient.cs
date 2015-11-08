@@ -51,6 +51,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			_deviceConnectionService = devConnectionService;
 
 			_deviceConnectionService.ConnectionStateChanged += ConnectionStateChanged;
+
 		}
 
 		async void ConnectionStateChanged(object sender, ConnectionStateChangedEventArgs args){
@@ -407,13 +408,27 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
 			try{
+                /*
 				var table = GetEntityTable();
 
-				var empType = typeof(Employee).ToString ();
+                if(table == null)
+                {
+                    throw new InvalidOperationException("Cannot retrieve server table");
+                }
 
+                var debugAis = await table.ToListAsync();
+                var count = debugAis.Count();
+                if(count < 10){
+                    await table.PurgeAsync();
+                    var query = table.Where(e => true);
+                    await table.PullAsync("all", query);
+                }
+
+                var empType = typeof(Employee).ToString ();
 				var ais = await table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(email.Value)).ToEnumerableAsync ();
 				var items = ais.Select(ai => _entityDTOFactory.FromDataStorageObject<Employee>(ai.ToRestaurantDTO()));
-
+*/
+                var items = await GetEmployeesAsync();
 				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
 					&& e.Password != null && e.Password.Equals (password));
 
@@ -535,12 +550,17 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			}
 		}
 
+        private IMobileServiceSyncTable<AzureEntityStorage> _entityTable;
 	    private IMobileServiceSyncTable<AzureEntityStorage> GetEntityTable() 
 	    {
-			var table = _client.GetSyncTable<AzureEntityStorage>();
+            if (_entityTable == null)
+            {
+                _entityTable = _client.GetSyncTable<AzureEntityStorage>();
+            }
 		
-			return table;
+			return _entityTable;
 	    }
+
 
 		private IMobileServiceTable<AzureEventStorage> GetEventTable ()
 		{

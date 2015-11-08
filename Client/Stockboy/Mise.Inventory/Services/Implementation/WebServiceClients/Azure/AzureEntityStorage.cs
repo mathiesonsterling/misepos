@@ -45,8 +45,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
         public string EntityJSON { get; set; }
         public DateTimeOffset LastUpdatedDate { get; set; }
 
+        /*
 		[JsonProperty(PropertyName = "__version")]
-		//[Microsoft.WindowsAzure.MobileServices.Version]
-		public string Version { set; get; }
+		public string Version { set; get; }*/
     }
 }

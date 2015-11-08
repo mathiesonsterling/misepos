@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System.Threading.Tasks;
+
+using Autofac;
 
 using Mise.Core.Services;
 using Mise.Inventory.Services;
@@ -18,7 +20,7 @@ namespace Mise.Inventory.Android
 {
 	public class DependencySetup : Mise.Inventory.DependencySetup
 	{
-		protected override void RegisterDepenencies(ContainerBuilder cb)
+		protected override async void RegisterDepenencies(ContainerBuilder cb)
 		{
 			var errorService = new AndroidRaygun ();
 			cb.RegisterInstance<IErrorTrackingService> (errorService).SingleInstance ();
@@ -32,28 +34,36 @@ namespace Mise.Inventory.Android
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance();
 
 			//make the web service
-			InitWebService (cb);
+			await InitWebService (cb);
 			base.RegisterDepenencies(cb);
 		}
-			
-		async void InitWebService (ContainerBuilder cb)
+		
+        const string applicationURL = @"https://stockboymobile.azure-mobile.net/";
+        const string applicationKey = @"zjnThZMLqPYplzheWvyqPaosgWpnrH41";
+        const string localDbPath    = "localstore.db";
+		async Task InitWebService (ContainerBuilder cb)
 		{
 			var wsLocation = GetWebServiceLocation ();
 			if (wsLocation != null) {
 				CurrentPlatform.Init ();
+                var dbService = new AndroidSQLite ();
+
+                cb.RegisterInstance<ISQLite> (dbService);
+
+                var mobileService = new MobileServiceClient(applicationURL, applicationKey);
+
+                /*
 				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey, new NativeMessageHandler());
+                */
 
-				var dbService = new AndroidSQLite ();
-
-				cb.RegisterInstance<ISQLite> (dbService);
-
-				//SQLitePCL.CurrentPlatform.Init ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
+
 
 				store.DefineTable<AzureEntityStorage>();
 				store.DefineTable<AzureEventStorage>();
 
 				await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
+                //await mobileService.SyncContext.InitializeAsync(store);
 
 				var deviceConnection = new DeviceConnectionService ();
 				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, 
