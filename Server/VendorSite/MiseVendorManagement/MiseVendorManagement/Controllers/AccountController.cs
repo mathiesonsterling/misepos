@@ -139,6 +139,8 @@ namespace MiseVendorManagement.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            var vm = new RegisterViewModel();
+            //TODO generate a unique referral code
             return View();
         }
 

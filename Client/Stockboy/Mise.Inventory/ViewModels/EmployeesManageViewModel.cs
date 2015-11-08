@@ -15,7 +15,7 @@ namespace Mise.Inventory.ViewModels
 {
 	public class EmployeesManageViewModel : BaseViewModel
 	{
-		public IEnumerable<IEmployee> Employees { get; set; }
+		public IEnumerable<IApplicationInvitation> Invites { get; set; }
 
 		readonly ILoginService _loginService;
 		public EmployeesManageViewModel(IAppNavigation navi, ILoginService loginService, ILogger logger)
@@ -72,9 +72,15 @@ namespace Mise.Inventory.ViewModels
 			return EmailAddress.IsValid (email);
 		}
 
-        public override Task OnAppearing()
+        public override async Task OnAppearing()
         {
-            return Task.FromResult(false);
+			try{
+				//get all our invitations for this restaurant
+				var invites = await _loginService.GetPendingInvitationsForRestaurant();
+				Invites = invites;
+			} catch(Exception e){
+				HandleException (e);
+			}
         }
 	}
 }

@@ -29,6 +29,7 @@ namespace MiseReporting.Controllers
             _icsvExportService = new CSVExportService(new DummyLogger());
         }
 
+        [Authorize]
         // GET: Pars
         public async Task<ActionResult> Index(Guid restaurantId)
         {
@@ -87,6 +88,7 @@ namespace MiseReporting.Controllers
             return par;
         }
 
+        [Authorize]
         // GET: Pars/Details/5
         public async Task<ActionResult> Details(Guid parId)
         {
@@ -108,6 +110,7 @@ namespace MiseReporting.Controllers
             return View(vms);
         }
 
+        [Authorize]
         public async Task<FileResult> GenerateCSV(Guid parId)
         {
             //get the inventory

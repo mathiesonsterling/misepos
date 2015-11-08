@@ -49,14 +49,18 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public override async Task OnAppearing(){
-			ParNumber = 0;
-			CaseSize = 12;
-			CaseSize = 12;
-			CreateEnabled = false;
-			SelectedContainerName = string.Empty;
-			SelectedCategoryName = string.Empty;
+			try{
+				ParNumber = 0;
+				CaseSize = 12;
+				CaseSize = 12;
+				CreateEnabled = false;
+				SelectedContainerName = string.Empty;
+				SelectedCategoryName = string.Empty;
 
-			await LoadPossibleItems ();
+				await LoadPossibleItems ();
+			} catch(Exception e){
+				HandleException (e);
+			}
 		}
 
 		#region Fields
@@ -156,24 +160,32 @@ namespace Mise.Inventory.ViewModels
 
 		async Task LoadPossibleItems ()
 		{
-			//curretly only handles one level of subcats
-			PossibleCategories = _categoriesService.GetIABIngredientCategories ();
+			try{
+				//curretly only handles one level of subcats
+				PossibleCategories = _categoriesService.GetIABIngredientCategories ();
 
-			var containers = (await _biService.GetAllPossibleContainerSizes ()).ToList();
-			PossibleContainers = containers;
-			PossibleContainerNames = containers.Select (c => c.DisplayName);
+				var containers = (await _biService.GetAllPossibleContainerSizes ()).ToList();
+				PossibleContainers = containers;
+				PossibleContainerNames = containers.Select (c => c.DisplayName);
 
-			var names = PossibleCategories.Select (c => c.Name)
-				.OrderByDescending (s => s.ToUpper () == "NONE")
-				.ThenBy (s => s);
-			//arrange the names how?
+				var names = PossibleCategories.Select (c => c.Name)
+					.OrderByDescending (s => s.ToUpper () == "NONE")
+					.ThenBy (s => s);
+				//arrange the names how?
 
-			PossibleCategoryNames = names;
+				PossibleCategoryNames = names;
+			} catch(Exception e){
+				HandleException (e);
+			}
 		}
 
 		async void Scan()
 		{
-			await Navigation.ShowItemScan();
+			try{
+				await Navigation.ShowItemScan();
+			}catch(Exception e){
+				HandleException (e);
+			}
 		}
 	}
 }

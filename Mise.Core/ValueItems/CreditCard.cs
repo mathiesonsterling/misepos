@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Mise.Core.ValueItems
 {
     public class CreditCard : IEquatable<CreditCard>, ITextSearchable
@@ -8,7 +7,7 @@ namespace Mise.Core.ValueItems
 			MaskedCardNumber = string.Empty;
 		}
 
-		public CreditCard(CreditCardProcessorToken token, PersonName name, int expMonth, int expYear, int? verificationCode, ZipCode zip)
+		public CreditCard(CreditCardProcessorToken token, PersonName name, int expMonth, int expYear, ZipCode zip)
         {
 			MaskedCardNumber = string.Empty;
 			ProcessorToken = token;
@@ -21,6 +20,7 @@ namespace Mise.Core.ValueItems
             ExpYear = expYear;
 			BillingZip = zip;
         }
+            
 
         public PersonName Name { get; set; }
 		public string MaskedCardNumber{ get; set;}
@@ -29,6 +29,12 @@ namespace Mise.Core.ValueItems
         public int ExpYear { get; set; }
 
 		public ZipCode BillingZip{ get; set;}
+
+        /// <summary>
+        /// Unique value good across multiple cards
+        /// </summary>
+        /// <value>The card fingerprint.</value>
+        public string CardFingerprint{ get; set; }
 
         /// <summary>
         /// The token we've gotten from our credit card processor.  Once we have this, we discard everything else sensitive
@@ -63,7 +69,8 @@ namespace Mise.Core.ValueItems
 			|| MaskedCardNumber.ToUpper ().Replace("X", "").Contains (searchString.ToUpper ());
         }
 
-		public static bool CardNumberIsValid(string num){
+		public static bool CardNumberIsValid(string value){
+            var num = value.Trim().Replace("-", "").Replace(" ", "");
 			return string.IsNullOrEmpty (num) == false
 			&& num.Length > 12 && num.Length < 17;
 		}

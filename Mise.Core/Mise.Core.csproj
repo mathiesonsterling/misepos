@@ -40,6 +40,7 @@
     <Compile Include="Entities\Accounts\IAccountCharge.cs" />
     <Compile Include="Entities\Accounts\IAccountEvent.cs" />
     <Compile Include="Entities\Accounts\IAccountPayment.cs" />
+    <Compile Include="Entities\Accounts\IBusinessAccount.cs" />
     <Compile Include="Entities\Base\ICloneableEntity.cs" />
     <Compile Include="Entities\Base\IEntityBase.cs" />
     <Compile Include="Entities\Base\IEventStoreEntityBase.cs" />
@@ -184,14 +185,15 @@
     <Compile Include="Services\UtilityServices\Cryptography.cs" />
     <Compile Include="ValueItems\CreditCardNumber.cs" />
     <Compile Include="ValueItems\OAuthToken.cs" />
+    <Compile Include="ValueItems\MisePaymentPlan.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="Validation">
+      <HintPath>..\Client\Stockboy\packages\Validation.2.2.8\lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
+    </Reference>
     <Reference Include="PCLCrypto">
       <HintPath>..\Client\Stockboy\packages\PCLCrypto.1.0.2.15130\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\PCLCrypto.dll</HintPath>
-    </Reference>
-    <Reference Include="Validation">
-      <HintPath>..\Client\Stockboy\packages\Validation.2.2.4\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -248,6 +248,16 @@ namespace Mise.Inventory.Services.Implementation
 			await _navi.PushAsync (_pages.GetPage (Pages.RegisterUser));
 		}
 
+		public async Task ShowSettings ()
+		{
+			await _navi.PushAsync(_pages.GetPage(Pages.Settings));
+		}
+
+		public async Task ShowChangePassword ()
+		{
+			await _navi.PushAsync(_pages.GetPage(Pages.ChangePassword));
+		}
+
 		public async Task CloseInventoryVisuallyMeasureItem ()
 		{
 			await App.InventoryViewModel.OnAppearing ();

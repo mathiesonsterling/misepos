@@ -10,6 +10,7 @@ using Mise.Core.Common.Services.Implementation.Serialization;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Mise.Inventory.Services.Implementation;
+using Mise.Core.Common.Services.Implementation;
 using ModernHttpClient;
 
 
@@ -26,7 +27,8 @@ namespace Mise.Inventory.Android
 			var device = AndroidDevice.CurrentDevice;
 			cb.RegisterInstance<IDevice> (device).SingleInstance ();
 
-			var processor = new MercuryPaymentProcessorService (Logger);
+            var stripeClient = new ClientStripeFacade();
+            var processor = new StripePaymentProcessorService(Logger, stripeClient);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance();
 
 			//make the web service

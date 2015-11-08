@@ -12,7 +12,7 @@ namespace Mise.Core.Common.Entities.Accounts
     /// <summary>
     /// Represents an account with us
     /// </summary>
-    public class RestaurantAccount : EntityBase, IAccount
+    public class RestaurantAccount : EntityBase, IBusinessAccount
     {
         public RestaurantAccount()
         {
@@ -36,9 +36,18 @@ namespace Mise.Core.Common.Entities.Accounts
 
         public MiseAccountStatus Status { get; set; }
 
-        public virtual MiseAccountTypes AccountType
+        public virtual MiseAccountTypes AccountType => MiseAccountTypes.Restaurant;
+
+        public MisePaymentPlan PaymentPlan
         {
-            get { return MiseAccountTypes.Restaurant; }
+            get;
+            set;
+        }
+
+        public bool PaymentPlanSetupWithProvider
+        {
+            get;
+            set;
         }
 
         public IEnumerable<MiseAppTypes> AppsOnAccount { get; set; }
@@ -61,15 +70,9 @@ namespace Mise.Core.Common.Entities.Accounts
             return list;
         }
 
-        public bool IsActive
-        {
-            get
-            {
-                return Status == MiseAccountStatus.Active
-                       || Status == MiseAccountStatus.Overdue
-                       || Status == MiseAccountStatus.CancelledButStillActive;
-            }
-        }
+        public bool IsActive => Status == MiseAccountStatus.Active
+                                || Status == MiseAccountStatus.Overdue
+                                || Status == MiseAccountStatus.CancelledButStillActive;
 
         public ICloneableEntity Clone()
         {
@@ -114,7 +117,7 @@ namespace Mise.Core.Common.Entities.Accounts
             Emails = new List<EmailAddress> {ev.Email};
             PhoneNumber = ev.PhoneNumber;
             Status = MiseAccountStatus.NotActivated;
-
+            PaymentPlan = ev.PaymentPlan;
             if (ev.ReferralCode != null)
             {
                 
@@ -134,5 +137,7 @@ namespace Mise.Core.Common.Entities.Accounts
                    || (AccountCredits.Any(p => p.ContainsSearchString(searchString)))
                    || (Charges.Any(p => p.ContainsSearchString(searchString)));
         }
+
+        public string BusinessName { get; set; }
     }
 }

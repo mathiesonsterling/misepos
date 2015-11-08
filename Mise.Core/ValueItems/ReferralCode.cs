@@ -21,10 +21,11 @@ namespace Mise.Core.ValueItems
 
         public bool Equals(ReferralCode other)
         {
-            return other != null && String.Equals(Code.ToUpper(), other.Code.ToUpper(), StringComparison.CurrentCultureIgnoreCase);
+            return other != null && string.Equals(Code.ToUpper(), other.Code.ToUpper(), StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public static ReferralCode TestReferralCode { get { return new ReferralCode {Code = "TESTING"}; } }
+        public static ReferralCode TestReferralCode => new ReferralCode {Code = "TESTING"};
+
         public bool ContainsSearchString(string searchString)
         {
             return string.IsNullOrEmpty(Code) == false && Code.Contains(searchString);

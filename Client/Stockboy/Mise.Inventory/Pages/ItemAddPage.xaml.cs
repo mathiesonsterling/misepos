@@ -17,10 +17,13 @@ namespace Mise.Inventory.Pages
 
 		protected override void OnAppearing ()
 		{
-			base.OnAppearing ();
-			var vm = ViewModel as ItemAddViewModel;
-			if(vm != null){
-				LoadPickers ();
+			try{
+				base.OnAppearing ();
+				var vm = ViewModel as ItemAddViewModel;
+				if(vm != null){
+					LoadPickers ();
+				}
+			}catch(Exception){
 			}
 		}
 
@@ -50,8 +53,11 @@ namespace Mise.Inventory.Pages
 				}
 
 				pckContainer.SelectedIndexChanged += (sender, e) => {
-					var selected = pckContainer.Items[pckContainer.SelectedIndex];
-					vm.SelectedContainerName = selected;
+					try{
+						var selected = pckContainer.Items[pckContainer.SelectedIndex];
+						vm.SelectedContainerName = selected;
+					}catch(Exception){
+					}
 				};
 
 				pckCategory.Items.Clear ();
@@ -60,8 +66,11 @@ namespace Mise.Inventory.Pages
 				}
 
 				pckCategory.SelectedIndexChanged += (sender, e) => {
-					var selected = pckCategory.Items[pckCategory.SelectedIndex];
-					vm.SelectedCategoryName = selected;
+					try{
+						var selected = pckCategory.Items[pckCategory.SelectedIndex];
+						vm.SelectedCategoryName = selected;
+					}catch(Exception){
+					}
 				};
 			}
 				

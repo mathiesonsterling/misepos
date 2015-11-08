@@ -21,7 +21,7 @@ namespace MiseVendorManagement.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("AzureDB", throwIfV1Schema: false)
         {
         }
 
@@ -29,11 +29,5 @@ namespace MiseVendorManagement.Models
         {
             return new ApplicationDbContext();
         }
-
-        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorViewModel> VendorViewModels { get; set; }
-
-        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorCSVImportFileViewModel> VendorCSVImportFileViewModels { get; set; }
-
-        public System.Data.Entity.DbSet<MiseVendorManagement.Models.VendorItemForSaleViewModel> VendorItemForSaleViewModels { get; set; }
     }
 }

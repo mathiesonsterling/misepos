@@ -117,7 +117,8 @@ namespace Mise.Core.Common.UnitTests.Events
 		[Test]	
 		public void AccountReg(){
 			var ev = _underTest.CreateAccountRegisteredFromMobileDeviceEvent (_emp, Guid.NewGuid (), EmailAddress.TestEmail,
-				         PhoneNumber.TestPhoneNumber, new CreditCard (), ReferralCode.TestReferralCode, MiseAppTypes.UnitTests, PersonName.TestName);
+				         PhoneNumber.TestPhoneNumber, new CreditCard (), ReferralCode.TestReferralCode, MiseAppTypes.UnitTests, PersonName.TestName,
+                        MisePaymentPlan.StockboyBasicMonthly);
 
 			TestCommonFields (ev);
 		}
@@ -309,7 +310,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void ParLineItemAddedDirect(){
 			var ev = _underTest.CreatePARLineItemAddedEvent (_emp, "testITem", "upc",
 				new List<ItemCategory>{ CategoriesService.Beer },
-				100, LiquidContainer.Bottle330ml, 1000, _par
+				100, LiquidContainer.Bottle330ML, 1000, _par
 			);
 			TestParEvent (ev);
 		}

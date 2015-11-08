@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation.Serialization;
@@ -13,56 +14,132 @@ namespace MiseVendorManagement
 {
     public class VendorDAL
     {
+        private const string VENDOR_ID_LIST_KEY = "allVendorIds";
         private readonly EntityDataTransportObjectFactory _entityFactory;
         private readonly string _vendorType;
+
         public VendorDAL()
         {
             _entityFactory = new EntityDataTransportObjectFactory(new JsonNetSerializer());
             _vendorType = typeof (Vendor).ToString();
         }
 
+        private static IList<Guid> CachedList
+        {
+            get { return HttpRuntime.Cache.Get(VENDOR_ID_LIST_KEY) as IList<Guid>; }
+            set
+            {
+                var existing = HttpRuntime.Cache.Get(VENDOR_ID_LIST_KEY);
+                if (existing != null)
+                {
+                    HttpRuntime.Cache.Remove(VENDOR_ID_LIST_KEY);
+                }
+                HttpRuntime.Cache.Insert(VENDOR_ID_LIST_KEY, value);
+            }
+        } 
+
         public async Task<IEnumerable<IVendor>> GetAllVendors()
         {
+            var realIds = CachedList;
+
+            if (realIds != null && realIds.Any())
+            {
+                var cachedItems = realIds
+                    .Select(id => HttpRuntime.Cache.Get(id.ToString()))
+                    .Select(res => res as IVendor);
+
+                return cachedItems;
+            }
+
             using (var db = new AzureDB())
             {
                 var ais = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _vendorType).ToListAsync();
                 var dtos = ais.Select(ai => ai.ToRestaurantDTO());
-                var vendors = dtos.Select(dto => _entityFactory.FromDataStorageObject<Vendor>(dto));
-                return vendors.Cast<IVendor>();
+                var vendors = dtos.Select(dto => _entityFactory.FromDataStorageObject<Vendor>(dto)).ToList();
+
+                foreach (var v in vendors)
+                {
+                    HttpRuntime.Cache[v.Id.ToString()] = v;
+                }
+
+                CachedList = vendors.Select(v => v.Id).ToList();
+                return vendors;
             }
         }
 
-        public Task<IVendor> GetVendor(Guid vendorId)
+        public async Task<IEnumerable<IVendor>> GetVendors(string searchString)
         {
-            return Task.Run(() =>
+            IEnumerable<IVendor> vendors;
+            if (string.IsNullOrEmpty(searchString))
+            {
+                vendors = await GetAllVendors();
+            }
+            else
             {
                 using (var db = new AzureDB())
                 {
-                    var ai =
-                        db.AzureEntityStorages.FirstOrDefault(
-                            a => a.EntityID == vendorId && a.MiseEntityType == _vendorType);
-                    if (ai == null)
-                    {
-                        return null;
-                    }
-
-                    var dto = ai.ToRestaurantDTO();
-                    var vendor = _entityFactory.FromDataStorageObject<Vendor>(dto);
-                    return (IVendor) vendor;
+                    var ais =
+                        await
+                            db.AzureEntityStorages.Where(
+                                ai => ai.MiseEntityType == _vendorType && ai.EntityJSON.Contains(searchString))
+                                .ToListAsync();
+                    var dtos = ais.Select(ai => ai.ToRestaurantDTO());
+                    vendors = dtos.Select(dto => _entityFactory.FromDataStorageObject<Vendor>(dto));
                 }
-            });
+            }
+
+            return vendors;
+        } 
+
+        public async Task<IVendor> GetVendor(Guid vendorId)
+        {
+            var cachedObj = HttpRuntime.Cache.Get(vendorId.ToString()) as IVendor;
+            if (cachedObj != null)
+            {
+                return cachedObj;
+            }
+
+            using (var db = new AzureDB())
+            {
+                var ai =
+                    await db.AzureEntityStorages.FirstOrDefaultAsync(
+                        a => a.EntityID == vendorId && a.MiseEntityType == _vendorType);
+                if (ai == null)
+                {
+                    return null;
+                }
+
+                var dto = ai.ToRestaurantDTO();
+                var vendor = _entityFactory.FromDataStorageObject<Vendor>(dto);
+
+                HttpRuntime.Cache.Insert(vendor.Id.ToString(), vendor);
+                return vendor;
+            }
         }
 
         public async Task InsertVendor(Vendor vendor)
         {
+            var existing = await GetAllVendors();
+            var alreadyHere = existing.Any(v => v.Name == vendor.Name && v.StreetAddress.Equals(vendor.StreetAddress));
+            if (alreadyHere)
+            {
+                throw new InvalidOperationException("Vendor already exists at specified location!");
+            }
+
             var dto = _entityFactory.ToDataTransportObject(vendor);
             var azureEnt = new AzureEntityStorage(dto);
+
 
             using (var db = new AzureDB())
             {
                 db.AzureEntityStorages.Add(azureEnt);
                 await db.SaveChangesAsync();
             }
+
+            HttpRuntime.Cache.Insert(vendor.Id.ToString(), vendor);
+            var list = CachedList ?? new List<Guid>();
+            list.Add(vendor.Id);
+            CachedList = list;
         }
 
         public async Task UpdateVendor(Vendor vendor)
@@ -88,6 +165,9 @@ namespace MiseVendorManagement
                     
                 db.Entry(oldVer).State = EntityState.Modified;
                 await db.SaveChangesAsync();
+
+                HttpRuntime.Cache.Remove(vendor.Id.ToString());
+                HttpRuntime.Cache.Insert(vendor.Id.ToString(), vendor);
             }
         }
 
@@ -119,6 +199,10 @@ namespace MiseVendorManagement
                 db.AzureEntityStorages.Remove(ai);
                 await db.SaveChangesAsync();
             }
+
+            HttpRuntime.Cache.Remove(id.ToString());
+            var ids = CachedList;
+            CachedList?.Remove(id);
         }  
     }
 }

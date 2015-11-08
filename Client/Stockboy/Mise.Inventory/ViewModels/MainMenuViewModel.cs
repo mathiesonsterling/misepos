@@ -115,6 +115,10 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public ICommand ResetDBCommand{get{return new Command (ResetDB, IsCurrentUserAdmin);}}
+
+		public ICommand SettingsCommand{get{ return new Command (Settings, () => NotProcessing); }}
+
+		public ICommand ChangePasswordCommand{ get { return new Command (ChangePassword, () => NotProcessing); } }
 		#endregion
 
 		async void ReceivingOrder()
@@ -217,6 +221,22 @@ namespace Mise.Inventory.ViewModels
 				await Navigation.ShowLogin();
 			} catch(Exception e){
 				HandleException(e);
+			}
+		}
+
+		async void Settings(){
+			try{
+				await Navigation.ShowSettings();
+			} catch(Exception e){
+				HandleException (e);
+			}
+		}
+
+		async void ChangePassword(){
+			try{
+				await Navigation.ShowChangePassword();
+			} catch(Exception e){
+				HandleException (e);
 			}
 		}
 

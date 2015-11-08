@@ -310,7 +310,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             var lineItem = new InventoryBeverageLineItem
             {
                 Id = liID,
-                Container = LiquidContainer.Bottle330ml
+                Container = LiquidContainer.Bottle330ML
             };
 
             var sectionID = Guid.NewGuid();

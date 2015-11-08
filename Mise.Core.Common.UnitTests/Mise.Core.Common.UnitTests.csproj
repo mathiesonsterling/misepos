@@ -45,20 +45,20 @@
     <Reference Include="Mono.Security">
       <HintPath>..\MiseInventory\packages\Mono.Security.3.2.3.0\lib\net45\Mono.Security.dll</HintPath>
     </Reference>
-    <Reference Include="PCLCrypto">
-      <HintPath>..\MiseInventory\packages\PCLCrypto.1.0.2.15130\lib\net40-Client\PCLCrypto.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\Client\Stockboy\packages\Moq.4.2.1507.0118\lib\net40\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\Client\Stockboy\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Server\InventoryWebService\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\Client\Stockboy\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Validation">
-      <HintPath>..\Client\Stockboy\packages\Validation.2.2.4\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
+      <HintPath>..\Client\Stockboy\packages\Validation.2.2.8\lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\Client\Stockboy\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLCrypto">
+      <HintPath>..\Client\Stockboy\packages\PCLCrypto.1.0.2.15130\lib\net40-Client\PCLCrypto.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +102,7 @@
     <Compile Include="Entities\Serialization\InventoryEventsSerializationTests.cs" />
     <Compile Include="ValueItems\EmailAddressTests.cs" />
     <Compile Include="Events\InventoryAppEventFactoryTests.cs" />
+    <Compile Include="Entities\Reports\COGSReportTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -130,5 +131,6 @@
   -->
   <ItemGroup>
     <Folder Include="Events\" />
+    <Folder Include="Entities\Reports\" />
   </ItemGroup>
 </Project>

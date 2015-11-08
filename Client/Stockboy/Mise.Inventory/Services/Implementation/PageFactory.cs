@@ -56,8 +56,8 @@ namespace Mise.Inventory.Services
                     return new InvitationsPage();
                 case Pages.PurchaseOrderSelect:
                     return new PurchaseOrderSelectPage();
-                case Pages.AccountRegistration:
-                    return new AccountRegistrationPage();
+				case Pages.AccountRegistration:
+					return new AccountRegistrationWithCreditCardPage ();
 				case Pages.AuthorizeCreditCard:
 					return new AuthorizeCreditCardPage ();
 				case Pages.Reports:
@@ -68,6 +68,10 @@ namespace Mise.Inventory.Services
                     return new ReportResultsPage();
 				case Pages.RestaurantLoading:
 					return new RestaurantLoadingPage ();
+				case Pages.Settings:
+					return new SettingsPage ();
+				case Pages.ChangePassword:
+					return new ChangePasswordPage ();
                 default:
                     throw new ArgumentException(string.Format("Unknown page type {0}", page));
             }

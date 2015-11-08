@@ -14,7 +14,7 @@ namespace stockboymobileserviceService.Controllers
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
-            stockboymobileserviceContext context = new stockboymobileserviceContext();
+            var context = new stockboymobileserviceContext();
             DomainManager = new EntityDomainManager<AzureEventStorage>(context, Request, Services);
         }
 

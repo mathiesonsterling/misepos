@@ -33,6 +33,7 @@ namespace Mise.Core.Common.Events.Accounts
 
 		public MiseAppTypes AppType{ get; set;}
         public PhoneNumber PhoneNumber { get; set; }
+        public MisePaymentPlan PaymentPlan{get;set;}
 
         /// <summary>
         /// Note this is a referral code we're USING, not one that we've been given!

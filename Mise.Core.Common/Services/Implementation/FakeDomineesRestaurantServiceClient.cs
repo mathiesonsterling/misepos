@@ -1578,6 +1578,15 @@ namespace Mise.Core.Common.Services.Implementation
             return Task.FromResult(GetEmployees());
         }
 
+		public Task<bool> IsEmailRegistered (EmailAddress email)
+		{
+			var exists = _employees.Any (emp => 
+				emp.GetEmailAddresses ().Any (em => em != null && em.Equals (email))
+			             || (emp.PrimaryEmail != null && emp.PrimaryEmail.Equals (email)));
+
+			return Task.FromResult (exists);
+		}
+
 		public Task<Employee> GetEmployeeByID (Guid id)
 		{
 			var emp = GetEmployees ().FirstOrDefault (e => e.Id == id);

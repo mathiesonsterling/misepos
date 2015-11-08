@@ -114,6 +114,11 @@ namespace Mise.Core.Common.UnitTests.Tools
 					}
 			});
 		}
+
+		public Task<CreditCard> SendCardToProcessorForSubscription (PersonName cardName, CreditCardNumber number)
+		{
+			throw new NotImplementedException ();
+		}
 	}
 }
 

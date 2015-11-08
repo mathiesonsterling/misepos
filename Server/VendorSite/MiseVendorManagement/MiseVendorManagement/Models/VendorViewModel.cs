@@ -40,6 +40,7 @@ namespace MiseVendorManagement.Models
 
         public string Email { get; set; }
 
+        [Required]
         [Url]
         public string Website { get; set; }
 

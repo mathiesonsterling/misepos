@@ -53,6 +53,11 @@ namespace Mise.Core.Common
 			);	
 		}
 
+
+		public Task<CreditCard> SendCardToProcessorForSubscription (PersonName cardName, CreditCardNumber number)
+		{
+			throw new NotImplementedException ();
+		}
 		#endregion
 	}
 }

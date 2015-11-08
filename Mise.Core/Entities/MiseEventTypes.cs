@@ -58,6 +58,7 @@
 		EmployeeInvitedToApplication,
 		EmployeeAcceptsInvitation,
 		EmployeeRejectsInvitation,
+		EmployeePasswordChanged,
 
         VendorCreatedEvent,
         VendorAddressUpdated,

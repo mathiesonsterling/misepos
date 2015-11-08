@@ -9,6 +9,9 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 using XLabs.Forms;
+
+using Mise.Core.Common;
+using Mise.Core.Common.Services.Implementation;
 namespace Mise.Inventory.iOS
 {
 	[Register("AppDelegate")]
@@ -19,9 +22,15 @@ namespace Mise.Inventory.iOS
 		{
 			Forms.Init();
 			MR.Gestures.iOS.Settings.LicenseKey = "8TJV-AFFS-72EV-SF4E-8BGG-S5YP-J9X4-CQQU-N9AY-YTBZ-GF8F-C3ED-GTWE";
+
 			LoadApplication(new App(new DependencySetup()));
 
 			return base.FinishedLaunching(app, options);
+		}
+
+		private void SetPaymentProvider(){
+			var settings = StripePaymentProviderSettingsFactory.GetSettings ();
+			Stripe.StripeClient.DefaultPublishableKey = settings.PublishableKey;
 		}
 	}
 }

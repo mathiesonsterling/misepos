@@ -32,6 +32,7 @@ namespace Mise.Core.Common.Events
         EmployeeRegisteredForInventoryAppEvent CreateEmployeeRegisteredForInventoryAppEvent(IEmployee emp);
         EmployeeLoggedOutOfInventoryAppEvent CreateEmployeeLoggedOutOfInventoryAppEvent(IEmployee emp);
 		EmployeeCreatedEvent CreateEmployeeCreatedEvent(EmailAddress email, Password password, PersonName name, MiseAppTypes appType);
+		EmployeePasswordChangedEvent CreateEmployeePasswordChangedEvent (IEmployee emp, Password newPassword);
 
 		ReceivingOrderCreatedEvent CreateReceivingOrderCreatedEvent(IEmployee emp, IVendor vendor);
 		ReceivingOrderAssociatedWithPOEvent CreateReceivingOrderAssociatedWithPOEvent(IEmployee emp, IReceivingOrder ro, IPurchaseOrder po);
@@ -109,7 +110,7 @@ namespace Mise.Core.Common.Events
 		UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID);
 
 		AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, Guid accountID, EmailAddress email, 
-			PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name);
+			PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name, MisePaymentPlan paymentPlan);
         #endregion
 
     }

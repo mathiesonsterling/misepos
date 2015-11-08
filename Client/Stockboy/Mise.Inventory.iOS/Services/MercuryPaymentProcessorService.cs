@@ -158,6 +158,11 @@ namespace Mise.Inventory.iOS.Services
 			}
 		}
 		#endregion
+
+		public Task<CreditCard> SendCardToProcessorForSubscription (PersonName cardName, CreditCardNumber number)
+		{
+			throw new InvalidOperationException ("Mercury requires a call to their webpage");
+		}
 	}
 }
 

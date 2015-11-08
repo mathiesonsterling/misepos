@@ -26,7 +26,15 @@ namespace Mise.Core.ValueItems
         {
             FullName = fullName;
 
-            ShortName = fullName.Length > 8 ? fullName.Substring(0, 8) : fullName;
+			var sname = fullName;
+			if (sname.ToUpper ().StartsWith ("THE ")) {
+				sname = sname.Replace ("The ", "").Replace ("THE ", "").Replace ("the ", "");
+			}
+			if (sname.Length < 9) {
+				ShortName = sname;
+			} else {
+				sname = fullName.Substring (0, 8);
+			}
         }
 
         public bool Equals(RestaurantName other)

@@ -42,6 +42,8 @@ namespace Mise.Core.Services
 		/// </summary>
 		/// <returns>The card after authorization.</returns>
 		Task<CreditCard> GetCardAfterAuthorization (string paymentID);
+
+		Task<CreditCard> SendCardToProcessorForSubscription (PersonName cardName, CreditCardNumber number);
 	}
 }
 

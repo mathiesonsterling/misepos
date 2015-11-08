@@ -11,6 +11,7 @@ using Mise.Core.Common.Services.Implementation.Serialization;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Mise.Inventory.Services.Implementation;
+using Mise.Core.Common.Services.Implementation;
 using ModernHttpClient;
 
 namespace Mise.Inventory.iOS
@@ -25,7 +26,9 @@ namespace Mise.Inventory.iOS
 
 			Logger = new IOSLogger (raygun);
 			cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
-			var processor = new MercuryPaymentProcessorService (Logger);
+
+            var stripeClient = new ClientStripeFacade();
+            var processor = new StripePaymentProcessorService(Logger, stripeClient);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();
 
 			InitWebService (cb);
