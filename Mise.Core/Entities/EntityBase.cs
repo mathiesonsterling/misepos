@@ -3,7 +3,7 @@
 using Mise.Core.Entities.Base;
 using Mise.Core.ValueItems;
 
-namespace Mise.Core
+namespace Mise.Core.Entities
 {
 	public class EntityBase : IEntityBase
 	{

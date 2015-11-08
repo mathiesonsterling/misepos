@@ -1,14 +1,10 @@
 ﻿using System;
-using Mise.Core.Services;
-using System;
 using System.Threading.Tasks;
-
-using Mise.Core.ValueItems;
+using Mise.Core.Entities.Payments;
 using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.Entities.Payments;
-using Mise.Core.Common.Services.Implementation;
-using Mise.Core.Common.Services;
+using Mise.Core.ValueItems;
+
 namespace Mise.Core.Common.Services.Implementation
 {
     public class StripePaymentProcessorService : ICreditCardProcessorService
@@ -21,15 +17,15 @@ namespace Mise.Core.Common.Services.Implementation
         }
 
         #region ICreditCardProcessorService implementation
-        public void ChargeCard (ICreditCardPayment payment, CreditCardAuthorizationCode authFromPrevious, Action<Mise.Core.Entities.Payments.ICreditCardPayment, CreditCardAuthorizationCode> closeCallback)
+        public void ChargeCard (ICreditCardPayment payment, CreditCardAuthorizationCode authFromPrevious, Action<ICreditCardPayment, CreditCardAuthorizationCode> closeCallback)
         {
             throw new NotImplementedException ();
         }
-        public void VoidAuthorization (ICreditCardPayment payment, CreditCardAuthorizationCode authFromPrevious, Action<Mise.Core.Entities.Payments.ICreditCardPayment, CreditCardAuthorizationCode> closeCallback)
+        public void VoidAuthorization (ICreditCardPayment payment, CreditCardAuthorizationCode authFromPrevious, Action<ICreditCardPayment, CreditCardAuthorizationCode> closeCallback)
         {
             throw new NotImplementedException ();
         }
-        public void AuthorizeCard (ICreditCardPayment payment, Action<Mise.Core.Entities.Payments.ICreditCardPayment, CreditCardAuthorizationCode> authCallback)
+        public void AuthorizeCard (ICreditCardPayment payment, Action<ICreditCardPayment, CreditCardAuthorizationCode> authCallback)
         {
             throw new NotImplementedException ();
         }

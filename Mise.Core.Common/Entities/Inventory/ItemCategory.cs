@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Mise.Core.ValueItems.Inventory;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
