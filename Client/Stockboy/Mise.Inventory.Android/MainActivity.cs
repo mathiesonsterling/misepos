@@ -10,7 +10,6 @@ using Xamarin.Forms.Platform.Android;
 
 using Mise.Inventory;
 
-using XLabs.Forms;
 using Mise.Core.Common;
 using Mise.Core.Common.Services.Implementation;
 namespace Mise.Inventory.Android
@@ -21,7 +20,7 @@ namespace Mise.Inventory.Android
 		MainLauncher = false,
 		Theme = @"@style/App.Theme"
 	)]
-	public class MainActivity : XFormsApplicationDroid
+    public class MainActivity : Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
 		{

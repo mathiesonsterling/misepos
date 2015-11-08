@@ -8,14 +8,13 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-using XLabs.Forms;
 
 using Mise.Core.Common;
 using Mise.Core.Common.Services.Implementation;
 namespace Mise.Inventory.iOS
 {
 	[Register("AppDelegate")]
-	public partial class AppDelegate : XFormsApplicationDelegate
+    public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
 
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)

@@ -4,7 +4,6 @@ using Autofac;
 
 using Mise.Core.Services;
 using Mise.Inventory.Services;
-using XLabs.Platform.Device;
 using Mise.Inventory.Android.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
@@ -26,9 +25,10 @@ namespace Mise.Inventory.Android
 			cb.RegisterInstance<IErrorTrackingService> (errorService).SingleInstance ();
 			Logger = new AndroidLogger (errorService);
 
+            /*
 			var device = AndroidDevice.CurrentDevice;
 			cb.RegisterInstance<IDevice> (device).SingleInstance ();
-
+            */
             var stripeClient = new ClientStripeFacade();
             var processor = new StripePaymentProcessorService(Logger, stripeClient);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance();

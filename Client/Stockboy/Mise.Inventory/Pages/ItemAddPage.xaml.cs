@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
-using XLabs.Forms.Mvvm;
 
 namespace Mise.Inventory.Pages
 {
