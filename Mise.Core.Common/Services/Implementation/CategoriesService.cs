@@ -456,7 +456,21 @@ namespace Mise.Core.Common.Services.Implementation
 			return results;
 		}
 
-	    public LiquidContainerShape GetShapeForCategory(ICategory cat)
+        public IEnumerable<LiquidContainer> GetPreferredContainers(IInventoryCategory cat){
+            var prefCats = cat.GetPreferredContainers();
+            if (prefCats != null)
+            {
+                return prefCats;
+            } 
+            var parent = _allCats.FirstOrDefault(c => c.Id == cat.ParentCategoryID);
+            if (parent == null)
+            {
+                return null;
+            }
+            return GetPreferredContainers(parent);
+        }
+
+	    public LiquidContainerShape GetShapeForCategory(IInventoryCategory cat)
 	    {
 	        if (cat == null)
 	        {
@@ -491,12 +505,12 @@ namespace Mise.Core.Common.Services.Implementation
 	        return LiquidContainerShape.DefaultBottleShape;
 	    }
 
-	    public IEnumerable<ICategory> GetPossibleCategories(string givenCategory)
+	    public IEnumerable<IInventoryCategory> GetPossibleCategories(string givenCategory)
 	    {
 	        return _allCats.Where(c => c.Name.Contains(givenCategory) || givenCategory.Contains(c.Name));
 	    }
 
-	    public IEnumerable<ICategory> GetAssignableCategories()
+	    public IEnumerable<IInventoryCategory> GetAssignableCategories()
 	    {
 	        var parentCats = _allCats.Where(c => c.ParentCategoryID != null).Select(c => c.ParentCategoryID).Distinct().ToList();
 	        return _allCats.Where(c => c.IsAssignable || (parentCats.Contains(c.Id) == false && c.ParentCategoryID.HasValue));

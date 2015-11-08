@@ -9,6 +9,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		}
 
 		public Uri Uri{get;private set;}
+        /// <summary>
+        /// Public key of the service
+        /// </summary>
 		public string AppKey{get;private set;}
 	}
 
@@ -19,14 +22,20 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				return null;
 			}
 				
+            /*
+            const string applicationURL = @"https://stockboymobile.azure-mobile.net/";
+            const string applicationKey = @"zjnThZMLqPYplzheWvyqPaosgWpnrH41";
+            const string localDbPath    = "localstore.db";*/
 			switch(level){
 			case BuildLevel.Debugging:
 				return new AzureServiceLocation("http://localhost:50778", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
 			case BuildLevel.Development:
 			case BuildLevel.QA:
-				return new AzureServiceLocation ("http://stagingstockboymobileservice.azure-mobile.net/", "iMKBBmlToPggjupkuLeoclvRBOZHsk90");
+                    return new AzureServiceLocation (@"https://stockboymobile.azure-mobile.net/", 
+                        @"zjnThZMLqPYplzheWvyqPaosgWpnrH41");
 			case BuildLevel.Production:
-				return new AzureServiceLocation("https://stockboymobileservice.azure-mobile.net/", "vvECpsmISLzAxntFjNgSxiZEPmQLLG42");
+                    return new AzureServiceLocation(@"https://stockboymobile.azure-mobile.net/", 
+                        @"zjnThZMLqPYplzheWvyqPaosgWpnrH41");
 			default:
 				throw new ArgumentException ();
 			}

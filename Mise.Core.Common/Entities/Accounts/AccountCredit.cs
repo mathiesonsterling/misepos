@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;
 using Mise.Core.ValueItems;

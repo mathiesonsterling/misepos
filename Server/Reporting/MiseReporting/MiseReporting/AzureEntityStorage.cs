@@ -5,12 +5,10 @@ using Mise.Core.Common.Entities.DTOs;
 
 namespace MiseReporting
 {
-    [Table("stockboymobileservice.AzureEntityStorages")]
-    public partial class AzureEntityStorage
+    [Table("AzureEntityStorages", Schema = "stockboymobile")]
+    public class AzureEntityStorage
     {
         public string Id { get; set; }
-
-        public string BuildLevel { get; set; }
 
         public string MiseEntityType { get; set; }
 
@@ -23,7 +21,6 @@ namespace MiseReporting
         public DateTimeOffset LastUpdatedDate { get; set; }
 
         [Column(TypeName = "timestamp")]
-        [MaxLength(8)]
         [Timestamp]
         public byte[] Version { get; set; }
 

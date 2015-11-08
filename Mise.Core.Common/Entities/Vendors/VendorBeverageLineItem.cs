@@ -7,6 +7,8 @@ using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Entities;
+
 namespace Mise.Core.Common.Entities.Vendors
 {
 	public class VendorBeverageLineItem : EntityBase, IVendorBeverageLineItem

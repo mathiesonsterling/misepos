@@ -31,7 +31,7 @@ namespace Mise.Inventory.Android.Services
 		}
 
 		public string GetLocalFilename(){
-			const string sqliteFilename = "MiseStockboy.db3";
+			const string sqliteFilename = "StockboyLocalStore.db3";
 			string documentsPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
 			var path = System.IO.Path.Combine (documentsPath, sqliteFilename);
 

@@ -58,7 +58,7 @@
       <HintPath>..\Client\Stockboy\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="PCLCrypto">
-      <HintPath>..\Client\Stockboy\packages\PCLCrypto.1.0.2.15130\lib\net40-Client\PCLCrypto.dll</HintPath>
+      <HintPath>..\Client\Stockboy\packages\PCLCrypto.1.0.82\lib\net40-Client\PCLCrypto.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
