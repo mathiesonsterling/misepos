@@ -325,9 +325,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			var table = GetEntityTable();
 
-			var storageItems = await table
-				.Where (si => si.MiseEntityType == type && si.EntityID == restaurantID)
-				.ToEnumerableAsync ();
+            var query = table
+                .Where(si => si.MiseEntityType == type && si.EntityID == restaurantID);
+
+            await AttemptPull("rest" + restaurantID, query);
+
+			var storageItems = await query.ToEnumerableAsync ();
 
 			var ai = storageItems.FirstOrDefault ();
 			if(ai == null){
@@ -411,10 +414,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
                 var emailString = email.Value;
                 var empType = typeof(Employee).ToString ();
                 var table = GetEntityTable();
-                await AttemptPull (emailString, null);
 
-                var ais = await table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(emailString))
-                    .ToEnumerableAsync ();
+                var query = table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(emailString));
+                await AttemptPull (emailString, query);
+
+                var ais = await query.ToEnumerableAsync ();
                 var items = ais.Select (ai => ai.ToRestaurantDTO ())
                     .Select (dto => _entityDTOFactory.FromDataStorageObject<Employee> (dto));
                 
