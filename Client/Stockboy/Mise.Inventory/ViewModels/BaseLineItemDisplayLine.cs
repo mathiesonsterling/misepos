@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Mise.Core;
 using Mise.Core.Entities.Inventory;
 using Xamarin.Forms;
-using XLabs.Platform.Services;
 
 namespace Mise.Inventory.ViewModels
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using Mise.Core.Services;
-using XLabs.Platform.Device;
 using Mise.Inventory.iOS.Services;
 using Mise.Inventory.Services;
 using Mise.Core.Services.UtilityServices;
@@ -25,7 +24,7 @@ namespace Mise.Inventory.iOS
 			cb.RegisterInstance<IErrorTrackingService>(raygun).SingleInstance ();
 
 			Logger = new IOSLogger (raygun);
-			cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
+			//cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
 
             var stripeClient = new ClientStripeFacade();
             var processor = new StripePaymentProcessorService(Logger, stripeClient);

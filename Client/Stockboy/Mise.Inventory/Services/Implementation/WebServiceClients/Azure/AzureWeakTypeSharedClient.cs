@@ -408,27 +408,16 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<Employee> GetEmployeeByPrimaryEmailAndPassword (EmailAddress email, Password password)
 		{
 			try{
-                /*
-				var table = GetEntityTable();
-
-                if(table == null)
-                {
-                    throw new InvalidOperationException("Cannot retrieve server table");
-                }
-
-                var debugAis = await table.ToListAsync();
-                var count = debugAis.Count();
-                if(count < 10){
-                    await table.PurgeAsync();
-                    var query = table.Where(e => true);
-                    await table.PullAsync("all", query);
-                }
-
+                var emailString = email.Value;
                 var empType = typeof(Employee).ToString ();
-				var ais = await table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(email.Value)).ToEnumerableAsync ();
-				var items = ais.Select(ai => _entityDTOFactory.FromDataStorageObject<Employee>(ai.ToRestaurantDTO()));
-*/
-                var items = await GetEmployeesAsync();
+                var table = GetEntityTable();
+                await AttemptPull (emailString, null);
+
+                var ais = await table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(emailString))
+                    .ToEnumerableAsync ();
+                var items = ais.Select (ai => ai.ToRestaurantDTO ())
+                    .Select (dto => _entityDTOFactory.FromDataStorageObject<Employee> (dto));
+                
 				var found = items.FirstOrDefault (e => e.PrimaryEmail != null && e.PrimaryEmail.Equals (email)
 					&& e.Password != null && e.Password.Equals (password));
 
