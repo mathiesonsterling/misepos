@@ -17,7 +17,7 @@ namespace Mise.Inventory.ViewModels
 	{
 			
 		IEnumerable<LiquidContainer> PossibleContainers{ get; set;}
-		IEnumerable<ICategory> PossibleCategories{get;set;}
+		IEnumerable<IInventoryCategory> PossibleCategories{get;set;}
 
 		public AddLineItemType CurrentAddType{ get; set;}
 
@@ -36,7 +36,7 @@ namespace Mise.Inventory.ViewModels
 			_parService = parService;
 			_categoriesService = categoriesService;
 
-			PropertyChanged += (sender, e) => {
+			PropertyChanged += async (sender, e) => {
 				if(e.PropertyName != "CreateEnabled")
 				{
 					CreateEnabled = (string.IsNullOrEmpty (Name) == false)
@@ -44,6 +44,11 @@ namespace Mise.Inventory.ViewModels
 						&& CaseSize > 0
 						&& (string.IsNullOrEmpty (SelectedCategoryName) == false);
 				}
+
+                if(e.PropertyName == "SelectedCategoryName")
+                {
+                    await SetContainersForCategory();
+                }
 			};
 				
 		}
@@ -102,6 +107,9 @@ namespace Mise.Inventory.ViewModels
 	    public IEnumerable<string> PossibleContainerNames{ get; set;}
 
 		public IEnumerable<string> PossibleCategoryNames{get;set;}
+
+        public event EventHandler ContainerChoicesUpdated;
+
 		#endregion
 
 		#region Commandsk
@@ -164,16 +172,14 @@ namespace Mise.Inventory.ViewModels
 				//curretly only handles one level of subcats
 				PossibleCategories = _categoriesService.GetIABIngredientCategories ();
 
-				var containers = (await _biService.GetAllPossibleContainerSizes ()).ToList();
-				PossibleContainers = containers;
-				PossibleContainerNames = containers.Select (c => c.DisplayName);
-
 				var names = PossibleCategories.Select (c => c.Name)
 					.OrderByDescending (s => s.ToUpper () == "NONE")
 					.ThenBy (s => s);
 				//arrange the names how?
 
 				PossibleCategoryNames = names;
+
+                await SetContainersForCategory();
 			} catch(Exception e){
 				HandleException (e);
 			}
@@ -187,6 +193,46 @@ namespace Mise.Inventory.ViewModels
 				HandleException (e);
 			}
 		}
+
+        async Task SetContainersForCategory(){
+            try{
+                if(PossibleCategories == null){
+                    await GetAllPossibleContainers();
+                    return;
+                }
+                var currentCat = PossibleCategories.FirstOrDefault(c => c.Name == SelectedCategoryName);
+                if (currentCat == null)
+                {
+                    await GetAllPossibleContainers();
+                }
+                else
+                {
+                    var containers = _categoriesService.GetPreferredContainers(currentCat);
+                    if (containers == null || !containers.Any())
+                    {
+                        await GetAllPossibleContainers();
+                    }
+                    else
+                    {
+                        PossibleContainers = containers;
+                        PossibleContainerNames = containers.Select(c => c.DisplayName);
+                    }
+                }
+
+                if (ContainerChoicesUpdated != null)
+                {
+                    ContainerChoicesUpdated(this, null);
+                }
+            } catch(Exception e){
+                HandleException(e);
+            }
+        }
+
+        private async Task GetAllPossibleContainers(){
+            var containers = (await _biService.GetAllPossibleContainerSizes()).ToList();
+            PossibleContainers = containers;
+            PossibleContainerNames = containers.Select(c => c.DisplayName);
+        }
 	}
 }
 

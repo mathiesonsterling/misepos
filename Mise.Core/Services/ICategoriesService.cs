@@ -11,7 +11,7 @@ namespace Mise.Core.Services
 		/// Get the categories used in IAB categories
 		/// </summary>
 		/// <returns>The IAB ingredient categories.</returns>
-		IEnumerable<ICategory> GetIABIngredientCategories();
+		IEnumerable<IInventoryCategory> GetIABIngredientCategories();
 
 		IEnumerable<ICategory> GetCustomCategoriesForRestaurant (Guid restaurantID);
 
@@ -29,6 +29,13 @@ namespace Mise.Core.Services
         /// </summary>
         /// <returns></returns>
 	    IEnumerable<IInventoryCategory> GetAssignableCategories();
+
+        /// <summary>
+        /// For a category, get the list of preferred containers (if any)
+        /// </summary>
+        /// <returns>The preferred containers.</returns>
+        /// <param name="cat">Cat.</param>
+        IEnumerable<LiquidContainer> GetPreferredContainers(IInventoryCategory cat);
 	}
 }
 
