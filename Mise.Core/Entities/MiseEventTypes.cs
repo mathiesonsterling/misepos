@@ -105,6 +105,7 @@
         NewRestaurantRegisteredOnApp,
 		UserSelectedRestaurant,
 
-        AccountRegisteredFromMobileDevice
+        AccountRegisteredFromMobileDevice,
+        RestaurantAssignedToAccount
     }
 }

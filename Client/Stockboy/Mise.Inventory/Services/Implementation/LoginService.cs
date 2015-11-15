@@ -494,15 +494,18 @@ namespace Mise.Inventory.Services.Implementation
 			var acct = _accountRepository.ApplyEvent (ev);
 			await _accountRepository.CommitOnlyImmediately (acct.Id);
 
-			if(_employeeRepository.Dirty){
-				await _employeeRepository.CommitOnlyImmediately (_currentEmployee.Id);
-			}
+            if(_employeeRepository.Dirty){
+                await _employeeRepository.CommitOnlyImmediately (_currentEmployee.Id);
+            }
 
-			if(_restaurantRepository.Dirty){
-				await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.Id);
+            //also associate the restaurant with this account
+            var restAssignedEvent = _eventFactory.CreateRestaurantAssignedToAccountEvent(_currentEmployee, _currentRestaurant, 
+                                        acct);
+            _currentRestaurant = _restaurantRepository.ApplyEvent(restAssignedEvent);
+                
+			await _restaurantRepository.CommitOnlyImmediately (_currentRestaurant.Id);
 
-				await _restaurantRepository.Load(_currentRestaurant.Id);
-			}
+            await SelectRestaurantForLoggedInEmployee(_currentRestaurant.Id);
 
 			return acct;
 		}

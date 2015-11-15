@@ -180,7 +180,7 @@ namespace Mise.Inventory.ViewModels
 						Processing = false;
 						//double check this
 						var userConf = await AskUserQuestionModal ("No Restaurant Found", 
-							"We don't show any restaurants assigned to this user.  This could be a server error.  Do you want to register a new restaurant?");
+							"We don't show any restaurants assigned to this user.  This could be a server error.  Do you want to register a new restaurant?", "Register");
 						if(userConf){
 							await Navigation.ShowRestaurantRegistration();
 						} 

@@ -206,6 +206,7 @@
     <Compile Include="Services\Implementation\StripePaymentProviderSettings.cs" />
     <Compile Include="Services\Implementation\StripePaymentProcessorService.cs" />
     <Compile Include="Services\IClientStripeFacade.cs" />
+    <Compile Include="Events\Restaurant\RestaurantAssignedToAccountEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

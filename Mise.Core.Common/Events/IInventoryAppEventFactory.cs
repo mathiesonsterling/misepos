@@ -14,7 +14,7 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Events.Vendors;
 using Mise.Core.Entities;
 using Mise.Core.Common.Events.Accounts;
-
+using Mise.Core.Entities.Accounts;
 namespace Mise.Core.Common.Events
 {
     public interface IInventoryAppEventFactory
@@ -108,6 +108,8 @@ namespace Mise.Core.Common.Events
 		EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent (IEmployee emp, IRestaurant rest);
 
 		UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID);
+
+        RestaurantAssignedToAccountEvent CreateRestaurantAssignedToAccountEvent(IEmployee emp, IRestaurant restaurant, IAccount accountId);
 
 		AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, Guid accountID, EmailAddress email, 
 			PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name, MisePaymentPlan paymentPlan);
