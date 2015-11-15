@@ -23,7 +23,7 @@ namespace Mise.Inventory.iOS.Services
 
 		public void Identify (Guid? userID, EmailAddress email, PersonName name, string deviceID, bool isAnonymous)
 		{
-			var emailString = email != null ? email.Value : string.Empty;
+			//var emailString = email != null ? email.Value : string.Empty;
 			/*_raygunClient.UserInfo = new Mindscape.Raygun4Net.Messages.RaygunIdentifierMessage (emailString) {
 				FullName = name != null ? name.ToSingleString () : string.Empty,
 				FirstName = name != null ? name.FirstName : string.Empty,

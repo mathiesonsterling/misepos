@@ -22,7 +22,7 @@ namespace Mise.Inventory.ViewModels
 
 		public ICommand ChangePasswordCommand{ get { return new Command (ChangePassword, () => NotProcessing); } }
 
-		public async void ChangePassword(){
+		public void ChangePassword(){
 		}
 	}
 }

@@ -39,6 +39,10 @@ namespace Mise.Core.Client.Repositories
 
         protected override Task<IEnumerable<PurchaseOrder>> LoadFromWebservice(Guid? restaurantID)
         {
+            if (!restaurantID.HasValue)
+            {
+                throw new ArgumentException("Can only load POs for a restaurant");
+            }
             //TODO enable returning POs at some point
             return Task.FromResult(new List<PurchaseOrder>().AsEnumerable());
         }

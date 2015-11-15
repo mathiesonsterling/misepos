@@ -89,7 +89,7 @@ namespace Mise.Inventory.Pages.Reports
 						}
 					}
 		        }
-			} catch(Exception e)
+			} catch(Exception)
 			{
 			}
 	    }

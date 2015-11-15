@@ -23,12 +23,10 @@ namespace Mise.Core.Common.Services.Implementation.DAL
 		readonly Dictionary<Guid, DatabaseEventItem> _eventDB;
 
         readonly EventDataTransportObjectFactory _dtoFactory;
-	    private readonly ILogger _logger;
 	    private readonly IJSONSerializer _serializer;
-		public MemoryClientDAL(ILogger logger, IJSONSerializer jsonSerializer)
+		public MemoryClientDAL(IJSONSerializer jsonSerializer)
 		{
 			_serializer = jsonSerializer;
-		    _logger = logger;
             _dtoFactory = new EventDataTransportObjectFactory(_serializer);
 			_entityDB = new Dictionary<Guid, DatabaseEntityItem>();
 			_eventDB = new Dictionary<Guid, DatabaseEventItem>();
