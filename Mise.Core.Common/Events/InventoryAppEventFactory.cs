@@ -17,11 +17,11 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Events.Vendors;
 using Mise.Core.Common.Events.Accounts;
-
+using Mise.Core.Entities.Accounts;
 
 namespace Mise.Core.Common.Events
 {
-	public class InventoryAppEventFactory : IInventoryAppEventFactory
+    public class InventoryAppEventFactory : IInventoryAppEventFactory
 	{
 		long _lastEventID;
 
@@ -803,6 +803,21 @@ namespace Mise.Core.Common.Events
 				EmployeeID = emp.Id
 			};
 		}
+
+        public RestaurantAssignedToAccountEvent CreateRestaurantAssignedToAccountEvent(IEmployee emp, IRestaurant restaurant, IAccount account)
+        {
+            return new RestaurantAssignedToAccountEvent
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = GetDate(),
+                DeviceId = _deviceID,
+                EventOrder = GetNextEventID(),
+
+                CausedById = emp.Id,
+                RestaurantId = restaurant.Id,
+                AccountId = account.Id
+            };
+        }
 
 		public UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID)
 		{

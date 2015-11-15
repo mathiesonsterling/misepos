@@ -12,6 +12,14 @@ namespace Mise.Inventory.Pages
 		public ItemAddPage()
 		{
 			InitializeComponent();
+
+            var vm = ViewModel as ItemAddViewModel;
+            if (vm != null)
+            {
+                vm.ContainerChoicesUpdated += (sender, e) => {
+                    LoadContainerPicker();
+                };
+            }
 		}
 
 		protected override void OnAppearing ()
@@ -21,6 +29,22 @@ namespace Mise.Inventory.Pages
 				var vm = ViewModel as ItemAddViewModel;
 				if(vm != null){
 					LoadPickers ();
+
+                    pckContainer.SelectedIndexChanged += (sender, e) => {
+                        try{
+                            var selected = pckContainer.Items[pckContainer.SelectedIndex];
+                            vm.SelectedContainerName = selected;
+                        }catch(Exception){
+                        }
+                    };
+
+                    pckCategory.SelectedIndexChanged += (sender, e) => {
+                        try{
+                            var selected = pckCategory.Items[pckCategory.SelectedIndex];
+                            vm.SelectedCategoryName = selected;
+                        }catch(Exception){
+                        }
+                    };
 				}
 			}catch(Exception){
 			}
@@ -46,34 +70,25 @@ namespace Mise.Inventory.Pages
 			//get the picker items
 			var vm = ViewModel as ItemAddViewModel;
 			if(vm != null){
-				pckContainer.Items.Clear ();
-				foreach(var opt in vm.PossibleContainerNames){
-					pckContainer.Items.Add (opt);
-				}
-
-				pckContainer.SelectedIndexChanged += (sender, e) => {
-					try{
-						var selected = pckContainer.Items[pckContainer.SelectedIndex];
-						vm.SelectedContainerName = selected;
-					}catch(Exception){
-					}
-				};
-
+                    
 				pckCategory.Items.Clear ();
 				foreach(var cat in vm.PossibleCategoryNames){
 					pckCategory.Items.Add (cat);
 				}
 
-				pckCategory.SelectedIndexChanged += (sender, e) => {
-					try{
-						var selected = pckCategory.Items[pckCategory.SelectedIndex];
-						vm.SelectedCategoryName = selected;
-					}catch(Exception){
-					}
-				};
+                LoadContainerPicker();
+                    
 			}
 				
 		}
+
+        private void LoadContainerPicker(){
+            var vm = ViewModel as ItemAddViewModel;
+            pckContainer.Items.Clear ();
+            foreach(var opt in vm.PossibleContainerNames){
+                pckContainer.Items.Add (opt);
+            }
+        }
 	}
 }
 

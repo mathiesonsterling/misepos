@@ -20,11 +20,11 @@ namespace Mise.Inventory.Pages
 		}
 
 		protected Task DisplayMessage(ErrorMessage message){
-			return DisplayAlert (message.Title, message.Message, message.OK);
+			return DisplayAlert (message.Title, message.Message, message.Affirm);
 		}
 
 		protected Task<bool> AskQuestion(UserQuestion question){
-			return DisplayAlert (question.Title, question.Message, question.OK, question.NoOption);
+			return DisplayAlert (question.Title, question.Message, question.Affirm, question.NoOption);
 		}
 
 		protected override async void OnAppearing ()

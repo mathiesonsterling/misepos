@@ -16,12 +16,12 @@ namespace Mise.Inventory.ViewModels.Modals
 		/// Caption for the cancel button
 		/// </summary>
 		/// <value><c>true</c> if this instance cancel; otherwise, <c>false</c>.</value>
-		public string OK{get;set;}
+		public string Affirm{get;set;}
 
-		public ErrorMessage(string title, string message, string ok = "OK"){
+		public ErrorMessage(string title, string message, string positive = "OK"){
 			Title = title;
 			Message = message;
-			OK = ok;
+			Affirm = positive;
 		}
 	}
 }

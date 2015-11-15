@@ -58,19 +58,31 @@ namespace Mise.Core.Common.Services.Implementation
         public static ItemCategory Beer => new ItemCategory {
 		    Name = "Beer",
 		    Id = Guid.Parse ("ceb2d033-50ca-42bd-a2aa-baeca09f5d3b"),
-		    ParentCategoryID = BeerWineLiquor.Id
+		    ParentCategoryID = BeerWineLiquor.Id,
 		};
 
 	    public static ItemCategory Wine => new ItemCategory {
 	        Name = "Wine",
 	        Id = Guid.Parse ("47480a57-ca22-49dc-ae97-b0e6856fb4a3"),
-	        ParentCategoryID = BeerWineLiquor.Id
+	        ParentCategoryID = BeerWineLiquor.Id,
+            PreferredContainers = new List<LiquidContainer>{
+                LiquidContainer.Bottle750ML,
+                LiquidContainer.Bottle1L,
+                LiquidContainer.Bottle1_75ML,
+                LiquidContainer.Bottle375ML
+            }
 	    };
 
 	    public static ItemCategory Liquor => new ItemCategory {
 	        Name = "Liquor",
 	        Id = Guid.Parse ("c382ad3c-7a91-4c68-9cac-03ae5d63a823"),
-	        ParentCategoryID = BeerWineLiquor.Id
+	        ParentCategoryID = BeerWineLiquor.Id,
+            PreferredContainers = new List<LiquidContainer>{
+                LiquidContainer.Bottle750ML,
+                LiquidContainer.Bottle1L,
+                LiquidContainer.Bottle1_75ML,
+                LiquidContainer.Bottle375ML
+            }
 	    };
         #endregion
 
@@ -79,7 +91,7 @@ namespace Mise.Core.Common.Services.Implementation
         {
             Name = "Vodka",
             Id = Guid.Parse("99d452e5-2549-4038-922b-be8742021e30"),
-            ParentCategoryID = Liquor.Id
+            ParentCategoryID = Liquor.Id,
         };
 
         public static ItemCategory Gin => new ItemCategory
@@ -411,14 +423,29 @@ namespace Mise.Core.Common.Services.Implementation
 	    {
 	        Name = "Package Beer",
 	        ParentCategoryID = Beer.Id,
-	        Id = Guid.Parse("3043c1f3-4718-4419-893a-697d6c16a5c6")
+	        Id = Guid.Parse("3043c1f3-4718-4419-893a-697d6c16a5c6"),
+            PreferredContainers = new List<LiquidContainer>{
+                LiquidContainer.Can12Oz,
+                LiquidContainer.Bottle12Oz,
+                LiquidContainer.Can16Oz,
+                LiquidContainer.Can10Oz,
+                LiquidContainer.Bottle16Oz,
+                LiquidContainer.Bottle7Oz,
+                LiquidContainer.Bottle40Oz
+            }
 	    };
 
 	    public static ItemCategory BeerDraft => new ItemCategory
 	    {
 	        Name = "Draft Beer",
 	        ParentCategoryID = Beer.Id,
-	        Id = Guid.Parse("b6fc4aca-0f9b-431a-a231-d1c55bb7dab6")
+	        Id = Guid.Parse("b6fc4aca-0f9b-431a-a231-d1c55bb7dab6"),
+            PreferredContainers = new List<LiquidContainer>{
+                LiquidContainer.Keg,
+                LiquidContainer.HalfKeg,
+                LiquidContainer.TorpedoKeg,
+                LiquidContainer.ImportKeg
+            }
 	    };
 
 	    public static ItemCategory Food => new ItemCategory
@@ -430,7 +457,7 @@ namespace Mise.Core.Common.Services.Implementation
 
 	    #endregion
 		#region ICategoriesService implementation
-		public IEnumerable<ICategory> GetIABIngredientCategories ()
+		public IEnumerable<IInventoryCategory> GetIABIngredientCategories ()
 		{
 			var results = GetCategoriesUnder (BeerWineLiquor).ToList();
 			results.Add (Food);
@@ -444,8 +471,8 @@ namespace Mise.Core.Common.Services.Implementation
 			return new List<ICategory> ();
 		}
 
-		public IEnumerable<ICategory> GetCategoriesUnder(ICategory cat){
-			var results = new List<ICategory> ();
+		public IEnumerable<IInventoryCategory> GetCategoriesUnder(IInventoryCategory cat){
+			var results = new List<IInventoryCategory> ();
 			var subs = _allCats.Where (c => c.ParentCategoryID.HasValue && c.ParentCategoryID.Value == cat.Id);
 			foreach(var sub in subs){
 				results.Add (sub);
