@@ -40,7 +40,7 @@ namespace Mise.Inventory.ViewModels
 			return DisplayMessage (new ErrorMessage (title, message));
 		}
 
-		protected Task<bool> AskUserQuestionModal(string title, string message, string yes = "OK", string no = "Cancel"){
+		protected Task<bool> AskUserQuestionModal(string title, string message, string yes, string no = "Cancel"){
 			if(AskUserQuestion == null){
 				throw new InvalidOperationException ("Page does not have a AskUserQuestion function!");
 			}	

@@ -131,6 +131,9 @@ namespace Mise.Core.Common.Entities
 				case MiseEventTypes.UserSelectedRestaurant:
 					WhenUserSelectedRestaurant ((UserSelectedRestaurant)entityEvent);
 					break;
+                case MiseEventTypes.RestaurantAssignedToAccount:
+                    WhenRestaurantAssignedToAccount((RestaurantAssignedToAccountEvent)entityEvent);
+                    break;
                 default:
                     throw new ArgumentException("Can't handle event " + entityEvent.EventType);
             }
@@ -179,5 +182,9 @@ namespace Mise.Core.Common.Entities
 		{
 			//do nothing for now, mostly used for caching
 		}
+
+        void WhenRestaurantAssignedToAccount(RestaurantAssignedToAccountEvent ev){
+            AccountID = ev.AccountId;
+        }
     }
 }

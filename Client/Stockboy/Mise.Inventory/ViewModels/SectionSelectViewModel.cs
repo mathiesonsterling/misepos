@@ -60,7 +60,7 @@ namespace Mise.Inventory.ViewModels
                     var sectionsString = string.Join(",", sectionsList);
 
                     var message = "You haven't done sections " + sectionsString + ".  Complete inventory anyways?";
-					closeInv = await AskUserQuestionModal ("Incomplete sections", message);
+					closeInv = await AskUserQuestionModal ("Incomplete sections", message, "Complete");
                 }
 
                 if (closeInv)
@@ -111,7 +111,7 @@ namespace Mise.Inventory.ViewModels
                 {
                     var userResponse =
                         await AskUserQuestionModal ("Already counted!",
-                                string.Format("This section has been completed by someone else.  Do you want to continue, and discard their count for {0}?", lineItem.Name));
+                                string.Format("This section has been completed by someone else.  Do you want to continue, and discard their count for {0}?", lineItem.Name), "Discard previous");
                     if (userResponse == false)
                     {
                         return;

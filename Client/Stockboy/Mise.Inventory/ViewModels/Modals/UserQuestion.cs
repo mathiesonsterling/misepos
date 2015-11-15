@@ -13,9 +13,13 @@ namespace Mise.Inventory.ViewModels.Modals
 		/// </summary>
 		public string NoOption{get;set;}
 
-		public UserQuestion(string title, string message, string yesOption = "OK", string noOption = "Cancel") 
+		public UserQuestion(string title, string message, string yesOption, string noOption = "Cancel") 
 			: base(title, message, yesOption)
 		{
+            if (yesOption.ToUpper() == "YES" || yesOption.ToUpper() == "OK")
+            {
+                throw new ArgumentException("Prohibed from using generic confirmations");
+            }
 			NoOption = noOption;
 		}
 	}
