@@ -142,7 +142,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void EmployeeAcceptsInvitation(){
 			var ev = _underTest.CreateEmployeeAcceptsInvitationEvent (new ApplicationInvitation(), _emp);
 
-			TestCommonFieldsWithRest (ev);
+			TestCommonFields (ev);
 		}
 
 		[Test]

@@ -40,9 +40,9 @@ namespace stockboymobileserviceService.Models
                     "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
         }
 
-        public System.Data.Entity.DbSet<stockboymobileserviceService.DataObjects.AzureEntityStorage> AzureEntityStorages { get; set; }
+        public DbSet<AzureEntityStorage> AzureEntityStorages { get; set; }
 
-        public System.Data.Entity.DbSet<stockboymobileserviceService.DataObjects.AzureEventStorage> AzureEventStorages { get; set; }
+        public DbSet<AzureEventStorage> AzureEventStorages { get; set; }
     }
 
 }

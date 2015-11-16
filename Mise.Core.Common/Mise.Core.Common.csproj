@@ -57,6 +57,7 @@
     <Compile Include="Entities\Reports\BaseReport.cs" />
     <Compile Include="Entities\Reports\COGsReport.cs" />
     <Compile Include="Entities\Reports\CompletedInventoryReport.cs" />
+    <Compile Include="Events\Accounts\AccountHasPaymentPlanSetupEvent.cs" />
     <Compile Include="Events\Accounts\AccountRegisteredFromMobileDeviceEvent.cs" />
     <Compile Include="Events\Accounts\BaseAccountEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\BaseInvitationEvent.cs" />

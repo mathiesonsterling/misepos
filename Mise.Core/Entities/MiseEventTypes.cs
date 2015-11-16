@@ -106,6 +106,7 @@
 		UserSelectedRestaurant,
 
         AccountRegisteredFromMobileDevice,
-        RestaurantAssignedToAccount
+        RestaurantAssignedToAccount,
+        AccountHasPaymentPlanSetup
     }
 }

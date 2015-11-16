@@ -847,6 +847,20 @@ namespace Mise.Core.Common.Events
                 CreditCard = card
 			};
 		}
+
+        public AccountHasPaymentPlanSetupEvent CreateAccountHasPaymentPlanSetupEvent(IAccount acct)
+        {
+            return new AccountHasPaymentPlanSetupEvent
+            {
+                AccountID = acct.Id,
+                CausedById = Guid.Empty,
+                CreatedDate = GetDate(),
+                DeviceId = _deviceID,
+                EventOrder = GetNextEventID(),
+                Id = Guid.NewGuid(),
+                PaymentPlan = acct.PaymentPlan
+            };
+        }
 	}
 }
 

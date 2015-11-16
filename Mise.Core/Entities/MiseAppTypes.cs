@@ -30,6 +30,11 @@
         /// Reporting site
         /// </summary>
         ManagementWebsite,
+
+        /// <summary>
+        /// Backend service to support mobile client
+        /// </summary>
+        MobileService,
 	}
 }
 
