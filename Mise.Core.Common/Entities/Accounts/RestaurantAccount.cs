@@ -120,7 +120,7 @@ namespace Mise.Core.Common.Entities.Accounts
             PaymentPlan = ev.PaymentPlan;
             if (ev.ReferralCode != null)
             {
-                
+                ReferralCodeUsedToCreate = ev.ReferralCode;
             }
         }
 

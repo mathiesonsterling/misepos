@@ -486,7 +486,7 @@ namespace Mise.Inventory.Services.Implementation
 			PhoneNumber phone, MiseAppTypes app, CreditCardNumber cardDetails)
 		{
 			//auth the credit card.  We'll create the subscription on the server?
-			CreditCard card = await _ccProcessor.SendCardToProcessorForSubscription(accountName, cardDetails);
+			var card = await _ccProcessor.SendCardToProcessorForSubscription(accountName, cardDetails);
 
 			var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, Guid.NewGuid (), email,
 				         phone, card, code, app, accountName, MisePaymentPlan.StockboyBasicMonthly);

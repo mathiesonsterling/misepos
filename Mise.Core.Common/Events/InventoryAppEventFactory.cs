@@ -850,7 +850,8 @@ namespace Mise.Core.Common.Events
 				AccountType = MiseAccountTypes.Restaurant,
 				AccountHolderName = name,
 				AppType = app,
-                PaymentPlan = paymentPlan
+                PaymentPlan = paymentPlan,
+                CreditCard = card
 			};
 		}
 	}
