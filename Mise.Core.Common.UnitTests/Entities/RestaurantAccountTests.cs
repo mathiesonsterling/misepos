@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Common.Entities.Accounts;
+using Mise.Core.Common.Events.Accounts;
 using Mise.Core.Entities;
 using Mise.Core.ValueItems;
 using NUnit.Framework;
@@ -98,6 +99,36 @@ namespace Mise.Core.Common.UnitTests.Entities
             }
 
             Assert.IsTrue(threw);
+        }
+
+        [Test]
+        public void AccountCreationShouldStoreCreditCard()
+        {
+            var account = new RestaurantAccount();
+
+            var ev = new AccountRegisteredFromMobileDeviceEvent
+            {
+                AccountID = Guid.NewGuid(),
+                CreditCard = new CreditCard
+                {
+                    BillingZip = new ZipCode {Value = "11111"},
+                    ProcessorToken = new CreditCardProcessorToken
+                    {
+                        Processor = CreditCardProcessors.FakeProcessor,
+                        Token = "testToken"
+                    }
+                }
+            };
+
+            //ACT
+            account.When(ev);
+
+            //ASSERT
+            var cc = account.CurrentCard;
+            Assert.NotNull(cc);
+            Assert.AreEqual("11111", cc.BillingZip.Value);
+            Assert.AreEqual(CreditCardProcessors.FakeProcessor, cc.ProcessorToken.Processor);
+            Assert.AreEqual("testToken", cc.ProcessorToken.Token, "token value");
         }
     }
 }

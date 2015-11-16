@@ -27,16 +27,9 @@ namespace Mise.Core.Common.Events
 
 		IRestaurant _restaurant;
 
-		public Guid? RestaurantID {
-			get {
-				if (_restaurant != null) {
-					return _restaurant.Id;
-				}
-				return null;
-			}
-		}
+		public Guid? RestaurantID => _restaurant?.Id;
 
-		string _deviceID;
+        string _deviceID;
 		readonly MiseAppTypes _appCode;
 
 		public InventoryAppEventFactory(string deviceID, MiseAppTypes appCode)

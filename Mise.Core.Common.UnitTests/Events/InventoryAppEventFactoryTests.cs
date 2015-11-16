@@ -115,12 +115,27 @@ namespace Mise.Core.Common.UnitTests.Events
 		}
 
 		[Test]	
-		public void AccountReg(){
+		public void AccountReg()
+		{
+		    var creditCard = new CreditCard
+		    {
+		        BillingZip = new ZipCode {Value = "11111"},
+		        ProcessorToken = new CreditCardProcessorToken
+		        {
+		            Processor = CreditCardProcessors.FakeProcessor,
+		            Token = "ccToken"
+		        }
+		    };
 			var ev = _underTest.CreateAccountRegisteredFromMobileDeviceEvent (_emp, Guid.NewGuid (), EmailAddress.TestEmail,
-				         PhoneNumber.TestPhoneNumber, new CreditCard (), ReferralCode.TestReferralCode, MiseAppTypes.UnitTests, PersonName.TestName,
+				         PhoneNumber.TestPhoneNumber, creditCard, ReferralCode.TestReferralCode, MiseAppTypes.UnitTests, PersonName.TestName,
                         MisePaymentPlan.StockboyBasicMonthly);
 
 			TestCommonFields (ev);
+            Assert.NotNull(ev.CreditCard);
+            Assert.AreEqual("11111", ev.CreditCard.BillingZip.Value);
+            Assert.NotNull(ev.CreditCard.ProcessorToken);
+            Assert.AreEqual("ccToken", ev.CreditCard.ProcessorToken.Token);
+            Assert.AreEqual(CreditCardProcessors.FakeProcessor, ev.CreditCard.ProcessorToken.Processor);
 		}
 
 		[Test]
