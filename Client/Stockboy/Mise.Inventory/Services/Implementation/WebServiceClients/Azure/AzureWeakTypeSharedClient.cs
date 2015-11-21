@@ -23,7 +23,7 @@ using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using System.Net;
 using Mise.Core.Client.Services;
 using Newtonsoft.Json.Serialization;
-
+using Mise.Core.Entities.Inventory;
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
@@ -153,7 +153,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		    var table = GetEntityTable();
             var query = table.Where(si => si.MiseEntityType == type.ToString() && si.EntityJSON.Contains(email.Value));
 
-            AttemptPull("invitationsFor" + email.Value, query);
+            await AttemptPull("invitationsFor" + email.Value, query);
 			var storageItems = await query.ToEnumerableAsync ();
 
 			var realItems = storageItems
@@ -268,7 +268,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 			var vendType = typeof(Vendor);
             var query = table.Where(ai => ai.MiseEntityType == vendType.ToString());
-            AttemptPull("vendorsFor" + restaurantID, query);
+            await AttemptPull("vendorsFor" + restaurantID, query);
 			var ais = await query.ToEnumerableAsync ();
 
 			//todo figure out a better way to do this on the server
@@ -304,7 +304,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		    var table = GetEntityTable();
 
             var query = table.Where(ai => ai.MiseEntityType == restType);
-            AttemptPull("allRests", query);
+            await AttemptPull("allRests", query);
 			var azureItems = await query.ToEnumerableAsync ();
 
 			var rests = azureItems.Select (ai => ai.ToRestaurantDTO ())
@@ -325,6 +325,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<Restaurant> GetRestaurant (Guid restaurantID)
 		{
+            if (restaurantID == Guid.Empty)
+            {
+                return null;
+            }
 			var type = typeof(Restaurant).ToString ();
 
 			var table = GetEntityTable();
@@ -420,7 +424,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
                 var table = GetEntityTable();
 
                 var query = table.Where (ai => ai.MiseEntityType == empType && ai.EntityJSON.Contains(emailString));
-                await AttemptPull (emailString, query);
+                await AttemptPull ("emp::"+emailString, query);
 
                 var ais = await query.ToEnumerableAsync ();
                 var items = ais.Select (ai => ai.ToRestaurantDTO ())
@@ -445,6 +449,32 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		}
 		#endregion
 
+        public Task<IAccount> GetAccountById(Guid id){
+            throw new NotImplementedException();
+        }
+
+        public async Task<IAccount> GetAccountFromEmail(EmailAddress email){
+            var emailString = email.Value;
+            var restAcctType = typeof(RestaurantAccount).ToString ();
+            var table = GetEntityTable();
+
+            var query = table.Where (ai => ai.MiseEntityType == restAcctType && ai.EntityJSON.Contains(emailString));
+            await AttemptPull ("acct::"+emailString, query);
+
+            var ais = await query.ToEnumerableAsync ();
+            var items = ais.Select (ai => ai.ToRestaurantDTO ())
+                .Select (dto => _entityDTOFactory.FromDataStorageObject<RestaurantAccount> (dto));
+
+            var found = items.FirstOrDefault (a => a.PrimaryEmail != null && a.PrimaryEmail.Equals (email));
+
+            return found;
+        }
+
+        public async Task<IEnumerable<IPurchaseOrder>> GetPurchaseOrdersForRestaurant(Guid restaurantId){
+            var items = await GetEntityOfTypeForRestaurant<PurchaseOrder>(restaurantId);
+            return items;
+        }
+
 		#region IEventStoreWebService implementation
 
 		public async Task<bool> SendEventsAsync (Employee updatedEntity, IEnumerable<Mise.Core.Entities.People.Events.IEmployeeEvent> events)
@@ -461,9 +491,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 	
 		private async Task<bool> SendEventDTOs(ICollection<EventDataTransportObject> dtos){
-	
-			//TODO actually store the events at some point
-			return true;
+            return true;
+
 
 			var table = GetEventTable ();
 
@@ -475,7 +504,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				.Select(dto => new AzureEventStorage (dto))
 				.Select (si => table.InsertAsync (si));
 
-			var delTasks = existingEvents.Select (ev => table.DeleteAsync (ev));
+			//var delTasks = existingEvents.Select (ev => table.DeleteAsync (ev));
 			
 			try{
 				//await Task.WhenAll (delTasks);

@@ -63,7 +63,7 @@ namespace Mise.Core.Client.Services.Implementation
 				if(ccStrings [0].StartsWith ("%B", StringComparison.Ordinal) == false){
 					//log it!
 				}
-				string acctNum = ccStrings [0].Substring (2);
+				//string acctNum = ccStrings [0].Substring (2);
 
 				//second is name
 				var nameStrings = ccStrings [1].Split (new []{'/'}, 2);
@@ -88,7 +88,7 @@ namespace Mise.Core.Client.Services.Implementation
                         LastName = lastName
                     },
 					ExpMonth = int.Parse (expMonthS),
-					ExpYear = int.Parse (expYearS)
+					ExpYear = int.Parse (expYearS),
 				};
 				return card;
 			}

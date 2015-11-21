@@ -188,7 +188,7 @@
       <HintPath>..\packages\Xamarin.Insights.1.11.2\lib\Xamarin.iOS10\PLCrashReporterUnifiedBinding.dll</HintPath>
     </Reference>
     <Reference Include="PCLCrypto">
-      <HintPath>..\packages\PCLCrypto.1.0.82\lib\Xamarin.iOS\PCLCrypto.dll</HintPath>
+      <HintPath>..\packages\PCLCrypto.1.0.86\lib\Xamarin.iOS\PCLCrypto.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

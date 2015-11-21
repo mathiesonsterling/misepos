@@ -20,7 +20,7 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Core.Common.Services.WebServices.FakeServices
 {
-	public class FakeInventoryWebService: IInventoryApplicationWebService
+    public class FakeInventoryWebService: IInventoryApplicationWebService
 	{
 		private const MiseAppTypes FAKE_APP_CODE = MiseAppTypes.DummyData;
 		private readonly List<Employee> _emps;
@@ -872,6 +872,21 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 	    {
 	        return Task.FromResult(true);
 	    }
+
+        public Task<IAccount> GetAccountById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IAccount> GetAccountFromEmail(EmailAddress email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<IPurchaseOrder>> GetPurchaseOrdersForRestaurant(Guid restaurantId)
+        {
+            throw new NotImplementedException();
+        }
 	}
 }
 

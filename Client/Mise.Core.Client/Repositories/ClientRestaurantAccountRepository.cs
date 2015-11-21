@@ -34,10 +34,15 @@ namespace Mise.Core.Client.Repositories
             return ev.AccountID;
         }
 
-        public Task<IAccount> GetAccountForEmail(EmailAddress email)
+        public async Task<IAccount> GetAccountForEmail(EmailAddress email)
         {
             var acct = GetAll().FirstOrDefault(a => a.PrimaryEmail.Equals(email));
-            return Task.FromResult(acct);
+
+            if (acct == null)
+            {
+                acct = await _webService.GetAccountFromEmail(email);
+            }
+            return acct;
         }
 
         protected override Task<IEnumerable<RestaurantAccount>> LoadFromWebservice(Guid? restaurantID)
