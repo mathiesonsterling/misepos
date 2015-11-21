@@ -2,13 +2,13 @@
 using System.Threading.Tasks;
 using Mise.Core.Services.UtilityServices;
 
-namespace stockboymobileserviceService.Services.Implementation
+namespace MiseReporting.Services.Implementation
 {
-    public class DummyLogger : ILogger
+    class DummyLogger : ILogger
     {
         public void Log(string message, LogLevel level = LogLevel.Error)
         {
-            Console.WriteLine(level + "::" +message);
+            Console.WriteLine(level + ":" + message);
         }
 
         public void Debug(string message)
@@ -18,7 +18,7 @@ namespace stockboymobileserviceService.Services.Implementation
 
         public void Info(string message)
         {
-           Log(message, LogLevel.Info);
+            Log(message, LogLevel.Info);
         }
 
         public void Warn(string message)
@@ -28,7 +28,7 @@ namespace stockboymobileserviceService.Services.Implementation
 
         public void Error(string message)
         {
-            Log(message);
+            Log(message, LogLevel.Error);
         }
 
         public void Fatal(string message)
@@ -38,17 +38,18 @@ namespace stockboymobileserviceService.Services.Implementation
 
         public void HandleException(Exception ex, LogLevel level = LogLevel.Error)
         {
-            Log(ex.Message + ":::" + ex.StackTrace, level);
+            Log(ex.Message, level);
         }
 
         public void HandleFaultedTask(Task t, LogLevel level = LogLevel.Error)
         {
-            if (t.Exception != null)
+            if (t.Exception == null)
             {
-                foreach (var ex in t.Exception.InnerExceptions)
-                {
-                    HandleException(ex);
-                }
+                return;
+            }
+            foreach (var ex in t.Exception.InnerExceptions)
+            {
+                HandleException(ex, level);
             }
         }
     }

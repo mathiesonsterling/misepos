@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
 
-namespace stockboymobileserviceService.Services
+namespace MiseReporting.Services
 {
     public interface IPaymentProviderService
     {
-        Task CreateAccountFromToken(CreditCard card, MisePaymentPlan plan);
+        Task CreateSubscriptionForAccount(IAccount account);
     }
 }
