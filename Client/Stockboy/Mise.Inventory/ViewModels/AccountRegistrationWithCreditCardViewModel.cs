@@ -121,7 +121,7 @@ namespace Mise.Inventory.ViewModels
                 CanRegister = true;
 
 				//go to the webpage
-                base.DisplayMessageModal("Account Created", "Your account has been created!");
+                await base.DisplayMessageModal("Account Created", "Your account has been created!");
 
                 await Navigation.ShowRestaurantLoading ();
 

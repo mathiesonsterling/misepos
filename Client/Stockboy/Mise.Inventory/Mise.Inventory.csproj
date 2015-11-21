@@ -151,10 +151,6 @@
     <Compile Include="Pages\PurchaseOrderSelectPage.xaml.cs">
       <DependentUpon>PurchaseOrderSelectPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\AccountRegistrationViewModel.cs" />
-    <Compile Include="Pages\AccountRegistrationPage.xaml.cs">
-      <DependentUpon>AccountRegistrationPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BuildLevel.cs" />
     <Compile Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml.cs">
       <DependentUpon>InventoryVisuallyMeasureWithGesturesPage.xaml</DependentUpon>
@@ -365,9 +361,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\PurchaseOrderSelectPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\AccountRegistrationPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml">

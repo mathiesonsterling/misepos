@@ -137,7 +137,7 @@ namespace Mise.Core.Common.UnitTests.Entities
             var acct = new RestaurantAccount
             {
                 PaymentPlanSetupWithProvider = false,
-                PaymentPlan = MisePaymentPlan.StockboyBasicMonthly
+                PaymentPlan = MisePaymentPlan.StockboyBasic
             };
 
             var ev = new AccountHasPaymentPlanSetupEvent();
