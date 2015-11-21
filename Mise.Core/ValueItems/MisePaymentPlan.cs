@@ -4,7 +4,8 @@ namespace Mise.Core.ValueItems
 {
     public enum MisePaymentPlan
     {
-        StockboyBasicMonthly
+        StockboyBasic,
+        StockboyBetaTester
     }
 }
 

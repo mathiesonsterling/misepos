@@ -57,6 +57,7 @@
     <Compile Include="Entities\Reports\BaseReport.cs" />
     <Compile Include="Entities\Reports\COGsReport.cs" />
     <Compile Include="Entities\Reports\CompletedInventoryReport.cs" />
+    <Compile Include="Events\Accounts\AccountHasPaymentPlanSetupEvent.cs" />
     <Compile Include="Events\Accounts\AccountRegisteredFromMobileDeviceEvent.cs" />
     <Compile Include="Events\Accounts\BaseAccountEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\BaseInvitationEvent.cs" />
@@ -210,15 +211,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
+    <Folder Include="Requests\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Mise.Core\Mise.Core.csproj">
-      <Project>{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}</Project>
+      <Project>{085e418a-7cc9-4ab6-b38a-fc6cabe373d6}</Project>
       <Name>Mise.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Requests\" />
-  </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

@@ -128,7 +128,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		    };
 			var ev = _underTest.CreateAccountRegisteredFromMobileDeviceEvent (_emp, Guid.NewGuid (), EmailAddress.TestEmail,
 				         PhoneNumber.TestPhoneNumber, creditCard, ReferralCode.TestReferralCode, MiseAppTypes.UnitTests, PersonName.TestName,
-                        MisePaymentPlan.StockboyBasicMonthly);
+                        MisePaymentPlan.StockboyBasic);
 
 			TestCommonFields (ev);
             Assert.NotNull(ev.CreditCard);
@@ -142,7 +142,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		public void EmployeeAcceptsInvitation(){
 			var ev = _underTest.CreateEmployeeAcceptsInvitationEvent (new ApplicationInvitation(), _emp);
 
-			TestCommonFieldsWithRest (ev);
+			TestCommonFields (ev);
 		}
 
 		[Test]

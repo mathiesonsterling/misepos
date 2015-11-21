@@ -130,5 +130,23 @@ namespace Mise.Core.Common.UnitTests.Entities
             Assert.AreEqual(CreditCardProcessors.FakeProcessor, cc.ProcessorToken.Processor);
             Assert.AreEqual("testToken", cc.ProcessorToken.Token, "token value");
         }
+
+        [Test]
+        public void PaymentPlanSetReflectsInAccount()
+        {
+            var acct = new RestaurantAccount
+            {
+                PaymentPlanSetupWithProvider = false,
+                PaymentPlan = MisePaymentPlan.StockboyBasic
+            };
+
+            var ev = new AccountHasPaymentPlanSetupEvent();
+
+            //ACT
+            acct.When(ev);
+
+            //ASSERT
+            Assert.True(acct.PaymentPlanSetupWithProvider);
+        }
     }
 }
