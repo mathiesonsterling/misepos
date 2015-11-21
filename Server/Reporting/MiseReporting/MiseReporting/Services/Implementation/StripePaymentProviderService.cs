@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
 using Stripe;
@@ -10,6 +11,13 @@ namespace MiseReporting.Services.Implementation
 {
     public class StripePaymentProviderService : IPaymentProviderService
     {
+        private readonly IStripePaymentProviderSettings _settings;
+        public StripePaymentProviderService()
+        {
+            _settings = StripePaymentProviderSettingsFactory.GetSettings();
+            //StripeConfiguration.SetApiKey(_settings.PrivateKey);
+        }
+
         public async Task CreateSubscriptionForAccount(IAccount account)
         {
             var card = account.CurrentCard;
@@ -39,13 +47,17 @@ namespace MiseReporting.Services.Implementation
             else
             {
                 customer = customers.FirstOrDefault();
+                AddSubscriptionToExistingCustomer(customer, planName);
             }
+        }
 
+        private static void AddSubscriptionToExistingCustomer(StripeCustomer customer, string planName)
+        {
             var subscriptionService = new StripeSubscriptionService();
             var subscription = subscriptionService.Create(customer.Id, planName);
         }
 
-        private static StripeCustomer CreateCustomer(IAccount account, CreditCard card, string planName)
+        private StripeCustomer CreateCustomer(IAccount account, CreditCard card, string planName)
         {
             var source = new StripeSourceOptions
             {
@@ -58,7 +70,7 @@ namespace MiseReporting.Services.Implementation
                 Description = account.AccountHolderName.ToSingleString(),
                 Source = source,
                 PlanId = planName,
-                TaxPercent = 8.875M,
+                TaxPercent = _settings.SalesTaxRate,
             };
 
             var customerService = new StripeCustomerService();
@@ -66,7 +78,7 @@ namespace MiseReporting.Services.Implementation
             return stripeCustomer;
         }
 
-        private Task<IEnumerable<StripeCustomer>> GetCustomersWithEmail(EmailAddress email)
+        private static Task<IEnumerable<StripeCustomer>> GetCustomersWithEmail(EmailAddress email)
         {
             var serv = new StripeCustomerService();
             var customers = serv.List();
