@@ -204,14 +204,6 @@ namespace Mise.Core.ValueItems.Inventory
 
         public bool Equals(LiquidContainer other)
         {
-            if (string.IsNullOrEmpty(_displayName) == false)
-            {
-                if (_displayName != other.DisplayName)
-                {
-                    return false;
-                }
-            }
-
             if (AmountContained.Equals(other.AmountContained) == false)
             {
                 return false;
