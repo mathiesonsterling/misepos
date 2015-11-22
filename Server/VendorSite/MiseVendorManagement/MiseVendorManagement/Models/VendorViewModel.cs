@@ -19,6 +19,9 @@ namespace MiseVendorManagement.Models
         [DisplayName("Street Number")]
         public string StreetAddressNumber { get; set; }
 
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+
         [DisplayName("Apt / Suite")]
         public string UnitNumber { get; set; }
 
@@ -73,6 +76,13 @@ namespace MiseVendorManagement.Models
             if (v.StreetAddress != null)
             {
                 StreetAddressNumber = v.StreetAddress.StreetAddressNumber.Number;
+                if (v.StreetAddress.StreetAddressNumber.Longitude != 0 ||
+                    v.StreetAddress.StreetAddressNumber.Latitude != 0)
+                {
+                    Longitude = v.StreetAddress.StreetAddressNumber.Longitude;
+                    Latitude = v.StreetAddress.StreetAddressNumber.Latitude;
+                }
+
                 StreetDirection = v.StreetAddress.StreetAddressNumber.Direction;
                 StreetName = v.StreetAddress.Street.Name;
                 City = v.StreetAddress.City.Name;

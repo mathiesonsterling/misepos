@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+
 namespace Mise.Core.ValueItems
 {
 	public class StreetAddress : IEquatable<StreetAddress>, ITextSearchable
@@ -43,10 +45,27 @@ namespace Mise.Core.ValueItems
 	               || Zip.ContainsSearchString(searchString);
 	    }
 
-	    public static StreetAddress TestStreetAddress
+	    public string ToSingleString()
 	    {
-            get { return new StreetAddress("699", "", "Ocean Ave", "Brooklyn", "New York", ValueItems.Country.UnitedStates.Name, "11226");}
+	        var sb = new StringBuilder(StreetAddressNumber.Number);
+	        if (!string.IsNullOrWhiteSpace(StreetAddressNumber.Direction))
+	        {
+	            sb.Append(" " + StreetAddressNumber.Direction);
+	        }
+
+	        sb.Append(" " + Street.Name);
+	        if (!string.IsNullOrWhiteSpace(StreetAddressNumber.ApartmentNumber))
+	        {
+	            sb.Append(" " + StreetAddressNumber.ApartmentNumber);
+	        }
+
+	        sb.Append(" " + City.Name);
+	        sb.Append(" " + State.Name);
+
+	        return sb.ToString();
 	    }
+
+	    public static StreetAddress TestStreetAddress => new StreetAddress("699", "", "Ocean Ave", "Brooklyn", "New York", Country.UnitedStates.Name, "11226");
 	}
 
     public class Street : IEquatable<Street>, ITextSearchable
@@ -127,19 +146,13 @@ namespace Mise.Core.ValueItems
 
 			var realThis = this;
 			if (Abbreviation == null) {
-				realThis = GetUSStates().FirstOrDefault(s => s.Name == Name || s.Abbreviation == Name);
-				if(realThis == null){
-					realThis = this;
-				}
+				realThis = GetUSStates().FirstOrDefault(s => s.Name == Name || s.Abbreviation == Name) ?? this;
 			}
 
 			var realOther = other;
 			if(other.Abbreviation == null)
 			{
-				realOther = GetUSStates ().FirstOrDefault (s => s.Name == other.Name || s.Abbreviation == other.Name);
-				if (realOther == null) {
-					realOther = other;
-				}
+				realOther = GetUSStates ().FirstOrDefault (s => s.Name == other.Name || s.Abbreviation == other.Name) ?? other;
 			}
 			return realThis.Name == realOther.Name || realThis.Abbreviation == realOther.Abbreviation;
         }
@@ -252,10 +265,7 @@ namespace Mise.Core.ValueItems
             return Name.Equals(other.Name);
         }
 
-        public static Country UnitedStates
-        {
-            get { return new Country("United States of America"); }
-        }
+        public static Country UnitedStates => new Country("United States of America");
     }
 }
 

@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Entities;
+using Mise.Core.Entities.Vendors;
+using Mise.Core.Server.Windows.Services;
+using Mise.Core.Server.Windows.Services.Implementation;
 using Mise.Core.ValueItems;
 using MiseVendorManagement.Models;
 
@@ -12,9 +15,11 @@ namespace MiseVendorManagement.Controllers
     public class VendorController : Controller
     {
         private readonly VendorDAL _dal;
+        private readonly IGeoCodingService _geoCoding;
         public VendorController()
         {
             _dal = new VendorDAL();
+            _geoCoding = new GoogleMapsGeoCodingService();
         }
 
         [Authorize(Roles = "MiseAdmin")]
@@ -104,16 +109,24 @@ namespace MiseVendorManagement.Controllers
                 }
                     var vendor = VendorVMToVendor(vm, Guid.NewGuid());
 
-                    //TODO get geolocation here
+                //get geolocation here
+                await AddLocationIfMissing(vendor);
 
                     //store this
-                    await _dal.InsertVendor(vendor);
-                    return RedirectToAction("Index");
+                await _dal.InsertVendor(vendor);
+                return RedirectToAction("Index");
             }
             catch
             {
                 return View();
             }
+        }
+
+        private async Task AddLocationIfMissing(IVendor vendor)
+        {
+            var loc = await _geoCoding.GetLocationForAddress(vendor.StreetAddress);
+            vendor.StreetAddress.StreetAddressNumber.Latitude = loc.Latitude;
+            vendor.StreetAddress.StreetAddressNumber.Longitude = loc.Longitude;
         }
 
         [Authorize(Roles = "MiseAdmin, VendorAccount")]
@@ -133,6 +146,8 @@ namespace MiseVendorManagement.Controllers
             try
             {
                 var updated = VendorVMToVendor(vm, vm.Id);
+                await AddLocationIfMissing(updated);
+
                 await _dal.UpdateVendor(updated);
                 
                 return RedirectToAction("Index");
@@ -186,6 +201,12 @@ namespace MiseVendorManagement.Controllers
                         vm.ZipCode),
                 Website = new Uri(vm.Website)
             };
+
+            if (vm.Longitude != 0 || vm.Latitude != 0)
+            {
+                vendor.StreetAddress.StreetAddressNumber.Longitude = vm.Longitude;
+                vendor.StreetAddress.StreetAddressNumber.Latitude = vm.Latitude;
+            }
             return vendor;
         }
     }
