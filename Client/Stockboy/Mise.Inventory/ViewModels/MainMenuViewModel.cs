@@ -32,6 +32,7 @@ namespace Mise.Inventory.ViewModels
 				var rest = await _loginService.GetCurrentRestaurant ();
 				if (rest == null) {
 					RestaurantName = "ERROR NO RESTAURANT";
+                    await Navigation.ShowSelectRestaurant();
 				} else {
 	                //if we're not a production one, let's make it obvious!
 				    var buildLevel = DependencySetup.GetBuildLevel();

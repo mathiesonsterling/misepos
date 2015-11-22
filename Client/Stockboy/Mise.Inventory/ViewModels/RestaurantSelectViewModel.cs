@@ -29,6 +29,23 @@ namespace Mise.Inventory.ViewModels
 
 		public override async Task OnAppearing(){
 			await LoadPossibleRestaurant ();
+
+            if (!PossibleRestaurants.Any())
+            {
+                //TODO log this!
+                Logger.Error("No restaurants found in Select Restaurant!");
+                var userConf = await AskUserQuestionModal ("No Restaurant Found", 
+                    "We don't show any restaurants assigned to this user.  This could be a server error.  Do you want to register a new restaurant?", "Register");
+                if (userConf)
+                {
+                    await Navigation.ShowRestaurantRegistration();
+                }
+                else
+                {
+                    await _loginService.LogOutAsync();
+                    await Navigation.ShowLogin();
+                }
+            }
 		}
 
 		async Task LoadPossibleRestaurant()
