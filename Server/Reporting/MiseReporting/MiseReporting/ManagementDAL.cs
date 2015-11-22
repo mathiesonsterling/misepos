@@ -23,7 +23,6 @@ namespace MiseReporting
     public class ManagementDAL
     {
         private const string RESTAURANT_ID_LIST_KEY = "allCachedRestaurantIds";
-        private const string INVENTORY_ID_LIST_KEY = "allCachedInventoryIds";
 
         private readonly EntityDataTransportObjectFactory _entityFactory;
         private readonly string _invType;
@@ -184,7 +183,7 @@ namespace MiseReporting
                         ai => ai.EntityID == inventory.Id && ai.MiseEntityType == _invType);
                 if (oldVer == null)
                 {
-                    throw new InvalidOperationException("Cannot find vendor to update in DB");
+                    throw new InvalidOperationException("Cannot find inventory to update in DB");
                 }
                 var newVerDTO = new AzureEntityStorage(_entityFactory.ToDataTransportObject(inventory));
                 oldVer.EntityJSON = newVerDTO.EntityJSON;
@@ -194,6 +193,33 @@ namespace MiseReporting
             }
 
             SubItemCache.Upsert(inventory);
+        }
+
+        public async Task UpdateRestaurant(IRestaurant rest)
+        {
+            var restaurant = rest as Restaurant;
+            if (restaurant == null)
+            {
+                throw new ArgumentException("Type given cannot be converted to concrete");
+            }
+
+            using (var db = new AzureNonTypedEntities())
+            {
+                var oldVer = await db.AzureEntityStorages.FirstOrDefaultAsync(
+                        ai => ai.EntityID == restaurant.Id && ai.MiseEntityType == _restType);
+                if (oldVer == null)
+                {
+                    throw new InvalidOperationException("Cannot find restaurant to update in DB");
+                }
+                var newVerDTO = new AzureEntityStorage(_entityFactory.ToDataTransportObject(restaurant));
+                oldVer.EntityJSON = newVerDTO.EntityJSON;
+                oldVer.LastUpdatedDate = newVerDTO.LastUpdatedDate;
+                db.Entry(oldVer).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+
+                HttpRuntime.Cache.Remove(rest.Id.ToString());
+                HttpRuntime.Cache.Insert(rest.Id.ToString(), restaurant);
+            }
         }
 
         public async Task<IEnumerable<IRestaurant>> GetAllRestaurants()

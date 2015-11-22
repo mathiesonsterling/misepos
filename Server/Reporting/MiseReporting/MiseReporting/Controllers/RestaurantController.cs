@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Mise.Core.Entities.Restaurant;
+using Mise.Core.Server.Windows.Services;
+using Mise.Core.Server.Windows.Services.Implementation;
 using Mise.Core.ValueItems;
 using MiseReporting.Models;
 
@@ -10,10 +13,12 @@ namespace MiseReporting.Controllers
 {
     public class RestaurantController : Controller
     {
+        private readonly IGeoCodingService _geoCodingService;
         private readonly ManagementDAL _dal;
         public RestaurantController()
         {
             _dal = new ManagementDAL();
+            _geoCodingService = new GoogleMapsGeoCodingService();
         }
 
         [Authorize(Roles= "MiseAdmin")]
@@ -21,6 +26,7 @@ namespace MiseReporting.Controllers
         public async Task<ActionResult> Index()
         {
             var rests = await _dal.GetAllRestaurants();
+
             var vms = rests.Select(r => new RestaurantViewModel(r));
 
             return View(vms.OrderBy(r => r.Name));
@@ -73,9 +79,18 @@ namespace MiseReporting.Controllers
                     return View(vm);
                 }
 
-                //TODO check we're not duplicating
                 vm.Id = Guid.NewGuid();
                 var ent = vm.ToEntity();
+
+                //check we're not duplicating
+                await AddLocation(ent);
+
+                var existings = await _dal.GetAllRestaurants();
+                var existing = existings.FirstOrDefault(r => r.StreetAddress.Equals(ent.StreetAddress));
+                if (existing != null)
+                {
+                    throw new ArgumentException("A restaurant named " + existing.Name.FullName + " already exists in this location!");
+                }
                 await _dal.InsertRestaurant(ent);
                 return RedirectToAction("Index");
             }
@@ -107,6 +122,21 @@ namespace MiseReporting.Controllers
             {
                 return View();
             } 
+        }
+
+        private async Task<IRestaurant> AddLocation(IRestaurant rest)
+        {
+            if (rest.StreetAddress?.StreetAddressNumber != null)
+            {
+                var location = await _geoCodingService.GetLocationForAddress(rest.StreetAddress);
+                if (location != null)
+                {
+                    rest.StreetAddress.StreetAddressNumber.Latitude = location.Latitude;
+                    rest.StreetAddress.StreetAddressNumber.Longitude = location.Longitude;
+                }
+            }
+
+            return rest;
         }
     }
 }
