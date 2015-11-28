@@ -20,7 +20,7 @@ using Mise.Core.Entities.Payments;
 
 namespace Mise.Core.Client.UnitTests.ApplicationModel
 {
-    [Ignore]
+    [Ignore("Waiting for POS")]
 	[TestFixture]
 	public class TerminalApplicationModelTestsPayment
 	{

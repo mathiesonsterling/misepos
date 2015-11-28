@@ -26,7 +26,7 @@ using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.UnitTests.ApplicationModel
 {
-    [Ignore]
+    [Ignore("Waiting for POS")]
 	[TestFixture]
 	public class TerminalApplicationModelTests
 	{

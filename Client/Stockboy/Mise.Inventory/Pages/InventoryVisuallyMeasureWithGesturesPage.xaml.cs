@@ -56,6 +56,11 @@ namespace Mise.Inventory.Pages
                 {
                     mb.SetOff();
                 }
+
+                if (stckMeasure != null)
+                {
+                    StckMeasureSizeChanged(stckMeasure, null);
+                }
             };
 			vm.MovePreviousAnimation = async () => 
 				await stckMain.TranslateTo (stckMain.Width, 0, MiseTheme.SwipeAnimationDuration);
@@ -74,34 +79,36 @@ namespace Mise.Inventory.Pages
 				UpdateBottleShape (vm.Shape);
 			}
 
-			stckMeasure.SizeChanged += (sender, e) => {
-				var updated = sender as VisualElement;
-				if (updated != null) {
-					//we can get our height now!
-					//only update if we're a significant amount changed, to avoid constant redraws
-					if (updated.Height > 0 && Math.Abs (updated.Height - _oldHeight) > 50) {
-						_oldHeight = updated.Height;
-
-						var levelHeight = updated.Height / (_shape.WidthsAsPercentageOfHeight.Count + 1);
-						foreach (var c in stckMeasure.Children) {
-							var mb = c as MeasureButton;
-							if (mb != null) {
-								//recalc the height based upon the ratio of the real height to the default
-								mb.HeightRequest = levelHeight;
-								//TODO reset the width as well?
-								mb.WidthRequest = updated.Height * mb.WidthAsPercentageOfContainerHeight;
-							} else {
-								var zero = c as ZeroButton;
-								if(zero != null){
-									zero.HeightRequest = levelHeight;
-									zero.WidthRequest = updated.Width;
-								}
-							}
-						}
-					}
-				}
-			};
+            stckMeasure.SizeChanged += StckMeasureSizeChanged;
 		}
+
+        private void StckMeasureSizeChanged(object sender, EventArgs e){
+            var updated = sender as VisualElement;
+            if (updated != null) {
+                //we can get our height now!
+                //only update if we're a significant amount changed, to avoid constant redraws
+                if (updated.Height > 0 && Math.Abs (updated.Height - _oldHeight) > 50) {
+                    _oldHeight = updated.Height;
+
+                    var levelHeight = updated.Height / (_shape.WidthsAsPercentageOfHeight.Count + 1);
+                    foreach (var c in stckMeasure.Children) {
+                        var mb = c as MeasureButton;
+                        if (mb != null) {
+                            //recalc the height based upon the ratio of the real height to the default
+                            mb.HeightRequest = levelHeight;
+                            //TODO reset the width as well?
+                            mb.WidthRequest = updated.Height * mb.WidthAsPercentageOfContainerHeight;
+                        } else {
+                            var zero = c as ZeroButton;
+                            if(zero != null){
+                                zero.HeightRequest = levelHeight;
+                                zero.WidthRequest = updated.Width;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 		#region implemented abstract members of BasePage
 
@@ -170,6 +177,7 @@ namespace Mise.Inventory.Pages
 			stckMeasure.Children.Add (zeroButton);
 
 			_shape = shape;
+
 			_loading = false;
 		}
 
