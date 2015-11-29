@@ -151,6 +151,10 @@ namespace Mise.Inventory.Pages
 			_measureButtons = new List<MeasureButton> ();
 			stckMeasure.Children.Clear ();
 
+            if (stckMeasure != null)
+            {
+                stckMeasure.MinimumHeightRequest = DEFAULT_HEIGHT;
+            }
 			var levelHeight = DEFAULT_HEIGHT / (shape.WidthsAsPercentageOfHeight.Count + 1);
 			var i = 0;
 
