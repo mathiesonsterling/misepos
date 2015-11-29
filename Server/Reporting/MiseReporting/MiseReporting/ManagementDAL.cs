@@ -224,13 +224,14 @@ namespace MiseReporting
 
         public async Task<IEnumerable<IRestaurant>> GetAllRestaurants()
         {
+            /*
             if (CachedRestaurantList != null && CachedRestaurantList.Any())
             {
                 var cachedItems = CachedRestaurantList
                     .Select(id => HttpRuntime.Cache.Get(id.ToString()))
                     .Select(r => r as IRestaurant);
                 return cachedItems;
-            }
+            }*/
 
             IEnumerable<AzureEntityStorage> ais;
             using (var db = new AzureNonTypedEntities())
