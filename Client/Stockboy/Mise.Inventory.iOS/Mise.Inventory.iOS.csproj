@@ -192,6 +192,7 @@
     </Reference>
     <Reference Include="Mindscape.Raygun4Net.Xamarin.iOS.Unified">
       <HintPath>..\Components\raygun4net-5.1.1\lib\ios-unified\Mindscape.Raygun4Net.Xamarin.iOS.Unified.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

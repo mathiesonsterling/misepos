@@ -27,46 +27,47 @@ namespace Mise.Inventory.ViewModels
 				var emp = await _loginService.GetCurrentEmployee ();
 				if(emp == null){
 					await Navigation.ShowLogin ();
-				}
-					
-				var rest = await _loginService.GetCurrentRestaurant ();
-				if (rest == null) {
-					RestaurantName = "ERROR NO RESTAURANT";
-                    await Navigation.ShowSelectRestaurant();
-				} else {
-	                //if we're not a production one, let's make it obvious!
-				    var buildLevel = DependencySetup.GetBuildLevel();
-				    switch (buildLevel)
-				    {
-				        case BuildLevel.Debugging:
-	                        RestaurantName = "DEBUG " + rest.Name.ShortName;
-				            break;
-	                    case BuildLevel.Demo:
-	                        RestaurantName = "DEMO " + rest.Name.ShortName;
-				            break;
-	                    case BuildLevel.Development:
-	                        RestaurantName = "DEV " + rest.Name.ShortName;
-				            break;
-	                    case BuildLevel.QA:
-	                        RestaurantName = "QA " + rest.Name.ShortName;
-				            break;
-	                    case BuildLevel.Production:
-	                        RestaurantName = rest.Name.ShortName;
-				            break;
-				    }
-					
-				}
+                }  else 
+                {			
+    				var rest = await _loginService.GetCurrentRestaurant ();
+    				if (rest == null) {
+    					RestaurantName = "ERROR NO RESTAURANT";
+                        await Navigation.ShowSelectRestaurant();
+    				} else {
+    	                //if we're not a production one, let's make it obvious!
+    				    var buildLevel = DependencySetup.GetBuildLevel();
+    				    switch (buildLevel)
+    				    {
+    				        case BuildLevel.Debugging:
+    	                        RestaurantName = "DEBUG " + rest.Name.ShortName;
+    				            break;
+    	                    case BuildLevel.Demo:
+    	                        RestaurantName = "DEMO " + rest.Name.ShortName;
+    				            break;
+    	                    case BuildLevel.Development:
+    	                        RestaurantName = "DEV " + rest.Name.ShortName;
+    				            break;
+    	                    case BuildLevel.QA:
+    	                        RestaurantName = "QA " + rest.Name.ShortName;
+    				            break;
+    	                    case BuildLevel.Production:
+    	                        RestaurantName = rest.Name.ShortName;
+    				            break;
+    				    }
+    					
+    				}
 
-				await _inventoryService.LoadLatest();
-			    var inv = _inventoryService.GetSelectedInventory();
-			    if (inv == null || inv.IsCompleted)
-			    {
-			        InventoryButtonText = "Start Count";
-			    }
-			    else
-			    {
-			        InventoryButtonText = "Continue Count";
-			    }
+    				await _inventoryService.LoadLatest();
+    			    var inv = _inventoryService.GetSelectedInventory();
+    			    if (inv == null || inv.IsCompleted)
+    			    {
+    			        InventoryButtonText = "Start Count";
+    			    }
+    			    else
+    			    {
+    			        InventoryButtonText = "Continue Count";
+    			    }
+                }
 			} catch(Exception e){
 				HandleException (e);
 			}

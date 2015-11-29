@@ -46,7 +46,7 @@ namespace Mise.Inventory.ViewModels
 		public override async Task OnAppearing(){
 			var emp = await _loginService.GetCurrentEmployee ();
 			if (emp != null) {
-				await Navigation.ShowMainMenu ();
+                await Navigation.ShowSelectRestaurant();
 			}
 			Processing = false;
 		}
