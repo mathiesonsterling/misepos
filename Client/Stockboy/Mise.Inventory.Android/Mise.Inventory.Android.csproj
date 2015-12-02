@@ -16,6 +16,7 @@
     <AssemblyName>Mise.Inventory.Android</AssemblyName>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <XamarinInsightsApiKey>ed66b318e3febcdfc08ca11d6c20e33c79f2f434</XamarinInsightsApiKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
