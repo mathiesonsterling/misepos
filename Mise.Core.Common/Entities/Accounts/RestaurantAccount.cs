@@ -99,12 +99,21 @@ namespace Mise.Core.Common.Entities.Accounts
                 case MiseEventTypes.AccountRegisteredFromMobileDevice:
                     WhenRegisteredFromMobile((AccountRegisteredFromMobileDeviceEvent) entityEvent);
                     break;
+                case MiseEventTypes.AccountHasPaymentPlanSetup:
+                    WhenAccountHasPaymentPlanSetup((AccountHasPaymentPlanSetupEvent) entityEvent);
+                    break;
                 default:
                     throw new InvalidOperationException("Don't know how to handle " + entityEvent.EventType);
             }
 
             LastUpdatedDate = entityEvent.CreatedDate;
             Revision = entityEvent.EventOrder;
+        }
+
+        private void WhenAccountHasPaymentPlanSetup(AccountHasPaymentPlanSetupEvent entityEvent)
+        {
+            PaymentPlanSetupWithProvider = true;
+            PaymentPlan = entityEvent.PaymentPlan;
         }
 
         protected virtual void WhenRegisteredFromMobile(AccountRegisteredFromMobileDeviceEvent ev)
@@ -120,7 +129,7 @@ namespace Mise.Core.Common.Entities.Accounts
             PaymentPlan = ev.PaymentPlan;
             if (ev.ReferralCode != null)
             {
-                
+                ReferralCodeUsedToCreate = ev.ReferralCode;
             }
         }
 

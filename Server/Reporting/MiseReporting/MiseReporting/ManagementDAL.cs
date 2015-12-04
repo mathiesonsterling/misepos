@@ -23,7 +23,6 @@ namespace MiseReporting
     public class ManagementDAL
     {
         private const string RESTAURANT_ID_LIST_KEY = "allCachedRestaurantIds";
-        private const string INVENTORY_ID_LIST_KEY = "allCachedInventoryIds";
 
         private readonly EntityDataTransportObjectFactory _entityFactory;
         private readonly string _invType;
@@ -184,7 +183,7 @@ namespace MiseReporting
                         ai => ai.EntityID == inventory.Id && ai.MiseEntityType == _invType);
                 if (oldVer == null)
                 {
-                    throw new InvalidOperationException("Cannot find vendor to update in DB");
+                    throw new InvalidOperationException("Cannot find inventory to update in DB");
                 }
                 var newVerDTO = new AzureEntityStorage(_entityFactory.ToDataTransportObject(inventory));
                 oldVer.EntityJSON = newVerDTO.EntityJSON;
@@ -196,15 +195,43 @@ namespace MiseReporting
             SubItemCache.Upsert(inventory);
         }
 
+        public async Task UpdateRestaurant(IRestaurant rest)
+        {
+            var restaurant = rest as Restaurant;
+            if (restaurant == null)
+            {
+                throw new ArgumentException("Type given cannot be converted to concrete");
+            }
+
+            using (var db = new AzureNonTypedEntities())
+            {
+                var oldVer = await db.AzureEntityStorages.FirstOrDefaultAsync(
+                        ai => ai.EntityID == restaurant.Id && ai.MiseEntityType == _restType);
+                if (oldVer == null)
+                {
+                    throw new InvalidOperationException("Cannot find restaurant to update in DB");
+                }
+                var newVerDTO = new AzureEntityStorage(_entityFactory.ToDataTransportObject(restaurant));
+                oldVer.EntityJSON = newVerDTO.EntityJSON;
+                oldVer.LastUpdatedDate = newVerDTO.LastUpdatedDate;
+                db.Entry(oldVer).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+
+                HttpRuntime.Cache.Remove(rest.Id.ToString());
+                HttpRuntime.Cache.Insert(rest.Id.ToString(), restaurant);
+            }
+        }
+
         public async Task<IEnumerable<IRestaurant>> GetAllRestaurants()
         {
+            /*
             if (CachedRestaurantList != null && CachedRestaurantList.Any())
             {
                 var cachedItems = CachedRestaurantList
                     .Select(id => HttpRuntime.Cache.Get(id.ToString()))
                     .Select(r => r as IRestaurant);
                 return cachedItems;
-            }
+            }*/
 
             IEnumerable<AzureEntityStorage> ais;
             using (var db = new AzureNonTypedEntities())
@@ -463,14 +490,80 @@ namespace MiseReporting
                 res.AddRange(miseAccts);
 
                 //get the rest accounts
+                var restAccounts = await GetRestaurantAccounts(email.Value);
+                res.AddRange(restAccounts);
+            }
+
+            return res;
+        }
+
+        public async Task<IEnumerable<IAccount>> GetRestaurantAccounts(string searchString)
+        {
+            var restAcctType = typeof(RestaurantAccount).ToString();
+
+            var res = new List<IAccount>();
+            using (var db = new AzureNonTypedEntities())
+            {
+                //get the rest accounts
                 var restAcctAis = await db.AzureEntityStorages.Where(
-                        ai => ai.MiseEntityType == restAcctType && ai.EntityJSON.Contains(email.Value)).ToListAsync();
+                        ai => ai.MiseEntityType == restAcctType && ai.EntityJSON.Contains(searchString)).ToListAsync();
                 var restAccts =
                     restAcctAis.Select(a => _entityFactory.FromDataStorageObject<RestaurantAccount>(a.ToRestaurantDTO()));
                 res.AddRange(restAccts);
             }
 
             return res;
+        }
+
+        public async Task<IEnumerable<IAccount>> GetAccountsWaitingForPaymentPlan()
+        {
+            var accountType = typeof(RestaurantAccount).ToString();
+            const string MISSING_ACCOUNTS_TAG = "\"PaymentPlanSetupWithProvider\":false";
+
+            IEnumerable<AzureEntityStorage> accountAIs;
+            using (var context = new AzureNonTypedEntities())
+            {
+                accountAIs = await context.AzureEntityStorages.Where(a => a.MiseEntityType == accountType && a.EntityJSON.Contains(MISSING_ACCOUNTS_TAG))
+                    .ToListAsync();
+            }
+
+            if (accountAIs == null)
+            {
+                return null;
+            }
+
+            var dtos = accountAIs.Select(ai => ai.ToRestaurantDTO());
+            var accounts = dtos.Select(dto => _entityFactory.FromDataStorageObject<RestaurantAccount>(dto));
+            return accounts;
+        }
+
+        public async Task UpdateAccount(IAccount account)
+        {
+            var downgrade = account as RestaurantAccount;
+            if (downgrade == null)
+            {
+                return;
+            }
+
+            var typeString = typeof(RestaurantAccount).ToString();
+            using (var db = new AzureNonTypedEntities())
+            {
+                var oldVer =
+                    await
+                        db.AzureEntityStorages.FirstOrDefaultAsync(
+                            ai => ai.EntityID == account.Id && ai.MiseEntityType == typeString);
+                if (oldVer == null)
+                {
+                    throw new InvalidOperationException("Unable to find existing account to update");
+                }
+                var dto = _entityFactory.ToDataTransportObject(downgrade);
+
+                var newVer = new AzureEntityStorage(dto);
+                oldVer.EntityJSON = newVer.EntityJSON;
+                oldVer.LastUpdatedDate = DateTimeOffset.UtcNow;
+                db.Entry(oldVer).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
         }
     }
 }

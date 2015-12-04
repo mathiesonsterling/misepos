@@ -486,10 +486,10 @@ namespace Mise.Inventory.Services.Implementation
 			PhoneNumber phone, MiseAppTypes app, CreditCardNumber cardDetails)
 		{
 			//auth the credit card.  We'll create the subscription on the server?
-			CreditCard card = await _ccProcessor.SendCardToProcessorForSubscription(accountName, cardDetails);
+			var card = await _ccProcessor.SendCardToProcessorForSubscription(accountName, cardDetails);
 
 			var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, Guid.NewGuid (), email,
-				         phone, card, code, app, accountName, MisePaymentPlan.StockboyBasicMonthly);
+                phone, card, code, app, accountName, MisePaymentPlan.StockboyBasic);
 
 			var acct = _accountRepository.ApplyEvent (ev);
 			await _accountRepository.CommitOnlyImmediately (acct.Id);
@@ -520,7 +520,7 @@ namespace Mise.Inventory.Services.Implementation
 				//commit account registry
 				var ev = _eventFactory.CreateAccountRegisteredFromMobileDeviceEvent (_currentEmployee, _currentRegistrationInProcess.AccountID,
 					_currentRegistrationInProcess.Email, _currentRestaurant.PhoneNumber, card, _currentRegistrationInProcess.Referral, 
-					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName, MisePaymentPlan.StockboyBasicMonthly);
+					_currentRegistrationInProcess.App, _currentRegistrationInProcess.AccountName, MisePaymentPlan.StockboyBasic);
 
 				var acct = _accountRepository.ApplyEvent (ev);
 				await _accountRepository.CommitOnlyImmediately (acct.Id);

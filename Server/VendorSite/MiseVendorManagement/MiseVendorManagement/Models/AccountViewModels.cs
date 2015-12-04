@@ -82,10 +82,7 @@ namespace MiseVendorManagement.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength=2)]
-        [Required]
-        public string BusinessName { get; set; }
-
+        /*
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         [Required]
         [DisplayName("Primary Contact First Name")]
@@ -99,7 +96,7 @@ namespace MiseVendorManagement.Models
         public string ReferralCodeUsed { get; set; }
 
         [Required]
-        public string ReferralCodeGenerated { get; set; }
+        public string ReferralCodeGenerated { get; set; }*/
 
     }
 

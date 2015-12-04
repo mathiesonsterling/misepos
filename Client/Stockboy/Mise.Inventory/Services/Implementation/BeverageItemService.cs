@@ -116,6 +116,9 @@ namespace Mise.Inventory.Services.Implementation
 				var vendorsWeHave = _vendorRepository.GetAll();
 				var allROs = _roRepository.GetAll ();
 
+                var ourVendorItems = vendorsWeHave.SelectMany (v => v.GetItemsVendorSells());
+                items = AddInOrderIfNotAlreadyPresent (items, ourVendorItems);
+
 				if (pars != null) {
 					items.AddRange (pars.SelectMany(p => p.GetBeverageLineItems()));
 				}
@@ -125,10 +128,7 @@ namespace Mise.Inventory.Services.Implementation
 
 				var oldInvItems = inventories.SelectMany (i => i.GetBeverageLineItems ());
 				items = AddInOrderIfNotAlreadyPresent (items, oldInvItems);
-
-				var ourVendorItems = vendorsWeHave.SelectMany (v => v.GetItemsVendorSells());
-				items = AddInOrderIfNotAlreadyPresent (items, ourVendorItems);
-
+               
 				var filtItems = string.IsNullOrEmpty (searchString) ? items.ToList () : items.Where(i => i.ContainsSearchString (searchString)).ToList ();
 
 				//update our containers here!

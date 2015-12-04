@@ -2,7 +2,7 @@
 
 using Mise.Core.ValueItems;
 using Mise.Core.Services.UtilityServices;
-//using Mindscape.Raygun4Net;
+using Mindscape.Raygun4Net;
 
 namespace Mise.Inventory.iOS.Services
 {

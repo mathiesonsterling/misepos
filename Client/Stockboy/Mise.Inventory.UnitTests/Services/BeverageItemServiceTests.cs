@@ -400,7 +400,7 @@ namespace Mise.Inventory.UnitTests.Services
 		}
 
 		[Test]
-		public async void GetPossibleItemsWithoutRestaurantIDShouldNotCallRepositories(){
+		public async Task GetPossibleItemsWithoutRestaurantIDShouldNotCallRepositories(){
 			var mockLogger = new Mock<ILogger> ();
 			var mockDevLoc = new DummyDeviceLocationService ();
 
@@ -429,6 +429,78 @@ namespace Mise.Inventory.UnitTests.Services
 			mockInventoryRepos.Verify (r => r.GetAll(), Times.Once());
 			mockPARRepos.Verify(r => r.GetAll(), Times.Once());
 		}
+
+        [Test]
+        public async Task ItemInVendorWithDifferentContainerNameShouldHideInventoryItem(){
+            var restaurantID = Guid.NewGuid ();
+
+            var mockLogger = new Mock<ILogger> ();
+            var mockDevLoc = new DummyDeviceLocationService ();
+
+            var vendorItem = new VendorBeverageLineItem{
+                Container = new LiquidContainer{
+                    DisplayName = "vendor container",
+                    AmountContained = new LiquidAmount{Milliliters = 245}},
+                DisplayName = "item"
+            };
+            var invItem = new InventoryBeverageLineItem{
+                Container = new LiquidContainer{
+                    DisplayName = "inv container",
+                    AmountContained = new LiquidAmount{Milliliters = 245}},
+                DisplayName = "item"
+            };
+
+            //we'll clone our items to ensure they're different objects!
+            var vendor1 = new Mock<IVendor> ();
+            vendor1.Setup (v => v.GetItemsVendorSells ()).Returns (new List<IVendorBeverageLineItem>{
+                vendorItem});
+
+
+ 
+
+            var mockVendorRepos = new Mock<IVendorRepository> ();
+            mockVendorRepos.Setup (r => r.GetAll())
+                .Returns (new List<IVendor>{vendor1.Object}.AsEnumerable());
+            mockVendorRepos.Setup(r => r.GetVendorsNotAssociatedWithRestaurantWithinRadius(It.IsAny<Guid>(), It.IsAny<Location>(), It.IsAny<int>()))
+                .Returns(Task.FromResult(new List<IVendor>().AsEnumerable()));
+
+            //one item in inventory will match the item in the vendor 3
+            var currentInv = new Mock<IInventory> ();
+            currentInv.Setup (i => i.IsCurrent).Returns (true);
+            currentInv.Setup (i => i.RestaurantID).Returns (restaurantID);
+            currentInv.Setup(i => i.GetBeverageLineItems()).Returns(new List<IInventoryBeverageLineItem>{
+                invItem
+            });
+
+            var oldInv = new Mock<IInventory> ();
+            oldInv.Setup (i => i.IsCurrent).Returns (false);
+            oldInv.Setup (i => i.RestaurantID).Returns (restaurantID);
+            oldInv.Setup (i => i.GetBeverageLineItems ()).Returns (new List<IInventoryBeverageLineItem>());
+
+            var mockInventoryRepos = new Mock<IInventoryRepository> ();
+            mockInventoryRepos.Setup (r => r.GetCurrentInventory (restaurantID))
+                .Returns (Task.FromResult(currentInv.Object));
+            mockInventoryRepos.Setup (r => r.GetAll ())
+                .Returns (new List<IInventory>());
+
+            IPar currentPar = new Par{ IsCurrent = true, ParLineItems = new List<ParBeverageLineItem> {}};
+            var mockPARRepos = new Mock<IParRepository> ();
+            mockPARRepos.Setup (r => r.GetCurrentPAR (restaurantID))
+                .Returns (Task.FromResult(currentPar));
+
+            var mockRORepos = new Mock<IReceivingOrderRepository> ();
+            mockRORepos.Setup (r => r.GetAll ())
+                .Returns (new List<IReceivingOrder> ());
+            var underTest = new BeverageItemService (mockLogger.Object, mockDevLoc, mockVendorRepos.Object, 
+                mockPARRepos.Object, mockInventoryRepos.Object, mockRORepos.Object);
+
+            //ACT
+            var items = await underTest.GetPossibleItems();
+
+            //ASSERT
+            Assert.AreEqual(1, items.Count(), "num items");
+            Assert.AreEqual("vendor container", items.First().Container.DisplayName);
+        }
 	}
 }
 

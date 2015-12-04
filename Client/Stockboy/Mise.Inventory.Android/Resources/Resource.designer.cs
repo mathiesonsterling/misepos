@@ -47,6 +47,8 @@ namespace Mise.Inventory.Android
 			global::Stripe.Resource.Id.stripeNumber = global::Mise.Inventory.Android.Resource.Id.stripeNumber;
 			global::Stripe.Resource.Layout.stripeviewlayout = global::Mise.Inventory.Android.Resource.Layout.stripeviewlayout;
 			global::Stripe.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
+			global::PCLCrypto.Resource.String.ApplicationName = global::Mise.Inventory.Android.Resource.String.ApplicationName;
+			global::PCLCrypto.Resource.String.Hello = global::Mise.Inventory.Android.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_in = global::Mise.Inventory.Android.Resource.Animation.abc_fade_in;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_out = global::Mise.Inventory.Android.Resource.Animation.abc_fade_out;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_grow_fade_in_from_bottom = global::Mise.Inventory.Android.Resource.Animation.abc_grow_fade_in_from_bottom;
@@ -1505,8 +1507,6 @@ namespace Mise.Inventory.Android
 			global::Xamarin.Forms.Platform.Resource.Styleable.ViewStubCompat_android_id = global::Mise.Inventory.Android.Resource.Styleable.ViewStubCompat_android_id;
 			global::Xamarin.Forms.Platform.Resource.Styleable.ViewStubCompat_android_inflatedId = global::Mise.Inventory.Android.Resource.Styleable.ViewStubCompat_android_inflatedId;
 			global::Xamarin.Forms.Platform.Resource.Styleable.ViewStubCompat_android_layout = global::Mise.Inventory.Android.Resource.Styleable.ViewStubCompat_android_layout;
-			global::PCLCrypto.Resource.String.ApplicationName = global::Mise.Inventory.Android.Resource.String.ApplicationName;
-			global::PCLCrypto.Resource.String.Hello = global::Mise.Inventory.Android.Resource.String.Hello;
 		}
 		
 		public partial class Animation

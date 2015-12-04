@@ -33,7 +33,7 @@ namespace MiseReporting.Controllers
                 vms.Add(vm);
             }
 
-            return View(vms.OrderBy(vm=> vm.LastName).ThenBy(vm => vm.FirstName).ThenBy(vm => vm.RestaurantsDisplay));
+            return View(vms.OrderBy(vm=> vm.RestaurantsDisplay).ThenBy(vm => vm.LastName).ThenBy(vm => vm.FirstName));
         }
 
         [Authorize]

@@ -255,8 +255,12 @@ namespace Mise.Inventory.Services.Implementation
 
 		public async Task SaveInventory ()
 		{
-			var currInventory = _inventoryRepository.GetByID (_selectedInventoryID.Value);
-			await _inventoryRepository.Commit (currInventory.Id).ConfigureAwait (false);
+            //only save if dirty
+            if (_inventoryRepository.Dirty)
+            {
+                var currInventory = _inventoryRepository.GetByID(_selectedInventoryID.Value);
+                await _inventoryRepository.Commit(currInventory.Id).ConfigureAwait(false);
+            }
 		}
 
 		public async Task ClearCurrentSection ()

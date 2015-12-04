@@ -7,7 +7,7 @@ using Xamarin.UITest.Queries;
 
 namespace Mise.Inventory.UITests
 {
-	[Ignore]
+    [Ignore("Needs fix to address built version")]
 	[TestFixture (Platform.Android)]
 	[TestFixture (Platform.iOS)]
 	public class Tests

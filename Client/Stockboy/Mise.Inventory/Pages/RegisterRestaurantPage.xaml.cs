@@ -15,9 +15,12 @@ namespace Mise.Inventory.Pages
 			InitializeComponent ();
 
 			pckState.SelectedIndexChanged += (sender, e) => {
-				var selectedItem = pckState.Items[pckState.SelectedIndex];
-				var vm = ViewModel as RestaurantRegistrationViewModel;
-				vm.State = selectedItem;
+                if(pckState != null && pckState.SelectedIndex >= 0)
+                {
+    				var selectedItem = pckState.Items[pckState.SelectedIndex];
+    				var vm = ViewModel as RestaurantRegistrationViewModel;
+    				vm.State = selectedItem;
+                }
 			};
 		}
 

@@ -202,6 +202,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\stockboymobileserviceContext.cs" />
+    <Compile Include="ScheduledJobs\CreateStripeSubsciptionsForNewAccountsJob.cs" />
     <Compile Include="ScheduledJobs\SampleJob.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -226,6 +227,7 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\mobile-stockboymobile.pubxml" />
     <None Include="Properties\PublishProfiles\mobile-stockboymobileservice.pubxml" />
+    <None Include="Properties\PublishProfiles\mobile-stockboymobilestaging.pubxml" />
     <None Include="Properties\PublishProfiles\stockboymobile - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\stockboymobile - Web Deploy.pubxml" />
   </ItemGroup>

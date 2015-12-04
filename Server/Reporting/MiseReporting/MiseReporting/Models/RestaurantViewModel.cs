@@ -22,6 +22,10 @@ namespace MiseReporting.Models
         [DisplayName("Street Number")]
         public string StreetAddressNumber { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
         [DisplayName("Apt / Suite")]
         public string UnitNumber { get; set; }
 
@@ -64,13 +68,14 @@ namespace MiseReporting.Models
             {
                 StreetAddressNumber = rest.StreetAddress.StreetAddressNumber.Number;
                 StreetDirection = rest.StreetAddress.StreetAddressNumber.Direction;
+                Longitude = rest.StreetAddress.StreetAddressNumber.Longitude;
+                Latitude = rest.StreetAddress.StreetAddressNumber.Latitude;
                 StreetName = rest.StreetAddress.Street.Name;
                 City = rest.StreetAddress.City.Name;
                 State = rest.StreetAddress.State.Name;
                 Country = rest.StreetAddress.Country.Name;
                 ZipCode = rest.StreetAddress.Zip.Value;
             }
-
 
             Name = rest.Name.FullName;
             CurrentTime = DateTimeOffset.UtcNow.ToLocalTime().DateTime;
@@ -98,7 +103,7 @@ namespace MiseReporting.Models
 
         public Restaurant ToEntity()
         {
-            return new Restaurant
+            var rest = new Restaurant
             {
                 CreatedDate = DateTime.UtcNow,
                 LastUpdatedDate = DateTime.UtcNow,
@@ -112,6 +117,14 @@ namespace MiseReporting.Models
                         this.State, Mise.Core.ValueItems.Country.UnitedStates.Name, this.ZipCode),
 
             };
+
+            if (Longitude != 0 || Latitude != 0)
+            {
+                rest.StreetAddress.StreetAddressNumber.Longitude = Longitude;
+                rest.StreetAddress.StreetAddressNumber.Latitude = Latitude;
+            }
+
+            return rest;
         }
     }
 }

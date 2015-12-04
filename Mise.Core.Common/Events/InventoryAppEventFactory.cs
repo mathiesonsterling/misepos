@@ -27,16 +27,9 @@ namespace Mise.Core.Common.Events
 
 		IRestaurant _restaurant;
 
-		public Guid? RestaurantID {
-			get {
-				if (_restaurant != null) {
-					return _restaurant.Id;
-				}
-				return null;
-			}
-		}
+		public Guid? RestaurantID => _restaurant?.Id;
 
-		string _deviceID;
+        string _deviceID;
 		readonly MiseAppTypes _appCode;
 
 		public InventoryAppEventFactory(string deviceID, MiseAppTypes appCode)
@@ -850,9 +843,24 @@ namespace Mise.Core.Common.Events
 				AccountType = MiseAccountTypes.Restaurant,
 				AccountHolderName = name,
 				AppType = app,
-                PaymentPlan = paymentPlan
+                PaymentPlan = paymentPlan,
+                CreditCard = card
 			};
 		}
+
+        public AccountHasPaymentPlanSetupEvent CreateAccountHasPaymentPlanSetupEvent(IAccount acct)
+        {
+            return new AccountHasPaymentPlanSetupEvent
+            {
+                AccountID = acct.Id,
+                CausedById = Guid.Empty,
+                CreatedDate = GetDate(),
+                DeviceId = _deviceID,
+                EventOrder = GetNextEventID(),
+                Id = Guid.NewGuid(),
+                PaymentPlan = acct.PaymentPlan
+            };
+        }
 	}
 }
 

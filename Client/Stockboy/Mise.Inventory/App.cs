@@ -139,7 +139,6 @@ namespace Mise.Inventory
         public static InvitationViewModel InvitationViewModel => Resolve<InvitationViewModel>();
         public static RestaurantRegistrationViewModel RestaurantRegistrationViewModel => Resolve<RestaurantRegistrationViewModel>();
         public static PurchaseOrderSelectViewModel PurchaseOrderSelectViewModel => Resolve<PurchaseOrderSelectViewModel>();
-        public static AccountRegistrationViewModel AccountRegistrationViewModel => Resolve<AccountRegistrationViewModel>();
 		public static AccountRegistrationWithCreditCardViewModel AccountRegistrationWithCreditCardViewModel => Resolve<AccountRegistrationWithCreditCardViewModel>();
 
         public static ReportsViewModel ReportsViewModel => Resolve<ReportsViewModel>();

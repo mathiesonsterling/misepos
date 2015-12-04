@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Client.Services;
+using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Events;
+using Mise.Core.Entities;
+using Mise.Core.Entities.People;
+using Mise.Core.Entities.People.Events;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
+using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
+using Mise.Core.ValueItems;
+using Mise.Inventory.Services.Implementation;
 using Moq;
 using NUnit.Framework;
 
-using Mise.Inventory.Services.Implementation;
-using Mise.Core.Entities.People;
-using Mise.Core.Repositories;
-using Mise.Core.Services;
-using Mise.Core.Common.Events;
-using Mise.Core.Entities.People.Events;
-using Mise.Core.ValueItems;
-using Mise.Core.Common.Entities;
-using Mise.Core.Entities;
-using Mise.Core.Client.Services;
-using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Common.Services.WebServices;
 namespace Mise.Inventory.UnitTests.Services
 {
 	[TestFixture]
