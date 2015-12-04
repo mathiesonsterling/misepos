@@ -24,7 +24,6 @@ namespace Mise.Inventory.Android
 			var errorService = new AndroidRaygun ();
 			cb.RegisterInstance<IErrorTrackingService> (errorService).SingleInstance ();
 			Logger = new AndroidLogger (errorService);
-
             /*
 			var device = AndroidDevice.CurrentDevice;
 			cb.RegisterInstance<IDevice> (device).SingleInstance ();
