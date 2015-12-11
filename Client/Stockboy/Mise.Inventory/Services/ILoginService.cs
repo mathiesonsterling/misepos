@@ -96,5 +96,8 @@ namespace Mise.Inventory.Services
 			MiseAppTypes app, CreditCardNumber cardDetails);
 
 		Task ChangePasswordForCurrentEmployee (Password oldPassword, Password newPassword);
+
+        bool HasBeenShowEula();
+        Task SetEulaAsShown();
 	}
 }
