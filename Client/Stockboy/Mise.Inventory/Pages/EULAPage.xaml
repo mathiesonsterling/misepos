@@ -6,7 +6,7 @@ x:Class="Mise.Inventory.Pages.EULAPage"
 xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
 >
 	<ContentPage.Content>
-		<StackLayout>
+		<StackLayout Padding="50">
 			<ScrollView>
 				<Label Text="{Binding EULAText}" FontSize="Micro"/>
 			</ScrollView>
