@@ -8,12 +8,14 @@ namespace Mise.Inventory.ViewModels
 	{
 		private readonly ILoginService _loginService;
 		private readonly IFunFactService _funFacts;
-		public RestaurantLoadingViewModel (ILoginService loginService, IFunFactService funFacts, IAppNavigation nav, 
-			ILogger logger) 
+        private readonly IBeverageItemService _beverageItemService;
+		public RestaurantLoadingViewModel (ILoginService loginService, IFunFactService funFacts, 
+            IBeverageItemService bevService, IAppNavigation nav, ILogger logger) 
 			: base(nav, logger)
 		{
 			_loginService = loginService;
 			_funFacts = funFacts;
+            _beverageItemService = bevService;
 		}
 
 		public string FunFact{ get { return GetValue<string> (); } private set { SetValue<string> (value); } }
@@ -28,6 +30,24 @@ namespace Mise.Inventory.ViewModels
 			try{
 				Processing = true;
 				await _loginService.LoadSelectedRestaurant ();
+
+                //check if our selected restaurant has an account
+                var rest = await _loginService.GetCurrentRestaurant();
+                if(!rest.AccountID.HasValue){
+                    //see if we're over the time
+                    var overTimeToRegister = await _beverageItemService.IsRestaurantOverTimeToRegister();
+                    if(overTimeToRegister){
+                        var res = await this.AskUserQuestionModal("Need to register account", "You need to register an account to continue using Stockboy.  You'll still get an additional free trial period!  Register an account now?",
+                            "Register");
+                        if(res){
+                            await Navigation.ShowAccountRegistration();
+                        } else {
+                            await Navigation.ShowLogin();
+                        }
+                        return;
+                    }
+                }
+
 				Processing = false;
 				await Navigation.ShowMainMenu ();
 				return;

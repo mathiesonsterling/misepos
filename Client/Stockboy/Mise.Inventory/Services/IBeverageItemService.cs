@@ -45,6 +45,8 @@ namespace Mise.Inventory.Services
 		Task<IEnumerable<IBaseBeverageLineItem>> FindItem(string seachString, int maxItems = int.MaxValue);
 
 		Task<IEnumerable<LiquidContainer>> GetAllPossibleContainerSizes();
+
+        Task<bool> IsRestaurantOverTimeToRegister();
 	}
 }
 

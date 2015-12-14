@@ -16,7 +16,7 @@ using Mise.Core.Client.Services;
 
 namespace Mise.Inventory.Services.Implementation
 {
-	public class LoginService : ILoginService
+    public class LoginService : ILoginService
 	{
 		readonly IEmployeeRepository _employeeRepository;
 		readonly IInventoryAppEventFactory _eventFactory;
@@ -559,5 +559,25 @@ namespace Mise.Inventory.Services.Implementation
 			_currentEmployee = _employeeRepository.ApplyEvent (ev);
 			await _employeeRepository.Commit (_currentEmployee.Id);
 		}
+
+        private const string eulaKey = "EULA_SHOWN_1.0";
+        public bool HasBeenShowEula()
+        {
+            try{
+                var found = _keyValStorage.GetID(eulaKey);
+                return found != null;
+            } catch(Exception e){
+                _logger.HandleException(e);
+                return false;
+            }
+        }
+
+
+        public Task SetEulaAsShown()
+        {
+            return _keyValStorage.SetID(eulaKey, Guid.NewGuid());
+        }
+
+
 	}
 }

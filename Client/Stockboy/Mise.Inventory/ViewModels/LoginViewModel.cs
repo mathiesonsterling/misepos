@@ -11,7 +11,7 @@ using System.Net;
 using Xamarin.Forms;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using Mise.Core.Common.Services.WebServices.Exceptions;
-
+using Mise.Core.Client.Services;
 
 namespace Mise.Inventory.ViewModels
 {
@@ -19,7 +19,6 @@ namespace Mise.Inventory.ViewModels
 	{
 		readonly ILoginService _loginService;
 	    private readonly IInsightsService _insightsService;
-
 	    /// <summary>
 	    /// Initializes a new instance of the <see cref="Mise.Inventory.ViewModels.LoginViewModel"/> class.
 	    /// </summary>
@@ -27,7 +26,8 @@ namespace Mise.Inventory.ViewModels
 	    /// <param name="loginService">Login service.</param>
 	    /// <param name="navigationService">Navigation service.</param>
 	    /// <param name="insightsService"></param>
-	    public LoginViewModel(ILogger logger, ILoginService loginService, IAppNavigation navigationService, IInsightsService insightsService)
+	    public LoginViewModel(ILogger logger, ILoginService loginService, IAppNavigation navigationService, 
+            IInsightsService insightsService)
 			:base(navigationService, logger)
 		{
 			_loginService = loginService;
@@ -44,6 +44,13 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		public override async Task OnAppearing(){
+            var hasEulaDone = HasEulaBeenShown();
+            if (hasEulaDone == false)
+            {
+                await Navigation.ShowEULA();
+                return;
+            }
+
 			var emp = await _loginService.GetCurrentEmployee ();
 			if (emp != null) {
                 await Navigation.ShowSelectRestaurant();
@@ -251,5 +258,10 @@ namespace Mise.Inventory.ViewModels
 				HandleException (e);
 			}
 		}
+
+        private const string MAJOR_VERSION = "1.0";
+        private bool HasEulaBeenShown(){
+            return _loginService.HasBeenShowEula();
+        }
 	}
 }

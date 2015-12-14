@@ -84,8 +84,8 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendorService = new Mock<IVendorService>();
             IVendor vendor = null;
-            vendorService.Setup(vs => vs.GetVendorWithLowestPriceForItem(It.IsAny<IBaseBeverageLineItem>(),
-                It.IsAny<int>(), It.IsAny<Guid?>()))
+            vendorService.Setup(vs => vs.GetBestVendorForItem(It.IsAny<IBaseBeverageLineItem>(),
+                It.IsAny<int>(), It.IsAny<IRestaurant>()))
                 .Returns(Task.FromResult(vendor));
 
             //use a real repos for full test
@@ -198,8 +198,8 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendorService = new Mock<IVendorService>();
             IVendor vendor = null;
-            vendorService.Setup(vs => vs.GetVendorWithLowestPriceForItem(It.IsAny<IBaseBeverageLineItem>(),
-                It.IsAny<int>(), It.IsAny<Guid?>()))
+            vendorService.Setup(vs => vs.GetBestVendorForItem(It.IsAny<IBaseBeverageLineItem>(),
+                It.IsAny<int>(), It.IsAny<IRestaurant>()))
                 .Returns(Task.FromResult(vendor));
 
             //use a real repos for full test
@@ -325,8 +325,8 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendorService = new Mock<IVendorService>();
             IVendor vendor = null;
-            vendorService.Setup(vs => vs.GetVendorWithLowestPriceForItem(It.IsAny<IBaseBeverageLineItem>(),
-                It.IsAny<int>(), It.IsAny<Guid?>()))
+            vendorService.Setup(vs => vs.GetBestVendorForItem(It.IsAny<IBaseBeverageLineItem>(),
+                It.IsAny<int>(), It.IsAny<IRestaurant>()))
                 .Returns(Task.FromResult(vendor));
 
             //use a real repos for full test
@@ -434,8 +434,8 @@ namespace Mise.Inventory.UnitTests.Services
 
             var vendorService = new Mock<IVendorService>();
             IVendor vendor = null;
-            vendorService.Setup(vs => vs.GetVendorWithLowestPriceForItem(It.IsAny<IBaseBeverageLineItem>(),
-                It.IsAny<int>(), It.IsAny<Guid?>()))
+            vendorService.Setup(vs => vs.GetBestVendorForItem(It.IsAny<IBaseBeverageLineItem>(),
+                It.IsAny<int>(), It.IsAny<IRestaurant>()))
                 .Returns(Task.FromResult(vendor));
 
             //use a real repos for full test

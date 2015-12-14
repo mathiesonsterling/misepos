@@ -90,30 +90,55 @@ namespace Mise.Inventory.Services.Implementation
 			return _vendorRepository.GetVendorsAssociatedWithRestaurant (restaurant.Id);
 		}
 
-		public Task<IVendor> GetVendorWithLowestPriceForItem (IBaseBeverageLineItem li, decimal quantity, Guid? restaurantID)
+		public Task<IVendor> GetBestVendorForItem (IBaseBeverageLineItem li, decimal quantity, IRestaurant restaurant)
 		{
 			var lowestPrice = new Money{Dollars = decimal.MaxValue};
-			IVendor lowestVendor = null;
+            IVendor foundVendor = null;
 			foreach(var vendor in _vendorRepository.GetAll ()){
-				var vendorPrice = vendor.GetPriceForLineItem (li, quantity, restaurantID);
+                var vendorPrice = vendor.GetPriceForLineItem (li, quantity, restaurant!=null?restaurant.Id:(Guid?)null);
 				if(vendorPrice != null){
-					if(lowestVendor == null || lowestPrice.GreaterThan (vendorPrice)){
-						lowestVendor = vendor;
+					if(foundVendor == null || lowestPrice.GreaterThan (vendorPrice)){
+						foundVendor = vendor;
 						lowestPrice = vendorPrice;
 					} 
 				}
 			}
 
-		    if (lowestVendor != null)
+		    if (foundVendor != null)
 		    {
-		        return Task.FromResult(lowestVendor);
+		        return Task.FromResult(foundVendor);
 		    }
 		    //is there only ONE vendor with the item?
 		    var anyVendors = _vendorRepository.GetAll ().Where(v => v.DoesCarryItem (li, quantity)).ToList();
-		    if(anyVendors.Count == 1){
-		        lowestVendor = anyVendors.First();
-		    }
-		    return Task.FromResult(lowestVendor);
+            if (anyVendors.Count == 1)
+            {
+                foundVendor = anyVendors.First();
+            }
+            else
+            {
+                IList<IVendor> vendorsToPickFrom;
+                //first find vendors in state
+                if (restaurant != null && restaurant.StreetAddress != null)
+                {
+                    vendorsToPickFrom = anyVendors.Where(v =>
+                            v.StreetAddress != null
+                        && v.StreetAddress.State != null
+                        && v.StreetAddress.State.Equals(restaurant.StreetAddress.State)
+                    ).ToList();
+                }
+                else
+                {
+                    vendorsToPickFrom = anyVendors.ToList();
+                }
+
+                var numVendors = vendorsToPickFrom.Count;
+                var rand = new Random();
+                var index = rand.Next(numVendors - 1);
+
+                foundVendor = vendorsToPickFrom[index];
+
+            }
+		    return Task.FromResult(foundVendor);
 		}
 
 		/// <summary>

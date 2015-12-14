@@ -83,6 +83,8 @@ namespace Mise.Inventory.Services
 
 	    Task ShowUpdateReceivingOrderLineItem();
 
+        Task ShowEULA();
+        Task CloseEULA();
         #region Reports
 
 	    Task ShowSelectCompletedInventory();

@@ -12,7 +12,7 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Inventory.Services.Implementation
 {
-	public class BeverageItemService : IBeverageItemService
+    public class BeverageItemService : IBeverageItemService
 	{
 		readonly IVendorRepository _vendorRepository;
 		readonly IInventoryRepository _inventoryRepository;
@@ -191,6 +191,13 @@ namespace Mise.Inventory.Services.Implementation
 				.Select (t => t.Container);
 			return Task.FromResult (containers);
 		}
+
+        public Task<bool> IsRestaurantOverTimeToRegister()
+        {
+            var res = _inventoryRepository.GetAll().Any(i => i.DateCompleted.HasValue && i.DateCompleted.Value < DateTimeOffset.UtcNow.AddDays(-7));
+
+            return Task.FromResult(res);
+        }
 			
 		#endregion
 	}

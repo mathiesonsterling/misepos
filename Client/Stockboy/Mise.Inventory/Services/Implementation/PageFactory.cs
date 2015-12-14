@@ -72,6 +72,8 @@ namespace Mise.Inventory.Services
 					return new SettingsPage ();
 				case Pages.ChangePassword:
 					return new ChangePasswordPage ();
+                case Pages.EULA:
+                    return new EULAPage();
                 default:
                     throw new ArgumentException(string.Format("Unknown page type {0}", page));
             }
