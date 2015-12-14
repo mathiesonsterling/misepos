@@ -22,7 +22,7 @@ namespace Mise.Inventory.Services
 		/// <param name="li">Li.</param>
 		/// <param name = "quantity">How many they wish to buy.  Lets minimum orders and the like come into play</param>
 		/// <param name = "restaurantID"></param>
-		Task<IVendor> GetVendorWithLowestPriceForItem (IBaseBeverageLineItem li, decimal quantity, Guid? restaurantID);
+		Task<IVendor> GetBestVendorForItem (IBaseBeverageLineItem li, decimal quantity, IRestaurant restaurant);
 
 		Task<IVendor> AddVendor(string name, StreetAddress address, PhoneNumber phoneNumber, EmailAddress email);
 

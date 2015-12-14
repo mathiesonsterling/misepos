@@ -91,7 +91,7 @@ namespace Mise.Inventory.Services.Implementation
 
 			    if (diff > 0) {
 					//see if we have a vendor
-					var vendor = await _vendorService.GetVendorWithLowestPriceForItem(parLI, diff, rest.Id);
+					var vendor = await _vendorService.GetBestVendorForItem(parLI, diff, rest);
 
 					var numBottles = (int)Math.Ceiling (diff);
 					//make an event
