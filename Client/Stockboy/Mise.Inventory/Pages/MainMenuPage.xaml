@@ -7,6 +7,7 @@
 	Title="{Binding RestaurantName}">
 
 	<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+		<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 		<ScrollView>
 			<StackLayout>
 				<Button 
@@ -20,7 +21,6 @@
 			    <Button Text="Invite Staff" Command="{Binding ManageEmployeesCommand}" />
 			    <Button Text="Logout" Command="{Binding LogoutCommand}"/>
 			    <Button Text="Change Password" Command="{Binding ChangePasswordCommand}"/>
-	    		<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
 	    	</StackLayout>
 	    </ScrollView>
   	</StackLayout>
