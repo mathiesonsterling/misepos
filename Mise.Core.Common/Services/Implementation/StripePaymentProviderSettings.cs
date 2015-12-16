@@ -5,7 +5,8 @@ namespace Mise.Core.Common.Services.Implementation
 	public static class StripePaymentProviderSettingsFactory
 	{
 		public static IStripePaymentProviderSettings GetSettings(){
-			return new StripePaymentProviderSettingsTest();
+			//return new StripePaymentProviderSettingsTest();
+            return new StripePaymentProviderSettingsReal();
 		}
 			
 	}
@@ -25,5 +26,13 @@ namespace Mise.Core.Common.Services.Implementation
 
 	    public decimal SalesTaxRate => 8.88M;
 	}
+
+    public class StripePaymentProviderSettingsReal : IStripePaymentProviderSettings
+    {
+        public string PublishableKey => "pk_live_NBFC6QGjzvG8jTB7p3raUiP4";
+        public string PrivateKey => "sk_live_epxlo1rIcvWJYQuILo1jsGTZ Roll Key\nLive Publishable Key:";
+
+        public decimal SalesTaxRate => 8.88M;
+    }
 }
 

@@ -7,7 +7,7 @@ using Mise.Inventory.ViewModels;
 
 namespace Mise.Inventory.Services.Implementation
 {
-	public class AppNavigation : IAppNavigation
+    public class AppNavigation : IAppNavigation
 	{
 	    /// <summary>
 	    /// The default page.
@@ -332,6 +332,15 @@ namespace Mise.Inventory.Services.Implementation
 	    {
 	        await _navi.PushAsync(_pages.GetPage(Pages.ReportResults));
 	    }
+
+        public async Task ShowEULA()
+        {
+            await _navi.PushModalAsync(_pages.GetPage(Pages.EULA));
+        }
+
+        public async Task CloseEULA(){
+            await _navi.PopModalAsync();
+        }
         #endregion	
 			
 	}

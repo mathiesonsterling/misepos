@@ -150,6 +150,7 @@ namespace Mise.Inventory
 		public static RestaurantLoadingViewModel RestaurantLoadingViewModel => Resolve<RestaurantLoadingViewModel>();
 		public static SettingsViewModel SettingsViewModel => Resolve<SettingsViewModel>();
 		public static ChangePasswordViewModel ChangePasswordViewModel => Resolve<ChangePasswordViewModel>();
+        public static EULAViewModel EULAViewModel => Resolve<EULAViewModel>();
 		#endregion
 
         private static T Resolve<T>()

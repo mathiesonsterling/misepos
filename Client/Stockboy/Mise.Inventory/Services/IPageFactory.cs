@@ -36,7 +36,8 @@ namespace Mise.Inventory.Services
 	    ReportResults,
 		RestaurantLoading,
 		Settings,
-		ChangePassword
+		ChangePassword,
+        EULA
 	}
 
 	public interface IPageFactory
