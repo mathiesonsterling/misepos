@@ -78,7 +78,7 @@ namespace Mise.Core.Common.Events
 
 		PurchaseOrderCreatedEvent CreatePurchaseOrderCreatedEvent(IEmployee emp);
 		PurchaseOrderLineItemAddedFromInventoryCalculationEvent CreatePOLineItemAddedFromInventoryCalcEvent(IEmployee emp, IPurchaseOrder po, ParBeverageLineItem baseItem, int? numBottles, 
-            LiquidAmount amtDesired, Guid? vendorID);
+            LiquidAmount amtDesired, IVendor vendor);
 		/// <summary>
 		/// Marks when we send items to be purchased form vendor
 		/// </summary>

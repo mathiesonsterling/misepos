@@ -33,6 +33,7 @@ namespace Mise.Core.Common.Events.Inventory
 		/// </summary>
 		/// <value>The vendor with best price I.</value>
 		public Guid? VendorWithBestPriceID{get;set;}
+        public string VendorName{get;set;}
 
 		public IEnumerable<ItemCategory> Categories{ get; set;}
 	}

@@ -589,7 +589,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public PurchaseOrderLineItemAddedFromInventoryCalculationEvent CreatePOLineItemAddedFromInventoryCalcEvent (IEmployee emp, IPurchaseOrder po, 
-			ParBeverageLineItem baseItem, int? numBottles, LiquidAmount amtDesired, Guid? vendorID)
+            ParBeverageLineItem baseItem, int? numBottles, LiquidAmount amtDesired, IVendor vendor)
 		{
 			return new PurchaseOrderLineItemAddedFromInventoryCalculationEvent {
 				Id = Guid.NewGuid (),
@@ -603,7 +603,8 @@ namespace Mise.Core.Common.Events
 				AmountNeeded = amtDesired,
 				NumBottlesNeeded = numBottles,
 				PARLineItem = baseItem,
-				VendorWithBestPriceID = vendorID,
+                VendorWithBestPriceID = vendor != null ? vendor.Id : (Guid?)null,
+                VendorName = vendor != null ? vendor.Name : string.Empty,
 				Categories = baseItem.Categories,
                 LineItemID = Guid.NewGuid()
 			};
