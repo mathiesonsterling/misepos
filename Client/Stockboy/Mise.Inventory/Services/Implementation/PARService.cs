@@ -64,7 +64,7 @@ namespace Mise.Inventory.Services.Implementation
 		{
 			if (_currentPar == null) {
 				var rest = await _loginService.GetCurrentRestaurant ();
-				_currentPar = await _parRepository.GetCurrentPAR (rest.RestaurantID);
+				_currentPar = await _parRepository.GetCurrentPAR (rest.Id);
 			}
 
 			return _currentPar;
