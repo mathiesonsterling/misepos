@@ -104,7 +104,8 @@ namespace Mise.Core.Common.Entities.Vendors
 			    {
 			        return item.GetLastPricePaidByRestaurantPerUnit(restaurantID.Value) ?? item.PublicPricePerUnit;
 			    }
-			    return item.PublicPricePerUnit;
+			    //return item.PublicPricePerUnit;
+                return null;
 			}
 			return null;
 		}
