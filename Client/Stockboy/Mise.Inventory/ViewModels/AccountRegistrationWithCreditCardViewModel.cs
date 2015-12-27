@@ -49,6 +49,7 @@ namespace Mise.Inventory.ViewModels
 				}
 			}
 			Number = string.Empty;
+            CSV = string.Empty;
             ExpMonth = DateTime.Now.Month;
             ExpYear = DateTime.Now.Year;
 

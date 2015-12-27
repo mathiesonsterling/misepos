@@ -12,6 +12,8 @@ namespace Mise.Core.Common
 	public class PurchaseOrderPerVendor : RestaurantEntityBase, IPurchaseOrderPerVendor
 	{
 		public Guid? VendorID{ get; set;}
+        public string VendorName{get;set;}
+
 		public List<PurchaseOrderLineItem> LineItems{ get; set;}
 
 		public bool IsExpectingShipments()
@@ -40,6 +42,7 @@ namespace Mise.Core.Common
 		{
 			return new PurchaseOrderPerVendor {
 				VendorID = VendorID,
+                VendorName = VendorName,
 				LineItems = LineItems.Select(l => l.Clone () as PurchaseOrderLineItem).ToList(),
 				Status = Status
 			};

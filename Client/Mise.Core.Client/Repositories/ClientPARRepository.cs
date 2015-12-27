@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,6 +49,13 @@ namespace Mise.Core.Client.Repositories
 		public Task<IPar> GetCurrentPAR (Guid restaurantID)
 		{
 			var par = GetAll ().FirstOrDefault (p => p.IsCurrent && p.RestaurantID == restaurantID);
+            if (par == null)
+            {
+                par = GetAll()
+                    .Where(p => p.RestaurantID == restaurantID)
+                    .OrderByDescending(p => p.CreatedDate)
+                    .FirstOrDefault();
+            }
 			return Task.FromResult (par);
 		}
 	}

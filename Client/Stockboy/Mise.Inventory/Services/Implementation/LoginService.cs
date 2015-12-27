@@ -13,7 +13,7 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Client.Services;
-
+using Mise.Core.Common.Entities;
 namespace Mise.Inventory.Services.Implementation
 {
     public class LoginService : ILoginService
@@ -232,12 +232,24 @@ namespace Mise.Inventory.Services.Implementation
 
 			_eventFactory.SetRestaurant (_currentRestaurant);
 
+            //store the account ID in case we loaded it again.  Sort of a hack, but let's see if this fixes it
+            var accountId = _currentRestaurant.AccountID;
+
 			//load the repositories as well to reflect our new restaurant!
 			await _repositoryLoader.LoadRepositories(_currentRestaurant.Id);
 
 			_logger.Debug ("Current restaurant is set, creating event");
 			var selEv = _eventFactory.CreateUserSelectedRestaurant (_currentEmployee, _currentRestaurant.Id);
 			_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
+            if (!_currentRestaurant.AccountID.HasValue && accountId.HasValue)
+            {
+                var baseRest = _currentRestaurant as Restaurant;
+                if (baseRest != null)
+                {
+                    baseRest.AccountID = accountId;
+                }
+            }
+
 			await _restaurantRepository.Commit (_currentRestaurant.Id);
 			_logger.Debug ("User selected restaurant event committed");
 

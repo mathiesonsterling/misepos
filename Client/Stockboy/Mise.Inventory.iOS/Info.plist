@@ -50,7 +50,7 @@
 		<string>remote-notification</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>0.1.56</string>
+	<string>0.1.58</string>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Images.xcassets/AppIcons-2.appiconset</string>
 	<key>CFBundleShortVersionString</key>

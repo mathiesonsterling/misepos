@@ -105,13 +105,25 @@ namespace Mise.Inventory.ViewModels
 
 			var res = new List<VendorAndItems> ();
 			foreach(var poByV in poByVs){
-				IVendor vendor = null;
-				if(poByV.VendorID.HasValue){
-					vendor = vendors.FirstOrDefault (v => v.Id == poByV.VendorID.Value);
-				}
-
+                string vendorName = "No Vendor";
+                if (string.IsNullOrEmpty(poByV.VendorName))
+                {
+                    IVendor vendor = null;
+                    if (poByV.VendorID.HasValue)
+                    {
+                        vendor = vendors.FirstOrDefault(v => v.Id == poByV.VendorID.Value);
+                        if (vendor != null)
+                        {
+                            vendorName = vendor.Name;
+                        }
+                    }
+                }
+                else
+                {
+                    vendorName = poByV.VendorName;
+                }
 				var newItem = new VendorAndItems {
-					VendorName = vendor != null ? vendor.Name : "No Vendor",
+					VendorName = vendorName,
 					POLineItems = poByV.GetLineItems ().Select(p => new PODisplayLineItem (p))
 				};
 				res.Add (newItem);
