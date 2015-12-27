@@ -121,6 +121,8 @@ namespace Mise.Inventory.ViewModels
 		public ICommand SettingsCommand{get{ return new Command (Settings, () => NotProcessing); }}
 
 		public ICommand ChangePasswordCommand{ get { return new Command (ChangePassword, () => NotProcessing); } }
+
+        public ICommand AdminMenuCommand{ get { return new Command(AdminMenu, IsCurrentUserAdmin); } }
 		#endregion
 
 		async void ReceivingOrder()
@@ -242,13 +244,21 @@ namespace Mise.Inventory.ViewModels
 			}
 		}
 
+        async void AdminMenu(){
+            try{
+                await Navigation.ShowAdminMenu();
+            } catch(Exception e){
+                HandleException(e);
+            }
+        }
+
 		/// <summary>
 		/// If this is true, our current user is an admin, and can access our admin stuff
 		/// </summary>
 		/// <returns><c>true</c> if this instance is current user admin; otherwise, <c>false</c>.</returns>
 		bool IsCurrentUserAdmin()
 		{
-			return NotProcessing;
+            return _loginService.IsCurrentUserAccountOwner;
 		}
 
 		public bool DisplayResetDB{

@@ -166,6 +166,7 @@ namespace Mise.Inventory
 			cb.RegisterType<ChangePasswordViewModel> ().SingleInstance ();
 			cb.RegisterType<AccountRegistrationWithCreditCardViewModel> ().SingleInstance ();
             cb.RegisterType<EULAViewModel>().SingleInstance();
+            cb.RegisterType<AdminMenuViewModel>().SingleInstance();
 		}
 	}
 }

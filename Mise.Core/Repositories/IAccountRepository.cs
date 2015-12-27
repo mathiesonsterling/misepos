@@ -11,5 +11,6 @@ namespace Mise.Core.Repositories
     public interface IAccountRepository : IEventSourcedEntityRepository<IAccount, IAccountEvent>
     {
         Task<IAccount> GetAccountForEmail(EmailAddress email);
+        Task LoadAccount(Guid id);
     }
 }

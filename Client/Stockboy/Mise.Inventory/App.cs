@@ -151,6 +151,7 @@ namespace Mise.Inventory
 		public static SettingsViewModel SettingsViewModel => Resolve<SettingsViewModel>();
 		public static ChangePasswordViewModel ChangePasswordViewModel => Resolve<ChangePasswordViewModel>();
         public static EULAViewModel EULAViewModel => Resolve<EULAViewModel>();
+        public static AdminMenuViewModel AdminMenuViewModel => Resolve<AdminMenuViewModel>();
 		#endregion
 
         private static T Resolve<T>()

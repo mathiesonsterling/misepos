@@ -102,12 +102,20 @@ namespace Mise.Core.Common.Entities.Accounts
                 case MiseEventTypes.AccountHasPaymentPlanSetup:
                     WhenAccountHasPaymentPlanSetup((AccountHasPaymentPlanSetupEvent) entityEvent);
                     break;
+                case MiseEventTypes.AccountCancelled:
+                    WhenAccountCancelled((AccountCancelledEvent)entityEvent);
+                    break;
                 default:
                     throw new InvalidOperationException("Don't know how to handle " + entityEvent.EventType);
             }
 
             LastUpdatedDate = entityEvent.CreatedDate;
             Revision = entityEvent.EventOrder;
+        }
+
+        private void WhenAccountCancelled(AccountCancelledEvent ec)
+        {
+            Status = MiseAccountStatus.Cancelled;
         }
 
         private void WhenAccountHasPaymentPlanSetup(AccountHasPaymentPlanSetupEvent entityEvent)

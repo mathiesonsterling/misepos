@@ -341,6 +341,11 @@ namespace Mise.Inventory.Services.Implementation
         public async Task CloseEULA(){
             await _navi.PopModalAsync();
         }
+
+        public async Task ShowAdminMenu()
+        {
+            await _navi.PushAsync(_pages.GetPage(Pages.AdminMenu));
+        }
         #endregion	
 			
 	}

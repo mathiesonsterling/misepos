@@ -449,8 +449,20 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		}
 		#endregion
 
-        public Task<IAccount> GetAccountById(Guid id){
-            throw new NotImplementedException();
+        public async Task<IAccount> GetAccountById(Guid id){
+            var restAcctType = typeof(RestaurantAccount).ToString ();
+            var table = GetEntityTable();
+
+            var query = table.Where (ai => ai.MiseEntityType == restAcctType && ai.EntityID == id);
+            await AttemptPull ("acct::"+id.ToString(), query);
+
+            var ais = await query.ToEnumerableAsync ();
+            var items = ais.Select (ai => ai.ToRestaurantDTO ())
+                .Select (dto => _entityDTOFactory.FromDataStorageObject<RestaurantAccount> (dto));
+
+            var found = items.FirstOrDefault ();
+
+            return found;
         }
 
         public async Task<IAccount> GetAccountFromEmail(EmailAddress email){
