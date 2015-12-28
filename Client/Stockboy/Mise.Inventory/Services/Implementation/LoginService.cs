@@ -664,7 +664,7 @@ namespace Mise.Inventory.Services.Implementation
 
                 if (_currentEmployee.GetEmailAddresses().Contains(account.PrimaryEmail))
                 {
-                    return true;
+                    return account.Status != MiseAccountStatus.Cancelled;
                 }
 
                 return false;
