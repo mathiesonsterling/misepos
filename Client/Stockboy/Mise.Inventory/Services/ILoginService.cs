@@ -95,6 +95,11 @@ namespace Mise.Inventory.Services
 		Task<IAccount> RegisterAccount (EmailAddress email, ReferralCode code, PersonName accountName, PhoneNumber phone, 
 			MiseAppTypes app, CreditCardNumber cardDetails);
 
+        bool IsCurrentUserAccountOwner{ get; }
+
+        Task<bool> DoesCurrentRestaurantHaveValidAccount();
+        Task<IAccount> CancelAccount();
+
 		Task ChangePasswordForCurrentEmployee (Password oldPassword, Password newPassword);
 
         bool HasBeenShowEula();

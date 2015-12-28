@@ -107,6 +107,7 @@
 
         AccountRegisteredFromMobileDevice,
         RestaurantAssignedToAccount,
-        AccountHasPaymentPlanSetup
+        AccountHasPaymentPlanSetup,
+        AccountCancelled
     }
 }

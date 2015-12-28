@@ -21,6 +21,7 @@
 			    <Button Text="Invite Staff" Command="{Binding ManageEmployeesCommand}" />
 			    <Button Text="Logout" Command="{Binding LogoutCommand}"/>
 			    <Button Text="Change Password" Command="{Binding ChangePasswordCommand}"/>
+			    <Button Text="Admin Menu" Command="{Binding AdminMenuCommand}" IsEnabled="{Binding IsCurrentUserAdmin}"/>
 	    	</StackLayout>
 	    </ScrollView>
   	</StackLayout>

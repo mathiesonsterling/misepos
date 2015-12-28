@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="Stockboy 0.1.58" package="com.mise.misestockboy" android:versionCode="158">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="Stockboy 0.1.60" package="com.mise.misestockboy" android:versionCode="160">
 	<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="23" />
 	<application android:icon="@drawable/stockboylaunch" android:label="Mise Stockboy"></application>
 	<uses-permission android:name="android.permission.CAMERA" />

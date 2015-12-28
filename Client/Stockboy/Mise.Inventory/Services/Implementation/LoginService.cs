@@ -241,6 +241,12 @@ namespace Mise.Inventory.Services.Implementation
 			_logger.Debug ("Current restaurant is set, creating event");
 			var selEv = _eventFactory.CreateUserSelectedRestaurant (_currentEmployee, _currentRestaurant.Id);
 			_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
+
+            if (_currentRestaurant.AccountID.HasValue)
+            {
+                await _accountRepository.LoadAccount(_currentRestaurant.AccountID.Value);
+            }
+
             if (!_currentRestaurant.AccountID.HasValue && accountId.HasValue)
             {
                 var baseRest = _currentRestaurant as Restaurant;
@@ -591,5 +597,78 @@ namespace Mise.Inventory.Services.Implementation
         }
 
 
+        public async Task<IAccount> CancelAccount()
+        {
+            if (_currentRestaurant == null || !_currentRestaurant.AccountID.HasValue)
+            {
+                return null;
+            }
+
+            var account = _accountRepository.GetByID(_currentRestaurant.AccountID.Value);
+            if (account == null)
+            {
+                return null;
+            }
+
+            var ev = _eventFactory.CreateAccountCancelledEvent(_currentEmployee, account, _currentRestaurant);
+
+            account.When(ev);
+            _currentRestaurant.When(ev);
+
+            await _accountRepository.Commit(account.Id);
+            await _restaurantRepository.Commit(_currentRestaurant.Id);
+
+            return account;
+        }
+
+        public async Task<bool> DoesCurrentRestaurantHaveValidAccount()
+        {
+            if (_currentRestaurant == null)
+            {
+                return false;
+            }
+
+            if (!_currentRestaurant.AccountID.HasValue)
+            {
+                return false;
+            }
+
+            var account = _accountRepository.GetByID(_currentRestaurant.AccountID.Value);
+            if (account == null)
+            {
+                return false;
+            }
+
+            return account.Status != MiseAccountStatus.Cancelled;
+        }
+
+        public bool IsCurrentUserAccountOwner
+        {
+            get
+            {
+                if (_currentEmployee == null)
+                {
+                    return false;
+                }
+
+                if (_currentRestaurant == null || !_currentRestaurant.AccountID.HasValue)
+                {
+                    return false;
+                }
+
+                var account = _accountRepository.GetByID(_currentRestaurant.AccountID.Value);
+                if (account == null || account.PrimaryEmail == null)
+                {
+                    return false;
+                }
+
+                if (_currentEmployee.GetEmailAddresses().Contains(account.PrimaryEmail))
+                {
+                    return account.Status != MiseAccountStatus.Cancelled;
+                }
+
+                return false;
+            }
+        }
 	}
 }

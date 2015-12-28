@@ -862,6 +862,20 @@ namespace Mise.Core.Common.Events
                 PaymentPlan = acct.PaymentPlan
             };
         }
+
+        public AccountCancelledEvent CreateAccountCancelledEvent(IEmployee emp, IAccount account, IRestaurant restaurant)
+        {
+            return new AccountCancelledEvent
+            {
+                AccountID = account.Id,
+                CausedById = emp.Id,
+                CreatedDate = GetDate(),
+                DeviceId = _deviceID,
+                EventOrder = GetNextEventID(),
+                Id = Guid.NewGuid(),
+                RestaurantID = restaurant.Id
+            };
+        }
 	}
 }
 

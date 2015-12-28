@@ -37,7 +37,8 @@ namespace Mise.Inventory.Services
 		RestaurantLoading,
 		Settings,
 		ChangePassword,
-        EULA
+        EULA,
+        AdminMenu,
 	}
 
 	public interface IPageFactory

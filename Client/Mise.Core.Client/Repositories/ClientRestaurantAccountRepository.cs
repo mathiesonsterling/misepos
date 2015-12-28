@@ -14,7 +14,9 @@ using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Repositories
 {
-    public class ClientRestaurantAccountRepository : BaseEventSourcedClientRepository<IAccount, IAccountEvent, RestaurantAccount>, IAccountRepository
+    public class ClientRestaurantAccountRepository 
+        : BaseEventSourcedClientRepository<IAccount, IAccountEvent, RestaurantAccount>, 
+    IAccountRepository
     {
         private IAccountWebService _webService;
         public ClientRestaurantAccountRepository(ILogger logger, IAccountWebService webService) : 
@@ -27,7 +29,6 @@ namespace Mise.Core.Client.Repositories
         {
             return new RestaurantAccount();
         }
-
 
         public override Guid GetEntityID(IAccountEvent ev)
         {
@@ -48,6 +49,18 @@ namespace Mise.Core.Client.Repositories
         protected override Task<IEnumerable<RestaurantAccount>> LoadFromWebservice(Guid? restaurantID)
         {
             return Task.FromResult(new List<RestaurantAccount>().AsEnumerable());
+        }
+
+        public async Task LoadAccount(Guid id)
+        {
+            if (!Cache.ContainsItem(id))
+            {
+                var account = await _webService.GetAccountById(id);
+                if (account != null)
+                {
+                    Cache.UpdateCache(new List<IAccount>{ account });
+                }
+            }
         }
     }
 }
