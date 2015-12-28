@@ -28,11 +28,17 @@ namespace Mise.Inventory.ViewModels
 
         private async void CancelAccount()
         {
-            await _loginService.CancelAccount();
+            var confirm = await AskUserQuestionModal("Cancel Subscription",
+                              "Are you sure you want to cancel your subscription?  You'll be unable to use Stockboy until you reregister",
+                              "Cancel Subscription", "No");
+            if (confirm)
+            {
+                await _loginService.CancelAccount();
 
-            await _loginService.LogOutAsync();
+                await _loginService.LogOutAsync();
 
-            await Navigation.ShowMainMenu();
+                await Navigation.ShowMainMenu();
+            }
         }
 
     }

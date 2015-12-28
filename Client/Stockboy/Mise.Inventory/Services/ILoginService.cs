@@ -96,6 +96,8 @@ namespace Mise.Inventory.Services
 			MiseAppTypes app, CreditCardNumber cardDetails);
 
         bool IsCurrentUserAccountOwner{ get; }
+
+        Task<bool> DoesCurrentRestaurantHaveValidAccount();
         Task<IAccount> CancelAccount();
 
 		Task ChangePasswordForCurrentEmployee (Password oldPassword, Password newPassword);

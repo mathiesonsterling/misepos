@@ -32,8 +32,8 @@ namespace Mise.Inventory.ViewModels
 				await _loginService.LoadSelectedRestaurant ();
 
                 //check if our selected restaurant has an account
-                var rest = await _loginService.GetCurrentRestaurant();
-                if(!rest.AccountID.HasValue){
+                var hasAccount = await _loginService.DoesCurrentRestaurantHaveValidAccount();
+                if(!hasAccount){
                     //see if we're over the time
                     var overTimeToRegister = await _beverageItemService.IsRestaurantOverTimeToRegister();
                     if(overTimeToRegister){

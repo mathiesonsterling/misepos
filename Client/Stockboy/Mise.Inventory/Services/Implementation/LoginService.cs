@@ -621,6 +621,27 @@ namespace Mise.Inventory.Services.Implementation
             return account;
         }
 
+        public async Task<bool> DoesCurrentRestaurantHaveValidAccount()
+        {
+            if (_currentRestaurant == null)
+            {
+                return false;
+            }
+
+            if (!_currentRestaurant.AccountID.HasValue)
+            {
+                return false;
+            }
+
+            var account = _accountRepository.GetByID(_currentRestaurant.AccountID.Value);
+            if (account == null)
+            {
+                return false;
+            }
+
+            return account.Status != MiseAccountStatus.Cancelled;
+        }
+
         public bool IsCurrentUserAccountOwner
         {
             get
