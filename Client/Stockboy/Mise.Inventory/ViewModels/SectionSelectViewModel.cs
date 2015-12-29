@@ -63,6 +63,13 @@ namespace Mise.Inventory.ViewModels
 					closeInv = await AskUserQuestionModal ("Incomplete sections", message, "Complete");
                 }
 
+                if(currInv.IsEmpty)
+                {
+                    closeInv = await AskUserQuestionModal("Empty inventory", 
+                        "All items in this inventory have a quantity of 0!  Are you sure you want to complete?",
+                        "Complete");
+                }
+
                 if (closeInv)
                 {
                     await _inventoryService.MarkInventoryAsComplete();
