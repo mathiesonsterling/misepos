@@ -106,6 +106,7 @@ namespace Mise.Core.Common.Events
         NewRestaurantRegisteredOnAppEvent CreateNewRestaurantRegisteredOnAppEvent(IEmployee emp, RestaurantName name,
             StreetAddress address, PhoneNumber phone);
 		EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent (IEmployee emp, IRestaurant rest);
+        RestaurantReportingEmailSetEvent CreateRestaurantReportingEmailSetEvent(IEmployee emp, IRestaurant rest, EmailAddress email);
 
 		UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID);
 

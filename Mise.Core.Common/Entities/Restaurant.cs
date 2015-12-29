@@ -18,6 +18,7 @@ namespace Mise.Core.Common.Entities
         public Restaurant()
         {
             InventorySections = new List<RestaurantInventorySection>();
+            EmailsToSendInventoryReportsTo = new List<EmailAddress>();
         }
 
         public ICloneableEntity Clone()
@@ -28,7 +29,7 @@ namespace Mise.Core.Common.Entities
             newItem.Name = Name;
             newItem.PhoneNumber = PhoneNumber;
             newItem.StreetAddress = StreetAddress;
-
+            newItem.EmailsToSendInventoryReportsTo = EmailsToSendInventoryReportsTo.Select(e => e).ToList();
             return newItem;
         }
 
@@ -84,6 +85,9 @@ namespace Mise.Core.Common.Entities
                 case MiseEventTypes.RestaurantAssignedToAccount:
                     WhenRestaurantAssignedToAccount((RestaurantAssignedToAccountEvent)entityEvent);
                     break;
+                case MiseEventTypes.RestaurantReportingEmailSet:
+                    WhenRestaurantReportingEmailSet((RestaurantReportingEmailSetEvent)entityEvent);
+                    break;
                 default:
                     throw new ArgumentException("Can't handle event " + entityEvent.EventType);
             }
@@ -135,6 +139,13 @@ namespace Mise.Core.Common.Entities
 
         void WhenRestaurantAssignedToAccount(RestaurantAssignedToAccountEvent ev){
             AccountID = ev.AccountId;
+        }
+
+        private void WhenRestaurantReportingEmailSet(RestaurantReportingEmailSetEvent entityEvent){
+            if (entityEvent.Email != null)
+            {
+                EmailsToSendInventoryReportsTo.Insert(0, entityEvent.Email);
+            }
         }
     }
 }

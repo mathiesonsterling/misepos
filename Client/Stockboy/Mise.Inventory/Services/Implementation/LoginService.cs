@@ -608,6 +608,34 @@ namespace Mise.Inventory.Services.Implementation
             }
         }
 
+        public Task<EmailAddress> GetCurrentAccountEmail()
+        {
+            EmailAddress email = null;
+            if (_currentRestaurant == null || !_currentRestaurant.AccountID.HasValue)
+            {
+                return Task.FromResult(email);
+            }
+
+            var acct = _accountRepository.GetByID(_currentRestaurant.AccountID.Value);
+            if (acct == null)
+            {
+                return Task.FromResult(email);
+            }
+
+            return Task.FromResult(acct.PrimaryEmail);
+        }
+
+        public async Task ChangeCurrentRestaurantReportingEmail(EmailAddress email)
+        {
+            if (_currentRestaurant != null)
+            {
+                var ev = _eventFactory.CreateRestaurantReportingEmailSetEvent(_currentEmployee, _currentRestaurant, email);
+                _currentRestaurant = _restaurantRepository.ApplyEvent(ev);
+
+                await _restaurantRepository.Commit(_currentRestaurant.Id);
+            }
+        }
+
         public Task MarkInventoryShownClearReminderAsShown(Guid inventoryId)
         {
             return _keyValStorage.SetID(InvReminderShownKey + inventoryId.ToString(), inventoryId);

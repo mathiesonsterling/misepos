@@ -785,6 +785,20 @@ namespace Mise.Core.Common.Events
 	        };
 	    }
 
+        public RestaurantReportingEmailSetEvent CreateRestaurantReportingEmailSetEvent(IEmployee emp, IRestaurant rest, EmailAddress email)
+        {
+            return new RestaurantReportingEmailSetEvent
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = GetDate(),
+                DeviceId = _deviceID,
+                EventOrder = GetNextEventID(),
+                CausedById = emp.Id,
+                RestaurantId = rest.Id,
+                Email = email
+            };
+        }
+
 		public EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent(IEmployee emp, IRestaurant rest){
 			return new EmployeeRegistersRestaurantEvent {
 				Id = Guid.NewGuid (),

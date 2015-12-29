@@ -104,6 +104,7 @@
         InventorySectionAddedToRestaurant,
         NewRestaurantRegisteredOnApp,
 		UserSelectedRestaurant,
+        RestaurantReportingEmailSet,
 
         AccountRegisteredFromMobileDevice,
         RestaurantAssignedToAccount,

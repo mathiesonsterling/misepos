@@ -209,6 +209,7 @@
     <Compile Include="Services\IClientStripeFacade.cs" />
     <Compile Include="Events\Restaurant\RestaurantAssignedToAccountEvent.cs" />
     <Compile Include="Events\Accounts\AccountCancelledEvent.cs" />
+    <Compile Include="Events\Restaurant\RestaurantReportingEmailSetEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
