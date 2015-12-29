@@ -61,7 +61,8 @@ namespace Mise.Inventory.ViewModels
 
 		readonly IInventoryService _inventoryService;
 		readonly IList<Guid> _lineItemsCurrentlyChanging;
-		public InventoryViewModel(IAppNavigation appNavigation, IInventoryService inventoryService, ILogger logger) : base(appNavigation, logger)
+		public InventoryViewModel(IAppNavigation appNavigation, IInventoryService inventoryService, ILogger logger) : 
+            base(appNavigation, logger)
 		{
 			_inventoryService = inventoryService;
 			_lineItemsCurrentlyChanging = new List<Guid> ();
@@ -80,6 +81,13 @@ namespace Mise.Inventory.ViewModels
                 if (section != null)
                 {
                     Title = "Count for " + section.Name;
+                }
+
+                //have we told them for this inventory that they can clear all?
+                var told = _inventoryService.HasCurrentInventoryShownClearReminder();
+                if(!told){
+                    await DisplayMessageModal("", "Just a reminder, if your items have moved around significantly, you can click Remove All Items to clear out the sheet");
+                    _inventoryService.MarkCurrentInventoryShownClearReminderAsShown();
                 }
             }
             catch (Exception e)
@@ -230,11 +238,15 @@ namespace Mise.Inventory.ViewModels
 		}
 
 		protected override async Task<ICollection<InventoryLineItemDisplayLine>> LoadItems (){
-			var items = (await _inventoryService.GetLineItemsForCurrentSection ()).ToList();
-            var itemsList = items.Select(li => new InventoryLineItemDisplayLine(li))
+            var items = await _inventoryService.GetLineItemsForCurrentSection();
+
+            var unsortedItems = items.Select(li => new InventoryLineItemDisplayLine(li));
+
+            var itemsList = unsortedItems
 				.OrderBy(li => li.InventoryPosition)
 				.ToList();
-            //find the first unmeasured
+            
+            //apply a sort
 		    
 
 			if(CameFromAdd){

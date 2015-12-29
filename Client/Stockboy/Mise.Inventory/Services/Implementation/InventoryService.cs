@@ -10,19 +10,20 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.Common.Events.Inventory;
-
+using Mise.Core.Client.Services;
 
 
 
 namespace Mise.Inventory.Services.Implementation
 {
-	public class InventoryService : IInventoryService
+    public class InventoryService : IInventoryService
 	{
 		readonly IInventoryRepository _inventoryRepository;
 		readonly ILoginService _loginService;
 		readonly IInventoryAppEventFactory _eventFactory;
 		readonly ILogger _logger;
 	    readonly IInsightsService _insights;
+        private readonly IClientKeyValueStorage _keyValueStorage;
 
 	    private Guid? _selectedLineItemId;
 	    private Guid? _selectedInventoryID;
@@ -31,7 +32,8 @@ namespace Mise.Inventory.Services.Implementation
 	    private Guid _selectedInventorySectionID;
 
 		public InventoryService (ILogger logger, ILoginService loginService, 
-			IInventoryRepository inventoryRespository, IInventoryAppEventFactory eventFactory, IInsightsService insightsService)
+			IInventoryRepository inventoryRespository, IInventoryAppEventFactory eventFactory, 
+            IInsightsService insightsService)
 		{
 			_logger = logger;
 			_inventoryRepository = inventoryRespository;
@@ -530,6 +532,32 @@ namespace Mise.Inventory.Services.Implementation
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 			return inv.GetBeverageLineItems ().FirstOrDefault (li => li.Id == _selectedLineItemId.Value);
 		}
+
+        public bool HasCurrentInventoryShownClearReminder()
+        {
+            if (!_selectedInventoryID.HasValue)
+            {
+                return false;
+            }
+            var inv = _inventoryRepository.GetByID(_selectedInventoryID.Value);
+            if (inv == null)
+            {
+                return false;
+            }
+            return _loginService.HasInventoryShownClearReminder(inv.Id);
+        }
+
+        public async Task MarkCurrentInventoryShownClearReminderAsShown()
+        {
+            if (_selectedInventoryID.HasValue)
+            {
+                var inv = _inventoryRepository.GetByID(_selectedInventoryID.Value);
+                if (inv != null)
+                {
+                    await _loginService.MarkInventoryShownClearReminderAsShown(inv.Id);
+                }
+            }
+        }
 	}
 }
 

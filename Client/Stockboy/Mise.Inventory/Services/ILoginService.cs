@@ -104,5 +104,9 @@ namespace Mise.Inventory.Services
 
         bool HasBeenShowEula();
         Task SetEulaAsShown();
+
+        bool HasInventoryShownClearReminder(Guid inventoryId);
+        Task MarkInventoryShownClearReminderAsShown(Guid inventoryId);
 	}
+
 }

@@ -45,6 +45,14 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public bool IsCurrent { get; set; }
 
+        public bool IsEmpty
+        {
+            get
+            {
+                return GetBeverageLineItems().All(li => li.Quantity == 0);
+            }
+        }
+
         public bool ContainsSearchString(string searchString)
         {
             return

@@ -100,6 +100,9 @@ namespace Mise.Inventory.Services
 
 		Task<bool> HasInventoryPriorToDate (Guid restaurantID, DateTimeOffset date);
 	    Task SetCurrentInventory(IInventory inventory);
+
+        bool HasCurrentInventoryShownClearReminder();
+        Task MarkCurrentInventoryShownClearReminderAsShown();
 	}
 }
 

@@ -32,5 +32,6 @@ namespace Mise.Core.Entities.Inventory
         /// If true, this is the running inventory for the restaurant
         /// </summary>
         bool IsCurrent { get; }
+        bool IsEmpty{get;}
     }
 }

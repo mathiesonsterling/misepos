@@ -596,6 +596,22 @@ namespace Mise.Inventory.Services.Implementation
             return _keyValStorage.SetID(eulaKey, Guid.NewGuid());
         }
 
+        private const string InvReminderShownKey = "invShownReminder";
+        public bool HasInventoryShownClearReminder(Guid inventoryId)
+        {
+            try{
+                var found = _keyValStorage.GetID(InvReminderShownKey + inventoryId.ToString());
+                return found != null;
+            } catch(Exception e){
+                _logger.HandleException(e);
+                return false;
+            }
+        }
+
+        public Task MarkInventoryShownClearReminderAsShown(Guid inventoryId)
+        {
+            return _keyValStorage.SetID(InvReminderShownKey + inventoryId.ToString(), inventoryId);
+        }
 
         public async Task<IAccount> CancelAccount()
         {
