@@ -683,7 +683,7 @@ namespace Mise.Inventory.Services.Implementation
                 return false;
             }
 
-            return account.Status != MiseAccountStatus.Cancelled;
+            return account.Status != MiseAccountStatus.Cancelled && account.Status != MiseAccountStatus.CancelledFully;
         }
 
         public bool IsCurrentUserAccountOwner
@@ -708,7 +708,7 @@ namespace Mise.Inventory.Services.Implementation
 
                 if (_currentEmployee.GetEmailAddresses().Contains(account.PrimaryEmail))
                 {
-                    return account.Status != MiseAccountStatus.Cancelled;
+                    return account.Status != MiseAccountStatus.Cancelled && account.Status != MiseAccountStatus.CancelledFully;
                 }
 
                 return false;
