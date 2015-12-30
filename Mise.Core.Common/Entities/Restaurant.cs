@@ -10,7 +10,7 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Payments;
-
+using Mise.Core.Common.Entities.Accounts;
 namespace Mise.Core.Common.Entities
 {
 	public class Restaurant : RestaurantEntityBase, IRestaurant
@@ -88,12 +88,23 @@ namespace Mise.Core.Common.Entities
                 case MiseEventTypes.RestaurantReportingEmailSet:
                     WhenRestaurantReportingEmailSet((RestaurantReportingEmailSetEvent)entityEvent);
                     break;
+                case MiseEventTypes.AccountCancelled:
+                    WhenAccountCancelled((Mise.Core.Common.Events.Accounts.AccountCancelledEvent)entityEvent);
+                    break;
                 default:
                     throw new ArgumentException("Can't handle event " + entityEvent.EventType);
             }
 
             LastUpdatedDate = entityEvent.CreatedDate;
             Revision = entityEvent.EventOrder;
+        }
+
+        private void WhenAccountCancelled(Mise.Core.Common.Events.Accounts.AccountCancelledEvent ev)
+        {
+            if (ev != null)
+            {
+                AccountID = null;
+            }
         }
 
 	    private void WhenNewRestaurantCreatedOnApp(NewRestaurantRegisteredOnAppEvent ev)
