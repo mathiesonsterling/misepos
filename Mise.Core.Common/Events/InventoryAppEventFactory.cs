@@ -887,7 +887,7 @@ namespace Mise.Core.Common.Events
                 DeviceId = _deviceID,
                 EventOrder = GetNextEventID(),
                 Id = Guid.NewGuid(),
-                RestaurantID = restaurant.Id
+                RestaurantId = restaurant.Id
             };
         }
 	}

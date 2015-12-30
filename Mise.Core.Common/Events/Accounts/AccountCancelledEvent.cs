@@ -16,7 +16,7 @@ namespace Mise.Core.Common.Events.Accounts
         }
         #endregion
 
-        public Guid RestaurantID{get;set;}
+        public override Guid RestaurantId{get;set;}
     }
 }
 

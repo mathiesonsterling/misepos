@@ -20,7 +20,7 @@ namespace Mise.Core.Common.Events.Accounts
         /// <summary>
         /// Should likely be ignored?
         /// </summary>
-        public Guid RestaurantId { get{throw new InvalidOperationException("RestaurantID on AccountEvent");} }
+        public virtual Guid RestaurantId { get{throw new InvalidOperationException("RestaurantID on AccountEvent");}set{} }
 
         public EventID EventOrder { get; set; }
         public Guid CausedById { get; set; }

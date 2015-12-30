@@ -656,11 +656,14 @@ namespace Mise.Inventory.Services.Implementation
 
             var ev = _eventFactory.CreateAccountCancelledEvent(_currentEmployee, account, _currentRestaurant);
 
-            account.When(ev);
-            _currentRestaurant.When(ev);
+            _accountRepository.ApplyEvent(ev);
+            _restaurantRepository.ApplyEvent(ev);
 
             await _accountRepository.Commit(account.Id);
-            await _restaurantRepository.Commit(_currentRestaurant.Id);
+            if (_restaurantRepository.Dirty)
+            {
+                await _restaurantRepository.Commit(_currentRestaurant.Id);
+            }
 
             return account;
         }
@@ -683,7 +686,7 @@ namespace Mise.Inventory.Services.Implementation
                 return false;
             }
 
-            return account.Status != MiseAccountStatus.Cancelled && account.Status != MiseAccountStatus.CancelledFully;
+            return true;
         }
 
         public bool IsCurrentUserAccountOwner
@@ -708,7 +711,8 @@ namespace Mise.Inventory.Services.Implementation
 
                 if (_currentEmployee.GetEmailAddresses().Contains(account.PrimaryEmail))
                 {
-                    return account.Status != MiseAccountStatus.Cancelled && account.Status != MiseAccountStatus.CancelledFully;
+                    return true;
+                    //return account.Status != MiseAccountStatus.Cancelled && account.Status != MiseAccountStatus.CancelledFully;
                 }
 
                 return false;
