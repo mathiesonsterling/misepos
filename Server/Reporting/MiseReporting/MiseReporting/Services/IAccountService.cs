@@ -15,6 +15,9 @@ namespace MiseReporting.Services
         /// <returns></returns>
         Task CreatePaymentPlansForAllNewAccounts();
 
+        Task DeletePaymentPlansForCancelledAccounts();
+
         Task<IEnumerable<IAccount>> GetAccountsWaitingForPaymentPlan();
+
     }
 }
