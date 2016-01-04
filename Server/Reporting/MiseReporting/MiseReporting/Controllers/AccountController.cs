@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Mise.Core.ValueItems;
 using MiseReporting.Models;
 
 namespace MiseReporting.Controllers
@@ -86,9 +87,22 @@ namespace MiseReporting.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
+                    //check if this matches an employee already in!
+                    var hasOther = await IsMiseUser(model);
+                    if (hasOther)
+                    {
+                        return RedirectToLocal(returnUrl);
+                    }
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+        }
+
+        private static async Task<bool> IsMiseUser(LoginViewModel login)
+        {
+            var dal = new ManagementDAL();
+            var emp = await dal.GetEmployeeWithEmailAndPassword(new EmailAddress(login.Email), login.Password);
+            return emp != null;
         }
 
         //
