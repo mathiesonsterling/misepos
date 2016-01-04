@@ -242,17 +242,20 @@ namespace Mise.Inventory.Services.Implementation
 			var selEv = _eventFactory.CreateUserSelectedRestaurant (_currentEmployee, _currentRestaurant.Id);
 			_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
 
-            if (_currentRestaurant.AccountID.HasValue)
+            if (accountId.HasValue)
             {
-                await _accountRepository.LoadAccount(_currentRestaurant.AccountID.Value);
+                await _accountRepository.LoadAccount(accountId.Value);
             }
 
-            if (!_currentRestaurant.AccountID.HasValue && accountId.HasValue)
+            if (accountId.HasValue)
             {
-                var baseRest = _currentRestaurant as Restaurant;
-                if (baseRest != null)
+                if ((!_currentRestaurant.AccountID.HasValue) || (_currentRestaurant.AccountID != accountId))
                 {
-                    baseRest.AccountID = accountId;
+                    var baseRest = _currentRestaurant as Restaurant;
+                    if (baseRest != null)
+                    {
+                        baseRest.AccountID = accountId;
+                    }
                 }
             }
 
