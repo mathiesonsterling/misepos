@@ -101,7 +101,6 @@ namespace Mise.Inventory.ViewModels
 		{
 			try{
 				Processing = true;
-				DateReceived = DateTime.Now;
 				await base.OnAppearing ();
 				var vendor = await _vendorService.GetSelectedVendor ();
 				VendorName = vendor.Name;
