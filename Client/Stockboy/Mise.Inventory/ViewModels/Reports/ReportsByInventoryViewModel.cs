@@ -46,19 +46,22 @@ namespace Mise.Inventory.ViewModels.Reports
 
 	    protected override async Task DoGenericRequestFor(ReportTypes type)
 	    {
-            try
+            if (StartInventory != null && EndInventory != null)
             {
-                Processing = true;
-                var unit = (LiquidAmountUnits)Enum.Parse(typeof(LiquidAmountUnits), LiquidUnit);
+                try
+                {
+                    Processing = true;
+                    var unit = (LiquidAmountUnits)Enum.Parse(typeof(LiquidAmountUnits), LiquidUnit);
 
-                var request = new ReportRequest(type, StartInventory, EndInventory, null, null, unit);
-                await ReportsService.SetCurrentReportRequest(request);
-                Processing = false;
-                await Navigation.ShowReportResults();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
+                    var request = new ReportRequest(type, StartInventory, EndInventory, null, null, unit);
+                    await ReportsService.SetCurrentReportRequest(request);
+                    Processing = false;
+                    await Navigation.ShowReportResults();
+                }
+                catch (Exception e)
+                {
+                    HandleException(e);
+                }
             }
         }
 

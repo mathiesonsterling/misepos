@@ -50,18 +50,17 @@ namespace Mise.Inventory.Services.Implementation
 					    var invToReport = _inventoryRepository.GetByID (_currentRequest.EntityID.Value);
                         var report = new CompletedInventoryReport(invToReport);
                         return await report.RunReportAsync();
-			    case ReportTypes.AmountUsed:
+                case ReportTypes.AmountUsed:
 				    //get our starting inventory - the first one prior to start
-				    var startInventory = _inventoryRepository.GetAll ()
-					    .Where (i => i.DateCompleted.HasValue)
-					    .Where (i => i.DateCompleted.Value < _currentRequest.EndDate)
-					    .OrderByDescending (i => i.DateCompleted)
-					    .FirstOrDefault (i => i.DateCompleted <= _currentRequest.StartDate);
-				    var inventoriesInTime = _inventoryRepository.GetAll ()
-					    .Where (i => i.DateCompleted.HasValue)
-					    .Where (i => i.DateCompleted.Value >= _currentRequest.StartDate
-				                            && i.DateCompleted.Value <= _currentRequest.EndDate);
-				    var recOrdersInTime = _receivingOrderRepository.GetAll ()
+                    var invs = _inventoryRepository.GetAll().Where(i => i.DateCompleted.HasValue).ToList();
+                    var inventoriesInTime = invs
+                        .Where(i => i.DateCompleted.Value >= _currentRequest.StartDate
+                                                && i.DateCompleted.Value <= _currentRequest.EndDate).ToList();
+                    var startInventory = inventoriesInTime
+                        .OrderBy(i => i.DateCompleted.Value)
+                        .FirstOrDefault();
+                    var ros = _receivingOrderRepository.GetAll();
+				    var recOrdersInTime = ros
 					    .Where (ro => ro.DateReceived >= _currentRequest.StartDate
 				                          && ro.DateReceived <= _currentRequest.EndDate
 				                          );
