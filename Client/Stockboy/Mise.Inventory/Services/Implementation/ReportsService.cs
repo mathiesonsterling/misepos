@@ -69,9 +69,10 @@ namespace Mise.Inventory.Services.Implementation
 					                       recOrdersInTime, inventoriesInTime, _currentRequest.LiquidUnit);*/
 				    return await amountReport.RunReportAsync ();
                 case ReportTypes.COGS:
-                    var inventories = _inventoryRepository.GetAll()
+                    var allFinishedInvs = _inventoryRepository.GetAll()
+                        .Where(i => i.DateCompleted.HasValue);
+                    var inventories = allFinishedInvs
                             .Where(inv =>
-									inv.DateCompleted.HasValue &&
                                           inv.DateCompleted.Value >= _currentRequest.StartDate &&
                                           inv.DateCompleted.Value <= _currentRequest.EndDate);
                     var rosInPeriod = _receivingOrderRepository.GetAll()
@@ -79,7 +80,7 @@ namespace Mise.Inventory.Services.Implementation
                                 ro.DateReceived >= _currentRequest.StartDate &&
                                           ro.DateReceived <= _currentRequest.EndDate);
 
-                    var cogsReport = new COGSReportRedux(inventories, rosInPeriod);
+                    var cogsReport = new COGSReportRedux(inventories, rosInPeriod, allFinishedInvs);
                     //var cogsReport = new COGsReport(inventories, rosInPeriod);
                     return await cogsReport.RunReportAsync();
                 default:
