@@ -193,7 +193,8 @@ namespace Mise.Core.Common.Entities.Inventory
                 UPC = entityEvent.UPC,
                 VendorBoughtFrom = entityEvent.VendorBoughtFrom,
                 Categories = entityEvent.Categories.ToList(),
-				InventoryPosition = invPos
+				InventoryPosition = invPos,
+                PricePaid = entityEvent.PricePaid
             };
 
             section.LineItems.Add(newLI);

@@ -49,7 +49,7 @@ namespace Mise.Core.Common.Events
 		InventoryCreatedEvent CreateInventoryCreatedEvent(IEmployee emp);
 		InventoryMadeCurrentEvent CreateInventoryMadeCurrentEvent(IEmployee emp, IInventory inventory);
 		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int quantity, Guid? vendorID, IInventorySection section, 
-           int inventoryPosition, IInventory inventory);
+           int inventoryPosition, IInventory inventory, Money pricePaid);
 
 		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, string name, string upc, 
 			IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity,  

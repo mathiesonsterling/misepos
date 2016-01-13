@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mise.Core.Entities;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.ValueItems;
 namespace Mise.Core.Common.Events.Inventory
 {
     public class InventoryLineItemAddedEvent : BaseInventoryEvent, ICreateLineItemEvent
@@ -54,5 +55,7 @@ namespace Mise.Core.Common.Events.Inventory
 		public IEnumerable<ItemCategory> Categories{get;set;}
 
         public int InventoryPosition { get; set; }
+
+        public Money PricePaid{get;set;}
     }
 }

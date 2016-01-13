@@ -23,7 +23,6 @@ namespace Mise.Inventory.Services.Implementation
 		readonly IInventoryAppEventFactory _eventFactory;
 		readonly ILogger _logger;
 	    readonly IInsightsService _insights;
-        private readonly IClientKeyValueStorage _keyValueStorage;
 
 	    private Guid? _selectedLineItemId;
 	    private Guid? _selectedInventoryID;
@@ -151,7 +150,7 @@ namespace Mise.Inventory.Services.Implementation
 	                        {
 	                            var ev = _eventFactory.CreateInventoryLineItemAddedEvent(emp,
 	                                li, 0, li.VendorBoughtFrom,
-	                                newSection, li.InventoryPosition, inv);
+                                    newSection, li.InventoryPosition, inv, li.PricePaid);
 	                            events.Add(ev);
 	                        }
 		                }
@@ -215,7 +214,7 @@ namespace Mise.Inventory.Services.Implementation
 			var section = GetSelectedSection ();
 			var itemPosition = inventoryPosition.HasValue ? inventoryPosition.Value : section.GetNextItemPosition ();
 			var addEv = _eventFactory.CreateInventoryLineItemAddedEvent (emp, source, quantity, null, section,
-				itemPosition, inv);
+				itemPosition, inv, null);
 		
 			_inventoryRepository.ApplyEvent (addEv);
             ReportNumItemsInTransaction();

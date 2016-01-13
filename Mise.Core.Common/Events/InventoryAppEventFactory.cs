@@ -122,7 +122,7 @@ namespace Mise.Core.Common.Events
 
 		public InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent (IEmployee emp, 
 			IBaseBeverageLineItem source, int quantity, Guid? vendorID, IInventorySection section, int inventoryPosition,  
-			IInventory inventory)
+            IInventory inventory, Money pricePaid)
 		{
 			return new InventoryLineItemAddedEvent {
 				Id = Guid.NewGuid (),
@@ -143,7 +143,8 @@ namespace Mise.Core.Common.Events
 				InventoryID = inventory.Id,
 				Categories = source.GetCategories ().Cast<ItemCategory>(),
                 InventoryPosition =  inventoryPosition,
-                LineItemID = Guid.NewGuid()
+                LineItemID = Guid.NewGuid(),
+                PricePaid = pricePaid
 			};
 		}
 

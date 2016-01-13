@@ -216,13 +216,14 @@ namespace Mise.Core.Common.UnitTests.Events
 		[Test]
 		public void CreateInventoryLineItemFromBase(){
 			var ev = _underTest.CreateInventoryLineItemAddedEvent (_emp, _parLI, 12, 
-				null, _invSection, 23, _inv);
+                null, _invSection, 23, _inv, new Money(100.0M));
 
 			TestInventoryEvent (ev);
 			Assert.AreEqual (_invSection.Id, ev.InventorySectionID);
 			Assert.AreEqual (23, ev.InventoryPosition);
 			Assert.AreEqual (_parLI.DisplayName, ev.DisplayName);
 			Assert.AreEqual (_parLI.UPC, ev.UPC);
+            Assert.AreEqual(ev.PricePaid.Dollars, 100.0M);
 		}
 
 		[Test]
