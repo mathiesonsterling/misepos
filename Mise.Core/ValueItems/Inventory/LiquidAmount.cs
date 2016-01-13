@@ -61,7 +61,7 @@ namespace Mise.Core.ValueItems.Inventory
         /// </summary>
 	    public bool IsEmpty
 	    {
-	        get { return Milliliters > 0; }
+            get { return Milliliters <= 0; }
 	    }
 
 	    /// <summary>
