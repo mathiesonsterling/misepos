@@ -30,16 +30,19 @@ namespace Mise.Core.Common.Entities.Reports
 
             //make the line items
             var lineItems = new List<ReportResultLineItem>();
-            foreach (var amtKey in amounts.Keys)
+            foreach (var amtKey in amounts.Keys.OrderBy(k => k))
             {
                 if (allKeys.ContainsKey(amtKey))
                 {
                     var fullKey = allKeys[amtKey];
 
                     var amt = amounts[amtKey];
-                    var amtDec = _unit == LiquidAmountUnits.Milliliters ? amt.GetInMilliliters() : amt.GetInLiquidOunces();
-                    var li = new ReportResultLineItem(fullKey.ItemName, fullKey.Container.DisplayName, amtDec, amtDec >= 0);
-                    lineItems.Add(li);
+                    if (!amt.IsEmpty)
+                    {
+                        var amtDec = _unit == LiquidAmountUnits.Milliliters ? amt.GetInMilliliters() : amt.GetInLiquidOunces();
+                        var li = new ReportResultLineItem(fullKey.ItemName, fullKey.Container.DisplayName, amtDec, amtDec >= 0);
+                        lineItems.Add(li);
+                    }
                 }
             }
 
@@ -116,41 +119,44 @@ namespace Mise.Core.Common.Entities.Reports
                     .OrderByDescending(i => i.DateCompleted.Value)
                     .FirstOrDefault();
 
-                //get the ROs in the period
-                var rosInPeriod = ros.Where(r => r.DateReceived < inventory.DateCompleted.Value && r.DateReceived > previousInv.DateCompleted.Value);
-
-                //consolidate any repeated in both inventories items
-                var endDic = GetConsolidatedItems(inventory);
-                var startDic = GetConsolidatedItems(previousInv);
-                var roAmounts = GetConsolidatedAmounts(rosInPeriod);
-
-                var startAmounts = AddAmountDics(startDic, roAmounts);
-
-                foreach (var itemKey in startAmounts.Keys)
+                if (previousInv != null)
                 {
-                    LiquidAmount usedForItem;
-                    if (endDic.ContainsKey(itemKey))
-                    {
-                        var difference = startAmounts[itemKey].Subtract(endDic[itemKey]);
+                    //get the ROs in the period
+                    var rosInPeriod = ros.Where(r => r.DateReceived < inventory.DateCompleted.Value && r.DateReceived > previousInv.DateCompleted.Value);
 
-                        usedForItem = difference;
-                    }
-                    else
-                    {
-                        //we used it all
-                        usedForItem = startAmounts[itemKey];
-                    }
+                    //consolidate any repeated in both inventories items
+                    var endDic = GetConsolidatedItems(inventory);
+                    var startDic = GetConsolidatedItems(previousInv);
+                    var roAmounts = GetConsolidatedAmounts(rosInPeriod);
 
-                    if (usedAmount.ContainsKey(itemKey))
+                    var startAmounts = AddAmountDics(startDic, roAmounts);
+
+                    foreach (var itemKey in startAmounts.Keys)
                     {
-                        var amt = usedAmount[itemKey];
-                        usedAmount[itemKey] = amt.Add(usedForItem);
+                        LiquidAmount usedForItem;
+                        if (endDic.ContainsKey(itemKey))
+                        {
+                            var difference = startAmounts[itemKey].Subtract(endDic[itemKey]);
+
+                            usedForItem = difference;
+                        }
+                        else
+                        {
+                            //we used it all
+                            usedForItem = startAmounts[itemKey];
+                        }
+
+                        if (usedAmount.ContainsKey(itemKey))
+                        {
+                            var amt = usedAmount[itemKey];
+                            usedAmount[itemKey] = amt.Add(usedForItem);
+                        }
+                        else
+                        {
+                            usedAmount.Add(itemKey, usedForItem);
+                        }
                     }
-                    else
-                    {
-                        usedAmount.Add(itemKey, usedForItem);
-                    }
-                }
+                } //end inventory cycle
             }
 
             return usedAmount;

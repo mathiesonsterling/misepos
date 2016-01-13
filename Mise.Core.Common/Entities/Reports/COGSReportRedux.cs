@@ -28,7 +28,7 @@ namespace Mise.Core.Common.Entities.Reports
             var allPossibleKeys = GetAllPossibleKeys(_inventories, _receivingOrders);
 
             var res = new Dictionary<KeyAndItemName, Money>();
-            foreach (var itemKey in amountsUsed.Keys)
+            foreach (var itemKey in amountsUsed.Keys.OrderBy(k => k))
             {
                 if (priceDic.ContainsKey(itemKey))
                 {
