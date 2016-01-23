@@ -56,7 +56,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                     AreaCode = "718",
                     Number = "1112222"
                 },
-                RestaurantServerLocation = new Uri("http://restaurantserver.misepos.com"),
                 Revision = new EventID { OrderingID = 100 },
                 StreetAddress = new StreetAddress
                 {
@@ -107,7 +106,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             Assert.AreEqual(updateDate, res.LastUpdatedDate);
             Assert.AreEqual("testRest", res.Name.FullName);
             Assert.AreEqual(MiseAppTypes.UnitTests, res.Revision.AppInstanceCode);
-            Assert.IsNotNull(res.RestaurantServerLocation);
             Assert.IsNotNull(res.PhoneNumber);
             Assert.AreEqual("718", res.PhoneNumber.AreaCode);
             Assert.AreEqual("1112222", res.PhoneNumber.Number);
@@ -137,20 +135,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var rest = new Restaurant
             {
                 Id = Guid.NewGuid(),
-                DiscountAmounts = new List<DiscountAmount>{
-
-                    new DiscountAmount
-                    {
-                        AmountToAdd = new Money(10.0M)
-                    }
-                },
-                DiscountPercentageAfterMinimumCashTotals = new List<DiscountPercentageAfterMinimumCashTotal>{
-                    new DiscountPercentageAfterMinimumCashTotal
-                    {
-                        Percentage = -.10M,
-                        MinCheckAmount = new Money(50.0M)
-                    }
-                }
 
             };
 
@@ -162,21 +146,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 
             Assert.AreNotEqual(Guid.Empty, res.Id);
             Assert.IsNotNull(res);
-            Assert.IsNotNull(res.GetPossibleDiscounts());
-            Assert.AreEqual(2, res.GetPossibleDiscounts().Count(), "num payments");
-
-            var discounts = res.GetPossibleDiscounts().ToList();
-            var firstDiscount = discounts.First();
-            var amt = firstDiscount.GetDiscountAmount(Money.None);
-            Assert.IsNotNull(amt);
-            Assert.AreEqual(10.00M, amt.Dollars);
-            Assert.AreEqual(DiscountType.DiscountAmount, firstDiscount.DiscountType);
-
-            var secondDiscount = discounts[1] as DiscountPercentageAfterMinimumCashTotal;
-            Assert.IsNotNull(secondDiscount);
-            Assert.IsNotNull(secondDiscount.MinCheckAmount);
-            Assert.AreEqual(DiscountType.DiscountPercentageAfterMinimumCashTotal, secondDiscount.DiscountType, "got " + secondDiscount.DiscountType);
-
         }
     }
 }

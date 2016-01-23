@@ -25,6 +25,12 @@ namespace Mise.Inventory.ViewModels.Reports
 		    StartDate = new DateTime(2015, 1, 1);
 			EndDate = DateTime.Now.AddDays(1);
 			LiquidUnit = LiquidAmountUnits.Milliliters.ToString ();
+
+            PropertyChanged += (sender, e) => {
+                if(e.PropertyName == "StartDate" || e.PropertyName == "EndDate" || e.PropertyName == "NotProcessing"){
+                    CanReport = NotProcessing && (StartDate != null) && (EndDate != null);
+                }
+            };
 		}
 
         public override async Task OnAppearing()
@@ -46,6 +52,8 @@ namespace Mise.Inventory.ViewModels.Reports
         public DateTime EndDate { get { return GetValue<DateTime>(); } set { SetValue(value);} }
 
         public string LiquidUnit{get{return GetValue<string> ();}set{ SetValue (value); }}
+
+        public bool CanReport{ get { return GetValue<bool>(); } set { SetValue(value); } }
         #endregion
 
         #region Commands
@@ -54,11 +62,11 @@ namespace Mise.Inventory.ViewModels.Reports
 		}
 
 		public ICommand AmountUsedCommand{
-			get{return new Command (AmountUsed, () => NotProcessing);}
+			get{return new Command (AmountUsed);}
 		}
 
 		public ICommand CostOfGoodsSoldCommand{
-			get{return new Command(CostOfGoodsSold, () => NotProcessing);}
+			get{return new Command(CostOfGoodsSold);}
 		}
 
 	    private async void CompletedInventories()

@@ -29,6 +29,8 @@ namespace MiseReporting
         private readonly string _empType;
         private readonly string _restType;
         private readonly string _roType;
+        private readonly string _poType;
+        private readonly string _parType;
         private readonly string _vendorType;
         public ManagementDAL()
         {
@@ -37,6 +39,8 @@ namespace MiseReporting
             _empType = typeof (Employee).ToString();
             _restType = typeof (Restaurant).ToString();
             _roType = typeof (ReceivingOrder).ToString();
+            _poType = typeof (PurchaseOrder).ToString();
+            _parType = typeof (Par).ToString();
             _vendorType = typeof (Vendor).ToString();
         }
 
@@ -120,6 +124,23 @@ namespace MiseReporting
             return invs;
         }
 
+        public async Task<IEnumerable<IInventory>> GetInventoriesCompletedAfter(DateTimeOffset date)
+        {
+            List<AzureEntityStorage> ais;
+            using (var db = new AzureNonTypedEntities())
+            {
+                ais = await db.AzureEntityStorages
+                    .Where(ai => ai.LastUpdatedDate > date)
+                    .Where(a => a.MiseEntityType == _invType)
+                    .ToListAsync();
+            }
+
+            var dtos = ais.Select(ai => ai.ToRestaurantDTO());
+            var invs = dtos.Select(dto => _entityFactory.FromDataStorageObject<Inventory>(dto)).ToList();
+
+            return invs.Where(inv => inv.DateCompleted.HasValue && inv.DateCompleted.Value > date);
+        }
+
         public async Task<IInventory> GetInventoryById(Guid invId)
         {
             var cached = SubItemCache.GetById<IInventory>(invId);
@@ -142,7 +163,7 @@ namespace MiseReporting
             }
         }
 
-
+        
         public async Task<IInventoryBeverageLineItem> GetInventoryLineItem(Guid inventoryId, Guid lineItemId)
         {
             var inv = await GetInventoryById(inventoryId);
@@ -158,7 +179,10 @@ namespace MiseReporting
         {
             var newLineItem = li as InventoryBeverageLineItem;
             var inv = (await GetInventoryById(inventoryId)) as Inventory;
-
+            if (inv == null)
+            {
+                throw new InvalidOperationException("Can't downgrade inventory");
+            }
             var sec = inv.Sections.FirstOrDefault(s => s.LineItems.Select(l => l.Id).Contains(li.Id));
 
             var oldLineItem = sec.LineItems.FirstOrDefault(l => l.Id == li.Id);
@@ -395,6 +419,23 @@ namespace MiseReporting
             }
         }
 
+        public async Task<IEmployee> GetEmployeeWithEmailAndPassword(EmailAddress email, string password)
+        {
+            var emp = await GetEmployeeWithEmail(email);
+
+            if (emp?.Password == null)
+            {
+                return null;
+            }
+            if (emp.Password.HashValue == password)
+            {
+                return emp;
+            }
+            var asPlain = new Password(password);
+
+            return emp.Password.Equals(asPlain) ? emp : null;
+        }
+
         public async Task CreateEmployee(Employee emp)
         {
             var dto = _entityFactory.ToDataTransportObject(emp);
@@ -453,7 +494,7 @@ namespace MiseReporting
             {
                 return cached;
             }
-            AzureEntityStorage ai = null;
+            AzureEntityStorage ai;
             using (var db = new AzureNonTypedEntities())
             {
                 ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _roType && a.EntityID == id);
@@ -461,6 +502,40 @@ namespace MiseReporting
             var ro = _entityFactory.FromDataStorageObject<ReceivingOrder>(ai.ToRestaurantDTO());
             SubItemCache.Upsert(ro);
             return ro;
+        }
+
+        public async Task<IPurchaseOrder> GetPurchaseOrderById(Guid id)
+        {
+            var cached = SubItemCache.GetById<IPurchaseOrder>(id);
+            if (cached != null)
+            {
+                return cached;
+            }
+            AzureEntityStorage ai;
+            using (var db = new AzureNonTypedEntities())
+            {
+                ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _poType && a.EntityID == id);
+            }
+            var po = _entityFactory.FromDataStorageObject<PurchaseOrder>(ai.ToRestaurantDTO());
+            SubItemCache.Upsert(po);
+            return po;
+        }
+
+        public async Task<IPar> GetParById(Guid id)
+        {
+            var cached = SubItemCache.GetById<IPar>(id);
+            if (cached != null)
+            {
+                return cached;
+            }
+            AzureEntityStorage ai;
+            using (var db = new AzureNonTypedEntities())
+            {
+                ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _parType && a.EntityID == id);
+            }
+            var po = _entityFactory.FromDataStorageObject<Par>(ai.ToRestaurantDTO());
+            SubItemCache.Upsert(po);
+            return po;
         }
 
         public async Task<IVendor> GetVendorById(Guid id)
@@ -473,10 +548,43 @@ namespace MiseReporting
             return _entityFactory.FromDataStorageObject<Vendor>(ai.ToRestaurantDTO());
         }
 
+        public async Task<IEnumerable<EmailAddress>> GetEmailToSendReportToForRestaurant(Guid restaurantId)
+        {
+            var rest = await GetRestaurantById(restaurantId);
+            if (rest == null)
+            {
+                return new List<EmailAddress>();
+            }
+            var overrides = rest.GetEmailsToSendInventoryReportsTo();
+            if (overrides != null && overrides.Any())
+            {
+                return overrides;
+            }
+
+            if (rest.AccountID.HasValue)
+            {
+                var acc = await GetAccountById(rest.AccountID.Value);
+                return new [] { acc.PrimaryEmail};
+            }
+
+            return new List<EmailAddress>();
+        }
+
+        public async Task<IAccount> GetAccountById(Guid id)
+        {
+            var miseAcctType = typeof(MiseEmployeeAccount).ToString();
+            using (var db = new AzureNonTypedEntities())
+            {
+                var miseAcct =
+                    await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == miseAcctType && ai.EntityID == id)
+                        .FirstOrDefaultAsync();
+
+                return _entityFactory.FromDataStorageObject<RestaurantAccount>(miseAcct.ToRestaurantDTO());
+            }
+        }
         public async Task<IEnumerable<IAccount>> GetAccountsByEmail(EmailAddress email)
         {
             var miseAcctType = typeof (MiseEmployeeAccount).ToString();
-            var restAcctType = typeof (RestaurantAccount).ToString();
 
             var res = new List<IAccount>();
             using (var db = new AzureNonTypedEntities())
@@ -562,6 +670,56 @@ namespace MiseReporting
                 oldVer.EntityJSON = newVer.EntityJSON;
                 oldVer.LastUpdatedDate = DateTimeOffset.UtcNow;
                 db.Entry(oldVer).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEnumerable<SendEmailCSVFile>> GetLastSentEmails(int numBack)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                var emails = await db.SendEmailCSVFiles.Where(e => e.Sent)
+                    .OrderByDescending(e => e.CreatedAt)
+                    .Take(numBack)
+                    .ToListAsync();
+
+                return emails;
+            }
+        }
+
+        public async Task<SendEmailCSVFile> GetEmailForEntity(Guid entityId)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                var found = await db.SendEmailCSVFiles.FirstOrDefaultAsync(e => e.EntityId == entityId);
+                return found;
+            }
+        }
+
+        public async Task<IEnumerable<SendEmailCSVFile>> GetUnsentEmails()
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                var items = await db.SendEmailCSVFiles.Where(e => e.Sent == false).ToListAsync();
+                return items;
+            }
+        }
+
+        public async Task CreateEmailRecord(SendEmailCSVFile email)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                db.SendEmailCSVFiles.Add(email);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task MarkEmailAsSent(SendEmailCSVFile email)
+        {
+            using (var db = new AzureNonTypedEntities())
+            {
+                email.Sent = true;
+                db.Entry(email).State = EntityState.Modified;
                 await db.SaveChangesAsync();
             }
         }

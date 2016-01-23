@@ -1518,29 +1518,8 @@ namespace Mise.Core.Common.Services.Implementation
                 CreatedDate = DateTime.UtcNow,
                 LastUpdatedDate = DateTime.UtcNow,
                 Name = new RestaurantName("Dominie's LIC", "Doms"),
-                FriendlyID = "dominieshoeklic",
                 Id = RestaurantID,
                 Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1023},
-                RestaurantServerLocation = restServLoc,
-                DiscountPercentageAfterMinimumCashTotals = new List<DiscountPercentageAfterMinimumCashTotal>{
-		            new DiscountPercentageAfterMinimumCashTotal
-		            {
-		                Id = Guid.NewGuid(),
-		                Name = "Cash over $50",
-		                Percentage = -0.10M,
-		                MinCheckAmount = new Money(50.0M),
-                        Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1023},
-		            }
-                },
-                DiscountPercentages = new List<DiscountPercentage>{
-		            new DiscountPercentage
-		            {
-		                Id = Guid.NewGuid(),
-		                Name = "8+ People",
-		                Percentage = .18M,
-                        Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1023},
-		            }
-		        },
                 StreetAddress = new StreetAddress
                 {
                     Country = Country.UnitedStates,
@@ -1564,7 +1543,6 @@ namespace Mise.Core.Common.Services.Implementation
                 RestaurantID = RestaurantID,
                 WaitForZToCloseCards = true,
             };
-            restaurant.Terminals = new List<MiseTerminalDevice> { dev };
 			return Task.Factory.StartNew (() => new Tuple<Restaurant, IMiseTerminalDevice>(restaurant, dev));
         }
 

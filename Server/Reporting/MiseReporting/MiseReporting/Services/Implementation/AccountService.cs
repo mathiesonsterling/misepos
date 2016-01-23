@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Events;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Services.UtilityServices;
+using Mise.Core.ValueItems;
 
 namespace MiseReporting.Services.Implementation
 {
@@ -15,6 +17,7 @@ namespace MiseReporting.Services.Implementation
         private readonly IInventoryAppEventFactory _eventFactory;
         private readonly IPaymentProviderService _paymentProviderService;
         private readonly ILogger _logger;
+
         public AccountService()
         {
             _dal = new ManagementDAL();
@@ -52,6 +55,24 @@ namespace MiseReporting.Services.Implementation
             }
         }
 
+        public async Task DeletePaymentPlansForCancelledAccounts()
+        {
+            var cancelledAccounts = await GetCancelledAccounts();
+            foreach (var acct in cancelledAccounts)
+            {
+                await _paymentProviderService.CancelSubscriptionForAccount(acct);
+
+                var downg = acct as RestaurantAccount;
+                if (downg == null)
+                {
+                    throw new InvalidCastException("Need RestaurantAccount, not " + acct.GetType());
+                }
+                downg.Status = MiseAccountStatus.CancelledFully;
+
+                await _dal.UpdateAccount(downg);
+            }
+        }
+
         public async Task<IEnumerable<IAccount>> GetAccountsWaitingForPaymentPlan()
         {
             const string MISSING_ACCOUNTS_TAG = "\"PaymentPlanSetupWithProvider\":false";
@@ -60,12 +81,16 @@ namespace MiseReporting.Services.Implementation
             return accts;
         }
 
+        public async Task<IEnumerable<IAccount>> GetCancelledAccounts()
+        {
+            var accts = await _dal.GetRestaurantAccounts(MiseAccountStatus.Cancelled.ToString());
+            return accts.Where(a => a.Status == MiseAccountStatus.Cancelled);
+        }
+
         private async Task MarkAccountAsHavingPaymentPlan(IAccount account)
         {
             var ev = _eventFactory.CreateAccountHasPaymentPlanSetupEvent(account);
             account.When(ev);
-
-            //todo - save the event into our DB as well
 
             //save the change!
             await _dal.UpdateAccount(account);

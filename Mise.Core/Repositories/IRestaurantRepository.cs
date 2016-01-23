@@ -9,8 +9,6 @@ namespace Mise.Core.Repositories
 {
     public interface IRestaurantRepository : IEventSourcedEntityRepository<IRestaurant, IRestaurantEvent>
     {
-        IRestaurant GetByFriendlyID(string friendlyID);
-
 		/// <summary>
 		/// Gets a selection of possible restaurants by name
 		/// </summary>

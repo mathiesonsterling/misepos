@@ -10,12 +10,12 @@
 		<ScrollView>
 			<StackLayout VerticalOptions="FillAndExpand" Padding="50">
 				<Label Text="Start"></Label>
-				<DatePicker Date="{Binding StartDate}"/>
+				<DatePicker Date="{Binding StartDate, Mode=TwoWay}"/>
 				<Label Text="End"></Label>
-				<DatePicker Date="{Binding EndDate}" />
+				<DatePicker Date="{Binding EndDate, Mode=TwoWay}" />
 				<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
-				<Button Command="{Binding CompletedInventoriesCommand}" Text="Completed Inventories"/>
-				<Button Command="{Binding AmountUsedCommand}" Text="Amount Used"/>
+				<Button Command="{Binding CompletedInventoriesCommand}" Text="Completed Inventories" IsEnabled="{Binding CanReport}"/>
+				<Button Command="{Binding AmountUsedCommand}" Text="Amount Used" IsEnabled="{Binding CanReport}"/>
 			</StackLayout>
 		</ScrollView>
 	</ContentPage.Content>

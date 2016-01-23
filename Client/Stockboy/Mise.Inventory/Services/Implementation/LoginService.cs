@@ -242,17 +242,20 @@ namespace Mise.Inventory.Services.Implementation
 			var selEv = _eventFactory.CreateUserSelectedRestaurant (_currentEmployee, _currentRestaurant.Id);
 			_currentRestaurant = _restaurantRepository.ApplyEvent (selEv);
 
-            if (_currentRestaurant.AccountID.HasValue)
+            if (accountId.HasValue)
             {
-                await _accountRepository.LoadAccount(_currentRestaurant.AccountID.Value);
+                await _accountRepository.LoadAccount(accountId.Value);
             }
 
-            if (!_currentRestaurant.AccountID.HasValue && accountId.HasValue)
+            if (accountId.HasValue)
             {
-                var baseRest = _currentRestaurant as Restaurant;
-                if (baseRest != null)
+                if ((!_currentRestaurant.AccountID.HasValue) || (_currentRestaurant.AccountID != accountId))
                 {
-                    baseRest.AccountID = accountId;
+                    var baseRest = _currentRestaurant as Restaurant;
+                    if (baseRest != null)
+                    {
+                        baseRest.AccountID = accountId;
+                    }
                 }
             }
 
@@ -596,6 +599,50 @@ namespace Mise.Inventory.Services.Implementation
             return _keyValStorage.SetID(eulaKey, Guid.NewGuid());
         }
 
+        private const string InvReminderShownKey = "invShownReminder";
+        public bool HasInventoryShownClearReminder(Guid inventoryId)
+        {
+            try{
+                var found = _keyValStorage.GetID(InvReminderShownKey + inventoryId.ToString());
+                return found != null;
+            } catch(Exception e){
+                _logger.HandleException(e);
+                return false;
+            }
+        }
+
+        public Task<EmailAddress> GetCurrentAccountEmail()
+        {
+            EmailAddress email = null;
+            if (_currentRestaurant == null || !_currentRestaurant.AccountID.HasValue)
+            {
+                return Task.FromResult(email);
+            }
+
+            var acct = _accountRepository.GetByID(_currentRestaurant.AccountID.Value);
+            if (acct == null)
+            {
+                return Task.FromResult(email);
+            }
+
+            return Task.FromResult(acct.PrimaryEmail);
+        }
+
+        public async Task ChangeCurrentRestaurantReportingEmail(EmailAddress email)
+        {
+            if (_currentRestaurant != null)
+            {
+                var ev = _eventFactory.CreateRestaurantReportingEmailSetEvent(_currentEmployee, _currentRestaurant, email);
+                _currentRestaurant = _restaurantRepository.ApplyEvent(ev);
+
+                await _restaurantRepository.Commit(_currentRestaurant.Id);
+            }
+        }
+
+        public Task MarkInventoryShownClearReminderAsShown(Guid inventoryId)
+        {
+            return _keyValStorage.SetID(InvReminderShownKey + inventoryId.ToString(), inventoryId);
+        }
 
         public async Task<IAccount> CancelAccount()
         {
@@ -612,11 +659,14 @@ namespace Mise.Inventory.Services.Implementation
 
             var ev = _eventFactory.CreateAccountCancelledEvent(_currentEmployee, account, _currentRestaurant);
 
-            account.When(ev);
-            _currentRestaurant.When(ev);
+            _accountRepository.ApplyEvent(ev);
+            _restaurantRepository.ApplyEvent(ev);
 
             await _accountRepository.Commit(account.Id);
-            await _restaurantRepository.Commit(_currentRestaurant.Id);
+            if (_restaurantRepository.Dirty)
+            {
+                await _restaurantRepository.Commit(_currentRestaurant.Id);
+            }
 
             return account;
         }
@@ -639,7 +689,7 @@ namespace Mise.Inventory.Services.Implementation
                 return false;
             }
 
-            return account.Status != MiseAccountStatus.Cancelled;
+            return true;
         }
 
         public bool IsCurrentUserAccountOwner
@@ -664,7 +714,8 @@ namespace Mise.Inventory.Services.Implementation
 
                 if (_currentEmployee.GetEmailAddresses().Contains(account.PrimaryEmail))
                 {
-                    return account.Status != MiseAccountStatus.Cancelled;
+                    return true;
+                    //return account.Status != MiseAccountStatus.Cancelled && account.Status != MiseAccountStatus.CancelledFully;
                 }
 
                 return false;

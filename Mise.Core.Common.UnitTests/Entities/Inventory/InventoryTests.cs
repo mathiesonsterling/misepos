@@ -415,7 +415,8 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                                     Milliliters = 10.0M,
                                     SpecificGravity = 1.0M
                                 },
-                                NumFullBottles = 13
+                                NumFullBottles = 13,
+                                PricePaid = new Money(11.11M)
                             }
                         }
                     }
@@ -450,6 +451,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
 
             Assert.AreEqual(underTest.Sections.First().Name, clone.Sections.First().Name);
             Assert.AreEqual(underTest.GetSections().First().Id, clone.GetSections().First().Id, "Section ID");
+            Assert.AreEqual(underTest.GetBeverageLineItems().First().PricePaid, clone.GetBeverageLineItems().First().PricePaid);
         }
 
         [Test]
@@ -492,7 +494,8 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                         Id = Guid.NewGuid(),
                         Name ="testCat"
                     }
-                }
+                },
+                PricePaid = new Money(11.11M)
             };
 
             //ACT
@@ -509,6 +512,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
             var otherSec = sections.FirstOrDefault(s => s.Name != "storeRoom");
             Assert.NotNull(otherSec);
             Assert.False(otherSec.GetInventoryBeverageLineItemsInSection().Any());
+
         }
 
 		[Test]

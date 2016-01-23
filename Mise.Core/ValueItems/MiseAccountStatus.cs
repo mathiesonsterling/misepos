@@ -23,9 +23,10 @@ namespace Mise.Core.ValueItems
         /// </summary>
         CancelledButStillActive,
         /// <summary>
-        /// Cancelled and no longer used
+        /// Cancel requested by the user
         /// </summary>
         Cancelled,
+        CancelledFully,
         SuspendedByRequest,
         SuspendedForNonPayment,
     }

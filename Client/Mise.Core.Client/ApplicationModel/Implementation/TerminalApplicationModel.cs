@@ -901,19 +901,6 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
         #endregion
 
         #region Discounts
-        public IEnumerable<IDiscount> GetPossibleDiscounts()
-        {
-            return _restaurant.GetPossibleDiscounts()
-                .Where(d => d.AddsMoney == false)
-                .Where(d => d.CanApplyToCheck(SelectedCheck));
-        }
-
-        public IEnumerable<IDiscount> GetPossibleGratuities()
-        {
-            return _restaurant.GetPossibleDiscounts()
-                .Where(d => d.AddsMoney)
-                .Where(d => d.CanApplyToCheck(SelectedCheck));
-        }
 
         public ICheck AddDiscountsToSelectedCheck(IEnumerable<IDiscount> discounts)
         {

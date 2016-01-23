@@ -130,11 +130,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 		public async Task<bool> SendEventsAsync (Core.Common.Entities.Inventory.Inventory updatedEntity, IEnumerable<Mise.Core.Entities.Inventory.Events.IInventoryEvent> events)
 		{
+            if (updatedEntity.IsEmpty)
+            {
+                _logger.Error("Empty inventory saved, id " + updatedEntity.Id);
+            }
+
 			var entRes = await StoreEntity (updatedEntity);
-            /*
-            var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
-			var evRes = await SendEventDTOs (dtos);
-*/
+
 			return entRes;
 		}
 

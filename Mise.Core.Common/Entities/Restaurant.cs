@@ -10,37 +10,26 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Payments;
-
+using Mise.Core.Common.Entities.Accounts;
 namespace Mise.Core.Common.Entities
 {
 	public class Restaurant : RestaurantEntityBase, IRestaurant
     {
         public Restaurant()
         {
-            DiscountAmounts = new List<DiscountAmount>();
-            DiscountPercentages = new List<DiscountPercentage>();
-            DiscountPercentageAfterMinimumCashTotals = new List<DiscountPercentageAfterMinimumCashTotal>();
-            Terminals = new List<MiseTerminalDevice>();
             InventorySections = new List<RestaurantInventorySection>();
+            EmailsToSendInventoryReportsTo = new List<EmailAddress>();
         }
 
         public ICloneableEntity Clone()
         {
             var newItem = base.CloneRestaurantBase(new Restaurant());
             newItem.AccountID = AccountID;
-            newItem.FriendlyID = FriendlyID;
             newItem.InventorySections = InventorySections.Select(i => i.Clone() as RestaurantInventorySection).ToList();
             newItem.Name = Name;
-            newItem.NumberOfActiveCashRegisters = NumberOfActiveCashRegisters;
-            newItem.NumberOfActiveCreditRegisters = NumberOfActiveCreditRegisters;
-            newItem.NumberOfActiveOrderTerminals = NumberOfActiveOrderTerminals;
             newItem.PhoneNumber = PhoneNumber;
-            newItem.RestaurantServerLocation = RestaurantServerLocation;
             newItem.StreetAddress = StreetAddress;
-            newItem.Terminals = Terminals;
-            newItem.LastMeasuredInventoryID = LastMeasuredInventoryID;
-            newItem.CurrentInventoryID = CurrentInventoryID;
-           
+            newItem.EmailsToSendInventoryReportsTo = EmailsToSendInventoryReportsTo.Select(e => e).ToList();
             return newItem;
         }
 
@@ -48,32 +37,8 @@ namespace Mise.Core.Common.Entities
 			get;
 			set;
 		}
-
-        public string FriendlyID { get; set; }
-
-        public List<MiseTerminalDevice> Terminals { get; set; }
-
-        public IEnumerable<IMiseTerminalDevice> GetTerminals()
-        {
-            return Terminals;
-        }
-
-        public void AddTerminal(IMiseTerminalDevice device)
-        {
-            var concrete = device as MiseTerminalDevice;
-            if (concrete != null)
-            {
-                Terminals.Add(concrete);
-            }
-        }
-
-        public Uri RestaurantServerLocation { get; set; }
-
-
+            
         public List<RestaurantInventorySection> InventorySections { get; set; }
-
-
-        public Guid? LastMeasuredInventoryID { get; set; }
 
         public IEnumerable<IRestaurantInventorySection> GetInventorySections()
         {
@@ -91,29 +56,15 @@ namespace Mise.Core.Common.Entities
 			set;
 		}
 
-        public List<DiscountAmount> DiscountAmounts;
-        public List<DiscountPercentage> DiscountPercentages;
-        public List<DiscountPercentageAfterMinimumCashTotal> DiscountPercentageAfterMinimumCashTotals;
-
-		public IEnumerable<IDiscount> GetPossibleDiscounts(){
-            var list = new List<IDiscount>();
-            list.AddRange(DiscountAmounts);
-            list.AddRange(DiscountPercentages);
-            list.AddRange(DiscountPercentageAfterMinimumCashTotals);
-
-            return list;
-		}
- 
-        public int NumberOfActiveCashRegisters { get; set; }
-        public int NumberOfActiveCreditRegisters { get; set; }
-        public int NumberOfActiveOrderTerminals { get; set; }
+        public List<EmailAddress> EmailsToSendInventoryReportsTo{ get; set; }
+        public IEnumerable<EmailAddress> GetEmailsToSendInventoryReportsTo(){
+            return EmailsToSendInventoryReportsTo;
+        }
 
         /// <summary>
         /// If this is true, this is just here to support a user, but is not verified as a real restaurant
         /// </summary>
         public bool IsPlaceholder { get { return AccountID.HasValue == false; } }
-
-        public Guid? CurrentInventoryID { get; set; }
 
         public void When(IRestaurantEvent entityEvent)
         {
@@ -134,12 +85,26 @@ namespace Mise.Core.Common.Entities
                 case MiseEventTypes.RestaurantAssignedToAccount:
                     WhenRestaurantAssignedToAccount((RestaurantAssignedToAccountEvent)entityEvent);
                     break;
+                case MiseEventTypes.RestaurantReportingEmailSet:
+                    WhenRestaurantReportingEmailSet((RestaurantReportingEmailSetEvent)entityEvent);
+                    break;
+                case MiseEventTypes.AccountCancelled:
+                    WhenAccountCancelled((Mise.Core.Common.Events.Accounts.AccountCancelledEvent)entityEvent);
+                    break;
                 default:
                     throw new ArgumentException("Can't handle event " + entityEvent.EventType);
             }
 
             LastUpdatedDate = entityEvent.CreatedDate;
             Revision = entityEvent.EventOrder;
+        }
+
+        private void WhenAccountCancelled(Mise.Core.Common.Events.Accounts.AccountCancelledEvent ev)
+        {
+            if (ev != null)
+            {
+                AccountID = null;
+            }
         }
 
 	    private void WhenNewRestaurantCreatedOnApp(NewRestaurantRegisteredOnAppEvent ev)
@@ -185,6 +150,13 @@ namespace Mise.Core.Common.Entities
 
         void WhenRestaurantAssignedToAccount(RestaurantAssignedToAccountEvent ev){
             AccountID = ev.AccountId;
+        }
+
+        private void WhenRestaurantReportingEmailSet(RestaurantReportingEmailSetEvent entityEvent){
+            if (entityEvent.Email != null)
+            {
+                EmailsToSendInventoryReportsTo.Insert(0, entityEvent.Email);
+            }
         }
     }
 }

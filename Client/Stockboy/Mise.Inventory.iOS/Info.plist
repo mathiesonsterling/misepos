@@ -33,29 +33,18 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>MKDirectionsRequest</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>com.apple.maps.directionsrequest</string>
-			</array>
-		</dict>
-	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>0.1.60</string>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Images.xcassets/AppIcons-2.appiconset</string>
-	<key>CFBundleShortVersionString</key>
-	<string>0.1</string>
 	<key>UIRequiresFullScreen</key>
 	<string>YES</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.5</string>
 </dict>
 </plist>

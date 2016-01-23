@@ -402,16 +402,6 @@ namespace Mise.Core.Client.ApplicationModel
 
 
 		#region Discounts
-		/// <summary>
-		/// Get any possible discounts for display
-		/// </summary>
-		/// <returns>The possible discounts.</returns>
-		IEnumerable<IDiscount> GetPossibleDiscounts ();
-		/// <summary>
-		/// Get any possible gratuities (add ons)
-		/// </summary>
-		/// <returns>The possible gratuities.</returns>
-		IEnumerable<IDiscount> GetPossibleGratuities ();
 
 		/// <summary>
 		/// Take some gratuities and discounts, and apply them to the current check

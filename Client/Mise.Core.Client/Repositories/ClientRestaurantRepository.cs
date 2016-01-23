@@ -31,12 +31,6 @@ namespace Mise.Core.Client.Repositories
             _locationService = locationService;
         }
 
-			
-	    public IRestaurant GetByFriendlyID(string friendlyID)
-	    {
-	        return Cache.FirstOrDefault(r => r.FriendlyID == friendlyID);
-	    }
-
         public IEnumerable<IRestaurant> GetByName(string name)
         {
             return Cache.GetAll().Where(r => r.Name.ContainsSearchString(name));

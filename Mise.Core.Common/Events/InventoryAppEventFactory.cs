@@ -122,7 +122,7 @@ namespace Mise.Core.Common.Events
 
 		public InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent (IEmployee emp, 
 			IBaseBeverageLineItem source, int quantity, Guid? vendorID, IInventorySection section, int inventoryPosition,  
-			IInventory inventory)
+            IInventory inventory, Money pricePaid)
 		{
 			return new InventoryLineItemAddedEvent {
 				Id = Guid.NewGuid (),
@@ -143,7 +143,8 @@ namespace Mise.Core.Common.Events
 				InventoryID = inventory.Id,
 				Categories = source.GetCategories ().Cast<ItemCategory>(),
                 InventoryPosition =  inventoryPosition,
-                LineItemID = Guid.NewGuid()
+                LineItemID = Guid.NewGuid(),
+                PricePaid = pricePaid
 			};
 		}
 
@@ -785,6 +786,20 @@ namespace Mise.Core.Common.Events
 	        };
 	    }
 
+        public RestaurantReportingEmailSetEvent CreateRestaurantReportingEmailSetEvent(IEmployee emp, IRestaurant rest, EmailAddress email)
+        {
+            return new RestaurantReportingEmailSetEvent
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = GetDate(),
+                DeviceId = _deviceID,
+                EventOrder = GetNextEventID(),
+                CausedById = emp.Id,
+                RestaurantId = rest.Id,
+                Email = email
+            };
+        }
+
 		public EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent(IEmployee emp, IRestaurant rest){
 			return new EmployeeRegistersRestaurantEvent {
 				Id = Guid.NewGuid (),
@@ -873,7 +888,7 @@ namespace Mise.Core.Common.Events
                 DeviceId = _deviceID,
                 EventOrder = GetNextEventID(),
                 Id = Guid.NewGuid(),
-                RestaurantID = restaurant.Id
+                RestaurantId = restaurant.Id
             };
         }
 	}

@@ -31,6 +31,11 @@ namespace Mise.Core.ValueItems.Inventory
             };
         }
 
+        public decimal Divide(LiquidAmount other)
+        {
+            return Milliliters / other.GetInMilliliters();
+        }
+
 	    public LiquidAmount Add(LiquidAmount other)
 	    {
 	        return new LiquidAmount
@@ -56,7 +61,7 @@ namespace Mise.Core.ValueItems.Inventory
         /// </summary>
 	    public bool IsEmpty
 	    {
-	        get { return Milliliters > 0; }
+            get { return Milliliters <= 0; }
 	    }
 
 	    /// <summary>

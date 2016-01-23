@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities.Accounts;
@@ -51,10 +50,26 @@ namespace MiseReporting.Services.Implementation
             }
         }
 
-        private static void AddSubscriptionToExistingCustomer(StripeCustomer customer, string planName)
+        public async Task CancelSubscriptionForAccount(IAccount account)
+        {
+            var customers = await GetCustomersWithEmail(account.PrimaryEmail);
+            var subscriptionService = new StripeSubscriptionService();
+
+            //get all the subscriptions
+            foreach (var customer in customers)
+            {
+                var subscriptions = subscriptionService.List(customer.Id);
+                foreach (var sub in subscriptions)
+                {
+                    subscriptionService.Cancel(customer.Id, sub.Id);
+                }
+            }
+        }
+
+        private static void AddSubscriptionToExistingCustomer(StripeObject customer, string planName)
         {
             var subscriptionService = new StripeSubscriptionService();
-            var subscription = subscriptionService.Create(customer.Id, planName);
+            subscriptionService.Create(customer.Id, planName);
         }
 
         private StripeCustomer CreateCustomer(IAccount account, CreditCard card, string planName)

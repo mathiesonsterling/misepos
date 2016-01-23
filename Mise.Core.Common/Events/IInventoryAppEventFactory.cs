@@ -49,7 +49,7 @@ namespace Mise.Core.Common.Events
 		InventoryCreatedEvent CreateInventoryCreatedEvent(IEmployee emp);
 		InventoryMadeCurrentEvent CreateInventoryMadeCurrentEvent(IEmployee emp, IInventory inventory);
 		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int quantity, Guid? vendorID, IInventorySection section, 
-           int inventoryPosition, IInventory inventory);
+           int inventoryPosition, IInventory inventory, Money pricePaid);
 
 		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, string name, string upc, 
 			IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity,  
@@ -106,6 +106,7 @@ namespace Mise.Core.Common.Events
         NewRestaurantRegisteredOnAppEvent CreateNewRestaurantRegisteredOnAppEvent(IEmployee emp, RestaurantName name,
             StreetAddress address, PhoneNumber phone);
 		EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent (IEmployee emp, IRestaurant rest);
+        RestaurantReportingEmailSetEvent CreateRestaurantReportingEmailSetEvent(IEmployee emp, IRestaurant rest, EmailAddress email);
 
 		UserSelectedRestaurant CreateUserSelectedRestaurant (IEmployee emp, Guid restaurantID);
 

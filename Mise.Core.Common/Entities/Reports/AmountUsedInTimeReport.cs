@@ -50,12 +50,16 @@ namespace Mise.Core.Common.Entities.Reports
 			public void AddIfDoesntExist(Dictionary<string, IBaseBeverageLineItem> keysAndItems){
 				var needsAdds = keysAndItems.Where (i => ContainsKey (i.Key) == false);
 				foreach(var item in needsAdds){
-					Add (item.Key, item.Value);
+                    try{
+					    Add (item.Key, item.Value);
+                    } catch(Exception e){
+                        throw;
+                    }
 				}
 			}
 
 		}
-
+            
         protected override ReportResult CreateReport()
         {
             var allPossiblePastInventoryies = new List<IInventory>();
@@ -77,15 +81,31 @@ namespace Mise.Core.Common.Entities.Reports
                 var priorInv =
                     allPossiblePastInventoryies.FirstOrDefault(i => i.DateCompleted < invInTime.DateCompleted);
 				if(priorInv != null){
-					var itemsAndKeys = priorInv.GetBeverageLineItems ()
-						.Select (li => li as IBaseBeverageLineItem)
-						.ToDictionary (li => GetListItemKey (li));
+                    var itemsAndKeys = new Dictionary<string, IBaseBeverageLineItem>();
+                    foreach (var item in priorInv.GetBeverageLineItems())
+                    {
+                        var key = GetListItemKey(item);
+                        while (itemsAndKeys.ContainsKey(key))
+                        {
+                            key = key + "n";
+                        }
+                        itemsAndKeys.Add(key, item);
+
+                    }
 					allItemsAndKeys.AddIfDoesntExist (itemsAndKeys);
 				}
                 var thisInventory = invInTime;
-				allItemsAndKeys.AddIfDoesntExist (thisInventory.GetBeverageLineItems ()
-					.Select (li => li as IBaseBeverageLineItem)
-					.ToDictionary (li => GetListItemKey (li)));
+                var newDic = new Dictionary<string, IBaseBeverageLineItem>();
+                foreach (var item in thisInventory.GetBeverageLineItems())
+                {
+                    var key = GetListItemKey(item);
+                    while (newDic.ContainsKey(key))
+                    {
+                        key = key + "n";
+                    }
+                    newDic.Add(key, item);
+                }
+                allItemsAndKeys.AddIfDoesntExist(newDic);
 
                 var rosInPeriod =
                     _receivingOrdersInTime.Where(
@@ -152,7 +172,9 @@ namespace Mise.Core.Common.Entities.Reports
             foreach (var currentLineItem in currentInventory.GetBeverageLineItems())
             {
                 var key = GetListItemKey(currentLineItem);
-                if (res.ContainsKey(key)) {continue;}
+                if (res.ContainsKey(key)) {
+                    continue;
+                }
                 var thisLineItem = currentLineItem;
                 var previousAmount = LiquidAmount.None;
                 //get the matching line for the previous inventory, if it exists
@@ -178,8 +200,11 @@ namespace Mise.Core.Common.Entities.Reports
                 }
 
                 //save the difference
-                var amountUsed = previousAmount.Subtract(currentLineItem.CurrentAmount);
-                res.Add(key, amountUsed);
+                if (!previousAmount.Equals(LiquidAmount.None))
+                {
+                    var amountUsed = previousAmount.Subtract(currentLineItem.CurrentAmount);
+                    res.Add(key, amountUsed);
+                }
             }
 
             return res;
