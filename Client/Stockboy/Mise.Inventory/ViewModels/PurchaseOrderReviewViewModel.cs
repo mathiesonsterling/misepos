@@ -7,7 +7,7 @@ using Mise.Inventory.Services;
 using System.Collections.Generic;
 using Mise.Core.Entities.Inventory;
 using System.Windows.Input;
-
+using Mise.Core.Client.Services;
 using System.Collections.ObjectModel;
 using Mise.Core.Entities.Vendors;
 using Xamarin;

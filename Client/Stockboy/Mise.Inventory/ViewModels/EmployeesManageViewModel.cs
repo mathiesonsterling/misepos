@@ -10,7 +10,7 @@ using Mise.Inventory.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Services;
 using Xamarin.Forms;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
 	public class EmployeesManageViewModel : BaseViewModel

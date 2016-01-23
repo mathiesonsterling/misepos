@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using Mise.Core.Entities.Inventory;
 using Mise.Core;
-namespace Mise.Inventory.Services
+namespace Mise.Core.Client.Services
 {
 	/// <summary>
 	/// Holds state of selections, employee and restaurant operations

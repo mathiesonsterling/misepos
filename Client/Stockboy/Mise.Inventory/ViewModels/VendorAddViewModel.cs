@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Mise.Core.ValueItems;
 using Xamarin.Forms;
 using Mise.Core.Services;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
     public class VendorAddViewModel : BaseViewModel

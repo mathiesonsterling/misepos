@@ -17,7 +17,7 @@ using Mise.Core.ValueItems;
 using Mise.Inventory.Services.Implementation;
 using Moq;
 using NUnit.Framework;
-
+using Mise.Core.Client.Services.Implementation;
 namespace Mise.Inventory.UnitTests.Services
 {
 	[TestFixture]

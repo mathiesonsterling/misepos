@@ -29,7 +29,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="IRepositoryLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -46,12 +45,10 @@
     <Compile Include="Async\AsyncLazy.cs" />
     <Compile Include="Async\NotifyTaskCompletion.cs" />
     <Compile Include="Services\IAppNavigation.cs" />
-    <Compile Include="Services\ILoginService.cs" />
     <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\IPageFactory.cs" />
     <Compile Include="DependencySetup.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
-    <Compile Include="Services\Implementation\LoginService.cs" />
     <Compile Include="Services\IRegistrationService.cs" />
     <Compile Include="Services\Implementation\RegistrationService.cs" />
     <Compile Include="App.cs" />

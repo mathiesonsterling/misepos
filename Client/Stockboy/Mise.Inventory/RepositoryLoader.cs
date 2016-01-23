@@ -7,7 +7,7 @@ using Mise.Core.Common.Events;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
-
+using Mise.Core.Client.Services;
 
 namespace Mise.Inventory
 {

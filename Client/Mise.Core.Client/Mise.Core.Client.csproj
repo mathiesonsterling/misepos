@@ -60,6 +60,9 @@
     <Compile Include="Repositories\ClientApplicationInvitationRepository.cs" />
     <Compile Include="Services\IClientKeyValueStorage.cs" />
     <Compile Include="Services\IDeviceConnectionService.cs" />
+    <Compile Include="Services\Implementation\LoginService.cs" />
+    <Compile Include="Services\ILoginService.cs" />
+    <Compile Include="Services\IRepositoryLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

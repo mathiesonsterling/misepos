@@ -14,7 +14,7 @@ using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Client.Services;
 using Mise.Core.Common.Entities;
-namespace Mise.Inventory.Services.Implementation
+namespace Mise.Core.Client.Services.Implementation
 {
     public class LoginService : ILoginService
 	{

@@ -9,7 +9,7 @@ using Mise.Core.Repositories;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Services;
-
+using Mise.Core.Client.Services;
 
 namespace Mise.Inventory.Services.Implementation
 {

@@ -15,7 +15,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Common.Entities.Inventory;
 using System.Drawing;
-
+using Mise.Core.Client.Services;
 
 namespace Mise.Inventory.Services.Implementation
 {

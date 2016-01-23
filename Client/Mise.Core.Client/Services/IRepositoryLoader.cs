@@ -1,8 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Autofac;
 
-namespace Mise.Inventory
+namespace Mise.Core.Client.Services
 {
     public interface IRepositoryLoader
     {

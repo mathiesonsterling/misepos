@@ -8,6 +8,7 @@ using Mise.Inventory.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities;
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
 	public class AccountRegistrationWithCreditCardViewModel : BaseViewModel

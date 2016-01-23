@@ -9,7 +9,7 @@ using Mise.Core.ValueItems.Reports;
 using Xamarin.Forms;
 using Mise.Inventory.Services.Implementation;
 using Mise.Core.ValueItems.Inventory;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels.Reports
 {
 	public class ReportsByInventoryViewModel : ReportsViewModel
