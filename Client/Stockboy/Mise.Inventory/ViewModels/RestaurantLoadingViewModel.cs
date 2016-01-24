@@ -2,6 +2,7 @@
 using Mise.Inventory.Services;
 using Mise.Core.Services.UtilityServices;
 using System.Threading.Tasks;
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
 	public class RestaurantLoadingViewModel : BaseViewModel

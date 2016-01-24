@@ -12,7 +12,7 @@ using Mise.Core.ValueItems;
 using Mise.Core.Common.Events;
 using Mise.Core.Services;
 using Mise.Core.Entities.Vendors.Events;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.Services.Implementation
 {
 	public class VendorService : IVendorService

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using System.Windows.Input;
-
+using Mise.Core.Client.Services;
 using Mise.Core.Services;
 using Mise.Inventory.Services;
 using Xamarin.Forms;

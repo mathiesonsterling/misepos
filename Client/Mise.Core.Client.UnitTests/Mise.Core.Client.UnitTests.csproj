@@ -47,7 +47,7 @@
       <HintPath>..\Stockboy\packages\PCLCrypto.1.0.86\lib\net40-Client\PCLCrypto.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\Stockboy\packages\NUnit.3.0.1\lib\net45\nunit.framework.dll</HintPath>
+      <HintPath>..\Stockboy\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

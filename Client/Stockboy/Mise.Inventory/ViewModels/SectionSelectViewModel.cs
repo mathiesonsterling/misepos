@@ -9,7 +9,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Xamarin.Forms;
 using Mise.Core.Common.Services.WebServices.Exceptions;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
 	public class SectionSelectViewModel : BaseSearchableViewModel<IInventorySection>

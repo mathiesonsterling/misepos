@@ -5,7 +5,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Inventory.Services;
 using Mise.Core.Common.Services.Implementation;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
 	public class AuthorizeCreditCardViewModel : BaseViewModel

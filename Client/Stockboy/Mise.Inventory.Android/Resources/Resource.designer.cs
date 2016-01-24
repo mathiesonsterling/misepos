@@ -48,6 +48,7 @@ namespace Mise.Inventory.Android
 			global::Stripe.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
 			global::PCLCrypto.Resource.String.ApplicationName = global::Mise.Inventory.Android.Resource.String.ApplicationName;
 			global::PCLCrypto.Resource.String.Hello = global::Mise.Inventory.Android.Resource.String.Hello;
+			global::Mindscape.Raygun4Net.Xamarin.Android.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_in = global::Mise.Inventory.Android.Resource.Animation.abc_fade_in;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_out = global::Mise.Inventory.Android.Resource.Animation.abc_fade_out;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_grow_fade_in_from_bottom = global::Mise.Inventory.Android.Resource.Animation.abc_grow_fade_in_from_bottom;
@@ -1506,7 +1507,6 @@ namespace Mise.Inventory.Android
 			global::Xamarin.Forms.Platform.Resource.Styleable.ViewStubCompat_android_id = global::Mise.Inventory.Android.Resource.Styleable.ViewStubCompat_android_id;
 			global::Xamarin.Forms.Platform.Resource.Styleable.ViewStubCompat_android_inflatedId = global::Mise.Inventory.Android.Resource.Styleable.ViewStubCompat_android_inflatedId;
 			global::Xamarin.Forms.Platform.Resource.Styleable.ViewStubCompat_android_layout = global::Mise.Inventory.Android.Resource.Styleable.ViewStubCompat_android_layout;
-			global::Mindscape.Raygun4Net.Xamarin.Android.Resource.String.library_name = global::Mise.Inventory.Android.Resource.String.library_name;
 		}
 		
 		public partial class Animation
@@ -4002,11 +4002,11 @@ namespace Mise.Inventory.Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f0a0020
-			public const int ApplicationName = 2131361824;
-			
 			// aapt resource value: 0x7f0a001f
-			public const int Hello = 2131361823;
+			public const int ApplicationName = 2131361823;
+			
+			// aapt resource value: 0x7f0a001e
+			public const int Hello = 2131361822;
 			
 			// aapt resource value: 0x7f0a000c
 			public const int abc_action_bar_home_description = 2131361804;
@@ -4065,8 +4065,8 @@ namespace Mise.Inventory.Android
 			// aapt resource value: 0x7f0a0000
 			public const int appbar_scrolling_view_behavior = 2131361792;
 			
-			// aapt resource value: 0x7f0a001e
-			public const int library_name = 2131361822;
+			// aapt resource value: 0x7f0a0020
+			public const int library_name = 2131361824;
 			
 			// aapt resource value: 0x7f0a0001
 			public const int mr_media_route_button_content_description = 2131361793;

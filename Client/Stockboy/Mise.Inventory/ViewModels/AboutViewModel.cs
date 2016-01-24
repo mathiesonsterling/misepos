@@ -5,7 +5,7 @@ using System.Windows.Input;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Xamarin.Forms;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
 	public class AboutViewModel : BaseViewModel

@@ -8,7 +8,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using System;
 using Xamarin.Forms;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
 	public class VendorFindViewModel : BaseSearchableViewModel<IVendor>

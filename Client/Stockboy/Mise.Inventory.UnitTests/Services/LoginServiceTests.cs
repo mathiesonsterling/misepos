@@ -17,7 +17,7 @@ using Mise.Core.ValueItems;
 using Mise.Inventory.Services.Implementation;
 using Moq;
 using NUnit.Framework;
-
+using Mise.Core.Client.Services.Implementation;
 namespace Mise.Inventory.UnitTests.Services
 {
 	[TestFixture]
@@ -95,7 +95,7 @@ namespace Mise.Inventory.UnitTests.Services
 		}
 
 		[Test]
-		public async void GetInvitesReturnsStockboyInvitesOnly(){
+		public async Task GetInvitesReturnsStockboyInvitesOnly(){
 			var moqRepos = new Mock<IEmployeeRepository> ();
             var email = new EmailAddress { Value = "test@test.com" };
 			var emp = new Employee{ Id = Guid.NewGuid (), Emails = new List<EmailAddress>{email}};
@@ -121,12 +121,14 @@ namespace Mise.Inventory.UnitTests.Services
 						new ApplicationInvitation {
 							Id = goodID,
 							DestinationEmail = email,
-							Application = MiseAppTypes.StockboyMobile
+							Application = MiseAppTypes.StockboyMobile,
+                            Status = InvitationStatus.Sent
 						},
 						new ApplicationInvitation{
 							Id = Guid.NewGuid (),
 							DestinationEmail = email,
-							Application = MiseAppTypes.UnitTests
+							Application = MiseAppTypes.UnitTests,
+                            Status = InvitationStatus.Sent
 						}
 					}
 			);

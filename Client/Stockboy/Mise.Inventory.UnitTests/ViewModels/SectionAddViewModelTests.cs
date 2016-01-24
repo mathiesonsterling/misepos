@@ -7,6 +7,8 @@ using Moq;
 using Mise.Inventory.ViewModels;
 using Mise.Core.Services;
 using Mise.Inventory.Services;
+using Mise.Core.Client.Services;
+
 namespace Mise.Inventory.UnitTests.ViewModels
 {
 	[TestFixture]

@@ -12,7 +12,7 @@ using Xamarin.Forms;
 using Mise.Inventory.Services;
 using Mise.Core.ValueItems;
 using Mise.Core.Services;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
     public class UserRegistrationViewModel : BaseViewModel

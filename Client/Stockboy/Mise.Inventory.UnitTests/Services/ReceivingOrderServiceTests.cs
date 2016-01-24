@@ -22,6 +22,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
+using Mise.Core.Client.Services;
 using Moq;
 using NUnit.Framework;
 namespace Mise.Inventory.UnitTests.Services

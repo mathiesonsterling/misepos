@@ -20,6 +20,7 @@ using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
+using Mise.Core.Client.Services.Implementation;
 using Moq;
 using NUnit.Framework;
 

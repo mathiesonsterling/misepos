@@ -8,6 +8,7 @@ using Mise.Core.Services;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Inventory.ViewModels;
+using Mise.Core.Client.Services;
 
 using NUnit.Framework;
 using Moq;

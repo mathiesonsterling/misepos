@@ -7,7 +7,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Core.Services;
 using Mise.Core.ValueItems;
-
+using Mise.Core.Client.Services;
 namespace Mise.Inventory.ViewModels
 {
 	public class RestaurantSelectViewModel : BaseViewModel
