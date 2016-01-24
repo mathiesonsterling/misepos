@@ -59,6 +59,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
             };
             invService.Setup(inv => inv.GetLineItemsForCurrentSection())
                 .Returns(Task.FromResult(invItems.AsEnumerable()));
+            invService.Setup(inv => inv.HasCurrentInventoryShownClearReminder()).Returns(true);
 
             var underTest = new InventoryViewModel(appNav.Object, invService.Object, null);
 
@@ -109,6 +110,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
 			};
 			invService.Setup(inv => inv.GetLineItemsForCurrentSection())
 				.Returns(Task.FromResult(invItems.AsEnumerable()));
+            invService.Setup(inv => inv.HasCurrentInventoryShownClearReminder()).Returns(true);
 
 			var underTest = new InventoryViewModel(appNav.Object, invService.Object, null);
 
