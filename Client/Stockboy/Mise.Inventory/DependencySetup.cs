@@ -97,8 +97,7 @@ namespace Mise.Inventory
 				cb.RegisterType<MemoryClientDAL> ().As<IClientDAL> ().SingleInstance ();
 			}
 
-			//Event factory
-			//TODO - do we have a restaurant?  if not, use a fake ID and go to register
+			//Event factory - rstaurant will be set later
 			var eventFactory = new InventoryAppEventFactory("testDevice", MiseAppTypes.StockboyMobile);
 			cb.RegisterInstance(eventFactory).As<IInventoryAppEventFactory>().SingleInstance();
 

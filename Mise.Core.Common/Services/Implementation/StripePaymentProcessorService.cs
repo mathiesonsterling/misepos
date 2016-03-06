@@ -50,7 +50,6 @@ namespace Mise.Core.Common.Services.Implementation
                 _logger.HandleException(e);
                 throw;
             }
-
         }
         #endregion
     }

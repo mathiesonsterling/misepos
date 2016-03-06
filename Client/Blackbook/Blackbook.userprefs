@@ -1,0 +1,24 @@
+﻿<Properties StartupItem="iOS/Blackbook.iOS.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone6.9.2" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Blackbook/Services/IBlackBookNavigation.cs">
+    <Files>
+      <File FileName="Blackbook/Blackbook.cs" Line="47" Column="44" />
+      <File FileName="Blackbook/DependencySetup.cs" Line="12" Column="13" />
+      <File FileName="iOS/AppDelegate.cs" Line="18" Column="34" />
+      <File FileName="Droid/MainActivity.cs" Line="19" Column="13" />
+      <File FileName="iOS/Main.cs" Line="21" Column="1" />
+      <File FileName="Blackbook/Services/IBlackBookNavigation.cs" Line="7" Column="6" />
+    </Files>
+    <Pads>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State name="__root__">
+          <Node name="Blackbook" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

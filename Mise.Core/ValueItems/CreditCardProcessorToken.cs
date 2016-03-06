@@ -12,6 +12,7 @@ namespace Mise.Core.ValueItems
         Mercury,
         BluePay,
 		Stripe,
+        Apple
     }
 
     public class CreditCardProcessorToken : IEquatable<CreditCardProcessorToken>
