@@ -1,6 +1,9 @@
 ﻿using System;
-using Mise.Core.Services;
+using System.Threading.Tasks;
 
+using Mise.Core.Services;
+using Mise.Core.Entities.Payments;
+using Mise.Core.ValueItems;
 namespace Services
 {
     /// <summary>
@@ -8,29 +11,32 @@ namespace Services
     /// </summary>
     public class AppleSubscriptionService : ICreditCardProcessorService
     {
+        private const string SHARED_SECRET = "7aaca5056f2e4455ad9d4c0eefd43ec4";
+
         #region ICreditCardProcessorService implementation
-        public void ChargeCard(Mise.Core.Entities.Payments.ICreditCardPayment payment, Mise.Core.ValueItems.CreditCardAuthorizationCode authFromPrevious, Action<Mise.Core.Entities.Payments.ICreditCardPayment, Mise.Core.ValueItems.CreditCardAuthorizationCode> closeCallback)
+        public void ChargeCard(ICreditCardPayment payment, CreditCardAuthorizationCode authFromPrevious, Action<ICreditCardPayment, CreditCardAuthorizationCode> closeCallback)
         {
             throw new NotImplementedException();
         }
-        public void VoidAuthorization(Mise.Core.Entities.Payments.ICreditCardPayment payment, Mise.Core.ValueItems.CreditCardAuthorizationCode authFromPrevious, Action<Mise.Core.Entities.Payments.ICreditCardPayment, Mise.Core.ValueItems.CreditCardAuthorizationCode> closeCallback)
+        public void VoidAuthorization(ICreditCardPayment payment, CreditCardAuthorizationCode authFromPrevious, Action<ICreditCardPayment, CreditCardAuthorizationCode> closeCallback)
         {
             throw new NotImplementedException();
         }
-        public void AuthorizeCard(Mise.Core.Entities.Payments.ICreditCardPayment payment, Action<Mise.Core.Entities.Payments.ICreditCardPayment, Mise.Core.ValueItems.CreditCardAuthorizationCode> authCallback)
+        public void AuthorizeCard(ICreditCardPayment payment, Action<ICreditCardPayment, CreditCardAuthorizationCode> authCallback)
         {
             throw new NotImplementedException();
         }
-        public System.Threading.Tasks.Task<string> SetPaymentID(Guid accountID, Mise.Core.ValueItems.PersonName name, Mise.Core.ValueItems.Money authorizationAmount)
+        public System.Threading.Tasks.Task<string> SetPaymentID(Guid accountID, PersonName name, Money authorizationAmount)
         {
             throw new NotImplementedException();
         }
-        public System.Threading.Tasks.Task<Mise.Core.ValueItems.CreditCard> GetCardAfterAuthorization(string paymentID)
+        public System.Threading.Tasks.Task<CreditCard> GetCardAfterAuthorization(string paymentID)
         {
             throw new NotImplementedException();
         }
-        public System.Threading.Tasks.Task<Mise.Core.ValueItems.CreditCard> SendCardToProcessorForSubscription(Mise.Core.ValueItems.PersonName cardName, Mise.Core.ValueItems.CreditCardNumber number)
+        public System.Threading.Tasks.Task<CreditCard> SendCardToProcessorForSubscription(PersonName cardName, CreditCardNumber number)
         {
+            //do the apply pay stuff here
             throw new NotImplementedException();
         }
         #endregion

@@ -44,7 +44,21 @@
 		    	Text="Register" 
 		    	Command="{Binding RegisterCommand}" 
 		    	StyleId="Register"
-		    	IsEnabled="{Binding NotProcessing}"/>
+		    	IsEnabled="{Binding NotProcessing}">
+		    	<Button.IsVisible>
+		    	  <OnPlatform x:TypeArguments="x:Boolean">
+			    	  <OnPlatform.iOS>
+				        False
+				      </OnPlatform.iOS>
+				      <OnPlatform.Android>
+				        True
+				      </OnPlatform.Android>
+				      <OnPlatform.WinPhone>
+				        True
+				      </OnPlatform.WinPhone>
+			      </OnPlatform>
+		    	</Button.IsVisible>
+		    </Button>
 
 	  	</StackLayout>
   	</ScrollView>

@@ -55,11 +55,13 @@ namespace Mise.Inventory.ViewModels
 			if (emp != null) {
                 await Navigation.ShowSelectRestaurant();
 			}
+                
 			Processing = false;
 		}
 
         public bool CanLogin { get { return GetValue<bool>(); } private set { SetValue(value);} }
 
+        //public bool DisplayRegistration{ get { return GetValue<bool>(); } private set { SetValue(value); } }
 		/// <summary>
 		/// Gets the login command.
 		/// </summary>

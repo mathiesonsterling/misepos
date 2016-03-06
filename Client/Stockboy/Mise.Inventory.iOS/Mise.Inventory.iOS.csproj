@@ -193,6 +193,9 @@
     <Reference Include="Plugin.Connectivity.Abstractions">
       <HintPath>..\packages\Xam.Plugin.Connectivity.2.1.1\lib\Xamarin.iOS10\Plugin.Connectivity.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.InAppPurchase-Unified">
+      <HintPath>..\Components\xamarin.inapppurchase-2.8\lib\ios-unified\Xamarin.InAppPurchase-Unified.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mise.Inventory\Mise.Inventory.csproj">
@@ -300,6 +303,10 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="stripe">
       <Version>1.0.7</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="xamarin.inapppurchase">
+      <Version>2.8</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>
