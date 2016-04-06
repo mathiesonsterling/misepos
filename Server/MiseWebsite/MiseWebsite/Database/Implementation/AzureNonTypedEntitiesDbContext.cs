@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MiseWebsite.Models;
 
-namespace MiseWebsite.Database
+namespace MiseWebsite.Database.Implementation
 {
-    public class AzureNonTypedEntities : DbContext
+    public class AzureNonTypedEntitiesDbContext : DbContext
     {
-        public AzureNonTypedEntities()
+        public AzureNonTypedEntitiesDbContext()
             : base("name=AzureNonTypedEntities")
         {
         }
@@ -18,7 +12,6 @@ namespace MiseWebsite.Database
         public virtual DbSet<AzureEntityStorage> AzureEntityStorages { get; set; }
         public virtual DbSet<AzureEventStorage> AzureEventStorages { get; set; }
 
-        public virtual DbSet<SendEmailCSVFile> SendEmailCSVFiles { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

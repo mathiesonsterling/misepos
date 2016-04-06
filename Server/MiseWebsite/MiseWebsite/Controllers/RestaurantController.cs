@@ -8,9 +8,9 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Server.Windows.Services;
 using Mise.Core.Server.Windows.Services.Implementation;
 using Mise.Core.ValueItems;
-using MiseWebsite.Database;
+using MiseWebsite.Database.Implementation;
 using MiseWebsite.Models;
-using MiseWebsite.Services;
+using MiseWebsite.Services.Implementation;
 
 namespace MiseWebsite.Controllers
 {

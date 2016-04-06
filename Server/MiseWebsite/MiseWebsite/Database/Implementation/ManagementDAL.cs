@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -19,9 +19,9 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.ValueItems;
 using MiseWebsite.Models;
 
-namespace MiseWebsite.Database
+namespace MiseWebsite.Database.Implementation
 {
-    public class ManagementDAL
+    public class ManagementDAL : IManagementDAL
     {
         private const string RESTAURANT_ID_LIST_KEY = "allCachedRestaurantIds";
 
@@ -114,7 +114,7 @@ namespace MiseWebsite.Database
             }
 
             List<AzureEntityStorage> ais;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ais = await db.AzureEntityStorages.Where(a => a.MiseEntityType == _invType && a.RestaurantID == restaurantId).ToListAsync();
             }
@@ -128,7 +128,7 @@ namespace MiseWebsite.Database
         public async Task<IEnumerable<IInventory>> GetInventoriesCompletedAfter(DateTimeOffset date)
         {
             List<AzureEntityStorage> ais;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ais = await db.AzureEntityStorages
                     .Where(ai => ai.LastUpdatedDate > date)
@@ -150,7 +150,7 @@ namespace MiseWebsite.Database
                 return cached;
             }
 
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var ai = await db.AzureEntityStorages.Where(a => a.MiseEntityType == _invType && a.EntityID == invId)
                             .FirstOrDefaultAsync();
@@ -185,7 +185,10 @@ namespace MiseWebsite.Database
                 throw new InvalidOperationException("Can't downgrade inventory");
             }
             var sec = inv.Sections.FirstOrDefault(s => s.LineItems.Select(l => l.Id).Contains(li.Id));
-
+            if (sec == null)
+            {
+                throw new InvalidOperationException("Cannot find section with item " + li.Id);
+            }
             var oldLineItem = sec.LineItems.FirstOrDefault(l => l.Id == li.Id);
 
             sec.LineItems.Remove(oldLineItem);
@@ -202,7 +205,7 @@ namespace MiseWebsite.Database
                 throw new ArgumentException("Type given cannot be converted to concrete");
             }
 
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var oldVer = await db.AzureEntityStorages.FirstOrDefaultAsync(
                         ai => ai.EntityID == inventory.Id && ai.MiseEntityType == _invType);
@@ -228,7 +231,7 @@ namespace MiseWebsite.Database
                 throw new ArgumentException("Type given cannot be converted to concrete");
             }
 
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var oldVer = await db.AzureEntityStorages.FirstOrDefaultAsync(
                         ai => ai.EntityID == restaurant.Id && ai.MiseEntityType == _restType);
@@ -259,7 +262,7 @@ namespace MiseWebsite.Database
             }*/
 
             IEnumerable<AzureEntityStorage> ais;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ais = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _restType).ToListAsync();
             }
@@ -284,7 +287,7 @@ namespace MiseWebsite.Database
             }
 
             AzureEntityStorage ai;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ai = await db.AzureEntityStorages.FirstOrDefaultAsync(
                             a => a.MiseEntityType == _restType && a.EntityID == restaurantId);
@@ -300,7 +303,7 @@ namespace MiseWebsite.Database
 
         public async Task<IEnumerable<IRestaurant>> GetRestaurantsUnderAccont(IAccount acct)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var ais = await db.AzureEntityStorages.Where(
                             a => a.MiseEntityType == _restType && a.MiseEntityType.Contains(acct.Id.ToString())).ToListAsync();
@@ -316,7 +319,7 @@ namespace MiseWebsite.Database
             var dto = _entityFactory.ToDataTransportObject(rest);
             var ai = new AzureEntityStorage(dto);
 
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 db.AzureEntityStorages.Add(ai);
                 await db.SaveChangesAsync();
@@ -330,7 +333,7 @@ namespace MiseWebsite.Database
 
         public async Task DeleteRestaurant(Guid id)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {//delete all items for the restaurant as well
                 var items = await db.AzureEntityStorages.Where(ai => ai.RestaurantID == id).ToListAsync();
                 foreach (var item in items)
@@ -356,7 +359,7 @@ namespace MiseWebsite.Database
 
         public async Task<IEnumerable<IEmployee>> GetAllEmployees()
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var ais = await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _empType && (ai.Deleted == false)).ToListAsync();
                 var dtos = ais.Select(ai => ai.ToRestaurantDTO());
@@ -366,7 +369,7 @@ namespace MiseWebsite.Database
         public async Task<IEmployee> GetEmployeeById(Guid id)
         {
             AzureEntityStorage ai;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ai =
                     await
@@ -378,7 +381,7 @@ namespace MiseWebsite.Database
         public async Task<IEmployee> GetEmployeeWhoCreatedInventory(IInventory inv)
         {
             AzureEntityStorage ai;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ai = await db.AzureEntityStorages.FirstOrDefaultAsync(
                             a => a.MiseEntityType == _empType && a.EntityID == inv.CreatedByEmployeeID);
@@ -395,7 +398,7 @@ namespace MiseWebsite.Database
 
         public async Task<IEnumerable<IEmployee>> GetAllEmployeesContaining(string search)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var empAIs = await db.AzureEntityStorages.Where(
                             ai => ai.MiseEntityType == _empType && ai.EntityJSON.Contains(search)).ToListAsync();
@@ -407,7 +410,7 @@ namespace MiseWebsite.Database
 
         public async Task<IEmployee> GetEmployeeWithEmail(EmailAddress email)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var empAIs = await db.AzureEntityStorages.Where(
                     ai => ai.MiseEntityType == _empType && ai.EntityJSON.Contains(email.Value)).ToListAsync();
@@ -442,7 +445,7 @@ namespace MiseWebsite.Database
             var dto = _entityFactory.ToDataTransportObject(emp);
             var ai = new AzureEntityStorage(dto);
 
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 db.AzureEntityStorages.Add(ai);
                 await db.SaveChangesAsync();
@@ -451,7 +454,7 @@ namespace MiseWebsite.Database
 
         public async Task UpdateEmployee(Employee emp)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 //get the original to get the restaurants for now
                 var orign = db.AzureEntityStorages.FirstOrDefault(a => a.EntityID == emp.Id);
@@ -475,7 +478,7 @@ namespace MiseWebsite.Database
             {
                 return cached;
             }
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var ais = await
                     db.AzureEntityStorages.Where(ai => ai.MiseEntityType == _roType && ai.RestaurantID == restaurantId)
@@ -496,7 +499,7 @@ namespace MiseWebsite.Database
                 return cached;
             }
             AzureEntityStorage ai;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _roType && a.EntityID == id);
             }
@@ -513,7 +516,7 @@ namespace MiseWebsite.Database
                 return cached;
             }
             AzureEntityStorage ai;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _poType && a.EntityID == id);
             }
@@ -530,7 +533,7 @@ namespace MiseWebsite.Database
                 return cached;
             }
             AzureEntityStorage ai;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _parType && a.EntityID == id);
             }
@@ -542,7 +545,7 @@ namespace MiseWebsite.Database
         public async Task<IVendor> GetVendorById(Guid id)
         {
             AzureEntityStorage ai;
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 ai = await db.AzureEntityStorages.FirstOrDefaultAsync(a => a.MiseEntityType == _vendorType && a.EntityID == id);
             }
@@ -574,7 +577,7 @@ namespace MiseWebsite.Database
         public async Task<IAccount> GetAccountById(Guid id)
         {
             var miseAcctType = typeof(MiseEmployeeAccount).ToString();
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var miseAcct =
                     await db.AzureEntityStorages.Where(ai => ai.MiseEntityType == miseAcctType && ai.EntityID == id)
@@ -588,7 +591,7 @@ namespace MiseWebsite.Database
             var miseAcctType = typeof(MiseEmployeeAccount).ToString();
 
             var res = new List<IAccount>();
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var miseAcctAis = await
                     db.AzureEntityStorages.Where(
@@ -611,7 +614,7 @@ namespace MiseWebsite.Database
             var restAcctType = typeof(RestaurantAccount).ToString();
 
             var res = new List<IAccount>();
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 //get the rest accounts
                 var restAcctAis = await db.AzureEntityStorages.Where(
@@ -630,7 +633,7 @@ namespace MiseWebsite.Database
             const string MISSING_ACCOUNTS_TAG = "\"PaymentPlanSetupWithProvider\":false";
 
             IEnumerable<AzureEntityStorage> accountAIs;
-            using (var context = new AzureNonTypedEntities())
+            using (var context = new AzureNonTypedEntitiesDbContext())
             {
                 accountAIs = await context.AzureEntityStorages.Where(a => a.MiseEntityType == accountType && a.EntityJSON.Contains(MISSING_ACCOUNTS_TAG))
                     .ToListAsync();
@@ -655,7 +658,7 @@ namespace MiseWebsite.Database
             }
 
             var typeString = typeof(RestaurantAccount).ToString();
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 var oldVer =
                     await
@@ -677,7 +680,7 @@ namespace MiseWebsite.Database
 
         public async Task<IEnumerable<SendEmailCSVFile>> GetLastSentEmails(int numBack)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new StronglyTypedEntitiesDbContext())
             {
                 var emails = await db.SendEmailCSVFiles.Where(e => e.Sent)
                     .OrderByDescending(e => e.CreatedAt)
@@ -690,7 +693,7 @@ namespace MiseWebsite.Database
 
         public async Task<SendEmailCSVFile> GetEmailForEntity(Guid entityId)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new StronglyTypedEntitiesDbContext())
             {
                 var found = await db.SendEmailCSVFiles.FirstOrDefaultAsync(e => e.EntityId == entityId);
                 return found;
@@ -699,7 +702,7 @@ namespace MiseWebsite.Database
 
         public async Task<IEnumerable<SendEmailCSVFile>> GetUnsentEmails()
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new StronglyTypedEntitiesDbContext())
             {
                 var items = await db.SendEmailCSVFiles.Where(e => e.Sent == false).ToListAsync();
                 return items;
@@ -708,7 +711,7 @@ namespace MiseWebsite.Database
 
         public async Task CreateEmailRecord(SendEmailCSVFile email)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new StronglyTypedEntitiesDbContext())
             {
                 db.SendEmailCSVFiles.Add(email);
                 await db.SaveChangesAsync();
@@ -717,7 +720,7 @@ namespace MiseWebsite.Database
 
         public async Task MarkEmailAsSent(SendEmailCSVFile email)
         {
-            using (var db = new AzureNonTypedEntities())
+            using (var db = new AzureNonTypedEntitiesDbContext())
             {
                 email.Sent = true;
                 db.Entry(email).State = EntityState.Modified;

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Mise.Core.Common.Entities.DTOs;
 
-namespace MiseWebsite.Database
+namespace MiseWebsite.Database.Implementation
 {
     [Table("AzureEntityStorages", Schema = "stockboymobile")]
     public class AzureEntityStorage

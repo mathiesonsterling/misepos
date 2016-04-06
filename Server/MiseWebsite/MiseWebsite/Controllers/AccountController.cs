@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Mise.Core.ValueItems;
+using MiseWebsite.Database.Implementation;
 using MiseWebsite.Models;
 
 namespace MiseWebsite.Controllers
@@ -86,9 +88,27 @@ namespace MiseWebsite.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
+                    //check if this matches an employee already in!
+                    var hasOther = await IsMiseUser(model);
+                    if (hasOther)
+                    {
+                        return RedirectToLocal(returnUrl);
+                    }
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+        }
+
+        /// <summary>
+        /// TODO move this into its own service, and redirect based on if we're a 
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
+        private static async Task<bool> IsMiseUser(LoginViewModel login)
+        {
+            var dal = new ManagementDAL();
+            var emp = await dal.GetEmployeeWithEmailAndPassword(new EmailAddress(login.Email), login.Password);
+            return emp != null;
         }
 
         //

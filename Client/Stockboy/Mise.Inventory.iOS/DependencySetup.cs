@@ -1,21 +1,20 @@
-﻿using System;
-using Autofac;
-using Mise.Core.Services;
-using Mise.Inventory.iOS.Services;
-using Mise.Inventory.Services;
-using Mise.Core.Services.UtilityServices;
-
-using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
-using Mise.Core.Common.Services.Implementation.Serialization;
+﻿using Autofac;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
-using Mise.Inventory.Services.Implementation;
 using Mise.Core.Common.Services.Implementation;
+using Mise.Core.Common.Services.Implementation.Serialization;
+using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
+using Mise.Inventory.iOS.Services;
+using Mise.Inventory.Services;
+using Mise.Inventory.Services.Implementation;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 using ModernHttpClient;
+using SQLitePCL;
 
 namespace Mise.Inventory.iOS
 {
-	public class DependencySetup : Mise.Inventory.DependencySetup
+	public class DependencySetup : Inventory.DependencySetup
 	{
 		
 		protected override void RegisterDepenencies(ContainerBuilder cb)
@@ -35,7 +34,7 @@ namespace Mise.Inventory.iOS
 			base.RegisterDepenencies (cb);
 		}
 
-		async void InitWebService (ContainerBuilder cb)
+	    static async void InitWebService (ContainerBuilder cb)
 		{
 			var wsLocation = GetWebServiceLocation ();
 			if (wsLocation != null) {
@@ -46,7 +45,7 @@ namespace Mise.Inventory.iOS
 				var dbService = new iOSSQLite ();
 
 				cb.RegisterInstance<ISQLite> (dbService);
-				SQLitePCL.CurrentPlatform.Init ();
+				CurrentPlatform.Init ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
 				store.DefineTable<AzureEntityStorage>();

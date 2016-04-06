@@ -18,9 +18,5 @@ namespace MiseWebsite.Models
         public string MiseEntityType { get; set; }
 
         public bool Sent { get; set; }
-
-        /*
-        public bool Error { get; set; }
-        public string SendError { get; set; }*/
     }
 }

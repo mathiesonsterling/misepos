@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MiseWebsite.Database
+namespace MiseWebsite.Database.Implementation
 {
     [Table("AzureEventStorages", Schema = "stockboymobile")]
     public class AzureEventStorage

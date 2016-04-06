@@ -11,6 +11,8 @@ namespace Mise.Core.Entities.Accounts
         /// <summary>
         /// Who this person pushes sales up to.  Must be either head of Mise sales or MiseEmployee at the end of the chain
         /// </summary>
-        Guid? ResellerUnderId { get; set; }
+        Guid? ResellerUnderId { get;  }
+
+        bool IsActive { get; }
     }
 }
