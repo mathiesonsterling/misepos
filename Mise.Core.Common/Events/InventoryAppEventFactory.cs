@@ -864,7 +864,7 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
-        public AccountHasPaymentPlanSetupEvent CreateAccountHasPaymentPlanSetupEvent(IAccount acct)
+        public AccountHasPaymentPlanSetupEvent CreateAccountHasPaymentPlanSetupEvent(IBusinessAccount acct)
         {
             return new AccountHasPaymentPlanSetupEvent
             {

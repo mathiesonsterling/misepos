@@ -27,11 +27,6 @@ namespace Mise.Core.Entities.Accounts
 
 		PhoneNumber PhoneNumber{get;}
 
-        /// <summary>
-        /// Credit card we're currently using for payment
-        /// </summary>
-        CreditCard CurrentCard { get; }
-
 		/// <summary>
 		/// The referral code this account uses
 		/// </summary>
@@ -42,22 +37,6 @@ namespace Mise.Core.Entities.Accounts
         /// If there, the referral code that we created the account with
         /// </summary>
         ReferralCode ReferralCodeUsedToCreate { get; }
-
-        MiseAccountStatus Status { get; }
-        MiseAccountTypes AccountType { get; }
-        MisePaymentPlan PaymentPlan{ get; }
-        /// <summary>
-        /// If true, we've setup the billing with our provider.  If not, we still need to!
-        /// </summary>
-        bool PaymentPlanSetupWithProvider{get;}
-
-        IEnumerable<MiseAppTypes> AppsOnAccount { get; }
-            
-        //payments
-	    IEnumerable<IAccountCharge> GetCharges();
-
-	    //charges
-	    IEnumerable<IAccountPayment> GetPayments();
 	}
 }
 

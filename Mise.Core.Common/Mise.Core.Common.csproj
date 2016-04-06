@@ -39,7 +39,9 @@
     <Compile Include="Entities\Accounts\AccountCharge.cs" />
     <Compile Include="Entities\Accounts\AccountCredit.cs" />
     <Compile Include="Entities\Accounts\AccountCreditCardPayment.cs" />
+    <Compile Include="Entities\Accounts\BaseAccount.cs" />
     <Compile Include="Entities\Accounts\MiseEmployeeAccount.cs" />
+    <Compile Include="Entities\Accounts\ResellerAccount.cs" />
     <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
     <Compile Include="Entities\Accounts\VendorAccount.cs" />
     <Compile Include="Entities\DTOs\IEntityDataTransportObjectFactory.cs" />
@@ -224,11 +226,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Client\Stockboy\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\Server\MiseWebsite\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
 </Project>

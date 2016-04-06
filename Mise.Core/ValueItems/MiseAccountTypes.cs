@@ -13,6 +13,8 @@ namespace Mise.Core.ValueItems
         /// </summary>
         AlphaTester,
         Restaurant,
-        MiseEmployee
+        MiseEmployee,
+        Vendor,
+        Reseller
     }
 }
