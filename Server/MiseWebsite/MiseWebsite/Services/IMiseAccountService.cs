@@ -15,6 +15,6 @@ namespace MiseWebsite.Services
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<Tuple<bool, Uri>> LoginForMiseCredentials(EmailAddress email, Password password);
+        Task<IEnumerable<MiseWebsiteAreas>> GetAreasUserHasAccessTo(EmailAddress email, Password password);
     }
 }

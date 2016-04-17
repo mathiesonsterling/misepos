@@ -17,11 +17,12 @@ namespace MiseWebsite.Database.Implementation
             FirstName = source.AccountHolderName?.FirstName;
             MiddleName = source.AccountHolderName?.MiddleName;
             LastName = source.AccountHolderName?.LastName;
-            Emails = source.Emails?.Select(e => e?.Value).ToList();
+           // Emails = source.Emails?.Select(e => e?.Value).ToList();
             AreaCode = source.PhoneNumber?.AreaCode;
             PhoneNumber = source.PhoneNumber?.Number;
             ReferralCodeCreatedWith = source.ReferralCodeUsedToCreate?.Code;
             ReferralCodeToGiveOut = source.ReferralCodeForAccountToGiveOut?.Code;
+            PasswordHash = source.Password?.HashValue;
         }
 
         public string PrimaryEmail { get; set; }
@@ -29,7 +30,13 @@ namespace MiseWebsite.Database.Implementation
         public string MiddleName { get; set; }
         public string LastName { get; set; }
 
-        public List<string> Emails { get; set; }
+        public string PasswordHash { get; set; }
+
+        /// <summary>
+        /// TODO figure out how to get emails to store
+        /// </summary>
+        /*
+        public List<string> Emails { get; set; }*/
 
         public string AreaCode { get; set; }
         public string PhoneNumber { get; set; }

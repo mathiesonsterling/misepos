@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Server.Windows.Services;

@@ -11,7 +11,11 @@ namespace MiseWebsite.Database
     public interface IAccountDAL
     {
         Task<IEnumerable<IResellerAccount>> GetActiveResellerAccounts();
+
         Task<IEnumerable<IResellerAccount>> GetResellerAccounts(EmailAddress email);
+
+        Task<IResellerAccount> GetResellerAccount(EmailAddress email, Password pwd);
+        
         Task<IResellerAccount> GetResellerAccount(Guid id);
 
         Task<IResellerAccount> AddResellerAccount(IResellerAccount acct);

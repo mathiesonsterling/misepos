@@ -31,7 +31,9 @@ namespace MiseWebsite.Database
         Task<IEmployee> GetEmployeeWhoCreatedInventory(IInventory inv);
         Task<IEnumerable<IEmployee>> GetAllEmployeesContaining(string search);
         Task<IEmployee> GetEmployeeWithEmail(EmailAddress email);
-        Task<IEmployee> GetEmployeeWithEmailAndPassword(EmailAddress email, string password);
+        Task<IEmployee> GetEmployee(EmailAddress email, string password);
+        Task<IEmployee> GetEmployee(EmailAddress email, Password password);
+
         Task CreateEmployee(Employee emp);
         Task UpdateEmployee(Employee emp);
         Task<IEnumerable<IReceivingOrder>> GetReceivingOrdersForRestaurant(Guid restaurantId);
@@ -42,6 +44,8 @@ namespace MiseWebsite.Database
         Task<IEnumerable<EmailAddress>> GetEmailToSendReportToForRestaurant(Guid restaurantId);
         Task<IAccount> GetAccountById(Guid id);
         Task<IEnumerable<IAccount>> GetAccountsByEmail(EmailAddress email);
+        Task<IAccount> GetAccount(EmailAddress email, Password pwd);
+
         Task<IEnumerable<IAccount>> GetRestaurantAccounts(string searchString);
         Task<IEnumerable<IAccount>> GetAccountsWaitingForPaymentPlan();
         Task UpdateAccount(IAccount account);

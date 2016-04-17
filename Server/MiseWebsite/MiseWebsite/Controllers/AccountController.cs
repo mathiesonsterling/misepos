@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -11,6 +12,8 @@ using Microsoft.Owin.Security;
 using Mise.Core.ValueItems;
 using MiseWebsite.Database.Implementation;
 using MiseWebsite.Models;
+using MiseWebsite.Services;
+using MiseWebsite.Services.Implementation;
 
 namespace MiseWebsite.Controllers
 {
@@ -19,9 +22,11 @@ namespace MiseWebsite.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IMiseAccountService _accountService;
 
         public AccountController()
         {
+            _accountService = new MiseAccountService(new ManagementDAL(), new AccountDAL());
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -89,13 +94,7 @@ namespace MiseWebsite.Controllers
                 case SignInStatus.Failure:
                 default:
                     //check if this matches an employee already in!
-                    var hasOther = await IsMiseUser(model);
-                    if (hasOther)
-                    {
-                        return RedirectToLocal(returnUrl);
-                    }
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    return await RedirectForMiseLogin(model);
             }
         }
 
@@ -104,11 +103,31 @@ namespace MiseWebsite.Controllers
         /// </summary>
         /// <param name="login"></param>
         /// <returns></returns>
-        private static async Task<bool> IsMiseUser(LoginViewModel login)
+        private async Task<ActionResult> RedirectForMiseLogin(LoginViewModel login)
         {
-            var dal = new ManagementDAL();
-            var emp = await dal.GetEmployeeWithEmailAndPassword(new EmailAddress(login.Email), login.Password);
-            return emp != null;
+            var allowedAreas = (await _accountService.GetAreasUserHasAccessTo(new EmailAddress(login.Email),
+                new Password(login.Password)))
+                .ToList();
+
+            /*
+            if (allowedAreas.Contains(MiseWebsiteAreas.Resellers))
+            {
+                //send em to resellers
+                RedirectToAction();
+            }*/
+
+            if (allowedAreas.Contains(MiseWebsiteAreas.Restaurants))
+            {
+                return RedirectToAction("IndexForUser", "Restaurant");
+            }
+
+            if (allowedAreas.Contains(MiseWebsiteAreas.Employee))
+            {
+                return RedirectToAction("IndexForUser", "Restaurant");
+            }
+
+            ModelState.AddModelError("", "Invalid login attempt.");
+            return View(login);
         }
 
         //

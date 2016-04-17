@@ -24,13 +24,18 @@ namespace MiseWebsite.Database.Implementation
         {
             using (var context = new StronglyTypedEntitiesDbContext())
             {
-                var items =
-                    await
-                        context.ResellerAccounts.Where(
-                            ra => ra.PrimaryEmail == email.Value || ra.Emails.Contains(email.Value))
-                            .ToListAsync();
+                //TODO figure out how to get Emails in here
+                var items = await context.ResellerAccounts
+                                            .Where(ra => ra.PrimaryEmail == email.Value)
+                                            .ToListAsync();
                 return items.Select(Hydrate);
             }
+        }
+
+        public async Task<IResellerAccount> GetResellerAccount(EmailAddress email, Password pwd)
+        {
+            var withEmail = await GetResellerAccounts(email);
+            return withEmail.FirstOrDefault(ra => ra.Password?.HashValue == pwd.HashValue);
         }
 
 
@@ -78,9 +83,10 @@ namespace MiseWebsite.Database.Implementation
                 AccountHolderName = new PersonName(source.FirstName, source.MiddleName, source.LastName),
                 CreatedDate = source.CreatedDate,
                 LastUpdatedDate = source.LastUpdatedDate,
-                Emails = source.Emails.Select(e => new EmailAddress(e)),
+                //Emails = source.Emails.Select(e => new EmailAddress(e)),
                 Id = source.Id,
                 IsActive = source.IsActive,
+                Password = new Password { HashValue = source.PasswordHash},
                 PhoneNumber = new PhoneNumber(source.AreaCode, source.PhoneNumber),
                 PrimaryEmail = source.PrimaryEmail != null ? new EmailAddress(source.PrimaryEmail) : null,
                 ReferralCodeForAccountToGiveOut =

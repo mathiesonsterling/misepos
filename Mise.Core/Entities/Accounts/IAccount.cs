@@ -17,6 +17,8 @@ namespace Mise.Core.Entities.Accounts
 		/// <value>The primary email.</value>
 		EmailAddress PrimaryEmail{ get; }
 
+        Password Password { get; }
+
         PersonName AccountHolderName { get; }
 
 		/// <summary>

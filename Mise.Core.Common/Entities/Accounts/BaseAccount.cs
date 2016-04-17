@@ -33,6 +33,8 @@ namespace Mise.Core.Common.Entities.Accounts
         }
 
         public EmailAddress PrimaryEmail { get; set; }
+        public Password Password { get; set; }
+
         public PersonName AccountHolderName { get; set; }
 
         public IEnumerable<EmailAddress> Emails { get; set; }

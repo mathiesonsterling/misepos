@@ -423,7 +423,7 @@ namespace MiseWebsite.Database.Implementation
             }
         }
 
-        public async Task<IEmployee> GetEmployeeWithEmailAndPassword(EmailAddress email, string password)
+        public async Task<IEmployee> GetEmployee(EmailAddress email, string password)
         {
             var emp = await GetEmployeeWithEmail(email);
 
@@ -436,8 +436,17 @@ namespace MiseWebsite.Database.Implementation
                 return emp;
             }
             var asPlain = new Password(password);
+            return await GetEmployee(email, asPlain);
+        }
 
-            return emp.Password.Equals(asPlain) ? emp : null;
+        public async Task<IEmployee> GetEmployee(EmailAddress email, Password password)
+        {
+            if (password == null)
+            {
+                return null;
+            }
+            var emp = await GetEmployeeWithEmail(email);
+            return password.Equals(emp.Password) ? emp : null;
         }
 
         public async Task CreateEmployee(Employee emp)
@@ -607,6 +616,12 @@ namespace MiseWebsite.Database.Implementation
             }
 
             return res;
+        }
+
+        public async Task<IAccount> GetAccount(EmailAddress email, Password pwd)
+        {
+            var accounts = await GetAccountsByEmail(email);
+            return accounts.FirstOrDefault(a => a.Password?.HashValue == pwd.HashValue);
         }
 
         public async Task<IEnumerable<IAccount>> GetRestaurantAccounts(string searchString)
