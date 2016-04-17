@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-
+using Xamarin.InAppPurchase;
 using Mise.Core.Services;
 using Mise.Core.Entities.Payments;
 using Mise.Core.ValueItems;
@@ -11,6 +11,12 @@ namespace Services
     /// </summary>
     public class AppleSubscriptionService : ICreditCardProcessorService
     {
+        private readonly InAppPurchaseManager _purchaseManager;
+        public AppleSubscriptionService(InAppPurchaseManager purchaseManager)
+        {
+            _purchaseManager = purchaseManager;
+        }
+
         private const string SHARED_SECRET = "7aaca5056f2e4455ad9d4c0eefd43ec4";
 
         #region ICreditCardProcessorService implementation
@@ -26,17 +32,31 @@ namespace Services
         {
             throw new NotImplementedException();
         }
-        public System.Threading.Tasks.Task<string> SetPaymentID(Guid accountID, PersonName name, Money authorizationAmount)
+        public Task<string> SetPaymentID(Guid accountID, PersonName name, Money authorizationAmount)
         {
             throw new NotImplementedException();
         }
-        public System.Threading.Tasks.Task<CreditCard> GetCardAfterAuthorization(string paymentID)
+        public Task<CreditCard> GetCardAfterAuthorization(string paymentID)
         {
             throw new NotImplementedException();
         }
-        public System.Threading.Tasks.Task<CreditCard> SendCardToProcessorForSubscription(PersonName cardName, CreditCardNumber number)
+        public Task<CreditCard> SendCardToProcessorForSubscription(PersonName cardName, CreditCardNumber number)
         {
             //do the apply pay stuff here
+            if (_purchaseManager.CanMakePayments)
+            {
+                _purchaseManager.QueryInventory(new ["in.mise.stockboy.monthly.subscription"]);
+
+            }
+
+            foreach(var product in _purchaseManager)
+            {
+                if (!product.purchased)
+                {
+                    _purchaseManager.BuyProduct("in.mise.stockboy.monthly.subscription");
+                }
+                break;
+            }
             throw new NotImplementedException();
         }
         #endregion
