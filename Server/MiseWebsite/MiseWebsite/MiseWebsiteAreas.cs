@@ -14,6 +14,7 @@ namespace MiseWebsite
         Restaurants,
         Vendors,
         Resellers,
-        Employee
+        Employee,
+        SiteUser
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -86,46 +83,45 @@ namespace MiseWebsite.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    var areas = (await _accountService.GetAreasUserHasAccessTo(new EmailAddress(model.Email),
+                        new Password(model.Password)))
+                    .ToList();
+                    areas.Add(MiseWebsiteAreas.SiteUser);
+                    return RedirectForMiseLogin(areas, model);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
                 default:
+                    var allowedAreas = (await _accountService.GetAreasUserHasAccessTo(new EmailAddress(model.Email),
+                        new Password(model.Password)))
+                    .ToList();
                     //check if this matches an employee already in!
-                    return await RedirectForMiseLogin(model);
+                    return RedirectForMiseLogin(allowedAreas, model);
             }
         }
 
         /// <summary>
         /// TODO move this into its own service, and redirect based on if we're a 
         /// </summary>
+        /// <param name="allowedAreas"></param>
         /// <param name="login"></param>
         /// <returns></returns>
-        private async Task<ActionResult> RedirectForMiseLogin(LoginViewModel login)
+        private ActionResult RedirectForMiseLogin(ICollection<MiseWebsiteAreas> allowedAreas, LoginViewModel login)
         {
-            var allowedAreas = (await _accountService.GetAreasUserHasAccessTo(new EmailAddress(login.Email),
-                new Password(login.Password)))
-                .ToList();
-
-            /*
-            if (allowedAreas.Contains(MiseWebsiteAreas.Resellers))
-            {
-                //send em to resellers
-                RedirectToAction();
-            }*/
 
             if (allowedAreas.Contains(MiseWebsiteAreas.Restaurants))
             {
                 return RedirectToAction("IndexForUser", "Restaurant");
             }
-
             if (allowedAreas.Contains(MiseWebsiteAreas.Employee))
             {
                 return RedirectToAction("IndexForUser", "Restaurant");
             }
-
+            if (allowedAreas.Contains(MiseWebsiteAreas.SiteUser))
+            {
+                return RedirectToAction("IndexForUser", "Restaurant");
+            }
             ModelState.AddModelError("", "Invalid login attempt.");
             return View(login);
         }
@@ -166,7 +162,6 @@ namespace MiseWebsite.Controllers
                     return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
-                case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid code.");
                     return View(model);
@@ -353,7 +348,7 @@ namespace MiseWebsite.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe });
         }
 
         //
@@ -377,7 +372,6 @@ namespace MiseWebsite.Controllers
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
@@ -464,15 +458,9 @@ namespace MiseWebsite.Controllers
 
         #region Helpers
         // Used for XSRF protection when adding external logins
-        private const string XsrfKey = "XsrfId";
+        private const string XSRF_KEY = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
+        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
         private void AddErrors(IdentityResult result)
         {
@@ -514,7 +502,7 @@ namespace MiseWebsite.Controllers
                 var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
                 if (UserId != null)
                 {
-                    properties.Dictionary[XsrfKey] = UserId;
+                    properties.Dictionary[XSRF_KEY] = UserId;
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }

@@ -73,3 +73,5 @@ Admin/MiseAdminWebsite/App_Data/aspnet-MiseAdminWebsite-20150802063049.mdf
 Admin/MiseAdminWebsite/App_Data/aspnet-MiseAdminWebsite-20150802063049_log.ldf
 Server/VendorSite/MiseVendorManagement/MiseVendorManagement/App_Data/aspnet-MiseVendorManagement-20150816120322.mdf
 Server/VendorSite/MiseVendorManagement/MiseVendorManagement/App_Data/aspnet-MiseVendorManagement-20150816120322_log.ldf
+Server/MiseWebsite/MiseWebsite/App_Data/aspnet-MiseWebsite-20160327091456.mdf
+*.ldf

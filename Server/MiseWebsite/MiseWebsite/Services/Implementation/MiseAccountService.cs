@@ -23,11 +23,12 @@ namespace MiseWebsite.Services.Implementation
             var allowedAreas = new List<MiseWebsiteAreas>();
 
             //check if they're a salesperson
+            /*
             var salesPerson = await _accountDAL.GetResellerAccount(email, password);
             if (salesPerson != null)
             {
                 allowedAreas.Add(MiseWebsiteAreas.Resellers);
-            }
+            }*/
 
             //check for rest account
             var restAccount = await _restaurantDAL.GetAccount(email, password);

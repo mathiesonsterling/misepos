@@ -12,6 +12,6 @@ namespace MiseWebsite.Database.Implementation
 
         public virtual DbSet<SendEmailCSVFile> SendEmailCSVFiles { get; set; }
 
-        public virtual DbSet<ResellerAccountStorage> ResellerAccounts { get; set; } 
+        public virtual DbSet<ResellerAccountStorage> ResellerAccounts { get; set; }
     }
 }

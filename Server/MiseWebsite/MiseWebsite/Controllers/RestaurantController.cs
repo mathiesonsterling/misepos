@@ -23,7 +23,7 @@ namespace MiseWebsite.Controllers
             _geoCodingService = new GoogleMapsGeoCodingService();
         }
 
-        [Authorize(Roles = "MiseAdmin")]
+       // [Authorize(Roles = "MiseAdmin")]
         // GET: Restaurant
         public async Task<ActionResult> Index()
         {
@@ -34,7 +34,7 @@ namespace MiseWebsite.Controllers
             return View(vms.OrderBy(r => r.Name));
         }
 
-        [Authorize]
+       // [Authorize]
         public async Task<ActionResult> IndexForUser()
         {
             var email = new EmailAddress(User.Identity.Name);
