@@ -1,5 +1,5 @@
 ﻿using System;
-using Connectivity.Plugin;
+using Plugin.Connectivity;
 using Mise.Core.Client.Services;
 
 

@@ -38,14 +38,13 @@ namespace Mise.Inventory.iOS
 		{
 			var wsLocation = GetWebServiceLocation ();
 			if (wsLocation != null) {
-				CurrentPlatform.Init ();
+				Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init ();
 				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey, 
 					new NativeMessageHandler());
 				//create the SQL store for offline
 				var dbService = new iOSSQLite ();
 
 				cb.RegisterInstance<ISQLite> (dbService);
-				CurrentPlatform.Init ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
 				store.DefineTable<AzureEntityStorage>();
