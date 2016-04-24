@@ -225,6 +225,7 @@
     <Compile Include="Models\PurchaseOrderViewModel.cs" />
     <Compile Include="Models\ReceivingOrderLineItemViewModel.cs" />
     <Compile Include="Models\ReceivingOrderViewModel.cs" />
+    <Compile Include="Models\RestaurantAccountViewModel.cs" />
     <Compile Include="Models\RestaurantViewModel.cs" />
     <Compile Include="Models\SendEmailCSVFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -292,11 +293,11 @@
     <Content Include="Views\Restaurant\Delete.cshtml" />
     <Content Include="Views\Restaurant\Details.cshtml" />
     <Content Include="Views\Restaurant\Index.cshtml" />
+    <Content Include="Views\RestaurantAccount\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="images\" />
-    <Folder Include="Views\RestaurantAccount\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

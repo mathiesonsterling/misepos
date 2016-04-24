@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using Mise.Core.ValueItems;
+using MiseWebsite.Database.Implementation;
 using MiseWebsite.Models;
+using MiseWebsite.Services;
+using MiseWebsite.Services.Implementation;
 
 namespace MiseWebsite
 {
@@ -54,10 +61,6 @@ namespace MiseWebsite
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
             };
 
             // Configure user lockout defaults
@@ -91,9 +94,12 @@ namespace MiseWebsite
     // Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
+        private readonly IMiseAccountService _accountService;
+        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager,
+            IMiseAccountService accountService)
             : base(userManager, authenticationManager)
         {
+            _accountService = accountService;
         }
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
@@ -103,7 +109,38 @@ namespace MiseWebsite
 
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+            var restaurantDAL = new ManagementDAL();
+            var accountDAL = new AccountDAL();
+            var accountService = new MiseAccountService(restaurantDAL, accountDAL);
+            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication, accountService);
+        }
+
+        public override async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        {
+            var baseRes = await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
+
+            if (baseRes == SignInStatus.Success)
+            {
+                return baseRes;
+            }
+
+            var miseUsers = (await _accountService.GetAreasUserHasAccessTo(new EmailAddress(userName), new Password(password))).ToList();
+
+            if (!miseUsers.Any() || miseUsers.All(mu => mu == MiseWebsiteAreas.None))
+            {
+                return baseRes;
+            }
+
+            var claimsIdentity = new ClaimsIdentity("TwoFactorCookie");
+            claimsIdentity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", userName));
+            AuthenticationManager.SignIn(claimsIdentity);
+
+            var principle = new GenericPrincipal(claimsIdentity, new string[] {});
+            HttpContext.Current.User = principle;
+            Thread.CurrentPrincipal = principle;
+
+            FormsAuthentication.SetAuthCookie(userName, isPersistent);
+            return SignInStatus.Success;
         }
     }
 }

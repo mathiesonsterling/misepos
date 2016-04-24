@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MiseWebsite.Models;
 
 namespace MiseWebsite.Controllers
 {
@@ -23,12 +24,20 @@ namespace MiseWebsite.Controllers
         // GET: RestaurantAccount/Create
         public ActionResult Create()
         {
-            return View();
+            //check if this email already is an employee
+
+            //if we have a current user, prepopulate
+            var vm = new RestaurantAccountViewModel();
+            if (!string.IsNullOrEmpty(User.Identity?.Name))
+            {
+                vm.EmailAddress = User.Identity.Name;
+            }
+            return View(vm);
         }
 
         // POST: RestaurantAccount/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(RestaurantAccountViewModel viewModel)
         {
             try
             {
