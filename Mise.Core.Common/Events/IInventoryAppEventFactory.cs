@@ -115,6 +115,11 @@ namespace Mise.Core.Common.Events
 		AccountRegisteredFromMobileDeviceEvent CreateAccountRegisteredFromMobileDeviceEvent (IEmployee emp, Guid accountID, EmailAddress email, 
 			PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, PersonName name, MisePaymentPlan paymentPlan);
 
+        RestaurantAccountRegisteredOnWebsiteEvent CreateRestaurantAccountRegisteredOnWebsiteEvent(Guid accountId,
+            EmailAddress email,
+            PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, string businessName,
+            MisePaymentPlan paymentPlan);
+
         AccountHasPaymentPlanSetupEvent CreateAccountHasPaymentPlanSetupEvent(IBusinessAccount acct);
         AccountCancelledEvent CreateAccountCancelledEvent(IEmployee emp, IAccount account, IRestaurant restaurant);
         #endregion

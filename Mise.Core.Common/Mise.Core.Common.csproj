@@ -62,6 +62,7 @@
     <Compile Include="Events\Accounts\AccountHasPaymentPlanSetupEvent.cs" />
     <Compile Include="Events\Accounts\AccountRegisteredFromMobileDeviceEvent.cs" />
     <Compile Include="Events\Accounts\BaseAccountEvent.cs" />
+    <Compile Include="Events\Accounts\RestaurantAccountRegisteredOnWebsiteEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\BaseInvitationEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\EmployeeAcceptsInvitationEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\EmployeeInvitedToApplicationEvent.cs" />

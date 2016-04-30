@@ -4,6 +4,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
+using Mise.Core.Common.Entities.DTOs;
+using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
 
@@ -74,6 +76,20 @@ namespace MiseWebsite.Database.Implementation
             }
 
             return acct;
+        }
+
+        public async Task<IBusinessAccount> AddRestaurantAccount(RestaurantAccount restaurantAccount)
+        {
+            var ef = new EntityDataTransportObjectFactory(new JsonNetSerializer());
+            var dto = ef.ToDataTransportObject(restaurantAccount);
+            var ai = new AzureEntityStorage(dto);
+            using (var db = new AzureNonTypedEntitiesDbContext())
+            {
+                db.AzureEntityStorages.Add(ai);
+                await db.SaveChangesAsync();
+            }
+
+            return restaurantAccount;
         }
 
         private static IResellerAccount Hydrate(ResellerAccountStorage source)

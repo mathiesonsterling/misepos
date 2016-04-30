@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
 
@@ -20,5 +21,7 @@ namespace MiseWebsite.Database
 
         Task<IResellerAccount> AddResellerAccount(IResellerAccount acct);
         Task<IResellerAccount> UpdateResellerAccount(IResellerAccount acct);
+
+        Task<IBusinessAccount> AddRestaurantAccount(RestaurantAccount restaurantAccount);
     }
 }

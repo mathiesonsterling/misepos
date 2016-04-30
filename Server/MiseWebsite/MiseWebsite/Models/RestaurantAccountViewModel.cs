@@ -46,13 +46,21 @@ namespace MiseWebsite.Models
         public string CardNumber { get; set; }
 
         [Required]
-        public int? ExpMonth { get; set; }
+        public int ExpMonth { get; set; }
 
         [Required]
-        public int? ExpYear { get; set; }
+        public int ExpYear { get; set; }
 
         [Required]
         public string BillingZip { get; set; }
 
+        [Required]
+        public string CardholderFirstName { get; set; }
+
+        [Required]
+        public string CardholderLastName { get; set; }
+
+        [Required]
+        public int CVC { get; set; }
     }
 }
