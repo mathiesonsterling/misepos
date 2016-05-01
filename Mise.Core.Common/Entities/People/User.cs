@@ -15,15 +15,15 @@ namespace Mise.Core.Common.Entities.People
         {
             get
             {
-                if (string.IsNullOrEmpty(_displayName))
+                if (!string.IsNullOrEmpty(_displayName))
                 {
-                    if (Name != null)
-                    {
-                        return Name.FirstName + " " + Name.LastName;
-                    }
-                    return string.Empty;
+                    return _displayName;
                 }
-                return _displayName;
+                if (Name != null)
+                {
+                    return Name.FirstName + " " + Name.LastName;
+                }
+                return string.Empty;
             }
             set { _displayName = value; }
         }
@@ -53,12 +53,13 @@ namespace Mise.Core.Common.Entities.People
         public IEnumerable<EmailAddress> GetEmailAddresses()
         {
             var res = Emails == null ? new List<EmailAddress>() : new List<EmailAddress>(Emails);
-            if (PrimaryEmail != null)
+            if (PrimaryEmail == null)
             {
-                if (res.Select(e => e.Value).Contains(PrimaryEmail.Value) == false)
-                {
-                    res.Add(PrimaryEmail);
-                }
+                return res.Where(e => e != null);
+            }
+            if (res.Select(e => e.Value).Contains(PrimaryEmail.Value) == false)
+            {
+                res.Add(PrimaryEmail);
             }
 
             return res.Where(e => e != null);

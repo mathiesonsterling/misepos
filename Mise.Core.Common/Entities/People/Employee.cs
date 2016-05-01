@@ -70,10 +70,7 @@ namespace Mise.Core.Common.Entities.People
 
 		public bool CanUseAppForRestaurant (Guid restaurantID, MiseAppTypes app)
 		{
-			if(RestaurantsAndAppsAllowed.ContainsKey (restaurantID)){
-				return RestaurantsAndAppsAllowed [restaurantID].Contains (app);
-			}
-			return false;
+		    return RestaurantsAndAppsAllowed.ContainsKey (restaurantID) && RestaurantsAndAppsAllowed [restaurantID].Contains (app);
 		}
 
 	    public IEnumerable<Guid> GetRestaurantIDs()
@@ -90,6 +87,7 @@ namespace Mise.Core.Common.Entities.People
 		
 
 		public DateTimeOffset? LastTimeLoggedIntoInventoryApp { get; set; }
+
 	    public string LastDeviceIDLoggedInWith { get; set; }
 
 	    public bool CurrentlyLoggedIntoInventoryApp { get; set; }
