@@ -12,16 +12,9 @@ namespace Mise.Core.Common.Events.Inventory
 	{
 		#region implemented abstract members of BaseReceivingOrderEvent
 
-		public override MiseEventTypes EventType {
-			get {
-				return MiseEventTypes.ReceivingOrderLineItemAdded;
-			}
-		}
+		public override MiseEventTypes EventType => MiseEventTypes.ReceivingOrderLineItemAdded;
 
-	    public override bool IsEntityCreation
-	    {
-	        get { return true; }
-	    }
+	    public override bool IsEntityCreation => true;
 
 	    #endregion
 
@@ -50,9 +43,9 @@ namespace Mise.Core.Common.Events.Inventory
 		/// <value>The size of the case.</value>
 		public int? CaseSize{get;set;}
 
-		public int Quantity{ get; set;}
+		public decimal Quantity{ get; set;}
 
-		public IEnumerable<ItemCategory> Categories{get;set;}
+		public IEnumerable<InventoryCategory> Categories{get;set;}
 	}
 }
 

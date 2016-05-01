@@ -4,7 +4,7 @@ namespace Mise.Core.ValueItems
 {
 	public class Money : IEquatable<Money>, ITextSearchable
 	{
-		public decimal Dollars{ get; set;}
+		public decimal Dollars{ get;}
 		public Money (decimal amountInDollars)
 		{
 			Dollars = Math.Round (amountInDollars, 2);
@@ -42,20 +42,17 @@ namespace Mise.Core.ValueItems
 			return Dollars > other.Dollars;
 		}
 
-		public bool HasValue{ get { return Dollars > 0.0M;} }
+		public bool HasValue => Dollars > 0.0M;
 
-		public string ToFormattedString(){
+	    public string ToFormattedString(){
 			return Dollars.ToString ("C");
 		}
 
 		public override bool Equals (object obj)
 		{
 			var mon = obj as Money;
-			if (mon == null) {
-				return false;
-			}
 
-			return Dollars == mon.Dollars;
+		    return Dollars == mon?.Dollars;
 		}
 
 		public bool Equals (Money other)
@@ -74,16 +71,9 @@ namespace Mise.Core.ValueItems
 	        return Dollars.ToString().Contains(searchString);
 	    }
 
-	    public static Money None{
-			get{
-				return new Money (0.0M);
-			}
-		}
+	    public static Money None => new Money (0.0M);
 
-	    public static Money MiseMonthlyFee
-	    {
-	        get { return new Money(12.99M); }
-	    }
+	    public static Money MiseMonthlyFee => new Money(12.99M);
 	}
 }
 

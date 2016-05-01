@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using Mise.Core.Client.Services;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Services;
@@ -39,8 +40,7 @@ namespace Mise.Inventory.iOS
 			var wsLocation = GetWebServiceLocation ();
 			if (wsLocation != null) {
 				Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init ();
-				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey, 
-					new NativeMessageHandler());
+				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), new NativeMessageHandler());
 				//create the SQL store for offline
 				var dbService = new iOSSQLite ();
 

@@ -76,21 +76,21 @@ namespace Mise.Core.Client.ApplicationModel
 		/// </summary>
 		/// <returns><c>true</c>, if clockin was employeed, <c>false</c> otherwise.</returns>
 		/// <param name="passcode">Passcode.</param>
-		bool EmployeeClockin (string passcode);
+		//bool EmployeeClockin (string passcode);
 		/// <summary>
 		/// Clocks the employee out, if the passcode is correct
 		/// </summary>
 		/// <returns><c>true</c>, if clockout was employeed, <c>false</c> otherwise.</returns>
 		/// <param name="passcode">Passcode.</param>
 		/// <param name="employee">Employee.</param>
-		bool EmployeeClockout(string passcode, IEmployee employee);
+		//bool EmployeeClockout(string passcode, IEmployee employee);
 
 		/// <summary>
 		/// Employee attempts to run a no sale event
 		/// </summary>
 		/// <returns><c>true</c>, if sale was noed, <c>false</c> otherwise.</returns>
 		/// <param name="passcode">Passcode.</param>
-		bool NoSale (string passcode);
+		//bool NoSale (string passcode);
 		#endregion
 
 		#region Checks

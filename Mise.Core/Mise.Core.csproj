@@ -63,6 +63,8 @@
     <Compile Include="Entities\Menu\MenuItemModifierGroup.cs" />
     <Compile Include="Entities\Menu\MenuRule.cs" />
     <Compile Include="Entities\MiseEventTypes.cs" />
+    <Compile Include="Entities\People\IPerson.cs" />
+    <Compile Include="Entities\People\IUser.cs" />
     <Compile Include="Entities\Restaurant\Events\IApplicationInvitationEvent.cs" />
     <Compile Include="Entities\Restaurant\Events\IRestaurantEvent.cs" />
     <Compile Include="Entities\Vendors\Events\IReceivingOrderEvent.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="Services\UtilityServices\IErrorTrackingService.cs" />
     <Compile Include="Services\UtilityServices\ILogger.cs" />
     <Compile Include="Services\UtilityServices\LogLevel.cs" />
-    <Compile Include="ValueItems\Beacon.cs" />
     <Compile Include="ValueItems\CommitResult.cs" />
     <Compile Include="ValueItems\CreditCardProcessorToken.cs" />
     <Compile Include="ValueItems\Distance.cs" />
@@ -136,7 +137,7 @@
     <Compile Include="ValueItems\Reports\ReportResult.cs" />
     <Compile Include="ValueItems\Reports\ReportResultLineItem.cs" />
     <Compile Include="ValueItems\Reports\ReportTypes.cs" />
-    <Compile Include="ValueItems\RestaurantName.cs" />
+    <Compile Include="ValueItems\BusinessName.cs" />
     <Compile Include="ValueItems\StreetAddress.cs" />
     <Compile Include="ValueItems\PhoneNumber.cs" />
     <Compile Include="ValueItems\EmailAddress.cs" />

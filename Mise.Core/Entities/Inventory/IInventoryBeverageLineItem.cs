@@ -40,8 +40,6 @@ namespace Mise.Core.Entities.Inventory
 
 		int NumFullBottles{get;}
 
-		decimal Quantity{ get;}
-
 		/// <summary>
 		/// If true, we've actually measured this line item, if not we haven't
 		/// </summary>

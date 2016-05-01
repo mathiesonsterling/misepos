@@ -75,7 +75,7 @@ namespace Mise.Core.Common.Events
 		}
 
 	    public ReceivingOrderLineItemAddedEvent CreateReceivingOrderLineItemAddedEvent(IEmployee emp,
-			IBaseBeverageLineItem source, int quantity, IReceivingOrder ro)
+			IBaseBeverageLineItem source, decimal quantity, IReceivingOrder ro)
 	    {
             return new ReceivingOrderLineItemAddedEvent
             {
@@ -93,14 +93,14 @@ namespace Mise.Core.Common.Events
 				Quantity = quantity,
 				ReceivingOrderID = ro.Id,
 				Categories = source.GetCategories () != null
-					? source.GetCategories ().Cast<ItemCategory>()
-					: new List<ItemCategory>(),
+					? source.GetCategories ().Cast<InventoryCategory>()
+					: new List<InventoryCategory>(),
                 LineItemID = Guid.NewGuid()
             };
 	    }
 
 		public ReceivingOrderLineItemAddedEvent CreateReceivingOrderLineItemAddedEvent (IEmployee emp, string name, 
-			string upc, IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, IReceivingOrder ro)
+			string upc, IEnumerable<InventoryCategory> categories, int caseSize, LiquidContainer container, decimal quantity, IReceivingOrder ro)
 		{
 			return new ReceivingOrderLineItemAddedEvent {
 				Id = Guid.NewGuid (),
@@ -141,7 +141,7 @@ namespace Mise.Core.Common.Events
 				RestaurantInventorySectionID = section.RestaurantInventorySectionID,
                 InventorySectionID = section.Id,
 				InventoryID = inventory.Id,
-				Categories = source.GetCategories ().Cast<ItemCategory>(),
+				Categories = source.GetCategories ().Cast<InventoryCategory>(),
                 InventoryPosition =  inventoryPosition,
                 LineItemID = Guid.NewGuid(),
                 PricePaid = pricePaid
@@ -214,14 +214,14 @@ namespace Mise.Core.Common.Events
 				Quantity = quantity,
 				ParID = par.Id,
 				Categories = source.GetCategories () != null 
-					? source.GetCategories ().Cast<ItemCategory>() 
-					: new List<ItemCategory>(),
+					? source.GetCategories ().Cast<InventoryCategory>() 
+					: new List<InventoryCategory>(),
                 LineItemID = Guid.NewGuid()
 			};
 		}
 
 		public PARLineItemAddedEvent CreatePARLineItemAddedEvent (IEmployee emp, string name, string upc, 
-			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity, IPar par)
+			IEnumerable<InventoryCategory> categories, int caseSize, LiquidContainer container, int quantity, IPar par)
 		{
 			return new PARLineItemAddedEvent {
 				Id = Guid.NewGuid (),
@@ -272,7 +272,7 @@ namespace Mise.Core.Common.Events
 		}
 
 		public InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent (IEmployee emp, string name, string upc,
-			IEnumerable<ItemCategory> categories, int caseSize, LiquidContainer container, int quantity,  Guid? vendorID, 
+			IEnumerable<InventoryCategory> categories, int caseSize, LiquidContainer container, int quantity,  Guid? vendorID, 
             IInventorySection section, int inventoryPosisiton, IInventory inventory)
 		{
 			return new InventoryLineItemAddedEvent {
@@ -694,7 +694,8 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
-		public EmployeeInvitedToApplicationEvent CreateEmployeeInvitedToApplicationEvent (IEmployee emp, EmailAddress destEmail, MiseAppTypes app, RestaurantName restName)
+		public EmployeeInvitedToApplicationEvent CreateEmployeeInvitedToApplicationEvent (IEmployee emp, EmailAddress destEmail, MiseAppTypes app, 
+            BusinessName restName)
 		{
 			return new EmployeeInvitedToApplicationEvent {
 				Id = Guid.NewGuid (),
@@ -768,7 +769,7 @@ namespace Mise.Core.Common.Events
 			};
 		}
 
-	    public NewRestaurantRegisteredOnAppEvent CreateNewRestaurantRegisteredOnAppEvent(IEmployee emp, RestaurantName name,
+	    public NewRestaurantRegisteredOnAppEvent CreateNewRestaurantRegisteredOnAppEvent(IEmployee emp, BusinessName name,
 	        StreetAddress address, PhoneNumber phone)
         {
 	        return new NewRestaurantRegisteredOnAppEvent
@@ -863,6 +864,16 @@ namespace Mise.Core.Common.Events
                 CreditCard = card
 			};
 		}
+
+        public RestaurantAccountRegisteredOnWebsiteEvent CreateRestaurantAccountRegisteredOnWebsiteEvent(Guid accountId,
+            EmailAddress email, PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, string businessName,
+            MisePaymentPlan paymentPlan)
+        {
+            return new RestaurantAccountRegisteredOnWebsiteEvent
+            {
+
+            };
+        }
 
         public AccountHasPaymentPlanSetupEvent CreateAccountHasPaymentPlanSetupEvent(IBusinessAccount acct)
         {

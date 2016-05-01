@@ -3,6 +3,8 @@
 using Mise.Inventory.Services;
 using Java.IO;
 using System.Threading.Tasks;
+using Android.Provider;
+using Mise.Core.Client.Services;
 
 
 namespace Mise.Inventory.Android.Services
@@ -19,7 +21,7 @@ namespace Mise.Inventory.Android.Services
 			return conn;
 		}
 
-		public System.Threading.Tasks.Task DeleteDatabaseFile ()
+		public Task DeleteDatabaseFile ()
 		{
 			var filename = GetLocalFilename ();
 

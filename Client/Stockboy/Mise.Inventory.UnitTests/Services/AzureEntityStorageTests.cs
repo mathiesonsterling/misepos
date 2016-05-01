@@ -7,6 +7,7 @@ using Mise.Core.Common.Entities.DTOs;
 using NUnit.Framework;
 
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.People;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 namespace Mise.Inventory.UnitTests.Services
 {

@@ -12,7 +12,7 @@ namespace Mise.Core.Common.Entities.Inventory
     /// <summary>
     /// Represents an item the restaurant has in inventory
     /// </summary>
-	public class InventoryBeverageLineItem : BaseTaggableRestaurantEntity, IInventoryBeverageLineItem
+	public class InventoryBeverageLineItem : BaseBeverageLineItem, IInventoryBeverageLineItem
     {
         public InventoryBeverageLineItem()
         {
@@ -54,14 +54,10 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public IEnumerable<decimal> GetPartialBottlePercentages()
         {
-            if (PartialBottleListing == null)
-            {
-                return new List<decimal>();
-            }
-            return PartialBottleListing;
+            return PartialBottleListing ?? new List<decimal>();
         }
 
-		public int NumPartialBottles => PartialBottleListing?.Count ?? 0;
+        public int NumPartialBottles => PartialBottleListing?.Count ?? 0;
 
         public int NumFullBottles{get;set;}
 
@@ -69,7 +65,7 @@ namespace Mise.Core.Common.Entities.Inventory
 		/// Total number of physical bottles that are part of this line item
 		/// </summary>
 		/// <value>The total bottles.</value>
-		public decimal Quantity {
+		public override decimal Quantity {
 			get {
 				var totalPartials = PartialBottleListing != null && PartialBottleListing.Any ()
 					? PartialBottleListing.Sum (s => s)
@@ -77,11 +73,10 @@ namespace Mise.Core.Common.Entities.Inventory
 				return 
 					NumFullBottles + totalPartials;
 			}
-		}
-
-		public int? CaseSize {
-			get;
-			set;
+		    set
+		    {
+		        //do nothing, shouldn't set!
+		    }
 		}
 
         public MeasurementMethods MethodsMeasuredLast { get; set; }
@@ -107,45 +102,14 @@ namespace Mise.Core.Common.Entities.Inventory
 				: new List<decimal> ();
 			newItem.Categories = Categories != null 
 				? Categories.Select (c => c).ToList () 
-				: new List<ItemCategory>();
+				: new List<InventoryCategory>();
 			newItem.InventoryPosition = InventoryPosition;
             newItem.PricePaid = PricePaid;
             return newItem;
         }
-
-		string _displayName;
-		public string DisplayName { get{ 
-				if(string.IsNullOrEmpty (_displayName)){
-					return MiseName;
-				}
-				return _displayName;
-			} 
-			set{ 
-				_displayName = value;
-			}
-		}
-        public string MiseName { get; set; }
-        public string UPC { get; set; }
-        public LiquidContainer Container { get; set; }
-
-		public bool ContainsSearchString (string searchString)
-		{
-			return (DisplayName != null && DisplayName.ToUpper ().Contains (searchString.ToUpper ()))
-				|| (MiseName != null && MiseName.ToUpper ().Contains (searchString.ToUpper ()))
-				|| (Container != null && Container.ContainsSearchString (searchString))
-				|| (Categories != null && Categories.Any(c => c.ContainsSearchString(searchString)));
-		}
 			
 		public bool HasBeenMeasured => MethodsMeasuredLast != MeasurementMethods.Unmeasured;
 
         public int InventoryPosition { get; set; }
-
-        public List<ItemCategory> Categories{get;set;}
-		public IEnumerable<ICategory> GetCategories()
-		{
-		    return Categories ?? (Categories = new List<ItemCategory>());
-		}
-
-        public string CategoryDisplay => Categories.Any () ? Categories.First ().Name : string.Empty;
     }
 }

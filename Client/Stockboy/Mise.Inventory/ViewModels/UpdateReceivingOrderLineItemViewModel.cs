@@ -73,7 +73,7 @@ namespace Mise.Inventory.ViewModels
 				SetCurrent (selItem);
 			}
 
-            CurrentQuantity = CurrentItem != null ? CurrentItem.Quantity : 0;
+            CurrentQuantity = (int)(CurrentItem?.Quantity ?? 0);
             ItemName = CurrentItem != null ? CurrentItem.DisplayName : string.Empty;
             TotalPrice = CurrentItem != null && CurrentItem.LineItemPrice != null ? CurrentItem.LineItemPrice.Dollars : 0;
             UnitPrice = CurrentItem != null && CurrentItem.UnitPrice != null ? CurrentItem.UnitPrice.Dollars : 0;
@@ -167,7 +167,7 @@ namespace Mise.Inventory.ViewModels
 
         protected override async Task AfterMove(IReceivingOrderLineItem newItem)
         {
-			CurrentQuantity = newItem.Quantity;
+			CurrentQuantity = (int)newItem.Quantity;
 			TotalPrice = newItem.LineItemPrice.Dollars;
 			UnitPrice = newItem.UnitPrice.Dollars;
             await OnAppearing();

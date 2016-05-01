@@ -10,6 +10,7 @@ using Mise.Core.Common.Entities;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.ValueItems.Inventory;
@@ -160,7 +161,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void EmployeeInvited(){
-			var ev = _underTest.CreateEmployeeInvitedToApplicationEvent (_emp, EmailAddress.TestEmail, MiseAppTypes.UnitTests, RestaurantName.TestName);
+			var ev = _underTest.CreateEmployeeInvitedToApplicationEvent (_emp, EmailAddress.TestEmail, MiseAppTypes.UnitTests, BusinessName.TestName);
 
 			TestCommonFieldsWithRest (ev);
 		}
@@ -232,7 +233,7 @@ namespace Mise.Core.Common.UnitTests.Events
 				         _emp, 
 				         "testItem", 
 				         "upc", 
-				         new List<ItemCategory>{ CategoriesService.Beer },
+				         new List<InventoryCategory>{ CategoriesService.Beer },
 				         11,
 				         LiquidContainer.Bottle1_75ML,
 				         100,
@@ -304,7 +305,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void NewRestaurant(){
-			var ev = _underTest.CreateNewRestaurantRegisteredOnAppEvent (_emp, RestaurantName.TestName, StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber);
+			var ev = _underTest.CreateNewRestaurantRegisteredOnAppEvent (_emp, BusinessName.TestName, StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber);
 			TestCommonFields (ev);
 			Assert.AreNotEqual (Guid.Empty, ev.RestaurantId);
 		}
@@ -325,7 +326,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		[Test]
 		public void ParLineItemAddedDirect(){
 			var ev = _underTest.CreatePARLineItemAddedEvent (_emp, "testITem", "upc",
-				new List<ItemCategory>{ CategoriesService.Beer },
+				new List<InventoryCategory>{ CategoriesService.Beer },
 				100, LiquidContainer.Bottle330ML, 1000, _par
 			);
 			TestParEvent (ev);
@@ -405,7 +406,7 @@ namespace Mise.Core.Common.UnitTests.Events
 			var ev = _underTest.CreateReceivingOrderLineItemAddedEvent (_emp, 
 				"testItem", 
 				"upc", 
-				new List<ItemCategory>{ CategoriesService.Beer },
+				new List<InventoryCategory>{ CategoriesService.Beer },
 				11,
 				LiquidContainer.Bottle1_75ML,
 				100,

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Common.UnitTests.Tools;
 using Mise.Core.ValueItems;
 using NUnit.Framework;
@@ -39,9 +40,9 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var emp = new Employee()
             {
                 Id = id,
-                CompBudget = new Money(10.0M),
+                //CompBudget = new Money(10.0M),
                 CreatedDate = DateTime.Now,
-                CurrentlyClockedInToPOS = true,
+                //CurrentlyClockedInToPOS = true,
                 DisplayName = "Test",
                 Emails = new List<EmailAddress>
                 {

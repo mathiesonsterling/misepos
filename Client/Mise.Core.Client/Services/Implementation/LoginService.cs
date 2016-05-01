@@ -430,7 +430,7 @@ namespace Mise.Core.Client.Services.Implementation
 			}
 		}
 
-		public async Task<IRestaurant> RegisterRestaurant(RestaurantName name, StreetAddress address, PhoneNumber phone)
+		public async Task<IRestaurant> RegisterRestaurant(BusinessName name, StreetAddress address, PhoneNumber phone)
 	    {
 			try{
 		        var ev = _eventFactory.CreateNewRestaurantRegisteredOnAppEvent(_currentEmployee, name, address, phone);

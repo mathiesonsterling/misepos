@@ -64,6 +64,7 @@
     <Compile Include="Services\ILoginService.cs" />
     <Compile Include="Services\IRepositoryLoader.cs" />
     <Compile Include="Services\ICurrentInventoryService.cs" />
+    <Compile Include="Services\ISQLite.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

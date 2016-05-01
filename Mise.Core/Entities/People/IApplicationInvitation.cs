@@ -57,7 +57,7 @@ namespace Mise.Core.Entities.People
 		Guid InvitingEmployeeID{get;}
 		PersonName InvitingEmployeeName{get;}
 
-		RestaurantName RestaurantName{get;}
+		BusinessName RestaurantName{get;}
 	}
 }
 

@@ -56,7 +56,7 @@ namespace Mise.Core.Client.Services
 		/// <returns>The placeholder restaurant for current employee.</returns>
 		Task CreatePlaceholderRestaurantForCurrentEmployee();
 
-	    Task<IRestaurant> RegisterRestaurant(RestaurantName name, StreetAddress address, PhoneNumber phone);
+	    Task<IRestaurant> RegisterRestaurant(BusinessName name, StreetAddress address, PhoneNumber phone);
 
 		/// <summary>
 		/// Fired when a user registers a restaurant, but doesn't create a restaurant

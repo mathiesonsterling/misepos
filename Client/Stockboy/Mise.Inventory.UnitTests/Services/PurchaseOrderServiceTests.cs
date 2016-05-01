@@ -22,6 +22,7 @@ using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Entities.People;
 
 namespace Mise.Inventory.UnitTests.Services
 {

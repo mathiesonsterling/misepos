@@ -14,6 +14,7 @@ using Mise.Core.Client.ApplicationModel.Implementation;
 using Moq;
 using Mise.Core.Entities.People;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.UnitTests.Tools

@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockboyMobileAppServiceService", "StockboyMobileAppServiceService\StockboyMobileAppServiceService.csproj", "{209FA716-A7AD-4095-BD70-C8710FC66FA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Database.AzureDefinitions", "..\..\Mise.Database.AzureDefinitions\Mise.Database.AzureDefinitions.csproj", "{D2CD4819-7F62-4753-A378-AE26960F6A05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core", "..\..\..\Mise.Core\Mise.Core.csproj", "{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common", "..\..\..\Mise.Core.Common\Mise.Core.Common.csproj", "{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common.UnitTests", "..\..\..\Mise.Core.Common.UnitTests\Mise.Core.Common.UnitTests.csproj", "{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Deploy|Any CPU = Deploy|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{209FA716-A7AD-4095-BD70-C8710FC66FA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2CD4819-7F62-4753-A378-AE26960F6A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2CD4819-7F62-4753-A378-AE26960F6A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2CD4819-7F62-4753-A378-AE26960F6A05}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2CD4819-7F62-4753-A378-AE26960F6A05}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{D2CD4819-7F62-4753-A378-AE26960F6A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2CD4819-7F62-4753-A378-AE26960F6A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Deploy|Any CPU.ActiveCfg = Deploy|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

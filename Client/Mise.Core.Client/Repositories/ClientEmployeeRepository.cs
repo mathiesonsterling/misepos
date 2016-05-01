@@ -11,6 +11,7 @@ using System;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.Repositories
@@ -53,11 +54,11 @@ namespace Mise.Core.Client.Repositories
             }
             return null;
         }
-
+        /*
         public IEmployee GetByPasscode(string passcode)
         {
             return Cache.GetAll().FirstOrDefault(e => e.Passcode == passcode);
-        }
+        }*/
 
         protected override IEmployee CreateNewEntity()
         {

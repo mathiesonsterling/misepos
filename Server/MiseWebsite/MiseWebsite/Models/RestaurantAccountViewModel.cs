@@ -21,7 +21,7 @@ namespace MiseWebsite.Models
             ReferralCodeToGiveOut = source.ReferralCodeForAccountToGiveOut?.Code;
             AccountStatus = source.Status;
             CardNumber = source.CurrentCard?.MaskedCardNumber;
-            ExpMonth = source.CurrentCard?.ExpMonth;
+            ExpMonth = source.CurrentCard.ExpMonth.Value;
             ExpYear = source.CurrentCard?.ExpYear;
             BillingZip = source.CurrentCard?.BillingZip?.Value;
         }

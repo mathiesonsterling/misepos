@@ -13,7 +13,7 @@ namespace Mise.Core.Common.Services.Implementation
 	/// </summary>
 	public class CategoriesService : ICategoriesService
 	{
-		private readonly List<ItemCategory> _allCats = new List<ItemCategory>{
+		private readonly List<InventoryCategory> _allCats = new List<InventoryCategory>{
 			BeerWineLiquor, Consumables, Operationals, Unknown,
 			Beer, Wine, Liquor,
 			Whiskey, WhiskeyAmerican, WhiskeyBourbon, WhiskeyCanadian, WhiskeyRye,
@@ -32,22 +32,22 @@ namespace Mise.Core.Common.Services.Implementation
 		};
 
 		#region Top Level Cats
-		public static ItemCategory BeerWineLiquor => new ItemCategory{
+		public static InventoryCategory BeerWineLiquor => new InventoryCategory{
 		    Name = "BeerWineLiquor",
 		    Id = Guid.Parse ("4d17620b-fcb5-4ad0-bfd3-a9aaa1d9eb25")
 		};
 
-	    public static ItemCategory Consumables => new ItemCategory {
+	    public static InventoryCategory Consumables => new InventoryCategory {
 	        Name = "Consumables",
 	        Id = Guid.Parse ("bf2d5626-bb54-4e99-a840-36311eb46f2f")
 	    };
 
-	    public static ItemCategory Operationals => new ItemCategory {
+	    public static InventoryCategory Operationals => new InventoryCategory {
 	        Name = "Operationals",
 	        Id = Guid.Parse ("8a4efc28-84f1-44d0-8dd3-d7525da0b2f1")
 	    };
 
-	    public static ItemCategory Unknown => new ItemCategory {
+	    public static InventoryCategory Unknown => new InventoryCategory {
 	        Name = "None",
 	        Id = Guid.Parse ("7e05f222-9aaf-47d0-a51b-3146f2060c55")
 	    };
@@ -55,13 +55,13 @@ namespace Mise.Core.Common.Services.Implementation
         #endregion
 
         #region BLW
-        public static ItemCategory Beer => new ItemCategory {
+        public static InventoryCategory Beer => new InventoryCategory {
 		    Name = "Beer",
 		    Id = Guid.Parse ("ceb2d033-50ca-42bd-a2aa-baeca09f5d3b"),
 		    ParentCategoryID = BeerWineLiquor.Id,
 		};
 
-	    public static ItemCategory Wine => new ItemCategory {
+	    public static InventoryCategory Wine => new InventoryCategory {
 	        Name = "Wine",
 	        Id = Guid.Parse ("47480a57-ca22-49dc-ae97-b0e6856fb4a3"),
 	        ParentCategoryID = BeerWineLiquor.Id,
@@ -73,7 +73,7 @@ namespace Mise.Core.Common.Services.Implementation
             }
 	    };
 
-	    public static ItemCategory Liquor => new ItemCategory {
+	    public static InventoryCategory Liquor => new InventoryCategory {
 	        Name = "Liquor",
 	        Id = Guid.Parse ("c382ad3c-7a91-4c68-9cac-03ae5d63a823"),
 	        ParentCategoryID = BeerWineLiquor.Id,
@@ -87,93 +87,93 @@ namespace Mise.Core.Common.Services.Implementation
         #endregion
 
         #region Standard Cats
-        public static ItemCategory Vodka => new ItemCategory
+        public static InventoryCategory Vodka => new InventoryCategory
         {
             Name = "Vodka",
             Id = Guid.Parse("99d452e5-2549-4038-922b-be8742021e30"),
             ParentCategoryID = Liquor.Id,
         };
 
-        public static ItemCategory Gin => new ItemCategory
+        public static InventoryCategory Gin => new InventoryCategory
         {
             Name = "Gin",
             Id = Guid.Parse("81cf06eb-00ba-40f3-8c61-a837ccc04dbb"),
             ParentCategoryID = Liquor.Id
         };
 
-        public static ItemCategory Rum => new ItemCategory
+        public static InventoryCategory Rum => new InventoryCategory
         {
             Name = "Rum",
             Id = Guid.Parse("badc4822-f4bf-40a1-a0f5-b7f403fb417a"),
             ParentCategoryID = Liquor.Id
         };
 
-	    public static ItemCategory RumTraditional => new ItemCategory
+	    public static InventoryCategory RumTraditional => new InventoryCategory
 	    {
 	        Name = "Rum",
 	        Id = Guid.Parse("cfb0cefa-925a-4799-831b-31e6e3b166a7"),
 	        ParentCategoryID = Rum.Id
 	    };
 
-	    public static ItemCategory RumAgricole => new ItemCategory
+	    public static InventoryCategory RumAgricole => new InventoryCategory
 	    {
 	        Name = "Rhum Agricole",
 	        Id = Guid.Parse("58503cb2-0f1a-4c10-ae8d-728b1c2bdce0"),
 	        ParentCategoryID = Rum.Id
 	    };
-        public static ItemCategory RumDark => new ItemCategory
+        public static InventoryCategory RumDark => new InventoryCategory
         {
             Name = "Dark Rum",
             Id = Guid.Parse("b0f3cd9d-26b2-4a6f-a792-a1ef4fa00661"),
             ParentCategoryID = Rum.Id
         };
 
-	    public static ItemCategory SpicedRum => new ItemCategory
+	    public static InventoryCategory SpicedRum => new InventoryCategory
 	    {
 	        Name = "Spiced Rum",
 	        Id = Guid.Parse("611cc7d8-63c6-4a56-86cf-c8c7572887a7"),
 	        ParentCategoryID = Rum.Id
 	    };
 
-	    public static ItemCategory Cachaca => new ItemCategory
+	    public static InventoryCategory Cachaca => new InventoryCategory
 	    {
             Name = "Cachaca",
             Id = Guid.Parse("3e6e8e10-e09e-4739-8c9f-baaeba1d0f76"),
             ParentCategoryID = Rum.Id
 	    };
 
-        public static ItemCategory Whiskey => new ItemCategory {
+        public static InventoryCategory Whiskey => new InventoryCategory {
 		    Name = "Whiskey",
 		    Id = Guid.Parse ("9607464b-11e2-4273-a0b5-aba2de34baee"),
 		    ParentCategoryID = Liquor.Id
 		};
 
-	    public static ItemCategory WhiskeyWorld => new ItemCategory {
+	    public static InventoryCategory WhiskeyWorld => new InventoryCategory {
 	        Name = "Whisky (World)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse ("9949f991-0ed2-4ec5-96db-c21f5ce0e54c")
 	    };
 
-	    public static ItemCategory WhiskeyIrish => new ItemCategory {
+	    public static InventoryCategory WhiskeyIrish => new InventoryCategory {
 	        Name = "Whiskey (Irish)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse ("1916f019-d98c-4f13-bc3c-0cf44bfa6f22")
 	    };
 
-	    public static ItemCategory WhiskeyAmerican => new ItemCategory {
+	    public static InventoryCategory WhiskeyAmerican => new InventoryCategory {
 	        Name = "Whiskey (American)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse ("fd28d0ca-258f-4cd2-b3e5-2e33dae7dae6")
 	    };
 
-	    public static ItemCategory WhiskeyScotch => new ItemCategory {
+	    public static InventoryCategory WhiskeyScotch => new InventoryCategory {
 	        Name = "Scotch",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse ("aec4cf62-094d-4d51-9003-042e361f7cb2"),
             IsAssignable = true
 	    };
 
-	    public static ItemCategory ScotchSingleMalt => new ItemCategory
+	    public static InventoryCategory ScotchSingleMalt => new InventoryCategory
 	    {
 	        Name = "Scotch (Single Malt)",
 	        ParentCategoryID = WhiskeyScotch.Id,
@@ -181,7 +181,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
 	    };
 
-	    public static ItemCategory ScotchSingleMaltHighland => new ItemCategory
+	    public static InventoryCategory ScotchSingleMaltHighland => new InventoryCategory
 	    {
 	        Name = "Scotch (SM Highlands)",
 	        ParentCategoryID = ScotchSingleMalt.Id,
@@ -189,7 +189,7 @@ namespace Mise.Core.Common.Services.Implementation
 	        IsAssignable = true
 	    };
 
-        public static ItemCategory ScotchSingleMaltSpeyside => new ItemCategory
+        public static InventoryCategory ScotchSingleMaltSpeyside => new InventoryCategory
         {
             Name = "Scotch (SM Speyside)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -197,7 +197,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-        public static ItemCategory ScotchSingleMaltCampbeltown => new ItemCategory
+        public static InventoryCategory ScotchSingleMaltCampbeltown => new InventoryCategory
         {
             Name = "Scotch (SM Campbeltown)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -205,7 +205,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-        public static ItemCategory  ScotchSingleMaltIslands => new ItemCategory
+        public static InventoryCategory  ScotchSingleMaltIslands => new InventoryCategory
         {
             Name = "Scotch (SM Islands)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -213,7 +213,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-        public static ItemCategory ScotchSingleMaltIslay => new ItemCategory
+        public static InventoryCategory ScotchSingleMaltIslay => new InventoryCategory
         {
             Name = "Scotch (SM Islay)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -221,7 +221,7 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-        public static ItemCategory ScotchSingleMaltLowland => new ItemCategory
+        public static InventoryCategory ScotchSingleMaltLowland => new InventoryCategory
         {
             Name = "Scotch (SM Lowland)",
             ParentCategoryID = ScotchSingleMalt.Id,
@@ -229,49 +229,49 @@ namespace Mise.Core.Common.Services.Implementation
             IsAssignable = true
         };
 
-	    public static ItemCategory ScotchBlended => new ItemCategory
+	    public static InventoryCategory ScotchBlended => new InventoryCategory
 	    {
 	        Name = "Scotch (Blended)",
 	        ParentCategoryID = WhiskeyScotch.Id,
 	        Id = Guid.Parse("4af047e0-3f22-4df7-8ed8-13d78789a458")
 	    };
 
-	    public static ItemCategory ScotchGrain => new ItemCategory
+	    public static InventoryCategory ScotchGrain => new InventoryCategory
 	    {
 	        Name = "Scotch (Grain)",
 	        ParentCategoryID = WhiskeyScotch.Id,
 	        Id = Guid.Parse("e376e21b-8f82-4514-885a-896bd0eb3694")
 	    };
 
-        public static ItemCategory WhiskeyBourbon => new ItemCategory
+        public static InventoryCategory WhiskeyBourbon => new InventoryCategory
 	    {
 	        Name = "Bourbon",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse("d2552894-1979-4e90-9604-dca3f54e0a8d")
 	    };
 
-	    public static ItemCategory WhiskeyRye => new ItemCategory
+	    public static InventoryCategory WhiskeyRye => new InventoryCategory
 	    {
 	        Name = "Whiskey (Rye)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse("ed526b32-efcd-48e7-8c73-f5027e5ad0df")
 	    };
 
-	    public static ItemCategory WhiskeyAmericanSingleMalt => new ItemCategory
+	    public static InventoryCategory WhiskeyAmericanSingleMalt => new InventoryCategory
 	    {
 	        Name = "Whiskey (American Single Malt)",
             ParentCategoryID = Whiskey.Id,
             Id = Guid.Parse("10a2ae32-4756-4838-988f-a6d87de67ac7")
 	    };
 
-	    public static ItemCategory WhiskeyAmericanCorn => new ItemCategory
+	    public static InventoryCategory WhiskeyAmericanCorn => new InventoryCategory
 	    {
 	        Name = "Whiskey (Corn)",
 	        ParentCategoryID = Whiskey.Id,
 	        Id = Guid.Parse("e4e7a71f-861e-4f64-ae57-74034bb367eb")
 	    };
 
-	    public static ItemCategory WhiskeyCanadian => new ItemCategory
+	    public static InventoryCategory WhiskeyCanadian => new InventoryCategory
 	    {
 	        Name = "Whiskey (Canadian)",
 	        ParentCategoryID = Whiskey.Id,
@@ -279,147 +279,147 @@ namespace Mise.Core.Common.Services.Implementation
 	    };
 
 
-	    public static ItemCategory Agave => new ItemCategory {
+	    public static InventoryCategory Agave => new InventoryCategory {
 	        Name = "Agave",
 	        Id = Guid.Parse ("b752a17d-9738-44d4-897a-0e7930a5b613"),
 	        ParentCategoryID = Liquor.Id
 	    };
 
-	    public static ItemCategory AgaveTequila => new ItemCategory {
+	    public static InventoryCategory AgaveTequila => new InventoryCategory {
 	        Name = "Tequila",
 	        Id = Guid.Parse ("196ff83e-7ef4-432d-9285-8390c2b88175"),
 	        ParentCategoryID = Agave.Id
 	    };
 
-	    public static ItemCategory AgaveMezcal => new ItemCategory {
+	    public static InventoryCategory AgaveMezcal => new InventoryCategory {
 	        Name = "Mezcal",
 	        Id = Guid.Parse ("bb1edde6-4546-4a31-91a7-afcdbcfaf67f"),
 	        ParentCategoryID = Agave.Id
 	    };
 
-	    public static ItemCategory Brandy => new ItemCategory {
+	    public static InventoryCategory Brandy => new InventoryCategory {
 	        Name = "Brandy",
 	        Id = Guid.Parse ("ce9652db-a575-4037-bef0-e20993203559"),
 	        ParentCategoryID = Liquor.Id
 	    };
 
-	    public static ItemCategory BrandyMisc => new ItemCategory
+	    public static InventoryCategory BrandyMisc => new InventoryCategory
 	    {
 	        Name = "Brandy",
 	        Id = Guid.Parse("fbcbe907-4a71-45f3-a43b-756aaeedc853"),
 	        ParentCategoryID = Brandy.Id
 	    };
 
-	    public static ItemCategory Cognac => new ItemCategory
+	    public static InventoryCategory Cognac => new InventoryCategory
 	    {
 	        Name = "Cognac",
 	        Id = Guid.Parse("85f40201-4510-4023-982b-64daa554a77d"),
 	        ParentCategoryID = Brandy.Id
 	    };
 
-	    public static ItemCategory EauDeVie => new ItemCategory
+	    public static InventoryCategory EauDeVie => new InventoryCategory
 	    {
 	        Name = "Eau de Vie",
 	        Id = Guid.Parse("c2ec7e2c-a231-4878-b248-9f5c567f8157"),
 	        ParentCategoryID = Brandy.Id,
 	    };
 
-	    public static ItemCategory Pisco => new ItemCategory
+	    public static InventoryCategory Pisco => new InventoryCategory
 	    {
 	        Name = "Pisco",
 	        Id = Guid.Parse("42d49164-5ebc-476e-a286-aea21a97950e"),
 	        ParentCategoryID = Brandy.Id
 	    };
-	    public static ItemCategory Liqueur => new ItemCategory {
+	    public static InventoryCategory Liqueur => new InventoryCategory {
 	        Name = "Liqueur",
 	        Id = Guid.Parse ("435f5bf7-4828-42fe-838a-59cf5e86e0be"),
 	        ParentCategoryID = Liquor.Id
 	    };
 
-	    public static ItemCategory LiquerAmaro => new ItemCategory {
+	    public static InventoryCategory LiquerAmaro => new InventoryCategory {
 	        Name = "Amaro",
 	        ParentCategoryID = Liqueur.Id,
 	        Id = Guid.Parse ("758d1f9d-053f-4a76-958b-aebfda88f580")
 	    };
 
-	    public static ItemCategory LiquerGeneric => new ItemCategory
+	    public static InventoryCategory LiquerGeneric => new InventoryCategory
 	    {
 	        Name = "Liqueur",
 	        ParentCategoryID = Liqueur.Id,
 	        Id = Guid.Parse("abb08632-0d61-463c-94c3-982f974423f1")
 	    };
 
-	    public static ItemCategory AromatizedWine => new ItemCategory
+	    public static InventoryCategory AromatizedWine => new InventoryCategory
 	    {
 	        Name = "Aromatized Wine",
 	        ParentCategoryID = BeerWineLiquor.Id,
 	        Id = Guid.Parse("1db18c0e-f28d-46a1-a864-7a2bf77b1a3f")
 	    };
 
-	    public static ItemCategory MiscAromatizedWine => new ItemCategory
+	    public static InventoryCategory MiscAromatizedWine => new InventoryCategory
 	    {
 	        Name = "Misc. Aromatized Wine",
 	        ParentCategoryID = AromatizedWine.Id,
 	        Id = Guid.Parse("6cf38037-dff9-47aa-a578-aad1063bb41f")
 	    };
 
-	    public static ItemCategory Vermouth => new ItemCategory
+	    public static InventoryCategory Vermouth => new InventoryCategory
 	    {
             Name = "Vermouth",
             ParentCategoryID = AromatizedWine.Id,
             Id = Guid.Parse("6a4a4be4-1da5-4451-8da6-22bbfdaaec80")
 	    };
 
-        public static ItemCategory WineFortified => new ItemCategory
+        public static InventoryCategory WineFortified => new InventoryCategory
         {
             Name = "Fortified Wine",
             ParentCategoryID = Wine.Id,
             Id = Guid.Parse("d3ad99ed-96b0-47e5-8044-e7886870b1a1")
         };
 
-        public static ItemCategory WineWhite => new ItemCategory
+        public static InventoryCategory WineWhite => new InventoryCategory
 	    {
 	        Name = "White Wine",
 	        ParentCategoryID = Wine.Id,
 	        Id = Guid.Parse("750f9746-5d15-4aa9-9fb3-990d347f009e")
 	    };
 
-	    public static ItemCategory WineRed => new ItemCategory
+	    public static InventoryCategory WineRed => new InventoryCategory
 	    {
 	        Name = "Red Wine",
 	        ParentCategoryID = Wine.Id,
 	        Id = Guid.Parse("9b47488d-396e-4289-9a67-20dbbaa605e8")
 	    };
 
-	    public static ItemCategory WineSparkling => new ItemCategory
+	    public static InventoryCategory WineSparkling => new InventoryCategory
 	    {
 	        Name = "Sparkling Wine",
 	        ParentCategoryID = Wine.Id,
 	        Id = Guid.Parse("f998f845-f2d1-4504-8621-47ca46f1d0ee")
 	    };
 
-	    public static ItemCategory WineRose => new ItemCategory
+	    public static InventoryCategory WineRose => new InventoryCategory
 	    {
 	        Name = "Rosé",
 	        ParentCategoryID = Wine.Id,
 	        Id = Guid.Parse("8d7c893f-07af-4d2a-b6a7-ca13af6ca876")
 	    };
 
-	    public static ItemCategory Sake => new ItemCategory
+	    public static InventoryCategory Sake => new InventoryCategory
 	    {
             Name = "Sake",
             ParentCategoryID = Wine.Id,
             Id = Guid.Parse("08610c03-efc4-4d70-be4b-d95c1ba9102d")
 	    };
 
-        public static ItemCategory NonAlcoholic => new ItemCategory {
+        public static InventoryCategory NonAlcoholic => new InventoryCategory {
 	        Name = "Non Alcoholic",
 	        Id = Guid.Parse ("115952ae-b81a-424d-be99-61d51804011c"),
 	        ParentCategoryID = Consumables.Id
 	    };
 
 
-	    public static ItemCategory BeerPackage => new ItemCategory
+	    public static InventoryCategory BeerPackage => new InventoryCategory
 	    {
 	        Name = "Package Beer",
 	        ParentCategoryID = Beer.Id,
@@ -435,7 +435,7 @@ namespace Mise.Core.Common.Services.Implementation
             }
 	    };
 
-	    public static ItemCategory BeerDraft => new ItemCategory
+	    public static InventoryCategory BeerDraft => new InventoryCategory
 	    {
 	        Name = "Draft Beer",
 	        ParentCategoryID = Beer.Id,
@@ -448,7 +448,7 @@ namespace Mise.Core.Common.Services.Implementation
             }
 	    };
 
-	    public static ItemCategory Food => new ItemCategory
+	    public static InventoryCategory Food => new InventoryCategory
 	    {
 	        Name = "Food",
 	        Id = Guid.Parse("76eff069-0340-42a7-815c-ef0ef1242635"),

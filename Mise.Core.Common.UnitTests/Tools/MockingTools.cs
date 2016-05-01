@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Check;
 using Mise.Core.Entities.Menu;
@@ -49,7 +50,7 @@ namespace Mise.Core.Common.UnitTests.Tools
         public static Guid RestaurantID { get { return Guid.Empty; } }
         public static Restaurant GetRestaurant()
         {
-            return new Restaurant { Id = RestaurantID, Name = new RestaurantName("testRestaurant") };
+            return new Restaurant { Id = RestaurantID, Name = new BusinessName("testRestaurant") };
         }
 
         public static Mock<IRestaurantTerminalService> GetTerminalService(bool printDupes = false)

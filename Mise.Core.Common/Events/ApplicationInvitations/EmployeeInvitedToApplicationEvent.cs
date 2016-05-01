@@ -35,7 +35,7 @@ namespace Mise.Core.Common.Events.ApplicationInvitations
 		/// </summary>
 		public MiseAppTypes Application{get;set;}
 
-        public RestaurantName RestaurantName { get; set; }
+        public BusinessName RestaurantName { get; set; }
 	}
 }
 

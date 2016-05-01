@@ -47,9 +47,9 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                             new InventoryBeverageLineItem
                             {
                                 Id = Guid.NewGuid(),
-                                Categories = new List<ItemCategory>
+                                Categories = new List<InventoryCategory>
                                 {
-                                    new ItemCategory
+                                    new InventoryCategory
                                     {
                                         Id = catID,
                                         IsCustomCategory = false,
@@ -110,9 +110,9 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                             new InventoryBeverageLineItem
                             {
                                 Id = firstLIid,
-                                Categories = new List<ItemCategory>
+                                Categories = new List<InventoryCategory>
                                 {
-                                    new ItemCategory
+                                    new InventoryCategory
                                     {
                                         Id = catID,
                                         IsCustomCategory = false,
@@ -126,7 +126,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                             new InventoryBeverageLineItem
                             {
                                 Id = secLI,
-                                Categories = new List<ItemCategory>
+                                Categories = new List<InventoryCategory>
                                 {
                                     CategoriesService.Agave
                                 },

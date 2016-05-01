@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Mise.Core.ValueItems;
-using Xamarin.Forms;
+﻿using Mise.Core.ValueItems;
 using Mise.Inventory.ViewModels;
+using Xamarin.Forms;
 
 namespace Mise.Inventory.Pages
 {
-	public partial class RestaurantSelectPage : BasePage
+	public partial class RestaurantSelectPage
 	{
-		private ListView lv;
+		private ListView _lv;
 		public RestaurantSelectPage()
 		{
 			InitializeComponent();
@@ -34,25 +32,25 @@ namespace Mise.Inventory.Pages
 			base.OnAppearing();
 			var vm = BindingContext as RestaurantSelectViewModel;
 			if(vm != null){
-				if(lv == null)
+				if(_lv == null)
 				{
 					var template = new DataTemplate (typeof(TextCell));
 					template.SetBinding (TextCell.TextProperty, "FullName");
-					lv = new ListView {
+					_lv = new ListView {
 						ItemTemplate = template,
 						HorizontalOptions = LayoutOptions.FillAndExpand
 					};
 
-					lv.ItemTapped += async (sender, e) => {
-						var selName = e.Item as RestaurantName;
+					_lv.ItemTapped += async (sender, e) => {
+						var selName = e.Item as BusinessName;
 						((ListView)sender).SelectedItem = null;
 						if(selName != null){
 							await vm.SelectRestaurant(selName);
 						}
 					};
-					stckMain.Children.Add (lv);
+					stckMain.Children.Add (_lv);
 				}
-				lv.ItemsSource = vm.PossibleRestaurantNames;
+				_lv.ItemsSource = vm.PossibleRestaurantNames;
 			}
 		}
 	}

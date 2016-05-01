@@ -26,6 +26,8 @@ namespace Mise.Core.Entities.Inventory
         /// </summary>
         string UPC { get; }
 
+        decimal Quantity { get; }
+
         /// <summary>
         /// Size of the container it comes in, which also has other information in it
         /// </summary>

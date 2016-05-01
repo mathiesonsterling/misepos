@@ -37,9 +37,9 @@ namespace Mise.Core.Common.Events
 		ReceivingOrderCreatedEvent CreateReceivingOrderCreatedEvent(IEmployee emp, IVendor vendor);
 		ReceivingOrderAssociatedWithPOEvent CreateReceivingOrderAssociatedWithPOEvent(IEmployee emp, IReceivingOrder ro, IPurchaseOrder po);
 		ReceivingOrderLineItemAddedEvent CreateReceivingOrderLineItemAddedEvent(IEmployee emp, 
-			IBaseBeverageLineItem source, int quantity, IReceivingOrder ro);
+			IBaseBeverageLineItem source, decimal quantity, IReceivingOrder ro);
 		ReceivingOrderLineItemAddedEvent CreateReceivingOrderLineItemAddedEvent(IEmployee emp, string name, 
-			string upc, IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity, IReceivingOrder ro);
+			string upc, IEnumerable<InventoryCategory> category, int caseSize, LiquidContainer container, decimal quantity, IReceivingOrder ro);
 		ReceivingOrderCompletedEvent CreateReceivingOrderCompletedEvent(IEmployee emp, IReceivingOrder ro, DateTimeOffset dateReceived, string notes, string invoiceID);
 		ReceivingOrderLineItemQuantityUpdatedEvent CreateROLineItemUpdateQuantityEvent(IEmployee emp, 
 			IReceivingOrder ro, Guid lineItemID, int quantity, Money pricePerBottle);
@@ -52,7 +52,7 @@ namespace Mise.Core.Common.Events
            int inventoryPosition, IInventory inventory, Money pricePaid);
 
 		InventoryLineItemAddedEvent CreateInventoryLineItemAddedEvent(IEmployee emp, string name, string upc, 
-			IEnumerable<ItemCategory> category, int caseSize, LiquidContainer container, int quantity,  
+			IEnumerable<InventoryCategory> category, int caseSize, LiquidContainer container, int quantity,  
 			Guid? vendorID, IInventorySection section, int inventoryPosition, IInventory inventory);
 		InventorySectionCompletedEvent CreateInventorySectionCompletedEvent(IEmployee emp, IInventory inventory, 
 			IInventorySection section);
@@ -69,7 +69,7 @@ namespace Mise.Core.Common.Events
 
 		PARCreatedEvent CreatePARCreatedEvent(IEmployee emp);
 		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem source, int? quantity, IPar par);
-		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, string name, string upc, IEnumerable<ItemCategory> category, 
+		PARLineItemAddedEvent CreatePARLineItemAddedEvent(IEmployee emp, string name, string upc, IEnumerable<InventoryCategory> category, 
 			int caseSize, LiquidContainer container, int quantity, IPar par);
 		PARLineItemQuantityUpdatedEvent CreatePARLineItemQuantityUpdatedEvent(IEmployee emp, IPar par, Guid lineItemID, decimal quantity);
 		ParLineItemDeletedEvent CreateParLineItemDeletedEvent (IEmployee emp, IPar par, IParBeverageLineItem li);
@@ -98,12 +98,12 @@ namespace Mise.Core.Common.Events
 		VendorAddNewLineItemEvent CreateVendorLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem li, IVendor v);
 		VendorRestaurantSetsPriceForReceivedItemEvent CreateRestaurantSetPriceEvent(IEmployee emp, IVendorBeverageLineItem li, IVendor v, Money pricePerUnit);
 
-		EmployeeInvitedToApplicationEvent CreateEmployeeInvitedToApplicationEvent(IEmployee emp, EmailAddress destEmail, MiseAppTypes appType, RestaurantName restName);
+		EmployeeInvitedToApplicationEvent CreateEmployeeInvitedToApplicationEvent(IEmployee emp, EmailAddress destEmail, MiseAppTypes appType, BusinessName restName);
 		EmployeeAcceptsInvitationEvent CreateEmployeeAcceptsInvitationEvent(IApplicationInvitation invite, IEmployee emp);
 		EmployeeRejectsInvitationEvent CreateEmployeeRejectsInvitiationEvent(IApplicationInvitation invite, IEmployee emp);
 
 		PlaceholderRestaurantCreatedEvent CreatePlaceholderRestaurantCreatedEvent(IEmployee emp);
-        NewRestaurantRegisteredOnAppEvent CreateNewRestaurantRegisteredOnAppEvent(IEmployee emp, RestaurantName name,
+        NewRestaurantRegisteredOnAppEvent CreateNewRestaurantRegisteredOnAppEvent(IEmployee emp, BusinessName name,
             StreetAddress address, PhoneNumber phone);
 		EmployeeRegistersRestaurantEvent CreateEmployeeRegistersRestaurantEvent (IEmployee emp, IRestaurant rest);
         RestaurantReportingEmailSetEvent CreateRestaurantReportingEmailSetEvent(IEmployee emp, IRestaurant rest, EmailAddress email);

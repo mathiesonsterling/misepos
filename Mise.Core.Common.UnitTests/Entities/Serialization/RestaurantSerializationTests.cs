@@ -50,7 +50,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                 AccountID = actId,
                 CreatedDate = createdDate,
                 LastUpdatedDate = updateDate,
-                Name = new RestaurantName("testRest"),
+                Name = new BusinessName("testRest"),
                 PhoneNumber = new PhoneNumber
                 {
                     AreaCode = "718",
@@ -79,10 +79,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                         Id = Guid.NewGuid(),
                         Name = "mainBar",
                         Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 101},
-                        Beacon = new Beacon
-                        {
-                            UUID = "beacon"
-                        }
                     },
                     new RestaurantInventorySection
                     {
@@ -122,7 +118,6 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
             var inventorySections = res.GetInventorySections().ToList();
             Assert.NotNull(inventorySections);
             Assert.AreEqual(2, inventorySections.Count);
-            Assert.NotNull(inventorySections.First().Beacon);
         }
 
         [TestCase(SerializationType.JSONDOTNET)]

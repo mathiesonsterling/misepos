@@ -11,8 +11,9 @@ namespace Mise.Core.Entities.Inventory
     /// <summary>
     /// Represents a line item of how much of a beverage item we want to have in the bar
     /// </summary>
-    public interface IParBeverageLineItem : IBaseBeverageLineItem, ICloneableEntity, IRestaurantEntityBase, IEquatable<IParBeverageLineItem>
+    public interface IParBeverageLineItem : IBaseBeverageLineItem, ICloneableEntity, IRestaurantEntityBase,
+        IEquatable<IParBeverageLineItem>
     {
-        decimal Quantity { get; }
+        
     }
 }

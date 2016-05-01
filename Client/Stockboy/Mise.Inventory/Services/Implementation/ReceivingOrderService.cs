@@ -207,7 +207,7 @@ namespace Mise.Inventory.Services.Implementation
 			string upc, int quantity, int caseSize, LiquidContainer container)
 		{
 			var emp = await GetCurrentEmployee ();
-			var categories = new List<ItemCategory>{ category as ItemCategory };
+			var categories = new List<InventoryCategory>{ category as InventoryCategory };
 			var alEv = _eventFactory.CreateReceivingOrderLineItemAddedEvent (emp, name, upc, categories, caseSize, container, 
 				quantity, _currentRO);
 

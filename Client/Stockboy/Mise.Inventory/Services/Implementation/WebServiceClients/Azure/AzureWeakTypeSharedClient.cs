@@ -22,6 +22,7 @@ using Mise.Core.Common.Services.WebServices;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Exceptions;
 using System.Net;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Entities.People;
 using Newtonsoft.Json.Serialization;
 using Mise.Core.Entities.Inventory;
 
