@@ -17,12 +17,12 @@ namespace Mise.Core.ValueItems.Inventory
         /// <summary>
         /// What unit value is in
         /// </summary>
-        public AmountUnits StoredUnit { get; }
+        public abstract AmountUnits StoredUnit { get; }
 
         /// <summary>
         /// The type of thing we are
         /// </summary>
-        public AmountTypes Type { get; }
+        public abstract AmountTypes Type { get; }
 
         /// <summary>
         /// How to make a new unit.  Usually just base class constructor

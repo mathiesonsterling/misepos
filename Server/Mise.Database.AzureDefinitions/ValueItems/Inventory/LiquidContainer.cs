@@ -6,6 +6,11 @@ namespace Mise.Database.AzureDefinitions.ValueItems.Inventory
     [ComplexType]
     public class LiquidContainer : IDbValueItem<Core.ValueItems.Inventory.LiquidContainer>
     {
+        public LiquidContainer()
+        {
+            AmountContained = new LiquidAmount();
+        }
+
         public Guid? ContainerExclusiveToBusinessId { get; set; }
 
         public string ContainerDisplayName { get; set; }

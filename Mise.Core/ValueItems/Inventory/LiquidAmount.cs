@@ -93,6 +93,10 @@ namespace Mise.Core.ValueItems.Inventory
             get { return new LiquidAmount {Milliliters = 750}; }
 	    }
 
+	    public override AmountUnits StoredUnit => AmountUnits.Milliliters;
+
+	    public override AmountTypes Type => AmountTypes.Liquid;
+
 	    protected override Func<decimal, BaseAmount> MakeNew { get { return amt => new LiquidAmount {Value = amt}; } }
 	}
 }

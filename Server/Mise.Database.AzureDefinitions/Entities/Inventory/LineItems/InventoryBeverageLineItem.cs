@@ -9,6 +9,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
     public class InventoryBeverageLineItem : BaseLiquidLineItemEntity<IInventoryBeverageLineItem, Core.Common.Entities.Inventory.InventoryBeverageLineItem>
     {
+        public InventoryBeverageLineItem()
+        {
+            CurrentAmount = new LiquidAmount();
+            PricePaid = new Money();
+        }
+
         public Guid? VendorBoughtFrom { get; set; }
 
         public LiquidAmount CurrentAmount { get; set; }
