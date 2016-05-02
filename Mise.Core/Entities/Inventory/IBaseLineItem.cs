@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mise.Database.AzureDefinitions.ValueItems.Inventory;
+using Mise.Core.Entities.Base;
+using Mise.Core.ValueItems.Inventory;
 
-namespace Mise.Database.AzureDefinitions.Entities.Inventory
+namespace Mise.Core.Entities.Inventory
 {
-    [ComplexType]
-    public class BaseLineItem
+    public interface IBaseLineItem : IEntityBase, ITextSearchable, ITaggable
     {
-        public string DisplayName { get; set; }
+        string DisplayName { get; }
 
         /// <summary>
         /// Reconciled name in our system, so we can combat vendor's differning
         /// </summary>
-        public string MiseName { get; set; }
+        string MiseName { get; }
 
         /// <summary>
         /// UPC for this item, if we know it
         /// </summary>
-        public string UPC { get; set; }
+        string UPC { get; }
+
+        decimal Quantity { get; }
 
         /// <summary>
         /// If not null, this is how many units are in a case.  Allows us to convert cases to bottles
         /// </summary>
         /// <value>The size of the case.</value>
-        public int? CaseSize { get; set; }
+        int? CaseSize { get; }
 
-        public decimal Quantity { get; set; }
+        /// <summary>
+        /// Get the categories this item is listed under
+        /// </summary>
+        IEnumerable<ICategory> GetCategories();
+
     }
 }

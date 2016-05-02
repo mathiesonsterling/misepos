@@ -15,9 +15,9 @@ namespace Mise.Core.Common.Entities.Reports
         private readonly IEnumerable<IReceivingOrder> _receivingOrdersInTime;
         private readonly DateTimeOffset _start;
         private readonly DateTimeOffset _end;
-		private readonly LiquidAmountUnits _unit;
+		private readonly AmountUnits _unit;
         public AmountUsedInTimeReport(DateTimeOffset start, DateTimeOffset end, IInventory startingInventory, 
-            IEnumerable<IReceivingOrder> receivingOrdersInTime, IEnumerable<IInventory> inventoriesInTime, LiquidAmountUnits unit)
+            IEnumerable<IReceivingOrder> receivingOrdersInTime, IEnumerable<IInventory> inventoriesInTime, AmountUnits unit)
         {
             if (startingInventory != null && startingInventory.DateCompleted.HasValue == false)
             {
@@ -71,7 +71,7 @@ namespace Mise.Core.Common.Entities.Reports
             allPossiblePastInventoryies =
                 allPossiblePastInventoryies.OrderByDescending(i => i.DateCompleted).ToList();
 
-            var amountsUsedAllPeriods = new List<Dictionary<string, LiquidAmount>>();
+            var amountsUsedAllPeriods = new List<Dictionary<string, BaseAmount>>();
 
 			var allItemsAndKeys = new LineItemsAndKey ();
             //for each inventory, we need to get the one previous as our baseline
@@ -126,7 +126,7 @@ namespace Mise.Core.Common.Entities.Reports
             }
 
             //sum up the amounts for each item
-			var totalAmounts = new Dictionary<string, LiquidAmount> ();
+			var totalAmounts = new Dictionary<string, BaseAmount> ();
 			foreach(var periodUse in amountsUsedAllPeriods){
 				foreach(var lineItem in periodUse){
 					if(totalAmounts.ContainsKey (lineItem.Key)){
@@ -144,15 +144,15 @@ namespace Mise.Core.Common.Entities.Reports
 				//get the LI this refers to
 				var li = allItemsAndKeys[amount.Key];
 
-				var quantity = _unit == LiquidAmountUnits.OuncesLiquid 
-					? amount.Value.GetInLiquidOunces () 
-					: amount.Value.GetInMilliliters ();
+				var quantity = _unit == AmountUnits.OuncesLiquid 
+					? ((LiquidAmount)amount.Value).GetInLiquidOunces () 
+					: ((LiquidAmount)amount.Value).GetInMilliliters ();
 				var reportLine = new ReportResultLineItem (li.DisplayName, li.Container.DisplayName, quantity, quantity >= 0);
 				res.Add (reportLine);
 			}
 
 			var title = "Amount used in "
-				+ (_unit == LiquidAmountUnits.OuncesLiquid ? "oz" : "ml")
+				+ (_unit == AmountUnits.OuncesLiquid ? "oz" : "ml")
 			            + " between "
 			            + _start.ToLocalTime ().ToString ("d")
 			            + " and "
@@ -163,10 +163,10 @@ namespace Mise.Core.Common.Entities.Reports
 			return result;
         }
 
-        private Dictionary<string, LiquidAmount> GetAmountUsedByInventoryPeriod(IInventory previousInventory,
+        private static Dictionary<string, BaseAmount> GetAmountUsedByInventoryPeriod(IInventory previousInventory,
             ICollection<IReceivingOrderLineItem> roLineItemsInPeriod, IInventory currentInventory)
         {
-            var res = new Dictionary<string, LiquidAmount>();
+            var res = new Dictionary<string, BaseAmount>();
 
             //first dedup any line items we have!
             foreach (var currentLineItem in currentInventory.GetBeverageLineItems())
@@ -176,7 +176,7 @@ namespace Mise.Core.Common.Entities.Reports
                     continue;
                 }
                 var thisLineItem = currentLineItem;
-                var previousAmount = LiquidAmount.None;
+                BaseAmount previousAmount = LiquidAmount.None;
                 //get the matching line for the previous inventory, if it exists
                 if (previousInventory != null)
                 {

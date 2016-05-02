@@ -101,11 +101,15 @@
   <ItemGroup>
     <Compile Include="Entities\BaseDbEntity.cs" />
     <Compile Include="Entities\Categories\InventoryCategory.cs" />
+    <Compile Include="Entities\Inventory\Inventory.cs" />
+    <Compile Include="Entities\Inventory\LineItems\Par.cs" />
+    <Compile Include="Entities\Inventory\LineItems\ParBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\LineItems\ReceivingOrderBeverageLineItem.cs" />
     <Compile Include="Entities\People\BaseUserDbEntity.cs" />
     <Compile Include="Entities\People\Employee.cs" />
-    <Compile Include="Entities\Inventory\BaseLineItem.cs" />
-    <Compile Include="Entities\Inventory\BaseLiquidLineItemEntity.cs" />
-    <Compile Include="Entities\Inventory\InventoryBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\LineItems\BaseLineItem.cs" />
+    <Compile Include="Entities\Inventory\LineItems\BaseLiquidLineItemEntity.cs" />
+    <Compile Include="Entities\Inventory\LineItems\InventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\InventorySection.cs" />
     <Compile Include="Entities\Inventory\RestaurantInventorySection.cs" />
     <Compile Include="Entities\Restaurant\Restaurant.cs" />

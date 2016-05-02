@@ -13,7 +13,7 @@ namespace Mise.Core.ValueItems.Reports
     public class ReportRequest : IEquatable<ReportRequest>
     {
         public ReportRequest(ReportTypes type, DateTimeOffset? startDate, DateTimeOffset? endDate, Guid? entityID,
-            int? maxResults, LiquidAmountUnits unit = LiquidAmountUnits.Milliliters)
+            int? maxResults, AmountUnits unit = AmountUnits.Milliliters)
         {
 			if (startDate.HasValue && endDate.HasValue && startDate.Value > endDate.Value) {
 				throw new ArgumentException ("Start date is after the End date");
@@ -23,11 +23,11 @@ namespace Mise.Core.ValueItems.Reports
             EndDate = endDate;
             EntityID = entityID;
             MaxResults = maxResults;
-			LiquidUnit = unit;
+			Unit = unit;
         }
 
         public ReportRequest(ReportTypes type, IInventory startInventory, IInventory endInventory, Guid? entityID,
-            int? maxResults, LiquidAmountUnits unit = LiquidAmountUnits.Milliliters) : this(type, startInventory.DateCompleted, endInventory.DateCompleted, entityID,
+            int? maxResults, AmountUnits unit = AmountUnits.Milliliters) : this(type, startInventory.DateCompleted, endInventory.DateCompleted, entityID,
                 maxResults, unit)
         {
             StartInventory = startInventory;
@@ -47,7 +47,7 @@ namespace Mise.Core.ValueItems.Reports
         /// </summary>
         public Guid? EntityID { get; private set; }
 
-		public LiquidAmountUnits LiquidUnit{get;private set;}
+		public AmountUnits Unit{get;private set;}
         /// <summary>
         /// If set, return only this amount of results
         /// </summary>

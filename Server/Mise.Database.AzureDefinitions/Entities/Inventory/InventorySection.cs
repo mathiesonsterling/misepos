@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Inventory;
+using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
 
 namespace Mise.Database.AzureDefinitions.Entities.Inventory
 {

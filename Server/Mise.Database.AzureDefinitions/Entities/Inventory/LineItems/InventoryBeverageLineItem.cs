@@ -5,7 +5,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Database.AzureDefinitions.ValueItems;
 using LiquidAmount = Mise.Database.AzureDefinitions.ValueItems.Inventory.LiquidAmount;
 
-namespace Mise.Database.AzureDefinitions.Entities.Inventory
+namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
     public class InventoryBeverageLineItem : BaseLiquidLineItemEntity<IInventoryBeverageLineItem, Core.Common.Entities.Inventory.InventoryBeverageLineItem>
     {

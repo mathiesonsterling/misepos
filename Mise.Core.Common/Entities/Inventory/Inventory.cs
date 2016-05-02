@@ -155,7 +155,7 @@ namespace Mise.Core.Common.Entities.Inventory
             }
 
             //calc the current amount
-            var currentAmount = LiquidAmount.None;
+            BaseAmount currentAmount = LiquidAmount.None;
             if (entityEvent.Container != null)
             {
                 currentAmount = entityEvent.Container.AmountContained.Multiply(entityEvent.Quantity);
@@ -179,7 +179,7 @@ namespace Mise.Core.Common.Entities.Inventory
             var newLI = new InventoryBeverageLineItem
             {
                 NumFullBottles = entityEvent.Quantity,
-                CurrentAmount = currentAmount,
+                CurrentAmount = (LiquidAmount)currentAmount,
                 CaseSize = entityEvent.CaseSize,
                 Container = entityEvent.Container,
                 CreatedDate = entityEvent.CreatedDate,

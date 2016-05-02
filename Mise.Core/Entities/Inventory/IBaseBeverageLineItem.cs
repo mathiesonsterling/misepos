@@ -12,36 +12,11 @@ namespace Mise.Core.Entities.Inventory
     /// <summary>
     /// Represents a beverage item, whether from a vendor, in the inventory, desired in the PAR, etc
     /// </summary>
-    public interface IBaseBeverageLineItem : IEntityBase, ITextSearchable, ITaggable
+    public interface IBaseBeverageLineItem : IBaseLineItem
     {
-		string DisplayName{get;}
-
-        /// <summary>
-        /// Reconciled name in our system, so we can combat vendor's differning
-        /// </summary>
-        string MiseName { get; }
-
-        /// <summary>
-        /// UPC for this item, if we know it
-        /// </summary>
-        string UPC { get; }
-
-        decimal Quantity { get; }
-
         /// <summary>
         /// Size of the container it comes in, which also has other information in it
         /// </summary>
         LiquidContainer Container { get; }
-
-		/// <summary>
-		/// If not null, this is how many units are in a case.  Allows us to convert cases to bottles
-		/// </summary>
-		/// <value>The size of the case.</value>
-		int? CaseSize{get;}
-
-		/// <summary>
-		/// Get the categories this item is listed under
-		/// </summary>
-		IEnumerable<ICategory> GetCategories();
 	}
 }

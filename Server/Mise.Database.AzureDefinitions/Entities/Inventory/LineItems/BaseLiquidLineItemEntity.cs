@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
-using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.ValueItems.Inventory;
 
-namespace Mise.Database.AzureDefinitions.Entities.Inventory
+namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
     public abstract class BaseLiquidLineItemEntity<TEntityType, TConcrete> : BaseDbEntity<TEntityType, TConcrete> 
         where TEntityType : IEntityBase 

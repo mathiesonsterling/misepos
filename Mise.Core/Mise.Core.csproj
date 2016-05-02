@@ -48,6 +48,7 @@
     <Compile Include="Entities\Check\Events\ICheckEvent.cs" />
     <Compile Include="Entities\Inventory\Events\IPAREvent.cs" />
     <Compile Include="Entities\Inventory\IBaseBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\IBaseLineItem.cs" />
     <Compile Include="Entities\Inventory\IInventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\IInventorySection.cs" />
     <Compile Include="Entities\Inventory\IPAR.cs" />
@@ -88,7 +89,9 @@
     <Compile Include="ValueItems\CommitResult.cs" />
     <Compile Include="ValueItems\CreditCardProcessorToken.cs" />
     <Compile Include="ValueItems\Distance.cs" />
-    <Compile Include="ValueItems\Inventory\LiquidAmountUnits.cs" />
+    <Compile Include="ValueItems\Inventory\AmountTypes.cs" />
+    <Compile Include="ValueItems\Inventory\BaseAmount.cs" />
+    <Compile Include="ValueItems\Inventory\AmountUnits.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainerShape.cs" />
     <Compile Include="ValueItems\Inventory\MeasurementMethods.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />

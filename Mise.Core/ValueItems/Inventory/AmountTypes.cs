@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Mise.Core.ValueItems.Inventory
 {
-    public enum LiquidAmountUnits
+    public enum AmountTypes
     {
-        Milliliters,
-        OuncesLiquid
+        Liquid,
+        Count
     }
 }

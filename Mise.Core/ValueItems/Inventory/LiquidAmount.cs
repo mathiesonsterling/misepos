@@ -5,64 +5,17 @@ namespace Mise.Core.ValueItems.Inventory
 	/// <summary>
 	/// Represents an amount of liquid.  Used for containers, measuring how much of a liquid is in inventory or a recipe, etc
 	/// </summary>
-	public class LiquidAmount : IEquatable<LiquidAmount>
+	public class LiquidAmount : BaseAmount, IEquatable<LiquidAmount>
 	{
-
 	    /// <summary>
         /// Only this is actually stored, but we should use the methods.  Interface it.
         /// </summary>
-        public decimal Milliliters { get; set; }
+        public decimal Milliliters {get { return Value; }set { Value = value; } }
 
-        /// <summary>
+	    /// <summary>
         /// The density of the liquid - used to allow us to measure it by weight
         /// </summary>
         public decimal? SpecificGravity { get; set; }
-
-        /// <summary>
-        /// Multiply this amount by an argument
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-	    public LiquidAmount Multiply(decimal arg)
-        {
-            return new LiquidAmount
-            {
-                Milliliters = Milliliters*arg
-            };
-        }
-
-        public decimal Divide(LiquidAmount other)
-        {
-            return Milliliters / other.GetInMilliliters();
-        }
-
-	    public LiquidAmount Add(LiquidAmount other)
-	    {
-	        return new LiquidAmount
-	        {
-	            Milliliters = Milliliters + other.Milliliters
-	        };
-	    }
-
-	    public bool GreaterThan(LiquidAmount other)
-	    {
-	        return Milliliters > other.Milliliters;
-	    }
-
-	    public LiquidAmount Subtract(LiquidAmount other)
-	    {
-	        return new LiquidAmount
-	        {
-	            Milliliters = Milliliters - other.Milliliters
-	        };
-	    }
-        /// <summary>
-        /// Lets us know if this is a zero amount of liquid
-        /// </summary>
-	    public bool IsEmpty
-	    {
-            get { return Milliliters <= 0; }
-	    }
 
 	    /// <summary>
 	    /// Amout represented in ML
@@ -139,6 +92,8 @@ namespace Mise.Core.ValueItems.Inventory
 	    {
             get { return new LiquidAmount {Milliliters = 750}; }
 	    }
+
+	    protected override Func<decimal, BaseAmount> MakeNew { get { return amt => new LiquidAmount {Value = amt}; } }
 	}
 }
 
