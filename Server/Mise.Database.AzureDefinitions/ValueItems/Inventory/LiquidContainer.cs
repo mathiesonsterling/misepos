@@ -9,6 +9,9 @@ namespace Mise.Database.AzureDefinitions.ValueItems.Inventory
         public LiquidContainer()
         {
             AmountContained = new LiquidAmount();
+            WeightEmpty = new Weight();
+            WeightFull = new Weight();
+            Shape = new LiquidContainerShape();
         }
 
         public Guid? ContainerExclusiveToBusinessId { get; set; }

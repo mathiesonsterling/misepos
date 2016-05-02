@@ -8,6 +8,7 @@ using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.People;
 using Mise.Database.AzureDefinitions.ValueItems;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Mise.Database.AzureDefinitions.Entities.People
 {
@@ -15,6 +16,12 @@ namespace Mise.Database.AzureDefinitions.Entities.People
         where TPersonEntity : IEntityBase, IPerson
         where TConcrete : User, TPersonEntity
     {
+        public BaseUserDbEntity()
+        {
+            Password = new Password();
+            Name = new PersonName();
+        }
+
         protected abstract TConcrete CreateConcretePerson();
 
         protected override TConcrete CreateConcreteSubclass()

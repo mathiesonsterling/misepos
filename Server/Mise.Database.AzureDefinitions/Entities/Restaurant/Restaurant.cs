@@ -9,6 +9,13 @@ namespace Mise.Database.AzureDefinitions.Entities.Restaurant
 {
     public class Restaurant : BaseDbEntity<IRestaurant, Core.Common.Entities.Restaurant>
     {
+        public Restaurant()
+        {
+            Name = new BusinessName();
+            StreetAddress = new StreetAddress();
+            PhoneNumber = new PhoneNumber();
+        }
+
         public Guid RestaurantID { get; set; }
 
         public Guid? AccountID { get; set; }

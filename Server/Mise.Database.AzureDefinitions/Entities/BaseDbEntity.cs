@@ -14,7 +14,10 @@ namespace Mise.Database.AzureDefinitions.Entities
         where TEntityType : IEntityBase
         where TConcrete : EntityBase, TEntityType
     {
-        protected BaseDbEntity() { }
+        protected BaseDbEntity() 
+        { 
+            Revision = new EventID();
+        }
 
         protected BaseDbEntity(TEntityType source)
         {
