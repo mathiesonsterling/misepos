@@ -4,7 +4,10 @@ using System.Linq;
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Tables;
 using Mise.Database.AzureDefinitions;
-
+using Mise.Database.AzureDefinitions.Entities.Inventory;
+using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
+using Mise.Database.AzureDefinitions.Entities.Restaurant;
+using Mise.Database.AzureDefinitions.Entities.People;
 namespace StockboyMobileAppServiceService.Models
 {
     public class StockboyMobileAppServiceContext : DbContext
@@ -16,13 +19,18 @@ namespace StockboyMobileAppServiceService.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
 
-        private const string connectionStringName = "Name=MS_TableConnectionString";
+        private const string CONNECTION_STRING_NAME = "Name=MS_TableConnectionString";
 
-        public StockboyMobileAppServiceContext() : base(connectionStringName)
+        public StockboyMobileAppServiceContext() : base(CONNECTION_STRING_NAME)
         {
         } 
 
         public DbSet<TodoItem> TodoItems { get; set; }
+
+        public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Par> Pars { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

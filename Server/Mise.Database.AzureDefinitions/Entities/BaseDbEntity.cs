@@ -37,16 +37,12 @@ namespace Mise.Database.AzureDefinitions.Entities
         {
             var entity = CreateConcreteSubclass();
             entity.Id = EntityId;
-            entity.CreatedDate = CreatedDate;
-            entity.LastUpdatedDate = LastUpdatedDate;
+            entity.CreatedDate = CreatedAt ?? DateTimeOffset.MinValue;
+            entity.LastUpdatedDate = UpdatedAt??DateTimeOffset.MinValue;
             entity.Revision = Revision;
 
             return entity;
         } 
-
-        public DateTimeOffset CreatedDate => CreatedAt ?? DateTimeOffset.MinValue;
-
-        public DateTimeOffset LastUpdatedDate => UpdatedAt ?? DateTimeOffset.MinValue;
 
         public Guid EntityId { get; set; }
 

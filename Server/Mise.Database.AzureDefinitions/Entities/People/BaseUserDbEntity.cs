@@ -12,7 +12,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Mise.Database.AzureDefinitions.Entities.People
 {
-    abstract class BaseUserDbEntity<TPersonEntity, TConcrete> : BaseDbEntity<TPersonEntity, TConcrete> 
+    public abstract class BaseUserDbEntity<TPersonEntity, TConcrete> : BaseDbEntity<TPersonEntity, TConcrete> 
         where TPersonEntity : IEntityBase, IPerson
         where TConcrete : User, TPersonEntity
     {

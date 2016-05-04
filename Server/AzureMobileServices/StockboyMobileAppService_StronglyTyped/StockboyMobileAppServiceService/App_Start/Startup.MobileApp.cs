@@ -7,6 +7,8 @@ using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Authentication;
 using Microsoft.Azure.Mobile.Server.Config;
 using Mise.Database.AzureDefinitions;
+using Mise.Database.AzureDefinitions.Entities.Restaurant;
+using Mise.Database.AzureDefinitions.ValueItems;
 using StockboyMobileAppServiceService.Models;
 using Owin;
 
@@ -59,12 +61,35 @@ namespace StockboyMobileAppServiceService
                 new TodoItem { Id = Guid.NewGuid().ToString(), Text = "Second item", Complete = false },
             };
 
-            foreach (TodoItem todoItem in todoItems)
+            foreach (var todoItem in todoItems)
             {
                 context.Set<TodoItem>().Add(todoItem);
             }
 
-            base.Seed(context);
+            try
+            {
+                var restId = Guid.NewGuid();
+                var restaurant = new Restaurant
+                {
+                    RestaurantID = restId,
+                    EntityId = restId,
+                    Id = restId.ToString(),
+                    EmailsToSendReportsTo = new List<EmailAddress>
+                    {
+                        new EmailAddress {Value = "mathieson@misepos.com"}
+                    },
+                    Name = new BusinessName {FullName = "Matty's Test", ShortName = "Test"},
+                };
+                context.Set<Restaurant>().Add(restaurant);
+
+                //here just to fire an ex
+                context.SaveChanges();
+                base.Seed(context);
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+            }
         }
     }
 }

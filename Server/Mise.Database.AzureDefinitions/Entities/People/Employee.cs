@@ -9,7 +9,7 @@ using Password = Mise.Database.AzureDefinitions.ValueItems.Password;
 
 namespace Mise.Database.AzureDefinitions.Entities.People
 {
-    class Employee : BaseUserDbEntity<IEmployee, Core.Common.Entities.People.Employee>
+    public class Employee : BaseUserDbEntity<IEmployee, Core.Common.Entities.People.Employee>
     {
 
         /// <summary>

@@ -14,6 +14,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Restaurant
             Name = new BusinessName();
             StreetAddress = new StreetAddress();
             PhoneNumber = new PhoneNumber();
+            EmailsToSendReportsTo = new List<EmailAddress>();
+            InventorySections = new List<RestaurantInventorySection>();
         }
 
         public Guid RestaurantID { get; set; }

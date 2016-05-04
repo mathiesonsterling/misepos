@@ -32,7 +32,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
             {
                 CurrentAmount = CurrentAmount.ToValueItem(),
                 VendorBoughtFrom = VendorBoughtFrom,
-                PricePaid = PricePaid,
+                PricePaid = PricePaid.ToValueItem(),
                 NumFullBottles = NumFullBottles,
                 MethodsMeasuredLast = MethodsMeasuredLast,
                 InventoryPosition = InventoryPosition,

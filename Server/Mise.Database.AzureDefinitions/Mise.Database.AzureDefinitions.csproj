@@ -102,7 +102,7 @@
     <Compile Include="Entities\BaseDbEntity.cs" />
     <Compile Include="Entities\Categories\InventoryCategory.cs" />
     <Compile Include="Entities\Inventory\Inventory.cs" />
-    <Compile Include="Entities\Inventory\LineItems\Par.cs" />
+    <Compile Include="Entities\Inventory\Par.cs" />
     <Compile Include="Entities\Inventory\LineItems\ParBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\LineItems\ReceivingOrderBeverageLineItem.cs" />
     <Compile Include="Entities\People\BaseUserDbEntity.cs" />
