@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Mise.Core.Client</RootNamespace>
     <AssemblyName>Mise.Core.Client</AssemblyName>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>

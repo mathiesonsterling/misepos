@@ -10,8 +10,9 @@ using Mise.Inventory.iOS.Services;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
-using ModernHttpClient;
+//using ModernHttpClient;
 using SQLitePCL;
+using System.Threading.Tasks;
 
 namespace Mise.Inventory.iOS
 {
@@ -30,17 +31,19 @@ namespace Mise.Inventory.iOS
             var processor = new StripePaymentProcessorService(Logger, stripeClient);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();
 
-			InitWebService (cb);
+			var initTask = InitWebService (cb);
+            initTask.Wait();
 
 			base.RegisterDepenencies (cb);
 		}
 
-	    static async void InitWebService (ContainerBuilder cb)
+	    static async Task InitWebService (ContainerBuilder cb)
 		{
 			var wsLocation = GetWebServiceLocation ();
 			if (wsLocation != null) {
 				Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init ();
-				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), new NativeMessageHandler());
+				//var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), new NativeMessageHandler());
+                var mobileService = new MobileServiceClient (wsLocation.Uri.ToString ());
 				//create the SQL store for offline
 				var dbService = new iOSSQLite ();
 

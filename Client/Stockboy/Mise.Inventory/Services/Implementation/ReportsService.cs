@@ -64,7 +64,7 @@ namespace Mise.Inventory.Services.Implementation
 					    .Where(ro => ro.DateReceived >= _currentRequest.StartDate
                                   && ro.DateReceived <= _currentRequest.EndDate
                               );
-                    var amountReport = new AmountUsedRedux(inventoriesInTime, recOrdersInTime, _currentRequest.LiquidUnit);
+                    var amountReport = new AmountUsedRedux(inventoriesInTime, recOrdersInTime, _currentRequest.Unit);
 				    /*var amountReport = new AmountUsedInTimeReport (_currentRequest.StartDate.Value, _currentRequest.EndDate.Value, startInventory,
 					                       recOrdersInTime, inventoriesInTime, _currentRequest.LiquidUnit);*/
 				    return await amountReport.RunReportAsync ();

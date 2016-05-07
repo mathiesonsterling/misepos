@@ -33,14 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="Xamarin.UITest, Version=1.3.7.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+      <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.UITest, Version=1.3.7.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Xamarin.UITest.1.3.7\lib\Xamarin.UITest.dll</HintPath>
-      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -60,12 +58,6 @@
     <ProjectReference Include="..\..\..\Mise.Core\Mise.Core.csproj">
       <Project>{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}</Project>
       <Name>Mise.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mise.Inventory.Android\Mise.Inventory.Android.csproj">
-      <Project>{EA2E8452-389E-46AF-BA29-5450F4048989}</Project>
-      <Name>Mise.Inventory.Android</Name>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

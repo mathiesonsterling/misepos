@@ -324,7 +324,8 @@ namespace Mise.Inventory.Services.Implementation
 
 			//make an event
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
-			var ev = _eventFactory.CreateInventoryLiquidItemMeasuredEvent(emp, inv, GetSelectedSection (), realLI, fullBottles, partials, totalAmt);
+			var ev = _eventFactory.CreateInventoryLiquidItemMeasuredEvent(emp, inv, GetSelectedSection (), 
+                realLI, fullBottles, partials, (LiquidAmount)totalAmt);
 
 			_inventoryRepository.ApplyEvent (ev);
 
