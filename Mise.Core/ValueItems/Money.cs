@@ -4,7 +4,8 @@ namespace Mise.Core.ValueItems
 {
 	public class Money : IEquatable<Money>, ITextSearchable
 	{
-		public decimal Dollars{ get;}
+		public decimal Dollars{ get; set; }
+
 		public Money (decimal amountInDollars)
 		{
 			Dollars = Math.Round (amountInDollars, 2);
