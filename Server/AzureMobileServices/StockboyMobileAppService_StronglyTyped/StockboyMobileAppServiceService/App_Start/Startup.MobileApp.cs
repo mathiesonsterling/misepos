@@ -53,33 +53,7 @@ namespace StockboyMobileAppServiceService
 
     public class StockboyMobileAppServiceInitializer : CreateDatabaseIfNotExists<StockboyMobileAppServiceContext>
     {
-        protected override void Seed(StockboyMobileAppServiceContext context)
-        {
-            try
-            {
-                var restId = Guid.NewGuid();
-                var restaurant = new Restaurant
-                {
-                    RestaurantID = restId,
-                    EntityId = restId,
-                    Id = restId.ToString(),
-                    EmailsToSendReportsTo = new List<EmailAddress>
-                    {
-                        new EmailAddress {Value = "mathieson@misepos.com"}
-                    },
-                    Name = new BusinessName {FullName = "Matty's Test", ShortName = "Test"},
-                };
-                context.Set<Restaurant>().Add(restaurant);
 
-                //here just to fire an ex
-                context.SaveChanges();
-                base.Seed(context);
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
-            }
-        }
     }
 }
 
