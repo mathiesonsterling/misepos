@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities;
 using Mise.Core.Entities.People;
+using Mise.Database.AzureDefinitions.ValueItems;
 
 namespace Mise.Database.AzureDefinitions.Entities.People
 {
     public class Employee : BaseUserDbEntity<IEmployee, Core.Common.Entities.People.Employee>
     {
+	    public Employee(){}
+
+	    public Employee(IEmployee source, List<EmailAddressDb> emails) :base(source, emails)
+	    {
+		    LastDeviceIDLoggedInWith = source.LastDeviceIDLoggedInWith;
+		    LastTimeLoggedIntoInventoryApp = source.LastTimeLoggedIntoInventoryApp;
+		    CurrentlyLoggedIntoInventoryApp = source.CurrentlyLoggedIntoInventoryApp;
+	    }
         /// <summary>
         /// Employees may or may not have a restaurant at all times
         /// </summary>

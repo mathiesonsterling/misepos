@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Entities.Base;
 using Mise.Core.Services.UtilityServices;
+using Mise.Core.ValueItems;
+using Mise.Database.AzureDefinitions.ValueItems;
 using TransferMiseEntitesTool.Database.StockboyMobileAppServiceService.Models;
 
 namespace TransferMiseEntitesTool.Consumers
@@ -37,5 +39,24 @@ namespace TransferMiseEntitesTool.Consumers
         }
 
         protected abstract Task SaveEntity(DestinationContext db, TEntityType entity);
+
+	  protected async Task<List<EmailAddressDb>> AddAnyMissingEmails(DestinationContext db,
+		  IEnumerable<EmailAddress> emails)
+	  {
+		var allEmails = emails.Select(e => e.Value).ToList();
+		var alreadyHave = await db.Emails.Where(e => allEmails.Contains(e.Value)).ToListAsync();
+
+		//create the others
+		var needCreating = allEmails
+			.Where(ne => !(alreadyHave.Select(e => e.Value).Contains(ne.Value)))
+			.Select(e => new EmailAddressDb {Value = e.Value});
+		foreach (var newEmail in needCreating)
+		{
+			db.Emails.Add(newEmail);
+		}
+		await db.SaveChangesAsync();
+
+		return await db.Emails.Where(e => allEmails.Contains(e.Value)).ToListAsync();
+	  }
     }
 }

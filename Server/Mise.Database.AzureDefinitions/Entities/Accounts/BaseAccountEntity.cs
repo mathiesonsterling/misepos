@@ -18,7 +18,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             
         }
 
-        protected BaseAccountEntity(TEntity source)
+        protected BaseAccountEntity(TEntity source) :base(source)
         {
             AccountType = source.AccountType;
             Status = source.Status;

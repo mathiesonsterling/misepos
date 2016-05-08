@@ -15,7 +15,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 
 	    }
 
-	    public RestaurantInventorySection(IRestaurantInventorySection source)
+	    public RestaurantInventorySection(IRestaurantInventorySection source) :base(source)
 	    {
 		    Name = source.Name;
 		    AllowsPartialBottles = source.AllowsPartialBottles;

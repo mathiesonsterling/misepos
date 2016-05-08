@@ -16,7 +16,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             Amount = new MoneyDb();
         }
 
-        public AccountCharge(IAccountCharge source)
+        public AccountCharge(IAccountCharge source) :base(source)
         {
             App = source.App;
             AccountID = source.AccountID;

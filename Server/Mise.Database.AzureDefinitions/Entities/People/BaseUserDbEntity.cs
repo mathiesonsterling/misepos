@@ -9,9 +9,23 @@ using Mise.Database.AzureDefinitions.ValueItems;
 namespace Mise.Database.AzureDefinitions.Entities.People
 {
     public abstract class BaseUserDbEntity<TPersonEntity, TConcrete> : BaseDbEntity<TPersonEntity, TConcrete> 
-        where TPersonEntity : IEntityBase, IPerson
+        where TPersonEntity : IEntityBase, IUser
         where TConcrete : User, TPersonEntity
-    { 
+    {
+
+	    protected BaseUserDbEntity(){}
+
+	    protected BaseUserDbEntity(TPersonEntity source, List<EmailAddressDb> emails) : base(source)
+	    {
+		    FirstName = source.Name?.FirstName;
+		    MiddleName = source.Name?.MiddleName;
+		    LastName = source.Name?.LastName;
+
+		    Emails = emails;
+		    PasswordHash = source.Password?.HashValue;
+		    PrimaryEmail = emails.FirstOrDefault(e => e.Value == source.PrimaryEmail?.Value);
+		    DisplayName = source.DisplayName;
+	    }
 
         protected abstract TConcrete CreateConcretePerson();
 

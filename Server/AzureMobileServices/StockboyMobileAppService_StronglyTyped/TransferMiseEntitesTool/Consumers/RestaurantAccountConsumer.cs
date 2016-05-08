@@ -18,10 +18,12 @@ namespace TransferMiseEntitesTool.Consumers
 
         }
 
-        protected override void SaveEntity(DestinationContext db, RestaurantAccount entity)
+        protected override Task SaveEntity(DestinationContext db, RestaurantAccount entity)
         {
             var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount(entity);
             db.RestaurantAccounts.Add(dbEnt);
+
+	        return Task.FromResult(true);
         }
     }
 }

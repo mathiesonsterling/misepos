@@ -16,7 +16,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             Amount = new MoneyDb();
         }
 
-        public AccountCredit(Core.Common.Entities.Accounts.AccountCredit source)
+        public AccountCredit(Core.Common.Entities.Accounts.AccountCredit source) :base(source)
         {
             ReferralCodeGiven = new ReferralCodeDb {Code = source.ReferralCodeGiven?.Code};
             AccountID = source.AccountID;

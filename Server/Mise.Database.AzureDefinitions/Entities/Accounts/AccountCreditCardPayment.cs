@@ -19,6 +19,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
         }
 
         public AccountCreditCardPayment(Core.Common.Entities.Accounts.AccountCreditCardPayment source)
+	    	:base(source)
         {
             CardUsed = new CreditCard(source.CardUsed);
             Status = source.Status;
