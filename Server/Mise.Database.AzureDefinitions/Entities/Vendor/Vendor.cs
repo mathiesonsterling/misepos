@@ -15,7 +15,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 
         public EmailAddress EmailToOrderFrom { get; set; }
 
-        public Uri Website { get; set; }
+        public string Website { get; set; }
 
         public PhoneNumber PhoneNumber { get; set; }
 
@@ -33,7 +33,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             {
                 StreetAddress = StreetAddress.ToValueItem(),
                 EmailToOrderFrom = EmailToOrderFrom.ToValueItem(),
-                Website = Website,
+                Website = new Uri(Website),
                 PhoneNumber = PhoneNumber.ToValueItem(),
                 CreatedByEmployeeID = CreatedBy?.EntityId,
                 RestaurantsAssociatedIDs = RestaurantsAssociatedWith?.Select(r => r.RestaurantID).ToList(),

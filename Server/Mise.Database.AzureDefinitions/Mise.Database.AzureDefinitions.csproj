@@ -120,7 +120,6 @@
     <Compile Include="Entities\Vendor\Vendor.cs" />
     <Compile Include="Entities\Vendor\VendorBeverageLineItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TodoItem.cs" />
     <Compile Include="ValueItems\BusinessName.cs" />
     <Compile Include="ValueItems\EmailAddress.cs" />
     <Compile Include="ValueItems\EventID.cs" />

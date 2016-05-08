@@ -8,6 +8,8 @@ using Mise.Database.AzureDefinitions.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
 using Mise.Database.AzureDefinitions.Entities.Restaurant;
 using Mise.Database.AzureDefinitions.Entities.People;
+using Mise.Database.AzureDefinitions.Entities.Vendor;
+
 namespace StockboyMobileAppServiceService.Models
 {
     public class StockboyMobileAppServiceContext : DbContext
@@ -25,12 +27,14 @@ namespace StockboyMobileAppServiceService.Models
         {
         } 
 
-        public DbSet<TodoItem> TodoItems { get; set; }
-
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Par> Pars { get; set; }
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public DbSet<ReceivingOrder> ReceivingOrders { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

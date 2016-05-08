@@ -55,17 +55,6 @@ namespace StockboyMobileAppServiceService
     {
         protected override void Seed(StockboyMobileAppServiceContext context)
         {
-            var todoItems = new List<TodoItem>
-            {
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "First item", Complete = false },
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "Second item", Complete = false },
-            };
-
-            foreach (var todoItem in todoItems)
-            {
-                context.Set<TodoItem>().Add(todoItem);
-            }
-
             try
             {
                 var restId = Guid.NewGuid();
