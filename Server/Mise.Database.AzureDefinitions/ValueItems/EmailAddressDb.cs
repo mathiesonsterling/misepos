@@ -5,9 +5,9 @@ using Microsoft.Azure.Mobile.Server;
 
 namespace Mise.Database.AzureDefinitions.ValueItems
 {
-    public class EmailAddress : EntityData, IDbValueItem<Core.ValueItems.EmailAddress>
+    public class EmailAddressDb : EntityData, IDbValueItem<Core.ValueItems.EmailAddress>
     {
-        public EmailAddress()
+        public EmailAddressDb()
         {
             Id = Guid.NewGuid().ToString();
             CreatedAt = DateTimeOffset.UtcNow;

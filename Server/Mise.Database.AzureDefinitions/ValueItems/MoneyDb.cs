@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Mise.Database.AzureDefinitions.ValueItems
 {
     [ComplexType]
-    public class Money :  IDbValueItem<Core.ValueItems.Money>
+    public class MoneyDb :  IDbValueItem<Core.ValueItems.Money>
     {
         public decimal Dollars { get; set; }
 

@@ -9,11 +9,11 @@ using Mise.Core.Entities;
 namespace Mise.Database.AzureDefinitions.ValueItems
 {
     [ComplexType]
-    public class EventID : Core.ValueItems.EventID, IDbValueItem<Core.ValueItems.EventID>
+    public class EventIDDb : Core.ValueItems.EventID, IDbValueItem<Core.ValueItems.EventID>
     {
-        public EventID() { }
+        public EventIDDb() { }
 
-        public EventID(Core.ValueItems.EventID source)
+        public EventIDDb(Core.ValueItems.EventID source)
         {
             AppInstanceCode = source.AppInstanceCode;
             OrderingID = source.OrderingID;

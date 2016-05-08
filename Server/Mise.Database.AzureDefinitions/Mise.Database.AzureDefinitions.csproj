@@ -99,6 +99,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Accounts\AccountCharge.cs" />
+    <Compile Include="Entities\Accounts\AccountCredit.cs" />
+    <Compile Include="Entities\Accounts\AccountCreditCardPayment.cs" />
+    <Compile Include="Entities\Accounts\ApplicationInvitation.cs" />
+    <Compile Include="Entities\Accounts\BaseAccountEntity.cs" />
+    <Compile Include="Entities\Accounts\MiseEmployeeAccount.cs" />
+    <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
     <Compile Include="Entities\BaseDbEntity.cs" />
     <Compile Include="Entities\Categories\InventoryCategory.cs" />
     <Compile Include="Entities\Inventory\Inventory.cs" />
@@ -121,17 +128,16 @@
     <Compile Include="Entities\Vendor\VendorBeverageLineItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueItems\BusinessName.cs" />
-    <Compile Include="ValueItems\EmailAddress.cs" />
-    <Compile Include="ValueItems\EventID.cs" />
+    <Compile Include="ValueItems\CreditCard.cs" />
+    <Compile Include="ValueItems\EmailAddressDb.cs" />
+    <Compile Include="ValueItems\EventIDDb.cs" />
     <Compile Include="ValueItems\IDbValueItem.cs" />
     <Compile Include="ValueItems\Inventory\LiquidAmount.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainerShape.cs" />
-    <Compile Include="ValueItems\Money.cs" />
+    <Compile Include="ValueItems\MoneyDb.cs" />
+    <Compile Include="ValueItems\ReferralCodeDb.cs" />
     <Compile Include="ValueItems\Weight.cs" />
-    <Compile Include="ValueItems\Password.cs" />
-    <Compile Include="ValueItems\PersonName.cs" />
-    <Compile Include="ValueItems\PhoneNumber.cs" />
     <Compile Include="ValueItems\StreetAddress.cs" />
   </ItemGroup>
   <ItemGroup>

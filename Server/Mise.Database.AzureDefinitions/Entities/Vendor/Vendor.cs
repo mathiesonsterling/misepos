@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mise.Core.Entities.Vendors;
+using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Entities.People;
 using Mise.Database.AzureDefinitions.ValueItems;
+using BusinessName = Mise.Database.AzureDefinitions.ValueItems.BusinessName;
+using StreetAddress = Mise.Database.AzureDefinitions.ValueItems.StreetAddress;
 
 namespace Mise.Database.AzureDefinitions.Entities.Vendor
 {
     public class Vendor : BaseDbEntity<IVendor, Core.Common.Entities.Vendors.Vendor>
     {
+        public Vendor()
+        {
+            StreetAddress = new StreetAddress();
+            Name = new BusinessName();
+        }
         public StreetAddress StreetAddress { get; set; }
 
-        public EmailAddress EmailToOrderFrom { get; set; }
+        public EmailAddressDb EmailToOrderFrom { get; set; }
 
         public string Website { get; set; }
 
-        public PhoneNumber PhoneNumber { get; set; }
+        public string VendorPhoneNumberAreaCode { get; set; }
+        public string VendorPhoneNumber { get; set; }
 
         public Employee CreatedBy { get; set; }
 
@@ -34,7 +41,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
                 StreetAddress = StreetAddress.ToValueItem(),
                 EmailToOrderFrom = EmailToOrderFrom.ToValueItem(),
                 Website = new Uri(Website),
-                PhoneNumber = PhoneNumber.ToValueItem(),
+                PhoneNumber = new PhoneNumber(VendorPhoneNumberAreaCode, VendorPhoneNumber),
                 CreatedByEmployeeID = CreatedBy?.EntityId,
                 RestaurantsAssociatedIDs = RestaurantsAssociatedWith?.Select(r => r.RestaurantID).ToList(),
                 VendorBeverageLineItems = LineItems.Select(li => li.ToBusinessEntity()).ToList(),

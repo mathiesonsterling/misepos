@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities;
 using Mise.Core.Entities.People;
-using Mise.Core.ValueItems;
-using EmailAddress = Mise.Database.AzureDefinitions.ValueItems.EmailAddress;
-using Password = Mise.Database.AzureDefinitions.ValueItems.Password;
 
 namespace Mise.Database.AzureDefinitions.Entities.People
 {
     public class Employee : BaseUserDbEntity<IEmployee, Core.Common.Entities.People.Employee>
     {
-
         /// <summary>
         /// Employees may or may not have a restaurant at all times
         /// </summary>

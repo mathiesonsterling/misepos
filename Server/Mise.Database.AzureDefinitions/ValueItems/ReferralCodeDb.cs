@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 namespace Mise.Database.AzureDefinitions.ValueItems
 {
     [ComplexType]
-    public class Password : Core.ValueItems.Password, IDbValueItem<Core.ValueItems.Password>
+    public class ReferralCodeDb : IDbValueItem<Core.ValueItems.ReferralCode>
     {
-        public Core.ValueItems.Password ToValueItem()
+        public string Code { get; set; }
+
+        public Core.ValueItems.ReferralCode ToValueItem()
         {
-            return this;
+            return new Core.ValueItems.ReferralCode {Code = Code};
         }
     }
 }

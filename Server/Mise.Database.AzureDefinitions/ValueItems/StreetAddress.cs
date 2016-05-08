@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Mise.Database.AzureDefinitions.ValueItems
 {
     [ComplexType]
-    public class StreetAddressNumber : Core.ValueItems.StreetAddressNumber, IDbValueItem<Core.ValueItems.StreetAddressNumber>
+    public class StreetAddressNumberDb : Core.ValueItems.StreetAddressNumber, IDbValueItem<Core.ValueItems.StreetAddressNumber>
     {
         public Core.ValueItems.StreetAddressNumber ToValueItem()
         {
-            return new StreetAddressNumber
+            return new Core.ValueItems.StreetAddressNumber
             {
                 ApartmentNumber = ApartmentNumber,
                 Direction = Direction,
@@ -49,7 +49,7 @@ namespace Mise.Database.AzureDefinitions.ValueItems
     [ComplexType]
     public class StreetAddress : IDbValueItem<Core.ValueItems.StreetAddress>
     {
-        public StreetAddressNumber StreetAddressNumber { get; set; }
+        public StreetAddressNumberDb StreetAddressNumberDb { get; set; }
         public Street Street { get; set; }
         public City City { get; set; }
         public State State { get; set; }
@@ -58,7 +58,7 @@ namespace Mise.Database.AzureDefinitions.ValueItems
 
         public StreetAddress()
         {
-            StreetAddressNumber = new StreetAddressNumber();
+            StreetAddressNumberDb = new StreetAddressNumberDb();
             Street = new Street();
             City = new City();
             State = new State();
@@ -74,7 +74,7 @@ namespace Mise.Database.AzureDefinitions.ValueItems
                 Street = Street,
                 Country = Country,
                 State = State,
-                StreetAddressNumber = StreetAddressNumber,
+                StreetAddressNumber = StreetAddressNumberDb,
                 Zip = Zip
             };
         }

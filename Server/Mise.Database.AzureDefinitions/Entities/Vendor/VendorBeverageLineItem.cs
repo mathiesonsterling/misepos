@@ -12,6 +12,11 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 {
     public class VendorBeverageLineItem : BaseLiquidLineItemEntity<IVendorBeverageLineItem, Core.Common.Entities.Vendors.VendorBeverageLineItem>
     {
+        public VendorBeverageLineItem()
+        {
+            PublicPricePerUnit = new MoneyDb();
+        }
+
         public Guid VendorID
         {
             get;
@@ -26,7 +31,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 
 
         //the price published per unit
-        public Money PublicPricePerUnit
+        public MoneyDb PublicPricePerUnit
         {
             get;
             set;
