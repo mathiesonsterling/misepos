@@ -20,6 +20,20 @@ namespace Mise.Database.AzureDefinitions.Entities.Restaurant
             InventorySections = new List<RestaurantInventorySection>();
         }
 
+      public Restaurant(IRestaurant source, List<EmailAddressDb> emails)
+      {
+        RestaurantID = source.RestaurantID != Guid.Empty ? source.RestaurantID : source.Id;
+        AccountID = source.AccountID;
+        Name = source.Name;
+        StreetAddress = new StreetAddress(source.StreetAddress);
+	      PhoneNumberAreaCode = source.PhoneNumber?.AreaCode;
+	      PhoneNumber = source.PhoneNumber?.Number;
+	      IsPlaceholder = source.IsPlaceholder;
+	      EmailsToSendReportsTo = emails;
+
+	      var sections = source.GetInventorySections().Select(invS => new RestaurantInventorySection(invS));
+	      InventorySections = sections;
+      }
         public Guid RestaurantID { get; set; }
 
         public Guid? AccountID { get; set; }

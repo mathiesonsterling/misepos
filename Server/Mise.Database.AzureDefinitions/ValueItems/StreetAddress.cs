@@ -7,6 +7,17 @@ namespace Mise.Database.AzureDefinitions.ValueItems
     [ComplexType]
     public class StreetAddressNumberDb : Core.ValueItems.StreetAddressNumber, IDbValueItem<Core.ValueItems.StreetAddressNumber>
     {
+	    public StreetAddressNumberDb(){}
+
+	    public StreetAddressNumberDb(Core.ValueItems.StreetAddressNumber source)
+	    {
+		    ApartmentNumber = source.ApartmentNumber;
+		    Direction = source.Direction;
+		    Latitude = source.Latitude;
+		    Longitude = source.Longitude;
+		    Number = source.Number;
+	    }
+
         public Core.ValueItems.StreetAddressNumber ToValueItem()
         {
             return new Core.ValueItems.StreetAddressNumber
@@ -23,6 +34,12 @@ namespace Mise.Database.AzureDefinitions.ValueItems
     [ComplexType]
     public class Street : Core.ValueItems.Street, IDbValueItem<Core.ValueItems.Street>
     {
+	    public Street(){}
+
+	    public Street(Core.ValueItems.Street source)
+	    {
+		    Name = source.Name;
+	    }
         public Core.ValueItems.Street ToValueItem()
         {
             return new Core.ValueItems.Street
@@ -35,16 +52,47 @@ namespace Mise.Database.AzureDefinitions.ValueItems
     [ComplexType]
     public class City : Core.ValueItems.City
     {
+	    public City(){}
+
+	    public City(Core.ValueItems.City source)
+	    {
+		    Name = source.Name;
+	    }
     }
 
-    [ComplexType]
-    public class State : Core.ValueItems.State { }
+	[ComplexType]
+	public class State : Core.ValueItems.State
+	{
+		public State(){}
 
-    [ComplexType]
-    public class Country : Core.ValueItems.Country { }
+		public State(Core.ValueItems.State source)
+		{
+			Abbreviation = source.Abbreviation;
+			Name = source.Name;
+		}
+	}
 
-    [ComplexType]
-    public class ZipCode : Core.ValueItems.ZipCode { }
+	[ComplexType]
+	public class Country : Core.ValueItems.Country
+	{
+		public Country(){}
+
+		public Country(Core.ValueItems.Country source)
+		{
+			Name = source.Name;
+		}
+	}
+
+	[ComplexType]
+	public class ZipCode : Core.ValueItems.ZipCode
+	{
+		public ZipCode(){}
+
+		public ZipCode(Core.ValueItems.ZipCode source)
+		{
+			Value = source.Value;
+		}
+	}
 
     [ComplexType]
     public class StreetAddress : IDbValueItem<Core.ValueItems.StreetAddress>
@@ -66,9 +114,19 @@ namespace Mise.Database.AzureDefinitions.ValueItems
             Zip = new ZipCode();
         }
 
+      	public StreetAddress(Core.ValueItems.StreetAddress source)
+      	{
+        	StreetAddressNumberDb = new StreetAddressNumberDb(source.StreetAddressNumber);
+         	Street = new Street(source.Street);
+         	City = new City(source.City);
+         	Country = new Country(source.Country);
+         	State = new State(source.State);
+         	Zip = new ZipCode(source.Zip);
+      	}
+
         public Core.ValueItems.StreetAddress ToValueItem()
         {
-            return new Mise.Core.ValueItems.StreetAddress
+            return new Core.ValueItems.StreetAddress
             {
                 City = City,
                 Street = Street,

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
-using Mise.Database.AzureDefinitions.ValueItems.Enumerations;
 using CreditCard = Mise.Database.AzureDefinitions.ValueItems.CreditCard;
 
 namespace Mise.Database.AzureDefinitions.Entities.Accounts

@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
+using System.Linq;
 using System.Web.Http;
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Authentication;
 using Microsoft.Azure.Mobile.Server.Config;
+using Mise.Core.Entities;
 using Mise.Database.AzureDefinitions;
+using Mise.Database.AzureDefinitions.Entities;
 using Mise.Database.AzureDefinitions.Entities.Restaurant;
 using Mise.Database.AzureDefinitions.ValueItems;
 using StockboyMobileAppServiceService.Models;
@@ -53,7 +56,19 @@ namespace StockboyMobileAppServiceService
 
     public class StockboyMobileAppServiceInitializer : CreateDatabaseIfNotExists<StockboyMobileAppServiceContext>
     {
+      protected override void Seed(StockboyMobileAppServiceContext context)
+      {
+          base.Seed(context);
+          var allApps = Enum.GetValues(typeof(MiseAppTypes)).Cast<MiseAppTypes>();
+          var ents = allApps.Select(a => new MiseApplication(a));
 
+        foreach (var app in ents)
+        {
+          context.MiseApplications.Add(app);
+        }
+
+        context.SaveChanges();
+      }
     }
 }
 

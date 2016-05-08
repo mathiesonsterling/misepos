@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Vendors;
+using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
 using Mise.Database.AzureDefinitions.ValueItems;
 
@@ -43,12 +44,14 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             set;
         }
 
-        public Dictionary<Guid, decimal> PricePerUnitForRestaurantInDollars { get; set; }
+        public List<VendorPrivateRestaurantPrice> PrivateRestaurantPrices { get; set; }
 
         protected override Core.Common.Entities.Vendors.VendorBeverageLineItem CreateConcreteLineItemClass()
         {
-            var priceDic = PricePerUnitForRestaurantInDollars?.ToDictionary(kv => kv.Key,kv => new Core.ValueItems.Money(kv.Value)) 
-                ?? new Dictionary<Guid, Core.ValueItems.Money>();
+          var priceDic = PrivateRestaurantPrices != null
+            ? PrivateRestaurantPrices.ToDictionary(kv => kv.Restaurant.RestaurantID,
+              kv => kv.PriceCharged.ToValueItem())
+            : new Dictionary<Guid, Money>();
             return new Core.Common.Entities.Vendors.VendorBeverageLineItem
             {
                 VendorID = VendorID,

@@ -51,15 +51,16 @@ namespace TransferMiseEntitesTool
             var production = Task.Run(() => producer.Produce());
 
             var jsonSerializer = new JsonNetSerializer();
+	        var undone = await production;
             //do consumption runs here
             var restAccounts = new RestaurantAccountConsumer(jsonSerializer);
 
-            var allTasks = new List<Task>();
+            //do accounts, then rests, then emps, then the rest
+            await restAccounts.Consume(_restaurantAccounts);
 
-            allTasks.Add(Task.Run(() => restAccounts.Consume(_restaurantAccounts)));
+	        var rests = new RestaurantConsumer(jsonSerializer);
+	        await rests.Consume(_restaurants);
 
-            var undone = await production;
-            await Task.WhenAll(allTasks);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Entities.Base;
 using Mise.Core.Services.UtilityServices;
-using TransferMiseEntitesTool.StockboyMobileAppServiceService.Models;
+using TransferMiseEntitesTool.Database.StockboyMobileAppServiceService.Models;
 
 namespace TransferMiseEntitesTool.Consumers
 {
@@ -29,13 +29,13 @@ namespace TransferMiseEntitesTool.Consumers
                 foreach (var dto in dtos.GetConsumingEnumerable())
                 {
                     var entity = EntityFactory.FromDataStorageObject<TEntityType>(dto);
-                    SaveEntity(db, entity);
+                    await SaveEntity(db, entity);
                 }
 
                 await db.SaveChangesAsync();
             }
         }
 
-        protected abstract void SaveEntity(DestinationContext db, TEntityType entity);
+        protected abstract Task SaveEntity(DestinationContext db, TEntityType entity);
     }
 }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Azure.Mobile.Server;
+﻿using Microsoft.Azure.Mobile.Server;
 using Mise.Core.Entities;
 
-namespace Mise.Database.AzureDefinitions.ValueItems.Enumerations
+namespace Mise.Database.AzureDefinitions.Entities
 {
     public class MiseApplication : EntityData
     {

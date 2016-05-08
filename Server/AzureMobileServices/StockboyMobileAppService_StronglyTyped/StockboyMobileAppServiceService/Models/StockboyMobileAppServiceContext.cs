@@ -2,6 +2,7 @@
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using Microsoft.Azure.Mobile.Server.Tables;
+using Mise.Database.AzureDefinitions.Entities;
 using Mise.Database.AzureDefinitions.Entities.Accounts;
 using Mise.Database.AzureDefinitions.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Entities.People;
@@ -38,6 +39,7 @@ namespace StockboyMobileAppServiceService.Models
         public DbSet<RestaurantAccount> RestaurantAccounts { get; set; }
         public DbSet<ApplicationInvitation> ApplicationInvitations { get; set; }
 
+        public DbSet<MiseApplication> MiseApplications { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

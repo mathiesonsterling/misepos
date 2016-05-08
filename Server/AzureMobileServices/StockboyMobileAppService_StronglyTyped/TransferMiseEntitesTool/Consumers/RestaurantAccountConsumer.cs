@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Services.UtilityServices;
-using TransferMiseEntitesTool.StockboyMobileAppServiceService.Models;
+using TransferMiseEntitesTool.Database.StockboyMobileAppServiceService.Models;
 
 namespace TransferMiseEntitesTool.Consumers
 {

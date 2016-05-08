@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Consumers\BaseConsumer.cs" />
     <Compile Include="Consumers\RestaurantAccountConsumer.cs" />
+    <Compile Include="Consumers\RestaurantConsumer.cs" />
     <Compile Include="Database\AzureEntityStorage.cs" />
     <Compile Include="Database\AzureNonTypedEntities.cs" />
     <Compile Include="Database\DestinationContext.cs" />
