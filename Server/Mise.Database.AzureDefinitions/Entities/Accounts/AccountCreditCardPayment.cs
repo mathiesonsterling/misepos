@@ -18,6 +18,14 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             Amount = new MoneyDb();
         }
 
+        public AccountCreditCardPayment(Core.Common.Entities.Accounts.AccountCreditCardPayment source)
+        {
+            CardUsed = new CreditCard(source.CardUsed);
+            Status = source.Status;
+            AccountID = source.AccountID;
+            Amount = new MoneyDb(source.Amount);
+        }
+
         public CreditCard CardUsed { get; set; }
 
         public PaymentProcessingStatus Status { get; set; }

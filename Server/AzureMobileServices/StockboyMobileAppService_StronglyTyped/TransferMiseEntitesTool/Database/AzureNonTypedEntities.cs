@@ -12,6 +12,7 @@ namespace TransferMiseEntitesTool.Database
         public AzureNonTypedEntities()
             : base("name=AzureNonTypedEntities")
         {
+    
         }
 
         public virtual DbSet<AzureEntityStorage> AzureEntityStorages { get; set; }

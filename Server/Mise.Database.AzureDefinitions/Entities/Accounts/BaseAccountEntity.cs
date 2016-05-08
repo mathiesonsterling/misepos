@@ -13,6 +13,26 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
         where TEntity : IEntityBase, IAccount
         where TConcrete : BaseAccount, TEntity
     {
+        protected BaseAccountEntity()
+        {
+            
+        }
+
+        protected BaseAccountEntity(TEntity source)
+        {
+            AccountType = source.AccountType;
+            Status = source.Status;
+            PrimaryEmail = new EmailAddressDb {Value = source.PrimaryEmail?.Value};
+            AccountPasswordHash = source.Password?.HashValue;
+            AccountHolderFirstName = source.AccountHolderName?.FirstName;
+            AccountHolderLastName = source.AccountHolderName?.LastName;
+            Emails = source.Emails.Select(e => new EmailAddressDb { Value = e.Value}).ToList();
+            AccountPhoneNumber = source.PhoneNumber?.Number;
+            AccountPhoneNumberAreaCode = source.PhoneNumber?.AreaCode;
+            ReferralCodeForAccountToGiveOut = source.ReferralCodeForAccountToGiveOut?.Code;
+            ReferralCodeUsedToCreate = source.ReferralCodeUsedToCreate?.Code;
+        } 
+
         public MiseAccountTypes AccountType { get; set; }
 
         public MiseAccountStatus Status { get; set; }

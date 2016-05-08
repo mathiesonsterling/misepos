@@ -10,6 +10,9 @@ namespace TransferMiseEntitesTool
     {
         static void Main(string[] args)
         {
+            var tranfer = new RecordTransferrer();
+            var task = tranfer.TransferRecords();
+            task.Wait();
         }
     }
 }

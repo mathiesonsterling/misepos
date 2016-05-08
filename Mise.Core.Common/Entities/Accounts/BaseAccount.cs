@@ -19,6 +19,7 @@ namespace Mise.Core.Common.Entities.Accounts
         public abstract MiseAccountTypes AccountType { get;  }
 
         public MiseAccountStatus Status { get; set; }
+
         public EmailAddress PrimaryEmail { get; set; }
 
         public Password Password { get; set; }

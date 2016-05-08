@@ -45,7 +45,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
                 CreatedByEmployeeID = CreatedBy?.EntityId,
                 RestaurantsAssociatedIDs = RestaurantsAssociatedWith?.Select(r => r.RestaurantID).ToList(),
                 VendorBeverageLineItems = LineItems.Select(li => li.ToBusinessEntity()).ToList(),
-                Name = Name.ToValueItem()
+                VendorName = Name.ToValueItem()
             };
         }
     }

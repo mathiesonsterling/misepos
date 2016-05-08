@@ -26,7 +26,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             {
                 PurchaseOrdersPerVendor = PurchaseOrdersPerVendor.Select(pv => pv.ToBusinessEntity()).ToList(),
                 CreatedByEmployeeID = CreatedBy?.EntityId,
-                CreatedByName = CreatedBy?.GetName()
+                CreatedBy = CreatedBy?.GetName()
             };
         }
     }

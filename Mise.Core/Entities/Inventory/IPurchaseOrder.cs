@@ -15,14 +15,16 @@ namespace Mise.Core.Entities.Inventory
     /// Represents a purchase order made from a restaurant.  Can contain many vendors, will be split on server
     /// </summary>
     public interface IPurchaseOrder : IRestaurantEntityBase, 
-		IEventStoreEntityBase<IPurchaseOrderEvent>, ICloneableEntity, ITextSearchable
+		IEventStoreEntityBase<IPurchaseOrderEvent>, ITextSearchable
     {
         /// <summary>
         /// Employee that created this order
         /// </summary>
         Guid? CreatedByEmployeeID { get; }
 
-        PersonName CreatedByName { get; set; }
+        string CreatedByName { get; set; }
+
+        PersonName CreatedBy { get; set; }
 
         IEnumerable<IPurchaseOrderLineItem> GetPurchaseOrderLineItems();
 

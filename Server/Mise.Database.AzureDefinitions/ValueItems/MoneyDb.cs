@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Mise.Core.ValueItems;
 
 namespace Mise.Database.AzureDefinitions.ValueItems
 {
     [ComplexType]
-    public class MoneyDb :  IDbValueItem<Core.ValueItems.Money>
+    public class MoneyDb :  IDbValueItem<Money>
     {
+        public MoneyDb() { }
+
+        public MoneyDb(Money source)
+        {
+            Dollars = source.Dollars;
+        }
+
         public decimal Dollars { get; set; }
 
-        public Core.ValueItems.Money ToValueItem()
+        public Money ToValueItem()
         {
-            return new Core.ValueItems.Money(Dollars);
+            return new Money(Dollars);
         }
     }
 }

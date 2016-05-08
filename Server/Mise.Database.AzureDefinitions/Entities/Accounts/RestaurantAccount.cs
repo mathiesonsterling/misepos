@@ -16,8 +16,21 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
         {
             CurrentCard = new CreditCard();
         }
+     
+        public RestaurantAccount(Core.Common.Entities.Accounts.RestaurantAccount source) : base(source)
+        {
+            BillingCycle = source.BillingCycle;
+            CurrentCard = new CreditCard(source.CurrentCard);
+            PaymentPlan = source.PaymentPlan;
+            PaymentPlanSetupWithProvider = source.PaymentPlanSetupWithProvider;
+            AppsOnAccount = source.AppsOnAccount?.ToList() ?? new List<MiseAppTypes>();
 
-        public virtual TimeSpan BillingCycle { get; set; }
+            Charges = source.Charges.Select(c => new AccountCharge(c)).ToList();
+            CreditCardPayments = source.Payments.Select(p => new AccountCreditCardPayment(p)).ToList();
+            Credits = source.AccountCredits.Select(c => new AccountCredit(c)).ToList();
+        }
+
+        public TimeSpan BillingCycle { get; set; }
 
         public CreditCard CurrentCard { get; set; }
 

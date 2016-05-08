@@ -15,6 +15,13 @@ namespace Mise.Database.AzureDefinitions.ValueItems
             ProcessorToken = new CreditCardProcessorToken();
         }
 
+        public CreditCard(Core.ValueItems.CreditCard source)
+        {
+            FirstName = source.Name?.FirstName;
+            LastName = source.Name?.LastName;
+            ProcessorToken = new CreditCardProcessorToken(source.ProcessorToken);
+        }
+
         /// <summary>
         /// This has to be a string, can't have 2 person names in an entity
         /// </summary>
@@ -38,6 +45,17 @@ namespace Mise.Database.AzureDefinitions.ValueItems
     [ComplexType]
     public class CreditCardProcessorToken : Core.ValueItems.CreditCardProcessorToken, IDbValueItem<Core.ValueItems.CreditCardProcessorToken>
     {
+        public CreditCardProcessorToken()
+        {
+            
+        }
+
+        public CreditCardProcessorToken(Core.ValueItems.CreditCardProcessorToken source)
+        {
+            Processor = source.Processor;
+            Token = source.Token;
+        }
+
         public Core.ValueItems.CreditCardProcessorToken ToValueItem()
         {
             return this;

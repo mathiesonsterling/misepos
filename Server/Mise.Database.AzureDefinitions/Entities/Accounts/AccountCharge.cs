@@ -16,6 +16,15 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             Amount = new MoneyDb();
         }
 
+        public AccountCharge(IAccountCharge source)
+        {
+            App = source.App;
+            AccountID = source.AccountID;
+            Amount = new MoneyDb(source.Amount);
+            DateStart = source.DateStart;
+            DateEnd = source.DateEnd;
+        }
+
         public MiseAppTypes App { get; set; }
         public Guid AccountID { get; set; }
         public MoneyDb Amount { get; set; }

@@ -16,6 +16,13 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             Amount = new MoneyDb();
         }
 
+        public AccountCredit(Core.Common.Entities.Accounts.AccountCredit source)
+        {
+            ReferralCodeGiven = new ReferralCodeDb {Code = source.ReferralCodeGiven?.Code};
+            AccountID = source.AccountID;
+            Amount = new MoneyDb(source.Amount);
+        }
+
         /// <summary>
         /// If here, this is the referral code we were given to get this credit
         /// </summary>

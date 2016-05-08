@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mise.Database.AzureDefinitions.Entities.Accounts;
+using MiseEmployeeAccount = Mise.Core.Common.Entities.Accounts.MiseEmployeeAccount;
+using RestaurantAccount = Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount;
 
 namespace TransferMiseEntitesTool
 {
@@ -42,6 +45,9 @@ namespace TransferMiseEntitesTool
             public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
             public DbSet<ReceivingOrder> ReceivingOrders { get; set; }
             public DbSet<Vendor> Vendors { get; set; }
+            public DbSet<MiseEmployeeAccount> MiseEmployeeAccounts { get; set; }
+            public DbSet<RestaurantAccount> RestaurantAccounts { get; set; }
+            public DbSet<ApplicationInvitation> ApplicationInvitations { get; set; }
 
 
             protected override void OnModelCreating(DbModelBuilder modelBuilder)

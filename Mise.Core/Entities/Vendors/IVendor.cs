@@ -11,7 +11,9 @@ namespace Mise.Core.Entities.Vendors
     /// </summary>
     public interface IVendor : IEventStoreEntityBase<IVendorEvent>, ITextSearchable
     {
-        BusinessName Name { get; }
+        string Name { get; }
+
+        BusinessName VendorName { get; }
 
         StreetAddress StreetAddress { get; }
         /// <summary>

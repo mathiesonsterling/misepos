@@ -39,6 +39,9 @@ namespace Mise.Core.Entities.Accounts
         /// If there, the referral code that we created the account with
         /// </summary>
         ReferralCode ReferralCodeUsedToCreate { get; }
+
+	    MiseAccountTypes AccountType { get; }
+	    MiseAccountStatus Status { get; set; }
 	}
 }
 
