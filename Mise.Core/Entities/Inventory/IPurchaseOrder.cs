@@ -20,9 +20,9 @@ namespace Mise.Core.Entities.Inventory
         /// <summary>
         /// Employee that created this order
         /// </summary>
-        Guid CreatedByEmployeeID { get; }
+        Guid? CreatedByEmployeeID { get; }
 
-        string CreatedByName { get; set; }
+        PersonName CreatedByName { get; set; }
 
         IEnumerable<IPurchaseOrderLineItem> GetPurchaseOrderLineItems();
 

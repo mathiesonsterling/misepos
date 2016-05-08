@@ -585,7 +585,7 @@ namespace Mise.Core.Common.Events
 				CausedById = emp.Id,
 				RestaurantId = _restaurant.Id,
 
-				EmployeeCreatingName = emp.DisplayName,
+				EmployeeCreatingName = emp.Name,
 			};
 		}
 
@@ -604,8 +604,8 @@ namespace Mise.Core.Common.Events
 				AmountNeeded = amtDesired,
 				NumBottlesNeeded = numBottles,
 				PARLineItem = baseItem,
-                VendorWithBestPriceID = vendor != null ? vendor.Id : (Guid?)null,
-                VendorName = vendor != null ? vendor.Name : string.Empty,
+                VendorWithBestPriceID = vendor?.Id,
+                VendorName = vendor?.Name,
 				Categories = baseItem.Categories,
                 LineItemID = Guid.NewGuid()
 			};
@@ -641,7 +641,7 @@ namespace Mise.Core.Common.Events
 			};
 	    }
 
-	    public VendorCreatedEvent CreateVendorCreatedEvent (IEmployee emp, string name, StreetAddress address, PhoneNumber phone, EmailAddress email)
+	    public VendorCreatedEvent CreateVendorCreatedEvent (IEmployee emp, BusinessName name, StreetAddress address, PhoneNumber phone, EmailAddress email)
 		{
 			return new VendorCreatedEvent {
 				Id = Guid.NewGuid (),
@@ -869,9 +869,10 @@ namespace Mise.Core.Common.Events
             EmailAddress email, PhoneNumber phone, CreditCard card, ReferralCode code, MiseAppTypes app, string businessName,
             MisePaymentPlan paymentPlan)
         {
+            throw new NotImplementedException();
             return new RestaurantAccountRegisteredOnWebsiteEvent
             {
-
+                
             };
         }
 

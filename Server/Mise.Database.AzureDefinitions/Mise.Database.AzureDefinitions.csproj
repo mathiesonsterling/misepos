@@ -102,9 +102,13 @@
     <Compile Include="Entities\BaseDbEntity.cs" />
     <Compile Include="Entities\Categories\InventoryCategory.cs" />
     <Compile Include="Entities\Inventory\Inventory.cs" />
+    <Compile Include="Entities\Inventory\LineItems\PurchaseOrderBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\Par.cs" />
     <Compile Include="Entities\Inventory\LineItems\ParBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\LineItems\ReceivingOrderBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\PurchaseOrder.cs" />
+    <Compile Include="Entities\Inventory\PurchaseOrderPerVendor.cs" />
+    <Compile Include="Entities\Inventory\ReceivingOrder.cs" />
     <Compile Include="Entities\People\BaseUserDbEntity.cs" />
     <Compile Include="Entities\People\Employee.cs" />
     <Compile Include="Entities\Inventory\LineItems\BaseLineItem.cs" />
@@ -113,6 +117,8 @@
     <Compile Include="Entities\Inventory\InventorySection.cs" />
     <Compile Include="Entities\Inventory\RestaurantInventorySection.cs" />
     <Compile Include="Entities\Restaurant\Restaurant.cs" />
+    <Compile Include="Entities\Vendor\Vendor.cs" />
+    <Compile Include="Entities\Vendor\VendorBeverageLineItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TodoItem.cs" />
     <Compile Include="ValueItems\BusinessName.cs" />

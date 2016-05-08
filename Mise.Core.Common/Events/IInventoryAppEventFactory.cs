@@ -94,7 +94,7 @@ namespace Mise.Core.Common.Events
         /// <returns></returns>
         PurchaseOrderRecievedFromVendorEvent CreatePurchaseOrderRecievedFromVendorEvent(IEmployee emp, IPurchaseOrder po, IReceivingOrder ro, PurchaseOrderStatus status);
 
-		VendorCreatedEvent CreateVendorCreatedEvent(IEmployee emp, string name, StreetAddress address, PhoneNumber phone, EmailAddress email);
+		VendorCreatedEvent CreateVendorCreatedEvent(IEmployee emp, BusinessName name, StreetAddress address, PhoneNumber phone, EmailAddress email);
 		VendorAddNewLineItemEvent CreateVendorLineItemAddedEvent(IEmployee emp, IBaseBeverageLineItem li, IVendor v);
 		VendorRestaurantSetsPriceForReceivedItemEvent CreateRestaurantSetPriceEvent(IEmployee emp, IVendorBeverageLineItem li, IVendor v, Money pricePerUnit);
 

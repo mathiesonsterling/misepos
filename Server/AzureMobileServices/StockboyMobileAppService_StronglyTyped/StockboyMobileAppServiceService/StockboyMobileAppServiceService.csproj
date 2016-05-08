@@ -188,6 +188,10 @@
       <Name>Mise.Database.AzureDefinitions</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\StockboyMobileAppService - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\StockboyMobileAppService - Web Deploy.pubxml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />

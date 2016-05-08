@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -109,9 +109,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StockboyMobileAppService\StockboyMobileAppService.csproj">
+    <ProjectReference Include="..\StockboyMobileAppService\StockboyClient.csproj">
       <Project>{3AFA591D-C115-4AC9-9519-F788373ECDE9}</Project>
-      <Name>StockboyMobileAppService</Name>
+      <Name>StockboyClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Mise.Core\Mise.Core.csproj">
       <Project>{085E418A-7CC9-4AB6-B38A-FC6CABE373D6}</Project>

@@ -52,6 +52,7 @@ namespace Mise.Core.Common.Entities.Vendors
 	    }
 
 	    public List<Guid> RestaurantsAssociatedIDs { get; set; }
+
         public List<VendorBeverageLineItem> VendorBeverageLineItems { get; set; }
 	    public Vendor()
 	    {
@@ -62,7 +63,7 @@ namespace Mise.Core.Common.Entities.Vendors
 		#region IVendor implementation
 
 
-		public string Name {
+		public BusinessName Name {
 			get;
 			set;
 		}
@@ -83,7 +84,7 @@ namespace Mise.Core.Common.Entities.Vendors
 
 		public bool ContainsSearchString (string searchString)
 		{
-			if( (Name != null && Name.ToUpper ().Contains (searchString.ToUpper ()))
+			if( (Name != null && Name.ContainsSearchString (searchString))
 			|| (StreetAddress != null && StreetAddress.ContainsSearchString (searchString))
             || (EmailToOrderFrom != null && EmailToOrderFrom.ContainsSearchString(searchString))){
 		        return true;
@@ -122,17 +123,17 @@ namespace Mise.Core.Common.Entities.Vendors
 	            return false;
 	        }
 
-	        if (string.IsNullOrEmpty(v.Name))
+	        if (v.Name == null)
 	        {
 	            return false;
 	        }
 
-            if(v.Name != Name)
+            if(!v.Name.Equals(Name))
 	        {
 	            return false;
 	        }
 
-			if (v.Name == Name && v.StreetAddress != null 
+			if (v.Name.Equals(Name) && v.StreetAddress != null 
 				&& v.StreetAddress.City.Equals(StreetAddress.City)
 				&& v.StreetAddress.State.Equals(StreetAddress.State)
 			) {

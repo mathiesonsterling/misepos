@@ -45,7 +45,14 @@ namespace StockboyMobileAppService
 
             this.todoTable = client.GetSyncTable<TodoItem>();
 #else
-            this.todoTable = client.GetTable<TodoItem>();
+            try
+            {
+                this.todoTable = client.GetTable<TodoItem>();
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+            }
 #endif
         }
 

@@ -256,7 +256,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Id = Guid.Empty,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
-					Name = "Bob's Liquor Barn",
+					Name = new BusinessName("Bob's Liquor Barn"),
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>(),
 					StreetAddress = new StreetAddress
 					{
@@ -273,7 +273,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = "Siegal's",
+					Name = new BusinessName("Siegal's"),
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
@@ -371,7 +371,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				new Vendor{
 					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = "FreshPoint",
+					Name = new BusinessName("FreshPoint"),
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
@@ -392,7 +392,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				new Vendor{
 					Id = favoriteID,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = "Favorite Brands",
+					Name = new BusinessName("Favorite Brands"),
 					//13755 Diplomat Dr #100
 					//Farmers Branch, TX 75234
 					StreetAddress = new StreetAddress("13755", "", "Diplomat Dr", "Farmers Branch",
@@ -795,20 +795,14 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 
 		public Task<IEnumerable<Vendor>> GetVendorsBySearchString (string searchString)
 		{
-			return Task.FromResult (_vendors.Where (v => v.Name.Contains (searchString)));
+			return Task.FromResult (_vendors.Where (v => v.Name.ContainsSearchString(searchString)));
 		}
 
 		public Task<IEnumerable<Vendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
 		{
-			var res = new List<Vendor> ();
-			foreach(var v in _vendors){
-				var restIds = v.GetRestaurantIDsAssociatedWithVendor ();
-				if(restIds.Contains (restaurantID)){
-					res.Add (v);
-				}
-			}
+			var res = (from v in _vendors let restIds = v.GetRestaurantIDsAssociatedWithVendor() where restIds.Contains(restaurantID) select v).ToList();
 
-			return Task.FromResult (res.AsEnumerable ());
+		    return Task.FromResult (res.AsEnumerable ());
 		}
 
 		public Task<Par> GetCurrentPAR (Guid restaurantID)

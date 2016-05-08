@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
-using Mise.Core.Common;
-using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.ValueItems.Inventory;
 using Mise.Core.ValueItems;
-namespace Mise.Core.Common
+using Mise.Core.ValueItems.Inventory;
+
+namespace Mise.Core.Common.Entities.Inventory
 {
 	public class PurchaseOrderPerVendor : RestaurantEntityBase, IPurchaseOrderPerVendor
 	{
 		public Guid? VendorID{ get; set;}
-        public string VendorName{get;set;}
+        public BusinessName VendorName{get;set;}
 
 		public List<PurchaseOrderLineItem> LineItems{ get; set;}
 

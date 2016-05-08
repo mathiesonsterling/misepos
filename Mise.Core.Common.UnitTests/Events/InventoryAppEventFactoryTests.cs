@@ -354,7 +354,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void PurchaseOrderLineItemAdded(){
-            var ev = _underTest.CreatePOLineItemAddedFromInventoryCalcEvent (_emp, _po, _parLI, 12, LiquidAmount.SevenFiftyMillilters, new Vendor{Id=Guid.NewGuid(), Name="testVend"});
+            var ev = _underTest.CreatePOLineItemAddedFromInventoryCalcEvent (_emp, _po, _parLI, 12, LiquidAmount.SevenFiftyMillilters, new Vendor{Id=Guid.NewGuid(), Name=new BusinessName("testVend")});
 			TestPurchaseOrderEvent (ev);
 		}
 
@@ -444,7 +444,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void VendorCreated(){
-			var ev = _underTest.CreateVendorCreatedEvent (_emp, "testVend", StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber, EmailAddress.TestEmail);
+			var ev = _underTest.CreateVendorCreatedEvent (_emp, new BusinessName("testVend"), StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber, EmailAddress.TestEmail);
 			TestVendorEvent (ev);
 		}
 

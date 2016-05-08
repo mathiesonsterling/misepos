@@ -31,10 +31,11 @@ namespace Mise.Core.Common.Entities.Inventory
 			return PurchaseOrdersPerVendor;
 		}
 
-		public string CreatedByName{ get; set;}
+		public PersonName CreatedByName{ get; set;}
 
 
-	    public Guid CreatedByEmployeeID { get; set; }
+	    public Guid? CreatedByEmployeeID { get; set; }
+
         public ICloneableEntity Clone()
         {
             var newItem = CloneRestaurantBase(new PurchaseOrder());

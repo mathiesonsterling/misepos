@@ -128,9 +128,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\StockboyMobileAppService\StockboyMobileAppService.csproj">
+    <ProjectReference Include="..\StockboyMobileAppService\StockboyClient.csproj">
       <Project>{3AFA591D-C115-4AC9-9519-F788373ECDE9}</Project>
-      <Name>StockboyMobileAppService</Name>
+      <Name>StockboyClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Mise.Core.Common\Mise.Core.Common.csproj">
       <Project>{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}</Project>
