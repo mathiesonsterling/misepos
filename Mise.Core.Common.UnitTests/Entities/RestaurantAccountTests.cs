@@ -111,7 +111,6 @@ namespace Mise.Core.Common.UnitTests.Entities
                 AccountID = Guid.NewGuid(),
                 CreditCard = new CreditCard
                 {
-                    BillingZip = new ZipCode {Value = "11111"},
                     ProcessorToken = new CreditCardProcessorToken
                     {
                         Processor = CreditCardProcessors.FakeProcessor,
@@ -126,7 +125,6 @@ namespace Mise.Core.Common.UnitTests.Entities
             //ASSERT
             var cc = account.CurrentCard;
             Assert.NotNull(cc);
-            Assert.AreEqual("11111", cc.BillingZip.Value);
             Assert.AreEqual(CreditCardProcessors.FakeProcessor, cc.ProcessorToken.Processor);
             Assert.AreEqual("testToken", cc.ProcessorToken.Token, "token value");
         }

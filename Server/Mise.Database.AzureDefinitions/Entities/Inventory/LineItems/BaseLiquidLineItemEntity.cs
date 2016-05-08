@@ -10,6 +10,11 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
         where TEntityType : IEntityBase 
         where TConcrete : BaseBeverageLineItem, TEntityType
     {
+        protected BaseLiquidLineItemEntity()
+        {
+            Container = new LiquidContainer();
+        } 
+
         public BaseLineItem BaseLineItem { get; set;}
 
         /// <summary>

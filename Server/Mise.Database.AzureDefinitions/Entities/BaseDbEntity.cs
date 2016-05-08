@@ -16,7 +16,7 @@ namespace Mise.Database.AzureDefinitions.Entities
     {
         protected BaseDbEntity() 
         { 
-            Revision = new EventID();
+            Revision = new EventIDDb();
         }
 
         protected BaseDbEntity(TEntityType source)
@@ -24,7 +24,7 @@ namespace Mise.Database.AzureDefinitions.Entities
             EntityId = source.Id;
             CreatedAt = source.CreatedDate;
             UpdatedAt = source.LastUpdatedDate;
-            Revision = new EventID(source.Revision);
+            Revision = new EventIDDb(source.Revision);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Mise.Database.AzureDefinitions.Entities
 
         public Guid EntityId { get; set; }
 
-        public EventID Revision { get; set; }
+        public EventIDDb Revision { get; set; }
 
     }
 }

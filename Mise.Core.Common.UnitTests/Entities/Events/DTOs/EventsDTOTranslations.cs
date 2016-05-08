@@ -1000,9 +1000,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Events.DTOs
 				ProcessorToken = new CreditCardProcessorToken{
 					Processor = CreditCardProcessors.FakeProcessor, 
 					Token = "blerg"
-				},
-                ExpMonth = 101,
-                ExpYear = 2014
+				}
             };
         }
         #endregion

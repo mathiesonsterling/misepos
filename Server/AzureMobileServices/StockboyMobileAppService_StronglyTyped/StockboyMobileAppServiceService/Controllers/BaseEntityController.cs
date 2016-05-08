@@ -25,7 +25,15 @@ namespace StockboyMobileAppServiceService.Controllers
         // GET tables/Restaurants
         public IQueryable<TEntityType> GetAllEnities()
         {
-            return Query();
+            try
+            {
+                return Query();
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+                throw;
+            }
         }
 
         // GET tables/Restaurants/48D68C86-6EA6-4C25-AA33-223FC9A27959

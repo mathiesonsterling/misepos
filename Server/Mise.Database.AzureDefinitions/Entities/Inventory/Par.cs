@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
+using Mise.Database.AzureDefinitions.Entities.People;
 
 namespace Mise.Database.AzureDefinitions.Entities.Inventory
 {
@@ -14,14 +15,15 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
         {
             return new Core.Common.Entities.Inventory.Par
             {
-                CreatedByEmployeeID = CreatedByEmployeeID,
+                CreatedByEmployeeID = CreatedByEmployee.EntityId,
                 IsCurrent = IsCurrent,
                 ParLineItems = ParLineItems.Select(pl => pl.ToBusinessEntity()).ToList(),
                 RestaurantID = Restaurant.RestaurantID
             };
         }
 
-        public Guid CreatedByEmployeeID { get; set; }
+        public Employee CreatedByEmployee { get; set; }
+
         public bool IsCurrent { get; set; }
 
         public List<ParBeverageLineItem> ParLineItems { get; set; }

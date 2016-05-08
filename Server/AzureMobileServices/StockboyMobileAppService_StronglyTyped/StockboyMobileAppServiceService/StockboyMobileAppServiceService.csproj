@@ -155,12 +155,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Startup.MobileApp.cs" />
+    <Compile Include="Controllers\ApplicationInvitationsController.cs" />
     <Compile Include="Controllers\BaseEntityController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\InventoriesController.cs" />
     <Compile Include="Controllers\ParsController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\ReceivingOrdersController.cs" />
+    <Compile Include="Controllers\RestaurantAccountsController.cs" />
     <Compile Include="Controllers\RestaurantsController.cs" />
     <Compile Include="Controllers\VendorsController.cs" />
     <Compile Include="Models\StockboyMobileAppServiceContext.cs" />
@@ -194,7 +196,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\StockboyMobileAppService - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\StockboyMobileAppService - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\StockboyMobileAppService - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\StockboyMobileAppService - Web Deploy.pubxml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -1,14 +1,14 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
-using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Tables;
-using Mise.Database.AzureDefinitions;
+using Mise.Database.AzureDefinitions.Entities.Accounts;
 using Mise.Database.AzureDefinitions.Entities.Inventory;
-using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
-using Mise.Database.AzureDefinitions.Entities.Restaurant;
 using Mise.Database.AzureDefinitions.Entities.People;
+using Mise.Database.AzureDefinitions.Entities.Restaurant;
 using Mise.Database.AzureDefinitions.Entities.Vendor;
+using MiseEmployeeAccount = Mise.Core.Common.Entities.Accounts.MiseEmployeeAccount;
+using RestaurantAccount = Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount;
 
 namespace StockboyMobileAppServiceService.Models
 {
@@ -34,6 +34,9 @@ namespace StockboyMobileAppServiceService.Models
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<ReceivingOrder> ReceivingOrders { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<MiseEmployeeAccount> MiseEmployeeAccounts { get; set; }
+        public DbSet<RestaurantAccount> RestaurantAccounts { get; set; }
+        public DbSet<ApplicationInvitation> ApplicationInvitations { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

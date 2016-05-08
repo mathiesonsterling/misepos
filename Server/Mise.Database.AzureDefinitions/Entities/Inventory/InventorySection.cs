@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
+using Mise.Database.AzureDefinitions.Entities.People;
 
 namespace Mise.Database.AzureDefinitions.Entities.Inventory
 {
@@ -14,17 +15,17 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
         {
             return new Core.Common.Entities.Inventory.InventorySection
             {
-                InventoryID = InventoryID,
+                InventoryID = Inventory.EntityId,
                 Name = Name,
-                LastCompletedBy = LastCompletedBy,
-                CurrentlyInUseBy = CurrentlyInUseBy,
+                LastCompletedBy = LastCompletedBy?.EntityId,
+                CurrentlyInUseBy = CurrentlyInUseBy?.EntityId,
                 TimeCountStarted = TimeCountStarted,
-                RestaurantInventorySectionID = RestaurantInventorySectionID,
+                RestaurantInventorySectionID = RestaurantInventorySection.EntityId,
                 LineItems = LineItems.Select(li => li.ToBusinessEntity()).ToList()
             };
         }
 
-        public Guid InventoryID
+        public Inventory Inventory
         {
             get;
             set;
@@ -32,9 +33,9 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 
         public string Name { get; set; }
 
-        public Guid? LastCompletedBy { get; set; }
+        public Employee LastCompletedBy { get; set; }
 
-        public Guid? CurrentlyInUseBy
+        public Employee CurrentlyInUseBy
         {
             get;
             set;
@@ -42,7 +43,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 
         public DateTimeOffset? TimeCountStarted { get; set; }
 
-        public Guid RestaurantInventorySectionID { get; set; }
+        public RestaurantInventorySection RestaurantInventorySection { get; set; }
 
         public List<InventoryBeverageLineItem> LineItems { get; set; }
     }

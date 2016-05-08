@@ -18,6 +18,21 @@ namespace Mise.Core.Common.Entities.Accounts
 
         public abstract MiseAccountTypes AccountType { get;  }
 
+        public MiseAccountStatus Status { get; set; }
+        public EmailAddress PrimaryEmail { get; set; }
+
+        public Password Password { get; set; }
+
+        public PersonName AccountHolderName { get; set; }
+
+        public IEnumerable<EmailAddress> Emails { get; set; }
+
+        public PhoneNumber PhoneNumber { get; set; }
+
+        public ReferralCode ReferralCodeForAccountToGiveOut { get; set; }
+
+        public ReferralCode ReferralCodeUsedToCreate { get; set; }
+
         public virtual bool ContainsSearchString(string searchString)
         {
             return
@@ -31,16 +46,5 @@ namespace Mise.Core.Common.Entities.Accounts
                 || (ReferralCodeUsedToCreate != null && ReferralCodeUsedToCreate.ContainsSearchString(searchString))
                 || (AccountType.ToString().Contains(searchString));
         }
-
-        public EmailAddress PrimaryEmail { get; set; }
-        public Password Password { get; set; }
-
-        public PersonName AccountHolderName { get; set; }
-
-        public IEnumerable<EmailAddress> Emails { get; set; }
-        public PhoneNumber PhoneNumber { get; set; }
-
-        public ReferralCode ReferralCodeForAccountToGiveOut { get; set; }
-        public ReferralCode ReferralCodeUsedToCreate { get; set; }
     }
 }

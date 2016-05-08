@@ -59,7 +59,7 @@ namespace Mise.Inventory.Services.Implementation
 	    /// <param name = "address"></param>
 	    /// <param name = "phoneNumber"></param>
 	    /// <param name="email"></param>
-	    public async Task<IVendor> AddVendor(string name, StreetAddress address, PhoneNumber phoneNumber, EmailAddress email)
+	    public async Task<IVendor> AddVendor(BusinessName name, StreetAddress address, PhoneNumber phoneNumber, EmailAddress email)
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 

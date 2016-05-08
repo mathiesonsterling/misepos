@@ -26,8 +26,6 @@ namespace Mise.Core.Common.UnitTests.Tools
     {
 		public static CreditCard GetCreditCard(){
 			return new CreditCard{
-				ExpMonth = 12,
-				ExpYear = 2014,
 				Name = PersonName.TestName,
                 ProcessorToken = new CreditCardProcessorToken
                 {

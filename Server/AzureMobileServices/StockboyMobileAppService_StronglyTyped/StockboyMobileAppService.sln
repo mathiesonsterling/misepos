@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common", "..\..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mise.Core.Common.UnitTests", "..\..\..\Mise.Core.Common.UnitTests\Mise.Core.Common.UnitTests.csproj", "{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransferMiseEntitesTool", "TransferMiseEntitesTool\TransferMiseEntitesTool.csproj", "{746A69EB-B188-4D2E-8916-A52E529E9CD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,12 @@ Global
 		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Deploy|Any CPU.Build.0 = Deploy|Any CPU
 		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B3EBF26-FA4A-4697-B7E6-1618CE609EB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{746A69EB-B188-4D2E-8916-A52E529E9CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{746A69EB-B188-4D2E-8916-A52E529E9CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{746A69EB-B188-4D2E-8916-A52E529E9CD5}.Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{746A69EB-B188-4D2E-8916-A52E529E9CD5}.Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{746A69EB-B188-4D2E-8916-A52E529E9CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{746A69EB-B188-4D2E-8916-A52E529E9CD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

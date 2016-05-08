@@ -26,8 +26,6 @@ namespace Mise.Core.Common.Entities.Accounts
         public CreditCard CurrentCard { get; set; }
 
 
-        public MiseAccountStatus Status { get; set; }
-
         public override MiseAccountTypes AccountType => MiseAccountTypes.Restaurant;
 
         public MisePaymentPlan PaymentPlan

@@ -12,14 +12,14 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
         public InventoryBeverageLineItem()
         {
             CurrentAmount = new LiquidAmount();
-            PricePaid = new Money();
+            PricePaid = new MoneyDb();
         }
 
-        public Guid? VendorBoughtFrom { get; set; }
+        public Vendor.Vendor VendorBoughtFrom { get; set; }
 
         public LiquidAmount CurrentAmount { get; set; }
 
-        public Money PricePaid { get; set; }
+        public MoneyDb PricePaid { get; set; }
 
         public List<decimal> PartialBottleListing { get; set; }
         public int NumFullBottles { get; set; }
@@ -31,7 +31,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
             return new Core.Common.Entities.Inventory.InventoryBeverageLineItem
             {
                 CurrentAmount = CurrentAmount.ToValueItem(),
-                VendorBoughtFrom = VendorBoughtFrom,
+                VendorBoughtFrom = VendorBoughtFrom?.EntityId,
                 PricePaid = PricePaid.ToValueItem(),
                 NumFullBottles = NumFullBottles,
                 MethodsMeasuredLast = MethodsMeasuredLast,

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.InventoryPage"
+	Title="{Binding Title}">
+
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<Label Text = "Add your items in the order they appear on the shelf . . . we'll keep them in order for you!" IsVisible="{Binding IsInventoryEmpty}"/>
+			<Label Text = "You can move or delete items by giving a long press on Android, or a pulling the item to the left on iOS" IsVisible="{Binding IsInventoryEmpty}"/>
+			<StackLayout>
+				<StackLayout x:Name="listItems" VerticalOptions="FillAndExpand">
+				</StackLayout>
+			</StackLayout>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button Text="Add new item to section" Command="{Binding AddNewLineItemCommand}" 
+				HorizontalOptions="FillAndExpand"/>
+			<Button Text="Complete Section" Command="{Binding FinishSectionCommand}" 
+				IsEnabled ="{Binding CanComplete}" HorizontalOptions="FillAndExpand"/>
+			<Button Text="Remove All Items" Command="{Binding ClearSectionCommand}" 
+				IsEnabled="{Binding NotProcessing}" HorizontalOptions="FillAndExpand"/>
+		</StackLayout>
+	</ContentPage.Content>
+</local:BasePage>

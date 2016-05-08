@@ -31,20 +31,216 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BuildLevel.cs" />
+    <Compile Include="DependencySetup.cs" />
+    <Compile Include="Pages\AccountRegistrationWithCreditCardPage.xaml.cs">
+      <DependentUpon>AccountRegistrationWithCreditCardPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\AdminMenuPage.xaml.cs">
+      <DependentUpon>AdminMenuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\AuthorizeCreditCardPage.xaml.cs">
+      <DependentUpon>AuthorizeCreditCardPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BasePage.cs" />
+    <Compile Include="Pages\ChangePasswordPage.xaml.cs">
+      <DependentUpon>ChangePasswordPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\EmployeesManagePage.xaml.cs">
+      <DependentUpon>EmployeesManagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\EULAPage.xaml.cs">
+      <DependentUpon>EULAPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InventoryPage.xaml.cs">
+      <DependentUpon>InventoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml.cs">
+      <DependentUpon>InventoryVisuallyMeasureWithGesturesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InvitationsPage.xaml.cs">
+      <DependentUpon>InvitationsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ItemAddPage.xaml.cs">
+      <DependentUpon>ItemAddPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ItemFindPage.xaml.cs">
+      <DependentUpon>ItemFindPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ItemScanPage.xaml.cs">
+      <DependentUpon>ItemScanPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MainMenuPage.xaml.cs">
+      <DependentUpon>MainMenuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PARPage.xaml.cs">
+      <DependentUpon>PARPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseOrderReviewPage.xaml.cs">
+      <DependentUpon>PurchaseOrderReviewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PurchaseOrderSelectPage.xaml.cs">
+      <DependentUpon>PurchaseOrderSelectPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ReceivingOrderPage.xaml.cs">
+      <DependentUpon>ReceivingOrderPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RegisterRestaurantPage.xaml.cs">
+      <DependentUpon>RegisterRestaurantPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\ReportResultsPage.xaml.cs">
+      <DependentUpon>ReportResultsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\ReportsByInventoryPage.xaml.cs">
+      <DependentUpon>ReportsByInventoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\ReportsPage.xaml.cs">
+      <DependentUpon>ReportsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Reports\SelectCompletedInventoriesPage.xaml.cs">
+      <DependentUpon>SelectCompletedInventoriesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RestaurantLoadingPage.xaml.cs">
+      <DependentUpon>RestaurantLoadingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RestaurantSelectPage.xaml.cs">
+      <DependentUpon>RestaurantSelectPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SectionAddPage.xaml.cs">
+      <DependentUpon>SectionAddPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SectionSelectPage.xaml.cs">
+      <DependentUpon>SectionSelectPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UpdateParLineItemPage.xaml.cs">
+      <DependentUpon>UpdateParLineItemPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UpdateParQuantityPage.xaml.cs">
+      <DependentUpon>UpdateParQuantityPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UpdateReceivingOrderLineItemPage.xaml.cs">
+      <DependentUpon>UpdateReceivingOrderLineItemPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UserRegistrationPage.xaml.cs">
+      <DependentUpon>UserRegistrationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\VendorAddPage.xaml.cs">
+      <DependentUpon>VendorAddPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\VendorFindPage.xaml.cs">
+      <DependentUpon>VendorFindPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="RepositoryLoader.cs" />
+    <Compile Include="Services\IAppNavigation.cs" />
+    <Compile Include="Services\IBeverageItemService.cs" />
+    <Compile Include="Services\IFunFactService.cs" />
+    <Compile Include="Services\IInsightsService.cs" />
+    <Compile Include="Services\IInventoryService.cs" />
+    <Compile Include="Services\Implementation\AppNavigation.cs" />
+    <Compile Include="Services\Implementation\BeverageItemService.cs" />
+    <Compile Include="Services\Implementation\DeviceConnectionService.cs" />
+    <Compile Include="Services\Implementation\DummyDeviceLocationService.cs" />
+    <Compile Include="Services\Implementation\FunFactService.cs" />
+    <Compile Include="Services\Implementation\InventoryService.cs" />
+    <Compile Include="Services\Implementation\NavigationService.cs" />
+    <Compile Include="Services\Implementation\PageFactory.cs" />
+    <Compile Include="Services\Implementation\PARService.cs" />
+    <Compile Include="Services\Implementation\PurchaseOrderService.cs" />
+    <Compile Include="Services\Implementation\ReceivingOrderService.cs" />
+    <Compile Include="Services\Implementation\RegistrationService.cs" />
+    <Compile Include="Services\Implementation\ReportsService.cs" />
+    <Compile Include="Services\Implementation\ServiceStackJSONSerializer.cs" />
+    <Compile Include="Services\Implementation\VendorService.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureConflictHandler.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureEntityStorage.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureEntityWithLocationStorage.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureEventStorage.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureServiceLocator.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureWeakTypeSharedClient.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\Exceptions\UserNotFoundException.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\HttpWebServiceClient.cs" />
+    <Compile Include="Services\Implementation\WebServiceClients\ServiceStackWebServiceClient.cs" />
+    <Compile Include="Services\Implementation\XamarinFormsSimpleKeyValueStorage.cs" />
+    <Compile Include="Services\Implementation\XamarinInsightsService.cs" />
+    <Compile Include="Services\INavigationService.cs" />
+    <Compile Include="Services\IPageFactory.cs" />
+    <Compile Include="Services\IPARService.cs" />
+    <Compile Include="Services\IPurchaseOrderService.cs" />
+    <Compile Include="Services\IReceivingOrderService.cs" />
+    <Compile Include="Services\IRegistrationService.cs" />
+    <Compile Include="Services\IReportsService.cs" />
+    <Compile Include="Services\IVendorService.cs" />
     <Compile Include="TodoList.xaml.cs">
       <DependentUpon>TodoList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="TodoItem.cs" />
     <Compile Include="TodoItemManager.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\AccountRegistrationWithCreditCardViewModel.cs" />
+    <Compile Include="ViewModels\AddLineItemType.cs" />
+    <Compile Include="ViewModels\AdminMenuViewModel.cs" />
+    <Compile Include="ViewModels\AuthorizeCreditCardViewModel.cs" />
+    <Compile Include="ViewModels\BaseLineItemDisplayLine.cs" />
+    <Compile Include="ViewModels\BaseNextViewModel.cs" />
+    <Compile Include="ViewModels\BaseSearchableViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\EmployeesManageViewModel.cs" />
+    <Compile Include="ViewModels\EULAViewModel.cs" />
+    <Compile Include="ViewModels\InventoryViewModel.cs" />
+    <Compile Include="ViewModels\InventoryVisuallyMeasureBottleViewModel.cs" />
+    <Compile Include="ViewModels\InvitationViewModel.cs" />
+    <Compile Include="ViewModels\ItemAddViewModel.cs" />
+    <Compile Include="ViewModels\ItemFindViewModel.cs" />
+    <Compile Include="ViewModels\ItemScanViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MainMenuViewModel.cs" />
+    <Compile Include="ViewModels\Modals\ErrorMessage.cs" />
+    <Compile Include="ViewModels\Modals\UserQuestion.cs" />
+    <Compile Include="ViewModels\PARViewModel.cs" />
+    <Compile Include="ViewModels\PurchaseOrderReviewViewModel.cs" />
+    <Compile Include="ViewModels\PurchaseOrderSelectViewModel.cs" />
+    <Compile Include="ViewModels\ReceivingOrderViewModel.cs" />
+    <Compile Include="ViewModels\Reports\BaseReportViewModel.cs" />
+    <Compile Include="ViewModels\Reports\ReportResultsViewModel.cs" />
+    <Compile Include="ViewModels\Reports\ReportsByInventoryViewModel.cs" />
+    <Compile Include="ViewModels\Reports\ReportsViewModel.cs" />
+    <Compile Include="ViewModels\Reports\SelectCompletedInventoryViewModel.cs" />
+    <Compile Include="ViewModels\RestaurantLoadingViewModel.cs" />
+    <Compile Include="ViewModels\RestaurantRegistrationViewModel.cs" />
+    <Compile Include="ViewModels\RestaurantSelectViewModel.cs" />
+    <Compile Include="ViewModels\SectionAddViewModel.cs" />
+    <Compile Include="ViewModels\SectionSelectViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\UpdateParLineItemViewModel.cs" />
+    <Compile Include="ViewModels\UpdateParQuantityViewModel.cs" />
+    <Compile Include="ViewModels\UpdateReceivingOrderLineItemViewModel.cs" />
+    <Compile Include="ViewModels\UserRegistrationViewModel.cs" />
+    <Compile Include="ViewModels\VendorAddViewModel.cs" />
+    <Compile Include="ViewModels\VendorFindViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.4.2.6359\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.4.2.6359\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.2\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile">
       <HintPath>..\packages\Microsoft.Azure.Mobile.Client.2.0.1\lib\portable-win+net45+wp8+wpa81+monotouch+monoandroid\Microsoft.WindowsAzure.Mobile.dll</HintPath>
+    </Reference>
+    <Reference Include="MR.Gestures, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MR.Gestures.1.3.3\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\MR.Gestures.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
@@ -69,6 +265,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -97,5 +294,146 @@
       <Project>{BC3BD128-1D20-4C41-83B0-3FC37E5C5F5E}</Project>
       <Name>Mise.Core.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Implementation\WebServiceClients\AzureMobileServices\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Pages\AccountRegistrationWithCreditCardPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\AdminMenuPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\AuthorizeCreditCardPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ChangePasswordPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\EmployeesManagePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\EULAPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\InventoryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\InventoryVisuallyMeasureWithGesturesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\InvitationsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ItemAddPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ItemFindPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ItemScanPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\MainMenuPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PARPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PurchaseOrderReviewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PurchaseOrderSelectPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ReceivingOrderPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\RegisterRestaurantPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Reports\ReportResultsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Reports\ReportsByInventoryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Reports\ReportsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Reports\SelectCompletedInventoriesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\RestaurantLoadingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\RestaurantSelectPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\SectionAddPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\SectionSelectPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\UpdateParLineItemPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\UpdateParQuantityPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\UpdateReceivingOrderLineItemPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\UserRegistrationPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\VendorAddPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\VendorFindPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 </Project>

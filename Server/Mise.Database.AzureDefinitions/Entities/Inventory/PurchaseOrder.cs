@@ -10,6 +10,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 {
     public class PurchaseOrder : BaseDbEntity<IPurchaseOrder, Core.Common.Entities.Inventory.PurchaseOrder>
     {
+        public Restaurant.Restaurant Restaurant
+        {
+            get;
+            set;
+        }
+
         public List<PurchaseOrderPerVendor> PurchaseOrdersPerVendor { get; set; }
 
         public Employee CreatedBy{ get; set; }
@@ -20,7 +26,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             {
                 PurchaseOrdersPerVendor = PurchaseOrdersPerVendor.Select(pv => pv.ToBusinessEntity()).ToList(),
                 CreatedByEmployeeID = CreatedBy?.EntityId,
-                CreatedByName = CreatedBy?.Name
+                CreatedByName = CreatedBy?.GetName()
             };
         }
     }

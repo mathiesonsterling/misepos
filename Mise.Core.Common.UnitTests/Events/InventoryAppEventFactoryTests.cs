@@ -120,7 +120,6 @@ namespace Mise.Core.Common.UnitTests.Events
 		{
 		    var creditCard = new CreditCard
 		    {
-		        BillingZip = new ZipCode {Value = "11111"},
 		        ProcessorToken = new CreditCardProcessorToken
 		        {
 		            Processor = CreditCardProcessors.FakeProcessor,
@@ -133,7 +132,6 @@ namespace Mise.Core.Common.UnitTests.Events
 
 			TestCommonFields (ev);
             Assert.NotNull(ev.CreditCard);
-            Assert.AreEqual("11111", ev.CreditCard.BillingZip.Value);
             Assert.NotNull(ev.CreditCard.ProcessorToken);
             Assert.AreEqual("ccToken", ev.CreditCard.ProcessorToken.Token);
             Assert.AreEqual(CreditCardProcessors.FakeProcessor, ev.CreditCard.ProcessorToken.Processor);

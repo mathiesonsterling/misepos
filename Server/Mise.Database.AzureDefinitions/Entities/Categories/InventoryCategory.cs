@@ -11,7 +11,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Categories
         {
             return new Core.Common.Entities.Inventory.InventoryCategory
             {
-                ParentCategoryID = ParentCategoryID,
+                ParentCategoryID = ParentCategory.EntityId,
                 Name = Name,
                 IsCustomCategory = IsCustomCategory,
                 IsAssignable = IsAssignable,
@@ -20,11 +20,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Categories
             };
         }
 
-        public Guid? ParentCategoryID
+        public InventoryCategory ParentCategory
         {
             get;
             set;
         }
+
         public string Name
         {
             get;

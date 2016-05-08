@@ -6,13 +6,13 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
     public class PurchaseOrderBeverageLineItem : BaseLiquidLineItemEntity<IPurchaseOrderLineItem, PurchaseOrderLineItem>
     {
-        public Guid? VendorID { get; set; }
+        public Vendor.Vendor Vendor { get; set; }
 
         protected override PurchaseOrderLineItem CreateConcreteLineItemClass()
         {
             return new PurchaseOrderLineItem
             {
-                VendorID = VendorID
+                VendorID = Vendor.EntityId
             };
         }
     }

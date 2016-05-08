@@ -10,6 +10,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
     public class RestaurantInventorySection 
         : BaseDbEntity<IRestaurantInventorySection, Core.Common.Entities.Inventory.RestaurantInventorySection>
     {
+        public Restaurant.Restaurant Restaurant
+        {
+            get;
+            set;
+        }
+
         public string Name { get; set; }
         public bool AllowsPartialBottles { get; set; }
 

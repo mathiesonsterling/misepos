@@ -16,6 +16,7 @@ namespace Mise.Core.Common.Entities.Accounts
     public class AccountCredit : EntityBase, IAccountPayment, ICloneableEntity, ITextSearchable
     {
         private PaymentProcessingStatus _status;
+
         public Guid AccountID { get; set; }
         public Money Amount { get; set; }
         public PaymentType PaymentType { get { return PaymentType.MiseCredit; } }

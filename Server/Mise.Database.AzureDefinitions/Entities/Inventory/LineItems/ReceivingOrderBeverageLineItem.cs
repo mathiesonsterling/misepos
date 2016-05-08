@@ -11,12 +11,18 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
     public class ReceivingOrderBeverageLineItem : BaseLiquidLineItemEntity<IReceivingOrderLineItem, ReceivingOrderLineItem>
     {
+        public ReceivingOrderBeverageLineItem()
+        {
+            LineItemPrice = new MoneyDb();
+            UnitPrice = new MoneyDb();
+        }
+
         /// <summary>
         /// How much we paid, total for quantity
         /// </summary>
-        public Money LineItemPrice { get; set; }
+        public MoneyDb LineItemPrice { get; set; }
 
-        public Money UnitPrice { get; set; }
+        public MoneyDb UnitPrice { get; set; }
 
         public bool ZeroedOut { get; set; }
 
