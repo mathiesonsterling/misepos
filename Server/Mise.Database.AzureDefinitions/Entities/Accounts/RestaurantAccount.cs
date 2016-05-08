@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
+using Mise.Database.AzureDefinitions.ValueItems.Enumerations;
 using CreditCard = Mise.Database.AzureDefinitions.ValueItems.CreditCard;
 
 namespace Mise.Database.AzureDefinitions.Entities.Accounts
@@ -46,7 +47,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             set;
         }
 
-        public List<MiseAppTypes> AppsOnAccount { get; set; }
+        public List<MiseApplication> AppsOnAccount { get; set; }
 
         public List<AccountCharge> Charges { get; set; }
         public List<AccountCreditCardPayment> CreditCardPayments { get; set; }
@@ -60,7 +61,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
                 CurrentCard = CurrentCard.ToValueItem(),
                 PaymentPlan = PaymentPlan,
                 PaymentPlanSetupWithProvider = PaymentPlanSetupWithProvider,
-                AppsOnAccount = AppsOnAccount,
+                AppsOnAccount = AppsOnAccount.Select(a=> a.ToEnum()),
                 Charges = Charges.Select(c => c.ToBusinessEntity()).ToList(),
                 AccountCredits = Credits.Select(c => c.ToBusinessEntity()).ToList(),
                 Payments = CreditCardPayments.Select(c => c.ToBusinessEntity()).ToList()
