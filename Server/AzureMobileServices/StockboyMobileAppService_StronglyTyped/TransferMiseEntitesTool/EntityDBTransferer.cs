@@ -7,7 +7,7 @@ using TransferMiseEntitesTool.Consumers;
 
 namespace TransferMiseEntitesTool
 {
-    class RecordTransferrer
+    class EntityDBTransferer
     {
         private readonly BlockingCollection<RestaurantEntityDataTransportObject> _restaurants;
         private readonly BlockingCollection<RestaurantEntityDataTransportObject> _employees;
@@ -20,7 +20,7 @@ namespace TransferMiseEntitesTool
         private readonly BlockingCollection<RestaurantEntityDataTransportObject> _restaurantAccounts;
         private readonly BlockingCollection<RestaurantEntityDataTransportObject> _applicationInvitations;
 
-        public RecordTransferrer()
+        public EntityDBTransferer()
         {
             _restaurantAccounts = new BlockingCollection<RestaurantEntityDataTransportObject>();
             _applicationInvitations = new BlockingCollection<RestaurantEntityDataTransportObject>();

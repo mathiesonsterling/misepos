@@ -110,7 +110,7 @@
     <Compile Include="EntityProducer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecordTransferrer.cs" />
+    <Compile Include="EntityDBTransferer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

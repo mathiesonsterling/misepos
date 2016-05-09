@@ -31,6 +31,7 @@ namespace TransferMiseEntitesTool.Consumers
         {
             using (var db = new StockboyMobileAppServiceContext())
             {
+                db.Database.CommandTimeout = 180;
                 foreach (var dto in dtos.GetConsumingEnumerable())
                 {
                     try

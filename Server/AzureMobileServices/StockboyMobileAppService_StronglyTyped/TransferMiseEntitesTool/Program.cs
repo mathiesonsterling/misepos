@@ -10,7 +10,7 @@ namespace TransferMiseEntitesTool
     {
         static void Main(string[] args)
         {
-            var tranfer = new RecordTransferrer();
+            var tranfer = new EntityDBTransferer();
             var task = tranfer.TransferRecords();
             task.Wait();
         }
