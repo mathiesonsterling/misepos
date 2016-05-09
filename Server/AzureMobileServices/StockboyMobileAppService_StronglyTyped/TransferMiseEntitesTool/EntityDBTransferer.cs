@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
@@ -61,6 +62,19 @@ namespace TransferMiseEntitesTool
 
             var emps = new EmployeeConsumer(jsonSerializer);
             await emps.Consume(_employees);
+
+            //inv categories
+
+            //vendors
+
+            //rest sections should be done already
+
+            var appInvites = new ApplicationInvitationConsumer(jsonSerializer);
+            var otherTasks = new List<Task>
+            {
+                appInvites.Consume(_applicationInvitations),
+
+            };
 
         }
     }

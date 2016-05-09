@@ -2,18 +2,35 @@
 using System.Linq;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Base;
+using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.ValueItems.Inventory;
 
 namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
     public abstract class BaseLiquidLineItemEntity<TEntityType, TConcrete> : BaseDbEntity<TEntityType, TConcrete> 
-        where TEntityType : IEntityBase 
+        where TEntityType : IEntityBase , IBaseBeverageLineItem
         where TConcrete : BaseBeverageLineItem, TEntityType
     {
         protected BaseLiquidLineItemEntity()
         {
             Container = new LiquidContainer();
-        } 
+        }
+
+        public BaseLiquidLineItemEntity(TEntityType source, IEnumerable<Categories.InventoryCategory> categories) : base(source)
+        {
+            BaseLineItem = new BaseLineItem
+            {
+                DisplayName = source.DisplayName,
+                CaseSize = source.CaseSize,
+                MiseName = source.MiseName,
+                Quantity = source.Quantity,
+                UPC = source.UPC
+            };
+
+            Container = new LiquidContainer(source.Container);
+
+            Categories = categories.ToList();
+        }  
 
         public BaseLineItem BaseLineItem { get; set;}
 

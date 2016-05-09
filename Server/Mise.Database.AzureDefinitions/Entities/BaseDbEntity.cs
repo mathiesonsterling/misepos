@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Azure.Mobile.Server;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
@@ -21,6 +17,7 @@ namespace Mise.Database.AzureDefinitions.Entities
 
         protected BaseDbEntity(TEntityType source)
         {
+            Id = source.Id.ToString();
             EntityId = source.Id;
             CreatedAt = source.CreatedDate;
             UpdatedAt = source.LastUpdatedDate;

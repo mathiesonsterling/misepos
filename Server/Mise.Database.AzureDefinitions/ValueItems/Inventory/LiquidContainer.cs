@@ -14,6 +14,19 @@ namespace Mise.Database.AzureDefinitions.ValueItems.Inventory
             Shape = new LiquidContainerShape();
         }
 
+        public LiquidContainer(Core.ValueItems.Inventory.LiquidContainer source) : this()
+        {
+            if (source != null)
+            {
+                AmountContained = new LiquidAmount(source.AmountContained);
+                ContainerDisplayName = source.DisplayName;
+                ContainerExclusiveToBusinessId = source.BusinessId;
+                Shape = new LiquidContainerShape(source.Shape);
+                WeightFull = new Weight(source.WeightFull);
+                WeightEmpty = new Weight(source.WeightEmpty);
+            }
+        }
+
         public Guid? ContainerExclusiveToBusinessId { get; set; }
 
         public string ContainerDisplayName { get; set; }

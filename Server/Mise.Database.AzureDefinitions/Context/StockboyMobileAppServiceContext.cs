@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Azure.Mobile.Server.Tables;
 using Mise.Database.AzureDefinitions.Entities;
 using Mise.Database.AzureDefinitions.Entities.Accounts;
+using Mise.Database.AzureDefinitions.Entities.Categories;
 using Mise.Database.AzureDefinitions.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Entities.People;
 using Mise.Database.AzureDefinitions.Entities.Restaurant;
@@ -42,6 +43,8 @@ namespace Mise.Database.AzureDefinitions.Context
 
         public DbSet<MiseApplication> MiseApplications { get; set; }
         public DbSet<EmailAddressDb> Emails { get; set; }
+        public DbSet<RestaurantInventorySection> RestaurantInventorySections { get; set; }
+        public DbSet<InventoryCategory> InventoryCategories { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

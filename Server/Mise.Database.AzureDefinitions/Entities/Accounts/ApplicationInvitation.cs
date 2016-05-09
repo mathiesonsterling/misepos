@@ -11,11 +11,28 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
 {
     public class ApplicationInvitation : BaseDbEntity<IApplicationInvitation, Core.Common.Entities.ApplicationInvitation>
     {
-        public MiseAppTypes Application
+        public ApplicationInvitation()
+        {
+            
+        }
+
+        public ApplicationInvitation(Core.Common.Entities.ApplicationInvitation source, MiseApplication app, Employee destEmployee, 
+            Employee invitingEmployee, Restaurant.Restaurant rest) 
+            : base(source)
+        {
+            Application = app;
+            Status = source.Status;
+            DestinationEmployee = destEmployee;
+            InvitingEmployee = invitingEmployee;
+            Restaurant = rest;
+        }
+
+        public MiseApplication Application
         {
             get;
             set;
         }
+
         public InvitationStatus Status
         {
             get;
@@ -43,7 +60,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
         {
             return new Core.Common.Entities.ApplicationInvitation
             {
-                Application = Application,
+                Application = (MiseAppTypes)Application.AppTypeValue,
                 Status = Status,
                 DestinationEmail = DestinationEmployee?.PrimaryEmail.ToValueItem(),
                 DestinationEmployeeID = DestinationEmployee?.EntityId,

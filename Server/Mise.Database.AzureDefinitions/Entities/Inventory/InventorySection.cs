@@ -11,6 +11,21 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 {
     public class InventorySection : BaseDbEntity<IInventorySection, Core.Common.Entities.Inventory.InventorySection>
     {
+        public InventorySection() { }
+
+        public InventorySection(IInventorySection source, Inventory inv, Employee lastCompletedBy, RestaurantInventorySection rSec, Employee inUseBy, 
+            IEnumerable<Vendor.Vendor> vendors, IEnumerable<Categories.InventoryCategory> categories) 
+            : base(source)
+        {
+            Inventory = inv;
+            Name = source.Name;
+            LastCompletedBy = lastCompletedBy;
+            RestaurantInventorySection = rSec;
+            CurrentlyInUseBy = inUseBy;
+            TimeCountStarted = source.TimeCountStarted;
+
+            LineItems = source.GetInventoryBeverageLineItemsInSection().Select(li => new InventoryBeverageLineItem(li, vendors, categories)).ToList();
+        }
         protected override Core.Common.Entities.Inventory.InventorySection CreateConcreteSubclass()
         {
             return new Core.Common.Entities.Inventory.InventorySection

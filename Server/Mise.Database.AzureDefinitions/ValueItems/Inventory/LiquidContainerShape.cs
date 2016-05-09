@@ -11,6 +11,10 @@ namespace Mise.Database.AzureDefinitions.ValueItems.Inventory
     public class LiquidContainerShape 
         : Core.ValueItems.Inventory.LiquidContainerShape, IDbValueItem<Core.ValueItems.Inventory.LiquidContainerShape>
     {
+        public LiquidContainerShape() { }
+
+        public LiquidContainerShape(Core.ValueItems.Inventory.LiquidContainerShape source) : base(source) { }
+
         public Core.ValueItems.Inventory.LiquidContainerShape ToValueItem()
         {
             return this;

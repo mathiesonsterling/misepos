@@ -101,8 +101,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Consumers\ApplicationInvitationConsumer.cs" />
     <Compile Include="Consumers\BaseConsumer.cs" />
     <Compile Include="Consumers\EmployeeConsumer.cs" />
+    <Compile Include="Consumers\InventoriesConsumer.cs" />
     <Compile Include="Consumers\RestaurantAccountConsumer.cs" />
     <Compile Include="Consumers\RestaurantConsumer.cs" />
     <Compile Include="Database\AzureEntityStorage.cs" />

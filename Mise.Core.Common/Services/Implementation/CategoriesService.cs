@@ -456,6 +456,12 @@ namespace Mise.Core.Common.Services.Implementation
 	    };
 
 	    #endregion
+
+	    public IEnumerable<IInventoryCategory> GetAllCategories()
+	    {
+	        return _allCats;
+	    } 
+
 		#region ICategoriesService implementation
 		public IEnumerable<IInventoryCategory> GetIABIngredientCategories ()
 		{

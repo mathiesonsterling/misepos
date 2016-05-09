@@ -7,6 +7,18 @@ namespace Mise.Core.ValueItems.Inventory
 	/// </summary>
 	public class LiquidAmount : BaseAmount, IEquatable<LiquidAmount>
 	{
+        public LiquidAmount() { }
+
+	    public LiquidAmount(LiquidAmount clone) : this(clone.Milliliters, clone.SpecificGravity)
+	    {
+	    }
+
+	    public LiquidAmount(decimal milliters, decimal? specificGravity)
+	    {
+	        Milliliters = milliters;
+	        SpecificGravity = specificGravity;
+	    }
+
 	    /// <summary>
         /// Only this is actually stored, but we should use the methods.  Interface it.
         /// </summary>
@@ -78,20 +90,11 @@ namespace Mise.Core.ValueItems.Inventory
             }
         }
 
-        public static LiquidAmount None
-        {
-            get { return new LiquidAmount { Milliliters = 0, SpecificGravity = null }; }
-        }
+        public static LiquidAmount None => new LiquidAmount(0, null);
 
-	    public static LiquidAmount Liter
-	    {
-            get { return new LiquidAmount {Milliliters = 1000}; }
-	    }
+	    public static LiquidAmount Liter => new LiquidAmount {Milliliters = 1000};
 
-	    public static LiquidAmount SevenFiftyMillilters 
-	    {
-            get { return new LiquidAmount {Milliliters = 750}; }
-	    }
+	    public static LiquidAmount SevenFiftyMillilters => new LiquidAmount {Milliliters = 750};
 
 	    public override AmountUnits StoredUnit => AmountUnits.Milliliters;
 

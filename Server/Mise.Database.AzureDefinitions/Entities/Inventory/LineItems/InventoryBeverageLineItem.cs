@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ValueItems.Inventory;
+using Mise.Database.AzureDefinitions.Entities.Categories;
 using Mise.Database.AzureDefinitions.ValueItems;
 using LiquidAmount = Mise.Database.AzureDefinitions.ValueItems.Inventory.LiquidAmount;
 
@@ -15,13 +17,28 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
             PricePaid = new MoneyDb();
         }
 
+        public InventoryBeverageLineItem(IInventoryBeverageLineItem source, IEnumerable<Vendor.Vendor> vendors, IEnumerable<InventoryCategory> categories) 
+            :base(source, categories)
+        {
+            VendorBoughtFrom = source.VendorBoughtFrom.HasValue
+                ? vendors.FirstOrDefault(v => v.EntityId == source.VendorBoughtFrom)
+                : null;
+
+            CurrentAmount = new LiquidAmount(source.CurrentAmount);
+            PricePaid = new MoneyDb(source.PricePaid);
+            PartialBottleListing = ConcatePartialBottleListing(source.GetPartialBottlePercentages());
+            NumFullBottles = source.NumFullBottles;
+            MethodsMeasuredLast = source.MethodsMeasuredLast;
+            InventoryPosition = source.InventoryPosition;
+        }
+
         public Vendor.Vendor VendorBoughtFrom { get; set; }
 
         public LiquidAmount CurrentAmount { get; set; }
 
         public MoneyDb PricePaid { get; set; }
 
-        public List<decimal> PartialBottleListing { get; set; }
+        public string PartialBottleListing { get; set; }
         public int NumFullBottles { get; set; }
         public MeasurementMethods MethodsMeasuredLast { get; set; }
         public int InventoryPosition { get; set; }
@@ -36,8 +53,20 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
                 NumFullBottles = NumFullBottles,
                 MethodsMeasuredLast = MethodsMeasuredLast,
                 InventoryPosition = InventoryPosition,
-                PartialBottleListing = PartialBottleListing
+                PartialBottleListing = GetPartialBottleListing(PartialBottleListing)
             };
+        }
+
+        private static List<decimal> GetPartialBottleListing(string source)
+        {
+            var items = source.Split(',');
+            return items.Select(decimal.Parse).ToList();
+        }
+
+        private static string ConcatePartialBottleListing(IEnumerable<decimal> arr)
+        {
+            var strings = arr.Select(n => n.ToString(CultureInfo.InvariantCulture));
+            return string.Join(",", strings);
         }
     }
 }

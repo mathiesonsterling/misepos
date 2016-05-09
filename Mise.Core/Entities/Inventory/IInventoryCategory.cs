@@ -14,6 +14,8 @@ namespace Mise.Core.Entities.Inventory
         /// </summary>
         /// <returns>The preferred containers.</returns>
         IEnumerable<LiquidContainer> GetPreferredContainers();
+
+        bool IsAssignable { get; set; }
     }
 }
 

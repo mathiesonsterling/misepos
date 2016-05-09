@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.ValueItems.Inventory;
 
@@ -7,6 +8,17 @@ namespace Mise.Database.AzureDefinitions.Entities.Categories
 {
     public class InventoryCategory : BaseDbEntity<IInventoryCategory, Core.Common.Entities.Inventory.InventoryCategory>
     {
+        public InventoryCategory() { }
+
+        public InventoryCategory(IInventoryCategory source)
+        {
+           // ParentCategory = parent;
+            Name = source.Name;
+            IsCustomCategory = source.IsCustomCategory;
+            IsAssignable = source.IsAssignable;
+            PreferredContainer = new LiquidContainer(source.GetPreferredContainers().FirstOrDefault());
+        }
+
         protected override Core.Common.Entities.Inventory.InventoryCategory CreateConcreteSubclass()
         {
             return new Core.Common.Entities.Inventory.InventoryCategory
