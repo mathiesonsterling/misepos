@@ -10,6 +10,12 @@ namespace Mise.Database.AzureDefinitions.ValueItems
     [ComplexType]
     public class BusinessName : Core.ValueItems.BusinessName, IDbValueItem<Core.ValueItems.BusinessName>
     {
+        public BusinessName() { }
+
+        public BusinessName(Core.ValueItems.BusinessName source) : base(source.FullName, source.ShortName)
+        {
+        }
+
         public Core.ValueItems.BusinessName ToValueItem()
         {
             return this;

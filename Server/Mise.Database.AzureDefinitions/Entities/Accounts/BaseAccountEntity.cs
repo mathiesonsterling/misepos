@@ -22,11 +22,11 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
         {
             AccountType = source.AccountType;
             Status = source.Status;
-            PrimaryEmail = new EmailAddressDb {Value = source.PrimaryEmail?.Value};
+            PrimaryEmail = new EmailAddressDb(source.PrimaryEmail);
             AccountPasswordHash = source.Password?.HashValue;
             AccountHolderFirstName = source.AccountHolderName?.FirstName;
             AccountHolderLastName = source.AccountHolderName?.LastName;
-            Emails = source.Emails.Select(e => new EmailAddressDb { Value = e.Value}).ToList();
+            Emails = source.Emails.Select(e => new EmailAddressDb(e)).ToList();
             AccountPhoneNumber = source.PhoneNumber?.Number;
             AccountPhoneNumberAreaCode = source.PhoneNumber?.AreaCode;
             ReferralCodeForAccountToGiveOut = source.ReferralCodeForAccountToGiveOut?.Code;

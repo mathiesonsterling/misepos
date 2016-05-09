@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Mise.Core.Common.Entities.People;
 using Mise.Core.Services.UtilityServices;
-using TransferMiseEntitesTool.Database.StockboyMobileAppServiceService.Models;
+using Mise.Database.AzureDefinitions.Context;
 
 namespace TransferMiseEntitesTool.Consumers
 {
@@ -11,7 +11,7 @@ namespace TransferMiseEntitesTool.Consumers
 		{
 		}
 
-		protected override async Task SaveEntity(DestinationContext db, Employee entity)
+		protected override async Task SaveEntity(StockboyMobileAppServiceContext db, Employee entity)
 		{
 			var emails = entity.GetEmailAddresses();
 			var allEmails = await base.AddAnyMissingEmails(db, emails);

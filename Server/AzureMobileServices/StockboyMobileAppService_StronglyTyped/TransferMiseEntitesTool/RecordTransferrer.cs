@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Mise.Core.Common.Entities;
-using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.DTOs;
-using Mise.Core.Common.Entities.Inventory;
-using Mise.Core.Common.Entities.People;
-using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using TransferMiseEntitesTool.Consumers;
-using TransferMiseEntitesTool.Database;
 
 namespace TransferMiseEntitesTool
 {
@@ -52,6 +43,13 @@ namespace TransferMiseEntitesTool
 
             var jsonSerializer = new JsonNetSerializer();
 	        var undone = await production;
+
+            if (undone.Any())
+            {
+                //we've had an error loading some!
+                var numWrong = undone.Count();
+            }
+
             //do consumption runs here
             var restAccounts = new RestaurantAccountConsumer(jsonSerializer);
 
@@ -60,6 +58,9 @@ namespace TransferMiseEntitesTool
 
 	        var rests = new RestaurantConsumer(jsonSerializer);
 	        await rests.Consume(_restaurants);
+
+            var emps = new EmployeeConsumer(jsonSerializer);
+            await emps.Consume(_employees);
 
         }
     }

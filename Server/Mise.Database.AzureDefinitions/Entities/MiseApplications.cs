@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Mobile.Server;
+﻿using System;
+using Microsoft.Azure.Mobile.Server;
 using Mise.Core.Entities;
 
 namespace Mise.Database.AzureDefinitions.Entities
@@ -11,6 +12,9 @@ namespace Mise.Database.AzureDefinitions.Entities
         {
             AppTypeValue = (int) type;
             Name = type.ToString();
+            Id = AppTypeValue.ToString();
+            CreatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = DateTimeOffset.UtcNow;
         }
 
         public MiseAppTypes ToEnum()

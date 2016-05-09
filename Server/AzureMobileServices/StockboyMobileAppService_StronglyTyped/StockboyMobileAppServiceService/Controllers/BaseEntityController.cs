@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.OData;
 using Microsoft.Azure.Mobile.Server;
-using Mise.Database.AzureDefinitions.Entities;
-using Mise.Database.AzureDefinitions.Entities.Restaurant;
-using StockboyMobileAppServiceService.Models;
+using Mise.Database.AzureDefinitions.Context;
 
 namespace StockboyMobileAppServiceService.Controllers
 {
@@ -25,15 +20,7 @@ namespace StockboyMobileAppServiceService.Controllers
         // GET tables/Restaurants
         public IQueryable<TEntityType> GetAllEnities()
         {
-            try
-            {
-                return Query();
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
-                throw;
-            }
+            return Query();
         }
 
         // GET tables/Restaurants/48D68C86-6EA6-4C25-AA33-223FC9A27959

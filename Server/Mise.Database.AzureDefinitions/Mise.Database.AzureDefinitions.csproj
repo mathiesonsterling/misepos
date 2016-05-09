@@ -99,6 +99,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\StockboyMobileAppServiceContext.cs" />
     <Compile Include="Entities\Accounts\AccountCharge.cs" />
     <Compile Include="Entities\Accounts\AccountCredit.cs" />
     <Compile Include="Entities\Accounts\AccountCreditCardPayment.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Entities\Inventory\InventorySection.cs" />
     <Compile Include="Entities\Inventory\RestaurantInventorySection.cs" />
     <Compile Include="Entities\Restaurant\Restaurant.cs" />
+    <Compile Include="Entities\Restaurant\RestaurantApplicationUse.cs" />
     <Compile Include="Entities\Vendor\Vendor.cs" />
     <Compile Include="Entities\Vendor\VendorBeverageLineItem.cs" />
     <Compile Include="Entities\Vendor\VendorPrivateRestaurantPrice.cs" />

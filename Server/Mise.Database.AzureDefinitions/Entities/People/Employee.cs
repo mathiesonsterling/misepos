@@ -17,10 +17,6 @@ namespace Mise.Database.AzureDefinitions.Entities.People
 		    LastTimeLoggedIntoInventoryApp = source.LastTimeLoggedIntoInventoryApp;
 		    CurrentlyLoggedIntoInventoryApp = source.CurrentlyLoggedIntoInventoryApp;
 	    }
-        /// <summary>
-        /// Employees may or may not have a restaurant at all times
-        /// </summary>
-        public Dictionary<Guid, List<MiseAppTypes>> RestaurantsAndAppsAllowed { get; set; }
 
         public DateTimeOffset? LastTimeLoggedIntoInventoryApp { get; set; }
 
@@ -28,20 +24,36 @@ namespace Mise.Database.AzureDefinitions.Entities.People
 
         public bool CurrentlyLoggedIntoInventoryApp { get; set; }
 
+        public List<Restaurant.Restaurant> RestaurantsEmployedAt { get; set; } 
+
         protected override Core.Common.Entities.People.Employee CreateConcretePerson()
         {
             return new Core.Common.Entities.People.Employee
             {
-                RestaurantsAndAppsAllowed = ConvertAppDictionary(RestaurantsAndAppsAllowed),
+                RestaurantsAndAppsAllowed = GenerateAppAndRestaurantDictionary(),
                 CurrentlyLoggedIntoInventoryApp = CurrentlyLoggedIntoInventoryApp,
                 LastDeviceIDLoggedInWith = LastDeviceIDLoggedInWith,
                 LastTimeLoggedIntoInventoryApp = LastTimeLoggedIntoInventoryApp,
             };
         }
 
-        private static IDictionary<Guid, IList<MiseAppTypes>> ConvertAppDictionary(Dictionary<Guid, List<MiseAppTypes>> source)
+        private IDictionary<Guid, IList<MiseAppTypes>> GenerateAppAndRestaurantDictionary()
         {
-            return source.ToDictionary<KeyValuePair<Guid, List<MiseAppTypes>>, Guid, IList<MiseAppTypes>>(kv => kv.Key, kv => kv.Value);
+            if (RestaurantsEmployedAt == null)
+            {
+                return new Dictionary<Guid, IList<MiseAppTypes>>();
+            }
+
+            var dic = new Dictionary<Guid, IList<MiseAppTypes>>();
+            foreach (var rest in RestaurantsEmployedAt)
+            {
+                IList<MiseAppTypes> apps = rest.RestaurantApplicationUses.Select(ua => (MiseAppTypes) ua.MiseApplication.AppTypeValue).ToList();
+                if (apps.Any())
+                {
+                    dic.Add(rest.RestaurantID, apps);
+                }
+            }
+            return dic;
         }
     }
 }

@@ -8,10 +8,11 @@ using Mise.Database.AzureDefinitions.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Entities.People;
 using Mise.Database.AzureDefinitions.Entities.Restaurant;
 using Mise.Database.AzureDefinitions.Entities.Vendor;
+using Mise.Database.AzureDefinitions.ValueItems;
 using MiseEmployeeAccount = Mise.Core.Common.Entities.Accounts.MiseEmployeeAccount;
 using RestaurantAccount = Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount;
 
-namespace StockboyMobileAppServiceService.Models
+namespace Mise.Database.AzureDefinitions.Context
 {
     public class StockboyMobileAppServiceContext : DbContext
     {
@@ -40,6 +41,7 @@ namespace StockboyMobileAppServiceService.Models
         public DbSet<ApplicationInvitation> ApplicationInvitations { get; set; }
 
         public DbSet<MiseApplication> MiseApplications { get; set; }
+        public DbSet<EmailAddressDb> Emails { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

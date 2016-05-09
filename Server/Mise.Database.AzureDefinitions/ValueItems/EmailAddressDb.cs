@@ -9,9 +9,18 @@ namespace Mise.Database.AzureDefinitions.ValueItems
     {
         public EmailAddressDb()
         {
-            Id = Guid.NewGuid().ToString();
             CreatedAt = DateTimeOffset.UtcNow;
             UpdatedAt = DateTimeOffset.UtcNow;
+        }
+
+        public EmailAddressDb(Core.ValueItems.EmailAddress source) : this(source.Value)
+        {
+        }
+
+        public EmailAddressDb(string value) : this()
+        {
+            Id = value;
+            Value = Value;
         }
 
         public string Value { get; set; }

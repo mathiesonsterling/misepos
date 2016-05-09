@@ -40,6 +40,7 @@ namespace Mise.Core.Common.Entities.Accounts
             set;
         }
 
+        [Obsolete]
         public IEnumerable<MiseAppTypes> AppsOnAccount { get; set; }
 
         public ICollection<AccountCharge> Charges { get; set; } 

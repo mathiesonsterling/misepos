@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.ValueItems;
-using Mise.Database.AzureDefinitions.Entities.Inventory;
-using Mise.Database.AzureDefinitions.ValueItems;
-using TransferMiseEntitesTool.Database.StockboyMobileAppServiceService.Models;
+using Mise.Database.AzureDefinitions.Context;
 
 namespace TransferMiseEntitesTool.Consumers
 {
@@ -17,10 +11,10 @@ namespace TransferMiseEntitesTool.Consumers
     {
     }
 
-    protected override async Task SaveEntity(DestinationContext db, Restaurant entity)
+    protected override async Task SaveEntity(StockboyMobileAppServiceContext db, Restaurant entity)
     {
       //get emails
-	    var allRestEmails = entity.GetEmailsToSendInventoryReportsTo().Select(e => e.Value);
+	    var allRestEmails = entity.GetEmailsToSendInventoryReportsTo();
 	    var fullEmails = await AddAnyMissingEmails(db, allRestEmails);
 
 	    //now also construct all the inventory sections

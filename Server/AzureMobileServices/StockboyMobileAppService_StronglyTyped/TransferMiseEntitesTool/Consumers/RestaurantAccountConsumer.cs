@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
-using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Services.UtilityServices;
-using TransferMiseEntitesTool.Database.StockboyMobileAppServiceService.Models;
+using Mise.Database.AzureDefinitions.Context;
 
 namespace TransferMiseEntitesTool.Consumers
 {
@@ -18,7 +13,7 @@ namespace TransferMiseEntitesTool.Consumers
 
         }
 
-        protected override Task SaveEntity(DestinationContext db, RestaurantAccount entity)
+        protected override Task SaveEntity(StockboyMobileAppServiceContext db, RestaurantAccount entity)
         {
             var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount(entity);
             db.RestaurantAccounts.Add(dbEnt);
