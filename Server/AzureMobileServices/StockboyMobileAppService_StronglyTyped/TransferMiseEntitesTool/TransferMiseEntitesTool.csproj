@@ -107,6 +107,7 @@
     <Compile Include="Consumers\InventoriesConsumer.cs" />
     <Compile Include="Consumers\RestaurantAccountConsumer.cs" />
     <Compile Include="Consumers\RestaurantConsumer.cs" />
+    <Compile Include="Consumers\VendorsConsumer.cs" />
     <Compile Include="Database\AzureEntityStorage.cs" />
     <Compile Include="Database\AzureNonTypedEntities.cs" />
     <Compile Include="EntityProducer.cs" />

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.ValueItems;
+using Mise.Database.AzureDefinitions.Entities.Categories;
 using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
 using Mise.Database.AzureDefinitions.ValueItems;
 
@@ -18,7 +19,35 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             PublicPricePerUnit = new MoneyDb();
         }
 
-        public Guid VendorID
+	    public VendorBeverageLineItem(IVendorBeverageLineItem source, Vendor vendor,
+		    IEnumerable<InventoryCategory> cats, ICollection<Restaurant.Restaurant> rests)
+		    : base(source, cats)
+	    {
+		    Vendor = vendor;
+		    NameInVendor = source.NameInVendor;
+		    PublicPricePerUnit = new MoneyDb(source.PublicPricePerUnit);
+		    LastTimePriceSet = source.LastTimePriceSet;
+
+		    var prices = new List<VendorPrivateRestaurantPrice>();
+		    foreach (var restList in source.GetPricesForRestaurants())
+		    {
+			    var rest = rests.FirstOrDefault(r => r.RestaurantID == restList.Key);
+			    if (rest != null)
+			    {
+				    var allMoneys = restList.Value.Select(
+					    m => new VendorPrivateRestaurantPrice(this, rest, new MoneyDb(m)));
+
+				    foreach (var pPrice in allMoneys)
+				    {
+					    prices.Add(pPrice);
+				    }
+			    }
+		    }
+
+		    PrivateRestaurantPrices = prices;
+	    }
+
+        public Vendor Vendor
         {
             get;
             set;

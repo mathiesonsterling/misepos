@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.ValueItems;
+using Mise.Database.AzureDefinitions.Entities.Categories;
 using Mise.Database.AzureDefinitions.Entities.People;
 using Mise.Database.AzureDefinitions.ValueItems;
 using BusinessName = Mise.Database.AzureDefinitions.ValueItems.BusinessName;
@@ -17,6 +18,35 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             StreetAddress = new StreetAddress();
             Name = new BusinessName();
         }
+
+	    public Vendor(IVendor source, Employee createdBy, ICollection<Restaurant.Restaurant> rests,
+		    ICollection<InventoryCategory> cats)
+	    	:base(source)
+	    {
+		    StreetAddress = new StreetAddress(source.StreetAddress);
+		    EmailToOrderFrom = new EmailAddressDb(source.EmailToOrderFrom);
+		    Website = source.Website.AbsoluteUri;
+		    VendorPhoneNumber = source.PhoneNumber?.Number;
+		    VendorPhoneNumberAreaCode = source.PhoneNumber?.AreaCode;
+		    Name = new BusinessName(source.Name);
+		    CreatedBy = createdBy;
+		    RestaurantsAssociatedWith = rests.ToList();
+
+		    LineItems = source.GetItemsVendorSells().Select(li => GetLineItems(li, rests, cats));
+	    }
+
+	    IEnumerable<VendorBeverageLineItem> GetLineItems(IEnumerable<IVendorBeverageLineItem> source,
+		    ICollection<Restaurant.Restaurant> rests, ICollection<InventoryCategory> cats)
+	    {
+		    foreach (var sourceLI in source)
+		    {
+			    var thisRestIds = sourceLI.GetPricesForRestaurants().Values.Distinct();
+			    var thisRests = rests.Where(r => thisRestIds.Contains(r.RestaurantID)).ToList();
+
+			    yield return new VendorBeverageLineItem(sourceLI, this, cats, rests);
+		    }
+	    }
+
         public StreetAddress StreetAddress { get; set; }
 
         public EmailAddressDb EmailToOrderFrom { get; set; }

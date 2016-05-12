@@ -66,16 +66,20 @@ namespace TransferMiseEntitesTool
             //inv categories
 
             //vendors
+v           var vendors = new VendorsConsumer(jsonSerializer);
+	        await vendors.Consume(_vendors);
 
-            //rest sections should be done already
+            //rest sections should be done already by restaurants?
 
             var appInvites = new ApplicationInvitationConsumer(jsonSerializer);
+	        var inventories = new InventoriesConsumer(jsonSerializer);
             var otherTasks = new List<Task>
             {
                 appInvites.Consume(_applicationInvitations),
-
+				inventories.Consume(_inventories)
             };
 
+	        await Task.WhenAll(otherTasks);
         }
     }
 }

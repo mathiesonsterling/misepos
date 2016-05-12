@@ -16,6 +16,8 @@ namespace Mise.Database.AzureDefinitions.ValueItems
         {
         }
 
+	    public BusinessName(string fullName) :base(fullName){ }
+
         public Core.ValueItems.BusinessName ToValueItem()
         {
             return this;
