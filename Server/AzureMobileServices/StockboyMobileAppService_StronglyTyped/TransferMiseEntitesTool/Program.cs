@@ -12,7 +12,16 @@ namespace TransferMiseEntitesTool
         {
             var tranfer = new EntityDBTransferer();
             var task = tranfer.TransferRecords();
-            task.Wait();
+
+            try
+            {
+                task.Wait();
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+                throw;
+            }
         }
     }
 }

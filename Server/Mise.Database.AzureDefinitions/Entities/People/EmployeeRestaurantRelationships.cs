@@ -22,6 +22,8 @@ namespace Mise.Database.AzureDefinitions.Entities.People
             Employee = employee;
             Restaurant = restaurant;
             IsCurrentEmployee = true;
+
+            Id = employee.Id + ":" + restaurant.RestaurantID;
         }
 
         public Employee Employee { get; set; }

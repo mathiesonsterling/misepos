@@ -15,6 +15,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
         {
             Vendor = vendor;
             Restaurant = restaurant;
+            Id = vendor.EntityId + ":" + restaurant.RestaurantID;
         }
 
         public Vendor Vendor { get; set; }
