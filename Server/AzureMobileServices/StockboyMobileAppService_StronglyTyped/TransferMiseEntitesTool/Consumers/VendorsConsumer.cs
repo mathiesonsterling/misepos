@@ -21,8 +21,7 @@ namespace TransferMiseEntitesTool.Consumers
 
 		    var invCategories = await db.InventoryCategories.Where(ic => ic != null).ToListAsync();
 
-		    var email = await db.GetEmailEntities(new[] {entity.EmailToOrderFrom});
-			var dbEnt = new Mise.Database.AzureDefinitions.Entities.Vendor.Vendor(entity, createdBy, rests, email.FirstOrDefault(), invCategories);
+			var dbEnt = new Mise.Database.AzureDefinitions.Entities.Vendor.Vendor(entity, createdBy, rests, invCategories);
 
 		    db.Vendors.Add(dbEnt);
 		}

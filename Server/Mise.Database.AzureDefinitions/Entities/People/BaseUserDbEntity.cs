@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Mise.Core.Common.Entities.People;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.People;
 using Mise.Core.ValueItems;
-using Mise.Database.AzureDefinitions.ValueItems;
 
 namespace Mise.Database.AzureDefinitions.Entities.People
 {
@@ -15,15 +13,15 @@ namespace Mise.Database.AzureDefinitions.Entities.People
 
 	    protected BaseUserDbEntity(){}
 
-	    protected BaseUserDbEntity(TPersonEntity source, List<EmailAddressDb> emails) : base(source)
+	    protected BaseUserDbEntity(TPersonEntity source) : base(source)
 	    {
 		    FirstName = source.Name?.FirstName;
 		    MiddleName = source.Name?.MiddleName;
 		    LastName = source.Name?.LastName;
 
-		    Emails = emails;
+	        Emails = string.Join(",", source.GetEmailAddresses().Select(e => e.Value));
 		    PasswordHash = source.Password?.HashValue;
-		    PrimaryEmail = emails.FirstOrDefault(e => e.Value == source.PrimaryEmail?.Value);
+		    PrimaryEmail = source.PrimaryEmail?.Value;
 		    DisplayName = source.DisplayName;
 	    }
 
@@ -34,9 +32,10 @@ namespace Mise.Database.AzureDefinitions.Entities.People
             var concrete = CreateConcretePerson();
             concrete.Name = GetName();
             concrete.DisplayName = DisplayName;
-            concrete.Emails = Emails.Select(e => e.ToValueItem()).ToList();
-            concrete.PrimaryEmail = PrimaryEmail.ToValueItem();
+            concrete.PrimaryEmail = new EmailAddress(PrimaryEmail);
             concrete.Password = new Password {HashValue = PasswordHash};
+
+            concrete.Emails = Emails.Split(',').Select(e => new EmailAddress(e)).ToList();
             return concrete;
         }
 
@@ -56,8 +55,8 @@ namespace Mise.Database.AzureDefinitions.Entities.People
         /// </summary>
         public string DisplayName { get; set; }
 
-        public List<EmailAddressDb> Emails { get; set; }
+        public string Emails { get; set; }
 
-        public EmailAddressDb PrimaryEmail { get; set; }
+        public string PrimaryEmail { get; set; }
     }
 }

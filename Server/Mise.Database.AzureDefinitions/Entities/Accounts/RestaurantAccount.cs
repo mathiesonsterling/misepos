@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
-using Mise.Database.AzureDefinitions.ValueItems;
 using CreditCard = Mise.Database.AzureDefinitions.ValueItems.CreditCard;
 
 namespace Mise.Database.AzureDefinitions.Entities.Accounts
@@ -15,7 +14,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             CurrentCard = new CreditCard();
         }
      
-        public RestaurantAccount(Core.Common.Entities.Accounts.RestaurantAccount source, ICollection<EmailAddressDb> emails) : base(source, emails)
+        public RestaurantAccount(Core.Common.Entities.Accounts.RestaurantAccount source) : base(source)
         {
             BillingCycle = source.BillingCycle;
             CurrentCard = new CreditCard(source.CurrentCard);

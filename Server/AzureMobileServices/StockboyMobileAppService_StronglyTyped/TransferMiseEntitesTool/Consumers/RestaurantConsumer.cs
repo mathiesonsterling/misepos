@@ -14,12 +14,9 @@ namespace TransferMiseEntitesTool.Consumers
 
     protected override async Task SaveEntity(StockboyMobileAppServiceContext db, Restaurant entity)
     {
-      //get emails
-	    var allRestEmails = entity.GetEmailsToSendInventoryReportsTo();
-	    var fullEmails = await db.GetEmailEntities(allRestEmails);
 
 	    //now also construct all the inventory sections
-        var dbEnt = new Mise.Database.AzureDefinitions.Entities.Restaurant.Restaurant(entity, fullEmails.ToList());
+        var dbEnt = new Mise.Database.AzureDefinitions.Entities.Restaurant.Restaurant(entity);
         db.Restaurants.Add(dbEnt);
     }
   }

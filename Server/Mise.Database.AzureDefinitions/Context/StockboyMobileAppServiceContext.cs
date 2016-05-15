@@ -44,7 +44,6 @@ namespace Mise.Database.AzureDefinitions.Context
         public DbSet<ApplicationInvitation> ApplicationInvitations { get; set; }
 
         public DbSet<MiseApplication> MiseApplications { get; set; }
-        public DbSet<EmailAddressDb> Emails { get; set; }
         public DbSet<RestaurantInventorySection> RestaurantInventorySections { get; set; }
         public DbSet<InventoryCategory> InventoryCategories { get; set; }
 
@@ -53,29 +52,6 @@ namespace Mise.Database.AzureDefinitions.Context
             modelBuilder.Conventions.Add(
                 new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(
                     "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
-        }
-
-        public async Task<IEnumerable<EmailAddressDb>> GetEmailEntities(IEnumerable<EmailAddress> emails)
-        {
-            var allEmails = emails.Select(e => e.Value).ToList();
-            var alreadyHave = await Emails.Where(e => allEmails.Contains(e.Value)).ToListAsync();
-
-            //create the others
-            var needCreating = allEmails
-                .Where(ne => !(alreadyHave.Select(e => e.Value).Contains(ne)))
-                .Select(e => new EmailAddressDb(e))
-                .ToList();
-            foreach (var newEmail in needCreating)
-            {
-                Emails.Add(newEmail);
-            }
-
-            if (needCreating.Any())
-            {
-                await SaveChangesAsync();
-            }
-
-            return await Emails.Where(e => allEmails.Contains(e.Value)).ToListAsync();
         }
     }
 

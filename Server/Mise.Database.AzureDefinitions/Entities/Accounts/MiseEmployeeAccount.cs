@@ -12,7 +12,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
     {
         public MiseEmployeeAccount() { }
 
-        public MiseEmployeeAccount(Core.Common.Entities.Accounts.MiseEmployeeAccount source, ICollection<EmailAddressDb> emails) : base(source, emails)
+        public MiseEmployeeAccount(Core.Common.Entities.Accounts.MiseEmployeeAccount source) : base(source)
         {
             
         }

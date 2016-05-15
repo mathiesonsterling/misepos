@@ -18,33 +18,34 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             
         }
 
-        protected BaseAccountEntity(TEntity source, ICollection<EmailAddressDb> emails) :base(source)
+        protected BaseAccountEntity(TEntity source) :base(source)
         {
             AccountType = source.AccountType;
             Status = source.Status;
-            PrimaryEmail = source.PrimaryEmail != null
-                ? emails.FirstOrDefault(e => e.Value == source.PrimaryEmail.Value)
-                : null;
+            PrimaryEmail = source.PrimaryEmail?.Value;
             AccountPasswordHash = source.Password?.HashValue;
             AccountHolderFirstName = source.AccountHolderName?.FirstName;
             AccountHolderLastName = source.AccountHolderName?.LastName;
-            Emails = emails.ToList();
             AccountPhoneNumber = source.PhoneNumber?.Number;
             AccountPhoneNumberAreaCode = source.PhoneNumber?.AreaCode;
             ReferralCodeForAccountToGiveOut = source.ReferralCodeForAccountToGiveOut?.Code;
             ReferralCodeUsedToCreate = source.ReferralCodeUsedToCreate?.Code;
+
+            var emails = source.Emails.Where(e => e != null).Select(e => e.Value);
+            Emails = string.Join(",", emails);
         } 
 
         public MiseAccountTypes AccountType { get; set; }
 
         public MiseAccountStatus Status { get; set; }
-        public EmailAddressDb PrimaryEmail { get; set; }
+        public string PrimaryEmail { get; set; }
 
         public string AccountPasswordHash { get; set; }
 
         public string AccountHolderFirstName { get; set; }
         public string AccountHolderLastName { get; set; }
-        public List<EmailAddressDb> Emails { get; set; }
+
+        public string Emails { get; set; }
 
         public string AccountPhoneNumberAreaCode { get; set; }
         public string AccountPhoneNumber { get; set; }
@@ -60,14 +61,14 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
         {
             var conc = CreateAccountSubobject();
             conc.Status = Status;
-            conc.PrimaryEmail = PrimaryEmail.ToValueItem();
-            conc.Password = new Core.ValueItems.Password {HashValue = AccountPasswordHash};
+            conc.PrimaryEmail = new EmailAddress(PrimaryEmail);
+            conc.Password = new Password {HashValue = AccountPasswordHash};
             conc.AccountHolderName = new PersonName(AccountHolderFirstName, AccountHolderLastName);
-            conc.Emails = Emails.Select(e => e.ToValueItem()).ToList();
             conc.PhoneNumber = new PhoneNumber(AccountPhoneNumberAreaCode, AccountPhoneNumber);
             conc.ReferralCodeForAccountToGiveOut = new ReferralCode(ReferralCodeForAccountToGiveOut);
             conc.ReferralCodeUsedToCreate = new ReferralCode(ReferralCodeUsedToCreate);
 
+            conc.Emails = Emails.Split(',').Select(e => new EmailAddress(e)).ToList();
             return conc;
         }
     }

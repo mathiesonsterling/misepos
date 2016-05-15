@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Entities;
+﻿using Mise.Core.Entities;
 using Mise.Core.Entities.People;
+using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Entities.People;
-using Mise.Database.AzureDefinitions.ValueItems;
+
 namespace Mise.Database.AzureDefinitions.Entities.Accounts
 {
     public class ApplicationInvitation : BaseDbEntity<IApplicationInvitation, Core.Common.Entities.ApplicationInvitation>
@@ -62,7 +58,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             {
                 Application = (MiseAppTypes)Application.AppTypeValue,
                 Status = Status,
-                DestinationEmail = DestinationEmployee?.PrimaryEmail.ToValueItem(),
+                DestinationEmail = new EmailAddress(DestinationEmployee?.PrimaryEmail),
                 DestinationEmployeeID = DestinationEmployee?.EntityId,
                 InvitingEmployeeID = InvitingEmployee.EntityId,
                 InvitingEmployeeName = InvitingEmployee?.GetName(),

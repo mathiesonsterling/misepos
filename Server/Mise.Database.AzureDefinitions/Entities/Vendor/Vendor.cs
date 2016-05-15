@@ -5,7 +5,6 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Entities.Categories;
 using Mise.Database.AzureDefinitions.Entities.People;
-using Mise.Database.AzureDefinitions.ValueItems;
 using BusinessName = Mise.Database.AzureDefinitions.ValueItems.BusinessName;
 using StreetAddress = Mise.Database.AzureDefinitions.ValueItems.StreetAddress;
 
@@ -19,12 +18,11 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             Name = new BusinessName();
         }
 
-	    public Vendor(IVendor source, Employee createdBy, ICollection<Restaurant.Restaurant> rests, EmailAddressDb emailToOrderFrom,
-		    ICollection<InventoryCategory> cats)
+	    public Vendor(IVendor source, Employee createdBy, ICollection<Restaurant.Restaurant> rests, ICollection<InventoryCategory> cats)
 	    	:base(source)
 	    {
 		    StreetAddress = new StreetAddress(source.StreetAddress);
-		    EmailToOrderFrom = emailToOrderFrom;
+	        EmailToOrderFrom = source.EmailToOrderFrom?.Value;
 		    Website = source.Website.AbsoluteUri;
 		    VendorPhoneNumber = source.PhoneNumber?.Number;
 		    VendorPhoneNumberAreaCode = source.PhoneNumber?.AreaCode;
@@ -49,7 +47,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 
         public StreetAddress StreetAddress { get; set; }
 
-        public EmailAddressDb EmailToOrderFrom { get; set; }
+        public string EmailToOrderFrom { get; set; }
 
         public string Website { get; set; }
 
@@ -69,7 +67,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             return new Core.Common.Entities.Vendors.Vendor
             {
                 StreetAddress = StreetAddress.ToValueItem(),
-                EmailToOrderFrom = EmailToOrderFrom.ToValueItem(),
+                EmailToOrderFrom = new EmailAddress(EmailToOrderFrom),
                 Website = new Uri(Website),
                 PhoneNumber = new PhoneNumber(VendorPhoneNumberAreaCode, VendorPhoneNumber),
                 CreatedByEmployeeID = CreatedBy?.EntityId,

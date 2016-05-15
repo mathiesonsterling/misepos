@@ -11,7 +11,7 @@ namespace Mise.Database.AzureDefinitions.Entities.People
     {
 	    public Employee(){}
 
-	    public Employee(IEmployee source, List<EmailAddressDb> emails) :base(source, emails)
+	    public Employee(IEmployee source) :base(source)
 	    {
 		    LastDeviceIDLoggedInWith = source.LastDeviceIDLoggedInWith;
 		    LastTimeLoggedIntoInventoryApp = source.LastTimeLoggedIntoInventoryApp;

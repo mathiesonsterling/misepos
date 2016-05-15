@@ -160,6 +160,7 @@
     <Compile Include="Controllers\BaseEntityController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\InventoriesController.cs" />
+    <Compile Include="Controllers\InventoryCategoriesController.cs" />
     <Compile Include="Controllers\ParsController.cs" />
     <Compile Include="Controllers\PurchaseOrdersController.cs" />
     <Compile Include="Controllers\ReceivingOrdersController.cs" />

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mise.Core.Common.Entities.People;
 using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
@@ -12,12 +11,12 @@ namespace TransferMiseEntitesTool.Consumers
 		{
 		}
 
-		protected override async Task SaveEntity(StockboyMobileAppServiceContext db, Employee entity)
+		protected override Task SaveEntity(StockboyMobileAppServiceContext db, Employee entity)
 		{
-			var emails = entity.GetEmailAddresses();
-		    var allEmails = await db.GetEmailEntities(emails);
+			var dbEnt = new Mise.Database.AzureDefinitions.Entities.People.Employee(entity);
+		    db.Employees.Add(dbEnt);
 
-			var dbEnt = new Mise.Database.AzureDefinitions.Entities.People.Employee(entity, allEmails.ToList());
+            return Task.FromResult(true);
 		}
 	}
 }
