@@ -9,6 +9,16 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 {
     public class Par : BaseDbEntity<IPar, Core.Common.Entities.Inventory.Par>
     {
+        public Par() { }
+
+        public Par(IPar source, Restaurant.Restaurant restaurant, Employee createdByEmployee, IEnumerable<Categories.InventoryCategory> categories) : base(source)
+        {
+            Restaurant = restaurant;
+            CreatedByEmployee = createdByEmployee;
+            IsCurrent = source.IsCurrent;
+            ParLineItems = source.GetBeverageLineItems().Select(li => new ParBeverageLineItem(li, categories)).ToList();
+        }
+
         public Restaurant.Restaurant Restaurant { get; set; }
 
         protected override Core.Common.Entities.Inventory.Par CreateConcreteSubclass()

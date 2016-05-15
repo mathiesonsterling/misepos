@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.ValueItems;
+using InventoryCategory = Mise.Database.AzureDefinitions.Entities.Categories.InventoryCategory;
 
 namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
@@ -15,6 +16,14 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
         {
             LineItemPrice = new MoneyDb();
             UnitPrice = new MoneyDb();
+        }
+
+        public ReceivingOrderBeverageLineItem(IReceivingOrderLineItem source, IEnumerable<InventoryCategory> cats) 
+            : base(source, cats)
+        {
+            LineItemPrice = new MoneyDb(source.LineItemPrice);
+            UnitPrice = new MoneyDb(source.UnitPrice);
+            ZeroedOut = source.ZeroedOut;
         }
 
         /// <summary>

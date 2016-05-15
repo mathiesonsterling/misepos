@@ -23,15 +23,15 @@ namespace TransferMiseEntitesTool
 
         public EntityDBTransferer()
         {
-            _restaurantAccounts = new BlockingCollection<RestaurantEntityDataTransportObject>();
-            _applicationInvitations = new BlockingCollection<RestaurantEntityDataTransportObject>();
-            _restaurants = new BlockingCollection<RestaurantEntityDataTransportObject>();
-            _employees = new BlockingCollection<RestaurantEntityDataTransportObject>();
-            _inventories = new BlockingCollection<RestaurantEntityDataTransportObject>();
-            _vendors = new BlockingCollection<RestaurantEntityDataTransportObject>();
-            _receivingOrders = new BlockingCollection<RestaurantEntityDataTransportObject>();
-            _purchaseOrders = new BlockingCollection<RestaurantEntityDataTransportObject>();
-            _pars = new BlockingCollection<RestaurantEntityDataTransportObject>();
+            _restaurantAccounts = new BlockingCollection<RestaurantEntityDataTransportObject>(); //
+            _applicationInvitations = new BlockingCollection<RestaurantEntityDataTransportObject>(); //
+            _restaurants = new BlockingCollection<RestaurantEntityDataTransportObject>(); //
+            _employees = new BlockingCollection<RestaurantEntityDataTransportObject>(); //
+            _inventories = new BlockingCollection<RestaurantEntityDataTransportObject>(); //
+            _vendors = new BlockingCollection<RestaurantEntityDataTransportObject>(); //
+            _receivingOrders = new BlockingCollection<RestaurantEntityDataTransportObject>(); //
+            _purchaseOrders = new BlockingCollection<RestaurantEntityDataTransportObject>(); //
+            _pars = new BlockingCollection<RestaurantEntityDataTransportObject>();//
             _miseEmployeeAccounts = new BlockingCollection<RestaurantEntityDataTransportObject>();
         }
 
@@ -66,17 +66,25 @@ namespace TransferMiseEntitesTool
             //inv categories
 
             //vendors
-v           var vendors = new VendorsConsumer(jsonSerializer);
+            var vendors = new VendorsConsumer(jsonSerializer);
 	        await vendors.Consume(_vendors);
 
             //rest sections should be done already by restaurants?
 
             var appInvites = new ApplicationInvitationConsumer(jsonSerializer);
 	        var inventories = new InventoriesConsumer(jsonSerializer);
+            var pars = new ParsConsumer(jsonSerializer);
+            var purchaseOrders = new PurchaseOrderConsumer(jsonSerializer);
+            var receivingOrders = new ReceivingOrdersConsumer(jsonSerializer);
+            var miseEmpAccounts = new MiseEmployeeAccountsConsumer(jsonSerializer);
             var otherTasks = new List<Task>
             {
                 appInvites.Consume(_applicationInvitations),
-				inventories.Consume(_inventories)
+				inventories.Consume(_inventories),
+                pars.Consume(_pars),
+                purchaseOrders.Consume(_purchaseOrders),
+                receivingOrders.Consume(_receivingOrders),
+                miseEmpAccounts.Consume(_miseEmployeeAccounts)
             };
 
 	        await Task.WhenAll(otherTasks);

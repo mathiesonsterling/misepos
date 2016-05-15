@@ -9,7 +9,7 @@ using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
 
 namespace TransferMiseEntitesTool.Consumers
-{
+{ 
     class InventoriesConsumer : BaseConsumer<Inventory>
     {
         public InventoriesConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)

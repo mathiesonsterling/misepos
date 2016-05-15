@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ValueItems.Inventory;
+using Mise.Database.AzureDefinitions.Entities.Categories;
 using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
 using Mise.Database.AzureDefinitions.Entities.People;
 
@@ -13,6 +11,27 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 {
     public class ReceivingOrder : BaseDbEntity<IReceivingOrder, Core.Common.Entities.Inventory.ReceivingOrder>
     {
+        public ReceivingOrder()
+        {
+            LineItems = new List<ReceivingOrderBeverageLineItem>();
+        }
+
+        public ReceivingOrder(IReceivingOrder source, Restaurant.Restaurant rest, Employee receivedBy, PurchaseOrder po, 
+            Vendor.Vendor vendor, IEnumerable<InventoryCategory> cats)
+            : base(source)
+        {
+            Restaurant = rest;
+            ReceivedByEmployee = receivedBy;
+            DateReceived = source.DateReceived;
+            PurchaseOrder = po;
+            Vendor = vendor;
+            Status = source.Status;
+            Notes = source.Notes;
+            InvoiceID = source.InvoiceID;
+
+            LineItems =
+                source.GetBeverageLineItems().Select(li => new ReceivingOrderBeverageLineItem(li, cats)).ToList();
+        }
         public Restaurant.Restaurant Restaurant
         {
             get;
@@ -38,11 +57,6 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
         {
             get;
             set;
-        }
-
-        public ReceivingOrder()
-        {
-            LineItems = new List<ReceivingOrderBeverageLineItem>();
         }
 
         public List<ReceivingOrderBeverageLineItem> LineItems { get; set; }

@@ -10,6 +10,13 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
     public class ParBeverageLineItem : BaseLiquidLineItemEntity<IParBeverageLineItem, Core.Common.Entities.Inventory.ParBeverageLineItem>
     {
+        public ParBeverageLineItem() { }
+
+        public ParBeverageLineItem(IParBeverageLineItem source, IEnumerable<Categories.InventoryCategory> categories) : base(source, categories)
+        {
+            
+        }
+
         protected override Core.Common.Entities.Inventory.ParBeverageLineItem CreateConcreteLineItemClass()
         {
             return new Core.Common.Entities.Inventory.ParBeverageLineItem();

@@ -105,6 +105,11 @@
     <Compile Include="Consumers\BaseConsumer.cs" />
     <Compile Include="Consumers\EmployeeConsumer.cs" />
     <Compile Include="Consumers\InventoriesConsumer.cs" />
+    <Compile Include="Consumers\InventoryCategoriesConsumer.cs" />
+    <Compile Include="Consumers\MiseEmployeeAccountsConsumer.cs" />
+    <Compile Include="Consumers\ParsConsumer.cs" />
+    <Compile Include="Consumers\PurchaseOrderConsumer.cs" />
+    <Compile Include="Consumers\ReceivingOrdersConsumer.cs" />
     <Compile Include="Consumers\RestaurantAccountConsumer.cs" />
     <Compile Include="Consumers\RestaurantConsumer.cs" />
     <Compile Include="Consumers\VendorsConsumer.cs" />

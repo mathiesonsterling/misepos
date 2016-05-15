@@ -10,7 +10,6 @@ using Mise.Database.AzureDefinitions.Entities.People;
 using Mise.Database.AzureDefinitions.Entities.Restaurant;
 using Mise.Database.AzureDefinitions.Entities.Vendor;
 using Mise.Database.AzureDefinitions.ValueItems;
-using MiseEmployeeAccount = Mise.Core.Common.Entities.Accounts.MiseEmployeeAccount;
 using RestaurantAccount = Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount;
 
 namespace Mise.Database.AzureDefinitions.Context

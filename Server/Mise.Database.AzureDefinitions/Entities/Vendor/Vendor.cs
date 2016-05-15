@@ -32,7 +32,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 		    CreatedBy = createdBy;
 		    RestaurantsAssociatedWith = rests.ToList();
 
-		    LineItems = source.GetItemsVendorSells().Select(li => GetLineItems(li, rests, cats));
+	        LineItems = GetLineItems(source.GetItemsVendorSells(), rests, cats).ToList();
 	    }
 
 	    IEnumerable<VendorBeverageLineItem> GetLineItems(IEnumerable<IVendorBeverageLineItem> source,
@@ -40,10 +40,10 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 	    {
 		    foreach (var sourceLI in source)
 		    {
-			    var thisRestIds = sourceLI.GetPricesForRestaurants().Values.Distinct();
+			    var thisRestIds = sourceLI.GetPricesForRestaurants().Keys.Distinct();
 			    var thisRests = rests.Where(r => thisRestIds.Contains(r.RestaurantID)).ToList();
 
-			    yield return new VendorBeverageLineItem(sourceLI, this, cats, rests);
+			    yield return new VendorBeverageLineItem(sourceLI, this, cats, thisRests);
 		    }
 	    }
 
