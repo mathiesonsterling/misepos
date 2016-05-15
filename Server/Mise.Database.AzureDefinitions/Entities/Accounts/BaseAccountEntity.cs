@@ -18,15 +18,17 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             
         }
 
-        protected BaseAccountEntity(TEntity source) :base(source)
+        protected BaseAccountEntity(TEntity source, ICollection<EmailAddressDb> emails) :base(source)
         {
             AccountType = source.AccountType;
             Status = source.Status;
-            PrimaryEmail = new EmailAddressDb(source.PrimaryEmail);
+            PrimaryEmail = source.PrimaryEmail != null
+                ? emails.FirstOrDefault(e => e.Value == source.PrimaryEmail.Value)
+                : null;
             AccountPasswordHash = source.Password?.HashValue;
             AccountHolderFirstName = source.AccountHolderName?.FirstName;
             AccountHolderLastName = source.AccountHolderName?.LastName;
-            Emails = source.Emails.Select(e => new EmailAddressDb(e)).ToList();
+            Emails = emails.ToList();
             AccountPhoneNumber = source.PhoneNumber?.Number;
             AccountPhoneNumberAreaCode = source.PhoneNumber?.AreaCode;
             ReferralCodeForAccountToGiveOut = source.ReferralCodeForAccountToGiveOut?.Code;

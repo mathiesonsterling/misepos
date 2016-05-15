@@ -13,12 +13,11 @@ namespace TransferMiseEntitesTool.Consumers
 
         }
 
-        protected override Task SaveEntity(StockboyMobileAppServiceContext db, RestaurantAccount entity)
+        protected override async Task SaveEntity(StockboyMobileAppServiceContext db, RestaurantAccount entity)
         {
-            var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount(entity);
+            var emails = await db.GetEmailEntities(entity.Emails);
+            var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount(entity, emails.ToList());
             db.RestaurantAccounts.Add(dbEnt);
-
-	        return Task.FromResult(true);
         }
     }
 }

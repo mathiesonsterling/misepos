@@ -3,12 +3,10 @@ using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
-using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Authentication;
 using Microsoft.Azure.Mobile.Server.Config;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
-using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Context;
 using Mise.Database.AzureDefinitions.Entities;
 using Mise.Database.AzureDefinitions.Entities.Categories;
@@ -20,7 +18,7 @@ namespace StockboyMobileAppServiceService
     {
         public static void ConfigureMobileApp(IAppBuilder app)
         {
-            HttpConfiguration config = new HttpConfiguration();
+            var config = new HttpConfiguration();
 
             //For more information on Web API tracing, see http://go.microsoft.com/fwlink/?LinkId=620686 
             config.EnableSystemDiagnosticsTracing();
@@ -35,7 +33,7 @@ namespace StockboyMobileAppServiceService
             // To prevent Entity Framework from modifying your database schema, use a null database initializer
             // Database.SetInitializer<StockboyMobileAppServiceContext>(null);
 
-            MobileAppSettingsDictionary settings = config.GetMobileAppSettingsProvider().GetMobileAppSettings();
+            var settings = config.GetMobileAppSettingsProvider().GetMobileAppSettings();
 
             if (string.IsNullOrEmpty(settings.HostName))
             {

@@ -1,7 +1,10 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Azure.Mobile.Server.Tables;
+using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Entities;
 using Mise.Database.AzureDefinitions.Entities.Accounts;
 using Mise.Database.AzureDefinitions.Entities.Categories;
@@ -27,7 +30,7 @@ namespace Mise.Database.AzureDefinitions.Context
 
         public StockboyMobileAppServiceContext() : base(CONNECTION_STRING_NAME)
         {
-        } 
+        }
 
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Employee> Employees { get; set; }
@@ -50,6 +53,29 @@ namespace Mise.Database.AzureDefinitions.Context
             modelBuilder.Conventions.Add(
                 new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(
                     "ServiceTableColumn", (property, attributes) => attributes.Single().ColumnType.ToString()));
+        }
+
+        public async Task<IEnumerable<EmailAddressDb>> GetEmailEntities(IEnumerable<EmailAddress> emails)
+        {
+            var allEmails = emails.Select(e => e.Value).ToList();
+            var alreadyHave = await Emails.Where(e => allEmails.Contains(e.Value)).ToListAsync();
+
+            //create the others
+            var needCreating = allEmails
+                .Where(ne => !(alreadyHave.Select(e => e.Value).Contains(ne)))
+                .Select(e => new EmailAddressDb(e))
+                .ToList();
+            foreach (var newEmail in needCreating)
+            {
+                Emails.Add(newEmail);
+            }
+
+            if (needCreating.Any())
+            {
+                await SaveChangesAsync();
+            }
+
+            return await Emails.Where(e => allEmails.Contains(e.Value)).ToListAsync();
         }
     }
 

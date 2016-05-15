@@ -31,7 +31,7 @@ namespace TransferMiseEntitesTool.Consumers
         {
             using (var db = new StockboyMobileAppServiceContext())
             {
-                db.Database.CommandTimeout = 180;
+                db.Database.CommandTimeout = 500;
                 foreach (var dto in dtos.GetConsumingEnumerable())
                 {
                     try
@@ -57,24 +57,5 @@ namespace TransferMiseEntitesTool.Consumers
         }
 
       protected abstract Task SaveEntity(StockboyMobileAppServiceContext db, TEntityType entity);
-
-	  protected async Task<List<EmailAddressDb>> AddAnyMissingEmails(StockboyMobileAppServiceContext db,
-		  IEnumerable<EmailAddress> emails)
-	  {
-		var allEmails = emails.Select(e => e.Value).ToList();
-		var alreadyHave = await db.Emails.Where(e => allEmails.Contains(e.Value)).ToListAsync();
-
-		//create the others
-		var needCreating = allEmails
-			.Where(ne => !(alreadyHave.Select(e => e.Value).Contains(ne)))
-			.Select(e => new EmailAddressDb(e));
-		foreach (var newEmail in needCreating)
-		{
-			db.Emails.Add(newEmail);
-		}
-		await db.SaveChangesAsync();
-
-		return await db.Emails.Where(e => allEmails.Contains(e.Value)).ToListAsync();
-	  }
     }
 }

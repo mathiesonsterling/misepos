@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Entities.Accounts;
@@ -16,18 +14,16 @@ namespace TransferMiseEntitesTool.Consumers
         {
         }
 
-        protected override Task SaveEntity(StockboyMobileAppServiceContext db, IAccount entity)
+        protected override async Task SaveEntity(StockboyMobileAppServiceContext db, IAccount entity)
         {
             var downAcc = entity as MiseEmployeeAccount;
+
             if (downAcc != null)
             {
-                var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.MiseEmployeeAccount(downAcc);
+                var emails = (await db.GetEmailEntities(entity.Emails)).ToList();
+                var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.MiseEmployeeAccount(downAcc, emails);
                 db.MiseEmployeeAccounts.Add(dbEnt);
-
-                return Task.FromResult(true);
             }
-
-            return Task.FromResult(false);
         }
     }
 }

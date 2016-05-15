@@ -20,7 +20,7 @@ namespace Mise.Database.AzureDefinitions.ValueItems
         public EmailAddressDb(string value) : this()
         {
             Id = value;
-            Value = Value;
+            Value = value;
         }
 
         public string Value { get; set; }

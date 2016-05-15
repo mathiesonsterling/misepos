@@ -134,7 +134,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueItems\BusinessName.cs" />
     <Compile Include="ValueItems\CreditCard.cs" />
-    <Compile Include="ValueItems\EmailAddressDb.cs" />
+    <Compile Include="Entities\Emails\EmailAddressDb.cs" />
     <Compile Include="ValueItems\EventIDDb.cs" />
     <Compile Include="ValueItems\IDbValueItem.cs" />
     <Compile Include="ValueItems\Inventory\LiquidAmount.cs" />

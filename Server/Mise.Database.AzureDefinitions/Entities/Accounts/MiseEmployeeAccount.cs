@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Entities.Accounts;
+using Mise.Database.AzureDefinitions.ValueItems;
 
 namespace Mise.Database.AzureDefinitions.Entities.Accounts
 {
@@ -11,7 +12,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
     {
         public MiseEmployeeAccount() { }
 
-        public MiseEmployeeAccount(Core.Common.Entities.Accounts.MiseEmployeeAccount source) : base(source)
+        public MiseEmployeeAccount(Core.Common.Entities.Accounts.MiseEmployeeAccount source, ICollection<EmailAddressDb> emails) : base(source, emails)
         {
             
         }

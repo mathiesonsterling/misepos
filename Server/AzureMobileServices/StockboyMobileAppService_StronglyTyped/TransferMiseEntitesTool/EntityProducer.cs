@@ -44,7 +44,7 @@ namespace TransferMiseEntitesTool
         {
             using (var source = new AzureNonTypedEntities())
             {
-                source.Database.CommandTimeout = 180;
+                source.Database.CommandTimeout = 500;
                 foreach (var dto in source.AzureEntityStorages)
                 {
                     try

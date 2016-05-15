@@ -19,12 +19,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             Name = new BusinessName();
         }
 
-	    public Vendor(IVendor source, Employee createdBy, ICollection<Restaurant.Restaurant> rests,
+	    public Vendor(IVendor source, Employee createdBy, ICollection<Restaurant.Restaurant> rests, EmailAddressDb emailToOrderFrom,
 		    ICollection<InventoryCategory> cats)
 	    	:base(source)
 	    {
 		    StreetAddress = new StreetAddress(source.StreetAddress);
-		    EmailToOrderFrom = new EmailAddressDb(source.EmailToOrderFrom);
+		    EmailToOrderFrom = emailToOrderFrom;
 		    Website = source.Website.AbsoluteUri;
 		    VendorPhoneNumber = source.PhoneNumber?.Number;
 		    VendorPhoneNumberAreaCode = source.PhoneNumber?.AreaCode;
