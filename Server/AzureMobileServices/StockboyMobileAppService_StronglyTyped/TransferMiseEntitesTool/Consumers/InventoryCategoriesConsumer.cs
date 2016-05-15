@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,11 @@ namespace TransferMiseEntitesTool.Consumers
             db.InventoryCategories.Add(dbEnt);
 
             return Task.FromResult(true);
+        }
+
+        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        {
+            return db.InventoryCategories.AnyAsync(ic => ic.EntityId == id);
         }
     }
 }

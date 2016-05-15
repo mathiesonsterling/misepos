@@ -26,5 +26,10 @@ namespace TransferMiseEntitesTool.Consumers
 
             db.Pars.Add(dbEnt);
         }
+
+        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        {
+            return db.Pars.AnyAsync(p => p.EntityId == id);
+        }
     }
 }

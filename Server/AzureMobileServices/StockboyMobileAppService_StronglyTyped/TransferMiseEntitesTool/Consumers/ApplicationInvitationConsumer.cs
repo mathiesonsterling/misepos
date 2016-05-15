@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
 using Mise.Core.Services.UtilityServices;
@@ -21,6 +22,11 @@ namespace TransferMiseEntitesTool.Consumers
             var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.ApplicationInvitation(entity, app, destEmp, invEmp, rest);
 
             db.ApplicationInvitations.Add(dbEnt);
+        }
+
+        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        {
+            return db.ApplicationInvitations.AnyAsync(ai => ai.EntityId == id);
         }
     }
 }

@@ -10,7 +10,10 @@ namespace Mise.Database.AzureDefinitions.ValueItems
 
         public MoneyDb(Money source)
         {
-            Dollars = source.Dollars;
+            if (source != null)
+            {
+                Dollars = source.Dollars;
+            }
         }
 
         public decimal Dollars { get; set; }

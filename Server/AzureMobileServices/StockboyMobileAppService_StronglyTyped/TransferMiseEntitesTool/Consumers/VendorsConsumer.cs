@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Vendors;
@@ -25,5 +26,10 @@ namespace TransferMiseEntitesTool.Consumers
 
 		    db.Vendors.Add(dbEnt);
 		}
+
+	    protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+	    {
+	        return db.Vendors.AnyAsync(v => v.EntityId == id);
+	    }
 	}
 }

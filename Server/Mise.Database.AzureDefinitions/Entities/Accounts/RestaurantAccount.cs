@@ -16,7 +16,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
      
         public RestaurantAccount(Core.Common.Entities.Accounts.RestaurantAccount source) : base(source)
         {
-            BillingCycle = source.BillingCycle;
+            BillingCycleDays = source.BillingCycle.Days;
             CurrentCard = new CreditCard(source.CurrentCard);
             PaymentPlan = source.PaymentPlan;
             PaymentPlanSetupWithProvider = source.PaymentPlanSetupWithProvider;
@@ -26,7 +26,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             Credits = source.AccountCredits.Select(c => new AccountCredit(c)).ToList();
         }
 
-        public TimeSpan BillingCycle { get; set; }
+        public int BillingCycleDays { get; set; }
 
         public CreditCard CurrentCard { get; set; }
 
@@ -50,7 +50,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
         {
             return new Core.Common.Entities.Accounts.RestaurantAccount
             {
-                BillingCycle = BillingCycle,
+                BillingCycle = new TimeSpan(BillingCycleDays, 0, 0, 0),
                 CurrentCard = CurrentCard.ToValueItem(),
                 PaymentPlan = PaymentPlan,
                 PaymentPlanSetupWithProvider = PaymentPlanSetupWithProvider,

@@ -36,8 +36,12 @@ namespace TransferMiseEntitesTool.Consumers
                 {
                     try
                     {
-                        var entity = EntityFactory.FromDataStorageObject<TEntityType>(dto);
-                        await SaveEntity(db, entity);
+                        var exists = await DoesEntityExist(db, dto.Id);
+                        if (!exists)
+                        {
+                            var entity = EntityFactory.FromDataStorageObject<TEntityType>(dto);
+                            await SaveEntity(db, entity);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -56,6 +60,8 @@ namespace TransferMiseEntitesTool.Consumers
             }
         }
 
-      protected abstract Task SaveEntity(StockboyMobileAppServiceContext db, TEntityType entity);
+        protected abstract Task SaveEntity(StockboyMobileAppServiceContext db, TEntityType entity);
+
+        protected abstract Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id);
     }
 }

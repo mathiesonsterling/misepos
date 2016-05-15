@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities;
 using Mise.Core.Entities.People;
-using Mise.Database.AzureDefinitions.ValueItems;
 
 namespace Mise.Database.AzureDefinitions.Entities.People
 {
@@ -11,11 +10,12 @@ namespace Mise.Database.AzureDefinitions.Entities.People
     {
 	    public Employee(){}
 
-	    public Employee(IEmployee source) :base(source)
+	    public Employee(IEmployee source, IEnumerable<Restaurant.Restaurant> restaurantsWorkingAt) :base(source)
 	    {
 		    LastDeviceIDLoggedInWith = source.LastDeviceIDLoggedInWith;
 		    LastTimeLoggedIntoInventoryApp = source.LastTimeLoggedIntoInventoryApp;
 		    CurrentlyLoggedIntoInventoryApp = source.CurrentlyLoggedIntoInventoryApp;
+	        RestaurantsEmployedAt = restaurantsWorkingAt.Select(r => new EmployeeRestaurantRelationships(this, r)).ToList();
 	    }
 
         public DateTimeOffset? LastTimeLoggedIntoInventoryApp { get; set; }
@@ -24,7 +24,7 @@ namespace Mise.Database.AzureDefinitions.Entities.People
 
         public bool CurrentlyLoggedIntoInventoryApp { get; set; }
 
-        public List<Restaurant.Restaurant> RestaurantsEmployedAt { get; set; } 
+        public List<EmployeeRestaurantRelationships> RestaurantsEmployedAt { get; set; } 
 
         protected override Core.Common.Entities.People.Employee CreateConcretePerson()
         {
@@ -45,7 +45,7 @@ namespace Mise.Database.AzureDefinitions.Entities.People
             }
 
             var dic = new Dictionary<Guid, IList<MiseAppTypes>>();
-            foreach (var rest in RestaurantsEmployedAt)
+            foreach (var rest in RestaurantsEmployedAt.Select(r => r.Restaurant))
             {
                 IList<MiseAppTypes> apps = rest.RestaurantApplicationUses.Select(ua => (MiseAppTypes) ua.MiseApplication.AppTypeValue).ToList();
                 if (apps.Any())

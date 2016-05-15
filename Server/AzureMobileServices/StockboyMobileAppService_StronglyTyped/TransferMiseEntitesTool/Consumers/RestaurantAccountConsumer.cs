@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Data.Entity;
+using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
@@ -18,6 +20,11 @@ namespace TransferMiseEntitesTool.Consumers
             db.RestaurantAccounts.Add(dbEnt);
 
             return Task.FromResult(true);
+        }
+
+        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        {
+            return db.RestaurantAccounts.AnyAsync(ra => ra.EntityId == id);
         }
     }
 }

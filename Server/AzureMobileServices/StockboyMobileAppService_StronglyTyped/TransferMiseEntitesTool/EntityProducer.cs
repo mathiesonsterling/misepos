@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
 using TransferMiseEntitesTool.Database;
 
@@ -40,12 +43,13 @@ namespace TransferMiseEntitesTool
             _failedTransfers = new List<AzureEntityStorage>();
         }
 
-        public List<AzureEntityStorage> Produce()
+        public Task<List<AzureEntityStorage>> Produce()
         {
             using (var source = new AzureNonTypedEntities())
             {
                 source.Database.CommandTimeout = 500;
-                foreach (var dto in source.AzureEntityStorages)
+                var dtos = source.AzureEntityStorages.Where(a => !a.Deleted);
+                foreach (var dto in dtos)
                 {
                     try
                     {
@@ -105,7 +109,7 @@ namespace TransferMiseEntitesTool
             _receivingOrders.CompleteAdding();
             _restaurants.CompleteAdding();
             _vendors.CompleteAdding();
-            return _failedTransfers;
+            return Task.FromResult(_failedTransfers);
         }
     }
 }

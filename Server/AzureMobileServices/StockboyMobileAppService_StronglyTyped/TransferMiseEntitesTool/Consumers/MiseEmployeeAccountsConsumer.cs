@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Data.Entity;
+using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Services.UtilityServices;
@@ -25,6 +27,11 @@ namespace TransferMiseEntitesTool.Consumers
             }
 
             return Task.FromResult(false);
+        }
+
+        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        {
+            return db.MiseEmployeeAccounts.AnyAsync(ea => ea.EntityId == id);
         }
     }
 }

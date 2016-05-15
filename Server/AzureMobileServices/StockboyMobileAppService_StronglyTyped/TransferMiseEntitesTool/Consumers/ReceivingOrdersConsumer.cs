@@ -29,5 +29,10 @@ namespace TransferMiseEntitesTool.Consumers
             var dbEnt = new ReceivingOrder(entity, rest, emp, po, vendor, cats);
             db.ReceivingOrders.Add(dbEnt);
         }
+
+        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        {
+            return db.ReceivingOrders.AnyAsync(ro => ro.EntityId == id);
+        }
     }
 }

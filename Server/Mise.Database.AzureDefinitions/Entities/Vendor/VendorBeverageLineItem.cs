@@ -17,12 +17,14 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
         }
 
 	    public VendorBeverageLineItem(IVendorBeverageLineItem source, Vendor vendor,
-		    IEnumerable<InventoryCategory> cats, ICollection<Restaurant.Restaurant> rests)
+		    IEnumerable<InventoryCategory> cats, IEnumerable<Restaurant.Restaurant> rests)
 		    : base(source, cats)
 	    {
 		    Vendor = vendor;
 		    NameInVendor = source.NameInVendor;
-		    PublicPricePerUnit = new MoneyDb(source.PublicPricePerUnit);
+		    PublicPricePerUnit = source.PublicPricePerUnit != null 
+                ? new MoneyDb(source.PublicPricePerUnit) 
+                : new MoneyDb();
 		    LastTimePriceSet = source.LastTimePriceSet;
 
 		    var prices = (

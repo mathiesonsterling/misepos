@@ -20,7 +20,9 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
       }
 
   	  public VendorBeverageLineItem LineItem { get; set; }
+
       public Restaurant.Restaurant Restaurant { get; set; }
+
       public MoneyDb PriceCharged { get; set; }
   }
 }

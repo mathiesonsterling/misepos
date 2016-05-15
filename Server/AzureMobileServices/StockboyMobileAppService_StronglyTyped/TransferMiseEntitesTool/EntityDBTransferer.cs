@@ -40,10 +40,8 @@ namespace TransferMiseEntitesTool
             var producer = new EntityProducer(_restaurants, _employees, _inventories, _vendors, _receivingOrders, _purchaseOrders, _pars, _miseEmployeeAccounts,
                 _restaurantAccounts, _applicationInvitations);
 
-            var production = Task.Run(() => producer.Produce());
-
             var jsonSerializer = new JsonNetSerializer();
-	        var undone = await production;
+            var undone = await producer.Produce();
 
             if (undone.Any())
             {

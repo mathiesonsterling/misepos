@@ -34,5 +34,10 @@ namespace TransferMiseEntitesTool.Consumers
             var dbInv = new Mise.Database.AzureDefinitions.Entities.Inventory.Inventory(entity, rest, emps, rSecs, cats, vendors);
             db.Inventories.Add(dbInv);
         }
+
+        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        {
+            return db.Inventories.AnyAsync(i => i.EntityId == id);
+        }
     }
 }
