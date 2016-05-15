@@ -13,8 +13,12 @@ namespace Mise.Core.ValueItems
     {
         public Weight() { }
 
-        public Weight(Weight source) : this(source.Grams)
+        public Weight(Weight source)
         {
+            if (source != null)
+            {
+                Grams = source.Grams;
+            }
         }
 
         public Weight(decimal grams)

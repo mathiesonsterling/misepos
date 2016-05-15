@@ -18,9 +18,12 @@ namespace Mise.Core.ValueItems.Inventory
 
         public LiquidContainerShape(LiquidContainerShape source) : this()
         {
-            _widthsAsPercentageOfHeight = source.WidthsAsPercentageOfHeight;
-            Name = source.Name;
-            
+            if (source != null)
+            {
+                _widthsAsPercentageOfHeight = source.WidthsAsPercentageOfHeight;
+                Name = source.Name;
+            }
+
         }
 
         List<double> _widthsAsPercentageOfHeight;

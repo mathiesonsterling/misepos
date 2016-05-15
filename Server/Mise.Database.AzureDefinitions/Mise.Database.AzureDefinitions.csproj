@@ -108,6 +108,7 @@
     <Compile Include="Entities\Accounts\MiseEmployeeAccount.cs" />
     <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
     <Compile Include="Entities\BaseDbEntity.cs" />
+    <Compile Include="Entities\Categories\EntityCategoryOwnership.cs" />
     <Compile Include="Entities\Categories\InventoryCategory.cs" />
     <Compile Include="Entities\Inventory\Inventory.cs" />
     <Compile Include="Entities\Inventory\LineItems\PurchaseOrderBeverageLineItem.cs" />

@@ -15,8 +15,11 @@ namespace Mise.Database.AzureDefinitions.ValueItems
 
         public EventIDDb(Core.ValueItems.EventID source)
         {
-            AppInstanceCode = source.AppInstanceCode;
-            OrderingID = source.OrderingID;
+            if (source != null)
+            {
+                AppInstanceCode = source.AppInstanceCode;
+                OrderingID = source.OrderingID;
+            }
         }
 
         public Core.ValueItems.EventID ToValueItem()

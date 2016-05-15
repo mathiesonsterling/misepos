@@ -10,13 +10,17 @@ namespace Mise.Database.AzureDefinitions.Entities.Categories
     {
         public InventoryCategory() { }
 
-        public InventoryCategory(IInventoryCategory source)
+        public InventoryCategory(IInventoryCategory source) : base(source)
         {
            // ParentCategory = parent;
             Name = source.Name;
             IsCustomCategory = source.IsCustomCategory;
             IsAssignable = source.IsAssignable;
-            PreferredContainer = new LiquidContainer(source.GetPreferredContainers().FirstOrDefault());
+            
+            var container = source.GetPreferredContainers()?.FirstOrDefault();
+            PreferredContainer = container != null 
+                ? new LiquidContainer(container) 
+                : new LiquidContainer();
         }
 
         protected override Core.Common.Entities.Inventory.InventoryCategory CreateConcreteSubclass()
