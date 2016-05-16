@@ -36,13 +36,11 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 	    IEnumerable<VendorBeverageLineItem> GetLineItems(IEnumerable<IVendorBeverageLineItem> source,
 		    ICollection<Restaurant.Restaurant> rests, ICollection<InventoryCategory> cats)
 	    {
-		    foreach (var sourceLI in source)
-		    {
-			    var thisRestIds = sourceLI.GetPricesForRestaurants().Keys.Distinct();
-			    var thisRests = rests.Where(r => thisRestIds.Contains(r.RestaurantID)).ToList();
-
-			    yield return new VendorBeverageLineItem(sourceLI, this, cats, thisRests);
-		    }
+	        return
+	            from sourceLI in source
+	            let thisRestIds = sourceLI.GetPricesForRestaurants().Keys.Distinct()
+	            let thisRests = rests.Where(r => thisRestIds.Contains(r.RestaurantID)).ToList()
+	            select new VendorBeverageLineItem(sourceLI, this, cats, thisRests);
 	    }
 
         public StreetAddress StreetAddress { get; set; }

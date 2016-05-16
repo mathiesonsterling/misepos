@@ -8,6 +8,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
   {
       public VendorPrivateRestaurantPrice()
       {
+            PriceCharged = new MoneyDb();
       }
 
       public VendorPrivateRestaurantPrice(VendorBeverageLineItem lineItem, Restaurant.Restaurant restaurant,

@@ -30,7 +30,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 
             Container = new LiquidContainer(source.Container);
 
-            Categories = categories.Select(c => new EntityCategoryOwnership {EntityId = EntityId, InventoryCategory = c}).ToList();
+            Categories = categories.Select(c => new EntityCategoryOwnership(EntityId, c)).ToList();
         }  
 
         public BaseLineItem BaseLineItem { get; set;}

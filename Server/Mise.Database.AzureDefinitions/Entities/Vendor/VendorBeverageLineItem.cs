@@ -25,7 +25,6 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 		    PublicPricePerUnit = source.PublicPricePerUnit != null 
                 ? new MoneyDb(source.PublicPricePerUnit) 
                 : new MoneyDb();
-		    LastTimePriceSet = source.LastTimePriceSet;
 
 		    var prices = (
                 from kv in source.GetPricesForRestaurants()
@@ -34,7 +33,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
                 select new VendorPrivateRestaurantPrice(this, rest, new MoneyDb(kv.Value))
             ).ToList();
 
-	        PrivateRestaurantPrices = prices;
+	        //PrivateRestaurantPrices = prices;
 	    }
 
         public Vendor Vendor
@@ -57,12 +56,6 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             set;
         }
 
-        public DateTimeOffset? LastTimePriceSet
-        {
-            get;
-            set;
-        }
-
         public List<VendorPrivateRestaurantPrice> PrivateRestaurantPrices { get; set; }
 
         protected override Core.Common.Entities.Vendors.VendorBeverageLineItem CreateConcreteLineItemClass()
@@ -74,7 +67,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
                 VendorID = Vendor.EntityId,
                 NameInVendor = NameInVendor,
                 PublicPricePerUnit = PublicPricePerUnit.ToValueItem(),
-                LastTimePriceSet = LastTimePriceSet,
+                LastTimePriceSet = PrivateRestaurantPrices?.Where(p => p.UpdatedAt.HasValue).Max(p => p.UpdatedAt),
+                    
                 PricePerUnitForRestaurant = priceDic
             };
         }

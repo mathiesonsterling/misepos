@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Common.Services.Implementation.Serialization;
+using Mise.Core.Entities.Base;
 using TransferMiseEntitesTool.Consumers;
+using TransferMiseEntitesTool.Producers;
 
 namespace TransferMiseEntitesTool
 {
@@ -35,6 +37,15 @@ namespace TransferMiseEntitesTool
             _miseEmployeeAccounts = new BlockingCollection<RestaurantEntityDataTransportObject>();
         }
 
+        private async Task ProduceConsume<TEnt>(BaseAzureEntitiesProducer producer, BaseConsumer<TEnt> consumer) where TEnt : class, IEntityBase
+        {
+            var queue = new BlockingCollection<RestaurantEntityDataTransportObject>();
+            var prodTask = Task.Run(() => producer.Produce(queue));
+            var consumeTask = Task.Run(() => consumer.Consume(queue));
+
+            await Task.WhenAll(prodTask, consumeTask);
+        }
+
         public async Task TransferRecords()
         {
             var producer = new EntityProducer(_restaurants, _employees, _inventories, _vendors, _receivingOrders, _purchaseOrders, _pars, _miseEmployeeAccounts,
@@ -49,10 +60,9 @@ namespace TransferMiseEntitesTool
                 var numWrong = undone.Count();
             }
 
+            //var restAccountProducer = new RestaurantAccountProducer(_restaurantAccounts);
             //do consumption runs here
             var restAccounts = new RestaurantAccountConsumer(jsonSerializer);
-
-            //do accounts, then rests, then emps, then the rest
             await restAccounts.Consume(_restaurantAccounts);
 
 	        var rests = new RestaurantConsumer(jsonSerializer);

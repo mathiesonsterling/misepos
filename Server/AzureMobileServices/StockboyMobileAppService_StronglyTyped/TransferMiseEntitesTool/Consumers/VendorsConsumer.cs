@@ -25,6 +25,17 @@ namespace TransferMiseEntitesTool.Consumers
 			var dbEnt = new Mise.Database.AzureDefinitions.Entities.Vendor.Vendor(entity, createdBy, rests, invCategories);
 
 		    db.Vendors.Add(dbEnt);
+
+            //debug
+		    try
+		    {
+		        await db.SaveChangesAsync();
+		    }
+		    catch (Exception e)
+		    {
+		        var msg = e.Message;
+		        throw;
+		    }
 		}
 
 	    protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)

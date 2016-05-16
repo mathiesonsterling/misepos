@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
 using TransferMiseEntitesTool.Database;
 
-namespace TransferMiseEntitesTool
+namespace TransferMiseEntitesTool.Producers
 {
     class EntityProducer
     {

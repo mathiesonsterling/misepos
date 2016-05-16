@@ -115,7 +115,9 @@
     <Compile Include="Consumers\VendorsConsumer.cs" />
     <Compile Include="Database\AzureEntityStorage.cs" />
     <Compile Include="Database\AzureNonTypedEntities.cs" />
-    <Compile Include="EntityProducer.cs" />
+    <Compile Include="Producers\BaseAzureEntitiesProducer.cs" />
+    <Compile Include="Producers\EntityProducer.cs" />
+    <Compile Include="Producers\RestaurantAccountProducer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntityDBTransferer.cs" />

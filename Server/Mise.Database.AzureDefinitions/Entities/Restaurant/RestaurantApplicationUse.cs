@@ -12,6 +12,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Restaurant
     /// </summary>
     public class RestaurantApplicationUse : EntityData
     {
+        public RestaurantApplicationUse() { }
+
         public RestaurantApplicationUse(Restaurant rest, MiseApplication app)
         {
             Id = rest.EntityId + ":" + app.AppTypeValue;

@@ -13,6 +13,8 @@ namespace Mise.Database.AzureDefinitions.Entities
         protected BaseDbEntity() 
         { 
             Revision = new EventIDDb();
+            CreatedAt = DateTimeOffset.UtcNow;
+            UpdatedAt = DateTimeOffset.UtcNow;
         }
 
         protected BaseDbEntity(TEntityType source)
