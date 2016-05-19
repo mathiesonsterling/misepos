@@ -8,16 +8,16 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
 using Mise.Database.AzureDefinitions.Entities.Inventory;
-
+using dbPar = Mise.Database.AzureDefinitions.Entities.Inventory.Par;
 namespace TransferMiseEntitesTool.Consumers
 {
-    class ParsConsumer : BaseConsumer<IPar>
+    class ParsConsumer : BaseConsumer<IPar, dbPar>
     {
         public ParsConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
         }
 
-        protected override async Task SaveEntity(StockboyMobileAppServiceContext db, IPar entity)
+        protected override async Task<dbPar> SaveEntity(StockboyMobileAppServiceContext db, IPar entity)
         {
             var rest = await db.Restaurants.FirstOrDefaultAsync(r => entity.RestaurantID == r.EntityId);
             var invCats = await db.InventoryCategories.Where(ic => ic != null).ToListAsync();
@@ -25,11 +25,13 @@ namespace TransferMiseEntitesTool.Consumers
             var dbEnt = new Par(entity, rest, creatingEmployee, invCats);
 
             db.Pars.Add(dbEnt);
+
+            return dbEnt;
         }
 
-        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        protected override Task<Par> GetSavedEntity(StockboyMobileAppServiceContext db, Guid id)
         {
-            return db.Pars.AnyAsync(p => p.EntityId == id);
+            return db.Pars.FirstOrDefaultAsync(p => p.EntityId == id);
         }
     }
 }

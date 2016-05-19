@@ -4,27 +4,27 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
-
+using DbAcct = Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount;
 namespace TransferMiseEntitesTool.Consumers
 {
-    class RestaurantAccountConsumer : BaseConsumer<RestaurantAccount>
+    class RestaurantAccountConsumer : BaseConsumer<RestaurantAccount, DbAcct>
     {
         public RestaurantAccountConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
 
         }
 
-        protected override Task SaveEntity(StockboyMobileAppServiceContext db, RestaurantAccount entity)
+        protected override Task<DbAcct> SaveEntity(StockboyMobileAppServiceContext db, RestaurantAccount entity)
         {
-            var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.RestaurantAccount(entity);
+            var dbEnt = new DbAcct(entity);
             db.RestaurantAccounts.Add(dbEnt);
 
-            return Task.FromResult(true);
+            return Task.FromResult(dbEnt);
         }
 
-        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        protected override Task<DbAcct> GetSavedEntity(StockboyMobileAppServiceContext db, Guid id)
         {
-            return db.RestaurantAccounts.AnyAsync(ra => ra.EntityId == id);
+            return db.RestaurantAccounts.FirstOrDefaultAsync(ra => ra.EntityId == id);
         }
     }
 }

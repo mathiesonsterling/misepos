@@ -17,14 +17,17 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
             Container = new LiquidContainer();
         }
 
-        protected BaseLiquidLineItemEntity(TEntityType source, IEnumerable<Categories.InventoryCategory> categories) : base(source)
+        protected BaseLiquidLineItemEntity(TEntityType source, IEnumerable<Categories.InventoryCategory> categories) 
+            : base(source)
         {
             BaseLineItem = new BaseLineItem
             {
                 DisplayName = source.DisplayName,
                 CaseSize = source.CaseSize,
                 MiseName = source.MiseName,
-                Quantity = source.Quantity,
+                Quantity = source.Quantity > 10000 
+                    ? 10000 
+                    : source.Quantity,
                 UPC = source.UPC
             };
 

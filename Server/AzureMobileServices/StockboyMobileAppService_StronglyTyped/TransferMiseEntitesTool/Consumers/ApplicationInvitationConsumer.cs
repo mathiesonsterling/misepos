@@ -7,13 +7,13 @@ using Mise.Database.AzureDefinitions.Context;
 
 namespace TransferMiseEntitesTool.Consumers
 {
-    class ApplicationInvitationConsumer : BaseConsumer<ApplicationInvitation>
+    class ApplicationInvitationConsumer : BaseConsumer<ApplicationInvitation, Mise.Database.AzureDefinitions.Entities.Accounts.ApplicationInvitation>
     {
         public ApplicationInvitationConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
         }
 
-        protected override async Task SaveEntity(StockboyMobileAppServiceContext db, ApplicationInvitation entity)
+        protected override async Task<Mise.Database.AzureDefinitions.Entities.Accounts.ApplicationInvitation> SaveEntity(StockboyMobileAppServiceContext db, ApplicationInvitation entity)
         {
             var rest = await db.Restaurants.FirstOrDefaultAsync(r => r.RestaurantID == entity.RestaurantID);
             var app = await db.MiseApplications.FirstOrDefaultAsync(a => a.AppTypeValue == (int) entity.Application);
@@ -22,11 +22,13 @@ namespace TransferMiseEntitesTool.Consumers
             var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.ApplicationInvitation(entity, app, destEmp, invEmp, rest);
 
             db.ApplicationInvitations.Add(dbEnt);
+
+            return dbEnt;
         }
 
-        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        protected override Task<Mise.Database.AzureDefinitions.Entities.Accounts.ApplicationInvitation> GetSavedEntity(StockboyMobileAppServiceContext db, Guid id)
         {
-            return db.ApplicationInvitations.AnyAsync(ai => ai.EntityId == id);
+            return db.ApplicationInvitations.FirstOrDefaultAsync(ai => ai.EntityId == id);
         }
     }
 }

@@ -8,16 +8,15 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
 using Mise.Database.AzureDefinitions.Entities.Inventory;
-
 namespace TransferMiseEntitesTool.Consumers
 {
-    class PurchaseOrderConsumer : BaseConsumer<IPurchaseOrder>
+    class PurchaseOrderConsumer : BaseConsumer<IPurchaseOrder, PurchaseOrder>
     {
         public PurchaseOrderConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
         }
 
-        protected override async Task SaveEntity(StockboyMobileAppServiceContext db, IPurchaseOrder entity)
+        protected override async Task<PurchaseOrder> SaveEntity(StockboyMobileAppServiceContext db, IPurchaseOrder entity)
         {
             var cats = await db.InventoryCategories.ToListAsync();
 
@@ -28,11 +27,13 @@ namespace TransferMiseEntitesTool.Consumers
             var createdEmp = await db.Employees.FirstOrDefaultAsync(e => e.EntityId == entity.CreatedByEmployeeID);
             var dbEnt = new PurchaseOrder(entity, cats, vendors, rest, createdEmp);
             db.PurchaseOrders.Add(dbEnt);
+
+            return dbEnt;
         }
 
-        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        protected override Task<PurchaseOrder> GetSavedEntity(StockboyMobileAppServiceContext db, Guid id)
         {
-            return db.PurchaseOrders.AnyAsync(po => po.EntityId == id);
+            return db.PurchaseOrders.FirstOrDefaultAsync(po => po.EntityId == id);
         }
     }
 }

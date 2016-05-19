@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
-
+using DBVendor = Mise.Database.AzureDefinitions.Entities.Vendor.Vendor;
 namespace TransferMiseEntitesTool.Consumers
 {
-	class VendorsConsumer : BaseConsumer<Vendor>
+	class VendorsConsumer : BaseConsumer<Vendor, DBVendor>
 	{
 		public VendorsConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
 		{
 		}
 
-		protected override async Task SaveEntity(StockboyMobileAppServiceContext db, Vendor entity)
+		protected override async Task<DBVendor> SaveEntity(StockboyMobileAppServiceContext db, Vendor entity)
 		{
 			var rests = await db.Restaurants.Where(r => entity.RestaurantsAssociatedIDs.Contains(r.RestaurantID)).ToListAsync();
 
@@ -22,7 +22,7 @@ namespace TransferMiseEntitesTool.Consumers
 
 		    var invCategories = await db.InventoryCategories.Where(ic => ic != null).ToListAsync();
 
-			var dbEnt = new Mise.Database.AzureDefinitions.Entities.Vendor.Vendor(entity, createdBy, rests, invCategories);
+			var dbEnt = new DBVendor(entity, createdBy, rests, invCategories);
 
 		    db.Vendors.Add(dbEnt);
 
@@ -36,11 +36,14 @@ namespace TransferMiseEntitesTool.Consumers
 		        var msg = e.Message;
 		        throw;
 		    }
+
+		    return dbEnt;
 		}
 
-	    protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+	    protected override Task<DBVendor> GetSavedEntity(StockboyMobileAppServiceContext db, Guid id)
 	    {
-	        return db.Vendors.AnyAsync(v => v.EntityId == id);
+	        return db.Vendors.FirstOrDefaultAsync(v => v.EntityId == id);
 	    }
+
 	}
 }

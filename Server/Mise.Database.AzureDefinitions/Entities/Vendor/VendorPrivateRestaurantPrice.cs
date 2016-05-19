@@ -4,6 +4,7 @@ using Mise.Database.AzureDefinitions.ValueItems;
 
 namespace Mise.Database.AzureDefinitions.Entities.Vendor
 {
+    
   public class VendorPrivateRestaurantPrice : EntityData
   {
       public VendorPrivateRestaurantPrice()
@@ -15,12 +16,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
           MoneyDb priceCharged)
       {
           Id = lineItem.EntityId + ":" + restaurant.RestaurantID;
-          LineItem = lineItem;
+          VendorBeverageLineItem = lineItem;
           Restaurant = restaurant;
           PriceCharged = priceCharged;
       }
 
-  	  public VendorBeverageLineItem LineItem { get; set; }
+  	  public VendorBeverageLineItem VendorBeverageLineItem { get; set; }
 
       public Restaurant.Restaurant Restaurant { get; set; }
 

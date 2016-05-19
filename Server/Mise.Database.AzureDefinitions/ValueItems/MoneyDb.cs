@@ -12,7 +12,7 @@ namespace Mise.Database.AzureDefinitions.ValueItems
         {
             if (source != null)
             {
-                Dollars = source.Dollars;
+                Dollars = decimal.Round(source.Dollars, 3);
             }
         }
 

@@ -17,23 +17,15 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
         }
 
 	    public VendorBeverageLineItem(IVendorBeverageLineItem source, Vendor vendor,
-		    IEnumerable<InventoryCategory> cats, IEnumerable<Restaurant.Restaurant> rests)
+		    IEnumerable<InventoryCategory> cats)
 		    : base(source, cats)
 	    {
 		    Vendor = vendor;
-		    NameInVendor = source.NameInVendor;
+		    NameOfItemInVendor = source.NameInVendor;
 		    PublicPricePerUnit = source.PublicPricePerUnit != null 
                 ? new MoneyDb(source.PublicPricePerUnit) 
                 : new MoneyDb();
-
-		    var prices = (
-                from kv in source.GetPricesForRestaurants()
-                let rest = rests.FirstOrDefault(r => r.RestaurantID == kv.Key)
-                where rest != null
-                select new VendorPrivateRestaurantPrice(this, rest, new MoneyDb(kv.Value))
-            ).ToList();
-
-	        //PrivateRestaurantPrices = prices;
+           
 	    }
 
         public Vendor Vendor
@@ -42,7 +34,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             set;
         }
 
-        public string NameInVendor
+        public string NameOfItemInVendor
         {
             get;
             set;
@@ -56,18 +48,18 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             set;
         }
 
-        public List<VendorPrivateRestaurantPrice> PrivateRestaurantPrices { get; set; }
+        public List<VendorPrivateRestaurantPrice> VendorPrivateRestaurantPrices { get; set; }
 
         protected override Core.Common.Entities.Vendors.VendorBeverageLineItem CreateConcreteLineItemClass()
         {
-          var priceDic = PrivateRestaurantPrices?.ToDictionary(kv => kv.Restaurant.RestaurantID,
+           var priceDic = VendorPrivateRestaurantPrices?.ToDictionary(kv => kv.Restaurant.RestaurantID,
               kv => kv.PriceCharged.ToValueItem()) ?? new Dictionary<Guid, Money>();
             return new Core.Common.Entities.Vendors.VendorBeverageLineItem
             {
                 VendorID = Vendor.EntityId,
-                NameInVendor = NameInVendor,
+                NameInVendor = NameOfItemInVendor,
                 PublicPricePerUnit = PublicPricePerUnit.ToValueItem(),
-                LastTimePriceSet = PrivateRestaurantPrices?.Where(p => p.UpdatedAt.HasValue).Max(p => p.UpdatedAt),
+                LastTimePriceSet = VendorPrivateRestaurantPrices?.Where(p => p.UpdatedAt.HasValue).Max(p => p.UpdatedAt),
                     
                 PricePerUnitForRestaurant = priceDic
             };

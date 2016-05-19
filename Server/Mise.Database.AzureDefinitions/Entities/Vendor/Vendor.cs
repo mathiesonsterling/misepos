@@ -16,9 +16,11 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
         {
             StreetAddress = new StreetAddress();
             Name = new BusinessName();
+            VendorBeverageLineItems = new List<VendorBeverageLineItem>();
         }
 
-	    public Vendor(IVendor source, Employee createdBy, ICollection<Restaurant.Restaurant> rests, ICollection<InventoryCategory> cats)
+	    public Vendor(IVendor source, Employee createdBy, 
+            IEnumerable<Restaurant.Restaurant> rests, IEnumerable<InventoryCategory> cats)
 	    	:base(source)
 	    {
 		    StreetAddress = new StreetAddress(source.StreetAddress);
@@ -30,17 +32,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 		    CreatedBy = createdBy;
 	        RestaurantsAssociatedWith = rests.Select(r => new VendorRestaurantRelationships(this, r)).ToList();
 
-	        LineItems = GetLineItems(source.GetItemsVendorSells(), rests, cats).ToList();
-	    }
-
-	    IEnumerable<VendorBeverageLineItem> GetLineItems(IEnumerable<IVendorBeverageLineItem> source,
-		    ICollection<Restaurant.Restaurant> rests, ICollection<InventoryCategory> cats)
-	    {
-	        return
-	            from sourceLI in source
-	            let thisRestIds = sourceLI.GetPricesForRestaurants().Keys.Distinct()
-	            let thisRests = rests.Where(r => thisRestIds.Contains(r.RestaurantID)).ToList()
-	            select new VendorBeverageLineItem(sourceLI, this, cats, thisRests);
+	        VendorBeverageLineItems = source.GetItemsVendorSells()
+	            .Select(li => new VendorBeverageLineItem(li, this, cats)).ToList();
 	    }
 
         public StreetAddress StreetAddress { get; set; }
@@ -57,7 +50,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 
         public List<VendorRestaurantRelationships> RestaurantsAssociatedWith { get; set; } 
 
-        public List<VendorBeverageLineItem> LineItems { get; set; }
+        public List<VendorBeverageLineItem> VendorBeverageLineItems { get; set; }
 
         public BusinessName Name { get; set; }
 
@@ -71,7 +64,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
                 PhoneNumber = new PhoneNumber(VendorPhoneNumberAreaCode, VendorPhoneNumber),
                 CreatedByEmployeeID = CreatedBy?.EntityId,
                 RestaurantsAssociatedIDs = RestaurantsAssociatedWith?.Select(r => r.Restaurant.RestaurantID).ToList(),
-                VendorBeverageLineItems = LineItems.Select(li => li.ToBusinessEntity()).ToList(),
+                VendorBeverageLineItems = VendorBeverageLineItems.Select(li => li.ToBusinessEntity()).ToList(),
                 VendorName = Name.ToValueItem()
             };
         }

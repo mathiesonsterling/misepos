@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Consumers\ApplicationInvitationConsumer.cs" />
     <Compile Include="Consumers\BaseConsumer.cs" />
+    <Compile Include="Consumers\BaseLineItemConsumer.cs" />
     <Compile Include="Consumers\EmployeeConsumer.cs" />
     <Compile Include="Consumers\InventoriesConsumer.cs" />
     <Compile Include="Consumers\InventoryCategoriesConsumer.cs" />

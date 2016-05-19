@@ -13,12 +13,13 @@ namespace Mise.Database.AzureDefinitions.Entities.Categories
 
         public EntityCategoryOwnership(Guid entityId, InventoryCategory category)
         {
-            EntityId = entityId;
+            Entity = entityId;
             InventoryCategory = category;
-            Id = EntityId + ":" + InventoryCategory.EntityId;
+            Id = Entity + ":" + InventoryCategory.EntityId;
         }
 
-        public Guid EntityId { get; set; }
+        public Guid Entity { get; set; }
+
         public InventoryCategory InventoryCategory { get; set; }
     }
 }

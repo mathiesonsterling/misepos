@@ -39,6 +39,9 @@ namespace Mise.Database.AzureDefinitions.Context
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<ReceivingOrder> ReceivingOrders { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<VendorBeverageLineItem> VendorBeverageLineItems { get; set; }
+        public DbSet<VendorPrivateRestaurantPrice> VendorPrivateRestaurantPrices { get; set; }
+
         public DbSet<MiseEmployeeAccount> MiseEmployeeAccounts { get; set; }
         public DbSet<RestaurantAccount> RestaurantAccounts { get; set; }
         public DbSet<ApplicationInvitation> ApplicationInvitations { get; set; }

@@ -10,7 +10,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
     {
         public PurchaseOrderBeverageLineItem() { }
 
-        public PurchaseOrderBeverageLineItem(IPurchaseOrderLineItem source, IEnumerable<InventoryCategory> cats,
+        public PurchaseOrderBeverageLineItem(IPurchaseOrderLineItem source, 
+            IEnumerable<InventoryCategory> cats,
             PurchaseOrderPerVendor pov)
             : base(source, cats)
         {

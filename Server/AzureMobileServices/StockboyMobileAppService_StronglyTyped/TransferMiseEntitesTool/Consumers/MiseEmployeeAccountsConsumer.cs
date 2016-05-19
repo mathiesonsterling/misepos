@@ -5,33 +5,33 @@ using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
-
+using DBAcc = Mise.Database.AzureDefinitions.Entities.Accounts.MiseEmployeeAccount;
 namespace TransferMiseEntitesTool.Consumers
 {
-    class MiseEmployeeAccountsConsumer : BaseConsumer<IAccount>
+    class MiseEmployeeAccountsConsumer : BaseConsumer<IAccount, DBAcc>
     {
         public MiseEmployeeAccountsConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
         }
 
-        protected override Task SaveEntity(StockboyMobileAppServiceContext db, IAccount entity)
+        protected override Task<DBAcc> SaveEntity(StockboyMobileAppServiceContext db, IAccount entity)
         {
             var downAcc = entity as MiseEmployeeAccount;
 
             if (downAcc != null)
             {
-                var dbEnt = new Mise.Database.AzureDefinitions.Entities.Accounts.MiseEmployeeAccount(downAcc);
+                var dbEnt = new DBAcc(downAcc);
                 db.MiseEmployeeAccounts.Add(dbEnt);
 
-                return Task.FromResult(true);
+                return Task.FromResult(dbEnt);
             }
 
-            return Task.FromResult(false);
+            throw new ArgumentException("Account is not a MiseEmployeeAccount");
         }
 
-        protected override Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id)
+        protected override Task<DBAcc> GetSavedEntity(StockboyMobileAppServiceContext db, Guid id)
         {
-            return db.MiseEmployeeAccounts.AnyAsync(ea => ea.EntityId == id);
+            return db.MiseEmployeeAccounts.FirstOrDefaultAsync(me => me.EntityId == id);
         }
     }
 }

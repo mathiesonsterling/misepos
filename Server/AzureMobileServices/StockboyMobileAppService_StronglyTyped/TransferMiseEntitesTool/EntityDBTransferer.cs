@@ -37,7 +37,9 @@ namespace TransferMiseEntitesTool
             _miseEmployeeAccounts = new BlockingCollection<RestaurantEntityDataTransportObject>();
         }
 
-        private async Task ProduceConsume<TEnt>(BaseAzureEntitiesProducer producer, BaseConsumer<TEnt> consumer) where TEnt : class, IEntityBase
+        private async Task ProduceConsume<TEnt, TSaved>(BaseAzureEntitiesProducer producer, BaseConsumer<TEnt, TSaved> consumer) 
+            where TEnt : class, IEntityBase 
+            where TSaved : class
         {
             var queue = new BlockingCollection<RestaurantEntityDataTransportObject>();
             var prodTask = Task.Run(() => producer.Produce(queue));
@@ -85,6 +87,14 @@ namespace TransferMiseEntitesTool
             var purchaseOrders = new PurchaseOrderConsumer(jsonSerializer);
             var receivingOrders = new ReceivingOrdersConsumer(jsonSerializer);
             var miseEmpAccounts = new MiseEmployeeAccountsConsumer(jsonSerializer);
+
+            await appInvites.Consume(_applicationInvitations);
+            await inventories.Consume(_inventories);
+            await pars.Consume(_pars);
+            await purchaseOrders.Consume(_purchaseOrders);
+            await receivingOrders.Consume(_receivingOrders);
+            await miseEmpAccounts.Consume(_miseEmployeeAccounts);
+            /*
             var otherTasks = new List<Task>
             {
                 appInvites.Consume(_applicationInvitations),
@@ -95,7 +105,7 @@ namespace TransferMiseEntitesTool
                 miseEmpAccounts.Consume(_miseEmployeeAccounts)
             };
 
-	        await Task.WhenAll(otherTasks);
+	        await Task.WhenAll(otherTasks);*/
         }
     }
 }

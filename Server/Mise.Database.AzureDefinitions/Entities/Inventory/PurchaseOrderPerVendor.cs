@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Database.AzureDefinitions.Entities.Categories;
@@ -12,14 +9,19 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 {
     public class PurchaseOrderPerVendor : BaseDbEntity<IPurchaseOrderPerVendor, Core.Common.Entities.Inventory.PurchaseOrderPerVendor>
     {
-        public PurchaseOrderPerVendor() { }
+        public PurchaseOrderPerVendor()
+        {
+            Status = PurchaseOrderStatus.Created;
+            PurchaseOrderBeverageLineItems = new List<PurchaseOrderBeverageLineItem>();
+        }
 
         public PurchaseOrderPerVendor(IPurchaseOrderPerVendor pov, Vendor.Vendor vendor,
             IEnumerable<InventoryCategory> cats) : base(pov)
         {
             Vendor = vendor;
             Status = pov.Status;
-            LineItems = pov.GetLineItems().Select(li => new PurchaseOrderBeverageLineItem(li, cats, this)).ToList();
+            PurchaseOrderBeverageLineItems = pov.GetLineItems()
+                .Select(li => new PurchaseOrderBeverageLineItem(li, cats, this)).ToList();
         }
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
         /// </summary>
         public Vendor.Vendor Vendor { get; set; }
 
-        public List<PurchaseOrderBeverageLineItem> LineItems { get; set; }
+        public List<PurchaseOrderBeverageLineItem> PurchaseOrderBeverageLineItems { get; set; }
 
         public PurchaseOrderStatus Status { get; set; }
 
@@ -38,7 +40,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
                 VendorID = Vendor?.EntityId,
                 VendorName = Vendor?.Name,
                 Status = Status,
-                LineItems = LineItems.Select(li => li.ToBusinessEntity()).ToList()
+                LineItems = PurchaseOrderBeverageLineItems.Select(li => li.ToBusinessEntity()).ToList()
             };
         }
     }

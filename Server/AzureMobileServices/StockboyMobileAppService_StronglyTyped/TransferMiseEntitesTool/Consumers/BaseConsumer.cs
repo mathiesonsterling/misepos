@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
 using Mise.Core.Entities.Base;
 using Mise.Core.Services.UtilityServices;
-using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Context;
-using Mise.Database.AzureDefinitions.ValueItems;
-
 
 namespace TransferMiseEntitesTool.Consumers
 {
-    abstract class BaseConsumer<TEntityType> where TEntityType : class, IEntityBase
+    abstract class BaseConsumer<TEntityType, TSavedType> 
+        where TEntityType : class, IEntityBase
+        where TSavedType : class
     {
         protected EntityDataTransportObjectFactory EntityFactory { get; }
 
-        private readonly IList<Tuple<RestaurantEntityDataTransportObject, Exception>> _errors; 
+        protected readonly IList<Tuple<RestaurantEntityDataTransportObject, Exception>> Errors; 
         protected BaseConsumer(IJSONSerializer jsonSerializer)
         {
             EntityFactory = new EntityDataTransportObjectFactory(jsonSerializer);
-            _errors = new List<Tuple<RestaurantEntityDataTransportObject, Exception>>();
+            Errors = new List<Tuple<RestaurantEntityDataTransportObject, Exception>>();
         }
 
-        public IEnumerable<Tuple<RestaurantEntityDataTransportObject, Exception>> ErroredObjects => _errors; 
+        public IEnumerable<Tuple<RestaurantEntityDataTransportObject, Exception>> ErroredObjects => Errors; 
 
-        public async Task Consume(BlockingCollection<RestaurantEntityDataTransportObject> dtos)
+        public virtual async Task Consume(BlockingCollection<RestaurantEntityDataTransportObject> dtos)
         {
+            Errors.Clear();
+            var numAdded = 0;
             using (var db = new StockboyMobileAppServiceContext())
             {
                 db.Database.CommandTimeout = 500;
@@ -36,32 +37,48 @@ namespace TransferMiseEntitesTool.Consumers
                 {
                     try
                     {
-                        var exists = await DoesEntityExist(db, dto.Id);
-                        if (!exists)
+                        var exists = await GetSavedEntity(db, dto.Id);
+                        if (exists == null)
                         {
                             var entity = EntityFactory.FromDataStorageObject<TEntityType>(dto);
                             await SaveEntity(db, entity);
+                            numAdded++;
+                            if (numAdded > 100)
+                            {
+                                db.Database.Log = s =>
+                                {
+                                    Debug.WriteLine(s);
+                                    Console.WriteLine(s);
+                                };
+                                await db.SaveChangesAsync();
+                                numAdded = 0;
+                            }
                         }
                     }
                     catch (Exception e)
                     {
-                        _errors.Add(new Tuple<RestaurantEntityDataTransportObject, Exception>(dto, e));
+                        Errors.Add(new Tuple<RestaurantEntityDataTransportObject, Exception>(dto, e));
                     }
                 }
 
-                if (!_errors.Any())
+                if (!Errors.Any())
                 {
+                    db.Database.Log = s =>
+                    {
+                        Debug.WriteLine(s);
+                        Console.WriteLine(s);
+                    };
                     await db.SaveChangesAsync();
                 }
                 else
                 {
-                    throw new AggregateException(_errors.Select(t => t.Item2));
+                    throw new AggregateException(Errors.Select(t => t.Item2));
                 }
             }
         }
 
-        protected abstract Task SaveEntity(StockboyMobileAppServiceContext db, TEntityType entity);
+        protected abstract Task<TSavedType> SaveEntity(StockboyMobileAppServiceContext db, TEntityType entity);
 
-        protected abstract Task<bool> DoesEntityExist(StockboyMobileAppServiceContext db, Guid id);
+        protected abstract Task<TSavedType> GetSavedEntity(StockboyMobileAppServiceContext db, Guid id);
     }
 }
