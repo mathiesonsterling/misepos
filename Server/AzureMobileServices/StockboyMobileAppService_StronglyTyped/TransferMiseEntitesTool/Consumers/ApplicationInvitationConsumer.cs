@@ -13,6 +13,8 @@ namespace TransferMiseEntitesTool.Consumers
         {
         }
 
+        public override string EntityName => "ApplicationInvitation";
+
         protected override async Task<Mise.Database.AzureDefinitions.Entities.Accounts.ApplicationInvitation> SaveEntity(StockboyMobileAppServiceContext db, ApplicationInvitation entity)
         {
             var rest = await db.Restaurants.FirstOrDefaultAsync(r => r.RestaurantID == entity.RestaurantID);

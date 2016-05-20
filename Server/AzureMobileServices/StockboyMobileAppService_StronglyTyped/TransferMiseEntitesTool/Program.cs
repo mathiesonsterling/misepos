@@ -16,10 +16,12 @@ namespace TransferMiseEntitesTool
             try
             {
                 task.Wait();
+                Console.WriteLine("All entities should now be completed!");
             }
             catch (Exception e)
             {
                 var msg = e.Message;
+                Console.WriteLine("Error while writing items - " + e + "::" + e.StackTrace);
                 throw;
             }
         }

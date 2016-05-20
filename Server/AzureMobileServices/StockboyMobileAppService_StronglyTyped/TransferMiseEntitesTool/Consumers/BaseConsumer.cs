@@ -11,13 +11,17 @@ using Mise.Database.AzureDefinitions.Context;
 
 namespace TransferMiseEntitesTool.Consumers
 {
-    abstract class BaseConsumer<TEntityType, TSavedType> 
-        where TEntityType : class, IEntityBase
-        where TSavedType : class
+    abstract class BaseConsumer<TEntityType, TSavedType> : IEntityConsumer
+        where TEntityType : class, IEntityBase, new()
+        where TSavedType : class, new()
     {
         protected EntityDataTransportObjectFactory EntityFactory { get; }
+        public abstract string EntityName { get; }
 
-        protected readonly IList<Tuple<RestaurantEntityDataTransportObject, Exception>> Errors; 
+        protected readonly IList<Tuple<RestaurantEntityDataTransportObject, Exception>> Errors;
+
+        protected virtual int BatchSize => 100;
+         
         protected BaseConsumer(IJSONSerializer jsonSerializer)
         {
             EntityFactory = new EntityDataTransportObjectFactory(jsonSerializer);
@@ -33,6 +37,11 @@ namespace TransferMiseEntitesTool.Consumers
             using (var db = new StockboyMobileAppServiceContext())
             {
                 db.Database.CommandTimeout = 500;
+                db.Database.Log = s =>
+                {
+                    Debug.WriteLine(s);
+                    Console.WriteLine(s);
+                };
                 foreach (var dto in dtos.GetConsumingEnumerable())
                 {
                     try
@@ -43,13 +52,8 @@ namespace TransferMiseEntitesTool.Consumers
                             var entity = EntityFactory.FromDataStorageObject<TEntityType>(dto);
                             await SaveEntity(db, entity);
                             numAdded++;
-                            if (numAdded > 100)
+                            if (numAdded > BatchSize)
                             {
-                                db.Database.Log = s =>
-                                {
-                                    Debug.WriteLine(s);
-                                    Console.WriteLine(s);
-                                };
                                 await db.SaveChangesAsync();
                                 numAdded = 0;
                             }
@@ -63,12 +67,10 @@ namespace TransferMiseEntitesTool.Consumers
 
                 if (!Errors.Any())
                 {
-                    db.Database.Log = s =>
+                    if (numAdded > 0)
                     {
-                        Debug.WriteLine(s);
-                        Console.WriteLine(s);
-                    };
-                    await db.SaveChangesAsync();
+                        await db.SaveChangesAsync();
+                    }
                 }
                 else
                 {

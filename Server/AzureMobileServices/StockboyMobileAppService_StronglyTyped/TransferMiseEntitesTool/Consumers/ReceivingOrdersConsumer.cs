@@ -7,13 +7,15 @@ using Mise.Database.AzureDefinitions.Context;
 using dbRO = Mise.Database.AzureDefinitions.Entities.Inventory.ReceivingOrder;
 namespace TransferMiseEntitesTool.Consumers
 {
-    class ReceivingOrdersConsumer : BaseConsumer<IReceivingOrder, dbRO>
+    class ReceivingOrdersConsumer : BaseConsumer<Mise.Core.Common.Entities.Inventory.ReceivingOrder, dbRO>
     {
         public ReceivingOrdersConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
         }
 
-        protected override async Task<dbRO> SaveEntity(StockboyMobileAppServiceContext db, IReceivingOrder entity)
+        public override string EntityName => "ReceivingOrder";
+
+        protected override async Task<dbRO> SaveEntity(StockboyMobileAppServiceContext db, Mise.Core.Common.Entities.Inventory.ReceivingOrder entity)
         {
             var cats = await db.InventoryCategories.ToListAsync();
             var rest = await db.Restaurants.FirstOrDefaultAsync(r => entity.RestaurantID == r.EntityId);

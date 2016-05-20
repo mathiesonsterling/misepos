@@ -8,15 +8,17 @@ using Mise.Database.AzureDefinitions.Context;
 using DBAcc = Mise.Database.AzureDefinitions.Entities.Accounts.MiseEmployeeAccount;
 namespace TransferMiseEntitesTool.Consumers
 {
-    class MiseEmployeeAccountsConsumer : BaseConsumer<IAccount, DBAcc>
+    class MiseEmployeeAccountsConsumer : BaseConsumer<MiseEmployeeAccount, DBAcc>
     {
         public MiseEmployeeAccountsConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
         }
 
-        protected override Task<DBAcc> SaveEntity(StockboyMobileAppServiceContext db, IAccount entity)
+        public override string EntityName => "MiseEmployeeAccounts";
+
+        protected override Task<DBAcc> SaveEntity(StockboyMobileAppServiceContext db, MiseEmployeeAccount entity)
         {
-            var downAcc = entity as MiseEmployeeAccount;
+            var downAcc = entity;
 
             if (downAcc != null)
             {

@@ -104,7 +104,7 @@ namespace Mise.Core.Common.Entities.Inventory
 			if(existing == null){
 				existing = new PurchaseOrderPerVendor {
 					VendorID = ev.VendorWithBestPriceID,
-                    VendorName = ev.VendorName,
+                    VendorName = ev.VendorName.FullName,
 					Status = PurchaseOrderStatus.Created
 				};
 				PurchaseOrdersPerVendor.Add (existing);

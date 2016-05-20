@@ -14,7 +14,9 @@ namespace TransferMiseEntitesTool.Consumers
 		{
 		}
 
-		protected override async Task<DBVendor> SaveEntity(StockboyMobileAppServiceContext db, Vendor entity)
+	    public override string EntityName => "Vendors";
+
+	    protected override async Task<DBVendor> SaveEntity(StockboyMobileAppServiceContext db, Vendor entity)
 		{
 			var rests = await db.Restaurants.Where(r => entity.RestaurantsAssociatedIDs.Contains(r.RestaurantID)).ToListAsync();
 

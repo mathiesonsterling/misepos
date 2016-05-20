@@ -10,13 +10,15 @@ using Mise.Database.AzureDefinitions.Context;
 using Mise.Database.AzureDefinitions.Entities.Inventory;
 namespace TransferMiseEntitesTool.Consumers
 {
-    class PurchaseOrderConsumer : BaseConsumer<IPurchaseOrder, PurchaseOrder>
+    class PurchaseOrderConsumer : BaseConsumer<Mise.Core.Common.Entities.Inventory.PurchaseOrder, PurchaseOrder>
     {
         public PurchaseOrderConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
         }
 
-        protected override async Task<PurchaseOrder> SaveEntity(StockboyMobileAppServiceContext db, IPurchaseOrder entity)
+        public override string EntityName => "PurchaseOrder";
+
+        protected override async Task<PurchaseOrder> SaveEntity(StockboyMobileAppServiceContext db, Mise.Core.Common.Entities.Inventory.PurchaseOrder entity)
         {
             var cats = await db.InventoryCategories.ToListAsync();
 

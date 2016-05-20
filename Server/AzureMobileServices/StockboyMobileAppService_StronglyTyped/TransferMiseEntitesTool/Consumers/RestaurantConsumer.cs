@@ -14,7 +14,9 @@ namespace TransferMiseEntitesTool.Consumers
     {
     }
 
-    protected override Task<dbRest> SaveEntity(StockboyMobileAppServiceContext db, Restaurant entity)
+      public override string EntityName => "Restaurant";
+
+      protected override Task<dbRest> SaveEntity(StockboyMobileAppServiceContext db, Restaurant entity)
     {
 	    //now also construct all the inventory sections
         var dbEnt = new dbRest(entity);

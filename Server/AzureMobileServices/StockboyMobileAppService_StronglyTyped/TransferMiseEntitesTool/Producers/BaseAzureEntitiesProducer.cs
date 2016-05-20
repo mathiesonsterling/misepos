@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities.DTOs;
 using TransferMiseEntitesTool.Database;
@@ -21,7 +20,7 @@ namespace TransferMiseEntitesTool.Producers
             _errors = new List<Tuple<AzureEntityStorage, Exception>>();
         } 
 
-        public Task Produce(BlockingCollection<RestaurantEntityDataTransportObject> queue)
+        public Task<bool> Produce(BlockingCollection<RestaurantEntityDataTransportObject> queue)
         {
             _errors = new List<Tuple<AzureEntityStorage, Exception>>();
             using (var db = new AzureNonTypedEntities())
@@ -43,9 +42,11 @@ namespace TransferMiseEntitesTool.Producers
                         _errors.Add(new Tuple<AzureEntityStorage, Exception>(dto, e));
                     }
                 }
+
+                queue.CompleteAdding();
             }
 
-            return Task.FromResult(_errors.Any());
+            return Task.FromResult(!_errors.Any());
         }
     }
 }

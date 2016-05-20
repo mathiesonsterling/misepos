@@ -38,7 +38,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             return new Core.Common.Entities.Inventory.PurchaseOrderPerVendor
             {
                 VendorID = Vendor?.EntityId,
-                VendorName = Vendor?.Name,
+                VendorName = Vendor?.Name?.FullName,
                 Status = Status,
                 LineItems = PurchaseOrderBeverageLineItems.Select(li => li.ToBusinessEntity()).ToList()
             };

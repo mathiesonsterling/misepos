@@ -14,6 +14,8 @@ namespace TransferMiseEntitesTool.Consumers
 
         }
 
+        public override string EntityName => "RestaurantAccount";
+
         protected override Task<DbAcct> SaveEntity(StockboyMobileAppServiceContext db, RestaurantAccount entity)
         {
             var dbEnt = new DbAcct(entity);

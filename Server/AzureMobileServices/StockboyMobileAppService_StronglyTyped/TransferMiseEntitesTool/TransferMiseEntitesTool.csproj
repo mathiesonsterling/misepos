@@ -103,8 +103,8 @@
   <ItemGroup>
     <Compile Include="Consumers\ApplicationInvitationConsumer.cs" />
     <Compile Include="Consumers\BaseConsumer.cs" />
-    <Compile Include="Consumers\BaseLineItemConsumer.cs" />
     <Compile Include="Consumers\EmployeeConsumer.cs" />
+    <Compile Include="Consumers\IEntityConsumer.cs" />
     <Compile Include="Consumers\InventoriesConsumer.cs" />
     <Compile Include="Consumers\InventoryCategoriesConsumer.cs" />
     <Compile Include="Consumers\MiseEmployeeAccountsConsumer.cs" />
@@ -116,9 +116,17 @@
     <Compile Include="Consumers\VendorsConsumer.cs" />
     <Compile Include="Database\AzureEntityStorage.cs" />
     <Compile Include="Database\AzureNonTypedEntities.cs" />
+    <Compile Include="Producers\ApplicationInvitationProducer.cs" />
     <Compile Include="Producers\BaseAzureEntitiesProducer.cs" />
-    <Compile Include="Producers\EntityProducer.cs" />
+    <Compile Include="Producers\EmployeeProducer.cs" />
+    <Compile Include="Producers\InventoryProducer.cs" />
+    <Compile Include="Producers\MiseEmployeeAccountProducer.cs" />
+    <Compile Include="Producers\ParProducer.cs" />
+    <Compile Include="Producers\PurchaseOrderProducer.cs" />
+    <Compile Include="Producers\ReceivingOrderProducer.cs" />
     <Compile Include="Producers\RestaurantAccountProducer.cs" />
+    <Compile Include="Producers\RestaurantProducer.cs" />
+    <Compile Include="Producers\VendorProducer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntityDBTransferer.cs" />

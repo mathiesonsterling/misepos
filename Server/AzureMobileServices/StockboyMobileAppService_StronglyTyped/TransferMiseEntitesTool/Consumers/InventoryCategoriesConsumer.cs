@@ -17,6 +17,8 @@ namespace TransferMiseEntitesTool.Consumers
         {
         }
 
+        public override string EntityName => "InventoryCategories";
+
         protected override Task<dbCat> SaveEntity(StockboyMobileAppServiceContext db, 
             Mise.Core.Common.Entities.Inventory.InventoryCategory entity)
         {

@@ -15,7 +15,9 @@ namespace TransferMiseEntitesTool.Consumers
 		{
 		}
 
-		protected override async Task<Mise.Database.AzureDefinitions.Entities.People.Employee> SaveEntity(StockboyMobileAppServiceContext db, Employee entity)
+	    public override string EntityName => "Employees";
+
+	    protected override async Task<Mise.Database.AzureDefinitions.Entities.People.Employee> SaveEntity(StockboyMobileAppServiceContext db, Employee entity)
 		{
 		    var restIds = entity.GetRestaurantIDs() ?? new List<Guid>();
 		    var rests = await db.Restaurants.Where(r => restIds.Contains(r.RestaurantID)).ToListAsync();

@@ -11,13 +11,16 @@ using Mise.Database.AzureDefinitions.Entities.Inventory;
 using dbPar = Mise.Database.AzureDefinitions.Entities.Inventory.Par;
 namespace TransferMiseEntitesTool.Consumers
 {
-    class ParsConsumer : BaseConsumer<IPar, dbPar>
+    class ParsConsumer : BaseConsumer<Mise.Core.Common.Entities.Inventory.Par, dbPar>
     {
         public ParsConsumer(IJSONSerializer jsonSerializer) : base(jsonSerializer)
         {
         }
 
-        protected override async Task<dbPar> SaveEntity(StockboyMobileAppServiceContext db, IPar entity)
+        public override string EntityName => "Par";
+
+        protected override async Task<dbPar> SaveEntity(StockboyMobileAppServiceContext db, 
+            Mise.Core.Common.Entities.Inventory.Par entity)
         {
             var rest = await db.Restaurants.FirstOrDefaultAsync(r => entity.RestaurantID == r.EntityId);
             var invCats = await db.InventoryCategories.Where(ic => ic != null).ToListAsync();

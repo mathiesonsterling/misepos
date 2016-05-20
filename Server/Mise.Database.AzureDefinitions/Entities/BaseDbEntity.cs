@@ -19,8 +19,9 @@ namespace Mise.Database.AzureDefinitions.Entities
 
         protected BaseDbEntity(TEntityType source)
         {
-            Id = source.Id.ToString();
-            EntityId = source.Id;
+            var idVal = source.Id != Guid.Empty ? source.Id : Guid.NewGuid();
+            Id = idVal.ToString();
+            EntityId = idVal;
             CreatedAt = source.CreatedDate;
             UpdatedAt = source.LastUpdatedDate;
             Revision = new EventIDDb(source.Revision);
