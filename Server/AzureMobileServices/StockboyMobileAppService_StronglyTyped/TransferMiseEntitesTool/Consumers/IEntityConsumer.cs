@@ -11,5 +11,7 @@ namespace TransferMiseEntitesTool.Consumers
     public interface IEntityConsumer
     {
         Task Consume(BlockingCollection<RestaurantEntityDataTransportObject> dtos);
+
+        int MaxQueueSize { get; }
     }
 }

@@ -14,6 +14,8 @@ namespace TransferMiseEntitesTool.Consumers
 		{
 		}
 
+	    protected override int BatchSize => 10;
+
 	    public override string EntityName => "Vendors";
 
 	    protected override async Task<DBVendor> SaveEntity(StockboyMobileAppServiceContext db, Vendor entity)
@@ -27,17 +29,6 @@ namespace TransferMiseEntitesTool.Consumers
 			var dbEnt = new DBVendor(entity, createdBy, rests, invCategories);
 
 		    db.Vendors.Add(dbEnt);
-
-            //debug
-		    try
-		    {
-		        await db.SaveChangesAsync();
-		    }
-		    catch (Exception e)
-		    {
-		        var msg = e.Message;
-		        throw;
-		    }
 
 		    return dbEnt;
 		}

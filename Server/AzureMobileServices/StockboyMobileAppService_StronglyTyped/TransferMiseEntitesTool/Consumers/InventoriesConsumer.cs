@@ -20,7 +20,9 @@ namespace TransferMiseEntitesTool.Consumers
 
         public override string EntityName => "Inventories";
 
-        protected override int BatchSize => 5;
+        protected override int BatchSize => 10;
+
+        public override int MaxQueueSize => 150;
 
         private IEnumerable<InventoryCategory> _categories;
         private IList<Employee> _employees;

@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using Mise.Core.Common.Entities.DTOs;
 using TransferMiseEntitesTool.Database;
 
@@ -12,15 +12,15 @@ namespace TransferMiseEntitesTool.Producers
     {
         protected abstract string EntityTypeString { get; }
 
-        private List<Tuple<AzureEntityStorage, Exception>> _errors; 
+        private List<Tuple<AzureEntityStorage, Exception>> _errors;
         public IEnumerable<Tuple<AzureEntityStorage, Exception>> Errors => _errors;
 
         protected BaseAzureEntitiesProducer()
         {
             _errors = new List<Tuple<AzureEntityStorage, Exception>>();
-        } 
+        }
 
-        public Task<bool> Produce(BlockingCollection<RestaurantEntityDataTransportObject> queue)
+        public bool Produce(BlockingCollection<RestaurantEntityDataTransportObject> queue)
         {
             _errors = new List<Tuple<AzureEntityStorage, Exception>>();
             using (var db = new AzureNonTypedEntities())
@@ -32,21 +32,21 @@ namespace TransferMiseEntitesTool.Producers
 
                 foreach (var dto in dtos)
                 {
-                    try
+
+                    var restDTO = dto.ToRestaurantDTO();
+                    var couldAdd = queue.TryAdd(restDTO);
+                    while (!couldAdd)
                     {
-                        var restDTO = dto.ToRestaurantDTO();
-                        queue.Add(restDTO);
-                    }
-                    catch (Exception e)
-                    {
-                        _errors.Add(new Tuple<AzureEntityStorage, Exception>(dto, e));
+                        Thread.Sleep(1000);
+                        couldAdd = queue.TryAdd(restDTO);
                     }
                 }
 
                 queue.CompleteAdding();
             }
 
-            return Task.FromResult(!_errors.Any());
+            Console.WriteLine($"Completed adding for {EntityTypeString} with {_errors.Count()} errors");
+            return !_errors.Any();
         }
     }
 }
