@@ -15,6 +15,18 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public string AppKey{get;private set;}
 	}
 
+    /// <summary>
+    /// Are we a QA, Dev, production, or demo build?
+    /// </summary>
+    public enum BuildLevel
+    {
+        Demo,
+        Debugging,
+        Development,
+        QA,
+        Production
+    }
+
 	public static class AzureServiceLocator
 	{
 		public static AzureServiceLocation GetAzureMobileServiceLocation(BuildLevel level){

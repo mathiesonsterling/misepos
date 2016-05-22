@@ -21,7 +21,8 @@ using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Services;
 using Mise.Inventory.ViewModels.Reports;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
-namespace Mise.Inventory
+
+namespace StockboyForms
 {
 	public class DependencySetup
 	{

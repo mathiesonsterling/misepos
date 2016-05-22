@@ -7,7 +7,7 @@ using Mise.Inventory.ViewModels;
 using Mise.Inventory.ViewModels.Reports;
 namespace Mise.Inventory.Pages.Reports
 {
-	public partial class ReportsByInventoryPage
+	public partial class ReportsByInventoryPage : BasePage
 	{
 	    private Dictionary<string, IInventory> _possibleInventories;
 		public ReportsByInventoryPage ()

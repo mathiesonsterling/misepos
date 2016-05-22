@@ -7,7 +7,7 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Inventory.Services;
 using Mise.Inventory.ViewModels;
-
+using System.Windows.Input;
 namespace StockboyForms.ViewModels
 {
 	public class UpdateParQuantityViewModel : BaseNextViewModel<IParBeverageLineItem>
@@ -19,11 +19,11 @@ namespace StockboyForms.ViewModels
 
 		}
 
-		public override async Task OnAppearing ()
+		public override Task OnAppearing ()
 		{
 			CurrentQuantity = CurrentItem != null ? CurrentItem.Quantity : 0;
 			ItemName = CurrentItem != null ? CurrentItem.DisplayName : string.Empty;
-
+            return Task.FromResult(true);
 		}
 
 		#region Fields
@@ -52,15 +52,11 @@ namespace StockboyForms.ViewModels
 		{
 			await OnAppearing();
 		}
-
-		protected override Task<IParBeverageLineItem> GetSelectedItem ()
-		{
-			return _parService.GetLineItemToMeasure ();
-		}
+            
 
 		#endregion
 
-		public ICommand UpdateQuantityCommand{get{return new SimpleCommand (
+		public ICommand UpdateQuantityCommand{get{return new Command (
 				UpdateQuantity, 
 				() => CurrentItem != null && CurrentQuantity != CurrentItem.Quantity);}}
 

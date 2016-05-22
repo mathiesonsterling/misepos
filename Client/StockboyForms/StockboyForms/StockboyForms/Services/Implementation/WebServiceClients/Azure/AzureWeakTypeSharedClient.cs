@@ -24,7 +24,8 @@ using System.Net;
 using Mise.Core.Client.Services;
 using Newtonsoft.Json.Serialization;
 using Mise.Core.Entities.Inventory;
-
+using Mise.Core.Entities.People;
+using Mise.Core.Common.Entities.People;
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 {

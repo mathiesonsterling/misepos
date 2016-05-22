@@ -11,7 +11,6 @@ using Xamarin.Forms;
 using Mise.Core.Services;
 using Mise.Core.Common.Services.WebServices.Exceptions;
 using Mise.Core.Common.Events.Inventory;
-using Mise.Inventory.Async;
 
 namespace Mise.Inventory.ViewModels
 {
