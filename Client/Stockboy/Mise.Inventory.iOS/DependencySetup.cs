@@ -48,6 +48,7 @@ namespace Mise.Inventory.iOS
 				var dbService = new iOSSQLite ();
 
 				cb.RegisterInstance<ISQLite> (dbService);
+                SQLitePCL.CurrentPlatform.Init ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
 				store.DefineTable<AzureEntityStorage>();
