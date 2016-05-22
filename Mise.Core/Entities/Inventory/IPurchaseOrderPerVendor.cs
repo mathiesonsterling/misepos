@@ -11,7 +11,7 @@ namespace Mise.Core.Entities.Inventory
 	public interface IPurchaseOrderPerVendor : ICloneableEntity, IRestaurantEntityBase, ITextSearchable
 	{
 		Guid? VendorID{ get;}
-        string VendorName{ get; }
+        BusinessName VendorName{ get; }
 
 		IEnumerable<IPurchaseOrderLineItem> GetLineItems();
 

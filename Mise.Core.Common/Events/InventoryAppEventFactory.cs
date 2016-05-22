@@ -605,7 +605,7 @@ namespace Mise.Core.Common.Events
 				NumBottlesNeeded = numBottles,
 				PARLineItem = baseItem,
                 VendorWithBestPriceID = vendor?.Id,
-                VendorName = vendor?.VendorName,
+                VendorName = vendor?.Name,
 				Categories = baseItem.Categories,
                 LineItemID = Guid.NewGuid()
 			};

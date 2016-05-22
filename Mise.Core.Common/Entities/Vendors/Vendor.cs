@@ -63,12 +63,11 @@ namespace Mise.Core.Common.Entities.Vendors
 		#region IVendor implementation
 
 
-		public string Name {
+		public BusinessName Name {
 			get;
 			set;
 		}
-
-        public BusinessName VendorName { get; set; }
+            
 
 		#endregion
 
@@ -86,7 +85,7 @@ namespace Mise.Core.Common.Entities.Vendors
 
 		public bool ContainsSearchString (string searchString)
 		{
-			if( (VendorName != null && VendorName.ContainsSearchString (searchString))
+			if( (Name != null && Name.ContainsSearchString (searchString))
 			|| (StreetAddress != null && StreetAddress.ContainsSearchString (searchString))
             || (EmailToOrderFrom != null && EmailToOrderFrom.ContainsSearchString(searchString))){
 		        return true;
@@ -217,7 +216,7 @@ namespace Mise.Core.Common.Entities.Vendors
 	        Id = created.VendorID;
 	        CreatedByEmployeeID = created.CausedById;
 
-			VendorName = created.Name;
+			Name = created.Name;
 			StreetAddress = created.Address;
 			PhoneNumber = created.PhoneNumber;
 	        EmailToOrderFrom = created.Email;
