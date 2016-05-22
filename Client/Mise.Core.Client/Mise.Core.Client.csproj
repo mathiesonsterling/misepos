@@ -69,6 +69,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Services\WebServices\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mise.Core\Mise.Core.csproj">
