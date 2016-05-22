@@ -6,7 +6,7 @@ using Mise.Inventory.CustomControls;
 using Mise.Inventory.Services.Implementation;
 
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class InventoryPage : BasePage
 	{

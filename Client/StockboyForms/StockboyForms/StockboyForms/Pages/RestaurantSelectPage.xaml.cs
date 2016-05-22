@@ -4,7 +4,7 @@ using Mise.Core.ValueItems;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class RestaurantSelectPage : BasePage
 	{

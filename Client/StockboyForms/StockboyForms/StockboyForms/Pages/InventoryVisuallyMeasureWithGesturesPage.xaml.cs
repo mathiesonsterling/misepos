@@ -8,7 +8,7 @@ using Xamarin;
 using MR.Gestures;
 using Mise.Inventory.Themes;
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class InventoryVisuallyMeasureWithGesturesPage : BasePage
 	{

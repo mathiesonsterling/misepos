@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mise.Inventory.ViewModels;
 using Xamarin.Forms;
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class AuthorizeCreditCardPage : BasePage
 	{

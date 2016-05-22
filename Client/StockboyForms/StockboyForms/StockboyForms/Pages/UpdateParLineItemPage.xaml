@@ -3,8 +3,8 @@
 	xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	xmlns:mr="clr-namespace:MR.Gestures;assembly=MR.Gestures" 
-	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
-	x:Class="Mise.Inventory.Pages.UpdateParLineItemPage"
+	xmlns:local="clr-namespace:StockboyForms.Pages;assembly=Mise.Inventory"
+	x:Class="StockboyForms.Pages.UpdateParLineItemPage"
 	Title="{Binding ItemName}"
 >
 	<ContentPage.Content>

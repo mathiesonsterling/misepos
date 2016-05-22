@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Inventory.CustomControls;
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class PARPage : BasePage
 	{

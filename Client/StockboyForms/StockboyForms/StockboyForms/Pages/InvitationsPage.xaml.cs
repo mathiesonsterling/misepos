@@ -7,7 +7,7 @@ using Mise.Core;
 using System.Runtime.InteropServices;
 using Mise.Core.Entities.People;
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class InvitationsPage : BasePage
 	{

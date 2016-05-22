@@ -3,7 +3,7 @@ using Xamarin.Forms;
 using Mise.Inventory.ViewModels.Reports;
 using Mise.Inventory.CustomControls;
 using Mise.Inventory.ViewModels;
-namespace Mise.Inventory.Pages.Reports
+namespace StockboyForms.Pages.Reports
 {
 	public partial class ReportResultsPage : BasePage
 	{

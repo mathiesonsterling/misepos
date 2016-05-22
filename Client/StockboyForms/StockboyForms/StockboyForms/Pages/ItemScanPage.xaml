@@ -3,7 +3,7 @@
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:local="clr-namespace:Mise.Inventory;assembly=Mise.Inventory"
-	x:Class="Mise.Inventory.Pages.ItemScanPage"
+	x:Class="StockboyForms.Pages.ItemScanPage"
 	BindingContext="{x:Static local:App.ItemScanViewModel}"
 	Title="Find Beverage Item">
 

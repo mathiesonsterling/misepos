@@ -5,7 +5,7 @@ using Mise.Core.Entities.Inventory;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Inventory.ViewModels.Reports;
-namespace Mise.Inventory.Pages.Reports
+namespace StockboyForms.Pages.Reports
 {
 	public partial class ReportsByInventoryPage : BasePage
 	{

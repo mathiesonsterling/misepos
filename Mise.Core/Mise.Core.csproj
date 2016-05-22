@@ -195,11 +195,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="Validation">
-      <HintPath>..\Client\Stockboy\packages\Validation.2.2.8\lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
-    </Reference>
     <Reference Include="PCLCrypto, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d4421c8a4786956c">
       <HintPath>..\Server\MiseWebsite\packages\PCLCrypto.2.0.147\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\PCLCrypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Validation">
+      <HintPath>..\Client\Stockboy\packages\Validation.2.2.8\lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

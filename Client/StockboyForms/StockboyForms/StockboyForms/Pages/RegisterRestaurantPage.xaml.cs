@@ -6,7 +6,7 @@ using Xamarin;
 using Mise.Inventory.ViewModels;
 
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class RegisterRestaurantPage : BasePage
 	{

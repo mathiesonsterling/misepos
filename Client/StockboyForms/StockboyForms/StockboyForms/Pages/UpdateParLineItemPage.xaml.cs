@@ -7,7 +7,7 @@ using MR.Gestures;
 using System.Threading.Tasks;
 
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class UpdateParLineItemPage : BasePage
 	{

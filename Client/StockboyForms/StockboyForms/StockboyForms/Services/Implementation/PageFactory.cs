@@ -2,8 +2,8 @@
 
 using Xamarin.Forms;
 
-using Mise.Inventory.Pages;
-using Mise.Inventory.Pages.Reports;
+using StockboyForms.Pages;
+using StockboyForms.Pages.Reports;
 namespace Mise.Inventory.Services
 {
     public class PageFactory : IPageFactory

@@ -4,7 +4,7 @@ using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Inventory.ViewModels.Modals;
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public abstract class BasePage : ContentPage
 	{

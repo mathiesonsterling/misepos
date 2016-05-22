@@ -2,7 +2,7 @@
 using Mise.Inventory.ViewModels.Reports;
 using Xamarin.Forms;
 
-namespace Mise.Inventory.Pages.Reports
+namespace StockboyForms.Pages.Reports
 {
 	public partial class SelectCompletedInventoriesPage : BasePage
 	{

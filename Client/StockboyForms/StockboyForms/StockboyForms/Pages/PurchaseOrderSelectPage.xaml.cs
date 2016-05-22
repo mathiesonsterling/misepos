@@ -5,7 +5,7 @@ using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Core.Entities.Inventory;
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class PurchaseOrderSelectPage : BasePage
 	{

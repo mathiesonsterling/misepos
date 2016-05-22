@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class EmployeesManagePage : BasePage
 	{

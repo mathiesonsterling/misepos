@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Services.UtilityServices;
-using Mise.Inventory.Pages;
+using StockboyForms.Pages;
 using Mise.Inventory.ViewModels;
 
 namespace Mise.Inventory.Services.Implementation

@@ -7,7 +7,7 @@ using Mise.Inventory.ViewModels;
 using Mise.Core.ValueItems;
 
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class VendorAddPage : BasePage
 	{

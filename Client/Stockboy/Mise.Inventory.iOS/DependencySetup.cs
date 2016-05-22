@@ -30,9 +30,13 @@ namespace Mise.Inventory.iOS
             var stripeClient = new ClientStripeFacade();
             var processor = new StripePaymentProcessorService(Logger, stripeClient);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();
+            try{
+                var initTask = Task.Run(async () => await InitWebService (cb));
 
-			var initTask = InitWebService (cb);
-            initTask.Wait();
+                initTask.Wait();
+            } catch(System.Exception e){
+                Logger.HandleException(e);
+            }
 
 			base.RegisterDepenencies (cb);
 		}
@@ -52,9 +56,14 @@ namespace Mise.Inventory.iOS
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
 				store.DefineTable<AzureEntityStorage>();
-				store.DefineTable<AzureEventStorage>();
 
-				await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
+                try{
+				    //await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
+                    await mobileService.SyncContext.InitializeAsync(store).ConfigureAwait(false);
+                }catch(System.Exception e){
+                    var msg = e.Message;
+                    throw;
+                }
 
 				var deviceConnection = new DeviceConnectionService ();
 				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, deviceConnection);

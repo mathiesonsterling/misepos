@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class RestaurantLoadingPage : BasePage
 	{

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 using Mise.Inventory.ViewModels;
 using Mise.Core.Entities.Vendors;
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class VendorFindPage : BasePage
 	{

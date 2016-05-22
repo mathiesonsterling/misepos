@@ -7,7 +7,7 @@ using Mise.Core.Entities.Inventory;
 using Mise.Inventory.CustomControls;
 
 
-namespace Mise.Inventory.Pages
+namespace StockboyForms.Pages
 {
 	public partial class ItemFindPage : BasePage
 	{
