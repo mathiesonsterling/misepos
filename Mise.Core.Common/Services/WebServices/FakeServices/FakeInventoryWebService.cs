@@ -35,6 +35,12 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 
 	    #region Creation
 
+        public bool Synched
+        {
+            get;
+            set;
+        }
+
         public Task SetRestaurantId(Guid restaurantId)
         {
             return Task.FromResult(true);

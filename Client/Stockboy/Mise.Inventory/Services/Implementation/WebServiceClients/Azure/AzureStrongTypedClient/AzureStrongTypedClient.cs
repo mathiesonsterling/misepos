@@ -24,6 +24,7 @@ using System.Linq.Expressions;
 using Mise.Core.Client.Entities.Categories;
 using Xamarin.Forms;
 using System.Net.Http.Headers;
+using Mise.Core.Client.Services;
 
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureStrongTypedClient
@@ -32,6 +33,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
     {
         private readonly IMobileServiceClient _client;
         private readonly ILogger _logger;
+        private readonly IDeviceConnectionService _connService;
         private Guid? _restaurantId;
 
         private IMobileServiceSyncTable<Mise.Core.Client.Entities.Accounts.RestaurantAccount> _restaurantAccountTable;
@@ -62,10 +64,16 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             return store;
         }
 
-        public AzureStrongTypedClient(ILogger logger, IMobileServiceClient client)
+        public AzureStrongTypedClient(ILogger logger, IMobileServiceClient client, IDeviceConnectionService connService)
         {
             _logger = logger;
             _client = client;
+            _connService = connService;
+            _connService.ConnectionStateChanged += async (sender, args) => {
+                if(args.IsConnected){
+                    await SynchWithServer();
+                }
+            };
         }
 
         #region IInventoryApplicationWebService implementation
@@ -131,9 +139,15 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                     }
                 }
                 else{
-                    SyncTable("Restaurants", _restaurantTable);
-                    SyncTable("Employees", _employeeTable);
-                    SyncTable("ApplicationInvitations", _applicationInvitationTable);
+                    var minSync = new List<Task>{
+                        SyncTable("Restaurants", _restaurantTable),
+                        SyncTable("Employees", _employeeTable),
+                        SyncTable("ApplicationInvitations", _applicationInvitationTable)
+                    };
+                    foreach(var t in minSync)
+                    {
+                        await t.ConfigureAwait(false);
+                    }
                 }
 
                 Synched = true;

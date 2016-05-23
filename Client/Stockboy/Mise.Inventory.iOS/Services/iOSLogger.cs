@@ -48,11 +48,14 @@ namespace Mise.Inventory.iOS.Services
 		{
 			if (ex != null) {
 				if (level == LogLevel.Error || level == LogLevel.Fatal) {
+                    try{
 					Insights.Report (ex);
+                    } catch(Exception e){
+                    }
 				}
 				try{
 					_errorTrack.ReportException (ex, level);
-				} catch(Exception e){
+				} catch(Exception){
 					Log (ex.Message, LogLevel.Fatal);
 				}
 				Log (ex.Message + "::" + ex.StackTrace, level);
