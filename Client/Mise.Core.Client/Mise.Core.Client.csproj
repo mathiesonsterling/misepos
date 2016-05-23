@@ -65,11 +65,56 @@
     <Compile Include="Services\IRepositoryLoader.cs" />
     <Compile Include="Services\ICurrentInventoryService.cs" />
     <Compile Include="Services\ISQLite.cs" />
+    <Compile Include="Entities\BaseDbEntity.cs" />
+    <Compile Include="Entities\MiseApplications.cs" />
+    <Compile Include="Entities\Accounts\AccountCharge.cs" />
+    <Compile Include="Entities\Accounts\AccountCredit.cs" />
+    <Compile Include="Entities\Accounts\AccountCreditCardPayment.cs" />
+    <Compile Include="Entities\Accounts\ApplicationInvitation.cs" />
+    <Compile Include="Entities\Accounts\BaseAccountEntity.cs" />
+    <Compile Include="Entities\Accounts\MiseEmployeeAccount.cs" />
+    <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
+    <Compile Include="Entities\Categories\EntityCategoryOwnership.cs" />
+    <Compile Include="Entities\Categories\InventoryCategory.cs" />
+    <Compile Include="Entities\Inventory\Inventory.cs" />
+    <Compile Include="Entities\Inventory\InventorySection.cs" />
+    <Compile Include="Entities\Inventory\Par.cs" />
+    <Compile Include="Entities\Inventory\PurchaseOrder.cs" />
+    <Compile Include="Entities\Inventory\PurchaseOrderPerVendor.cs" />
+    <Compile Include="Entities\Inventory\ReceivingOrder.cs" />
+    <Compile Include="Entities\Inventory\RestaurantInventorySection.cs" />
+    <Compile Include="Entities\Inventory\LineItems\BaseLineItem.cs" />
+    <Compile Include="Entities\Inventory\LineItems\BaseLiquidLineItemEntity.cs" />
+    <Compile Include="Entities\Inventory\LineItems\InventoryBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\LineItems\ParBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\LineItems\PurchaseOrderBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\LineItems\ReceivingOrderBeverageLineItem.cs" />
+    <Compile Include="Entities\People\BaseUserDbEntity.cs" />
+    <Compile Include="Entities\People\Employee.cs" />
+    <Compile Include="Entities\People\EmployeeRestaurantRelationships.cs" />
+    <Compile Include="Entities\Restaurant\Restaurant.cs" />
+    <Compile Include="Entities\Restaurant\RestaurantApplicationUse.cs" />
+    <Compile Include="Entities\Vendor\Vendor.cs" />
+    <Compile Include="Entities\Vendor\VendorBeverageLineItem.cs" />
+    <Compile Include="Entities\Vendor\VendorPrivateRestaurantPrice.cs" />
+    <Compile Include="Entities\Vendor\VendorRestaurantRelationships.cs" />
+    <Compile Include="ValueItems\BusinessName.cs" />
+    <Compile Include="ValueItems\CreditCard.cs" />
+    <Compile Include="ValueItems\EventIDDb.cs" />
+    <Compile Include="ValueItems\IDbValueItem.cs" />
+    <Compile Include="ValueItems\MoneyDb.cs" />
+    <Compile Include="ValueItems\ReferralCodeDb.cs" />
+    <Compile Include="ValueItems\StreetAddress.cs" />
+    <Compile Include="ValueItems\Weight.cs" />
+    <Compile Include="ValueItems\Inventory\LiquidAmount.cs" />
+    <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />
+    <Compile Include="ValueItems\Inventory\LiquidContainerShape.cs" />
+    <Compile Include="Entities\EntityData.cs" />
+    <Compile Include="Entities\IMiseClientEntity.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Services\WebServices\" />
-    <Folder Include="Entities\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mise.Core\Mise.Core.csproj">

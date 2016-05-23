@@ -32,7 +32,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 	/// <summary>
 	/// Azure Mobile Services client - all items are serialized as JSON before going to the server
 	/// </summary>
-	public class AzureWeakTypeSharedClient : IInventoryApplicationWebService
+    public class AzureWeakTypeSharedClient : IInventoryApplicationWebService
 	{
 		private readonly IMobileServiceClient _client;
 		readonly ILogger _logger;
@@ -77,6 +77,11 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			}
 			//TODO do we need to pull tables as well?
 		}
+
+        public Task SetRestaurantId(Guid restaurantId)
+        {
+            return Task.FromResult(true);
+        }
 
 		public async Task<bool> SendEventsAsync (RestaurantAccount updatedEntity, IEnumerable<IAccountEvent> events)
 		{
@@ -579,6 +584,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		}
 
 		private async Task AttemptPull(string queryName, IMobileServiceTableQuery<AzureEntityStorage> query){
+            var triedAgain = false;
 			try{
 				var table = GetEntityTable ();
 				if(query == null){
@@ -589,6 +595,20 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				_logger.HandleException (we, LogLevel.Debug);
 				_needsSynch = true;
 			}
+            catch(Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException ue){
+                if (triedAgain)
+                {
+                    throw;
+                }
+                triedAgain = true;
+                _entityTable = null;
+                var table = GetEntityTable();
+                if (query == null)
+                {
+                    query = table.CreateQuery();
+                }
+                await table.PullAsync(queryName, query);
+            }
 		}
 
         private IMobileServiceSyncTable<AzureEntityStorage> _entityTable;

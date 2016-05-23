@@ -34,6 +34,11 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 	    private readonly List<ApplicationInvitation> _invitations; 
 
 	    #region Creation
+
+        public Task SetRestaurantId(Guid restaurantId)
+        {
+            return Task.FromResult(true);
+        }
 		public FakeInventoryWebService(){
 		    var restID = Guid.Empty;
             var townsendID = Guid.Parse("c7c61794-03db-4e20-a87e-8483f4960286");
