@@ -22,9 +22,9 @@ namespace Mise.Core.Client.Repositories
 	public class ClientRestaurantRepository : BaseEventSourcedClientRepository<IRestaurant, IRestaurantEvent, Restaurant>, 
 		IRestaurantRepository
 	{
-		readonly IInventoryRestaurantWebService _webService;
+		readonly IInventoryApplicationWebService _webService;
         private readonly IDeviceLocationService _locationService;
-        public ClientRestaurantRepository(ILogger logger, IInventoryRestaurantWebService webService, IDeviceLocationService locationService)
+        public ClientRestaurantRepository(ILogger logger, IInventoryApplicationWebService webService, IDeviceLocationService locationService)
             : base(logger, webService)
         {
 			_webService = webService;
@@ -56,6 +56,7 @@ namespace Mise.Core.Client.Repositories
         {
             if (restaurantID.HasValue)
             {
+                await _webService.SetRestaurantId(restaurantID.Value);
                 var rest = await _webService.GetRestaurant(restaurantID.Value);
 				return rest != null ? new List<Restaurant> {rest} : new List<Restaurant>();
             }

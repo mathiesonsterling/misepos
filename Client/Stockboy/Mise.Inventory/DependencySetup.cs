@@ -26,7 +26,6 @@ namespace Mise.Inventory
 	public class DependencySetup
 	{
 		public static ILogger Logger{get;protected set;}
-		protected ISQLite SqlLiteConnection{ get; set; }
 
 		/// <summary>
 		/// Creates an instance of the AutoFac container
@@ -55,7 +54,7 @@ namespace Mise.Inventory
 		protected static AzureServiceLocation GetWebServiceLocation(){
 			var level = GetBuildLevel ();
 
-			return AzureServiceLocator.GetAzureMobileServiceLocation (level);
+			return AzureServiceLocator.GetAzureMobileServiceLocation (level, true);
 		}
 
 		protected static void RegisterWebService (ContainerBuilder cb, IInventoryWebService webService)

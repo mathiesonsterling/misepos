@@ -230,8 +230,9 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 _logger.HandleException(e);
                 Online = false;
                 //get our restaraunt stored
-                IRestaurantRepository restaurantRepository = new ClientRestaurantRepository(logger, terminalService, locationService);
-                _restaurant = restaurantRepository.GetAll().FirstOrDefault();
+                /*IRestaurantRepository restaurantRepository = 
+                    new ClientRestaurantRepository(logger, terminalService, locationService);
+                _restaurant = restaurantRepository.GetAll().FirstOrDefault();*/
             }
 				
             var checkRepos = new ClientCheckRepository(terminalWebService, logger);

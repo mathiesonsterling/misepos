@@ -13,6 +13,7 @@ using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 //using ModernHttpClient;
 using SQLitePCL;
 using System.Threading.Tasks;
+using Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureStrongTypedClient;
 
 namespace Mise.Inventory.iOS
 {
@@ -30,9 +31,13 @@ namespace Mise.Inventory.iOS
             var stripeClient = new ClientStripeFacade();
             var processor = new StripePaymentProcessorService(Logger, stripeClient);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();
+            try{
+                var initTask = Task.Run(async () => await InitWebService (cb));
 
-			var initTask = InitWebService (cb);
-            initTask.Wait();
+                initTask.Wait();
+            } catch(System.Exception e){
+                Logger.HandleException(e);
+            }
 
 			base.RegisterDepenencies (cb);
 		}
@@ -42,7 +47,6 @@ namespace Mise.Inventory.iOS
 			var wsLocation = GetWebServiceLocation ();
 			if (wsLocation != null) {
 				Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init ();
-				//var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), new NativeMessageHandler());
                 var mobileService = new MobileServiceClient (wsLocation.Uri.ToString ());
 				//create the SQL store for offline
 				var dbService = new iOSSQLite ();
@@ -51,13 +55,26 @@ namespace Mise.Inventory.iOS
                 SQLitePCL.CurrentPlatform.Init ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
-				store.DefineTable<AzureEntityStorage>();
-				store.DefineTable<AzureEventStorage>();
+                store = AzureStrongTypedClient.DefineTables(store);
 
-				await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
+                try{
+				    //await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
+                    await mobileService.SyncContext.InitializeAsync(store).ConfigureAwait(false);
+                }catch(System.Exception e){
+                    var msg = e.Message;
+                    throw;
+                }
 
 				var deviceConnection = new DeviceConnectionService ();
-				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, deviceConnection);
+                var webService = new AzureStrongTypedClient(Logger, mobileService, deviceConnection);
+                try{
+                    await webService.SynchWithServer().ConfigureAwait(false);
+                } catch(System.Exception e)
+                {
+                    //we've got to do something here!
+                    var msg = e.Message;
+                }
+				//var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, deviceConnection);
 				RegisterWebService (cb, webService);
 			}
 		}

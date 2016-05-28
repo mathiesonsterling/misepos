@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Mise.Core.Entities.Accounts;
+using Mise.Core.ValueItems;
+using Mise.Core.Client.ValueItems;
+using CreditCard = Mise.Core.Client.ValueItems.CreditCard;
+
+namespace Mise.Core.Client.Entities.Accounts
+{
+    public class AccountCreditCardPayment : BaseDbEntity<IAccountPayment, Core.Common.Entities.Accounts.AccountCreditCardPayment>
+    {
+        public AccountCreditCardPayment()
+        {
+            CardUsed = new CreditCard();
+            Amount = new MoneyDb();
+        }
+
+        public AccountCreditCardPayment(Core.Common.Entities.Accounts.AccountCreditCardPayment source)
+	    	:base(source)
+        {
+            CardUsed = new CreditCard(source.CardUsed);
+            Status = source.Status;
+            AccountID = source.AccountID;
+            Amount = new MoneyDb(source.Amount);
+        }
+
+        public CreditCard CardUsed { get; set; }
+
+        public PaymentProcessingStatus Status { get; set; }
+
+        public Guid AccountID { get; set; }
+        public MoneyDb Amount { get; set; }
+        protected override Core.Common.Entities.Accounts.AccountCreditCardPayment CreateConcreteSubclass()
+        {
+            return new Core.Common.Entities.Accounts.AccountCreditCardPayment
+            {
+                CardUsed = CardUsed.ToValueItem(),
+                Status = Status,
+                AccountID = AccountID,
+                Amount = Amount.ToValueItem()
+            };
+        }
+    }
+}

@@ -17,7 +17,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 
 	public static class AzureServiceLocator
 	{
-		public static AzureServiceLocation GetAzureMobileServiceLocation(BuildLevel level){
+        public static AzureServiceLocation GetAzureMobileServiceLocation(BuildLevel level, bool strong = false){
+            if (strong)
+            {
+                return new AzureServiceLocation("http://stockboymobileappservice.azurewebsites.net/", "");
+            }
+
 			if(level == BuildLevel.Demo){
 				return null;
 			}
