@@ -2,7 +2,7 @@
 
 namespace StockboyMobileAppServiceService.Controllers
 {
-    public class EmployeesController : BaseEntityController<Employee>
+    public class EmployeeController : BaseEntityController<Employee>
     {
     }
 }

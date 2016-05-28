@@ -2,7 +2,7 @@
 
 namespace StockboyMobileAppServiceService.Controllers
 {
-    public class ApplicationInvitationsController : BaseEntityController<ApplicationInvitation>
+    public class ApplicationInvitationController : BaseEntityController<ApplicationInvitation>
     {
     }
 }

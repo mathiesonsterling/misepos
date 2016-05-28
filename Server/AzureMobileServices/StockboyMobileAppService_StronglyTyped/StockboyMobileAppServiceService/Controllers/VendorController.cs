@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Mise.Database.AzureDefinitions.Entities.Accounts;
+using Mise.Database.AzureDefinitions.Entities.Vendor;
 
 namespace StockboyMobileAppServiceService.Controllers
 {
-    public class RestaurantAccountsController : BaseEntityController<RestaurantAccount>
+    public class VendorController : BaseEntityController<Vendor>
     {
     }
 }

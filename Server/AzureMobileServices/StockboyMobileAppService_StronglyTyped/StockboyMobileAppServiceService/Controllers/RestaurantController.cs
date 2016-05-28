@@ -2,7 +2,7 @@
 
 namespace StockboyMobileAppServiceService.Controllers
 {
-    public class RestaurantsController : BaseEntityController<Restaurant>
+    public class RestaurantController : BaseEntityController<Restaurant>
     {
         
     }

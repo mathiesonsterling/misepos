@@ -157,17 +157,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Startup.MobileApp.cs" />
-    <Compile Include="Controllers\ApplicationInvitationsController.cs" />
+    <Compile Include="Controllers\ApplicationInvitationController.cs" />
     <Compile Include="Controllers\BaseEntityController.cs" />
-    <Compile Include="Controllers\EmployeesController.cs" />
-    <Compile Include="Controllers\InventoriesController.cs" />
-    <Compile Include="Controllers\InventoryCategoriesController.cs" />
-    <Compile Include="Controllers\ParsController.cs" />
-    <Compile Include="Controllers\PurchaseOrdersController.cs" />
-    <Compile Include="Controllers\ReceivingOrdersController.cs" />
-    <Compile Include="Controllers\RestaurantAccountsController.cs" />
-    <Compile Include="Controllers\RestaurantsController.cs" />
-    <Compile Include="Controllers\VendorsController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
+    <Compile Include="Controllers\InventoryCategoryController.cs" />
+    <Compile Include="Controllers\ParController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
+    <Compile Include="Controllers\ReceivingOrderController.cs" />
+    <Compile Include="Controllers\RestaurantAccountController.cs" />
+    <Compile Include="Controllers\RestaurantController.cs" />
+    <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

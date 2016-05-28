@@ -6,7 +6,7 @@ using Mise.Database.AzureDefinitions.Entities.Inventory;
 
 namespace StockboyMobileAppServiceService.Controllers
 {
-    public class InventoriesController : BaseEntityController<Inventory>
+    public class ParController : BaseEntityController<Par>
     {
     }
 }

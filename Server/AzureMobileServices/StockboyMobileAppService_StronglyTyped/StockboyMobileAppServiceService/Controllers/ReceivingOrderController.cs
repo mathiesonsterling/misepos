@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Mise.Database.AzureDefinitions.Entities.Categories;
+using Mise.Database.AzureDefinitions.Entities.Inventory;
 
 namespace StockboyMobileAppServiceService.Controllers
 {
-    public class InventoryCategoriesController : BaseEntityController<InventoryCategory>
+    public class ReceivingOrderController : BaseEntityController<ReceivingOrder>
     {
     }
 }
