@@ -10,11 +10,12 @@ namespace StockboyMobileAppServiceService.Controllers
 {
     public abstract class BaseEntityController<TEntityType> : TableController<TEntityType> where TEntityType : EntityData
     {
+        protected StockboyMobileAppServiceContext Context { get; private set; }
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
-            var context = new StockboyMobileAppServiceContext();
-            DomainManager = new EntityDomainManager<TEntityType>(context, Request);
+            Context = new StockboyMobileAppServiceContext();
+            DomainManager = new EntityDomainManager<TEntityType>(Context, Request);
         }
 
         // GET tables/Restaurants
