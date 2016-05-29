@@ -38,6 +38,17 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         private Guid? _restaurantId;
 
         private IMobileServiceSyncTable<Mise.Core.Client.Entities.Accounts.RestaurantAccount> _restaurantAccountTable;
+
+        public IMobileServiceSyncTable<Mise.Core.Client.Entities.Restaurant.Restaurant> RestaurantTable
+        {
+            get{
+                if (_restaurantTable == null)
+                {
+                    _restaurantTable = _client.GetSyncTable<Restaurant>();
+                }
+                return _restaurantTable;
+            }
+        }
         private IMobileServiceSyncTable<Mise.Core.Client.Entities.Restaurant.Restaurant> _restaurantTable;
 
         private IMobileServiceSyncTable<Employee> _employeeTable;
@@ -50,6 +61,18 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                     _employeeTable = _client.GetSyncTable<Employee>();
                 } 
                 return _employeeTable;
+            }
+        }
+
+        private IMobileServiceSyncTable<EmployeeRestaurantRelationships> _employeeRestaurantTable;
+        public IMobileServiceSyncTable<EmployeeRestaurantRelationships> EmployeeRestaurantRelationships{
+            get
+            {
+                if (_employeeRestaurantTable == null)
+                {
+                    _employeeRestaurantTable = _client.GetSyncTable<EmployeeRestaurantRelationships>();
+                }
+                return _employeeRestaurantTable;
             }
         }
         private IMobileServiceSyncTable<Vendor> _vendorTable;
@@ -287,7 +310,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             var invitEmps = await EmployeeTable.Where(e => e.EntityId == updatedEntity.InvitingEmployeeID)
                                                 .Take(1)
                                                 .ToEnumerableAsync();
-            var rest = await _restaurantTable.Where(r => r.EntityId == updatedEntity.RestaurantID)
+            var rest = await RestaurantTable.Where(r => r.EntityId == updatedEntity.RestaurantID)
                                              .Take(1)
                                              .ToEnumerableAsync();
             return await UpdateEntity(updatedEntity, _applicationInvitationTable, 
@@ -306,7 +329,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         public async Task<bool>  SendEventsAsync(Mise.Core.Common.Entities.Inventory.Inventory updatedEntity, 
             IEnumerable<Mise.Core.Entities.Inventory.Events.IInventoryEvent> events)
         {
-            var rests = await _restaurantTable.Where(r => r.EntityId == updatedEntity.RestaurantID)
+            var rests = await RestaurantTable.Where(r => r.EntityId == updatedEntity.RestaurantID)
                                               .Take(1).ToEnumerableAsync();
             var rest = rests.First();
 
@@ -341,7 +364,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         {
             var cats = await _categoriesTable.Where(c => !c.Deleted).ToEnumerableAsync();
             var vendors = await _vendorTable.Where(v => !v.Deleted).ToEnumerableAsync();
-            var rest = await _restaurantTable.Where(r => !r.Deleted && r.EntityId == updatedEntity.RestaurantID).Take(1).ToEnumerableAsync();
+            var rest = await RestaurantTable.Where(r => !r.Deleted && r.EntityId == updatedEntity.RestaurantID).Take(1).ToEnumerableAsync();
             var emp = await EmployeeTable.Where(e => !e.Deleted && e.EntityId == updatedEntity.CreatedByEmployeeID).Take(1).ToEnumerableAsync();
             return await UpdateEntity(updatedEntity, _purchaseOrderTable, 
                 e => new Mise.Core.Client.Entities.Inventory.PurchaseOrder(updatedEntity, cats, vendors, 
@@ -365,7 +388,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public async Task<bool> SendEventsAsync(Mise.Core.Common.Entities.Inventory.ReceivingOrder updatedEntity, IEnumerable<Mise.Core.Entities.Vendors.Events.IReceivingOrderEvent> events)
         {
-            var rests = await _restaurantTable.Where(r => updatedEntity.RestaurantID == r.EntityId)
+            var rests = await RestaurantTable.Where(r => updatedEntity.RestaurantID == r.EntityId)
                 .Take(1).ToEnumerableAsync();
             var emps = await EmployeeTable.Where(r => updatedEntity.ReceivedByEmployeeID == r.EntityId).Take(1).ToEnumerableAsync();
             var cats = await _categoriesTable.Where(c => !c.Deleted).ToEnumerableAsync();
@@ -471,13 +494,25 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public async Task<Mise.Core.Common.Entities.People.Employee> GetEmployeeByPrimaryEmailAndPassword(Mise.Core.ValueItems.EmailAddress email, Mise.Core.ValueItems.Password password)
         {
-            var emps = await EmployeeTable.Where(e => IsValidEmployee(e, email, password))
-                .Take(1)
+            var dbEmps = await EmployeeTable
                 .ToEnumerableAsync();
 
-            if (emps.Any())
+            var emp = dbEmps.Where(e => IsValidEmployee(e, email, password)).FirstOrDefault();
+            if (emp != null)
             {
-                return emps.First().ToBusinessEntity();
+                try{
+                var restaurantRelationships = await EmployeeRestaurantRelationships
+                    .Where(er => er.Employee != null)
+                    .ToEnumerableAsync();
+
+                    var forThisEmp = restaurantRelationships.Where(e => e.Employee.EntityId == emp.EntityId).ToList();
+                    emp.RestaurantsEmployedAt = forThisEmp;
+                }
+                catch(Exception e)
+                {
+                    _logger.HandleException(e);
+                }
+                return emp.ToBusinessEntity();
             }
 
             return null;
@@ -499,7 +534,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public async Task<bool> SendEventsAsync(Mise.Core.Common.Entities.People.Employee updatedEntity, System.Collections.Generic.IEnumerable<Mise.Core.Entities.People.Events.IEmployeeEvent> events)
         {
-            var rests = await _restaurantTable.Where(r => updatedEntity.GetRestaurantIDs().Contains(r.RestaurantID))
+            var ids = updatedEntity.GetRestaurantIDs().ToList();
+            var rests = await RestaurantTable.Where(r => ids.Contains(r.EntityId))
                 .ToEnumerableAsync();
 
             return await UpdateEntity(updatedEntity, EmployeeTable, ent => new Employee(ent, rests));

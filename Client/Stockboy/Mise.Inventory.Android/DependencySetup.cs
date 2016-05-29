@@ -43,7 +43,7 @@ namespace Mise.Inventory.Android
         const string localDbPath    = "localstore.db";
 		async Task InitWebService (ContainerBuilder cb)
 		{
-			var wsLocation = GetWebServiceLocation ();
+            var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation (GetBuildLevel (), true);
 			if (wsLocation != null) {
 				CurrentPlatform.Init ();
                 var dbService = new AndroidSQLite ();

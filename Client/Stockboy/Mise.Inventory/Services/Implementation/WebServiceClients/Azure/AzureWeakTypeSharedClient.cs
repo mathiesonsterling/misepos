@@ -26,7 +26,7 @@ using Mise.Core.Common.Entities.People;
 using Newtonsoft.Json.Serialization;
 using Mise.Core.Entities.Inventory;
 
-
+using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 {
 	/// <summary>
@@ -54,6 +54,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 			_deviceConnectionService.ConnectionStateChanged += ConnectionStateChanged;
 
 		}
+
+        public static MobileServiceSQLiteStore DefineTables(MobileServiceSQLiteStore store)
+        {
+            store.DefineTable<AzureEntityStorage>();
+
+            return store;
+        }
 
 		async void ConnectionStateChanged(object sender, ConnectionStateChangedEventArgs args){
 			if(args.CanReachMiseServer){
