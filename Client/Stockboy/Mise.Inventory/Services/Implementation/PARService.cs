@@ -40,7 +40,7 @@ namespace Mise.Inventory.Services.Implementation
 			var emp = await _loginService.GetCurrentEmployee().ConfigureAwait (false);
 			var curr = await GetCurrentPAR ().ConfigureAwait (false);
 
-			var categories = new []{ category as ItemCategory };
+			var categories = new []{ category as InventoryCategory };
 			var addEv = _eventFactory.CreatePARLineItemAddedEvent (emp, name, upc, categories, caseSize, container, 
 				quantity.HasValue ? quantity.Value:0, curr);
 		

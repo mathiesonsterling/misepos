@@ -76,7 +76,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
                     Container = LiquidContainer.Can12Oz,
-                    Categories = new List<ItemCategory>
+                    Categories = new List<InventoryCategory>
                     {
                         CategoriesService.Beer
                     }
@@ -86,7 +86,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     Id = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
                     Container = LiquidContainer.Bottle750ML,
-                    Categories = new List<ItemCategory>
+                    Categories = new List<InventoryCategory>
                     {
                         CategoriesService.WhiskeyWorld
                     }
@@ -128,7 +128,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
                     Container = LiquidContainer.Can12Oz,
-                    Categories = new List<ItemCategory>
+                    Categories = new List<InventoryCategory>
                     {
                         CategoriesService.Beer
                     }
@@ -138,7 +138,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     Id = Guid.NewGuid(),
                     DisplayName = "Powers Irish Whiskey",
                     Container = LiquidContainer.Bottle750ML,
-                    Categories = new List<ItemCategory>
+                    Categories = new List<InventoryCategory>
                     {
                         CategoriesService.WhiskeyWorld
                     }

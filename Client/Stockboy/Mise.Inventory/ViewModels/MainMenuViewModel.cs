@@ -14,12 +14,11 @@ namespace Mise.Inventory.ViewModels
 		readonly ISQLite _sqliteService;
 	    private readonly IInventoryService _inventoryService;
 		public MainMenuViewModel(ILogger logger, IAppNavigation navigationService, ILoginService loginService, 
-			IInventoryService inventoryService, ISQLite sqliteService)
+			IInventoryService inventoryService)
 			:base(navigationService, logger)
 		{
 		    _loginService = loginService;
 		    _inventoryService = inventoryService;
-			_sqliteService = sqliteService;
 		}
 
 	    public override async Task OnAppearing(){
@@ -115,8 +114,7 @@ namespace Mise.Inventory.ViewModels
 		public ICommand LogoutCommand {
 			get { return new Command(Logout, () => NotProcessing); }
 		}
-
-		public ICommand ResetDBCommand{get{return new Command (ResetDB, IsCurrentUserAdmin);}}
+            
 
 		public ICommand SettingsCommand{get{ return new Command (Settings, () => NotProcessing); }}
 
@@ -132,10 +130,6 @@ namespace Mise.Inventory.ViewModels
 			} catch(Exception e){
 				HandleException (e);
 			}
-		}
-
-		async void ResetDB(){
-			await _sqliteService.DeleteDatabaseFile ();
 		}
 
 		/// <summary>

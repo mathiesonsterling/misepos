@@ -185,7 +185,7 @@ namespace Mise.Inventory.Services.Implementation
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
 
 			//TODO - if we've waited too long between items, autosave
-			var categories = new []{ category as ItemCategory };
+			var categories = new []{ category as InventoryCategory };
 
 			var section = GetSelectedSection ();
 			var itemPosition = inventoryPosition.HasValue ? inventoryPosition.Value : section.GetNextItemPosition ();
@@ -324,7 +324,8 @@ namespace Mise.Inventory.Services.Implementation
 
 			//make an event
 			var inv = _inventoryRepository.GetByID (_selectedInventoryID.Value);
-			var ev = _eventFactory.CreateInventoryLiquidItemMeasuredEvent(emp, inv, GetSelectedSection (), realLI, fullBottles, partials, totalAmt);
+			var ev = _eventFactory.CreateInventoryLiquidItemMeasuredEvent(emp, inv, GetSelectedSection (), 
+                realLI, fullBottles, partials, (LiquidAmount)totalAmt);
 
 			_inventoryRepository.ApplyEvent (ev);
 

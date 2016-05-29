@@ -43,7 +43,7 @@ namespace Mise.Core.Common.Services.Implementation
             try{
                 var mToken = await _stripeClient.SendForToken(cardName, number);
                 //send the number - we won't store, but we want a unique hash
-                var card = new CreditCard(mToken, cardName, number.ExpMonth, number.ExpYear, number.BillingZip);
+                var card = new CreditCard {Name = cardName, ProcessorToken = mToken};
 
                 return card;
             } catch(Exception e){

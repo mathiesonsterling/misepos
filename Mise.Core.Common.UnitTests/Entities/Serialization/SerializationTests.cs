@@ -7,6 +7,7 @@ using Mise.Core.Entities.Payments;
 using Mise.Core.Entities.People;
 using NUnit.Framework;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.ValueItems;
@@ -273,12 +274,12 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 			var emp = new Employee {
 				Id = id,
 				Name = PersonName.TestName,
-				CompBudget = new Money (10.0M),
-				CurrentlyClockedInToPOS = true,
+				//CompBudget = new Money (10.0M),
+				//CurrentlyClockedInToPOS = true,
 				Emails = new List<EmailAddress> {
 					new EmailAddress{ Value = "test@test.com" }
 				},
-				Passcode = "1234",
+				//Passcode = "1234",
 			};
 
 			var json = _jsonSer.Serialize (emp);
@@ -289,7 +290,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
 			Assert.AreEqual (id, emp.Id);
 			Assert.AreEqual ("Testy", res.Name.FirstName);
 			Assert.AreEqual ("McTesterson", res.Name.LastName);
-			Assert.AreEqual (10.0M, res.CompBudget.Dollars);
+			//Assert.AreEqual (10.0M, res.CompBudget.Dollars);
 
 			Assert.IsNotNull (res.Emails);
 			Assert.AreEqual ("test@test.com", res.Emails.First().Value);

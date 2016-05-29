@@ -85,17 +85,11 @@ namespace Mise.Core.ValueItems
 	        }
 	        return $"({AreaCode}) {Number.Substring(0, 3)}-{Number.Substring(3, 4)}";
 	    }
-	    public static PhoneNumber TestPhoneNumber
+	    public static PhoneNumber TestPhoneNumber => new PhoneNumber
 	    {
-	        get
-	        {
-	            return new PhoneNumber
-	            {
-	                AreaCode = "(111)",
-                    Number = "222 - 3332"
-	            };
-	        }
-	    }
+	        AreaCode = "(111)",
+	        Number = "222 - 3332"
+	    };
 	}
 }
 

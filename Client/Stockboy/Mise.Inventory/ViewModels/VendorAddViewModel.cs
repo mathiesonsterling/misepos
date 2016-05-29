@@ -92,13 +92,14 @@ namespace Mise.Inventory.ViewModels
 
         async void AddVendor()
         {
+            var vendorName = new BusinessName(Name);
 			try{
             	//make our address
 	            Processing = true;
 	            var address = MakeAddress();
 	            var phone = MakePhoneNumber();
 	            var email = MakeEmail();
-	            await _vendorService.AddVendor(Name, address, phone, email);
+	            await _vendorService.AddVendor(vendorName, address, phone, email);
 				Email = string.Empty;
 				Name = string.Empty;
 	            //go back (pop it)

@@ -24,7 +24,7 @@ namespace Mise.Inventory.ViewModels.Reports
 			InventoryService = inventoryService;
 		    StartDate = new DateTime(2015, 1, 1);
 			EndDate = DateTime.Now.AddDays(1);
-			LiquidUnit = LiquidAmountUnits.Milliliters.ToString ();
+			LiquidUnit = AmountUnits.Milliliters.ToString ();
 
             PropertyChanged += (sender, e) => {
                 if(e.PropertyName == "StartDate" || e.PropertyName == "EndDate" || e.PropertyName == "NotProcessing"){
@@ -75,7 +75,7 @@ namespace Mise.Inventory.ViewModels.Reports
 	        {
 	            Processing = true;
                 //set our request to limit dates
-				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
+				var unit = (AmountUnits)Enum.Parse (typeof(AmountUnits), LiquidUnit);
 	            var request = new ReportRequest(ReportTypes.CompletedInventory, StartDate, EndDate, null, null, unit);
 	            await ReportsService.SetCurrentReportRequest(request);
 	            Processing = false;
@@ -111,7 +111,7 @@ namespace Mise.Inventory.ViewModels.Reports
 		protected virtual async Task DoGenericRequestFor(ReportTypes type){
 			try{
 				Processing = true;
-				var unit = (LiquidAmountUnits)Enum.Parse (typeof(LiquidAmountUnits), LiquidUnit);
+				var unit = (AmountUnits)Enum.Parse (typeof(AmountUnits), LiquidUnit);
 		
 				var request = new ReportRequest (type, StartDate, EndDate, null, null, unit);
 				await ReportsService.SetCurrentReportRequest (request);

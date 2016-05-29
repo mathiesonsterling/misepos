@@ -24,7 +24,7 @@ namespace Mise.Core.ValueItems
 		/// <summary>
 		/// SHA-1 value of the password.  ONLY this can be sent across the wire
 		/// </summary>
-		/// <value><c></value>
+		/// <value></value>
 		public string HashValue{get;set;}
 
 		/// <summary>
@@ -53,10 +53,7 @@ namespace Mise.Core.ValueItems
 			return password != null && password.Length > 2;
 		}
 
-	    public static Password TestPassword 
-	    {
-            get { return new Password("test");}
-	    }
+	    public static Password TestPassword => new Password("test");
 	}
 }
 

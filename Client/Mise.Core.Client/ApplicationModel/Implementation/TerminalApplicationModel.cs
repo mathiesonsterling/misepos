@@ -230,8 +230,9 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 _logger.HandleException(e);
                 Online = false;
                 //get our restaraunt stored
-                IRestaurantRepository restaurantRepository = new ClientRestaurantRepository(logger, terminalService, locationService);
-                _restaurant = restaurantRepository.GetAll().FirstOrDefault();
+                /*IRestaurantRepository restaurantRepository = 
+                    new ClientRestaurantRepository(logger, terminalService, locationService);
+                _restaurant = restaurantRepository.GetAll().FirstOrDefault();*/
             }
 				
             var checkRepos = new ClientCheckRepository(terminalWebService, logger);
@@ -280,9 +281,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
         /// <value>The employees.</value>
         public IEnumerable<IEmployee> CurrentEmployees
         {
-            get
-            {
-                return _employeeRepository.GetAll().Where(e => e.CurrentlyClockedInToPOS);
+            get { return _employeeRepository.GetAll(); //.Where(e => e.CurrentlyClockedInToPOS);
             }
         }
 
@@ -317,6 +316,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             LastSelectedEmployee = employee;
         }
 
+        /*
         public bool EmployeeClockin(string passcode)
         {
             var thisEmp = _employeeRepository.GetByPasscode(passcode);
@@ -348,7 +348,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             }
 
             //check we put the correct passcode in
-            if (employee.Passcode != passcode) return false;
+           // if (employee.Passcode != passcode) return false;
 
             //make an event here
             var clockoutEvent = _eventFactory.CreateEmployeeClockedOutEvent(thisEmp);
@@ -365,7 +365,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             }
             return true;
         }
-
+        */
         #endregion
 
         #region Checks
@@ -1256,7 +1256,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 var currStatus = SelectedOrderItem.Status;
 
                 //check manager is valid
-                var manager = _employeeRepository.GetAll().FirstOrDefault(e => e.Passcode == managerPasscode);
+                var manager = _employeeRepository.GetAll().FirstOrDefault();//e => e.Passcode == managerPasscode);
                 if (manager == null)
                 {
                     var failEv = _eventFactory.CreateBadLoginEvent(managerPasscode, "void");
@@ -1265,12 +1265,13 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
                 }
 
                 //check we have permission
+                /*
                 if (manager.CanVoid(currStatus) == false)
                 {
                     var permEV = _eventFactory.CreateInsufficientPermissionEvent(manager, "void");
                     _employeeRepository.ApplyEvents(new[] { permEV });
                     return false;
-                }
+                }*/
 
                 //pull the server ID and status we currently have
                 //create event, put it into checks repos
@@ -1506,6 +1507,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
             }
         }
 
+        /*
         public bool NoSale(string passcode)
         {
             var thisEmp = _employeeRepository.GetByPasscode(passcode);
@@ -1523,7 +1525,7 @@ namespace Mise.Core.Client.ApplicationModel.Implementation
 
             CurrentTerminalViewTypeToDisplay = TerminalViewTypes.NoSale;
             return true;
-        }
+        }*/
         #endregion
     }
 }

@@ -17,7 +17,6 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
-using ModernHttpClient;
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients
 {

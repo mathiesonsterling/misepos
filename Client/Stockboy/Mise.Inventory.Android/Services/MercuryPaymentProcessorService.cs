@@ -135,10 +135,6 @@ namespace Mise.Inventory.Android.Services
 				//make the cc
 				return new CreditCard {
 					Name = new PersonName (result.CardholderName),
-					BillingZip = new ZipCode{Value = result.AVSZip}, 
-					ExpMonth = expDateMonth,
-					ExpYear = expDateYear,
-					MaskedCardNumber = result.MaskedAccount,
 					ProcessorToken = new CreditCardProcessorToken{
 						Processor = CreditCardProcessors.Mercury,
 						Token = result.Token

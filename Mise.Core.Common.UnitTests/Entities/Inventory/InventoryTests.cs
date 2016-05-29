@@ -487,9 +487,9 @@ namespace Mise.Core.Common.UnitTests.Entities.Inventory
                 DisplayName = "addedItem",
                 InventoryID = Guid.NewGuid(),
                 Quantity = 1,
-                Categories = new List<ItemCategory>
+                Categories = new List<InventoryCategory>
                 {
-                    new ItemCategory
+                    new InventoryCategory
                     {
                         Id = Guid.NewGuid(),
                         Name ="testCat"

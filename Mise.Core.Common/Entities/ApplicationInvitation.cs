@@ -52,7 +52,7 @@ namespace Mise.Core.Common.Entities
 			set;
 		}
 
-		public RestaurantName RestaurantName {
+		public BusinessName RestaurantName {
 			get;
 			set;
 		}

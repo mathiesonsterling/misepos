@@ -9,8 +9,6 @@ namespace Mise.Core.Entities.Inventory
 {
     public interface IPurchaseOrderLineItem : IBaseBeverageLineItem, ICloneableEntity, IRestaurantEntityBase
     {
-        int Quantity { get; }
-
 		/// <summary>
 		/// The vendor we intend to buy from, if any
 		/// </summary>

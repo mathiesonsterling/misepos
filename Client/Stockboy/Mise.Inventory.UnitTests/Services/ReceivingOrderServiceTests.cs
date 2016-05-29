@@ -23,6 +23,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Entities.People;
 using Moq;
 using NUnit.Framework;
 namespace Mise.Inventory.UnitTests.Services

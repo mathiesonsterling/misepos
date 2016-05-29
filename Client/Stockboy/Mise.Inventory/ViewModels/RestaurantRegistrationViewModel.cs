@@ -83,7 +83,7 @@ namespace Mise.Inventory.ViewModels
 					Country = Country.UnitedStates
 				};
 
-				var name = new RestaurantName (Name);
+				var name = new BusinessName (Name);
 				Processing = true;
 				await _login.RegisterRestaurant (name, address, phone);
 				Processing = false;

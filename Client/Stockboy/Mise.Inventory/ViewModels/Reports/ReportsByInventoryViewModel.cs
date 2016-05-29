@@ -51,7 +51,7 @@ namespace Mise.Inventory.ViewModels.Reports
                 try
                 {
                     Processing = true;
-                    var unit = (LiquidAmountUnits)Enum.Parse(typeof(LiquidAmountUnits), LiquidUnit);
+                    var unit = (AmountUnits)Enum.Parse(typeof(AmountUnits), LiquidUnit);
 
                     var request = new ReportRequest(type, StartInventory, EndInventory, null, null, unit);
                     await ReportsService.SetCurrentReportRequest(request);

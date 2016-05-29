@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Mise.Core.Client.Services;
 using Mise.Inventory.Services;
 
 namespace Mise.Inventory.iOS.Services

@@ -1,14 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Mise.Core.Common.Entities.Accounts;
+using Mise.Core.Common.Services;
+using Mise.Core.Common.Services.Implementation;
+using Mise.Core.Services;
+using Mise.Core.Services.UtilityServices;
+using Mise.Core.ValueItems;
+using MiseWebsite.Database;
+using MiseWebsite.Database.Implementation;
 using MiseWebsite.Models;
+using MiseWebsite.Services.Implementation;
 
 namespace MiseWebsite.Controllers
 {
     public class RestaurantAccountController : Controller
     {
+        private readonly IAccountDAL _accountDAL;
+        private readonly ICreditCardProcessorService _creditCardProcessorService;
+        public RestaurantAccountController(IAccountDAL accountDAL, ICreditCardProcessorService creditCardProcessor)
+        {
+            _accountDAL = accountDAL;
+            _creditCardProcessorService = creditCardProcessor;
+        }
+
+        public RestaurantAccountController() : this(new AccountDAL(), null)
+        {
+            var logger = new DummyLogger();
+            IClientStripeFacade stripeClientFacade = new WebsiteStripeProcessor();
+
+            _creditCardProcessorService = new StripePaymentProcessorService(logger, stripeClientFacade);
+        }
+
         // GET: RestaurantAccount
         public ActionResult Index()
         {
@@ -16,7 +42,7 @@ namespace MiseWebsite.Controllers
         }
 
         // GET: RestaurantAccount/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
             return View();
         }
@@ -31,23 +57,45 @@ namespace MiseWebsite.Controllers
             if (!string.IsNullOrEmpty(User.Identity?.Name))
             {
                 vm.EmailAddress = User.Identity.Name;
+                vm.ExpMonth = DateTime.Now.Month;
+                vm.ExpYear = DateTime.Now.Year;
             }
             return View(vm);
         }
 
         // POST: RestaurantAccount/Create
         [HttpPost]
-        public ActionResult Create(RestaurantAccountViewModel viewModel)
+        public async Task<ActionResult> Create(RestaurantAccountViewModel viewModel)
         {
             try
             {
-                // TODO: Add insert logic here
+                //setup billing
+                var card = new CreditCardNumber
+                {
+                    ExpYear = viewModel.ExpYear,
+                    ExpMonth = viewModel.ExpMonth,
+                    BillingZip = new ZipCode(viewModel.BillingZip),
+                    CVC = viewModel.CVC,
+                    Number = viewModel.CardNumber
+                };
 
-                return RedirectToAction("Index");
+                var cardholder = new PersonName(viewModel.CardholderFirstName, viewModel.CardholderLastName);
+                var cardRes = await _creditCardProcessorService.SendCardToProcessorForSubscription(cardholder, card);
+
+                if (cardRes != null)
+                {
+                    //create account
+                    var entity = new RestaurantAccount();
+
+                    var addRes = await _accountDAL.AddRestaurantAccount(entity);
+
+                    return RedirectToAction("IndexForUser", "Restaurant");
+                }
+                return View(viewModel);
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                return View(viewModel);
             }
         }
 

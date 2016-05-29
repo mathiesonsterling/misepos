@@ -21,6 +21,7 @@ using Mise.Core.ValueItems.Inventory;
 using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
 using Mise.Core.Client.Services.Implementation;
+using Mise.Core.Common.Entities.People;
 using Moq;
 using NUnit.Framework;
 
@@ -311,7 +312,7 @@ namespace Mise.Inventory.UnitTests.Services
 			empRepos.Setup (er => er.Commit (It.IsAny<Guid> ()))
 				.Returns (Task.FromResult (CommitResult.SentToServer));
 
-		    var restaurantWs = new Mock<IInventoryRestaurantWebService>();
+		    var restaurantWs = new Mock<IInventoryApplicationWebService>();
 		    restaurantWs.Setup(rws => rws.GetRestaurant(It.IsAny<Guid>()))
 		        .Returns(Task.FromResult(rest as Restaurant));
 			restaurantWs.Setup (rws => rws.SendEventsAsync (It.IsAny<Restaurant> (), It.IsAny<IEnumerable<IRestaurantEvent>> ()))

@@ -224,6 +224,12 @@ namespace Mise.Core.ValueItems
 
     public class ZipCode : IEquatable<ZipCode>, ITextSearchable
     {
+        public ZipCode() { }
+        public ZipCode(string value)
+        {
+            Value = value;
+        }
+
         public string Value { get; set; }
         public bool Equals(ZipCode other)
         {

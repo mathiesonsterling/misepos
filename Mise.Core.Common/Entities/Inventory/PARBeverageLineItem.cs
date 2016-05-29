@@ -6,30 +6,11 @@ using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Core.Common.Entities.Inventory
 {
-	public class ParBeverageLineItem : BaseTaggableRestaurantEntity, IParBeverageLineItem
+	public class ParBeverageLineItem : BaseBeverageLineItem, IParBeverageLineItem
 	{
 		public ParBeverageLineItem(){
-			Categories = new List<ItemCategory> ();
+			Categories = new List<InventoryCategory> ();
 		}
-
-        public string MiseName { get; set; }
-
-		string _displayName;
-		public string DisplayName { 
-            get
-            {
-                var name = string.IsNullOrEmpty(_displayName) ? MiseName : _displayName;
-                return name;
-            }
-			set{
-				_displayName = value;
-			}
-		}
-
-        public string UPC { get; set; }
-        public LiquidContainer Container { get; set; }
-
-		public int? CaseSize { get; set;}
 
         public ICloneableEntity Clone()
         {
@@ -40,30 +21,9 @@ namespace Mise.Core.Common.Entities.Inventory
             newItem.Quantity = Quantity;
 			newItem.Categories = Categories.Select (c => c).ToList ();
             newItem.CaseSize = CaseSize;
-            newItem.DisplayName = _displayName;
+            newItem.DisplayName = DisplayName;
             return newItem;
         }
-
-        public decimal Quantity { get; set; }
-
-		public List<ItemCategory> Categories{get;set;}
-		public IEnumerable<ICategory> GetCategories(){
-			return Categories;
-		}
-		public string CategoryDisplay {
-			get {
-				return Categories.Any () ? Categories.First ().Name : string.Empty;
-			}
-		}
-
-		public bool ContainsSearchString (string searchString)
-		{
-			return (string.IsNullOrEmpty (MiseName) == false && MiseName.ToUpper ().Contains (searchString.ToUpper ()))
-			|| (string.IsNullOrEmpty (DisplayName) == false && DisplayName.ToUpper ().Contains (searchString.ToUpper ()))
-			|| Quantity.ToString ().Contains (searchString)
-			|| (Container != null && Container.ContainsSearchString (searchString))
-				|| (Categories != null && Categories.Any(c => c.ContainsSearchString(searchString)));
-		}
 
 	    public bool Equals(IParBeverageLineItem other)
 	    {

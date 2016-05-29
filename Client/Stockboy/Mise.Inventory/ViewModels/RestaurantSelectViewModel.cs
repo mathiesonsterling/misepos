@@ -15,7 +15,7 @@ namespace Mise.Inventory.ViewModels
 		private readonly ILoginService _loginService;
 
 		public IEnumerable<IRestaurant> PossibleRestaurants{ get; private set; }
-		public IEnumerable<RestaurantName> PossibleRestaurantNames{ get; set;}
+		public IEnumerable<BusinessName> PossibleRestaurantNames{ get; set;}
 	
 		#region commands
 
@@ -56,7 +56,7 @@ namespace Mise.Inventory.ViewModels
 		    PossibleRestaurantNames = names;
 		}
 
-		public async Task SelectRestaurant(RestaurantName name)
+		public async Task SelectRestaurant(BusinessName name)
 		{
 			Processing = true;
 			try{

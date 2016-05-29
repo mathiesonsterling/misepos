@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Mise.Core</RootNamespace>
     <AssemblyName>Mise.Core</AssemblyName>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -48,6 +48,7 @@
     <Compile Include="Entities\Check\Events\ICheckEvent.cs" />
     <Compile Include="Entities\Inventory\Events\IPAREvent.cs" />
     <Compile Include="Entities\Inventory\IBaseBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\IBaseLineItem.cs" />
     <Compile Include="Entities\Inventory\IInventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\IInventorySection.cs" />
     <Compile Include="Entities\Inventory\IPAR.cs" />
@@ -63,6 +64,8 @@
     <Compile Include="Entities\Menu\MenuItemModifierGroup.cs" />
     <Compile Include="Entities\Menu\MenuRule.cs" />
     <Compile Include="Entities\MiseEventTypes.cs" />
+    <Compile Include="Entities\People\IPerson.cs" />
+    <Compile Include="Entities\People\IUser.cs" />
     <Compile Include="Entities\Restaurant\Events\IApplicationInvitationEvent.cs" />
     <Compile Include="Entities\Restaurant\Events\IRestaurantEvent.cs" />
     <Compile Include="Entities\Vendors\Events\IReceivingOrderEvent.cs" />
@@ -83,11 +86,12 @@
     <Compile Include="Services\UtilityServices\IErrorTrackingService.cs" />
     <Compile Include="Services\UtilityServices\ILogger.cs" />
     <Compile Include="Services\UtilityServices\LogLevel.cs" />
-    <Compile Include="ValueItems\Beacon.cs" />
     <Compile Include="ValueItems\CommitResult.cs" />
     <Compile Include="ValueItems\CreditCardProcessorToken.cs" />
     <Compile Include="ValueItems\Distance.cs" />
-    <Compile Include="ValueItems\Inventory\LiquidAmountUnits.cs" />
+    <Compile Include="ValueItems\Inventory\AmountTypes.cs" />
+    <Compile Include="ValueItems\Inventory\BaseAmount.cs" />
+    <Compile Include="ValueItems\Inventory\AmountUnits.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainerShape.cs" />
     <Compile Include="ValueItems\Inventory\MeasurementMethods.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />
@@ -136,7 +140,7 @@
     <Compile Include="ValueItems\Reports\ReportResult.cs" />
     <Compile Include="ValueItems\Reports\ReportResultLineItem.cs" />
     <Compile Include="ValueItems\Reports\ReportTypes.cs" />
-    <Compile Include="ValueItems\RestaurantName.cs" />
+    <Compile Include="ValueItems\BusinessName.cs" />
     <Compile Include="ValueItems\StreetAddress.cs" />
     <Compile Include="ValueItems\PhoneNumber.cs" />
     <Compile Include="ValueItems\EmailAddress.cs" />
@@ -191,9 +195,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="PCLCrypto, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d4421c8a4786956c, processorArchitecture=MSIL">
+    <Reference Include="PCLCrypto, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d4421c8a4786956c">
       <HintPath>..\Server\MiseWebsite\packages\PCLCrypto.2.0.147\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\PCLCrypto.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Validation">
       <HintPath>..\Client\Stockboy\packages\Validation.2.2.8\lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>

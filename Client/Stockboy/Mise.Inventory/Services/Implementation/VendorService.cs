@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Mise.Core.Client.Services;
+using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Events;
+using Mise.Core.Entities.Inventory;
+using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.Repositories;
-using Mise.Core.Entities.Restaurant;
-using Mise.Core.Entities.Inventory;
-using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
-using Mise.Core.Common.Events;
-using Mise.Core.Services;
-using Mise.Core.Entities.Vendors.Events;
-using Mise.Core.Client.Services;
+
 namespace Mise.Inventory.Services.Implementation
 {
 	public class VendorService : IVendorService
@@ -60,7 +59,7 @@ namespace Mise.Inventory.Services.Implementation
 	    /// <param name = "address"></param>
 	    /// <param name = "phoneNumber"></param>
 	    /// <param name="email"></param>
-	    public async Task<IVendor> AddVendor(string name, StreetAddress address, PhoneNumber phoneNumber, EmailAddress email)
+	    public async Task<IVendor> AddVendor(BusinessName name, StreetAddress address, PhoneNumber phoneNumber, EmailAddress email)
 		{
 			var emp = await _loginService.GetCurrentEmployee ();
 
@@ -92,10 +91,10 @@ namespace Mise.Inventory.Services.Implementation
 
 		public Task<IVendor> GetBestVendorForItem (IBaseBeverageLineItem li, decimal quantity, IRestaurant restaurant)
 		{
-			var lowestPrice = new Money{Dollars = decimal.MaxValue};
+			var lowestPrice = new Money(decimal.MaxValue);
             IVendor foundVendor = null;
 			foreach(var vendor in _vendorRepository.GetAll ()){
-                var vendorPrice = vendor.GetPriceForLineItem (li, quantity, restaurant!=null?restaurant.Id:(Guid?)null);
+                var vendorPrice = vendor.GetPriceForLineItem (li, quantity, restaurant?.Id);
 				if(vendorPrice != null){
 					if(foundVendor == null || lowestPrice.GreaterThan (vendorPrice)){
 						foundVendor = vendor;
@@ -146,7 +145,7 @@ namespace Mise.Inventory.Services.Implementation
 		/// </summary>
 		/// <returns>The line item to vendor if doesnt exist.</returns>
 		/// <param name="vendorID">Vendor I.</param>
-		/// <param name="lis">Li.</param>
+		/// <param name="lineItems">Li.</param>
 		public async Task AddLineItemsToVendorIfDontExist (Guid vendorID, IEnumerable<IReceivingOrderLineItem> lineItems)
 		{
 			var vendor = _vendorRepository.GetByID (vendorID);

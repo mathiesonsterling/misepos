@@ -26,7 +26,6 @@ namespace Mise.Inventory
 	public class DependencySetup
 	{
 		public static ILogger Logger{get;protected set;}
-		protected ISQLite SqlLiteConnection{ get; set; }
 
 		/// <summary>
 		/// Creates an instance of the AutoFac container
@@ -55,7 +54,7 @@ namespace Mise.Inventory
 		protected static AzureServiceLocation GetWebServiceLocation(){
 			var level = GetBuildLevel ();
 
-			return AzureServiceLocator.GetAzureMobileServiceLocation (level);
+			return AzureServiceLocator.GetAzureMobileServiceLocation (level, true);
 		}
 
 		protected static void RegisterWebService (ContainerBuilder cb, IInventoryWebService webService)
@@ -69,6 +68,7 @@ namespace Mise.Inventory
 			cb.RegisterInstance (webService).As<IPurchaseOrderWebService> ().SingleInstance ();
 			cb.RegisterInstance (webService).As<IApplicationInvitationWebService> ().SingleInstance ();
 			cb.RegisterInstance (webService).As<IAccountWebService> ().SingleInstance ();
+            cb.RegisterInstance(webService).As<IInventoryApplicationWebService>().SingleInstance();
 		}
 
 		/// <summary>
@@ -89,13 +89,6 @@ namespace Mise.Inventory
 				Logger = new DummyLogger ();
 			}
 			cb.RegisterInstance (Logger).As<ILogger>().SingleInstance ();
-
-			// DAL
-			if (SqlLiteConnection != null) {
-				cb.RegisterType<SQLiteClietDAL> ().As<IClientDAL> ().SingleInstance ();
-			} else {
-				cb.RegisterType<MemoryClientDAL> ().As<IClientDAL> ().SingleInstance ();
-			}
 
 			//Event factory - rstaurant will be set later
 			var eventFactory = new InventoryAppEventFactory("testDevice", MiseAppTypes.StockboyMobile);

@@ -15,8 +15,7 @@ namespace Mise.Core.Repositories
 		/// Get an employee by their POS passcode, if they've been loaded
 		/// </summary>
 		/// <returns>The by passcode.</returns>
-		/// <param name="passcode">Passcode.</param>
-        IEmployee GetByPasscode(string passcode);
+       // IEmployee GetByPasscode(string passcode);
 
 		/// <summary>
 		/// Get an employee by their sign in credentials

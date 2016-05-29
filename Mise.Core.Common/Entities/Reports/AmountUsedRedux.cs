@@ -11,9 +11,9 @@ namespace Mise.Core.Common.Entities.Reports
     {
         protected readonly IEnumerable<IInventory> _inventories;
         protected readonly IEnumerable<IReceivingOrder> _receivingOrders;
-        private readonly LiquidAmountUnits _unit;
+        private readonly AmountUnits _unit;
         public AmountUsedRedux(IEnumerable<IInventory> inventories,
-            IEnumerable<IReceivingOrder> receivingOrdersInPeriod, LiquidAmountUnits unit)
+            IEnumerable<IReceivingOrder> receivingOrdersInPeriod, AmountUnits unit)
         {
             _inventories = inventories;
             _receivingOrders = receivingOrdersInPeriod;
@@ -39,14 +39,14 @@ namespace Mise.Core.Common.Entities.Reports
                     var amt = amounts[amtKey];
                     if (!amt.IsEmpty)
                     {
-                        var amtDec = _unit == LiquidAmountUnits.Milliliters ? amt.GetInMilliliters() : amt.GetInLiquidOunces();
+                        var amtDec = _unit == AmountUnits.Milliliters ? ((LiquidAmount)amt).GetInMilliliters() : ((LiquidAmount)amt).GetInLiquidOunces();
                         var li = new ReportResultLineItem(fullKey.ItemName, fullKey.Container.DisplayName, amtDec, amtDec >= 0);
                         lineItems.Add(li);
                     }
                 }
             }
 
-            var title = _unit == LiquidAmountUnits.Milliliters ? "Amount in ML" : "Amount in Oz";
+            var title = _unit == AmountUnits.Milliliters ? "Amount in ML" : "Amount in Oz";
             return new ReportResult(ReportTypes.AmountUsed, title, lineItems, 0);
         }
 
@@ -102,7 +102,7 @@ namespace Mise.Core.Common.Entities.Reports
             return res;
         }
 
-        protected Dictionary<string, LiquidAmount> GetTotalAmounts(IEnumerable<IInventory> inventories,
+        protected Dictionary<string, BaseAmount> GetTotalAmounts(IEnumerable<IInventory> inventories,
             IEnumerable<IReceivingOrder> ros)
         {
             //get the cost and items, each way
@@ -111,7 +111,7 @@ namespace Mise.Core.Common.Entities.Reports
             var orderedInvs = _inventories.Where(i => i.DateCompleted.HasValue)
                 .OrderByDescending(i => i.DateCompleted.Value);
 
-            var usedAmount = new Dictionary<string, LiquidAmount>();
+            var usedAmount = new Dictionary<string, BaseAmount>();
             foreach (var inventory in orderedInvs)
             {
                 var previousInv = orderedInvs
@@ -133,12 +133,12 @@ namespace Mise.Core.Common.Entities.Reports
 
                     foreach (var itemKey in startAmounts.Keys)
                     {
-                        LiquidAmount usedForItem;
+                        BaseAmount usedForItem;
                         if (endDic.ContainsKey(itemKey))
                         {
                             var difference = startAmounts[itemKey].Subtract(endDic[itemKey]);
 
-                            usedForItem = difference;
+                            usedForItem = (LiquidAmount)difference;
                         }
                         else
                         {
@@ -149,7 +149,7 @@ namespace Mise.Core.Common.Entities.Reports
                         if (usedAmount.ContainsKey(itemKey))
                         {
                             var amt = usedAmount[itemKey];
-                            usedAmount[itemKey] = amt.Add(usedForItem);
+                            usedAmount[itemKey] = (LiquidAmount)amt.Add(usedForItem);
                         }
                         else
                         {
@@ -162,7 +162,7 @@ namespace Mise.Core.Common.Entities.Reports
             return usedAmount;
         }
 
-        private Dictionary<string, LiquidAmount> GetConsolidatedAmounts(IEnumerable<IReceivingOrder> ros)
+        private static Dictionary<string, LiquidAmount> GetConsolidatedAmounts(IEnumerable<IReceivingOrder> ros)
         {
             var dic = new Dictionary<string, LiquidAmount>();
             foreach (var ro in ros)
@@ -173,7 +173,7 @@ namespace Mise.Core.Common.Entities.Reports
                     if (dic.ContainsKey(key))
                     {
                         var existing = dic[key];
-                        dic[key] = existing.Add(li.Container.AmountContained);
+                        dic[key] = (LiquidAmount)existing.Add(li.Container.AmountContained);
                     }
                     else
                     {
@@ -194,7 +194,7 @@ namespace Mise.Core.Common.Entities.Reports
                 if (dic.ContainsKey(key))
                 {
                     var existing = dic[key];
-                    dic[key] = existing.Add(item.CurrentAmount);
+                    dic[key] = (LiquidAmount)existing.Add(item.CurrentAmount);
                 }
                 else
                 {
@@ -205,20 +205,16 @@ namespace Mise.Core.Common.Entities.Reports
             return dic;
         }
 
-        private Dictionary<string, LiquidAmount> AddAmountDics(Dictionary<string, LiquidAmount> dic1, Dictionary<string, LiquidAmount> dic2)
+        private static Dictionary<string, BaseAmount> AddAmountDics(Dictionary<string, LiquidAmount> dic1, Dictionary<string, LiquidAmount> dic2)
         {
-            var res = new Dictionary<string, LiquidAmount>();
-            foreach (var key in dic1.Keys)
-            {
-                res.Add(key, dic1[key]);
-            }
+            var res = dic1.Keys.ToDictionary<string, string, BaseAmount>(key => key, key => dic1[key]);
 
             foreach (var key in dic2.Keys)
             {
                 if (res.ContainsKey(key))
                 {
                     var existing = res[key];
-                    res[key] = existing.Add(dic2[key]);
+                    res[key] = (LiquidAmount)existing.Add(dic2[key]);
                 }
                 else
                 {

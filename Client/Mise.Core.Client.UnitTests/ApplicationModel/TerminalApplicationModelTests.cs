@@ -26,6 +26,7 @@ using Mise.Core.Common.Services.WebServices;
 
 namespace Mise.Core.Client.UnitTests.ApplicationModel
 {
+    /*
     [Ignore("Waiting for POS")]
 	[TestFixture]
 	public class TerminalApplicationModelTests
@@ -363,6 +364,6 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			Assert.AreEqual("NoSale", firstEvent.FunctionAttempted);
 			Assert.AreEqual ("1929", firstEvent.PasscodeGiven);
 		}
-	}
+	}*/
 }
 

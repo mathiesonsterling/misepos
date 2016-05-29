@@ -177,7 +177,7 @@ namespace Mise.Inventory.UnitTests.ViewModels
                     MiseName = "Budweiser",
                     DisplayName = "Budweiser",
                     Container = new LiquidContainer {DisplayName = "12oz Can", AmountContained = LiquidAmount.FromLiquidOunces(12.0M )},
-                    Categories = new List<ItemCategory>
+                    Categories = new List<InventoryCategory>
                     {
                         CategoriesService.Beer
                     }

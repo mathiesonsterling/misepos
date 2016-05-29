@@ -18,6 +18,8 @@ using Mise.Inventory.Services.Implementation;
 using Moq;
 using NUnit.Framework;
 using Mise.Core.Client.Services.Implementation;
+using Mise.Core.Common.Entities.People;
+
 namespace Mise.Inventory.UnitTests.Services
 {
 	[TestFixture]

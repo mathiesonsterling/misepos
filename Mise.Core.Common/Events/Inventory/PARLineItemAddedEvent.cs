@@ -48,7 +48,7 @@ namespace Mise.Core.Common.Events.Inventory
 
 		public int? Quantity { get; set; }
 
-		public IEnumerable<ItemCategory> Categories{get;set;}
+		public IEnumerable<InventoryCategory> Categories{get;set;}
 	}
 }
 

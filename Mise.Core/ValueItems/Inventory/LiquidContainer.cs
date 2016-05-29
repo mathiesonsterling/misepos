@@ -162,7 +162,7 @@ namespace Mise.Core.ValueItems.Inventory
         /// <summary>
         /// If set, this container only shows up for this restaurant
         /// </summary>
-        public Guid? RestaurantId { get; set; }
+        public Guid? BusinessId { get; set; }
 
         private string _displayName;
         public string DisplayName

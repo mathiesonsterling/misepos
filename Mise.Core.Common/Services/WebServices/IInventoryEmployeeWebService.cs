@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.People.Events;
 using Mise.Core.ValueItems;

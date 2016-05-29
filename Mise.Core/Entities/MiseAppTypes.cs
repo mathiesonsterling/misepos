@@ -5,36 +5,36 @@
 	/// </summary>
 	public enum MiseAppTypes
 	{
-		UnitTests,
+		UnitTests = 0,
 
 		/// <summary>
 		/// Default data done as a placeholder
 		/// </summary>
-		DummyData,
+		DummyData = 1,
 
 		/// <summary>
 		/// Our POS system, running on mobile devices
 		/// </summary>
-		POSMobile,
+		POSMobile= 2,
 		/// <summary>
 		/// Stockboy inventory app, running on mobile
 		/// </summary>
-		StockboyMobile,
+		StockboyMobile= 3,
 
         /// <summary>
         /// Imported for vendor via CSV upload
         /// </summary>
-        VendorManagement,
+        VendorManagement = 4,
 
         /// <summary>
         /// Reporting site
         /// </summary>
-        ManagementWebsite,
+        ManagementWebsite = 5,
 
         /// <summary>
         /// Backend service to support mobile client
         /// </summary>
-        MobileService,
+        MobileService = 6,
 	}
 }
 

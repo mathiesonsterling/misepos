@@ -13,6 +13,7 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.ValueItems;
 using Mise.Core.Common.Entities.MenuItems;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Entities.Payments;
 using Mise.Core.Entities.Check.Events;
@@ -41,9 +42,9 @@ namespace Mise.Core.Common.Services.Implementation
 				new Employee {
 					Id = Guid.NewGuid (),
                     Name = new PersonName("Leo","Dominee"),
-					Passcode = "1111",
-					CompBudget = new Money(50.0M),
-					WhenICanVoid = new List<OrderItemStatus>{OrderItemStatus.Ordering, OrderItemStatus.Added, OrderItemStatus.Sent},
+					//Passcode = "1111",
+					//CompBudget = new Money(50.0M),
+					//WhenICanVoid = new List<OrderItemStatus>{OrderItemStatus.Ordering, OrderItemStatus.Added, OrderItemStatus.Sent},
                     CreatedDate = DateTime.UtcNow,
                     LastUpdatedDate = DateTime.UtcNow,
                     RestaurantsAndAppsAllowed = restaurantList,
@@ -51,7 +52,7 @@ namespace Mise.Core.Common.Services.Implementation
 				},
 				new Employee {
 					Id = Guid.NewGuid (),
-					Passcode = "4444",
+					//Passcode = "4444",
                     Name = new PersonName("Justin","Elliott"),
                     CreatedDate = DateTime.UtcNow,
                     LastUpdatedDate = DateTime.UtcNow,
@@ -64,7 +65,7 @@ namespace Mise.Core.Common.Services.Implementation
                 new Employee
                 {
                     Id = Guid.NewGuid(),
-                    Passcode = "6666",
+                   // Passcode = "6666",
                     Name = new PersonName("Mathieson", "Sterling"),
                     CreatedDate = DateTime.UtcNow,
                     LastUpdatedDate = DateTime.UtcNow,
@@ -1517,7 +1518,7 @@ namespace Mise.Core.Common.Services.Implementation
                 AccountID = AccountID,
                 CreatedDate = DateTime.UtcNow,
                 LastUpdatedDate = DateTime.UtcNow,
-                Name = new RestaurantName("Dominie's LIC", "Doms"),
+                Name = new BusinessName("Dominie's LIC", "Doms"),
                 Id = RestaurantID,
                 Revision = new EventID{AppInstanceCode = MiseAppTypes.UnitTests, OrderingID = 1023},
                 StreetAddress = new StreetAddress

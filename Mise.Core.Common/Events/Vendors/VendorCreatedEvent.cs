@@ -25,7 +25,7 @@ namespace Mise.Core.Common.Events.Vendors
             get { return true; }
         }
 
-        public string Name{ get; set;}
+        public BusinessName Name{ get; set;}
 		public StreetAddress Address{get;set;}
 		public PhoneNumber PhoneNumber{get;set;}
 

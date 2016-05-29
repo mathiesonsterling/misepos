@@ -15,6 +15,7 @@ using Mise.Core.Entities.Restaurant;
 using Mise.Core.Services;
 using Mise.Inventory.ViewModels.Modals;
 using Mise.Core.Client.Services;
+using Mise.Core.Common.Entities.People;
 
 namespace Mise.Inventory.UnitTests.ViewModels
 {

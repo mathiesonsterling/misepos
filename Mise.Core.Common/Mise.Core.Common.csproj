@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Mise.Core.Common</RootNamespace>
     <AssemblyName>Mise.Core.Common</AssemblyName>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -45,6 +45,7 @@
     <Compile Include="Entities\Accounts\RestaurantAccount.cs" />
     <Compile Include="Entities\Accounts\VendorAccount.cs" />
     <Compile Include="Entities\DTOs\IEntityDataTransportObjectFactory.cs" />
+    <Compile Include="Entities\Inventory\BaseBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\InventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\InventorySection.cs" />
     <Compile Include="Entities\Inventory\PAR.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Entities\Inventory\RestaurantInventorySection.cs" />
     <Compile Include="Entities\DTOs\RestaurantEntityDataTransportObject.cs" />
     <Compile Include="Entities\DTOs\EntityDataTransportObjectFactory.cs" />
+    <Compile Include="Entities\People\User.cs" />
     <Compile Include="Entities\Reports\AmountUsedInTimeReport.cs" />
     <Compile Include="Entities\Reports\BaseReport.cs" />
     <Compile Include="Entities\Reports\COGsReport.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="Events\Accounts\AccountHasPaymentPlanSetupEvent.cs" />
     <Compile Include="Events\Accounts\AccountRegisteredFromMobileDeviceEvent.cs" />
     <Compile Include="Events\Accounts\BaseAccountEvent.cs" />
+    <Compile Include="Events\Accounts\RestaurantAccountRegisteredOnWebsiteEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\BaseInvitationEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\EmployeeAcceptsInvitationEvent.cs" />
     <Compile Include="Events\ApplicationInvitations\EmployeeInvitedToApplicationEvent.cs" />
@@ -96,7 +99,7 @@
     <Compile Include="Events\Vendors\VendorPhoneNumberUpdatedEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\MiseTerminalDevice.cs" />
-    <Compile Include="Entities\Employee.cs" />
+    <Compile Include="Entities\People\Employee.cs" />
     <Compile Include="Entities\MenuItems\WineMenuItem.cs" />
     <Compile Include="Entities\Restaurant.cs" />
     <Compile Include="Repositories\Base\BaseEventSourcedRepository.cs" />
@@ -173,7 +176,7 @@
     <Compile Include="Entities\Inventory\PurchaseOrderPerVendor.cs" />
     <Compile Include="Entities\ApplicationInvitation.cs" />
     <Compile Include="BeverageLineItemEquator.cs" />
-    <Compile Include="Entities\Inventory\ItemCategory.cs" />
+    <Compile Include="Entities\Inventory\InventoryCategory.cs" />
     <Compile Include="Services\Implementation\CategoriesService.cs" />
     <Compile Include="Events\Inventory\PurchaseOrderRecievedFromVendorEvent.cs" />
     <Compile Include="Events\Vendors\VendorRestaurantSetsPriceForReceivedItemEvent.cs" />
@@ -230,9 +233,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\Server\MiseWebsite\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
     </Reference>
   </ItemGroup>
 </Project>

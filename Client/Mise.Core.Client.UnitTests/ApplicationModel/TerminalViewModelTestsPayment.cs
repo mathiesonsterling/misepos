@@ -20,6 +20,7 @@ using Mise.Core.Entities.Payments;
 
 namespace Mise.Core.Client.UnitTests.ApplicationModel
 {
+    /*
     [Ignore("Waiting for POS")]
 	[TestFixture]
 	public class TerminalApplicationModelTestsPayment
@@ -596,6 +597,6 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             Assert.True(vm.SelectedCheck.Total.Equals(Money.None));
             //Assert.True(vm.SelectedCheck.ChangeDue.Equals(new Money(8.0M)), "Amount paid should be in the change");
 	    }
-	}
+	}*/
 }
 

@@ -45,7 +45,7 @@ namespace Mise.Core.Common.Entities
             return InventorySections;
         }
 
-        public RestaurantName Name { get; set; }
+        public BusinessName Name { get; set; }
 
 		public StreetAddress StreetAddress {
 			get;

@@ -10,10 +10,6 @@ namespace Mise.Core.Entities.Inventory
 {
     public interface IReceivingOrderLineItem: IRestaurantEntityBase, IBaseBeverageLineItem, ICloneableEntity
     {
-        /// <summary>
-        /// Quantity of bottles listed
-        /// </summary>
-        int Quantity { get; }
 
 		/// <summary>
 		/// How much the entire line item costs

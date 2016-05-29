@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
@@ -33,6 +34,17 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 	    private readonly List<ApplicationInvitation> _invitations; 
 
 	    #region Creation
+
+        public bool Synched
+        {
+            get;
+            set;
+        }
+
+        public Task SetRestaurantId(Guid restaurantId)
+        {
+            return Task.FromResult(true);
+        }
 		public FakeInventoryWebService(){
 		    var restID = Guid.Empty;
             var townsendID = Guid.Parse("c7c61794-03db-4e20-a87e-8483f4960286");
@@ -63,7 +75,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				new Restaurant
 				{
 					AccountID = accountID,
-					Name = new RestaurantName("MainTestRestaurant"),
+					Name = new BusinessName("MainTestRestaurant"),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 2},
 					Id = restID,
 					InventorySections = new List<RestaurantInventorySection>
@@ -89,7 +101,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				new Restaurant
 				{
 					AccountID = null,
-					Name = new RestaurantName("The Townsend", "Townsend"),
+					Name = new BusinessName("The Townsend", "Townsend"),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 					Id = townsendID,
                     InventorySections = new List<RestaurantInventorySection>(),
@@ -99,7 +111,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                 new Restaurant
                 {
                     AccountID = null,
-                    Name = new RestaurantName("Relapse", "Relapse"),
+                    Name = new BusinessName("Relapse", "Relapse"),
                     Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 102},
                     Id = qaID,
                     InventorySections = new List<RestaurantInventorySection>(),
@@ -108,7 +120,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                 },
 				new Restaurant {
 					AccountID = null,
-					Name = new RestaurantName("Couch Party USA", "Couch Party"),
+					Name = new BusinessName("Couch Party USA", "Couch Party"),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1020},
 					Id = marketingID,
 					InventorySections = new List<RestaurantInventorySection>{
@@ -127,7 +139,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                 new Restaurant
                 {
                     AccountID = null,
-                    Name = new RestaurantName ("The Long Suffering Wife", "Suffering Wife"),
+                    Name = new BusinessName ("The Long Suffering Wife", "Suffering Wife"),
                     Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 10200},
                     Id = sleazyHomeID,
                     StreetAddress = new StreetAddress("1415", "", "Beckett St", "Austin", "Texas", Country.UnitedStates.Name, "78757"),
@@ -191,10 +203,10 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Id = Guid.NewGuid(),
                     Name = new PersonName("Mise", "Development"),
-                    Passcode = "1111",
-					CompBudget = new Money(50.0M),
-					WhenICanVoid =
-						new List<OrderItemStatus> {OrderItemStatus.Ordering, OrderItemStatus.Added, OrderItemStatus.Sent},
+                    //Passcode = "1111",
+					//CompBudget = new Money(50.0M),
+					//WhenICanVoid =
+					//	new List<OrderItemStatus> {OrderItemStatus.Ordering, OrderItemStatus.Added, OrderItemStatus.Sent},
 					CreatedDate = DateTime.UtcNow,
 					LastUpdatedDate = DateTime.UtcNow,
 					RestaurantsAndAppsAllowed =  new Dictionary<Guid, IList<MiseAppTypes>>
@@ -255,7 +267,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Id = Guid.Empty,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
-					Name = "Bob's Liquor Barn",
+					Name = new BusinessName("Bob's Liquor Barn"),
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>(),
 					StreetAddress = new StreetAddress
 					{
@@ -272,7 +284,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = "Siegal's",
+					Name = new BusinessName("Siegal's"),
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
@@ -281,7 +293,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Mount Gay Black Barrel",
 							MiseName = "mountgayblackbarrel750ml",
 							Container = ml750,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.Rum
 							}
 						},
@@ -292,7 +304,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Cointreau",
 							MiseName = "cointreau750ml",
 							Container = ml750,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.Liqueur
 							}
 						},
@@ -303,7 +315,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Bruichladdich Port Charlotte SB",
 							MiseName = "bruichladdichportcharlottesb",
 							Container = ml750,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.WhiskeyScotch
 							}
 						},
@@ -314,7 +326,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Pimms",
 							MiseName = "pimms750ml",
 							Container = ml750,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.Liqueur
 							}
 						},
@@ -325,7 +337,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Botanist Gin",
 							MiseName = "botanistgin750ml",
 							Container = ml750,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.Gin
 							}
 						},
@@ -336,7 +348,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Angostura Bitters",
 							MiseName = "angosturabitters118ml",
 							Container = ml118,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.NonAlcoholic
 							}
 						},
@@ -347,7 +359,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Cointreau Guignolet",
 							MiseName = "cointreauguignolet375ml",
 							Container = ml375,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.Liqueur
 							}
 						},
@@ -358,7 +370,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Old Granddad 80 Proof",
 							MiseName = "oldgranddad80proof1750ml",
 							Container = l175,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.WhiskeyAmerican
 							}
 						}
@@ -370,7 +382,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				new Vendor{
 					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = "FreshPoint",
+					Name = new BusinessName("FreshPoint"),
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
@@ -379,7 +391,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Perfect Puree Passionfruit",
 							MiseName = "perfectpureepassionfruit30oz",
 							Container = oz30,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.NonAlcoholic
 							}
 						}
@@ -391,7 +403,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				new Vendor{
 					Id = favoriteID,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = "Favorite Brands",
+					Name = new BusinessName("Favorite Brands"),
 					//13755 Diplomat Dr #100
 					//Farmers Branch, TX 75234
 					StreetAddress = new StreetAddress("13755", "", "Diplomat Dr", "Farmers Branch",
@@ -405,7 +417,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							DisplayName = "Underberg",
 							Container = ml20,
                             VendorID = favoriteID,
-							Categories = new List<ItemCategory>{
+							Categories = new List<InventoryCategory>{
 								CategoriesService.Liqueur
 							}
 						}
@@ -585,7 +597,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
 					MiseName = key + "750ml",
 					Quantity = int.Parse (lis750[key]),
-					Categories = new List<ItemCategory>{
+					Categories = new List<InventoryCategory>{
 						CategoriesService.Unknown
 					}
 				});
@@ -640,7 +652,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 										WeightFull = new Weight{Grams = 183}
 
 									},
-									Categories = new List<ItemCategory>{
+									Categories = new List<InventoryCategory>{
 										CategoriesService.Unknown
 									}
 								}
@@ -681,7 +693,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 							MiseName = "wildturkey101kentuckybourbon750ml",
 							LineItemPrice =  new Money(10.0M),
 							Quantity = 100,
-							Categories = new List<ItemCategory>{CategoriesService.WhiskeyAmerican}
+							Categories = new List<InventoryCategory>{CategoriesService.WhiskeyAmerican}
 						}
 					}
 				}
@@ -794,20 +806,14 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 
 		public Task<IEnumerable<Vendor>> GetVendorsBySearchString (string searchString)
 		{
-			return Task.FromResult (_vendors.Where (v => v.Name.Contains (searchString)));
+			return Task.FromResult (_vendors.Where (v => v.Name.ContainsSearchString(searchString)));
 		}
 
 		public Task<IEnumerable<Vendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)
 		{
-			var res = new List<Vendor> ();
-			foreach(var v in _vendors){
-				var restIds = v.GetRestaurantIDsAssociatedWithVendor ();
-				if(restIds.Contains (restaurantID)){
-					res.Add (v);
-				}
-			}
+			var res = (from v in _vendors let restIds = v.GetRestaurantIDsAssociatedWithVendor() where restIds.Contains(restaurantID) select v).ToList();
 
-			return Task.FromResult (res.AsEnumerable ());
+		    return Task.FromResult (res.AsEnumerable ());
 		}
 
 		public Task<Par> GetCurrentPAR (Guid restaurantID)

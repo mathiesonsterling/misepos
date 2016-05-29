@@ -23,6 +23,7 @@ using NUnit.Framework;
 
 namespace Mise.Core.Client.UnitTests.ApplicationModel
 {
+    /*
 	[TestFixture]
 	public class TerminalApplicationModelTestsOrdering
 	{
@@ -178,9 +179,9 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
 			var tab = new RestaurantCheck {Id = checkID, OrderItems = new List<OrderItem > {oi}};
 
 			var emp = new Employee{ Passcode = "1111", CurrentlyClockedInToPOS = false };
-			/*service.Setup (s => s.GetEmployees ()).Returns (new List<IEmployee>{
+			service.Setup (s => s.GetEmployees ()).Returns (new List<IEmployee>{
 				emp
-			});*/
+			});
 		    service.Setup(s => s.GetEmployeesAsync()).Returns(Task<IEnumerable<Employee>>.Factory.StartNew(() => new[] {emp}));
 
 		    service.Setup(s => s.GetChecksAsync()).Returns(Task<IEnumerable<RestaurantCheck>>.Factory.StartNew(() => new[] {tab}));
@@ -517,6 +518,6 @@ namespace Mise.Core.Client.UnitTests.ApplicationModel
             //check that our comp amount is updated
             Assert.AreEqual(10.0M, emp.CompBudget.Dollars, "Comp amount was decremented");
         }
-	}
+	}*/
 }
 

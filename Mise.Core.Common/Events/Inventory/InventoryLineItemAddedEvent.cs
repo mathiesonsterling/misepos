@@ -52,7 +52,7 @@ namespace Mise.Core.Common.Events.Inventory
 
         public Guid? VendorBoughtFrom { get; set; }
 
-		public IEnumerable<ItemCategory> Categories{get;set;}
+		public IEnumerable<InventoryCategory> Categories{get;set;}
 
         public int InventoryPosition { get; set; }
 
