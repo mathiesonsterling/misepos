@@ -11,7 +11,8 @@ using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.ViewModels;
 using Mise.Inventory.ViewModels.Reports;
 using Xamarin.Forms;
-
+using Xamarin.Forms.Xaml;
+[assembly: XamlCompilation (XamlCompilationOptions.Compile)]
 namespace Mise.Inventory
 {
     public class App : Application

@@ -13,6 +13,7 @@ using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
+using Mise.Core.Entities.People;
 
 namespace Mise.Core.Client.Repositories
 {
@@ -46,6 +47,30 @@ namespace Mise.Core.Client.Repositories
             return new Restaurant();
         }
 
+        public async Task<IEnumerable<IRestaurant>> GetRestaurantsEmployeeWorksAt(IEmployee emp)
+        {
+            var res = new List<IRestaurant>();
+
+            foreach (var restId in emp.GetRestaurantIDs())
+            {
+                var local = GetByID(restId);
+                if (local == null)
+                {
+                    local = await _webService.GetRestaurant(restId);
+                }
+
+                if (local != null)
+                {
+                    res.Add(local);
+                }
+            }
+
+            if (res.Any())
+            {
+                Cache.UpdateCache(res);
+            }
+            return res;
+        }
 
         public override Guid GetEntityID(IRestaurantEvent ev)
         {

@@ -193,28 +193,13 @@ namespace Mise.Core.Client.Services.Implementation
 			await _keyValStorage.DeleteValue (LAST_RESTAURANT_ID_KEY);
 		}
 
-		public async Task<IEnumerable<IRestaurant>> GetPossibleRestaurantsForLoggedInEmployee ()
+		public Task<IEnumerable<IRestaurant>> GetPossibleRestaurantsForLoggedInEmployee ()
 		{
 			if(_currentEmployee == null){
 				throw new InvalidOperationException ("Employee must be logged in to get possible restaurants");
 			}
 
-			var results = new List<IRestaurant> ();
-			foreach(var restID in _currentEmployee.GetRestaurantIDs ())
-			{
-				var foundLocal = _restaurantRepository.GetByID (restID);
-				if(foundLocal != null){
-					results.Add (foundLocal);
-				} else{
-					await _restaurantRepository.Load (restID);
-					foundLocal = _restaurantRepository.GetByID (restID);
-					if(foundLocal != null){
-						results.Add (foundLocal);
-					}
-				}
-			}
-
-			return results;
+            return _restaurantRepository.GetRestaurantsEmployeeWorksAt(_currentEmployee);
 		}
 
 		public Task SelectRestaurantForLoggedInEmployee (Guid restaurantID)

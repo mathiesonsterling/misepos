@@ -44,8 +44,8 @@ namespace Mise.Inventory.iOS
 
 	    static async Task InitWebService (ContainerBuilder cb)
 		{
-            //var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation (GetBuildLevel (), true);
-            var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation(GetBuildLevel(), false);
+            var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation (GetBuildLevel (), true);
+            //var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation(GetBuildLevel(), false);
 			if (wsLocation != null) {
 				Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init ();
                 var mobileService = new MobileServiceClient (wsLocation.Uri.ToString ());
@@ -56,8 +56,8 @@ namespace Mise.Inventory.iOS
                 SQLitePCL.CurrentPlatform.Init ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
-                store = AzureWeakTypeSharedClient.DefineTables(store);
-
+                store = AzureStrongTypedClient.DefineTables(store);
+                //store = AzureWeakTypeSharedClient.DefineTables(store);
                 try{
 				    //await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
                     await mobileService.SyncContext.InitializeAsync(store).ConfigureAwait(false);
@@ -67,9 +67,9 @@ namespace Mise.Inventory.iOS
                 }
 
 				var deviceConnection = new DeviceConnectionService ();
-                //var webService = new AzureStrongTypedClient(Logger, mobileService, deviceConnection);
+                var webService = new AzureStrongTypedClient(Logger, mobileService, deviceConnection);
 
-                var webService = new AzureWeakTypeSharedClient(Logger, new JsonNetSerializer(), mobileService, deviceConnection);
+                //var webService = new AzureWeakTypeSharedClient(Logger, new JsonNetSerializer(), mobileService, deviceConnection);
                 try{
                     await webService.SynchWithServer().ConfigureAwait(false);
                 } catch(System.Exception e)
@@ -77,7 +77,6 @@ namespace Mise.Inventory.iOS
                     //we've got to do something here!
                     var msg = e.Message;
                 }
-				//var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, deviceConnection);
 				RegisterWebService (cb, webService);
 			}
 		}

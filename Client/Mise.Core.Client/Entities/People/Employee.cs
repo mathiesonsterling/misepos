@@ -15,7 +15,8 @@ namespace Mise.Core.Client.Entities.People
 		    LastDeviceIDLoggedInWith = source.LastDeviceIDLoggedInWith;
 		    LastTimeLoggedIntoInventoryApp = source.LastTimeLoggedIntoInventoryApp;
 		    CurrentlyLoggedIntoInventoryApp = source.CurrentlyLoggedIntoInventoryApp;
-	        RestaurantsEmployedAt = restaurantsWorkingAt.Select(r => new EmployeeRestaurantRelationships(this, r)).ToList();
+            var restIds = restaurantsWorkingAt.Select(r => r.RestaurantID.ToString()).ToList();
+            RestaurantsEmployedAtIds = string.Join(",", restIds);
 	    }
 
         public DateTimeOffset? LastTimeLoggedIntoInventoryApp { get; set; }
@@ -23,8 +24,6 @@ namespace Mise.Core.Client.Entities.People
         public string LastDeviceIDLoggedInWith { get; set; }
 
         public bool CurrentlyLoggedIntoInventoryApp { get; set; }
-
-        public List<EmployeeRestaurantRelationships> RestaurantsEmployedAt { get; set; }
 
         public string RestaurantsEmployedAtIds { get; set; }
 

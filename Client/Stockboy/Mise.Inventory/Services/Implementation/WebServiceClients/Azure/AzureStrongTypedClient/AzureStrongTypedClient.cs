@@ -132,10 +132,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             }
 
             var query = table.CreateQuery().Where(i => !i.Deleted);
+
+            /*
             if (whereClause != null)
             {
                 query = query.Where(whereClause);
-            }
+            }*/
             await table.PullAsync(tableName, query);
 
         }
@@ -150,28 +152,28 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                 {
                     var allSyncTasks = new List<Task>{
                         SyncTable("RestaurantAccounts", _restaurantAccountTable),
-                        SyncTable("RestaurantsFor" + _restaurantId.ToString(), _restaurantTable, 
-                            r => r.EntityId == _restaurantId.Value),
-                        SyncTable("EmployeesFor" + _restaurantId.ToString(), _employeeTable, 
-                            e => e.RestaurantsEmployedAt.Where(r => r != null && r.Restaurant != null)
-                                    .Select(r => r.Restaurant.RestaurantID)
-                                    .Contains(_restaurantId.Value)),
+                        SyncTable("Restaurants", _restaurantTable),
+
+                        SyncTable("Employees",_employeeTable),
                         SyncTable("Vendors", _vendorTable),
-                        SyncTable("ReceivingOrdersFor" + _restaurantId.Value, _receivingOrderTable,
-                            ro => ro.Restaurant != null && ro.Restaurant.RestaurantID == _restaurantId.Value),
-                        SyncTable("PurchaseOrdersFor" + _restaurantId.Value, _purchaseOrderTable,
-                            po => po.Restaurant != null && po.Restaurant.RestaurantID == _restaurantId.Value),
-                        SyncTable("ApplicationInvitationsFor" + _restaurantId.Value, _applicationInvitationTable),
-                        SyncTable("ParsFor" + _restaurantId.Value, _parTable, 
-                            p => p.Restaurant != null && p.Restaurant.RestaurantID == _restaurantId.Value),
-                        SyncTable("InventoriesFor" + _restaurantId.Value, _inventoryTable, i => i.Restaurant != null 
-                            && i.Restaurant.RestaurantID == _restaurantId.Value),
+                        SyncTable("ReceivingOrders", _receivingOrderTable),
+                        SyncTable("PurchaseOrders", _purchaseOrderTable),
+                        SyncTable("ApplicationInvitations", _applicationInvitationTable),
+                        SyncTable("ParsFor", _parTable),
+                        SyncTable("Inventories", _inventoryTable),
                         SyncTable("InventoryCategories", _categoriesTable)
                     };
 
                     foreach(var t in allSyncTasks)
                     {
-                        await t.ConfigureAwait(false);
+                        try
+                        {
+                            await t.ConfigureAwait(false);
+                        } catch(Exception e)
+                        {
+                            _logger.HandleException(e);
+                            throw;
+                        }
                     }
                 }
                 else{
@@ -459,9 +461,24 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             throw new NotImplementedException();
         }
 
-        public Task<Mise.Core.Common.Entities.Restaurant> GetRestaurant(Guid restaurantID)
+        public async Task<Mise.Core.Common.Entities.Restaurant> GetRestaurant(Guid restaurantID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var restDb = await RestaurantTable.Where(e => !e.Deleted && e.Id == restaurantID.ToString())
+                    .Take(1)
+                    .ToEnumerableAsync();
+                if (restDb.Any())
+                {
+                    return restDb.First().ToBusinessEntity();
+                }
+                return null;
+            } 
+            catch(Exception e)
+            {
+                _logger.HandleException(e);
+                throw;
+            }
         }
 
         #endregion
@@ -470,7 +487,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public Task<bool> SendEventsAsync(Mise.Core.Common.Entities.Restaurant updatedEntity, IEnumerable<Mise.Core.Entities.Restaurant.Events.IRestaurantEvent> events)
         {
-            throw new NotImplementedException();
+            return UpdateEntity(updatedEntity, RestaurantTable, ent => new Restaurant(ent));
         }
 
         #endregion
@@ -486,7 +503,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         public async Task<IEnumerable<Mise.Core.Common.Entities.People.Employee>> GetEmployeesForRestaurant(Guid restaurantID)
         {
             var dbEmps = await EmployeeTable.Where(e => !e.Deleted 
-                && e.RestaurantsEmployedAt.Select(r => r.Restaurant.RestaurantID).Contains(restaurantID))
+                && e.RestaurantsEmployedAtIds.Contains(restaurantID.ToString()))
                 .ToEnumerableAsync();
 
             return dbEmps.Select(e => e.ToBusinessEntity());
@@ -500,18 +517,6 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             var emp = dbEmps.Where(e => IsValidEmployee(e, email, password)).FirstOrDefault();
             if (emp != null)
             {
-                try{
-                var restaurantRelationships = await EmployeeRestaurantRelationships
-                    .Where(er => er.Employee != null)
-                    .ToEnumerableAsync();
-
-                    var forThisEmp = restaurantRelationships.Where(e => e.Employee.EntityId == emp.EntityId).ToList();
-                    emp.RestaurantsEmployedAt = forThisEmp;
-                }
-                catch(Exception e)
-                {
-                    _logger.HandleException(e);
-                }
                 return emp.ToBusinessEntity();
             }
 

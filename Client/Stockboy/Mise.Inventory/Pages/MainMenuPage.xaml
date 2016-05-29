@@ -14,7 +14,7 @@
 					Text="Manage Par" 
 					Command="{Binding PARCommand}"
 				/>
-		    	<Button Text="{Binding InventoryButtonText}" Command="{Binding SectionSelectCommand}"/>
+		    	<Button Text="Start Count" Command="{Binding SectionSelectCommand}"/>
 			    <Button Text="Receive Shipment" Command="{Binding ReceivingOrderCommand}" />
 			    <Button Text="Create Purchase Order" Command="{Binding CreatePurchaseOrderCommand}" />
 			    <Button Text="Reports" Command="{Binding ReportsCommand}"/>
