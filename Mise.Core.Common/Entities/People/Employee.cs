@@ -75,7 +75,9 @@ namespace Mise.Core.Common.Entities.People
 
 	    public IEnumerable<Guid> GetRestaurantIDs()
 	    {
-	        return RestaurantsAndAppsAllowed.Keys;
+            return RestaurantsAndAppsAllowed != null
+                ? RestaurantsAndAppsAllowed.Keys
+                    : new List<Guid>();
 	    } 
 
 		public IEnumerable<Guid> GetRestaurantIDs(MiseAppTypes type)
