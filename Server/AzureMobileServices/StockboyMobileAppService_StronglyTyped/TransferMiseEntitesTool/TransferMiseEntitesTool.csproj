@@ -116,6 +116,7 @@
     <Compile Include="Consumers\VendorsConsumer.cs" />
     <Compile Include="Database\AzureEntityStorage.cs" />
     <Compile Include="Database\AzureNonTypedEntities.cs" />
+    <Compile Include="PopulateRestIdsInEmployee.cs" />
     <Compile Include="Producers\ApplicationInvitationProducer.cs" />
     <Compile Include="Producers\BaseAzureEntitiesProducer.cs" />
     <Compile Include="Producers\EmployeeProducer.cs" />

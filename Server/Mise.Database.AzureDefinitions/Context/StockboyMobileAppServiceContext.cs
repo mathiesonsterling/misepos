@@ -49,7 +49,7 @@ namespace Mise.Database.AzureDefinitions.Context
         public DbSet<MiseApplication> MiseApplications { get; set; }
         public DbSet<RestaurantInventorySection> RestaurantInventorySections { get; set; }
         public DbSet<InventoryCategory> InventoryCategories { get; set; }
-
+        public DbSet<EmployeeRestaurantRelationships> EmployeeRestaurantRelationships { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Add(
