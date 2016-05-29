@@ -50,12 +50,7 @@ namespace Mise.Inventory
 			return BuildLevel.Production;
 			#endif
 		}
-
-		protected static AzureServiceLocation GetWebServiceLocation(){
-			var level = GetBuildLevel ();
-
-			return AzureServiceLocator.GetAzureMobileServiceLocation (level, true);
-		}
+            
 
 		protected static void RegisterWebService (ContainerBuilder cb, IInventoryWebService webService)
 		{
