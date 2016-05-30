@@ -9,6 +9,7 @@ using Mise.Database.AzureDefinitions.Entities;
 using Mise.Database.AzureDefinitions.Entities.Accounts;
 using Mise.Database.AzureDefinitions.Entities.Categories;
 using Mise.Database.AzureDefinitions.Entities.Inventory;
+using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
 using Mise.Database.AzureDefinitions.Entities.People;
 using Mise.Database.AzureDefinitions.Entities.Restaurant;
 using Mise.Database.AzureDefinitions.Entities.Vendor;
@@ -35,6 +36,9 @@ namespace Mise.Database.AzureDefinitions.Context
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<InventorySection> InventorySections { get; set; }
+        public DbSet<InventoryBeverageLineItem> InventoryBeverageLineItems { get; set; }
+
         public DbSet<Par> Pars { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<ReceivingOrder> ReceivingOrders { get; set; }

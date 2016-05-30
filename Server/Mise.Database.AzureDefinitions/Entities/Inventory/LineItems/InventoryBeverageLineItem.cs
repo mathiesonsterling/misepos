@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
@@ -17,7 +18,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
             PricePaid = new MoneyDb();
         }
 
-        public InventoryBeverageLineItem(IInventoryBeverageLineItem source, IEnumerable<Vendor.Vendor> vendors, IEnumerable<InventoryCategory> categories) 
+        public InventoryBeverageLineItem(IInventoryBeverageLineItem source, InventorySection section, 
+            IEnumerable<Vendor.Vendor> vendors, IEnumerable<InventoryCategory> categories) 
             :base(source, categories)
         {
             VendorBoughtFrom = source.VendorBoughtFrom.HasValue
@@ -42,6 +44,9 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
         public int NumFullBottles { get; set; }
         public MeasurementMethods MethodsMeasuredLast { get; set; }
         public int InventoryPosition { get; set; }
+
+        public InventorySection InventorySection { get; set; }
+        public Guid InventorySectionId { get; set; }
 
         protected override Core.Common.Entities.Inventory.InventoryBeverageLineItem CreateConcreteLineItemClass()
         {

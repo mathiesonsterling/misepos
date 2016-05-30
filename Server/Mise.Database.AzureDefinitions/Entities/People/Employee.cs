@@ -16,9 +16,8 @@ namespace Mise.Database.AzureDefinitions.Entities.People
 		    LastTimeLoggedIntoInventoryApp = source.LastTimeLoggedIntoInventoryApp;
 		    CurrentlyLoggedIntoInventoryApp = source.CurrentlyLoggedIntoInventoryApp;
 	        RestaurantsEmployedAt = restaurantsWorkingAt.Select(r => new EmployeeRestaurantRelationships(this, r)).ToList();
-	        var restIds = restaurantsWorkingAt.Select(r => r.RestaurantID).ToList();
-	        var restIdsString = string.Join(",", restIds);
-	        RestaurantsEmployedAtIds = restIdsString;
+	        var restIds = restaurantsWorkingAt.Select(r => r.RestaurantID);
+            RestaurantsEmployedAtIds = IDListToString(restIds);
 	    }
 
         public DateTimeOffset? LastTimeLoggedIntoInventoryApp { get; set; }
@@ -49,7 +48,7 @@ namespace Mise.Database.AzureDefinitions.Entities.People
                 return new Dictionary<Guid, IList<MiseAppTypes>>();
             }
 
-            var ids = RestaurantsEmployedAtIds.Split(new[] {','}).Select(s => s.Trim()).Select(Guid.Parse);
+            var ids = StringToIDList(RestaurantsEmployedAtIds);
 
             return ids.ToDictionary<Guid, Guid, IList<MiseAppTypes>>(restId => restId, restId => new List<MiseAppTypes> {MiseAppTypes.StockboyMobile});
             /*

@@ -18,13 +18,14 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             : base(source)
         {
             Inventory = inv;
+            InventoryId = inv.EntityId;
             Name = source.Name;
             LastCompletedBy = lastCompletedBy;
             RestaurantInventorySection = rSec;
             CurrentlyInUseBy = inUseBy;
             TimeCountStarted = source.TimeCountStarted;
 
-            LineItems = source.GetInventoryBeverageLineItemsInSection().Select(li => new InventoryBeverageLineItem(li, vendors, categories)).ToList();
+            LineItems = source.GetInventoryBeverageLineItemsInSection().Select(li => new InventoryBeverageLineItem(li, this, vendors, categories)).ToList();
         }
         protected override Core.Common.Entities.Inventory.InventorySection CreateConcreteSubclass()
         {
@@ -45,6 +46,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             get;
             set;
         }
+
+        public Guid InventoryId { get; set; }
 
         public string Name { get; set; }
 

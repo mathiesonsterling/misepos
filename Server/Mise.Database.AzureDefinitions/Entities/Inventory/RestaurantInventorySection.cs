@@ -22,11 +22,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 		    IsDefaultInventorySection = source.IsDefaultInventorySection;
 	    }
 
-        public Restaurant.Restaurant Restaurant
-        {
-            get;
-            set;
-        }
+        public Restaurant.Restaurant Restaurant { get; set; }
+        public Guid RestaurantId { get; set; }
 
         public string Name { get; set; }
         public bool AllowsPartialBottles { get; set; }

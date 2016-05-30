@@ -141,6 +141,14 @@
     <Compile Include="Migrations\201605290316149_AddRestIdsToEmployees.Designer.cs">
       <DependentUpon>201605290316149_AddRestIdsToEmployees.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605292105355_InventorySectionIds.cs" />
+    <Compile Include="Migrations\201605292105355_InventorySectionIds.Designer.cs">
+      <DependentUpon>201605292105355_InventorySectionIds.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605292112103_RestSectionsSeed.cs" />
+    <Compile Include="Migrations\201605292112103_RestSectionsSeed.Designer.cs">
+      <DependentUpon>201605292112103_RestSectionsSeed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueItems\BusinessName.cs" />
@@ -175,6 +183,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605290316149_AddRestIdsToEmployees.resx">
       <DependentUpon>201605290316149_AddRestIdsToEmployees.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605292105355_InventorySectionIds.resx">
+      <DependentUpon>201605292105355_InventorySectionIds.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605292112103_RestSectionsSeed.resx">
+      <DependentUpon>201605292112103_RestSectionsSeed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
