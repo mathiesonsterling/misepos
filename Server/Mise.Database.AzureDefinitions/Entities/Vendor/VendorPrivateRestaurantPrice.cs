@@ -10,11 +10,10 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
   {
       public VendorPrivateRestaurantPrice()
       {
-            PriceCharged = new MoneyDb();
       }
 
       public VendorPrivateRestaurantPrice(VendorBeverageLineItem lineItem, Restaurant.Restaurant restaurant,
-          MoneyDb priceCharged)
+          decimal priceCharged)
       {
           Id = lineItem.EntityId + ":" + restaurant.RestaurantID;
           VendorBeverageLineItem = lineItem;
@@ -30,6 +29,6 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 	  public string RestaurantId { get; set; }
       public Restaurant.Restaurant Restaurant { get; set; }
 
-      public MoneyDb PriceCharged { get; set; }
+      public decimal PriceCharged { get; set; }
   }
 }

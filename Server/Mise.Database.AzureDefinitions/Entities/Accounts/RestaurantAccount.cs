@@ -21,9 +21,9 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             PaymentPlan = source.PaymentPlan;
             PaymentPlanSetupWithProvider = source.PaymentPlanSetupWithProvider;
 
-            Charges = source.Charges.Select(c => new AccountCharge(c)).ToList();
-            CreditCardPayments = source.Payments.Select(p => new AccountCreditCardPayment(p)).ToList();
-            Credits = source.AccountCredits.Select(c => new AccountCredit(c)).ToList();
+            Charges = source.Charges.Select(c => new AccountCharge(c, this)).ToList();
+            CreditCardPayments = source.Payments.Select(p => new AccountCreditCardPayment(p, this)).ToList();
+            Credits = source.AccountCredits.Select(c => new AccountCredit(c, this)).ToList();
         }
 
         public int BillingCycleDays { get; set; }

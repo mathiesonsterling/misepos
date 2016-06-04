@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +20,10 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             : base(source)
         {
             Restaurant = restaurant;
+            RestaurantId = restaurant.Id;
+
             CreatedBy = createdByEmp;
+            CreatedById = createdByEmp?.Id;
 
             PurchaseOrdersPerVendor =
                 source.GetPurchaseOrderPerVendors().Select(pov => CreatePurchaseOrderForVendor(pov, cats, vendors)).ToList();
@@ -31,15 +36,20 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             return new PurchaseOrderPerVendor(pov, thisVendor, cats);
         }
            
+        [Required]
         public Restaurant.Restaurant Restaurant
         {
             get;
             set;
         }
+        [ForeignKey("Restaurant")]
+        public string RestaurantId { get; set; }
 
         public List<PurchaseOrderPerVendor> PurchaseOrdersPerVendor { get; set; }
 
         public Employee CreatedBy{ get; set; }
+        [ForeignKey("CreatedBy")]
+        public string CreatedById { get; set; }
 
         protected override Core.Common.Entities.Inventory.PurchaseOrder CreateConcreteSubclass()
         {

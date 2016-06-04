@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Base;
 using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Entities.Categories;
-using Mise.Database.AzureDefinitions.ValueItems.Inventory;
 
 namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
 {
@@ -14,7 +14,6 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
     {
         protected BaseLiquidLineItemEntity()
         {
-            Container = new LiquidContainer();
         }
 
         protected BaseLiquidLineItemEntity(TEntityType source, IEnumerable<Categories.InventoryCategory> categories) 
@@ -32,7 +31,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
             };
 
             Container = new LiquidContainer(source.Container);
-
+            ContainerId = Container.Id;
             var thisItemCategoryIds = source.GetCategories().Select(c => c.Id).Distinct().ToList();
             Categories = categories
                 .Where(c => thisItemCategoryIds.Contains(c.EntityId))
@@ -44,7 +43,9 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
         /// <summary>
         /// Size of the container it comes in, which also has other information in it
         /// </summary>
-        LiquidContainer Container { get; }
+        public LiquidContainer Container { get; set; }
+        [ForeignKey("Container")]
+        public string ContainerId { get; set; }
 
         public List<EntityCategoryOwnership> Categories { get; set; }
 
@@ -53,7 +54,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
             var concrete = CreateConcreteLineItemClass();
 
             concrete.Categories = Categories.Select(c => c.InventoryCategory.ToBusinessEntity()).ToList();
-            concrete.Container = Container.ToValueItem();
+
+            if (Container != null)
+            {
+                var containerEnt = Container.ToBusinessEntity();
+                concrete.Container = new Core.ValueItems.Inventory.LiquidContainer(containerEnt);
+            }
 
             concrete.CaseSize = BaseLineItem.CaseSize;
             concrete.DisplayName = BaseLineItem.DisplayName;

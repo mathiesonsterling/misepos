@@ -10,10 +10,10 @@ namespace TransferMiseEntitesTool
     {
         static void Main(string[] args)
         {
-            //var tranfer = new EntityDBTransferer();
-            //var task = tranfer.TransferRecords();
+            var tranfer = new EntityDBTransferer();
+            var task = tranfer.TransferRecords();
 
-            var task = new PopulateRestIdsInEmployee().Execute();
+            //var task = new PopulateRestIdsInEmployee().Execute();
             try
             {
                 task.Wait(new TimeSpan(0, 1, 0, 0));

@@ -50,7 +50,16 @@ namespace TransferMiseEntitesTool.Consumers
                     var exists = await GetSavedEntity(db, dto.Id);
                     if (exists == null)
                     {
-                        var entity = EntityFactory.FromDataStorageObject<TEntityType>(dto);
+                        TEntityType entity;
+                        try
+                        {
+                            entity = EntityFactory.FromDataStorageObject<TEntityType>(dto);
+                        }
+                        catch (Exception e)
+                        {
+                            var msg = e.Message;
+                            throw;
+                        }
                         await SaveEntity(db, entity);
                         numAdded++;
                         if (numAdded > BatchSize)

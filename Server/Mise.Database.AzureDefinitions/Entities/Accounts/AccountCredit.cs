@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Mise.Core.Entities.Accounts;
-using Mise.Database.AzureDefinitions.ValueItems;
+using Mise.Core.ValueItems;
 
 namespace Mise.Database.AzureDefinitions.Entities.Accounts
 {
@@ -12,32 +8,33 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
     {
         public AccountCredit()
         {
-            ReferralCodeGiven = new ReferralCodeDb();
-            Amount = new MoneyDb();
         }
 
-        public AccountCredit(Core.Common.Entities.Accounts.AccountCredit source) :base(source)
+        public AccountCredit(Core.Common.Entities.Accounts.AccountCredit source, RestaurantAccount acct) :base(source)
         {
-            ReferralCodeGiven = new ReferralCodeDb {Code = source.ReferralCodeGiven?.Code};
-            AccountID = source.AccountID;
-            Amount = new MoneyDb(source.Amount);
+            ReferralCodeGiven = source.ReferralCodeGiven?.Code;
+            RestaurantAccount = acct;
+            RestaurantAccountId = acct.Id;
+            Amount = source.Amount.Dollars;
         }
 
         /// <summary>
         /// If here, this is the referral code we were given to get this credit
         /// </summary>
-        public ReferralCodeDb ReferralCodeGiven { get; set; }
+        public string ReferralCodeGiven { get; set; }
 
-        public Guid AccountID { get; set; }
+        [ForeignKey("RestaurantAccount")]
+        public string RestaurantAccountId { get; set; }
+        public RestaurantAccount RestaurantAccount { get; set; }
 
-        public MoneyDb Amount { get; set; }
+        public decimal Amount { get; set; }
         protected override Core.Common.Entities.Accounts.AccountCredit CreateConcreteSubclass()
         {
             return new Core.Common.Entities.Accounts.AccountCredit
             {
-                AccountID = AccountID,
-                Amount = Amount.ToValueItem(),
-                ReferralCodeGiven = ReferralCodeGiven.ToValueItem()
+                AccountID = RestaurantAccount.EntityId,
+                Amount = new Money(Amount),
+                ReferralCodeGiven = new ReferralCode(ReferralCodeGiven)
             };
         }
     }

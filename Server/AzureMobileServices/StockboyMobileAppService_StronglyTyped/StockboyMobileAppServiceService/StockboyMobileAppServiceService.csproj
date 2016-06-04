@@ -180,6 +180,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\InventoryCategoryController.cs" />
+    <Compile Include="Controllers\LiquidContainerController.cs" />
     <Compile Include="Controllers\ParController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\ReceivingOrderController.cs" />

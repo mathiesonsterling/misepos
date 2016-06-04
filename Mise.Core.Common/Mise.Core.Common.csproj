@@ -48,6 +48,7 @@
     <Compile Include="Entities\Inventory\BaseBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\InventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\InventorySection.cs" />
+    <Compile Include="Entities\Inventory\LiquidContainerEntity.cs" />
     <Compile Include="Entities\Inventory\PAR.cs" />
     <Compile Include="Entities\Inventory\PARBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\PurchaseOrderLineItem.cs" />

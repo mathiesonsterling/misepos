@@ -2,41 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
-using Mise.Database.AzureDefinitions.ValueItems.Inventory;
 using System.ComponentModel.DataAnnotations.Schema;
+using Mise.Database.AzureDefinitions.Entities.Inventory;
+
 namespace Mise.Database.AzureDefinitions.Entities.Categories
 {
     public class InventoryCategory : BaseDbEntity<IInventoryCategory, Core.Common.Entities.Inventory.InventoryCategory>
     {
         public InventoryCategory() { }
 
-        public InventoryCategory(IInventoryCategory source) : base(source)
+        public InventoryCategory(IInventoryCategory source, LiquidContainer container) : base(source)
         {
            // ParentCategory = parent;
             Name = source.Name;
             IsCustomCategory = source.IsCustomCategory;
             IsAssignable = source.IsAssignable;
             
-            var container = source.GetPreferredContainers()?.FirstOrDefault();
-            PreferredContainer = container != null 
-                ? new LiquidContainer(container) 
-                : new LiquidContainer();
+            PreferredContainer = container;
         }
 
         protected override Core.Common.Entities.Inventory.InventoryCategory CreateConcreteSubclass()
         {
+            var prefContainers = new List<Core.ValueItems.Inventory.LiquidContainer>();
+
+            if (PreferredContainer != null)
+            {
+                prefContainers =
+                    new List<Core.ValueItems.Inventory.LiquidContainer> {new Core.ValueItems.Inventory.LiquidContainer(PreferredContainer.ToBusinessEntity())};
+            }
             return new Core.Common.Entities.Inventory.InventoryCategory
             {
                 ParentCategoryID = ParentCategory.EntityId,
                 Name = Name,
                 IsCustomCategory = IsCustomCategory,
                 IsAssignable = IsAssignable,
-                PreferredContainers =
-                    new List<Core.ValueItems.Inventory.LiquidContainer> {PreferredContainer.ToValueItem()}
+                PreferredContainers = prefContainers
             };
         }
 
-	    [ForeignKey("InventoryCategory")]
+	    [ForeignKey("ParentCategory")]
 	    public string ParentCategoryId { get; set; }
 
         public InventoryCategory ParentCategory
@@ -59,5 +63,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Categories
         public bool IsAssignable { get; set; }
 
         public LiquidContainer PreferredContainer { get; set; }
+        [ForeignKey("PreferredContainer")]
+        public string PreferredContainerId { get; set; }
     }
 }
