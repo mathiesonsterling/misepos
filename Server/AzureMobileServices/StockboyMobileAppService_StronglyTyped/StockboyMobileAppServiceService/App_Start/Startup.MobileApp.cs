@@ -30,6 +30,8 @@ namespace StockboyMobileAppServiceService
                 .UseDefaultConfiguration()
                 .ApplyTo(config);
 
+            config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+
             // Use Entity Framework Code First to create database tables based on your DbContext
             Database.SetInitializer(new StockboyMobileAppServiceInitializer());
 
@@ -61,7 +63,16 @@ namespace StockboyMobileAppServiceService
             base.Seed(context);
             AddMiseApplications(context);
             AddShapes(context);
-            context.SaveChanges();
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+                throw;
+            }
+
             AddInventoryCategories(context);
             try
             {
