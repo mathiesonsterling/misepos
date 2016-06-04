@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.ValueItems.Inventory;
@@ -30,6 +31,10 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
         public Vendor.Vendor Vendor { get; set; }
 
         public List<PurchaseOrderBeverageLineItem> PurchaseOrderBeverageLineItems { get; set; }
+
+	    public PurchaseOrder PurchaseOrder { get; set; }
+	    [ForeignKey("PurchaseOrder")]
+	    public string PurchaseOrderId { get; set; }
 
         public PurchaseOrderStatus Status { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.ValueItems;
@@ -34,6 +35,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             set;
         }
 
+	    [ForeignKey("Vendor")]
+	    public string VendorId { get; set; }
         public string NameOfItemInVendor
         {
             get;

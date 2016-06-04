@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
@@ -46,7 +47,9 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
         public int InventoryPosition { get; set; }
 
         public InventorySection InventorySection { get; set; }
-        public Guid InventorySectionId { get; set; }
+
+	    [ForeignKey("InventorySection")]
+        public string InventorySectionId { get; set; }
 
         protected override Core.Common.Entities.Inventory.InventoryBeverageLineItem CreateConcreteLineItemClass()
         {

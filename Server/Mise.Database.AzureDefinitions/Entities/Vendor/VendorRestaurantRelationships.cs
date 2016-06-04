@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
         }
 
         public Vendor Vendor { get; set; }
-        public Restaurant.Restaurant Restaurant { get; set; }
+	    [ForeignKey("Vendor")]
+		public string VendorId { get; set; }
+
+
+	    public Restaurant.Restaurant Restaurant { get; set; }
+	    [ForeignKey("Restaurant")]
+	    public string RestaurantId { get; set; }
     }
 }

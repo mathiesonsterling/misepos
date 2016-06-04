@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,7 +48,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             set;
         }
 
-        public Guid InventoryId { get; set; }
+	    [ForeignKey("Inventory")]
+        public string InventoryId { get; set; }
 
         public string Name { get; set; }
 

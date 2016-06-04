@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.ValueItems.Inventory;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace Mise.Database.AzureDefinitions.Entities.Categories
 {
     public class InventoryCategory : BaseDbEntity<IInventoryCategory, Core.Common.Entities.Inventory.InventoryCategory>
@@ -35,6 +35,9 @@ namespace Mise.Database.AzureDefinitions.Entities.Categories
                     new List<Core.ValueItems.Inventory.LiquidContainer> {PreferredContainer.ToValueItem()}
             };
         }
+
+	    [ForeignKey("InventoryCategory")]
+	    public string ParentCategoryId { get; set; }
 
         public InventoryCategory ParentCategory
         {

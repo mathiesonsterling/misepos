@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.ValueItems;
@@ -18,12 +15,15 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
             UnitPrice = new MoneyDb();
         }
 
-        public ReceivingOrderBeverageLineItem(IReceivingOrderLineItem source, IEnumerable<InventoryCategory> cats) 
+        public ReceivingOrderBeverageLineItem(IReceivingOrderLineItem source, ReceivingOrder ro,
+	        IEnumerable<InventoryCategory> cats)
             : base(source, cats)
         {
             LineItemPrice = new MoneyDb(source.LineItemPrice);
             UnitPrice = new MoneyDb(source.UnitPrice);
             ZeroedOut = source.ZeroedOut;
+	        ReceivingOrder = ro;
+	        ReceivingOrderId = ro.Id;
         }
 
         /// <summary>
@@ -34,6 +34,10 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory.LineItems
         public MoneyDb UnitPrice { get; set; }
 
         public bool ZeroedOut { get; set; }
+
+	    public ReceivingOrder ReceivingOrder { get; set; }
+	    [ForeignKey("ReceivingOrder")]
+	    public string ReceivingOrderId { get; set; }
 
         protected override ReceivingOrderLineItem CreateConcreteLineItemClass()
         {
