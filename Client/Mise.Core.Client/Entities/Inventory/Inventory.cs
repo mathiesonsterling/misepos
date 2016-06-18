@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mise.Core.Entities.Inventory;
 using Mise.Core.Client.Entities.Categories;
 using Mise.Core.Client.Entities.People;
+using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Client.Entities.Inventory
 {
@@ -15,9 +15,12 @@ namespace Mise.Core.Client.Entities.Inventory
             IEnumerable<InventoryCategory> cats, IEnumerable<Vendor.Vendor> vendors) : base(source)
         {
             Restaurant = rest;
+            RestaurantId = rest.Id;
             Sections = source.GetSections().Select(s => CreateSection(s, emps, this, rSecs, cats, vendors)).ToList();
             DateCompleted = source.DateCompleted;
             CreatedByEmployee = emps.FirstOrDefault(e => e.EntityId == source.CreatedByEmployeeID);
+            CreatedByEmployeeId = CreatedByEmployee?.Id;
+
             IsCurrent = source.IsCurrent;
         }
 
@@ -35,6 +38,7 @@ namespace Mise.Core.Client.Entities.Inventory
             var rSec = rSecs.FirstOrDefault(rs => rs.EntityId == source.RestaurantInventorySectionID);
             return new InventorySection(source, inv, lastCompletedBy, rSec, usingEmp, vendors, cats);
         }
+        public string RestaurantId { get; set; }
 
         public Restaurant.Restaurant Restaurant { get; set; }
 
@@ -42,6 +46,7 @@ namespace Mise.Core.Client.Entities.Inventory
 
         public DateTimeOffset? DateCompleted { get; set; }
 
+        public string CreatedByEmployeeId { get; set; }
         public Employee CreatedByEmployee { get; set; }
 
 

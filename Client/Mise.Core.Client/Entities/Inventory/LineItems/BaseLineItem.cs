@@ -1,6 +1,4 @@
-﻿
-
-namespace Mise.Core.Client.Entities.Inventory.LineItems
+﻿namespace Mise.Core.Client.Entities.Inventory.LineItems
 {
     public class BaseLineItem
     {

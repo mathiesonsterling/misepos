@@ -103,7 +103,7 @@ namespace Mise.Inventory.ViewModels
 				Processing = true;
 				await base.OnAppearing ();
 				var vendor = await _vendorService.GetSelectedVendor ();
-				VendorName = vendor.Name.ShortName;
+				VendorName = vendor.Name;
 				var ro = await _roService.GetCurrentReceivingOrder ();
 				if (ro != null)
 				{

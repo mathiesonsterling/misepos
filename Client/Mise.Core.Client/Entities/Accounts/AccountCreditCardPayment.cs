@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Entities.Accounts;
+﻿using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
-using Mise.Core.Client.ValueItems;
-using CreditCard = Mise.Core.Client.ValueItems.CreditCard;
 
 namespace Mise.Core.Client.Entities.Accounts
 {
@@ -14,33 +7,34 @@ namespace Mise.Core.Client.Entities.Accounts
     {
         public AccountCreditCardPayment()
         {
-            CardUsed = new CreditCard();
-            Amount = new MoneyDb();
+            CardUsed = new Core.Client.ValueItems.CreditCard();
         }
 
-        public AccountCreditCardPayment(Core.Common.Entities.Accounts.AccountCreditCardPayment source)
+        public AccountCreditCardPayment(Core.Common.Entities.Accounts.AccountCreditCardPayment source, RestaurantAccount acct)
 	    	:base(source)
         {
-            CardUsed = new CreditCard(source.CardUsed);
+            CardUsed = new Core.Client.ValueItems.CreditCard(source.CardUsed);
             Status = source.Status;
-            AccountID = source.AccountID;
-            Amount = new MoneyDb(source.Amount);
+            RestaurantAccount = acct;
+            RestaurantAccountId = acct.Id;
+            Amount = source.Amount.Dollars;
         }
 
-        public CreditCard CardUsed { get; set; }
+        public Core.Client.ValueItems.CreditCard CardUsed { get; set; }
 
         public PaymentProcessingStatus Status { get; set; }
 
-        public Guid AccountID { get; set; }
-        public MoneyDb Amount { get; set; }
+        public RestaurantAccount RestaurantAccount { get; set; }
+        public string RestaurantAccountId { get; set; }
+        public decimal Amount { get; set; }
         protected override Core.Common.Entities.Accounts.AccountCreditCardPayment CreateConcreteSubclass()
         {
             return new Core.Common.Entities.Accounts.AccountCreditCardPayment
             {
                 CardUsed = CardUsed.ToValueItem(),
                 Status = Status,
-                AccountID = AccountID,
-                Amount = Amount.ToValueItem()
+                AccountID = RestaurantAccount.EntityId,
+                Amount = new Money(Amount)
             };
         }
     }

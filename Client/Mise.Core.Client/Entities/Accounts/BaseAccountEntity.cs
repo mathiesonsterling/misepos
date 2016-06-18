@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Mise.Core.Common.Entities.Accounts;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.Entities.Base;
 using Mise.Core.ValueItems;
-using Mise.Core.Client.ValueItems;
 using ReferralCode = Mise.Core.ValueItems.ReferralCode;
 
 namespace Mise.Core.Client.Entities.Accounts

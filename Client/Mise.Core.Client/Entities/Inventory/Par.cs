@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Mise.Core.Entities.Inventory;
+using Mise.Core.Client.Entities.Categories;
 using Mise.Core.Client.Entities.Inventory.LineItems;
 using Mise.Core.Client.Entities.People;
+using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Client.Entities.Inventory
 {
@@ -11,15 +11,18 @@ namespace Mise.Core.Client.Entities.Inventory
     {
         public Par() { }
 
-        public Par(IPar source, Restaurant.Restaurant restaurant, Employee createdByEmployee, IEnumerable<Categories.InventoryCategory> categories) : base(source)
+        public Par(IPar source, Restaurant.Restaurant restaurant, Employee createdByEmployee, IEnumerable<InventoryCategory> categories) : base(source)
         {
             Restaurant = restaurant;
+            RestaurantId = restaurant.Id;
             CreatedByEmployee = createdByEmployee;
+            CreatedByEmployeeId = createdByEmployee?.Id;
             IsCurrent = source.IsCurrent;
-            ParLineItems = source.GetBeverageLineItems().Select(li => new ParBeverageLineItem(li, categories)).ToList();
+            ParLineItems = source.GetBeverageLineItems().Select(li => new ParBeverageLineItem(li, this, categories)).ToList();
         }
 
         public Restaurant.Restaurant Restaurant { get; set; }
+        public string RestaurantId { get; set; }
 
         protected override Core.Common.Entities.Inventory.Par CreateConcreteSubclass()
         {
@@ -33,7 +36,7 @@ namespace Mise.Core.Client.Entities.Inventory
         }
 
         public Employee CreatedByEmployee { get; set; }
-
+        public string CreatedByEmployeeId { get; set; }
         public bool IsCurrent { get; set; }
 
         public List<ParBeverageLineItem> ParLineItems { get; set; }

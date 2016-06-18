@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Accounts;
-using Mise.Core.Client.ValueItems;
+using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Entities.Accounts
 {
@@ -13,21 +9,26 @@ namespace Mise.Core.Client.Entities.Accounts
     {
         public AccountCharge()
         {
-            Amount = new MoneyDb();
         }
 
-        public AccountCharge(IAccountCharge source) :base(source)
+        public AccountCharge(IAccountCharge source, RestaurantAccount account) :base(source)
         {
             App = source.App;
-            AccountID = source.AccountID;
-            Amount = new MoneyDb(source.Amount);
+            RestaurantAccountId = source.AccountID.ToString();
+            Amount = source.Amount.Dollars;
             DateStart = source.DateStart;
             DateEnd = source.DateEnd;
+
+            RestaurantAccount = account;
         }
 
         public MiseAppTypes App { get; set; }
-        public Guid AccountID { get; set; }
-        public MoneyDb Amount { get; set; }
+
+        public RestaurantAccount RestaurantAccount { get; set; }
+
+        public string RestaurantAccountId { get; set; }
+
+        public decimal Amount { get; set; }
         public DateTimeOffset DateStart { get; set; }
         public DateTimeOffset DateEnd { get; set; }
         protected override Core.Common.Entities.Accounts.AccountCharge CreateConcreteSubclass()
@@ -35,8 +36,8 @@ namespace Mise.Core.Client.Entities.Accounts
             return new Core.Common.Entities.Accounts.AccountCharge
             {
                 App = App,
-                AccountID = AccountID,
-                Amount = Amount.ToValueItem(),
+                AccountID = Guid.Parse(RestaurantAccountId),
+                Amount = new Money(Amount),
                 DateStart = DateStart,
                 DateEnd = DateEnd
             };

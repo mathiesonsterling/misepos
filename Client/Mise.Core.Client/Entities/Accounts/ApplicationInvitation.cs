@@ -1,7 +1,7 @@
-﻿using Mise.Core.Entities;
+﻿using Mise.Core.Client.Entities.People;
+using Mise.Core.Entities;
 using Mise.Core.Entities.People;
 using Mise.Core.ValueItems;
-using Mise.Core.Client.Entities.People;
 
 namespace Mise.Core.Client.Entities.Accounts
 {
@@ -21,6 +21,7 @@ namespace Mise.Core.Client.Entities.Accounts
             DestinationEmployee = destEmployee;
             InvitingEmployee = invitingEmployee;
             Restaurant = rest;
+            RestaurantId = rest.Id;
         }
 
         public MiseApplication Application
@@ -46,6 +47,7 @@ namespace Mise.Core.Client.Entities.Accounts
             set;
         }
 
+        public string RestaurantId { get; set; }
         public Restaurant.Restaurant Restaurant
         {
             get;
@@ -62,7 +64,7 @@ namespace Mise.Core.Client.Entities.Accounts
                 DestinationEmployeeID = DestinationEmployee?.EntityId,
                 InvitingEmployeeID = InvitingEmployee.EntityId,
                 InvitingEmployeeName = InvitingEmployee?.GetName(),
-                RestaurantName = Restaurant.Name,
+                RestaurantName = new BusinessName(Restaurant.FullName, Restaurant.ShortName),
                 RestaurantID = Restaurant.RestaurantID
             };
         }

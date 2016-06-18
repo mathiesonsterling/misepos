@@ -1,18 +1,14 @@
-﻿using System;
-using Mise.Core.Client.ValueItems;
-
-namespace Mise.Core.Client.Entities.Vendor
+﻿namespace Mise.Core.Client.Entities.Vendor
 {
     
   public class VendorPrivateRestaurantPrice : EntityData
   {
       public VendorPrivateRestaurantPrice()
       {
-            PriceCharged = new MoneyDb();
       }
 
       public VendorPrivateRestaurantPrice(VendorBeverageLineItem lineItem, Restaurant.Restaurant restaurant,
-          MoneyDb priceCharged)
+          decimal priceCharged)
       {
           Id = lineItem.EntityId + ":" + restaurant.RestaurantID;
           VendorBeverageLineItem = lineItem;
@@ -20,10 +16,12 @@ namespace Mise.Core.Client.Entities.Vendor
           PriceCharged = priceCharged;
       }
 
+	  public string VendorBeverageLineItemId { get; set; }
   	  public VendorBeverageLineItem VendorBeverageLineItem { get; set; }
 
+	  public string RestaurantId { get; set; }
       public Restaurant.Restaurant Restaurant { get; set; }
 
-      public MoneyDb PriceCharged { get; set; }
+      public decimal PriceCharged { get; set; }
   }
 }

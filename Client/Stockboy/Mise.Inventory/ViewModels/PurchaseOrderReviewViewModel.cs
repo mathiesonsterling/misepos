@@ -106,7 +106,7 @@ namespace Mise.Inventory.ViewModels
 			var res = new List<VendorAndItems> ();
 			foreach(var poByV in poByVs){
                 string vendorName = "No Vendor";
-                if (string.IsNullOrEmpty(poByV.VendorName.ShortName))
+                if (string.IsNullOrEmpty(poByV.VendorName))
                 {
                     IVendor vendor = null;
                     if (poByV.VendorID.HasValue)
@@ -114,13 +114,13 @@ namespace Mise.Inventory.ViewModels
                         vendor = vendors.FirstOrDefault(v => v.Id == poByV.VendorID.Value);
                         if (vendor != null)
                         {
-                            vendorName = vendor.Name.ShortName;
+                            vendorName = vendor.Name;
                         }
                     }
                 }
                 else
                 {
-                    vendorName = poByV.VendorName.ShortName;
+                    vendorName = poByV.VendorName;
                 }
 				var newItem = new VendorAndItems {
 					VendorName = vendorName,

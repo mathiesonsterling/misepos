@@ -487,7 +487,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public Task<bool> SendEventsAsync(Mise.Core.Common.Entities.Restaurant updatedEntity, IEnumerable<Mise.Core.Entities.Restaurant.Events.IRestaurantEvent> events)
         {
-            return UpdateEntity(updatedEntity, RestaurantTable, ent => new Restaurant(ent));
+            return UpdateEntity(updatedEntity, RestaurantTable, ent => new Restaurant(ent, null));
         }
 
         #endregion
@@ -541,7 +541,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         {
             var ids = updatedEntity.GetRestaurantIDs().ToList();
             var rests = await RestaurantTable.Where(r => ids.Contains(r.EntityId))
-                .ToEnumerableAsync();
+                .ToListAsync();
 
             return await UpdateEntity(updatedEntity, EmployeeTable, ent => new Employee(ent, rests));
         }

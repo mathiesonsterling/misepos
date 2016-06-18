@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Entities.Inventory;
+﻿using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Client.Entities.Inventory
 {
@@ -22,11 +17,9 @@ namespace Mise.Core.Client.Entities.Inventory
 		    IsDefaultInventorySection = source.IsDefaultInventorySection;
 	    }
 
-        public Restaurant.Restaurant Restaurant
-        {
-            get;
-            set;
-        }
+        public Restaurant.Restaurant Restaurant { get; set; }
+
+        public string RestaurantId { get; set; }
 
         public string Name { get; set; }
         public bool AllowsPartialBottles { get; set; }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mise.Core.Client.Entities.People
+﻿namespace Mise.Core.Client.Entities.People
 {
     /// <summary>
     /// Shows that an employee works at a restaurant
@@ -26,7 +20,13 @@ namespace Mise.Core.Client.Entities.People
         }
 
         public Employee Employee { get; set; }
+
+	    public string EmployeeId { get; set; }
+
         public Restaurant.Restaurant Restaurant { get; set; }
+
+	    public string RestaurantId { get; set; }
+
         public bool IsCurrentEmployee { get; set; }
     }
 }

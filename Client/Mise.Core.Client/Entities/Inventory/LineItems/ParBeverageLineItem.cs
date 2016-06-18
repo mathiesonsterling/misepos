@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Common.Entities.Inventory;
+﻿using System.Collections.Generic;
 using Mise.Core.Entities.Inventory;
+using InventoryCategory = Mise.Core.Client.Entities.Categories.InventoryCategory;
+using Par = Mise.Core.Client.Entities.Inventory.Par;
 
 namespace Mise.Core.Client.Entities.Inventory.LineItems
 {
@@ -12,14 +9,20 @@ namespace Mise.Core.Client.Entities.Inventory.LineItems
     {
         public ParBeverageLineItem() { }
 
-        public ParBeverageLineItem(IParBeverageLineItem source, IEnumerable<Categories.InventoryCategory> categories) : base(source, categories)
+        public ParBeverageLineItem(IParBeverageLineItem source, Par par, IEnumerable<InventoryCategory> categories)
+	        : base(source, categories)
         {
-            
+	        Par = par;
+	        ParId = par.Id;
         }
 
         protected override Core.Common.Entities.Inventory.ParBeverageLineItem CreateConcreteLineItemClass()
         {
             return new Core.Common.Entities.Inventory.ParBeverageLineItem();
         }
+
+	    public Par Par { get; set; }
+
+	    public string ParId { get; set; }
     }
 }

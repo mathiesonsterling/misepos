@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities.Inventory;
-using Mise.Core.Client.ValueItems;
+using Mise.Core.ValueItems;
 using InventoryCategory = Mise.Core.Client.Entities.Categories.InventoryCategory;
 
 namespace Mise.Core.Client.Entities.Inventory.LineItems
@@ -14,33 +10,37 @@ namespace Mise.Core.Client.Entities.Inventory.LineItems
     {
         public ReceivingOrderBeverageLineItem()
         {
-            LineItemPrice = new MoneyDb();
-            UnitPrice = new MoneyDb();
         }
 
-        public ReceivingOrderBeverageLineItem(IReceivingOrderLineItem source, IEnumerable<InventoryCategory> cats) 
+        public ReceivingOrderBeverageLineItem(IReceivingOrderLineItem source, ReceivingOrder ro,
+	        IEnumerable<InventoryCategory> cats)
             : base(source, cats)
         {
-            LineItemPrice = new MoneyDb(source.LineItemPrice);
-            UnitPrice = new MoneyDb(source.UnitPrice);
+            LineItemPrice = source.LineItemPrice.Dollars;
+            UnitPrice = source.UnitPrice.Dollars;
             ZeroedOut = source.ZeroedOut;
+	        ReceivingOrder = ro;
+	        ReceivingOrderId = ro.Id;
         }
 
         /// <summary>
         /// How much we paid, total for quantity
         /// </summary>
-        public MoneyDb LineItemPrice { get; set; }
+        public decimal LineItemPrice { get; set; }
 
-        public MoneyDb UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
 
         public bool ZeroedOut { get; set; }
+
+	    public ReceivingOrder ReceivingOrder { get; set; }
+	    public string ReceivingOrderId { get; set; }
 
         protected override ReceivingOrderLineItem CreateConcreteLineItemClass()
         {
             return new ReceivingOrderLineItem
             {
-                LineItemPrice = LineItemPrice.ToValueItem(),
-                UnitPrice = UnitPrice.ToValueItem(),
+                LineItemPrice = new Money(LineItemPrice),
+                UnitPrice = new Money(UnitPrice),
                 ZeroedOut = ZeroedOut
             };
         }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mise.Core.Client.ValueItems
+﻿namespace Mise.Core.Client.ValueItems
 {
     public class CreditCard : IDbValueItem<Core.ValueItems.CreditCard>
     {
@@ -39,7 +33,7 @@ namespace Mise.Core.Client.ValueItems
             };
         }
     }
-        
+
     public class CreditCardProcessorToken : Core.ValueItems.CreditCardProcessorToken, IDbValueItem<Core.ValueItems.CreditCardProcessorToken>
     {
         public CreditCardProcessorToken()

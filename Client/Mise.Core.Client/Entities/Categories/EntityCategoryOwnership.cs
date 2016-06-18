@@ -1,5 +1,5 @@
 ﻿using System;
-using Mise.Core.Client.Entities.Categories;
+
 namespace Mise.Core.Client.Entities.Categories
 {
     public class EntityCategoryOwnership : EntityData
@@ -14,6 +14,8 @@ namespace Mise.Core.Client.Entities.Categories
         }
 
         public Guid Entity { get; set; }
+
+	    public string InventoryCategoryId { get; set; }
 
         public InventoryCategory InventoryCategory { get; set; }
     }

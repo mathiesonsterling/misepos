@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Entities.Accounts;
-using Mise.Core.Client.ValueItems;
+﻿using Mise.Core.Entities.Accounts;
 
 namespace Mise.Core.Client.Entities.Accounts
 {
-    public class MiseEmployeeAccount : BaseAccountEntity<IAccount, Core.Common.Entities.Accounts.MiseEmployeeAccount>
+    public class MiseEmployeeAccount : BaseAccountEntity<IAccount, Common.Entities.Accounts.MiseEmployeeAccount>
     {
         public MiseEmployeeAccount() { }
 

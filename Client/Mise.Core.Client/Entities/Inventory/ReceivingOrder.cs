@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mise.Core.Entities.Inventory;
-using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Client.Entities.Categories;
 using Mise.Core.Client.Entities.Inventory.LineItems;
 using Mise.Core.Client.Entities.People;
+using Mise.Core.Entities.Inventory;
+using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Core.Client.Entities.Inventory
 {
@@ -21,22 +21,35 @@ namespace Mise.Core.Client.Entities.Inventory
             : base(source)
         {
             Restaurant = rest;
+            RestaurantId = rest.Id;
+
             ReceivedByEmployee = receivedBy;
+            ReceivedByEmployeeId = receivedBy?.Id;
+
             DateReceived = source.DateReceived;
+
             PurchaseOrder = po;
+            PurchaseOrderId = po?.Id;
+
             Vendor = vendor;
+            VendorId = vendor?.Id;
+
             Status = source.Status;
             Notes = source.Notes;
             InvoiceID = source.InvoiceID;
 
             LineItems =
-                source.GetBeverageLineItems().Select(li => new ReceivingOrderBeverageLineItem(li, cats)).ToList();
+                source.GetBeverageLineItems().Select(li => new ReceivingOrderBeverageLineItem(li, this, cats)).ToList();
         }
+
+
         public Restaurant.Restaurant Restaurant
         {
             get;
             set;
         }
+
+        public string RestaurantId { get; set; }
 
         public DateTimeOffset DateReceived { get; set; }
 
@@ -45,11 +58,17 @@ namespace Mise.Core.Client.Entities.Inventory
         /// </summary>
         public PurchaseOrder PurchaseOrder { get; set; }
 
+        public string PurchaseOrderId { get; set; }
+
         public Vendor.Vendor Vendor { get; set; }
+
+        public string VendorId { get; set; }
 
         public ReceivingOrderStatus Status { get; set; }
 
         public Employee ReceivedByEmployee { get; set; }
+
+        public string ReceivedByEmployeeId { get; set; }
 
         public string Notes { get; set; }
 

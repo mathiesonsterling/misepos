@@ -10,13 +10,14 @@ namespace Mise.Core.Client.Entities.People
     {
 	    public Employee(){}
 
-	    public Employee(IEmployee source, IEnumerable<Restaurant.Restaurant> restaurantsWorkingAt) :base(source)
+	    public Employee(IEmployee source, ICollection<Restaurant.Restaurant> restaurantsWorkingAt) :base(source)
 	    {
 		    LastDeviceIDLoggedInWith = source.LastDeviceIDLoggedInWith;
 		    LastTimeLoggedIntoInventoryApp = source.LastTimeLoggedIntoInventoryApp;
 		    CurrentlyLoggedIntoInventoryApp = source.CurrentlyLoggedIntoInventoryApp;
-            var restIds = restaurantsWorkingAt.Select(r => r.RestaurantID.ToString()).ToList();
-            RestaurantsEmployedAtIds = string.Join(",", restIds);
+	        RestaurantsEmployedAt = restaurantsWorkingAt.Select(r => new EmployeeRestaurantRelationships(this, r)).ToList();
+	        var restIds = restaurantsWorkingAt.Select(r => r.RestaurantID);
+            RestaurantsEmployedAtIds = IDListToString(restIds);
 	    }
 
         public DateTimeOffset? LastTimeLoggedIntoInventoryApp { get; set; }
@@ -24,6 +25,8 @@ namespace Mise.Core.Client.Entities.People
         public string LastDeviceIDLoggedInWith { get; set; }
 
         public bool CurrentlyLoggedIntoInventoryApp { get; set; }
+
+        public List<EmployeeRestaurantRelationships> RestaurantsEmployedAt { get; set; } 
 
         public string RestaurantsEmployedAtIds { get; set; }
 
@@ -45,9 +48,25 @@ namespace Mise.Core.Client.Entities.People
                 return new Dictionary<Guid, IList<MiseAppTypes>>();
             }
 
-            var ids = RestaurantsEmployedAtIds.Split(new[] { ',' }).Select(s => s.Trim()).Select(Guid.Parse);
+            var ids = StringToIDList(RestaurantsEmployedAtIds);
 
-            return ids.ToDictionary<Guid, Guid, IList<MiseAppTypes>>(restId => restId, restId => new List<MiseAppTypes> { MiseAppTypes.StockboyMobile });
+            return ids.ToDictionary<Guid, Guid, IList<MiseAppTypes>>(restId => restId, restId => new List<MiseAppTypes> {MiseAppTypes.StockboyMobile});
+            /*
+            if (RestaurantsEmployedAt == null)
+            {
+                return new Dictionary<Guid, IList<MiseAppTypes>>();
+            }
+
+            var dic = new Dictionary<Guid, IList<MiseAppTypes>>();
+            foreach (var rest in RestaurantsEmployedAt.Select(r => r.Restaurant))
+            {
+                IList<MiseAppTypes> apps = rest.RestaurantApplicationUses.Select(ua => (MiseAppTypes) ua.MiseApplication.AppTypeValue).ToList();
+                if (apps.Any())
+                {
+                    dic.Add(rest.RestaurantID, apps);
+                }
+            }
+            return dic;*/
         }
     }
 }

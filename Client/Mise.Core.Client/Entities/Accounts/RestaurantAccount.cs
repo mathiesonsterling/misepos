@@ -3,32 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using Mise.Core.Entities.Accounts;
 using Mise.Core.ValueItems;
-using CreditCard = Mise.Core.Client.ValueItems.CreditCard;
 
 namespace Mise.Core.Client.Entities.Accounts
 {
-    public class RestaurantAccount : BaseAccountEntity<IBusinessAccount, Core.Common.Entities.Accounts.RestaurantAccount>
+    public class RestaurantAccount : BaseAccountEntity<IBusinessAccount, Common.Entities.Accounts.RestaurantAccount>
     {
         public RestaurantAccount()
         {
-            CurrentCard = new CreditCard();
+            CurrentCard = new ValueItems.CreditCard();
         }
      
         public RestaurantAccount(Core.Common.Entities.Accounts.RestaurantAccount source) : base(source)
         {
             BillingCycleDays = source.BillingCycle.Days;
-            CurrentCard = new CreditCard(source.CurrentCard);
+            CurrentCard = new Core.Client.ValueItems.CreditCard(source.CurrentCard);
             PaymentPlan = source.PaymentPlan;
             PaymentPlanSetupWithProvider = source.PaymentPlanSetupWithProvider;
 
-            Charges = source.Charges.Select(c => new AccountCharge(c)).ToList();
-            CreditCardPayments = source.Payments.Select(p => new AccountCreditCardPayment(p)).ToList();
-            Credits = source.AccountCredits.Select(c => new AccountCredit(c)).ToList();
+            Charges = source.Charges.Select(c => new AccountCharge(c, this)).ToList();
+            CreditCardPayments = source.Payments.Select(p => new AccountCreditCardPayment(p, this)).ToList();
+            Credits = source.AccountCredits.Select(c => new AccountCredit(c, this)).ToList();
         }
 
         public int BillingCycleDays { get; set; }
 
-        public CreditCard CurrentCard { get; set; }
+        public ValueItems.CreditCard CurrentCard { get; set; }
 
         public MisePaymentPlan PaymentPlan
         {
