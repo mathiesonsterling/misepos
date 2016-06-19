@@ -11,7 +11,8 @@ namespace Mise.Core.Client.Entities.Inventory
     {
         public Inventory() { }
 
-        public Inventory(IInventory source, Restaurant.Restaurant rest, ICollection<Employee> emps, IEnumerable<RestaurantInventorySection> rSecs,
+        public Inventory(IInventory source, Restaurant.Restaurant rest, ICollection<Employee> emps, 
+                         IEnumerable<RestaurantInventorySection> rSecs,
             IEnumerable<InventoryCategory> cats, IEnumerable<Vendor.Vendor> vendors) : base(source)
         {
             Restaurant = rest;

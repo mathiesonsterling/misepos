@@ -84,7 +84,9 @@ namespace Mise.Core.Client.Entities.Restaurant
          
         protected override Core.Common.Entities.Restaurant CreateConcreteSubclass()
         {
-            var emails = EmailsToSendReportsTo.Split(',').Select(e => new EmailAddress(e)).ToList();
+            var emails = EmailsToSendReportsTo.Split(',')
+                                              .Where(s => !string.IsNullOrEmpty (s))
+                                              .Select(e => new EmailAddress(e)).ToList();
             return new Core.Common.Entities.Restaurant 
             {
                 EmailsToSendInventoryReportsTo = emails,
