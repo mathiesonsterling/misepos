@@ -181,7 +181,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             store.DefineTable<DbInventory>();
             store.DefineTable<Core.Client.Entities.Inventory.InventorySection>();
             store.DefineTable<Core.Client.Entities.Categories.InventoryCategory>();
-
+            store.DefineTable<Core.Client.Entities.Inventory.LineItems.InventoryBeverageLineItem>();
             return store;
         }
 

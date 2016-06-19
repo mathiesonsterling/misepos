@@ -11,9 +11,11 @@ using Mise.Inventory.Services;
 using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 //using ModernHttpClient;
+using System;
 using SQLitePCL;
 using System.Threading.Tasks;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureStrongTypedClient;
+using System.Threading;
 
 namespace Mise.Inventory.iOS
 {
@@ -26,13 +28,16 @@ namespace Mise.Inventory.iOS
 			cb.RegisterInstance<IErrorTrackingService>(raygun).SingleInstance ();
 
 			Logger = new IOSLogger (raygun);
-			//cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
+            //cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
 
+            /*
             var stripeClient = new ClientStripeFacade();
             var processor = new StripePaymentProcessorService(Logger, stripeClient);
-			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();
+			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();*/
+
+            cb.RegisterType<NoProcessorService> ().As<ICreditCardProcessorService> ().SingleInstance ();
             try{
-                var initTask = Task.Run(async () => await InitWebService (cb));
+                var initTask = InitWebService (cb);
 
                 initTask.Wait();
             } catch(System.Exception e){
@@ -48,7 +53,13 @@ namespace Mise.Inventory.iOS
             //var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation(GetBuildLevel(), false);
 			if (wsLocation != null) {
 				Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init ();
-                var mobileService = new MobileServiceClient (wsLocation.Uri.ToString ());
+
+                IMobileServiceClient mobileService;
+                try {
+                    mobileService = new MobileServiceClient (wsLocation.Uri.ToString ());
+                } catch (Exception e) {
+                    throw;
+                }
 				//create the SQL store for offline
 				var dbService = new iOSSQLite ();
 

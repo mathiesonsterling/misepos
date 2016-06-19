@@ -54,7 +54,7 @@ namespace Mise.Inventory
 
 		protected static void RegisterWebService (ContainerBuilder cb, IInventoryWebService webService)
 		{
-			cb.RegisterInstance (webService).As<IInventoryEmployeeWebService> ().SingleInstance ();
+            cb.RegisterInstance(webService).As<IInventoryEmployeeWebService>().SingleInstance ();
 			cb.RegisterInstance (webService).As<IInventoryRestaurantWebService> ().SingleInstance ();
 			cb.RegisterInstance (webService).As<IVendorWebService> ().SingleInstance ();
 			cb.RegisterInstance (webService).As<IParWebService> ().SingleInstance ();
