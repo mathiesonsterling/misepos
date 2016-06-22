@@ -16,6 +16,7 @@ using SQLitePCL;
 using System.Threading.Tasks;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureStrongTypedClient;
 using System.Threading;
+using ModernHttpClient;
 
 namespace Mise.Inventory.iOS
 {
@@ -37,7 +38,7 @@ namespace Mise.Inventory.iOS
 
             cb.RegisterType<NoProcessorService> ().As<ICreditCardProcessorService> ().SingleInstance ();
             try{
-                var initTask = InitWebService (cb);
+                var initTask = Task.Run(async () => await InitWebService (cb));
 
                 initTask.Wait();
             } catch(System.Exception e){
@@ -56,7 +57,7 @@ namespace Mise.Inventory.iOS
 
                 IMobileServiceClient mobileService;
                 try {
-                    mobileService = new MobileServiceClient (wsLocation.Uri.ToString ());
+                    mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), new NativeMessageHandler());
                 } catch (Exception e) {
                     throw;
                 }
@@ -70,8 +71,8 @@ namespace Mise.Inventory.iOS
                 store = AzureStrongTypedClient.DefineTables(store);
                 //store = AzureWeakTypeSharedClient.DefineTables(store);
                 try{
-				    //await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
-                    await mobileService.SyncContext.InitializeAsync(store).ConfigureAwait(false);
+				    await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger)).ConfigureAwait (false);
+                    //await mobileService.SyncContext.InitializeAsync(store).ConfigureAwait(false);
                 }catch(System.Exception e){
                     var msg = e.Message;
                     throw;
