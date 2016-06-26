@@ -27,10 +27,11 @@ namespace Mise.Inventory.iOS
 			return base.FinishedLaunching(app, options);
 		}
 
+        /*
 		private void SetPaymentProvider(){
 			var settings = StripePaymentProviderSettingsFactory.GetSettings ();
 			Stripe.StripeClient.DefaultPublishableKey = settings.PublishableKey;
-		}
+		}*/
 	}
 }
 
