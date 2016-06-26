@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory" 
+	x:Class="Mise.Inventory.Pages.Reports.SelectCompletedInventoriesPage">
+	<ContentPage.Content>
+			<StackLayout>
+				<SearchBar 
+					x:Name="searchEntry"
+					Placeholder="Search" 
+					Text="{Binding SearchString}" />
+				<ScrollView VerticalOptions="FillAndExpand">
+					<StackLayout x:Name="stckInventories"/>
+				</ScrollView>
+				<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			</StackLayout>
+	</ContentPage.Content>
+</local:BasePage>
