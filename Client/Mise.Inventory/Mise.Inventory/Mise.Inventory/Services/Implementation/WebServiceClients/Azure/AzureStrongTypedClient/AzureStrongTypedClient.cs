@@ -331,12 +331,12 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             IEnumerable<IInventoryEvent> events)
         {
             var rests = await RestaurantTable.Where(r => r.EntityId == updatedEntity.RestaurantID)
-                                              .Take(1).ToEnumerableAsync();
+                                              .Take(1).ToListAsync ();
             var rest = rests.First();
 
-            var cats = await _categoriesTable.Where(c => !c.Deleted).ToEnumerableAsync();
+            var cats = await CategoriesTable.Where(c => !c.Deleted).ToEnumerableAsync();
 
-            var vendors = await _vendorTable.Where(v => !v.Deleted).ToEnumerableAsync();
+            var vendors = await VendorTable.Where(v => !v.Deleted).ToEnumerableAsync();
 
             var emps = await EmployeeTable.Where(e => e.EntityId == updatedEntity.CreatedByEmployeeID).ToEnumerableAsync();
             return await UpdateEntity(updatedEntity, _inventoryTable, e => new DbInventory(updatedEntity, rest,

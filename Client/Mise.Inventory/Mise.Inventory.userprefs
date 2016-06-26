@@ -1,8 +1,16 @@
 ﻿<Properties StartupItem="Mise.Inventory/Mise.Inventory.iOS/Mise.Inventory.iOS.csproj">
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Mise.Inventory/Mise.Inventory/ViewModels/LoginViewModel.cs">
+    <Files>
+      <File FileName="Mise.Inventory/Mise.Inventory/ViewModels/LoginViewModel.cs" Line="223" Column="1" />
+      <File FileName="../../Mise.Core/ValueItems/Password.cs" Line="39" Column="1" />
+      <File FileName="../../Mise.Core/Services/UtilityServices/Cryptography.cs" Line="11" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/ViewModels/LoginViewModel.cs" line="127" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Mise.Inventory.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.202BEB12-5F52-4C6A-A30D-157674C815D8" />

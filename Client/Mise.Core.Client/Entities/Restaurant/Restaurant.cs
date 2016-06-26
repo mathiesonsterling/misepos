@@ -5,6 +5,7 @@ using Mise.Core.Client.Entities.Accounts;
 using Mise.Core.Client.Entities.Inventory;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.ValueItems;
+using Mise.Core.Common.Entities.Inventory;
 
 namespace Mise.Core.Client.Entities.Restaurant
 {
@@ -12,7 +13,7 @@ namespace Mise.Core.Client.Entities.Restaurant
     {
         public Restaurant()
         {
-            InventorySections = new List<RestaurantInventorySection>();
+            InventorySections = new List<Mise.Core.Client.Entities.Inventory.RestaurantInventorySection>();
         }
 
         public Restaurant(IRestaurant source, RestaurantAccount acct) : base(source)
@@ -29,7 +30,8 @@ namespace Mise.Core.Client.Entities.Restaurant
             var emails = source.GetEmailsToSendInventoryReportsTo().Select(e => e.Value);
             EmailsToSendReportsTo = string.Join(",", emails);
 
-            var sections = source.GetInventorySections().Select(invS => new RestaurantInventorySection(invS)).ToList();
+            var sections = source.GetInventorySections().Select(
+                invS => new Mise.Core.Client.Entities.Inventory.RestaurantInventorySection(invS)).ToList();
             InventorySections = sections;
 
             if (source.StreetAddress != null)
@@ -78,7 +80,7 @@ namespace Mise.Core.Client.Entities.Restaurant
 
         public string EmailsToSendReportsTo { get; set; }
 
-        public List<RestaurantInventorySection> InventorySections { get; set; }
+        public List<Mise.Core.Client.Entities.Inventory.RestaurantInventorySection> InventorySections { get; set; }
 
         public List<RestaurantApplicationUse> RestaurantApplicationUses { get; set; }
          
@@ -92,7 +94,9 @@ namespace Mise.Core.Client.Entities.Restaurant
                 EmailsToSendInventoryReportsTo = emails,
                 StreetAddress = new StreetAddress(StreetNumber, StreetDirection,
                     StreetName, City, State, Country, Zip, Latitude, Longitude),
-                InventorySections = InventorySections.Select(s => s.ToBusinessEntity()).ToList(),
+                InventorySections = InventorySections != null
+                    ?InventorySections.Select(s => s.ToBusinessEntity()).ToList()
+                                      : new List<Mise.Core.Common.Entities.Inventory.RestaurantInventorySection>(),
                 Name = new BusinessName(FullName, ShortName),
                 AccountID = RestaurantAccount?.EntityId,
                 PhoneNumber = new PhoneNumber(PhoneNumberAreaCode, PhoneNumber),
