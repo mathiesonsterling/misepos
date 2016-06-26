@@ -26,6 +26,7 @@
     <MtouchArch>i386, x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -120,6 +121,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Mise.Inventory\Mise.Inventory.csproj">
       <Name>Mise.Inventory</Name>
+      <Project>{8050D9B9-DEDD-4E4B-AC3A-C2B4C82FB66E}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -9,9 +9,7 @@ namespace Mise.Inventory.Services.Implementation
 {
 	public class XamarinInsightsService : IInsightsService
     {
-		private readonly IErrorTrackingService _raygun;
-		public XamarinInsightsService(IErrorTrackingService raygun){
-			_raygun = raygun;
+		public XamarinInsightsService(){
 		}
         public void Track(string evName, Dictionary<string, string> values)
         {
@@ -49,9 +47,6 @@ namespace Mise.Inventory.Services.Implementation
 				break;
 			}
 			Insights.Report (e, severity);
-			if(reportToRaygun){
-				_raygun.ReportException (e, level);
-			}
 		}
 
 	    public void Identify(Guid? userID, EmailAddress email, PersonName name, string deviceID, bool isAnonymous)
