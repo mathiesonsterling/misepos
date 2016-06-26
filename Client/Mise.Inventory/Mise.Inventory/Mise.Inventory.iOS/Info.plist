@@ -22,7 +22,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>9.0</string>
+	<string>8.4</string>
 	<key>CFBundleDisplayName</key>
 	<string>Mise Stockboy</string>
 	<key>CFBundleIdentifier</key>
@@ -41,5 +41,10 @@
 	<string>LaunchScreen</string>
 	<key>CFBundleShortVersionString</key>
 	<string></string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>
