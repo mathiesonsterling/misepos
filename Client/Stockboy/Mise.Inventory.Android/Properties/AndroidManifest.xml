@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="Stockboy 1.0.5" package="com.mise.misestockboy" android:versionCode="1005">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="Stockboy 1.0.5" package="com.mise.misestockboy" android:versionCode="1005" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="15" />
-	<application android:icon="@drawable/stockboylaunch" android:label="Mise Stockboy"></application>
+	<application android:label="Mise Stockboy"></application>
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.INTERNET" />

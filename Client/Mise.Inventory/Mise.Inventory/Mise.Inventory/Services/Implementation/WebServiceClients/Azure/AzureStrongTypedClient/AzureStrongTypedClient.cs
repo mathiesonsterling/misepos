@@ -33,54 +33,53 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
     {
         private readonly IMobileServiceClient _client;
         private readonly ILogger _logger;
-        private readonly IDeviceConnectionService _connService;
         private Guid? _restaurantId;
 
         private IMobileServiceSyncTable<RestaurantAccount> _restaurantAccountTable;
+        private IMobileServiceSyncTable<RestaurantAccount> RestaurantAccountTable =>  _restaurantAccountTable ?? (_restaurantAccountTable = _client.GetSyncTable<RestaurantAccount>());
 
-        public IMobileServiceSyncTable<Restaurant> RestaurantTable
-        {
-            get{
-                if (_restaurantTable == null)
-                {
-                    _restaurantTable = _client.GetSyncTable<Restaurant>();
-                }
-                return _restaurantTable;
-            }
-        }
+        private IMobileServiceSyncTable<Restaurant> RestaurantTable => _restaurantTable ?? (_restaurantTable = _client.GetSyncTable<Restaurant>());
         private IMobileServiceSyncTable<Restaurant> _restaurantTable;
 
         private IMobileServiceSyncTable<Employee> _employeeTable;
-        public IMobileServiceSyncTable<Employee> EmployeeTable
-        { 
-            get 
-            { 
-                if(_employeeTable == null)
-                {
-                    _employeeTable = _client.GetSyncTable<Employee>();
-                } 
-                return _employeeTable;
-            }
-        }
+        public IMobileServiceSyncTable<Employee> EmployeeTable => _employeeTable ?? (_employeeTable = _client.GetSyncTable<Employee>());
 
         private IMobileServiceSyncTable<EmployeeRestaurantRelationships> _employeeRestaurantTable;
-        public IMobileServiceSyncTable<EmployeeRestaurantRelationships> EmployeeRestaurantRelationships{
-            get
-            {
-                if (_employeeRestaurantTable == null)
-                {
-                    _employeeRestaurantTable = _client.GetSyncTable<EmployeeRestaurantRelationships>();
-                }
-                return _employeeRestaurantTable;
-            }
-        }
+        private IMobileServiceSyncTable<EmployeeRestaurantRelationships> EmployeeRestaurantRelationshipsTable => _employeeRestaurantTable ??
+                                                                                                            (_employeeRestaurantTable = _client.GetSyncTable<EmployeeRestaurantRelationships>());
+
         private IMobileServiceSyncTable<Vendor> _vendorTable;
+
+        private IMobileServiceSyncTable<Vendor> VendorTable => _vendorTable ?? (_vendorTable = _client.GetSyncTable<Vendor>());
+
         private IMobileServiceSyncTable<ReceivingOrder> _receivingOrderTable;
+        private IMobileServiceSyncTable<ReceivingOrder> ReceivingOrderTable
+            => _receivingOrderTable ?? (_receivingOrderTable = _client.GetSyncTable<ReceivingOrder>());
+
         private IMobileServiceSyncTable<PurchaseOrder> _purchaseOrderTable;
+
+        private IMobileServiceSyncTable<PurchaseOrder> PurchaseOrderTable
+            => _purchaseOrderTable ?? (_purchaseOrderTable = _client.GetSyncTable<PurchaseOrder>());
+
         private IMobileServiceSyncTable<ApplicationInvitation> _applicationInvitationTable;
+
+        private IMobileServiceSyncTable<ApplicationInvitation> ApplicationInvitationTable
+            =>
+                _applicationInvitationTable ??
+                (_applicationInvitationTable = _client.GetSyncTable<ApplicationInvitation>());
+
         private IMobileServiceSyncTable<Par> _parTable;
+        private IMobileServiceSyncTable<Par> ParTable => _parTable ?? (_parTable = _client.GetSyncTable<Par>());
+
         private IMobileServiceSyncTable<DbInventory> _inventoryTable;
+
+        private IMobileServiceSyncTable<DbInventory> InventoryTable
+            => _inventoryTable ?? (_inventoryTable = _client.GetSyncTable<DbInventory>());
+
         private IMobileServiceSyncTable<InventoryCategory> _categoriesTable;
+
+        private IMobileServiceSyncTable<InventoryCategory> CategoriesTable
+            => _categoriesTable ?? (_categoriesTable = _client.GetSyncTable<InventoryCategory>());
 
         public bool Synched{ get; private set; }
         public static MobileServiceSQLiteStore DefineTables(MobileServiceSQLiteStore store)
@@ -103,8 +102,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         {
             _logger = logger;
             _client = client;
-            _connService = connService;
-            _connService.ConnectionStateChanged += async (sender, args) => {
+            connService.ConnectionStateChanged += async (sender, args) => {
                 if(args.IsConnected){
                     await SynchWithServer();
                 }
@@ -150,17 +148,17 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                 if(_restaurantId.HasValue)
                 {
                     var allSyncTasks = new List<Task>{
-                        SyncTable("RestaurantAccounts", _restaurantAccountTable),
-                        SyncTable("Restaurants", _restaurantTable),
+                        SyncTable("RestaurantAccounts", RestaurantAccountTable),
+                        SyncTable("Restaurants", RestaurantTable),
 
-                        SyncTable("Employees",_employeeTable),
-                        SyncTable("Vendors", _vendorTable),
-                        SyncTable("ReceivingOrders", _receivingOrderTable),
-                        SyncTable("PurchaseOrders", _purchaseOrderTable),
-                        SyncTable("ApplicationInvitations", _applicationInvitationTable),
+                        SyncTable("Employees",EmployeeTable),
+                        SyncTable("Vendors", VendorTable),
+                        SyncTable("ReceivingOrders", ReceivingOrderTable),
+                        SyncTable("PurchaseOrders", PurchaseOrderTable),
+                        SyncTable("ApplicationInvitations", ApplicationInvitationTable),
                         SyncTable("ParsFor", _parTable),
-                        SyncTable("Inventories", _inventoryTable),
-                        SyncTable("InventoryCategories", _categoriesTable)
+                        SyncTable("Inventories", InventoryTable),
+                        SyncTable("InventoryCategories", CategoriesTable)
                     };
 
                     foreach(var t in allSyncTasks)
@@ -177,9 +175,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                 }
                 else{
                     var minSync = new List<Task>{
-                        SyncTable("Restaurants", _restaurantTable),
-                        SyncTable("Employees", _employeeTable),
-                        SyncTable("ApplicationInvitations", _applicationInvitationTable)
+                        SyncTable("Restaurants", RestaurantTable),
+                        SyncTable("Employees", EmployeeTable),
+                        SyncTable("ApplicationInvitations", ApplicationInvitationTable)
                     };
                     foreach(var t in minSync)
                     {
@@ -321,7 +319,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public Task<IEnumerable<Core.Common.Entities.Inventory.Inventory>> GetInventoriesForRestaurant(Guid restaurantID)
         {
-            return _inventoryTable.Where(i => i != null && !i.Deleted && i.Restaurant != null
+            return InventoryTable.Where(i => i != null && !i.Deleted && i.Restaurant != null
                             && i.Restaurant.EntityId == restaurantID)
                 .Select(i => i.ToBusinessEntity())
                 .ToEnumerableAsync();
@@ -339,7 +337,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             var vendors = await VendorTable.Where(v => !v.Deleted).ToEnumerableAsync();
 
             var emps = await EmployeeTable.Where(e => e.EntityId == updatedEntity.CreatedByEmployeeID).ToEnumerableAsync();
-            return await UpdateEntity(updatedEntity, _inventoryTable, e => new DbInventory(updatedEntity, rest,
+            return await UpdateEntity(updatedEntity, InventoryTable, e => new DbInventory(updatedEntity, rest,
                 emps.ToList(), rest.InventorySections, cats, vendors));
         }
 
@@ -363,8 +361,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public async Task<bool> SendEventsAsync(Core.Common.Entities.Inventory.PurchaseOrder updatedEntity, IEnumerable<IPurchaseOrderEvent> events)
         {
-            var cats = await _categoriesTable.Where(c => !c.Deleted).ToEnumerableAsync();
-            var vendors = await _vendorTable.Where(v => !v.Deleted).ToEnumerableAsync();
+            var cats = await CategoriesTable.Where(c => !c.Deleted).ToEnumerableAsync();
+            var vendors = await VendorTable.Where(v => !v.Deleted).ToEnumerableAsync();
             var rest = await RestaurantTable.Where(r => !r.Deleted && r.EntityId == updatedEntity.RestaurantID).Take(1).ToEnumerableAsync();
             var emp = await EmployeeTable.Where(e => !e.Deleted && e.EntityId == updatedEntity.CreatedByEmployeeID).Take(1).ToEnumerableAsync();
             return await UpdateEntity(updatedEntity, _purchaseOrderTable, 
