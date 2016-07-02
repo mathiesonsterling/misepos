@@ -25,7 +25,7 @@ using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using DbInventory = Mise.Core.Client.Entities.Inventory.Inventory;
-
+using DbRestaurantInventorySection = Mise.Core.Client.Entities.Inventory.RestaurantInventorySection;
 
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureStrongTypedClient
 {
@@ -40,6 +40,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         private IMobileServiceSyncTable<Restaurant> RestaurantTable => _restaurantTable ?? (_restaurantTable = _client.GetSyncTable<Restaurant>());
         private IMobileServiceSyncTable<Restaurant> _restaurantTable;
+
+        private IMobileServiceSyncTable<DbRestaurantInventorySection> _restaurantInventorySectionsTable;
+        private IMobileServiceSyncTable<DbRestaurantInventorySection> RestaurantInventorySectionsTable => _restaurantInventorySectionsTable ?? (_restaurantInventorySectionsTable = _client.GetSyncTable<DbRestaurantInventorySection> ());
 
         private IMobileServiceSyncTable<Employee> _employeeTable;
         public IMobileServiceSyncTable<Employee> EmployeeTable => _employeeTable ?? (_employeeTable = _client.GetSyncTable<Employee>());
@@ -85,7 +88,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         public static MobileServiceSQLiteStore DefineTables(MobileServiceSQLiteStore store)
         {
             store.DefineTable<RestaurantAccount>();
+
             store.DefineTable<Restaurant>();
+            store.DefineTable<DbRestaurantInventorySection>();
+
             store.DefineTable<Employee>();
             store.DefineTable<Vendor>();
             store.DefineTable<ReceivingOrder>();
@@ -150,6 +156,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                     var allSyncTasks = new List<Task>{
                         SyncTable("RestaurantAccounts", RestaurantAccountTable),
                         SyncTable("Restaurants", RestaurantTable),
+                        SyncTable("RestaurantInventorySections", RestaurantInventorySectionsTable),
 
                         SyncTable("Employees",EmployeeTable),
                         SyncTable("Vendors", VendorTable),
@@ -252,11 +259,21 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             var exists = await existsTask.ConfigureAwait(false);
             if (exists.Any())
             {
-                await table.UpdateAsync(busItem).ConfigureAwait(false);
+                try {
+                    await table.UpdateAsync (busItem).ConfigureAwait (false);
+                } catch (Exception e) {
+                    _logger.HandleException (e);
+                    throw;
+                }
             }
             else
             {
-                await table.InsertAsync(busItem).ConfigureAwait(false);
+                try {
+                    await table.InsertAsync (busItem).ConfigureAwait (false);
+                } catch (Exception e) {
+                    _logger.HandleException (e);
+                    throw;
+                }
             }
 
             return true;
@@ -467,7 +484,13 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                     .ToEnumerableAsync();
                 if (restDb.Any())
                 {
-                    return restDb.First().ToBusinessEntity();
+                    var sections = await RestaurantInventorySectionsTable
+                        .Where (rs => rs.RestaurantId == restaurantID.ToString ())
+                        .ToListAsync ();
+                    var rest = restDb.First();
+                    rest.InventorySections = sections;
+
+                    return rest.ToBusinessEntity ();
                 }
                 return null;
             } 
@@ -484,7 +507,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public Task<bool> SendEventsAsync(Core.Common.Entities.Restaurant updatedEntity, IEnumerable<IRestaurantEvent> events)
         {
-            return UpdateEntity(updatedEntity, RestaurantTable, ent => new Restaurant(ent, null));
+            var sections = updatedEntity.InventorySections.Select (s => new RestaurantInventorySection (s));
+            return UpdateEntity(updatedEntity, RestaurantTable, ent => new Restaurant(ent, null, sections));
         }
 
         #endregion

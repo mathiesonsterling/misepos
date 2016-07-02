@@ -217,6 +217,20 @@
     <Reference Include="PCLCrypto">
       <HintPath>..\..\packages\PCLCrypto.2.0.147\lib\xamarinios10\PCLCrypto.dll</HintPath>
     </Reference>
+    <Reference Include="Validation">
+      <HintPath>..\..\..\Stockboy\packages\Validation.2.2.8\lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Icon.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy114.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy180.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy144.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy72.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy152.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy76.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.0.49\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.0.49\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />

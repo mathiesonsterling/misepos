@@ -19,7 +19,7 @@ namespace Mise.Inventory.iOS
 		protected override void RegisterDepenencies(ContainerBuilder cb)
 		{
 
-			Logger = new IOSLogger (null);
+			Logger = new IOSLogger ();
             //cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
 
             /*
