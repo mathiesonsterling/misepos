@@ -16,9 +16,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="Default-Portrait.png" translatesAutoresizingMaskIntoConstraints="NO" id="23">
-                                <rect key="frame" x="0.0" y="69" width="600" height="531"/>
+                            <imageView userInteractionEnabled="NO" contentMode="center" misplaced="YES" image="Default-Portrait.png" translatesAutoresizingMaskIntoConstraints="NO" id="23">
+                                <rect key="frame" x="0.0" y="124" width="368" height="290"/>
                                 <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="-188" y="-73" width="768" height="1004"/>
+                                </variation>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.20392156862745098" green="0.59607843137254901" blue="0.85882352941176465" alpha="1" colorSpace="calibratedRGB"/>
@@ -35,8 +38,11 @@
     </scenes>
     <resources>
         <image name="Default-568h.png" width="320" height="568"/>
-        <image name="Default-Portrait.png" width="768" height="1004"/>
+        <image name="Default-Portrait.png" width="614" height="803"/>
         <image name="Default.png" width="320" height="480"/>
     </resources>
     <color key="tintColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedScreenMetrics key="destination" type="retina55"/>
+    </simulatedMetricsContainer>
 </document>

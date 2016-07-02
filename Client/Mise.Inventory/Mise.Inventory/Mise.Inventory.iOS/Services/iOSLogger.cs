@@ -6,12 +6,6 @@ namespace Mise.Inventory.iOS.Services
 {
 	public class IOSLogger : ILogger
 	{
-		private IErrorTrackingService _errorTrack;
-		public IOSLogger (IErrorTrackingService errorTracking)
-		{
-			_errorTrack = errorTracking;
-		}
-
 		#region ILogger implementation
 		private const string TAG = "misePOS";
 		public void Log (string message, LogLevel level = LogLevel.Error)
@@ -49,15 +43,16 @@ namespace Mise.Inventory.iOS.Services
 			if (ex != null) {
 				if (level == LogLevel.Error || level == LogLevel.Fatal) {
                     try{
-					Insights.Report (ex);
+					    Insights.Report (ex);
                     } catch(Exception e){
                     }
 				}
+                /*
 				try{
 					_errorTrack.ReportException (ex, level);
 				} catch(Exception){
 					Log (ex.Message, LogLevel.Fatal);
-				}
+				}*/
 				Log (ex.Message + "::" + ex.StackTrace, level);
 			} else {
 				Log ("Null exception received", level);

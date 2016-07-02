@@ -4,17 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
 using Mise.Core.Common.Entities.People;
-using Mise.Core.Entities;
-using Mise.Core.Entities.Check;
-using Mise.Core.Entities.Menu;
-using Mise.Core.Entities.People;
-using Mise.Core.Entities.Restaurant;
-using Mise.Core.Entities.Check.Events;
-using Mise.Core.Common.Services;
 using Mise.Core.Common.Services.WebServices;
-using Mise.Core.Entities.Base;
-using Moq;
+using Mise.Core.Entities;
+using Mise.Core.Entities.Check.Events;
+using Mise.Core.Entities.Menu;
 using Mise.Core.ValueItems;
+using Moq;
 
 
 namespace Mise.Core.Common.UnitTests.Tools

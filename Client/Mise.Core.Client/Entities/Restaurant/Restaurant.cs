@@ -13,10 +13,10 @@ namespace Mise.Core.Client.Entities.Restaurant
     {
         public Restaurant()
         {
-            InventorySections = new List<Mise.Core.Client.Entities.Inventory.RestaurantInventorySection>();
+            InventorySections = new List<Inventory.RestaurantInventorySection>();
         }
 
-        public Restaurant(IRestaurant source, RestaurantAccount acct) : base(source)
+        public Restaurant(IRestaurant source, RestaurantAccount acct, IEnumerable<Inventory.RestaurantInventorySection> sections) : base(source)
         {
             RestaurantID = source.RestaurantID != Guid.Empty ? source.RestaurantID : source.Id;
             RestaurantAccount = acct;
@@ -30,9 +30,7 @@ namespace Mise.Core.Client.Entities.Restaurant
             var emails = source.GetEmailsToSendInventoryReportsTo().Select(e => e.Value);
             EmailsToSendReportsTo = string.Join(",", emails);
 
-            var sections = source.GetInventorySections().Select(
-                invS => new Mise.Core.Client.Entities.Inventory.RestaurantInventorySection(invS)).ToList();
-            InventorySections = sections;
+            InventorySections = sections.ToList();
 
             if (source.StreetAddress != null)
             {
@@ -80,7 +78,7 @@ namespace Mise.Core.Client.Entities.Restaurant
 
         public string EmailsToSendReportsTo { get; set; }
 
-        public List<Mise.Core.Client.Entities.Inventory.RestaurantInventorySection> InventorySections { get; set; }
+        public List<Inventory.RestaurantInventorySection> InventorySections { get; set; }
 
         public List<RestaurantApplicationUse> RestaurantApplicationUses { get; set; }
          
