@@ -183,6 +183,7 @@
     <Compile Include="Controllers\InventoryCategoryController.cs" />
     <Compile Include="Controllers\InventorySectionController.cs" />
     <Compile Include="Controllers\LiquidContainerController.cs" />
+    <Compile Include="Controllers\ParBeverageLineItemController.cs" />
     <Compile Include="Controllers\ParController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\ReceivingOrderController.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Controllers\RestaurantController.cs" />
     <Compile Include="Controllers\RestaurantInventorySectionController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
+    <Compile Include="Controllers\VendorRestaurantRelationshipsController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
