@@ -1,4 +1,5 @@
-﻿using Mise.Core.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Mise.Core.Entities;
 using Mise.Core.Entities.People;
 using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Entities.People;
@@ -21,6 +22,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             DestinationEmployee = destEmployee;
             InvitingEmployee = invitingEmployee;
             Restaurant = rest;
+            RestaurantId = rest.Id;
         }
 
         public MiseApplication Application
@@ -46,6 +48,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
             set;
         }
 
+        [ForeignKey("Restaurant")]
+        public string RestaurantId { get; set; }
         public Restaurant.Restaurant Restaurant
         {
             get;
@@ -62,7 +66,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Accounts
                 DestinationEmployeeID = DestinationEmployee?.EntityId,
                 InvitingEmployeeID = InvitingEmployee.EntityId,
                 InvitingEmployeeName = InvitingEmployee?.GetName(),
-                RestaurantName = Restaurant.Name,
+                RestaurantName = new BusinessName(Restaurant.FullName, Restaurant.ShortName),
                 RestaurantID = Restaurant.RestaurantID
             };
         }

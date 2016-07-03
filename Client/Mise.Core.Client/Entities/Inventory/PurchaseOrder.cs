@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mise.Core.Entities.Inventory;
 using Mise.Core.Client.Entities.Categories;
 using Mise.Core.Client.Entities.People;
+using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Client.Entities.Inventory
 {
-    public class PurchaseOrder : BaseDbEntity<IPurchaseOrder, Core.Common.Entities.Inventory.PurchaseOrder>
+    public class PurchaseOrder : BaseDbRestaurantEntity<IPurchaseOrder, Core.Common.Entities.Inventory.PurchaseOrder>
     {
         public PurchaseOrder() { }
 
@@ -18,7 +15,10 @@ namespace Mise.Core.Client.Entities.Inventory
             : base(source)
         {
             Restaurant = restaurant;
+            RestaurantId = restaurant.Id;
+
             CreatedBy = createdByEmp;
+            CreatedById = createdByEmp?.Id;
 
             PurchaseOrdersPerVendor =
                 source.GetPurchaseOrderPerVendors().Select(pov => CreatePurchaseOrderForVendor(pov, cats, vendors)).ToList();
@@ -40,6 +40,7 @@ namespace Mise.Core.Client.Entities.Inventory
         public List<PurchaseOrderPerVendor> PurchaseOrdersPerVendor { get; set; }
 
         public Employee CreatedBy{ get; set; }
+        public string CreatedById { get; set; }
 
         protected override Core.Common.Entities.Inventory.PurchaseOrder CreateConcreteSubclass()
         {

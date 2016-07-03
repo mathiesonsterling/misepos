@@ -1,11 +1,11 @@
-﻿using Mise.Core.Entities;
+﻿using Mise.Core.Client.Entities.People;
+using Mise.Core.Entities;
 using Mise.Core.Entities.People;
 using Mise.Core.ValueItems;
-using Mise.Core.Client.Entities.People;
 
 namespace Mise.Core.Client.Entities.Accounts
 {
-    public class ApplicationInvitation : BaseDbEntity<IApplicationInvitation, Core.Common.Entities.ApplicationInvitation>
+    public class ApplicationInvitation : BaseDbRestaurantEntity<IApplicationInvitation, Core.Common.Entities.ApplicationInvitation>
     {
         public ApplicationInvitation()
         {
@@ -21,6 +21,7 @@ namespace Mise.Core.Client.Entities.Accounts
             DestinationEmployee = destEmployee;
             InvitingEmployee = invitingEmployee;
             Restaurant = rest;
+            RestaurantId = rest.Id;
         }
 
         public MiseApplication Application
@@ -52,6 +53,7 @@ namespace Mise.Core.Client.Entities.Accounts
             set;
         }
 
+
         protected override Core.Common.Entities.ApplicationInvitation CreateConcreteSubclass()
         {
             return new Core.Common.Entities.ApplicationInvitation
@@ -62,7 +64,7 @@ namespace Mise.Core.Client.Entities.Accounts
                 DestinationEmployeeID = DestinationEmployee?.EntityId,
                 InvitingEmployeeID = InvitingEmployee.EntityId,
                 InvitingEmployeeName = InvitingEmployee?.GetName(),
-                RestaurantName = Restaurant.Name,
+                RestaurantName = new BusinessName(Restaurant.FullName, Restaurant.ShortName),
                 RestaurantID = Restaurant.RestaurantID
             };
         }

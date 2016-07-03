@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +19,20 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             : base(source)
         {
             Inventory = inv;
+            InventoryId = inv.Id;
             Name = source.Name;
             LastCompletedBy = lastCompletedBy;
+            LastCompletedById = lastCompletedBy?.Id;
+
             RestaurantInventorySection = rSec;
+            RestaurantInventorySectionId = rSec?.Id;
+
             CurrentlyInUseBy = inUseBy;
+            CurrentlyInUseById = inUseBy?.Id;
+
             TimeCountStarted = source.TimeCountStarted;
 
-            LineItems = source.GetInventoryBeverageLineItemsInSection().Select(li => new InventoryBeverageLineItem(li, vendors, categories)).ToList();
+            LineItems = source.GetInventoryBeverageLineItemsInSection().Select(li => new InventoryBeverageLineItem(li, this, vendors, categories)).ToList();
         }
         protected override Core.Common.Entities.Inventory.InventorySection CreateConcreteSubclass()
         {
@@ -46,19 +54,28 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             set;
         }
 
+	    [ForeignKey("Inventory")]
+        public string InventoryId { get; set; }
+
         public string Name { get; set; }
 
         public Employee LastCompletedBy { get; set; }
+        [ForeignKey("LastCompletedBy")]
+        public string LastCompletedById { get; set; }
 
         public Employee CurrentlyInUseBy
         {
             get;
             set;
         }
+        [ForeignKey("CurrentlyInUseBy")]
+        public string CurrentlyInUseById { get; set; }
 
         public DateTimeOffset? TimeCountStarted { get; set; }
 
         public RestaurantInventorySection RestaurantInventorySection { get; set; }
+        [ForeignKey("RestaurantInventorySection")]
+        public string RestaurantInventorySectionId { get; set; }
 
         public List<InventoryBeverageLineItem> LineItems { get; set; }
     }

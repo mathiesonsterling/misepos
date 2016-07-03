@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
@@ -7,9 +8,11 @@ using Microsoft.Azure.Mobile.Server.Authentication;
 using Microsoft.Azure.Mobile.Server.Config;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
+using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Context;
 using Mise.Database.AzureDefinitions.Entities;
 using Mise.Database.AzureDefinitions.Entities.Categories;
+using Mise.Database.AzureDefinitions.Entities.Inventory;
 using Owin;
 
 namespace StockboyMobileAppServiceService
@@ -26,6 +29,8 @@ namespace StockboyMobileAppServiceService
             new MobileAppConfiguration()
                 .UseDefaultConfiguration()
                 .ApplyTo(config);
+
+            config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
             // Use Entity Framework Code First to create database tables based on your DbContext
             Database.SetInitializer(new StockboyMobileAppServiceInitializer());
@@ -57,6 +62,17 @@ namespace StockboyMobileAppServiceService
         {
             base.Seed(context);
             AddMiseApplications(context);
+            AddShapes(context);
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+                throw;
+            }
+
             AddInventoryCategories(context);
             try
             {
@@ -69,27 +85,52 @@ namespace StockboyMobileAppServiceService
             }
         }
 
+        private static void AddShapes(StockboyMobileAppServiceContext context)
+        {
+            var shapes = Mise.Core.ValueItems.Inventory.LiquidContainer.GetStandardBarSizes();
+
+            foreach (var entShape in shapes.Select(shape => new LiquidContainer(shape)))
+            {
+                context.LiquidContainers.Add(entShape);
+            }
+        }
+
+
         private static void AddInventoryCategories(StockboyMobileAppServiceContext context)
         {
             var catService = new CategoriesService();
             var allCats = catService.GetAllCategories();
 
-            var newAndOld = allCats.Select(c => new {Old = c, New = new InventoryCategory(c)}).ToList();
+            var newAndOld = new List<Tuple<IInventoryCategory, InventoryCategory>>();
+            foreach (var cat in allCats)
+            {
+                var prefContainer = cat.GetPreferredContainers().FirstOrDefault();
+                LiquidContainer container = null;
+                if (prefContainer != null)
+                {
+                    container =
+                        context.LiquidContainers.FirstOrDefault(c => c.DisplayName != null && c.DisplayName == prefContainer.DisplayName);
+                }
+
+                var tup = new Tuple<IInventoryCategory, InventoryCategory>(cat, new InventoryCategory(cat, container));
+                newAndOld.Add(tup);
+            }
+
             //first create all, then assign their parents!
             foreach (var pair in newAndOld)
             {
-                var oldParent = pair.Old.ParentCategoryID;
+                var oldParent = pair.Item1.ParentCategoryID;
                 if (oldParent.HasValue)
                 {
-                    var parentPair = newAndOld.FirstOrDefault(p => p.New.EntityId == oldParent.Value);
+                    var parentPair = newAndOld.FirstOrDefault(p => p.Item2.EntityId == oldParent.Value);
                     if (parentPair != null)
                     {
-                        pair.New.ParentCategory = parentPair.New;
+                        pair.Item2.ParentCategory = parentPair.Item2;
                     }
                 }
             }
 
-            var newOnes = newAndOld.Select(p => p.New);
+            var newOnes = newAndOld.Select(p => p.Item2);
 
             foreach (var c in newOnes)
             {

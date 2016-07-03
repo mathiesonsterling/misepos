@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Mise.Core.Entities;
 using Mise.Core.Entities.People;
 using Mise.Core.Entities.Restaurant;
@@ -22,5 +23,7 @@ namespace Mise.Core.Repositories
         /// <param name="accountID"></param>
         /// <returns></returns>
         IEnumerable<IRestaurant> GetRestaurantsForAccount(Guid accountID);
+
+        Task<IEnumerable<IRestaurant>> GetRestaurantsEmployeeWorksAt(IEmployee emp);
     }
 }

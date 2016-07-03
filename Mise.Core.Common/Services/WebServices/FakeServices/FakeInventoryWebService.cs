@@ -267,7 +267,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Id = Guid.Empty,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
-					Name = new BusinessName("Bob's Liquor Barn"),
+					Name = new BusinessName("Bob's Liquor Barn").FullName,
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>(),
 					StreetAddress = new StreetAddress
 					{
@@ -284,7 +284,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				{
 					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = new BusinessName("Siegal's"),
+					Name = new BusinessName("Siegal's").FullName,
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
@@ -382,7 +382,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				new Vendor{
 					Id = Guid.NewGuid (),
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = new BusinessName("FreshPoint"),
+					Name = new BusinessName("FreshPoint").FullName,
 					VendorBeverageLineItems = new List<VendorBeverageLineItem>{
 						new VendorBeverageLineItem {
 							Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 1},
@@ -403,7 +403,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 				new Vendor{
 					Id = favoriteID,
 					Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Name = new BusinessName("Favorite Brands"),
+					Name = new BusinessName("Favorite Brands").FullName,
 					//13755 Diplomat Dr #100
 					//Farmers Branch, TX 75234
 					StreetAddress = new StreetAddress("13755", "", "Diplomat Dr", "Farmers Branch",
@@ -806,7 +806,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 
 		public Task<IEnumerable<Vendor>> GetVendorsBySearchString (string searchString)
 		{
-			return Task.FromResult (_vendors.Where (v => v.Name.ContainsSearchString(searchString)));
+			return Task.FromResult (_vendors.AsEnumerable()/*.Where (v => v.Name.ContainsSearchString(searchString))*/);
 		}
 
 		public Task<IEnumerable<Vendor>> GetVendorsAssociatedWithRestaurant (Guid restaurantID)

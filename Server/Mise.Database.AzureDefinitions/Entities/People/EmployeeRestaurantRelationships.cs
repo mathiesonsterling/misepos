@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,14 @@ namespace Mise.Database.AzureDefinitions.Entities.People
         }
 
         public Employee Employee { get; set; }
+
+	    [ForeignKey("Employee")]
+	    public string EmployeeId { get; set; }
+
         public Restaurant.Restaurant Restaurant { get; set; }
+	    [ForeignKey("Restaurant")]
+	    public string RestaurantId { get; set; }
+
         public bool IsCurrentEmployee { get; set; }
     }
 }

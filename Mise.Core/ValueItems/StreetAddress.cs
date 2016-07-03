@@ -25,7 +25,16 @@ namespace Mise.Core.ValueItems
 			Country = new Country{ Name = country };
 			Zip = new ZipCode{ Value = zip };
 		}
-	    public bool Equals(StreetAddress other)
+
+	    public StreetAddress(string number, string direction, string street, string city, string state,
+	        string country, string zip, double lat, double longitude)
+	        : this(number, direction, street, city, state, country, zip)
+	    {
+	        StreetAddressNumber.Latitude = lat;
+	        StreetAddressNumber.Longitude = longitude;
+	    }
+
+        public bool Equals(StreetAddress other)
 	    {
 	        return
 	            StreetAddressNumber.Equals(other.StreetAddressNumber)

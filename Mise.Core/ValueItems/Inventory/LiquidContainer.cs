@@ -1,10 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.ValueItems.Inventory
 {
     public class LiquidContainer : IEquatable<LiquidContainer>, ITextSearchable
     {
+        public LiquidContainer() { }
+
+        public LiquidContainer(ILiquidContainerEntity source)
+        {
+            BusinessId = source.BusinessId;
+            DisplayName = source.DisplayName;
+            AmountContained = source.AmountContained;
+            WeightEmpty = source.WeightEmpty;
+            WeightFull = source.WeightFull;
+            Shape = source.Shape;
+        }
+
         #region Standard sizes
 
         public static LiquidContainer Bottle750ML => new LiquidContainer { 

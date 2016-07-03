@@ -45,7 +45,7 @@ namespace Mise.Core.Common.UnitTests.Entities.Serialization
                 Id = id,
                 CreatedDate = created,
                 LastUpdatedDate = date,
-                Name = new BusinessName("testVendor"),
+                Name = new BusinessName("testVendor").FullName,
                 PhoneNumber = new PhoneNumber
                 {
                     AreaCode = "718",

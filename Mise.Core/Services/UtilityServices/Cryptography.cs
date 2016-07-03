@@ -7,17 +7,21 @@ namespace Mise.Core.Services.UtilityServices
 	{
 		public static string CalculateSha1Hash(string input)
 		{
-			// step 1, calculate MD5 hash from input
-			var hasher = WinRTCrypto.HashAlgorithmProvider.OpenAlgorithm(HashAlgorithm.Sha1);
-			var inputBytes = Encoding.UTF8.GetBytes(input);
-			var hash = hasher.HashData(inputBytes);
+            // step 1, calculate MD5 hash from input
+            try {
+                var hasher = WinRTCrypto.HashAlgorithmProvider.OpenAlgorithm (HashAlgorithm.Sha1);
+                var inputBytes = Encoding.UTF8.GetBytes (input);
+                var hash = hasher.HashData (inputBytes);
 
-			var sb = new StringBuilder();
-			foreach (var t in hash)
-			{
-			    sb.Append(t.ToString("X2"));
-			}
-		    return sb.ToString();
+                var sb = new StringBuilder ();
+                foreach (var t in hash) {
+                    sb.Append (t.ToString ("X2"));
+                }
+                return sb.ToString ();
+            } catch (Exception e) {
+                var msg = e.Message;
+                throw;
+            }
 		}
 
         /// <summary>

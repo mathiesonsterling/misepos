@@ -1,0 +1,6 @@
+﻿<Properties StartupItem="Mise.Inventory/Mise.Inventory.iOS/Mise.Inventory.iOS.csproj">
+  <MonoDevelop.Ide.ItemProperties.Mise.Inventory.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.202BEB12-5F52-4C6A-A30D-157674C815D8" />
+  <DisabledProjects>
+    <String>Mise.Inventory/Mise.Inventory.Droid/Mise.Inventory.Droid.csproj</String>
+  </DisabledProjects>
+</Properties>

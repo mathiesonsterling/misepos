@@ -10,12 +10,14 @@ namespace Mise.Database.AzureDefinitions.Entities.People
     {
 	    public Employee(){}
 
-	    public Employee(IEmployee source, IEnumerable<Restaurant.Restaurant> restaurantsWorkingAt) :base(source)
+	    public Employee(IEmployee source, ICollection<Restaurant.Restaurant> restaurantsWorkingAt) :base(source)
 	    {
 		    LastDeviceIDLoggedInWith = source.LastDeviceIDLoggedInWith;
 		    LastTimeLoggedIntoInventoryApp = source.LastTimeLoggedIntoInventoryApp;
 		    CurrentlyLoggedIntoInventoryApp = source.CurrentlyLoggedIntoInventoryApp;
 	        RestaurantsEmployedAt = restaurantsWorkingAt.Select(r => new EmployeeRestaurantRelationships(this, r)).ToList();
+	        var restIds = restaurantsWorkingAt.Select(r => r.RestaurantID);
+            RestaurantsEmployedAtIds = IDListToString(restIds);
 	    }
 
         public DateTimeOffset? LastTimeLoggedIntoInventoryApp { get; set; }
@@ -25,6 +27,8 @@ namespace Mise.Database.AzureDefinitions.Entities.People
         public bool CurrentlyLoggedIntoInventoryApp { get; set; }
 
         public List<EmployeeRestaurantRelationships> RestaurantsEmployedAt { get; set; } 
+
+        public string RestaurantsEmployedAtIds { get; set; }
 
         protected override Core.Common.Entities.People.Employee CreateConcretePerson()
         {
@@ -39,6 +43,15 @@ namespace Mise.Database.AzureDefinitions.Entities.People
 
         private IDictionary<Guid, IList<MiseAppTypes>> GenerateAppAndRestaurantDictionary()
         {
+            if (RestaurantsEmployedAtIds == null)
+            {
+                return new Dictionary<Guid, IList<MiseAppTypes>>();
+            }
+
+            var ids = StringToIDList(RestaurantsEmployedAtIds);
+
+            return ids.ToDictionary<Guid, Guid, IList<MiseAppTypes>>(restId => restId, restId => new List<MiseAppTypes> {MiseAppTypes.StockboyMobile});
+            /*
             if (RestaurantsEmployedAt == null)
             {
                 return new Dictionary<Guid, IList<MiseAppTypes>>();
@@ -53,7 +66,7 @@ namespace Mise.Database.AzureDefinitions.Entities.People
                     dic.Add(rest.RestaurantID, apps);
                 }
             }
-            return dic;
+            return dic;*/
         }
     }
 }

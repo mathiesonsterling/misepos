@@ -10,7 +10,7 @@ namespace Mise.Inventory.iOS
     {
         public ClientStripeFacade(){
             var settings = StripePaymentProviderSettingsFactory.GetSettings();
-            Stripe.StripeClient.DefaultPublishableKey = settings.PublishableKey;
+            //Stripe.StripeClient.DefaultPublishableKey = settings.PublishableKey;
         }
 
         #region IClientStripeFacade implementation

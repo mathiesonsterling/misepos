@@ -11,8 +11,8 @@ namespace Mise.Core.Common.Entities.Inventory
 	public class PurchaseOrderPerVendor : RestaurantEntityBase, IPurchaseOrderPerVendor
 	{
 		public Guid? VendorID{ get; set;}
-        public BusinessName VendorName{get;set;}
-
+        //public BusinessName VendorName{get;set;}
+        public string VendorName { get; set; }
 		public List<PurchaseOrderLineItem> LineItems{ get; set;}
 
 		public bool IsExpectingShipments()

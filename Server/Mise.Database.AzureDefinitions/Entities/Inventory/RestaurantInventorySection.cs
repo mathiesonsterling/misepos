@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Mise.Core.Entities.Inventory;
 
 namespace Mise.Database.AzureDefinitions.Entities.Inventory
@@ -22,11 +18,9 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
 		    IsDefaultInventorySection = source.IsDefaultInventorySection;
 	    }
 
-        public Restaurant.Restaurant Restaurant
-        {
-            get;
-            set;
-        }
+        public Restaurant.Restaurant Restaurant { get; set; }
+	    [ForeignKey("Restaurant")]
+        public string RestaurantId { get; set; }
 
         public string Name { get; set; }
         public bool AllowsPartialBottles { get; set; }

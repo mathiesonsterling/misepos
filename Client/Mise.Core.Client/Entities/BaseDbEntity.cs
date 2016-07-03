@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Mise.Core.Entities;
 using Mise.Core.Entities.Base;
 using Mise.Core.Client.ValueItems;
@@ -38,7 +40,6 @@ namespace Mise.Core.Client.Entities
             entity.CreatedDate = CreatedAt ?? DateTimeOffset.MinValue;
             entity.LastUpdatedDate = UpdatedAt??DateTimeOffset.MinValue;
             entity.Revision = Revision;
-
             return entity;
         } 
 
@@ -46,5 +47,19 @@ namespace Mise.Core.Client.Entities
 
         public EventIDDb Revision { get; set; }
 
+        protected static string IDListToString(IEnumerable<Guid> ids)
+        {
+            return string.Join(",", ids.Select(i => i.ToString()));
+        }
+
+        protected static IList<Guid> StringToIDList(string source)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return new List<Guid>();
+            }
+            var ids = source.Split(',');
+            return ids.Select(i => i.Trim()).Select(Guid.Parse).ToList();
+        }
     }
 }

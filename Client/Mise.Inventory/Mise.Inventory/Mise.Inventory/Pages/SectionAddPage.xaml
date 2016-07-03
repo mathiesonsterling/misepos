@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
+	x:Class="Mise.Inventory.Pages.SectionAddPage"
+	Title="Add Section">
+
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<ScrollView>
+				<StackLayout VerticalOptions="FillAndExpand">
+					<Label Text="Add Section" Style="{DynamicResource TitleStyle}"/>
+					<Entry Placeholder="Name" Text="{Binding SectionName}"/>
+	    			<!---<StackLayout VerticalOptions="StartAndExpand" Orientation="Vertical">
+	    				<Label Text="Section has partial bottles" />
+	    				<Switch />
+					</StackLayout>-->
+				</StackLayout>
+			</ScrollView>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button Text="Add" 
+				Command="{Binding AddCommand}" 
+				HorizontalOptions="FillAndExpand" 
+				IsEnabled="{Binding CanAdd}"/>
+		</StackLayout>
+	</ContentPage.Content>
+</local:BasePage>

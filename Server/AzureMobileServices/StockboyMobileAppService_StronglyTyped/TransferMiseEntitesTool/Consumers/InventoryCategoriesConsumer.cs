@@ -8,6 +8,7 @@ using Mise.Core.Entities.Inventory;
 using Mise.Core.Services.UtilityServices;
 using Mise.Database.AzureDefinitions.Context;
 using Mise.Database.AzureDefinitions.Entities.Categories;
+using Mise.Database.AzureDefinitions.Entities.Inventory;
 using dbCat = Mise.Database.AzureDefinitions.Entities.Categories.InventoryCategory;
 namespace TransferMiseEntitesTool.Consumers
 {
@@ -19,13 +20,20 @@ namespace TransferMiseEntitesTool.Consumers
 
         public override string EntityName => "InventoryCategories";
 
-        protected override Task<dbCat> SaveEntity(StockboyMobileAppServiceContext db, 
+        protected override async Task<dbCat> SaveEntity(StockboyMobileAppServiceContext db, 
             Mise.Core.Common.Entities.Inventory.InventoryCategory entity)
         {
-            var dbEnt = new dbCat(entity);
+            var prefContainer = entity.GetPreferredContainers().FirstOrDefault();
+            LiquidContainer container = null;
+            if (prefContainer != null)
+            {
+                container =
+                    await db.LiquidContainers.FirstOrDefaultAsync(c => c.DisplayName != null && c.DisplayName == prefContainer.DisplayName);
+            }
+            var dbEnt = new dbCat(entity, container);
             db.InventoryCategories.Add(dbEnt);
 
-            return Task.FromResult(dbEnt);
+            return dbEnt;
         }
 
         protected override Task<InventoryCategory> GetSavedEntity(StockboyMobileAppServiceContext db, Guid id)

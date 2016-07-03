@@ -32,12 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -60,16 +56,20 @@
       <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.Azure.Mobile.Server.Tables.1.1.157.1\lib\net45\Microsoft.Azure.Mobile.Server.Tables.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Data.Edm, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.Data.Edm.5.6.4\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.Data.OData.5.6.4\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    <Reference Include="Microsoft.Data.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.Data.OData.5.7.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.SqlServer.Types.11.0.2\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -79,16 +79,16 @@
       <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
+    <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Http.OData, Version=5.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.AspNet.WebApi.OData.5.5.1\lib\net45\System.Web.Http.OData.dll</HintPath>
+    <Reference Include="System.Web.Http.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.AspNet.WebApi.OData.5.7.0\lib\net45\System.Web.Http.OData.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -112,6 +112,7 @@
     <Compile Include="Entities\Categories\InventoryCategory.cs" />
     <Compile Include="Entities\Inventory\Inventory.cs" />
     <Compile Include="Entities\Inventory\LineItems\PurchaseOrderBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\LiquidContainer.cs" />
     <Compile Include="Entities\Inventory\Par.cs" />
     <Compile Include="Entities\Inventory\LineItems\ParBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\LineItems\ReceivingOrderBeverageLineItem.cs" />
@@ -134,17 +135,11 @@
     <Compile Include="Entities\Vendor\VendorPrivateRestaurantPrice.cs" />
     <Compile Include="Entities\Vendor\VendorRestaurantRelationships.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValueItems\BusinessName.cs" />
+    <Compile Include="Services\Implementation\AzureLogger.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="ValueItems\CreditCard.cs" />
     <Compile Include="ValueItems\EventIDDb.cs" />
     <Compile Include="ValueItems\IDbValueItem.cs" />
-    <Compile Include="ValueItems\Inventory\LiquidAmount.cs" />
-    <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />
-    <Compile Include="ValueItems\Inventory\LiquidContainerShape.cs" />
-    <Compile Include="ValueItems\MoneyDb.cs" />
-    <Compile Include="ValueItems\ReferralCodeDb.cs" />
-    <Compile Include="ValueItems\Weight.cs" />
-    <Compile Include="ValueItems\StreetAddress.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Mise.Core.Common\Mise.Core.Common.csproj">
@@ -160,9 +155,29 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ValueItems\Inventory\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\readme.htm" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\AzureMobileServices\StockboyMobileAppService_StronglyTyped\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

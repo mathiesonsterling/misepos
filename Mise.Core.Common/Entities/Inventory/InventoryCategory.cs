@@ -33,7 +33,7 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public List<LiquidContainer> PreferredContainers{ get; set; }
         public IEnumerable<LiquidContainer> GetPreferredContainers(){
-            return PreferredContainers;
+            return PreferredContainers??new List<LiquidContainer>();
         }
 	}
 }

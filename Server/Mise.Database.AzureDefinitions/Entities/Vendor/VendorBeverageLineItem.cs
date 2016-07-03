@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Mise.Core.Entities.Vendors;
 using Mise.Core.ValueItems;
 using Mise.Database.AzureDefinitions.Entities.Categories;
 using Mise.Database.AzureDefinitions.Entities.Inventory.LineItems;
-using Mise.Database.AzureDefinitions.ValueItems;
 
 namespace Mise.Database.AzureDefinitions.Entities.Vendor
 {
@@ -13,7 +13,6 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
     {
         public VendorBeverageLineItem()
         {
-            PublicPricePerUnit = new MoneyDb();
         }
 
 	    public VendorBeverageLineItem(IVendorBeverageLineItem source, Vendor vendor,
@@ -22,10 +21,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 	    {
 		    Vendor = vendor;
 		    NameOfItemInVendor = source.NameInVendor;
-		    PublicPricePerUnit = source.PublicPricePerUnit != null 
-                ? new MoneyDb(source.PublicPricePerUnit) 
-                : new MoneyDb();
-           
+	        PublicPricePerUnit = source.PublicPricePerUnit?.Dollars;
+
 	    }
 
         public Vendor Vendor
@@ -34,6 +31,8 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
             set;
         }
 
+	    [ForeignKey("Vendor")]
+	    public string VendorId { get; set; }
         public string NameOfItemInVendor
         {
             get;
@@ -42,7 +41,7 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
 
 
         //the price published per unit
-        public MoneyDb PublicPricePerUnit
+        public decimal? PublicPricePerUnit
         {
             get;
             set;
@@ -53,12 +52,14 @@ namespace Mise.Database.AzureDefinitions.Entities.Vendor
         protected override Core.Common.Entities.Vendors.VendorBeverageLineItem CreateConcreteLineItemClass()
         {
            var priceDic = VendorPrivateRestaurantPrices?.ToDictionary(kv => kv.Restaurant.RestaurantID,
-              kv => kv.PriceCharged.ToValueItem()) ?? new Dictionary<Guid, Money>();
+              kv => new Money(kv.PriceCharged)) ?? new Dictionary<Guid, Money>();
             return new Core.Common.Entities.Vendors.VendorBeverageLineItem
             {
                 VendorID = Vendor.EntityId,
                 NameInVendor = NameOfItemInVendor,
-                PublicPricePerUnit = PublicPricePerUnit.ToValueItem(),
+                PublicPricePerUnit = PublicPricePerUnit.HasValue
+                    ?new Money(PublicPricePerUnit.Value) 
+                    :null ,
                 LastTimePriceSet = VendorPrivateRestaurantPrices?.Where(p => p.UpdatedAt.HasValue).Max(p => p.UpdatedAt),
                     
                 PricePerUnitForRestaurant = priceDic

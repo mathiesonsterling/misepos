@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Mise.Core.Entities.Inventory;
 using Mise.Database.AzureDefinitions.Entities.Categories;
@@ -15,9 +17,12 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             IEnumerable<InventoryCategory> cats, IEnumerable<Vendor.Vendor> vendors) : base(source)
         {
             Restaurant = rest;
+            RestaurantId = rest.Id;
             Sections = source.GetSections().Select(s => CreateSection(s, emps, this, rSecs, cats, vendors)).ToList();
             DateCompleted = source.DateCompleted;
             CreatedByEmployee = emps.FirstOrDefault(e => e.EntityId == source.CreatedByEmployeeID);
+            CreatedByEmployeeId = CreatedByEmployee?.Id;
+
             IsCurrent = source.IsCurrent;
         }
 
@@ -36,12 +41,17 @@ namespace Mise.Database.AzureDefinitions.Entities.Inventory
             return new InventorySection(source, inv, lastCompletedBy, rSec, usingEmp, vendors, cats);
         }
 
+        [ForeignKey("Restaurant")]
+        public string RestaurantId { get; set; }
+        [Required]
         public Restaurant.Restaurant Restaurant { get; set; }
 
         public List<InventorySection> Sections { get; set; }
 
         public DateTimeOffset? DateCompleted { get; set; }
 
+        [ForeignKey("CreatedByEmployee")]
+        public string CreatedByEmployeeId { get; set; }
         public Employee CreatedByEmployee { get; set; }
 
 

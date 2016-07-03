@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mise.Core.Entities.Inventory;
-using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Client.Entities.Categories;
 using Mise.Core.Client.Entities.Inventory.LineItems;
+using Mise.Core.Entities.Inventory;
+using Mise.Core.ValueItems.Inventory;
 
 namespace Mise.Core.Client.Entities.Inventory
 {
@@ -19,6 +19,7 @@ namespace Mise.Core.Client.Entities.Inventory
             IEnumerable<InventoryCategory> cats) : base(pov)
         {
             Vendor = vendor;
+            VendorId = vendor.Id;
             Status = pov.Status;
             PurchaseOrderBeverageLineItems = pov.GetLineItems()
                 .Select(li => new PurchaseOrderBeverageLineItem(li, cats, this)).ToList();
@@ -28,8 +29,13 @@ namespace Mise.Core.Client.Entities.Inventory
         /// The vendor this applies to
         /// </summary>
         public Vendor.Vendor Vendor { get; set; }
+        public string VendorId { get; set; }
 
         public List<PurchaseOrderBeverageLineItem> PurchaseOrderBeverageLineItems { get; set; }
+
+	    public PurchaseOrder PurchaseOrder { get; set; }
+
+	    public string PurchaseOrderId { get; set; }
 
         public PurchaseOrderStatus Status { get; set; }
 
@@ -38,7 +44,7 @@ namespace Mise.Core.Client.Entities.Inventory
             return new Core.Common.Entities.Inventory.PurchaseOrderPerVendor
             {
                 VendorID = Vendor?.EntityId,
-                VendorName = Vendor?.Name,
+                VendorName = Vendor?.FullName,
                 Status = Status,
                 LineItems = PurchaseOrderBeverageLineItems.Select(li => li.ToBusinessEntity()).ToList()
             };
