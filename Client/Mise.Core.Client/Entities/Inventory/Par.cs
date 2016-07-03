@@ -7,22 +7,20 @@ using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Client.Entities.Inventory
 {
-    public class Par : BaseDbEntity<IPar, Core.Common.Entities.Inventory.Par>
+    public class Par : BaseDbRestaurantEntity<IPar, Core.Common.Entities.Inventory.Par>
     {
         public Par() { }
 
-        public Par(IPar source, Restaurant.Restaurant restaurant, Employee createdByEmployee, IEnumerable<InventoryCategory> categories) : base(source)
+        public Par(IPar source, Restaurant.Restaurant restaurant, Employee createdByEmployee) : base(source)
         {
             Restaurant = restaurant;
             RestaurantId = restaurant.Id;
             CreatedByEmployee = createdByEmployee;
             CreatedByEmployeeId = createdByEmployee?.Id;
             IsCurrent = source.IsCurrent;
-            ParLineItems = source.GetBeverageLineItems().Select(li => new ParBeverageLineItem(li, this, categories)).ToList();
         }
 
         public Restaurant.Restaurant Restaurant { get; set; }
-        public string RestaurantId { get; set; }
 
         protected override Core.Common.Entities.Inventory.Par CreateConcreteSubclass()
         {

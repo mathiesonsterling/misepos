@@ -12,7 +12,7 @@ namespace Mise.Core.Client.Entities.Inventory
     {
         public InventorySection() { }
 
-        public InventorySection(IInventorySection source, Core.Client.Entities.Inventory.Inventory inv, Employee lastCompletedBy, RestaurantInventorySection rSec, Employee inUseBy, 
+        public InventorySection(IInventorySection source, Inventory inv, Employee lastCompletedBy, RestaurantInventorySection rSec, Employee inUseBy, 
             IEnumerable<Vendor.Vendor> vendors, IEnumerable<InventoryCategory> categories) 
             : base(source)
         {

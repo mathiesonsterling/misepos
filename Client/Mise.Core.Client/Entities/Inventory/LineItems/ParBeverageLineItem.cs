@@ -18,7 +18,8 @@ namespace Mise.Core.Client.Entities.Inventory.LineItems
 
         protected override Core.Common.Entities.Inventory.ParBeverageLineItem CreateConcreteLineItemClass()
         {
-            return new Core.Common.Entities.Inventory.ParBeverageLineItem();
+            var item = new Core.Common.Entities.Inventory.ParBeverageLineItem();
+            return item;
         }
 
 	    public Par Par { get; set; }
