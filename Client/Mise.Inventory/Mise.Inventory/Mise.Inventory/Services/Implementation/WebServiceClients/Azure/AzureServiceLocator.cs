@@ -22,10 +22,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
             {
                 return new AzureServiceLocation("http://stockboymobileappservice.azurewebsites.net/", "");
             }
-
-			if(level == BuildLevel.Demo){
-				return null;
-			}
+            return new AzureServiceLocation ("https://stockboynosqlservice.azurewebsites.net", "");
 				
             /*
             const string applicationURL = @"https://stockboymobile.azure-mobile.net/";

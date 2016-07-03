@@ -176,7 +176,6 @@
     <Compile Include="Services\Implementation\WebServiceClients\Azure\AzureWeakTypeSharedClient.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Services\Implementation\WebServiceClients\HttpWebServiceClient.cs" />
-    <Compile Include="Services\Implementation\WebServiceClients\ServiceStackWebServiceClient.cs" />
     <Compile Include="Services\Implementation\XamarinFormsSimpleKeyValueStorage.cs" />
     <Compile Include="Services\Implementation\XamarinInsightsService.cs" />
     <Compile Include="Services\INavigationService.cs" />

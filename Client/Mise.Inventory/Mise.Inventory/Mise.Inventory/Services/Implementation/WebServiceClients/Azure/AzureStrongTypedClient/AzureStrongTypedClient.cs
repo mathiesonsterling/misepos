@@ -111,7 +111,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             store.DefineTable<DbRestaurantInventorySection>();
 
             store.DefineTable<Employee>();
+
             store.DefineTable<Vendor>();
+            store.DefineTable<VendorRestaurantRelationships>();
+
             store.DefineTable<ReceivingOrder>();
             store.DefineTable<PurchaseOrder>();
             store.DefineTable<ApplicationInvitation>();
@@ -182,7 +185,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                         SyncTable("RestaurantInventorySections", RestaurantInventorySectionsTable),
 
                         SyncTable("Employees",EmployeeTable),
+
                         SyncTable("Vendors", VendorTable),
+                        //SyncTable("VendorRestaurantRelationships", VendorRestaurantRelationshipsTable),
+
                         SyncTable("ReceivingOrders", ReceivingOrderTable),
                         SyncTable("PurchaseOrders", PurchaseOrderTable),
                         SyncTable("ApplicationInvitations", ApplicationInvitationTable),
@@ -370,29 +376,38 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public async Task<IEnumerable<Core.Common.Entities.Inventory.Inventory>> GetInventoriesForRestaurant(Guid restaurantID)
         {
-            var invs = await InventoryTable.Where(i => i != null && !i.Deleted && i.Restaurant != null
-                            && i.Restaurant.EntityId == restaurantID)
-                .Select(i => i.ToBusinessEntity())
+            var invs = await InventoryTable
+                .Where(i => i.RestaurantId == restaurantID.ToString ())
+                .OrderByDescending(i => i.UpdatedAt)
+                .Take(10)
                 .ToListAsync();
 
+            var res = new List<Core.Common.Entities.Inventory.Inventory> ();
             foreach (var inv in invs) {
-                var sections = await InventorySectionTable.Where (s => s.InventoryId == inv.Id.ToString ()).ToListAsync ();
-
-                var tasks = sections.Select (s => LoadLineItemsInSection (s));
-
-                Task.WaitAll (tasks.ToArray ());
-
-                inv.Sections = sections.Select (s => s.ToBusinessEntity ()).ToList ();
+                var retInv = await LoadInventory (inv);
+                res.Add (retInv);
             }
 
-            return invs;
+            return res;
+        }
+
+        public async Task<Core.Common.Entities.Inventory.Inventory> LoadInventory (DbInventory inv)
+        {
+            var sections = await InventorySectionTable.Where (s => s.InventoryId == inv.Id.ToString ()).ToListAsync ();
+
+            var tasks = sections.Select (s => LoadLineItemsInSection (s));
+
+            Task.WaitAll (tasks.ToArray ());
+
+            inv.Sections = sections.ToList ();
+
+            return inv.ToBusinessEntity ();
         }
 
         public async Task LoadLineItemsInSection (DbInventorySection section)
         {
             var lis = await InventoryBeverageLineItemsTable.Where (li => li.InventorySectionId == section.Id)
-                                                           .ToListAsync ()
-                                                           .ConfigureAwait (false);
+                                                           .ToListAsync ();
             section.LineItems = lis;
         }
 
@@ -575,13 +590,18 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public async Task<IEnumerable<Core.Common.Entities.Vendors.Vendor>> GetVendorsAssociatedWithRestaurant(Guid restaurantID)
         {
-            var vendorRests = await VendorRestaurantRelationshipsTable.Where (rv => rv.RestaurantId == restaurantID.ToString ()).ToEnumerableAsync ();
+            try {
+                var vendorRests = await VendorRestaurantRelationshipsTable.Where (rv => rv.RestaurantId == restaurantID.ToString ()).ToEnumerableAsync ();
 
-            var vendorIds = vendorRests.Select (v => v.VendorId).ToList ();
+                var vendorIds = vendorRests.Select (v => v.VendorId).ToList ();
 
-            var vendors = await VendorTable.Where (v => vendorIds.Contains (v.Id)).ToEnumerableAsync ();
+                var vendors = await VendorTable.Where (v => vendorIds.Contains (v.Id)).ToEnumerableAsync ();
 
-            return vendors.Select (v => v.ToBusinessEntity ());
+                return vendors.Select (v => v.ToBusinessEntity ());
+            } catch (Exception e) {
+                _logger.HandleException (e);
+                throw;
+            }
         }
 
         #endregion
