@@ -229,6 +229,8 @@
     <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy72.png" />
     <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy152.png" />
     <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy76.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy167.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Stockboy40.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
