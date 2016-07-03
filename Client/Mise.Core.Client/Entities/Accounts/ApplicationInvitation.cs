@@ -5,7 +5,7 @@ using Mise.Core.ValueItems;
 
 namespace Mise.Core.Client.Entities.Accounts
 {
-    public class ApplicationInvitation : BaseDbEntity<IApplicationInvitation, Core.Common.Entities.ApplicationInvitation>
+    public class ApplicationInvitation : BaseDbRestaurantEntity<IApplicationInvitation, Core.Common.Entities.ApplicationInvitation>
     {
         public ApplicationInvitation()
         {
@@ -47,12 +47,12 @@ namespace Mise.Core.Client.Entities.Accounts
             set;
         }
 
-        public string RestaurantId { get; set; }
         public Restaurant.Restaurant Restaurant
         {
             get;
             set;
         }
+
 
         protected override Core.Common.Entities.ApplicationInvitation CreateConcreteSubclass()
         {

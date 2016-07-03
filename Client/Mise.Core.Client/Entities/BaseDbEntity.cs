@@ -40,7 +40,6 @@ namespace Mise.Core.Client.Entities
             entity.CreatedDate = CreatedAt ?? DateTimeOffset.MinValue;
             entity.LastUpdatedDate = UpdatedAt??DateTimeOffset.MinValue;
             entity.Revision = Revision;
-
             return entity;
         } 
 

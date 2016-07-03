@@ -58,7 +58,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
         public static MobileServiceSQLiteStore DefineTables(MobileServiceSQLiteStore store)
         {
             store.DefineTable<AzureEntityStorage>();
-
+            store.DefineTable<AzureEventStorage>();
             return store;
         }
 
@@ -94,9 +94,9 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		{
 
 			var entRes = await StoreEntity (updatedEntity);
-            /*
+
             var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
-			var evRes = await SendEventDTOs (dtos);*/
+			var evRes = await SendEventDTOs (dtos);
 
 			return entRes;
 		}
@@ -104,10 +104,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<bool> SendEventsAsync (ApplicationInvitation updatedEntity, IEnumerable<Mise.Core.Entities.Restaurant.Events.IApplicationInvitationEvent> events)
 		{
 			var entRes = await StoreEntity(updatedEntity);
-            /*
+
             var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 			var evRes = await SendEventDTOs (dtos);
-*/
+
 			return entRes;
 		}
 
@@ -134,10 +134,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 		public async Task<bool> SendEventsAsync (ReceivingOrder updatedEntity, IEnumerable<Mise.Core.Entities.Vendors.Events.IReceivingOrderEvent> events)
 		{
 			var entRes = await StoreEntity (updatedEntity);
-            /*
+
             var dtos = events.Select (ev => _eventDTOFactory.ToDataTransportObject (ev)).ToList ();
 			var evRes = await SendEventDTOs (dtos);
-*/
+
 			return entRes;
 		}
 
@@ -602,7 +602,8 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure
 				_logger.HandleException (we, LogLevel.Debug);
 				_needsSynch = true;
 			}
-            catch(Microsoft.WindowsAzure.MobileServices.MobileServiceInvalidOperationException ue){
+            catch(MobileServiceInvalidOperationException ue){
+                _logger.HandleException (ue);
                 if (triedAgain)
                 {
                     throw;

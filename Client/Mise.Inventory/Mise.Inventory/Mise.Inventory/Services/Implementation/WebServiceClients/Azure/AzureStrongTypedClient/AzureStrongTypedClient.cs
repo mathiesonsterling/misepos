@@ -25,8 +25,14 @@ using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
 using DbInventory = Mise.Core.Client.Entities.Inventory.Inventory;
-using DbRestaurantInventorySection = Mise.Core.Client.Entities.Inventory.RestaurantInventorySection;
+using DbInventoryLineItem = Mise.Core.Client.Entities.Inventory.LineItems.InventoryBeverageLineItem;
 
+using DbRestaurantInventorySection = Mise.Core.Client.Entities.Inventory.RestaurantInventorySection;
+using DbInventorySection = Mise.Core.Client.Entities.Inventory.InventorySection;
+
+using DbPar = Mise.Core.Client.Entities.Inventory.Par;
+using DbParLineItem = Mise.Core.Client.Entities.Inventory.LineItems.ParBeverageLineItem;
+using DbVendorRestaurant = Mise.Core.Client.Entities.Vendor.VendorRestaurantRelationships;
 namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureStrongTypedClient
 {
     public class AzureStrongTypedClient :  IInventoryApplicationWebService
@@ -52,8 +58,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                                                                                                             (_employeeRestaurantTable = _client.GetSyncTable<EmployeeRestaurantRelationships>());
 
         private IMobileServiceSyncTable<Vendor> _vendorTable;
-
         private IMobileServiceSyncTable<Vendor> VendorTable => _vendorTable ?? (_vendorTable = _client.GetSyncTable<Vendor>());
+        private IMobileServiceSyncTable<DbVendorRestaurant> _vendorRestaurantRelationshipsTable;
+        private IMobileServiceSyncTable<DbVendorRestaurant> VendorRestaurantRelationshipsTable => 
+          _vendorRestaurantRelationshipsTable ?? (_vendorRestaurantRelationshipsTable = _client.GetSyncTable<DbVendorRestaurant> ());
 
         private IMobileServiceSyncTable<ReceivingOrder> _receivingOrderTable;
         private IMobileServiceSyncTable<ReceivingOrder> ReceivingOrderTable
@@ -71,13 +79,23 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                 _applicationInvitationTable ??
                 (_applicationInvitationTable = _client.GetSyncTable<ApplicationInvitation>());
 
-        private IMobileServiceSyncTable<Par> _parTable;
-        private IMobileServiceSyncTable<Par> ParTable => _parTable ?? (_parTable = _client.GetSyncTable<Par>());
+        private IMobileServiceSyncTable<DbPar> _parTable;
+        private IMobileServiceSyncTable<DbPar> ParTable => _parTable ?? (_parTable = _client.GetSyncTable<Par>());
+        private IMobileServiceSyncTable<DbParLineItem> _parBeverageLineItemTable;
+        private IMobileServiceSyncTable<DbParLineItem> ParBeverageLineItemTable => _parBeverageLineItemTable ?? (_parBeverageLineItemTable = _client.GetSyncTable<DbParLineItem> ());
 
         private IMobileServiceSyncTable<DbInventory> _inventoryTable;
 
         private IMobileServiceSyncTable<DbInventory> InventoryTable
             => _inventoryTable ?? (_inventoryTable = _client.GetSyncTable<DbInventory>());
+
+        private IMobileServiceSyncTable<DbInventorySection> _inventorySectionTable;
+        private IMobileServiceSyncTable<DbInventorySection> InventorySectionTable => _inventorySectionTable ?? (_inventorySectionTable = _client.GetSyncTable<DbInventorySection> ());
+
+        private IMobileServiceSyncTable<DbInventoryLineItem> _inventoryBeverageLineItemsTable;
+        private IMobileServiceSyncTable<DbInventoryLineItem> InventoryBeverageLineItemsTable =>
+            _inventoryBeverageLineItemsTable ?? (_inventoryBeverageLineItemsTable = _client.GetSyncTable<DbInventoryLineItem> ());
+
 
         private IMobileServiceSyncTable<InventoryCategory> _categoriesTable;
 
@@ -93,14 +111,22 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             store.DefineTable<DbRestaurantInventorySection>();
 
             store.DefineTable<Employee>();
+
             store.DefineTable<Vendor>();
+            store.DefineTable<VendorRestaurantRelationships>();
+
             store.DefineTable<ReceivingOrder>();
             store.DefineTable<PurchaseOrder>();
             store.DefineTable<ApplicationInvitation>();
-            store.DefineTable<Par>();
-            store.DefineTable<DbInventory>();
-            store.DefineTable<InventoryCategory>();
 
+            store.DefineTable<DbPar>();
+            store.DefineTable<DbParLineItem>();
+
+            store.DefineTable<InventoryCategory> ();
+
+            store.DefineTable<DbInventory>();
+            store.DefineTable<DbInventorySection>();
+            store.DefineTable<DbInventoryLineItem>();
             return store;
         }
 
@@ -159,13 +185,18 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
                         SyncTable("RestaurantInventorySections", RestaurantInventorySectionsTable),
 
                         SyncTable("Employees",EmployeeTable),
+
                         SyncTable("Vendors", VendorTable),
+                        //SyncTable("VendorRestaurantRelationships", VendorRestaurantRelationshipsTable),
+
                         SyncTable("ReceivingOrders", ReceivingOrderTable),
                         SyncTable("PurchaseOrders", PurchaseOrderTable),
                         SyncTable("ApplicationInvitations", ApplicationInvitationTable),
                         SyncTable("ParsFor", _parTable),
                         SyncTable("Inventories", InventoryTable),
-                        SyncTable("InventoryCategories", CategoriesTable)
+                        SyncTable("InventoryCategories", CategoriesTable),
+                        SyncTable("InventorySections", InventorySectionTable),
+                        //SyncTable("InventoryBeverageLineItems", _inventoryBeverageLineItemsTable)
                     };
 
                     foreach(var t in allSyncTasks)
@@ -246,37 +277,46 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         #region IEventStoreWebService implementation
 
-        private async Task<bool> UpdateEntity<TEnt, TDb>(TEnt entity, IMobileServiceSyncTable<TDb> table, Func<TEnt, TDb> createDb) 
+        private async Task<bool> UpdateEntity<TEnt, TDb> (TEnt entity, IMobileServiceSyncTable<TDb> table, TDb dbEnt)
             where TDb : EntityData
             where TEnt : IEntityBase
         {
-            var existsTask = table
-                .Where(a => a.Id == entity.Id.ToString())
-                .Take(1)
-                .ToEnumerableAsync();
+            try {
+                var existsTask = table
+                    .Where (a => a.Id == entity.Id.ToString ())
+                    .Take (1)
+                    .ToEnumerableAsync ();
 
-            var busItem = createDb(entity);
-            var exists = await existsTask.ConfigureAwait(false);
-            if (exists.Any())
-            {
-                try {
-                    await table.UpdateAsync (busItem).ConfigureAwait (false);
-                } catch (Exception e) {
-                    _logger.HandleException (e);
-                    throw;
+                var busItem = dbEnt;
+                var exists = await existsTask.ConfigureAwait (false);
+                if (exists.Any ()) {
+                    try {
+                        await table.UpdateAsync (busItem).ConfigureAwait (false);
+                    } catch (Exception e) {
+                        _logger.HandleException (e);
+                        throw;
+                    }
+                } else {
+                    try {
+                        await table.InsertAsync (busItem).ConfigureAwait (false);
+                    } catch (Exception e) {
+                        _logger.HandleException (e);
+                        throw;
+                    }
                 }
-            }
-            else
-            {
-                try {
-                    await table.InsertAsync (busItem).ConfigureAwait (false);
-                } catch (Exception e) {
-                    _logger.HandleException (e);
-                    throw;
-                }
-            }
 
-            return true;
+                return true;
+            } catch (Exception e) {
+                _logger.HandleException (e);
+                throw;
+            }
+        }
+
+        private Task<bool> UpdateEntity<TEnt, TDb>(TEnt entity, IMobileServiceSyncTable<TDb> table, Func<TEnt, TDb> createDb) 
+            where TDb : EntityData
+            where TEnt : IEntityBase
+        {
+            return UpdateEntity (entity, table, createDb (entity));
         }
 
         public Task<bool> SendEventsAsync(Core.Common.Entities.Accounts.RestaurantAccount updatedEntity, IEnumerable<IAccountEvent> events)
@@ -290,26 +330,26 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         public async Task<IEnumerable<Core.Common.Entities.ApplicationInvitation>> GetInvitationsForRestaurant(Guid restaurantID)
         {
-            var items = await _applicationInvitationTable
-                .Where(ai => ai != null
-                            && !ai.Deleted
-                            && ai.Restaurant.RestaurantID == restaurantID)
+            var items = await ApplicationInvitationTable
+                //.Where(ai => ai.RestaurantId == restaurantID.ToString ())
                 .ToEnumerableAsync();
 
-            var busItems = items.Select(i => i.ToBusinessEntity());
+
+            var busItems = items.Where(a => a!= null && a.RestaurantId == restaurantID.ToString())
+                                .Select(i => i.ToBusinessEntity());
             return busItems;
         }
 
         public async Task<IEnumerable<Core.Common.Entities.ApplicationInvitation>> GetInvitationsForEmail(EmailAddress email)
         {
-            var items = await _applicationInvitationTable
-                .Where(ai => ai != null
-                    && !ai.Deleted
-                    && ai.DestinationEmployee.Emails.Contains(email.Value) 
-                    || ai.InvitingEmployee.Emails.Contains(email.Value))
+            var items = await ApplicationInvitationTable
                 .ToEnumerableAsync();
 
-            var busItems = items.Select(i => i.ToBusinessEntity());
+            var aiItems = items.Where (ai => ai != null
+                     && !ai.Deleted
+                     && ai.DestinationEmployee.Emails.Contains (email.Value)
+                                       || ai.InvitingEmployee.Emails.Contains (email.Value));
+            var busItems = aiItems.Select(i => i.ToBusinessEntity());
             return busItems;
         }
 
@@ -334,28 +374,91 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         }
 
 
-        public Task<IEnumerable<Core.Common.Entities.Inventory.Inventory>> GetInventoriesForRestaurant(Guid restaurantID)
+        public async Task<IEnumerable<Core.Common.Entities.Inventory.Inventory>> GetInventoriesForRestaurant(Guid restaurantID)
         {
-            return InventoryTable.Where(i => i != null && !i.Deleted && i.Restaurant != null
-                            && i.Restaurant.EntityId == restaurantID)
-                .Select(i => i.ToBusinessEntity())
-                .ToEnumerableAsync();
+            var invs = await InventoryTable
+                .Where(i => i.RestaurantId == restaurantID.ToString ())
+                .OrderByDescending(i => i.UpdatedAt)
+                .Take(10)
+                .ToListAsync();
+
+            var res = new List<Core.Common.Entities.Inventory.Inventory> ();
+            foreach (var inv in invs) {
+                var retInv = await LoadInventory (inv);
+                res.Add (retInv);
+            }
+
+            return res;
         }
 
-        public async Task<bool>  SendEventsAsync(Core.Common.Entities.Inventory.Inventory updatedEntity, 
+        public async Task<Core.Common.Entities.Inventory.Inventory> LoadInventory (DbInventory inv)
+        {
+            var sections = await InventorySectionTable.Where (s => s.InventoryId == inv.Id.ToString ()).ToListAsync ();
+
+            var tasks = sections.Select (s => LoadLineItemsInSection (s));
+
+            Task.WaitAll (tasks.ToArray ());
+
+            inv.Sections = sections.ToList ();
+
+            return inv.ToBusinessEntity ();
+        }
+
+        public async Task LoadLineItemsInSection (DbInventorySection section)
+        {
+            var lis = await InventoryBeverageLineItemsTable.Where (li => li.InventorySectionId == section.Id)
+                                                           .ToListAsync ();
+            section.LineItems = lis;
+        }
+
+        public async Task<bool> SendEventsAsync (Core.Common.Entities.Inventory.Inventory updatedEntity,
             IEnumerable<IInventoryEvent> events)
         {
-            var rests = await RestaurantTable.Where(r => r.EntityId == updatedEntity.RestaurantID)
-                                              .Take(1).ToListAsync ();
-            var rest = rests.First();
+            var rests = await RestaurantTable.Where (r => r.EntityId == updatedEntity.RestaurantID)
+                                              .Take (1).ToListAsync ();
+            var rest = rests.First ();
 
-            var cats = await CategoriesTable.Where(c => !c.Deleted).ToEnumerableAsync();
+            var cats = await CategoriesTable.Where (c => !c.Deleted).ToEnumerableAsync ();
 
-            var vendors = await VendorTable.Where(v => !v.Deleted).ToEnumerableAsync();
+            var vendors = await VendorTable.Where (v => !v.Deleted).ToEnumerableAsync ();
 
-            var emps = await EmployeeTable.Where(e => e.EntityId == updatedEntity.CreatedByEmployeeID).ToEnumerableAsync();
-            return await UpdateEntity(updatedEntity, InventoryTable, e => new DbInventory(updatedEntity, rest,
-                emps.ToList(), rest.InventorySections, cats, vendors));
+            var emps = await EmployeeTable.Where (e => e.EntityId == updatedEntity.CreatedByEmployeeID).ToEnumerableAsync ();
+
+            var dbInventory = new DbInventory (updatedEntity, rest, emps.ToList ());
+            foreach (var sec in updatedEntity.GetSections ()) {
+                await SendInventorySection (sec, dbInventory, emps, cats, vendors).ConfigureAwait (false);
+            }
+
+            updatedEntity.Sections = null;
+
+            //update the sections
+            return await UpdateEntity (updatedEntity, InventoryTable, dbInventory);
+        }
+
+        private async Task<bool> SendInventorySection (IInventorySection sec, DbInventory inventory, 
+                                                 IEnumerable<Employee> emps, IEnumerable<InventoryCategory> cats,
+                                                      IEnumerable<Vendor> vendors)
+        {
+            var restSec = await RestaurantInventorySectionsTable
+                .LookupAsync (sec.RestaurantInventorySectionID.ToString ());
+
+            var completedBy = sec.LastCompletedBy.HasValue
+                                 ? await EmployeeTable.LookupAsync (sec.LastCompletedBy.ToString ())
+                                 : null;
+            var currentlyInUseBy = sec.CurrentlyInUseBy.HasValue
+                                      ? await EmployeeTable.LookupAsync (sec.CurrentlyInUseBy.ToString ())
+                                      : null;
+
+            var dbSection = new DbInventorySection (sec, inventory, completedBy, restSec,
+                                                   currentlyInUseBy, vendors, cats);
+
+            //do the line items
+            foreach (var li in sec.GetInventoryBeverageLineItemsInSection ()) {
+                var dbLi = new DbInventoryLineItem (li, dbSection, vendors, cats);
+
+                await UpdateEntity (li, InventoryBeverageLineItemsTable, dbLi).ConfigureAwait (false);
+            }
+            return await UpdateEntity (sec, InventorySectionTable, dbSection);
         }
 
         #endregion
@@ -420,27 +523,60 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
       
         #region IParWebService implementation
 
-        public Task<Core.Common.Entities.Inventory.Par> GetCurrentPAR(Guid restaurantID)
+        public async Task<Core.Common.Entities.Inventory.Par> GetCurrentPAR(Guid restaurantID)
         {
-            throw new NotImplementedException();
+            var pars = await GetPARsForRestaurant (restaurantID);
+
+            return pars
+                .Where (p => p.IsCurrent)
+                .Where(p => p.GetBeverageLineItems ().Count () > 0)
+                .OrderByDescending (p => p.LastUpdatedDate)
+                .FirstOrDefault ();
         }
 
         public async Task<IEnumerable<Core.Common.Entities.Inventory.Par>> GetPARsForRestaurant(Guid restaurantID)
         {
-            var items = await _parTable.Where(p => !p.Deleted && p.Restaurant != null 
-                                                && p.Restaurant.EntityId == restaurantID)
-                .ToEnumerableAsync();
+            try {
+                var items = await ParTable.Where (p => !p.Deleted
+                                                     && p.RestaurantId == restaurantID.ToString ())
+                    .ToListAsync ();
 
-            return items.Select(p => p.ToBusinessEntity());
+                var rest = await RestaurantTable.LookupAsync (restaurantID.ToString ());
+                foreach (var item in items) {
+                    var lis = await ParBeverageLineItemTable.Where (pli => pli.ParId == item.EntityId.ToString ()).ToListAsync ();
+
+                    item.ParLineItems = lis;
+
+                    var emp = await EmployeeTable.LookupAsync (item.CreatedByEmployeeId);
+                    item.CreatedByEmployee = emp;
+
+                    item.Restaurant = rest;
+                }
+                return items.Select (p => p.ToBusinessEntity ());
+            } catch (Exception e) {
+                _logger.HandleException (e);
+                throw;
+            }
         }
 
         #endregion
 
         #region IEventStoreWebService implementation
 
-        public Task<bool> SendEventsAsync(Core.Common.Entities.Inventory.Par updatedEntity, IEnumerable<IParEvent> events)
+        public async Task<bool> SendEventsAsync(Core.Common.Entities.Inventory.Par updatedEntity, IEnumerable<IParEvent> events)
         {
-            throw new NotImplementedException();
+            var categories = await CategoriesTable.ToEnumerableAsync ();
+
+            var rest = await RestaurantTable.LookupAsync (updatedEntity.RestaurantID.ToString ());
+            var emp = await EmployeeTable.LookupAsync (updatedEntity.CreatedByEmployeeID.ToString ());
+            var dbEnt = new Par (updatedEntity, rest, emp);
+
+            foreach (var li in updatedEntity.ParLineItems) {
+                var dbLI = new DbParLineItem (li, dbEnt, categories);
+                await UpdateEntity (li, ParBeverageLineItemTable, dbLI).ConfigureAwait (false);
+            }
+
+            return await UpdateEntity (updatedEntity, ParTable, dbEnt);
         }
 
         #endregion
@@ -452,9 +588,20 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Core.Common.Entities.Vendors.Vendor>> GetVendorsAssociatedWithRestaurant(Guid restaurantID)
+        public async Task<IEnumerable<Core.Common.Entities.Vendors.Vendor>> GetVendorsAssociatedWithRestaurant(Guid restaurantID)
         {
-            throw new NotImplementedException();
+            try {
+                var vendorRests = await VendorRestaurantRelationshipsTable.Where (rv => rv.RestaurantId == restaurantID.ToString ()).ToEnumerableAsync ();
+
+                var vendorIds = vendorRests.Select (v => v.VendorId).ToList ();
+
+                var vendors = await VendorTable.Where (v => vendorIds.Contains (v.Id)).ToEnumerableAsync ();
+
+                return vendors.Select (v => v.ToBusinessEntity ());
+            } catch (Exception e) {
+                _logger.HandleException (e);
+                throw;
+            }
         }
 
         #endregion
@@ -470,9 +617,10 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
 
         #region IInventoryRestaurantWebService implementation
 
-        public Task<IEnumerable<Core.Common.Entities.Restaurant>> GetRestaurants(Location deviceLocation, Distance maxDistance)
+        public async Task<IEnumerable<Core.Common.Entities.Restaurant>> GetRestaurants(Location deviceLocation, Distance maxDistance)
         {
-            throw new NotImplementedException();
+            var rests = await RestaurantTable.ToEnumerableAsync ();
+            return rests.Select (r => r.ToBusinessEntity ());
         }
 
         public async Task<Core.Common.Entities.Restaurant> GetRestaurant(Guid restaurantID)
@@ -533,6 +681,7 @@ namespace Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureSt
         public async Task<Core.Common.Entities.People.Employee> GetEmployeeByPrimaryEmailAndPassword(EmailAddress email, Password password)
         {
             var dbEmps = await EmployeeTable
+                .Where(e => e.PrimaryEmail.Contains (email.Value))
                 .ToEnumerableAsync();
 
             var emp = dbEmps.Where(e => IsValidEmployee(e, email, password)).FirstOrDefault();

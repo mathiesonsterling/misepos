@@ -10,6 +10,8 @@ using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureStrongTypedClient;
 //using ModernHttpClient;
+using Mise.Core.Common.Services.Implementation.Serialization;
+using AVFoundation;
 
 namespace Mise.Inventory.iOS
 {
@@ -20,12 +22,6 @@ namespace Mise.Inventory.iOS
 		{
 
 			Logger = new IOSLogger ();
-            //cb.RegisterInstance<IDevice> (AppleDevice.CurrentDevice).SingleInstance ();
-
-            /*
-            var stripeClient = new ClientStripeFacade();
-            var processor = new StripePaymentProcessorService(Logger, stripeClient);
-			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance ();*/
 
             cb.RegisterType<NoProcessorService> ().As<ICreditCardProcessorService> ().SingleInstance ();
             try{
@@ -41,8 +37,8 @@ namespace Mise.Inventory.iOS
 
 	    static async Task InitWebService (ContainerBuilder cb)
 		{
-            var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation (GetBuildLevel (), true);
-            //var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation(GetBuildLevel(), false);
+            //var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation (GetBuildLevel (), true);
+            var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation(GetBuildLevel(), false);
 			if (wsLocation != null) {
 				CurrentPlatform.Init ();
 
@@ -59,8 +55,8 @@ namespace Mise.Inventory.iOS
                 SQLitePCL.CurrentPlatform.Init ();
 				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
 
-                store = AzureStrongTypedClient.DefineTables(store);
-                //store = AzureWeakTypeSharedClient.DefineTables(store);
+                //store = AzureStrongTypedClient.DefineTables(store);
+                store = AzureWeakTypeSharedClient.DefineTables(store);
                 try{
 				    await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger)).ConfigureAwait (false);
                     //await mobileService.SyncContext.InitializeAsync(store).ConfigureAwait(false);
@@ -70,7 +66,8 @@ namespace Mise.Inventory.iOS
                 }
 
 				var deviceConnection = new DeviceConnectionService ();
-                var webService = new AzureStrongTypedClient(Logger, mobileService, deviceConnection);
+                //var webService = new AzureStrongTypedClient(Logger, mobileService, deviceConnection);
+                var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, deviceConnection);
                 try{
                     await webService.SynchWithServer().ConfigureAwait(false);
                 } catch(Exception e)

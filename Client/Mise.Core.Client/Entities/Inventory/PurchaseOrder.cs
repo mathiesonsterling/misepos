@@ -6,7 +6,7 @@ using Mise.Core.Entities.Inventory;
 
 namespace Mise.Core.Client.Entities.Inventory
 {
-    public class PurchaseOrder : BaseDbEntity<IPurchaseOrder, Core.Common.Entities.Inventory.PurchaseOrder>
+    public class PurchaseOrder : BaseDbRestaurantEntity<IPurchaseOrder, Core.Common.Entities.Inventory.PurchaseOrder>
     {
         public PurchaseOrder() { }
 
@@ -36,7 +36,6 @@ namespace Mise.Core.Client.Entities.Inventory
             get;
             set;
         }
-        public string RestaurantId { get; set; }
 
         public List<PurchaseOrderPerVendor> PurchaseOrdersPerVendor { get; set; }
 
