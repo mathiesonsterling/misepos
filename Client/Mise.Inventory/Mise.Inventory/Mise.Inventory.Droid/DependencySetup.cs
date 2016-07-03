@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Autofac;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
@@ -14,7 +15,7 @@ namespace Mise.Inventory.Droid
 {
 	public class DependencySetup : Mise.Inventory.DependencySetup
 	{
-		protected override async void RegisterDepenencies(ContainerBuilder cb)
+		protected override void RegisterDepenencies(ContainerBuilder cb)
 		{
 			Logger = new AndroidLogger ();
             /*
@@ -26,7 +27,8 @@ namespace Mise.Inventory.Droid
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance();
 
 			//make the web service
-			await InitWebService (cb);
+            var ws = Task.Run(async () => await InitWebService (cb));
+            ws.Wait ();
 			base.RegisterDepenencies(cb);
 		}
 		
@@ -35,32 +37,33 @@ namespace Mise.Inventory.Droid
         const string localDbPath    = "localstore.db";
 		async Task InitWebService (ContainerBuilder cb)
 		{
-            var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation (GetBuildLevel (), true);
+            var wsLocation = AzureServiceLocator.GetAzureMobileServiceLocation (GetBuildLevel (), false);
 			if (wsLocation != null) {
-				CurrentPlatform.Init ();
-                var dbService = new AndroidSQLite ();
+                try {
+                    CurrentPlatform.Init ();
+                    var dbService = new AndroidSQLite ();
 
-                cb.RegisterInstance<ISQLite> (dbService);
+                    cb.RegisterInstance<ISQLite> (dbService);
 
-                var mobileService = new MobileServiceClient(applicationURL);
+                    var mobileService = new MobileServiceClient (applicationURL);
 
-                /*
-				var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey, new NativeMessageHandler());
-                */
+                    /*
+                    var mobileService = new MobileServiceClient (wsLocation.Uri.ToString (), wsLocation.AppKey, new NativeMessageHandler());
+                    */
 
-				var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
+                    var store = new MobileServiceSQLiteStore (dbService.GetLocalFilename ());
+                    store = AzureWeakTypeSharedClient.DefineTables (store);
+                    await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler (Logger));
+                    //await mobileService.SyncContext.InitializeAsync(store);
 
-
-				store.DefineTable<AzureEntityStorage>();
-				store.DefineTable<AzureEventStorage>();
-
-				await mobileService.SyncContext.InitializeAsync (store, new AzureConflictHandler(Logger));
-                //await mobileService.SyncContext.InitializeAsync(store);
-
-				var deviceConnection = new DeviceConnectionService ();
-				var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, 
-					deviceConnection);
-				RegisterWebService (cb, webService);
+                    var deviceConnection = new DeviceConnectionService ();
+                    var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService,
+                    deviceConnection);
+                    RegisterWebService (cb, webService);
+                } catch (Exception e) {
+                    var msg = e.Message;
+                    throw;
+                }
 			}
 		}
 	}

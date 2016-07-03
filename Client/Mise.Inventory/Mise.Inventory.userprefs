@@ -1,14 +1,15 @@
-﻿<Properties StartupItem="Mise.Inventory/Mise.Inventory.iOS/Mise.Inventory.iOS.csproj">
-  <MonoDevelop.Ide.Workbench>
+﻿<Properties StartupItem="Mise.Inventory/Mise.Inventory.Droid/Mise.Inventory.Droid.csproj">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Mise.Inventory/Mise.Inventory.Droid/Resources/Resource.Designer.cs">
     <Files>
       <File FileName="Mise.Inventory/Mise.Inventory/Pages/RestaurantLoadingPage.xaml" Line="1" Column="1" />
       <File FileName="Mise.Inventory/Mise.Inventory.iOS/DependencySetup.cs" Line="59" Column="1" />
       <File FileName="Mise.Inventory/Mise.Inventory.iOS/Info.plist" />
       <File FileName="Mise.Inventory/Mise.Inventory.iOS/Main.cs" Line="15" Column="86" />
       <File FileName="Mise.Inventory/Mise.Inventory.iOS/AppDelegate.cs" Line="25" Column="48" />
+      <File FileName="Mise.Inventory/Mise.Inventory.Droid/Resources/Resource.Designer.cs" Line="919" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="180" column="1" />
@@ -26,7 +27,5 @@
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Mise.Inventory.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
-  <DisabledProjects>
-    <String>Mise.Inventory/Mise.Inventory.Droid/Mise.Inventory.Droid.csproj</String>
-  </DisabledProjects>
+  <MonoDevelop.Ide.ItemProperties.Mise.Inventory.Droid PreferredExecutionTarget="Android.Android_Accelerated_x86" />
 </Properties>

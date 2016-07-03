@@ -360,7 +360,7 @@ namespace Mise.Inventory.Droid
 			global::Xamarin.Forms.Platform.Resource.Color.design_fab_stroke_top_inner_color = global::Mise.Inventory.Droid.Resource.Color.design_fab_stroke_top_inner_color;
 			global::Xamarin.Forms.Platform.Resource.Color.design_fab_stroke_top_outer_color = global::Mise.Inventory.Droid.Resource.Color.design_fab_stroke_top_outer_color;
 			global::Xamarin.Forms.Platform.Resource.Color.design_snackbar_background_color = global::Mise.Inventory.Droid.Resource.Color.design_snackbar_background_color;
-			global::Xamarin.Forms.Platform.Resource.Color.design_textinput_error_color = global::Mise.Inventory.Droid.Resource.Color.design_textinput_error_color;
+			//global::Xamarin.Forms.Platform.Resource.Color.design_textinput_error_color = global::Mise.Inventory.Droid.Resource.Color.design_textinput_error_color;
 			global::Xamarin.Forms.Platform.Resource.Color.dim_foreground_disabled_material_dark = global::Mise.Inventory.Droid.Resource.Color.dim_foreground_disabled_material_dark;
 			global::Xamarin.Forms.Platform.Resource.Color.dim_foreground_disabled_material_light = global::Mise.Inventory.Droid.Resource.Color.dim_foreground_disabled_material_light;
 			global::Xamarin.Forms.Platform.Resource.Color.dim_foreground_material_dark = global::Mise.Inventory.Droid.Resource.Color.dim_foreground_material_dark;
@@ -468,7 +468,7 @@ namespace Mise.Inventory.Droid
 			global::Xamarin.Forms.Platform.Resource.Dimension.cardview_default_radius = global::Mise.Inventory.Droid.Resource.Dimension.cardview_default_radius;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_appbar_elevation = global::Mise.Inventory.Droid.Resource.Dimension.design_appbar_elevation;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_fab_border_width = global::Mise.Inventory.Droid.Resource.Dimension.design_fab_border_width;
-			global::Xamarin.Forms.Platform.Resource.Dimension.design_fab_content_size = global::Mise.Inventory.Droid.Resource.Dimension.design_fab_content_size;
+		//	global::Xamarin.Forms.Platform.Resource.Dimension.design_fab_content_size = global::Mise.Inventory.Droid.Resource.Dimension.design_fab_content_size;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_fab_elevation = global::Mise.Inventory.Droid.Resource.Dimension.design_fab_elevation;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_fab_size_mini = global::Mise.Inventory.Droid.Resource.Dimension.design_fab_size_mini;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_fab_size_normal = global::Mise.Inventory.Droid.Resource.Dimension.design_fab_size_normal;
@@ -478,7 +478,7 @@ namespace Mise.Inventory.Droid
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_navigation_icon_size = global::Mise.Inventory.Droid.Resource.Dimension.design_navigation_icon_size;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_navigation_max_width = global::Mise.Inventory.Droid.Resource.Dimension.design_navigation_max_width;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_navigation_padding_bottom = global::Mise.Inventory.Droid.Resource.Dimension.design_navigation_padding_bottom;
-			global::Xamarin.Forms.Platform.Resource.Dimension.design_navigation_padding_top_default = global::Mise.Inventory.Droid.Resource.Dimension.design_navigation_padding_top_default;
+		//	global::Xamarin.Forms.Platform.Resource.Dimension.design_navigation_padding_top_default = global::Mise.Inventory.Droid.Resource.Dimension.design_navigation_padding_top_default;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_navigation_separator_vertical_padding = global::Mise.Inventory.Droid.Resource.Dimension.design_navigation_separator_vertical_padding;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_snackbar_action_inline_max_width = global::Mise.Inventory.Droid.Resource.Dimension.design_snackbar_action_inline_max_width;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_snackbar_background_corner_radius = global::Mise.Inventory.Droid.Resource.Dimension.design_snackbar_background_corner_radius;
@@ -491,12 +491,14 @@ namespace Mise.Inventory.Droid
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_snackbar_padding_vertical_2lines = global::Mise.Inventory.Droid.Resource.Dimension.design_snackbar_padding_vertical_2lines;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_snackbar_text_size = global::Mise.Inventory.Droid.Resource.Dimension.design_snackbar_text_size;
 			global::Xamarin.Forms.Platform.Resource.Dimension.design_tab_max_width = global::Mise.Inventory.Droid.Resource.Dimension.design_tab_max_width;
-			global::Xamarin.Forms.Platform.Resource.Dimension.design_tab_min_width = global::Mise.Inventory.Droid.Resource.Dimension.design_tab_min_width;
+			/*
+            global::Xamarin.Forms.Platform.Resource.Dimension.design_tab_min_width = global::Mise.Inventory.Droid.Resource.Dimension.design_tab_min_width;
 			global::Xamarin.Forms.Platform.Resource.Dimension.dialog_fixed_height_major = global::Mise.Inventory.Droid.Resource.Dimension.dialog_fixed_height_major;
 			global::Xamarin.Forms.Platform.Resource.Dimension.dialog_fixed_height_minor = global::Mise.Inventory.Droid.Resource.Dimension.dialog_fixed_height_minor;
 			global::Xamarin.Forms.Platform.Resource.Dimension.dialog_fixed_width_major = global::Mise.Inventory.Droid.Resource.Dimension.dialog_fixed_width_major;
 			global::Xamarin.Forms.Platform.Resource.Dimension.dialog_fixed_width_minor = global::Mise.Inventory.Droid.Resource.Dimension.dialog_fixed_width_minor;
-			global::Xamarin.Forms.Platform.Resource.Dimension.disabled_alpha_material_dark = global::Mise.Inventory.Droid.Resource.Dimension.disabled_alpha_material_dark;
+		*/
+            global::Xamarin.Forms.Platform.Resource.Dimension.disabled_alpha_material_dark = global::Mise.Inventory.Droid.Resource.Dimension.disabled_alpha_material_dark;
 			global::Xamarin.Forms.Platform.Resource.Dimension.disabled_alpha_material_light = global::Mise.Inventory.Droid.Resource.Dimension.disabled_alpha_material_light;
 			global::Xamarin.Forms.Platform.Resource.Dimension.highlight_alpha_material_colored = global::Mise.Inventory.Droid.Resource.Dimension.highlight_alpha_material_colored;
 			global::Xamarin.Forms.Platform.Resource.Dimension.highlight_alpha_material_dark = global::Mise.Inventory.Droid.Resource.Dimension.highlight_alpha_material_dark;
@@ -914,7 +916,7 @@ namespace Mise.Inventory.Droid
 			global::Xamarin.Forms.Platform.Resource.Style.Platform_Widget_AppCompat_Spinner = global::Mise.Inventory.Droid.Resource.Style.Platform_Widget_AppCompat_Spinner;
 			global::Xamarin.Forms.Platform.Resource.Style.RtlOverlay_DialogWindowTitle_AppCompat = global::Mise.Inventory.Droid.Resource.Style.RtlOverlay_DialogWindowTitle_AppCompat;
 			global::Xamarin.Forms.Platform.Resource.Style.RtlOverlay_Widget_AppCompat_ActionBar_TitleItem = global::Mise.Inventory.Droid.Resource.Style.RtlOverlay_Widget_AppCompat_ActionBar_TitleItem;
-			global::Xamarin.Forms.Platform.Resource.Style.RtlOverlay_Widget_AppCompat_ActionButton_Overflow = global::Mise.Inventory.Droid.Resource.Style.RtlOverlay_Widget_AppCompat_ActionButton_Overflow;
+	//		global::Xamarin.Forms.Platform.Resource.Style.RtlOverlay_Widget_AppCompat_ActionButton_Overflow = global::Mise.Inventory.Droid.Resource.Style.RtlOverlay_Widget_AppCompat_ActionButton_Overflow;
 			global::Xamarin.Forms.Platform.Resource.Style.RtlOverlay_Widget_AppCompat_DialogTitle_Icon = global::Mise.Inventory.Droid.Resource.Style.RtlOverlay_Widget_AppCompat_DialogTitle_Icon;
 			global::Xamarin.Forms.Platform.Resource.Style.RtlOverlay_Widget_AppCompat_PopupMenuItem = global::Mise.Inventory.Droid.Resource.Style.RtlOverlay_Widget_AppCompat_PopupMenuItem;
 			global::Xamarin.Forms.Platform.Resource.Style.RtlOverlay_Widget_AppCompat_PopupMenuItem_InternalGroup = global::Mise.Inventory.Droid.Resource.Style.RtlOverlay_Widget_AppCompat_PopupMenuItem_InternalGroup;
@@ -1189,7 +1191,7 @@ namespace Mise.Inventory.Droid
 			global::Xamarin.Forms.Platform.Resource.Styleable.DrawerArrowToggle_spinBars = global::Mise.Inventory.Droid.Resource.Styleable.DrawerArrowToggle_spinBars;
 			global::Xamarin.Forms.Platform.Resource.Styleable.DrawerArrowToggle_thickness = global::Mise.Inventory.Droid.Resource.Styleable.DrawerArrowToggle_thickness;
 			global::Xamarin.Forms.Platform.Resource.Styleable.FloatingActionButton = global::Mise.Inventory.Droid.Resource.Styleable.FloatingActionButton;
-			global::Xamarin.Forms.Platform.Resource.Styleable.FloatingActionButton_android_background = global::Mise.Inventory.Droid.Resource.Styleable.FloatingActionButton_android_background;
+		//	global::Xamarin.Forms.Platform.Resource.Styleable.FloatingActionButton_android_background = global::Mise.Inventory.Droid.Resource.Styleable.FloatingActionButton_android_background;
 			global::Xamarin.Forms.Platform.Resource.Styleable.FloatingActionButton_backgroundTint = global::Mise.Inventory.Droid.Resource.Styleable.FloatingActionButton_backgroundTint;
 			global::Xamarin.Forms.Platform.Resource.Styleable.FloatingActionButton_backgroundTintMode = global::Mise.Inventory.Droid.Resource.Styleable.FloatingActionButton_backgroundTintMode;
 			global::Xamarin.Forms.Platform.Resource.Styleable.FloatingActionButton_borderWidth = global::Mise.Inventory.Droid.Resource.Styleable.FloatingActionButton_borderWidth;
@@ -1337,7 +1339,8 @@ namespace Mise.Inventory.Droid
 			global::Xamarin.Forms.Platform.Resource.Styleable.TextInputLayout_errorTextAppearance = global::Mise.Inventory.Droid.Resource.Styleable.TextInputLayout_errorTextAppearance;
 			global::Xamarin.Forms.Platform.Resource.Styleable.TextInputLayout_hintAnimationEnabled = global::Mise.Inventory.Droid.Resource.Styleable.TextInputLayout_hintAnimationEnabled;
 			global::Xamarin.Forms.Platform.Resource.Styleable.TextInputLayout_hintTextAppearance = global::Mise.Inventory.Droid.Resource.Styleable.TextInputLayout_hintTextAppearance;
-			global::Xamarin.Forms.Platform.Resource.Styleable.Theme = global::Mise.Inventory.Droid.Resource.Styleable.Theme;
+		/*
+            global::Xamarin.Forms.Platform.Resource.Styleable.Theme = global::Mise.Inventory.Droid.Resource.Styleable.Theme;
 			global::Xamarin.Forms.Platform.Resource.Styleable.Theme_actionBarDivider = global::Mise.Inventory.Droid.Resource.Styleable.Theme_actionBarDivider;
 			global::Xamarin.Forms.Platform.Resource.Styleable.Theme_actionBarItemBackground = global::Mise.Inventory.Droid.Resource.Styleable.Theme_actionBarItemBackground;
 			global::Xamarin.Forms.Platform.Resource.Styleable.Theme_actionBarPopupTheme = global::Mise.Inventory.Droid.Resource.Styleable.Theme_actionBarPopupTheme;
@@ -1446,7 +1449,8 @@ namespace Mise.Inventory.Droid
 			global::Xamarin.Forms.Platform.Resource.Styleable.Theme_windowMinWidthMajor = global::Mise.Inventory.Droid.Resource.Styleable.Theme_windowMinWidthMajor;
 			global::Xamarin.Forms.Platform.Resource.Styleable.Theme_windowMinWidthMinor = global::Mise.Inventory.Droid.Resource.Styleable.Theme_windowMinWidthMinor;
 			global::Xamarin.Forms.Platform.Resource.Styleable.Theme_windowNoTitle = global::Mise.Inventory.Droid.Resource.Styleable.Theme_windowNoTitle;
-			global::Xamarin.Forms.Platform.Resource.Styleable.Toolbar = global::Mise.Inventory.Droid.Resource.Styleable.Toolbar;
+			*/
+            global::Xamarin.Forms.Platform.Resource.Styleable.Toolbar = global::Mise.Inventory.Droid.Resource.Styleable.Toolbar;
 			global::Xamarin.Forms.Platform.Resource.Styleable.Toolbar_android_gravity = global::Mise.Inventory.Droid.Resource.Styleable.Toolbar_android_gravity;
 			global::Xamarin.Forms.Platform.Resource.Styleable.Toolbar_android_minHeight = global::Mise.Inventory.Droid.Resource.Styleable.Toolbar_android_minHeight;
 			global::Xamarin.Forms.Platform.Resource.Styleable.Toolbar_collapseContentDescription = global::Mise.Inventory.Droid.Resource.Styleable.Toolbar_collapseContentDescription;
