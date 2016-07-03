@@ -1,13 +1,9 @@
 ﻿
 using Autofac;
-
-using Mise.Core;
 using Mise.Core.Client.Repositories;
 using Mise.Core.Client.Services;
 using Mise.Core.Client.Services.Implementation;
 using Mise.Core.Common.Events;
-using Mise.Core.Common.Services;
-using Mise.Core.Common.Services.Implementation.DAL;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
@@ -16,14 +12,12 @@ using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.ViewModels;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities;
-using Mise.Core.Common;
 using Mise.Core.Common.Services.WebServices;
 using Mise.Core.Services;
 using Mise.Inventory.ViewModels.Reports;
-using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
 namespace Mise.Inventory
 {
-	public class DependencySetup
+    public class DependencySetup
 	{
 		public static ILogger Logger{get;protected set;}
 

@@ -74,7 +74,6 @@
     <Compile Include="Entities\Vendors\IVendor.cs" />
     <Compile Include="Entities\Vendors\IVendorBeverageLineItem.cs" />
     <Compile Include="ExtensionMethods\DateTimeOffsetExtensions.cs" />
-    <Compile Include="ExtensionMethods\IEnumerableExtensions.cs" />
     <Compile Include="Repositories\IAccountRepository.cs" />
     <Compile Include="Repositories\IEventSourcedEntityRepository.cs" />
     <Compile Include="Repositories\IPARRepository.cs" />

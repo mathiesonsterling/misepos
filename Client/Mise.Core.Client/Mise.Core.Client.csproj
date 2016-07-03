@@ -80,11 +80,7 @@
     <Compile Include="Repositories\ClientInventoryRepository.cs" />
     <Compile Include="Repositories\ClientCheckRepository.cs" />
     <Compile Include="Repositories\ClientEmployeeRepository.cs" />
-    <Compile Include="Repositories\ClientMenuRepository.cs" />
     <Compile Include="Repositories\ClientRestaurantRepository.cs" />
-    <Compile Include="ApplicationModel\TerminalViewTypes.cs" />
-    <Compile Include="ApplicationModel\ITerminalApplicationModel.cs" />
-    <Compile Include="ApplicationModel\Implementation\TerminalApplicationModel.cs" />
     <Compile Include="Repositories\ClientVendorRepository.cs" />
     <Compile Include="Services\IDeviceLocationService.cs" />
     <Compile Include="Services\IMachineIDService.cs" />

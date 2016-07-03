@@ -138,17 +138,11 @@
     <Compile Include="Services\Implementation\Serialization\JsonNetSerializer.cs" />
     <Compile Include="Services\Implementation\FakeDomineesRestaurantServiceClient.cs" />
     <Compile Include="Services\Implementation\FakeNYCSalesTaxService.cs" />
-    <Compile Include="Services\IDAL.cs" />
-    <Compile Include="Services\IClientDAL.cs" />
     <Compile Include="Repositories\Base\BaseRepository.cs" />
-    <Compile Include="Services\Implementation\DAL\MemoryClientDAL.cs" />
-    <Compile Include="Services\Implementation\DAL\DatabaseEntityItem.cs" />
-    <Compile Include="Services\Implementation\DAL\DatabaseEventItem.cs" />
     <Compile Include="Events\Checks\OrderItemWastedEvent.cs" />
     <Compile Include="Repositories\Base\RepositoryCache.cs" />
     <Compile Include="Events\Employee\InsufficientPermissionsEvent.cs" />
     <Compile Include="Events\Payments\CreditCards\CreditCardTipAddedToChargeEvent.cs" />
-    <Compile Include="Services\IRestaurantServerDAL.cs" />
     <Compile Include="Events\Payments\ItemUncompedEvent.cs" />
     <Compile Include="Entities\RestaurantCheck.cs" />
     <Compile Include="Entities\Vendors\Vendor.cs" />
