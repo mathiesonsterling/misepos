@@ -1,33 +1,14 @@
 ﻿<Properties StartupItem="Mise.Inventory/Mise.Inventory.iOS/Mise.Inventory.iOS.csproj">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Mise.Inventory/Mise.Inventory/ViewModels/SectionSelectViewModel.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="Mise.Inventory/Mise.Inventory/ViewModels/LoginViewModel.cs" Line="131" Column="1" />
-      <File FileName="Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" Line="411" Column="37" />
-      <File FileName="../Mise.Core.Client/Services/Implementation/LoginService.cs" Line="154" Column="1" />
-      <File FileName="../Mise.Core.Client/Entities/BaseDbEntity.cs" Line="44" Column="1" />
-      <File FileName="Mise.Inventory/Mise.Inventory/Services/Implementation/InventoryService.cs" Line="471" Column="1" />
-      <File FileName="../Mise.Core.Client/Repositories/ClientInventoryRepository.cs" Line="26" Column="10" />
-      <File FileName="../../Mise.Core.Common/Repositories/Base/BaseRepository.cs" Line="22" Column="25" />
-      <File FileName="Mise.Inventory/Mise.Inventory/ViewModels/SectionSelectViewModel.cs" Line="94" Column="1" />
-      <File FileName="../Mise.Core.Client/Repositories/BaseEventSourcedClientRepository.cs" Line="22" Column="23" />
-      <File FileName="Mise.Inventory/Mise.Inventory.iOS/Main.cs" Line="17" Column="1" />
-      <File FileName="../Mise.Core.Client/Entities/Inventory/Inventory.cs" Line="10" Column="46" />
-      <File FileName="Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureWeakTypeSharedClient.cs" Line="444" Column="1" />
-      <File FileName="Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureServiceLocator.cs" Line="25" Column="100" />
+      <File FileName="Mise.Inventory/Mise.Inventory/Pages/RestaurantLoadingPage.xaml" Line="1" Column="1" />
       <File FileName="Mise.Inventory/Mise.Inventory.iOS/DependencySetup.cs" Line="59" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/People/Employee.cs" Line="16" Column="15" />
-      <File FileName="../../Mise.Core.Common/Entities/Accounts/MiseEmployeeAccount.cs" Line="1" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/Accounts/RestaurantAccount.cs" Line="1" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/ApplicationInvitation.cs" Line="1" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/Inventory/Inventory.cs" Line="1" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/Inventory/PAR.cs" Line="1" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/Inventory/PurchaseOrder.cs" Line="1" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/Inventory/ReceivingOrder.cs" Line="1" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/Restaurant.cs" Line="1" Column="1" />
-      <File FileName="../../Mise.Core.Common/Entities/Vendors/Vendor.cs" Line="1" Column="1" />
+      <File FileName="Mise.Inventory/Mise.Inventory.iOS/Info.plist" />
+      <File FileName="Mise.Inventory/Mise.Inventory.iOS/Main.cs" Line="15" Column="86" />
+      <File FileName="Mise.Inventory/Mise.Inventory.iOS/AppDelegate.cs" Line="25" Column="48" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="180" column="1" />
@@ -41,11 +22,10 @@
       <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="400" column="1" />
       <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="409" column="1" />
       <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureWeakTypeSharedClient.cs" line="461" column="1" />
-      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.iOS/DependencySetup.cs" line="59" column="17" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Mise.Inventory.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.202BEB12-5F52-4C6A-A30D-157674C815D8" />
+  <MonoDevelop.Ide.ItemProperties.Mise.Inventory.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget" />
   <DisabledProjects>
     <String>Mise.Inventory/Mise.Inventory.Droid/Mise.Inventory.Droid.csproj</String>
   </DisabledProjects>
