@@ -1,4 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<discovery xmlns:scl="http://schemas.xmlsoap.org/disco/scl/" xmlns="http://schemas.xmlsoap.org/disco/">
-  <scl:contractRef docRef="https://hc.mercurydev.net/hcws/hcservice.asmx" ref="https://hc.mercurydev.net/hcws/hcservice.asmx?wsdl" />
-</discovery>
