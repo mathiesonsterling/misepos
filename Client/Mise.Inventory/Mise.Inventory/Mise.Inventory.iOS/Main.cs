@@ -15,7 +15,12 @@ namespace Mise.Inventory.iOS
             Xamarin.Insights.Initialize ("ed66b318e3febcdfc08ca11d6c20e33c79f2f434");
             // if you want to use a different Application Delegate class from "AppDelegate"
             // you can specify it here.
-            UIApplication.Main(args, null, "AppDelegate");
+            try {
+                UIApplication.Main (args, null, "AppDelegate");
+            } catch (Exception e) {
+                var msg = e.Message;
+                throw;
+            }
         }
     }
 }

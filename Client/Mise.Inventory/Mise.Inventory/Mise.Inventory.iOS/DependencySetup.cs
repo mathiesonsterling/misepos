@@ -69,7 +69,7 @@ namespace Mise.Inventory.iOS
                 //var webService = new AzureStrongTypedClient(Logger, mobileService, deviceConnection);
                 var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, deviceConnection);
                 try{
-                    await webService.SynchWithServer().ConfigureAwait(false);
+                   // await webService.SynchWithServer().ConfigureAwait(false);
                 } catch(Exception e)
                 {
                     //we've got to do something here!
