@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mise.Core.Common.Entities;
-using Mise.Core.Entities;
-using Mise.Core.Entities.Check;
-using Mise.Core.Entities.Menu;
-using Mise.Core.Entities.People;
-using Mise.Core.Entities.Restaurant;
-using Mise.Core.Entities.Check.Events;
-using Mise.Core.Common.Services;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Common.Services.WebServices;
-using Mise.Core.Entities.Base;
-using Moq;
+using Mise.Core.Entities;
+using Mise.Core.Entities.Check.Events;
+using Mise.Core.Entities.Menu;
 using Mise.Core.ValueItems;
+using Moq;
 
 
 namespace Mise.Core.Common.UnitTests.Tools
@@ -25,8 +21,6 @@ namespace Mise.Core.Common.UnitTests.Tools
     {
 		public static CreditCard GetCreditCard(){
 			return new CreditCard{
-				ExpMonth = 12,
-				ExpYear = 2014,
 				Name = PersonName.TestName,
                 ProcessorToken = new CreditCardProcessorToken
                 {
@@ -49,7 +43,7 @@ namespace Mise.Core.Common.UnitTests.Tools
         public static Guid RestaurantID { get { return Guid.Empty; } }
         public static Restaurant GetRestaurant()
         {
-            return new Restaurant { Id = RestaurantID, Name = new RestaurantName("testRestaurant") };
+            return new Restaurant { Id = RestaurantID, Name = new BusinessName("testRestaurant") };
         }
 
         public static Mock<IRestaurantTerminalService> GetTerminalService(bool printDupes = false)

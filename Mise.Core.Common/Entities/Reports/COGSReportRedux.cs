@@ -13,7 +13,7 @@ namespace Mise.Core.Common.Entities.Reports
         private readonly IEnumerable<IInventory> _allInventoriesForPrices;
         public COGSReportRedux(IEnumerable<IInventory> inventories,
             IEnumerable<IReceivingOrder> receivingOrdersInPeriod, IEnumerable<IInventory> allInventoriesForPrices) 
-            : base(inventories, receivingOrdersInPeriod, LiquidAmountUnits.Milliliters)
+            : base(inventories, receivingOrdersInPeriod, AmountUnits.Milliliters)
         {
             _allInventoriesForPrices = allInventoriesForPrices;
         }

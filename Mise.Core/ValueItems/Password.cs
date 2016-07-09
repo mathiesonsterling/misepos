@@ -11,20 +11,22 @@ namespace Mise.Core.ValueItems
 	/// </summary>
 	public class Password : IEquatable<Password>
 	{
+        private readonly ICryptography _crypto;
 	    public Password()
 	    {
 	        
 	    }
 
-	    public Password(string password)
+	    public Password(string password, ICryptography crypto)
 	    {
+            _crypto = crypto;
 	        SetValue(password);
 	    }
 
 		/// <summary>
 		/// SHA-1 value of the password.  ONLY this can be sent across the wire
 		/// </summary>
-		/// <value><c></value>
+		/// <value></value>
 		public string HashValue{get;set;}
 
 		/// <summary>
@@ -36,7 +38,7 @@ namespace Mise.Core.ValueItems
 		    {
 		        throw new ArgumentException("Cannot set a password to an empty value!");
 		    }
-			var hash = Cryptography.CalculateSha1Hash (rawPassword);
+			var hash = _crypto.CalculateSha1Hash (rawPassword);
 
 			HashValue = hash;
 		}
@@ -53,10 +55,6 @@ namespace Mise.Core.ValueItems
 			return password != null && password.Length > 2;
 		}
 
-	    public static Password TestPassword 
-	    {
-            get { return new Password("test");}
-	    }
 	}
 }
 

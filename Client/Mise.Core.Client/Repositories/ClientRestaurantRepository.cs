@@ -13,6 +13,7 @@ using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Repositories;
 using Mise.Core.Services.UtilityServices;
 using Mise.Core.ValueItems;
+using Mise.Core.Entities.People;
 
 namespace Mise.Core.Client.Repositories
 {
@@ -22,9 +23,9 @@ namespace Mise.Core.Client.Repositories
 	public class ClientRestaurantRepository : BaseEventSourcedClientRepository<IRestaurant, IRestaurantEvent, Restaurant>, 
 		IRestaurantRepository
 	{
-		readonly IInventoryRestaurantWebService _webService;
+		readonly IInventoryApplicationWebService _webService;
         private readonly IDeviceLocationService _locationService;
-        public ClientRestaurantRepository(ILogger logger, IInventoryRestaurantWebService webService, IDeviceLocationService locationService)
+        public ClientRestaurantRepository(ILogger logger, IInventoryApplicationWebService webService, IDeviceLocationService locationService)
             : base(logger, webService)
         {
 			_webService = webService;
@@ -46,6 +47,30 @@ namespace Mise.Core.Client.Repositories
             return new Restaurant();
         }
 
+        public async Task<IEnumerable<IRestaurant>> GetRestaurantsEmployeeWorksAt(IEmployee emp)
+        {
+            var res = new List<IRestaurant>();
+
+            foreach (var restId in emp.GetRestaurantIDs())
+            {
+                var local = GetByID(restId);
+                if (local == null)
+                {
+                    local = await _webService.GetRestaurant(restId);
+                }
+
+                if (local != null)
+                {
+                    res.Add(local);
+                }
+            }
+
+            if (res.Any())
+            {
+                Cache.UpdateCache(res);
+            }
+            return res;
+        }
 
         public override Guid GetEntityID(IRestaurantEvent ev)
         {
@@ -56,6 +81,7 @@ namespace Mise.Core.Client.Repositories
         {
             if (restaurantID.HasValue)
             {
+                await _webService.SetRestaurantId(restaurantID.Value);
                 var rest = await _webService.GetRestaurant(restaurantID.Value);
 				return rest != null ? new List<Restaurant> {rest} : new List<Restaurant>();
             }

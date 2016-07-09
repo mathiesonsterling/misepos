@@ -22,7 +22,7 @@ namespace Mise.Core.Entities.Restaurant
 		/// Name of the restaurant
 		/// </summary>
 		/// <value>The name.</value>
-        RestaurantName Name { get; }  
+        BusinessName Name { get; }  
 
 		StreetAddress StreetAddress{get;}
 

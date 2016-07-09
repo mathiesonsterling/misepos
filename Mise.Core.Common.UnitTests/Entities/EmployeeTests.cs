@@ -1,5 +1,6 @@
 ﻿using System;
 using Mise.Core.Common.Entities;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Common.Events;
 using Mise.Core.Common.Events.Employee;
 using Mise.Core.Entities.People;
@@ -59,7 +60,7 @@ namespace Mise.Core.Common.UnitTests.Entities
                 Id = Guid.NewGuid(),
                 LastTimeLoggedIntoInventoryApp = DateTime.Now,
                 CurrentlyLoggedIntoInventoryApp = true,
-                CurrentlyClockedInToPOS = true,
+                //CurrentlyClockedInToPOS = true,
                 Password = new Password { HashValue = "blabla"}
             };
 
@@ -73,7 +74,7 @@ namespace Mise.Core.Common.UnitTests.Entities
             Assert.AreEqual(employee.LastTimeLoggedIntoInventoryApp, res.LastTimeLoggedIntoInventoryApp);
             Assert.AreEqual(employee.Password, res.Password);
         }
-
+        /*
         [Test]
         public void TestCompBudgetIsValueWithClone()
         {
@@ -87,7 +88,7 @@ namespace Mise.Core.Common.UnitTests.Entities
             //ASSERT
             Assert.AreEqual(4.0M, oldMon.Dollars);
             Assert.AreEqual(10.0M, employee.CompBudget.Dollars, "Original did not change comp budget");
-        }
+        }*/
 
         [Test]
         public void TestInventoryAppLogin()

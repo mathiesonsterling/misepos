@@ -1,0 +1,47 @@
+﻿<Properties StartupItem="Mise.Inventory/Mise.Inventory.iOS/Mise.Inventory.iOS.csproj">
+  <MonoDevelop.Ide.Workbench>
+    <Files>
+      <File FileName="Mise.Inventory/Mise.Inventory.iOS/Info.plist" />
+      <File FileName="Mise.Inventory/Mise.Inventory.Droid/SplashActivity.cs" Line="9" Column="103" />
+      <File FileName="Mise.Inventory/Mise.Inventory.Droid/MainActivity.cs" Line="6" Column="21" />
+      <File FileName="Mise.Inventory/Mise.Inventory.Droid/app.config" Line="1" Column="1" />
+      <File FileName="Mise.Inventory/Mise.Inventory.Droid/DependencySetup.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="180" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="202" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="209" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="178" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Core.Client/Entities/Inventory/Inventory.cs" line="47" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="411" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="396" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="404" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="400" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureStrongTypedClient/AzureStrongTypedClient.cs" line="409" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureWeakTypeSharedClient.cs" line="461" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.Droid/DependencySetup.cs" line="21" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.Droid/DependencySetup.cs" line="41" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.Droid/DependencySetup.cs" line="65" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.Droid/DependencySetup.cs" line="33" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.Droid/MainActivity.cs" line="18" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.Droid/SplashActivity.cs" line="14" column="71" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.iOS/Main.cs" line="21" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.iOS/DependencySetup.cs" line="51" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureWeakTypeSharedClient.cs" line="80" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureWeakTypeSharedClient.cs" line="82" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureConflictHandler.cs" line="33" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureConflictHandler.cs" line="37" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureConflictHandler.cs" line="49" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/Services/Implementation/WebServiceClients/Azure/AzureConflictHandler.cs" line="54" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/ViewModels/LoginViewModel.cs" line="127" column="50" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/ViewModels/LoginViewModel.cs" line="131" column="1" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory/ViewModels/LoginViewModel.cs" line="130" column="39" />
+      <Breakpoint file="/Users/mathieson/projects/miselatest/Client/Mise.Inventory/Mise.Inventory/Mise.Inventory.iOS/DependencySetup.cs" line="78" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Mise.Inventory.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.23cf915efb52aa8c4bc86bbe9996d2cb45f03bf7" />
+</Properties>

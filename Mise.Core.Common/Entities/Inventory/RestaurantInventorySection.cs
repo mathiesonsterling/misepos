@@ -12,7 +12,6 @@ namespace Mise.Core.Common.Entities.Inventory
 
         public bool IsDefaultInventorySection { get; set; }
 
-        public Beacon Beacon { get; set; }
         public ICloneableEntity Clone()
         {
             return new RestaurantInventorySection
@@ -24,7 +23,6 @@ namespace Mise.Core.Common.Entities.Inventory
                 Revision = Revision,
 
                 Name = Name,
-                Beacon = Beacon,
                 AllowsPartialBottles = AllowsPartialBottles,
                 IsDefaultInventorySection = IsDefaultInventorySection
             };

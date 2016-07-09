@@ -86,9 +86,7 @@ namespace Mise.Core.Client.Services.Implementation
                     {
                         FirstName = fName,
                         LastName = lastName
-                    },
-					ExpMonth = int.Parse (expMonthS),
-					ExpYear = int.Parse (expYearS),
+                    }
 				};
 				return card;
 			}

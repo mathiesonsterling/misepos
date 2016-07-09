@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 using Mise.Core.ValueItems;
+using Mise.Core.Common.UnitTests.Tools;
 
 
 namespace Mise.Core.Common.UnitTests
@@ -14,7 +15,7 @@ namespace Mise.Core.Common.UnitTests
 		[TestCase("I don't like cake", "41bd4293fc3b8ba342baaa341ebcd63f588db4c3")]
 		[Test]
 		public void PasswordShouldHashValue(string input, string hash){
-			var password = new Password (input);
+            var password = new Password (input, new TestCrypto());
 
 			//ASSERT
 			Assert.AreNotEqual(input, password.HashValue);

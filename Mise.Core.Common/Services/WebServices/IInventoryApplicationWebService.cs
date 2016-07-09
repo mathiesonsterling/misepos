@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System;
 
 namespace Mise.Core.Common.Services.WebServices
 {
@@ -16,6 +17,8 @@ namespace Mise.Core.Common.Services.WebServices
 		/// </summary>
 		/// <returns>The with server.</returns>
 		Task<bool> SynchWithServer();
+
+        Task SetRestaurantId(Guid restaurantId);
 	}
 }
 

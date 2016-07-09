@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<local:BasePage xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="Mise.Inventory.Pages.UpdateParQuantityPage"
+  xmlns:local="clr-namespace:Mise.Inventory.Pages;assembly=Mise.Inventory"
+	Title="{Binding ItemName}"
+>
+	<ContentPage.Content>
+		<StackLayout VerticalOptions="FillAndExpand" Padding="50">
+			<ScrollView VerticalOptions="FillAndExpand">
+				<StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand">
+					<Label Text="Quantity" Style="{DynamicResource CaptionStyle}"/>
+					<StackLayout Orientation="Horizontal">
+						<Entry x:Name="entNumber" Text="{Binding CurrentQuantity}" Keyboard="Numeric" WidthRequest="100"/>
+						<Stepper x:Name="stp" Value="{Binding CurrentQuantity, Mode=TwoWay}" Maximum="10000"/>
+					</StackLayout>
+
+					<Label Text="Total Price" IsVisible="{Binding DoPrices}" Style="{DynamicResource CaptionStyle}"/>
+					<Entry 
+						Text="{Binding TotalPrice}" 
+						Keyboard="Numeric" 
+						IsVisible="{Binding DoPrices}" 
+						Placeholder="Total Price"
+					/>
+
+					<Label Text="Unit Price" IsVisible="{Binding DoPrices}" Style="{DynamicResource CaptionStyle}"/>
+					<Entry 
+						Text="{Binding UnitPrice}" 
+						Keyboard="Numeric" 
+						IsVisible="{Binding DoPrices}" 
+						Placeholder="Unit Price"
+					/>
+				</StackLayout>
+			</ScrollView>
+			<ActivityIndicator IsRunning="{Binding Processing}" Color="{Binding ActivityColor}"/>
+			<Button 
+				x:Name = "btnUpdateQuantity"
+				Text="{Binding Title}" 
+				Command="{Binding UpdateQuantityCommand}" 
+				HorizontalOptions="FillAndExpand"/>
+			<Button
+				Text="Zero Out" 
+				Command="{Binding ZeroOutCommand}"
+				IsVisible="{Binding ShowZeroOut}" 
+				HorizontalOptions ="FillAndExpand"/>
+		</StackLayout>
+	</ContentPage.Content>
+</local:BasePage>

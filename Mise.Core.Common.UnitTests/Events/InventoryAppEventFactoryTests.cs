@@ -10,6 +10,7 @@ using Mise.Core.Common.Entities;
 using Mise.Core.ValueItems;
 using Mise.Core.Entities.Restaurant;
 using Mise.Core.Common.Entities.Inventory;
+using Mise.Core.Common.Entities.People;
 using Mise.Core.Entities.Inventory;
 using Mise.Core.Entities.Inventory.Events;
 using Mise.Core.ValueItems.Inventory;
@@ -17,6 +18,7 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities.Vendors.Events;
+using Mise.Core.Common.UnitTests.Tools;
 
 namespace Mise.Core.Common.UnitTests.Events
 {
@@ -119,7 +121,6 @@ namespace Mise.Core.Common.UnitTests.Events
 		{
 		    var creditCard = new CreditCard
 		    {
-		        BillingZip = new ZipCode {Value = "11111"},
 		        ProcessorToken = new CreditCardProcessorToken
 		        {
 		            Processor = CreditCardProcessors.FakeProcessor,
@@ -132,7 +133,6 @@ namespace Mise.Core.Common.UnitTests.Events
 
 			TestCommonFields (ev);
             Assert.NotNull(ev.CreditCard);
-            Assert.AreEqual("11111", ev.CreditCard.BillingZip.Value);
             Assert.NotNull(ev.CreditCard.ProcessorToken);
             Assert.AreEqual("ccToken", ev.CreditCard.ProcessorToken.Token);
             Assert.AreEqual(CreditCardProcessors.FakeProcessor, ev.CreditCard.ProcessorToken.Processor);
@@ -147,7 +147,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void CreateEmployee(){
-			var ev = _underTest.CreateEmployeeCreatedEvent (EmailAddress.TestEmail, Password.TestPassword, PersonName.TestName, MiseAppTypes.UnitTests);
+            var ev = _underTest.CreateEmployeeCreatedEvent (EmailAddress.TestEmail, new Password ("password", new TestCrypto()), PersonName.TestName, MiseAppTypes.UnitTests);
 
             Assert.AreNotEqual(Guid.Empty, ev.Id, "ID");
             Assert.AreNotEqual(Guid.Empty, ev.CausedById, "CausedByID");
@@ -160,7 +160,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void EmployeeInvited(){
-			var ev = _underTest.CreateEmployeeInvitedToApplicationEvent (_emp, EmailAddress.TestEmail, MiseAppTypes.UnitTests, RestaurantName.TestName);
+			var ev = _underTest.CreateEmployeeInvitedToApplicationEvent (_emp, EmailAddress.TestEmail, MiseAppTypes.UnitTests, BusinessName.TestName);
 
 			TestCommonFieldsWithRest (ev);
 		}
@@ -232,7 +232,7 @@ namespace Mise.Core.Common.UnitTests.Events
 				         _emp, 
 				         "testItem", 
 				         "upc", 
-				         new List<ItemCategory>{ CategoriesService.Beer },
+				         new List<InventoryCategory>{ CategoriesService.Beer },
 				         11,
 				         LiquidContainer.Bottle1_75ML,
 				         100,
@@ -304,7 +304,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void NewRestaurant(){
-			var ev = _underTest.CreateNewRestaurantRegisteredOnAppEvent (_emp, RestaurantName.TestName, StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber);
+			var ev = _underTest.CreateNewRestaurantRegisteredOnAppEvent (_emp, BusinessName.TestName, StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber);
 			TestCommonFields (ev);
 			Assert.AreNotEqual (Guid.Empty, ev.RestaurantId);
 		}
@@ -325,7 +325,7 @@ namespace Mise.Core.Common.UnitTests.Events
 		[Test]
 		public void ParLineItemAddedDirect(){
 			var ev = _underTest.CreatePARLineItemAddedEvent (_emp, "testITem", "upc",
-				new List<ItemCategory>{ CategoriesService.Beer },
+				new List<InventoryCategory>{ CategoriesService.Beer },
 				100, LiquidContainer.Bottle330ML, 1000, _par
 			);
 			TestParEvent (ev);
@@ -353,7 +353,9 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void PurchaseOrderLineItemAdded(){
-            var ev = _underTest.CreatePOLineItemAddedFromInventoryCalcEvent (_emp, _po, _parLI, 12, LiquidAmount.SevenFiftyMillilters, new Vendor{Id=Guid.NewGuid(), Name="testVend"});
+            var ev = _underTest.CreatePOLineItemAddedFromInventoryCalcEvent (_emp, _po, _parLI, 12, LiquidAmount.SevenFiftyMillilters, 
+                new Vendor{Id=Guid.NewGuid(), 
+                Name=new BusinessName("testVend").FullName});
 			TestPurchaseOrderEvent (ev);
 		}
 
@@ -405,7 +407,7 @@ namespace Mise.Core.Common.UnitTests.Events
 			var ev = _underTest.CreateReceivingOrderLineItemAddedEvent (_emp, 
 				"testItem", 
 				"upc", 
-				new List<ItemCategory>{ CategoriesService.Beer },
+				new List<InventoryCategory>{ CategoriesService.Beer },
 				11,
 				LiquidContainer.Bottle1_75ML,
 				100,
@@ -443,7 +445,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void VendorCreated(){
-			var ev = _underTest.CreateVendorCreatedEvent (_emp, "testVend", StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber, EmailAddress.TestEmail);
+			var ev = _underTest.CreateVendorCreatedEvent (_emp, new BusinessName("testVend"), StreetAddress.TestStreetAddress, PhoneNumber.TestPhoneNumber, EmailAddress.TestEmail);
 			TestVendorEvent (ev);
 		}
 

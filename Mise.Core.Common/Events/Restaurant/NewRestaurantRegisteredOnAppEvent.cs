@@ -27,7 +27,7 @@ namespace Mise.Core.Common.Events.Restaurant
 	    }
 
         public MiseAppTypes ApplicationUsed { get; set; }
-        public RestaurantName Name { get; set; }
+        public BusinessName Name { get; set; }
         public StreetAddress StreetAddress { get; set; }
         public PhoneNumber PhoneNumber { get; set; }
     }

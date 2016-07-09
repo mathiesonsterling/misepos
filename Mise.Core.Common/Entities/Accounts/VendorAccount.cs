@@ -10,36 +10,43 @@ using Mise.Core.ValueItems;
 
 namespace Mise.Core.Common.Entities.Accounts
 {
-    public class VendorAccount : EntityBase, IBusinessAccount
+    public class VendorAccount : BaseAccount, IBusinessAccount
     {
-        public void When(IAccountEvent entityEvent)
+        public override void When(IAccountEvent entityEvent)
         {
             throw new NotImplementedException();
         }
 
-        public ICloneableEntity Clone()
+        public override ICloneableEntity Clone()
         {
             throw new NotImplementedException();
         }
 
-        public bool ContainsSearchString(string searchString)
+        public override MiseAccountTypes AccountType => MiseAccountTypes.Vendor;
+
+        public override bool ContainsSearchString(string searchString)
         {
-            throw new NotImplementedException();
+            if (base.ContainsSearchString(searchString))
+            {
+                return true;
+            }
+
+            return (CurrentCard != null && CurrentCard.ContainsSearchString(searchString))
+                   || PaymentPlan.ToString().Contains(searchString)
+                   || (BusinessName != null && BusinessName.Contains(searchString));
         }
 
-        public EmailAddress PrimaryEmail { get; set; }
-        public PersonName AccountHolderName { get; set; }
-        public IEnumerable<EmailAddress> Emails { get; set; }
-        public PhoneNumber PhoneNumber { get; set; }
         public TimeSpan BillingCycle { get; set; }
+
         public CreditCard CurrentCard { get; set; }
-        public ReferralCode ReferralCodeForAccountToGiveOut { get; set; }
-        public ReferralCode ReferralCodeUsedToCreate { get; set; }
+
         public MiseAccountStatus Status { get; set; }
-        public MiseAccountTypes AccountType { get; set; }
+
         public MisePaymentPlan PaymentPlan { get; set; }
         public bool PaymentPlanSetupWithProvider { get; set; }
+
         public IEnumerable<MiseAppTypes> AppsOnAccount { get; set; }
+
         public IEnumerable<IAccountCharge> GetCharges()
         {
             throw new NotImplementedException();

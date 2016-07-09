@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Mise.Core</RootNamespace>
     <AssemblyName>Mise.Core</AssemblyName>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -41,14 +41,17 @@
     <Compile Include="Entities\Accounts\IAccountEvent.cs" />
     <Compile Include="Entities\Accounts\IAccountPayment.cs" />
     <Compile Include="Entities\Accounts\IBusinessAccount.cs" />
+    <Compile Include="Entities\Accounts\IResellerAccount.cs" />
     <Compile Include="Entities\Base\ICloneableEntity.cs" />
     <Compile Include="Entities\Base\IEntityBase.cs" />
     <Compile Include="Entities\Base\IEventStoreEntityBase.cs" />
     <Compile Include="Entities\Check\Events\ICheckEvent.cs" />
     <Compile Include="Entities\Inventory\Events\IPAREvent.cs" />
     <Compile Include="Entities\Inventory\IBaseBeverageLineItem.cs" />
+    <Compile Include="Entities\Inventory\IBaseLineItem.cs" />
     <Compile Include="Entities\Inventory\IInventoryBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\IInventorySection.cs" />
+    <Compile Include="Entities\Inventory\ILiquidContainerEntity.cs" />
     <Compile Include="Entities\Inventory\IPAR.cs" />
     <Compile Include="Entities\Inventory\IParBeverageLineItem.cs" />
     <Compile Include="Entities\Inventory\IPurchaseOrderLineItem.cs" />
@@ -62,6 +65,8 @@
     <Compile Include="Entities\Menu\MenuItemModifierGroup.cs" />
     <Compile Include="Entities\Menu\MenuRule.cs" />
     <Compile Include="Entities\MiseEventTypes.cs" />
+    <Compile Include="Entities\People\IPerson.cs" />
+    <Compile Include="Entities\People\IUser.cs" />
     <Compile Include="Entities\Restaurant\Events\IApplicationInvitationEvent.cs" />
     <Compile Include="Entities\Restaurant\Events\IRestaurantEvent.cs" />
     <Compile Include="Entities\Vendors\Events\IReceivingOrderEvent.cs" />
@@ -69,7 +74,6 @@
     <Compile Include="Entities\Vendors\IVendor.cs" />
     <Compile Include="Entities\Vendors\IVendorBeverageLineItem.cs" />
     <Compile Include="ExtensionMethods\DateTimeOffsetExtensions.cs" />
-    <Compile Include="ExtensionMethods\IEnumerableExtensions.cs" />
     <Compile Include="Repositories\IAccountRepository.cs" />
     <Compile Include="Repositories\IEventSourcedEntityRepository.cs" />
     <Compile Include="Repositories\IPARRepository.cs" />
@@ -82,11 +86,12 @@
     <Compile Include="Services\UtilityServices\IErrorTrackingService.cs" />
     <Compile Include="Services\UtilityServices\ILogger.cs" />
     <Compile Include="Services\UtilityServices\LogLevel.cs" />
-    <Compile Include="ValueItems\Beacon.cs" />
     <Compile Include="ValueItems\CommitResult.cs" />
     <Compile Include="ValueItems\CreditCardProcessorToken.cs" />
     <Compile Include="ValueItems\Distance.cs" />
-    <Compile Include="ValueItems\Inventory\LiquidAmountUnits.cs" />
+    <Compile Include="ValueItems\Inventory\AmountTypes.cs" />
+    <Compile Include="ValueItems\Inventory\BaseAmount.cs" />
+    <Compile Include="ValueItems\Inventory\AmountUnits.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainerShape.cs" />
     <Compile Include="ValueItems\Inventory\MeasurementMethods.cs" />
     <Compile Include="ValueItems\Inventory\LiquidContainer.cs" />
@@ -135,7 +140,7 @@
     <Compile Include="ValueItems\Reports\ReportResult.cs" />
     <Compile Include="ValueItems\Reports\ReportResultLineItem.cs" />
     <Compile Include="ValueItems\Reports\ReportTypes.cs" />
-    <Compile Include="ValueItems\RestaurantName.cs" />
+    <Compile Include="ValueItems\BusinessName.cs" />
     <Compile Include="ValueItems\StreetAddress.cs" />
     <Compile Include="ValueItems\PhoneNumber.cs" />
     <Compile Include="ValueItems\EmailAddress.cs" />
@@ -189,15 +194,4 @@
     <Compile Include="Entities\Inventory\IInventoryCategory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <ItemGroup>
-    <Reference Include="Validation">
-      <HintPath>..\Client\Stockboy\packages\Validation.2.2.8\lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
-    </Reference>
-    <Reference Include="PCLCrypto">
-      <HintPath>..\Client\Stockboy\packages\PCLCrypto.1.0.86\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\PCLCrypto.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
 </Project>

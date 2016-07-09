@@ -11,7 +11,20 @@ namespace Mise.Core.ValueItems
     /// </summary>
     public class Weight : IEquatable<Weight>
     {
+        public Weight() { }
 
+        public Weight(Weight source)
+        {
+            if (source != null)
+            {
+                Grams = source.Grams;
+            }
+        }
+
+        public Weight(decimal grams)
+        {
+            Grams = grams;
+        }
         public decimal Grams { get; set; }
         public bool Equals(Weight other)
         {

@@ -13,10 +13,20 @@ namespace Mise.Core.ValueItems.Inventory
     {
         public LiquidContainerShape()
         {
-            widthsAsPercentageOfHeight = new List<double>();
+            _widthsAsPercentageOfHeight = new List<double>();
         }
 
-        List<double> widthsAsPercentageOfHeight;
+        public LiquidContainerShape(LiquidContainerShape source) : this()
+        {
+            if (source != null)
+            {
+                _widthsAsPercentageOfHeight = source.WidthsAsPercentageOfHeight;
+                Name = source.Name;
+            }
+
+        }
+
+        List<double> _widthsAsPercentageOfHeight;
         /// <summary>
         /// Represents the widths at evenly spaced intervals, as a percentage of height.  Goes from bottom up
         /// </summary>
@@ -24,15 +34,15 @@ namespace Mise.Core.ValueItems.Inventory
         {
             get
             {
-                return widthsAsPercentageOfHeight;
+                return _widthsAsPercentageOfHeight;
             }
             set
             {
-                if (widthsAsPercentageOfHeight.Any(d => d > 1))
+                if (_widthsAsPercentageOfHeight.Any(d => d > 1))
                 {
                     throw new ArgumentException("Values in a shape cannot be greater than 1!");
                 }
-                widthsAsPercentageOfHeight = value;
+                _widthsAsPercentageOfHeight = value;
             }
         }
 

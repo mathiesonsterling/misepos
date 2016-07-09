@@ -12,7 +12,7 @@ namespace Mise.Core.Common.Entities.Accounts
     /// <summary>
     /// Represents an account with us
     /// </summary>
-    public class RestaurantAccount : EntityBase, IBusinessAccount
+    public class RestaurantAccount : BaseAccount, IBusinessAccount
     {
         public RestaurantAccount()
         {
@@ -21,22 +21,12 @@ namespace Mise.Core.Common.Entities.Accounts
             AccountCredits = new List<AccountCredit>();
         }
 
-        public EmailAddress PrimaryEmail { get; set; }
-        public PersonName AccountHolderName { get; set; }
-        public IEnumerable<EmailAddress> Emails { get; set; }
-        public PhoneNumber PhoneNumber { get; set; }
-
         public virtual TimeSpan BillingCycle { get; set; }
 
         public CreditCard CurrentCard { get; set; }
 
-        public ReferralCode ReferralCodeUsedToCreate { get; set; }
-        public ReferralCode ReferralCodeForAccountToGiveOut { get; set; }
 
-
-        public MiseAccountStatus Status { get; set; }
-
-        public virtual MiseAccountTypes AccountType => MiseAccountTypes.Restaurant;
+        public override MiseAccountTypes AccountType => MiseAccountTypes.Restaurant;
 
         public MisePaymentPlan PaymentPlan
         {
@@ -50,6 +40,7 @@ namespace Mise.Core.Common.Entities.Accounts
             set;
         }
 
+        [Obsolete]
         public IEnumerable<MiseAppTypes> AppsOnAccount { get; set; }
 
         public ICollection<AccountCharge> Charges { get; set; } 
@@ -74,7 +65,7 @@ namespace Mise.Core.Common.Entities.Accounts
                                 || Status == MiseAccountStatus.Overdue
                                 || Status == MiseAccountStatus.CancelledButStillActive;
 
-        public ICloneableEntity Clone()
+        public override ICloneableEntity Clone()
         {
             var item = CloneEntityBase(new RestaurantAccount());
             item.AccountHolderName = AccountHolderName;
@@ -92,7 +83,7 @@ namespace Mise.Core.Common.Entities.Accounts
             return item;
         }
 
-        public void When(IAccountEvent entityEvent)
+        public override void When(IAccountEvent entityEvent)
         {
             switch (entityEvent.EventType)
             {
@@ -141,18 +132,18 @@ namespace Mise.Core.Common.Entities.Accounts
             }
         }
 
-        public bool ContainsSearchString(string searchString)
+        public override bool ContainsSearchString(string searchString)
         {
-            return (PrimaryEmail != null && PrimaryEmail.ContainsSearchString(searchString))
-                   || (AccountHolderName != null && AccountHolderName.ContainsSearchString(searchString))
-                   || (CurrentCard != null) && CurrentCard.ContainsSearchString(searchString)
-                   || (Emails != null && Emails.Any(e => e.ContainsSearchString(searchString)))
+            if (base.ContainsSearchString(searchString))
+            {
+                return true;
+            }
+            return  (CurrentCard != null) && CurrentCard.ContainsSearchString(searchString)
                    || (PhoneNumber != null && PhoneNumber.ContainsSearchString(searchString))
-                   || (ReferralCodeForAccountToGiveOut != null && ReferralCodeForAccountToGiveOut.ContainsSearchString(searchString))
-                   || (ReferralCodeUsedToCreate != null && ReferralCodeUsedToCreate.ContainsSearchString(searchString))
                    || (Payments.Any(p => p.ContainsSearchString(searchString)))
                    || (AccountCredits.Any(p => p.ContainsSearchString(searchString)))
-                   || (Charges.Any(p => p.ContainsSearchString(searchString)));
+                   || (Charges.Any(p => p.ContainsSearchString(searchString)))
+                   || (BusinessName != null && BusinessName.Contains(searchString));
         }
 
         public string BusinessName { get; set; }

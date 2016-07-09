@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Mise.Core.ValueItems.Inventory;
 using Mise.Core.Common.Entities.Inventory;
 using Mise.Core.Entities;
+using Mise.Core.ValueItems;
+
 namespace Mise.Core.Common.Events.Inventory
 {
 	public class PurchaseOrderLineItemAddedFromInventoryCalculationEvent : BasePurchaseOrderEvent
@@ -33,9 +35,9 @@ namespace Mise.Core.Common.Events.Inventory
 		/// </summary>
 		/// <value>The vendor with best price I.</value>
 		public Guid? VendorWithBestPriceID{get;set;}
-        public string VendorName{get;set;}
+        public BusinessName VendorName{get;set;}
 
-		public IEnumerable<ItemCategory> Categories{ get; set;}
+		public IEnumerable<InventoryCategory> Categories{ get; set;}
 	}
 }
 

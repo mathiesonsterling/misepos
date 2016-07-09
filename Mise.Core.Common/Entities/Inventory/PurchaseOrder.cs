@@ -31,11 +31,14 @@ namespace Mise.Core.Common.Entities.Inventory
 			return PurchaseOrdersPerVendor;
 		}
 
-		public string CreatedByName{ get; set;}
+        public PersonName CreatedBy { get; set; }
+
+        public string CreatedByName{ get; set;}
 
 
-	    public Guid CreatedByEmployeeID { get; set; }
-        public ICloneableEntity Clone()
+	    public Guid? CreatedByEmployeeID { get; set; }
+
+	    public ICloneableEntity Clone()
         {
             var newItem = CloneRestaurantBase(new PurchaseOrder());
             newItem.CreatedByEmployeeID = CreatedByEmployeeID;
@@ -76,7 +79,7 @@ namespace Mise.Core.Common.Entities.Inventory
             CreatedByEmployeeID = entityEvent.CausedById;
             CreatedDate = entityEvent.CreatedDate;
 
-			CreatedByName = entityEvent.EmployeeCreatingName;
+			CreatedBy = entityEvent.EmployeeCreatingName;
         }
 
         void WhenPurchaseOrderLineItemAddedFromInventoryCalculation (PurchaseOrderLineItemAddedFromInventoryCalculationEvent ev)
@@ -101,7 +104,7 @@ namespace Mise.Core.Common.Entities.Inventory
 			if(existing == null){
 				existing = new PurchaseOrderPerVendor {
 					VendorID = ev.VendorWithBestPriceID,
-                    VendorName = ev.VendorName,
+                    VendorName = ev.VendorName.FullName,
 					Status = PurchaseOrderStatus.Created
 				};
 				PurchaseOrdersPerVendor.Add (existing);

@@ -16,10 +16,6 @@ namespace Mise.Core.Entities.Inventory
         string Name { get; }
 
         bool AllowsPartialBottles { get; }
-
-        /// <summary>
-        /// If set, a Beacon set to broadcast this section's location
-        /// </summary>
-        Beacon Beacon { get; }
+        bool IsDefaultInventorySection { get; set; }
     }
 }

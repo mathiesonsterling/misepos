@@ -17,6 +17,8 @@ namespace Mise.Core.Entities.Accounts
 		/// <value>The primary email.</value>
 		EmailAddress PrimaryEmail{ get; }
 
+        Password Password { get; }
+
         PersonName AccountHolderName { get; }
 
 		/// <summary>
@@ -26,11 +28,6 @@ namespace Mise.Core.Entities.Accounts
 		IEnumerable<EmailAddress> Emails{get;}
 
 		PhoneNumber PhoneNumber{get;}
-
-        /// <summary>
-        /// Credit card we're currently using for payment
-        /// </summary>
-        CreditCard CurrentCard { get; }
 
 		/// <summary>
 		/// The referral code this account uses
@@ -43,21 +40,8 @@ namespace Mise.Core.Entities.Accounts
         /// </summary>
         ReferralCode ReferralCodeUsedToCreate { get; }
 
-        MiseAccountStatus Status { get; }
-        MiseAccountTypes AccountType { get; }
-        MisePaymentPlan PaymentPlan{ get; }
-        /// <summary>
-        /// If true, we've setup the billing with our provider.  If not, we still need to!
-        /// </summary>
-        bool PaymentPlanSetupWithProvider{get;}
-
-        IEnumerable<MiseAppTypes> AppsOnAccount { get; }
-            
-        //payments
-	    IEnumerable<IAccountCharge> GetCharges();
-
-	    //charges
-	    IEnumerable<IAccountPayment> GetPayments();
+	    MiseAccountTypes AccountType { get; }
+	    MiseAccountStatus Status { get; set; }
 	}
 }
 
