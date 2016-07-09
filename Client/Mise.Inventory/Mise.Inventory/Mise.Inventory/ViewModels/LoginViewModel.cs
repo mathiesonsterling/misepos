@@ -19,6 +19,7 @@ namespace Mise.Inventory.ViewModels
 	{
 		readonly ILoginService _loginService;
 	    private readonly IInsightsService _insightsService;
+        private readonly ICryptography _crypto;
 	    /// <summary>
 	    /// Initializes a new instance of the <see cref="Mise.Inventory.ViewModels.LoginViewModel"/> class.
 	    /// </summary>
@@ -27,12 +28,12 @@ namespace Mise.Inventory.ViewModels
 	    /// <param name="navigationService">Navigation service.</param>
 	    /// <param name="insightsService"></param>
 	    public LoginViewModel(ILogger logger, ILoginService loginService, IAppNavigation navigationService, 
-            IInsightsService insightsService)
+            IInsightsService insightsService, ICryptography crypto)
 			:base(navigationService, logger)
 		{
 			_loginService = loginService;
 		    _insightsService = insightsService;
-
+            _crypto = crypto;
 	        PropertyChanged += (sender, args) =>
 	        {
 	            if (args.PropertyName != "CanLogin")
@@ -123,8 +124,7 @@ namespace Mise.Inventory.ViewModels
 			try{
 				Processing = true;
 				var email = new EmailAddress{ Value = Username.Trim() };
-				var password = new Password();
-				password.SetValue(Password);
+				var password = new Password(Password, _crypto);
 				IEmployee employee = null;
 
 				employee = await _loginService.LoginAsync(email, password);

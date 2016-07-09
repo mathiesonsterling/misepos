@@ -10,6 +10,7 @@ using Mise.Core.Services;
 using Mise.Inventory.Droid.Services;
 using Mise.Inventory.Services.Implementation;
 using Mise.Inventory.Services.Implementation.WebServiceClients.Azure;
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Inventory.Droid
 {
@@ -25,7 +26,7 @@ namespace Mise.Inventory.Droid
             var stripeClient = new ClientStripeFacade();
             var processor = new StripePaymentProcessorService(Logger, stripeClient);
 			cb.RegisterInstance<ICreditCardProcessorService>(processor).SingleInstance();
-
+            cb.RegisterType<AndroidCryptography> ().As<ICryptography> ().SingleInstance ();
 			//make the web service
             var ws = Task.Run(async () => await InitWebService (cb));
             ws.Wait ();

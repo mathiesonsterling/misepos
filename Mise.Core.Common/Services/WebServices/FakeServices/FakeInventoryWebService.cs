@@ -18,9 +18,11 @@ using Mise.Core.Entities.Restaurant.Events;
 using Mise.Core.Entities.Vendors.Events;
 using Mise.Core.ValueItems;
 using Mise.Core.ValueItems.Inventory;
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Core.Common.Services.WebServices.FakeServices
 {
+    
     public class FakeInventoryWebService: IInventoryApplicationWebService
 	{
 		private const MiseAppTypes FAKE_APP_CODE = MiseAppTypes.DummyData;
@@ -31,8 +33,9 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 	    readonly List<Inventory> _inventories;
 	    readonly List<ReceivingOrder> _receivingOrders;
 
-	    private readonly List<ApplicationInvitation> _invitations; 
+	    private readonly List<ApplicationInvitation> _invitations;
 
+        private readonly ICryptography _crypto;
 	    #region Creation
 
         public bool Synched
@@ -66,6 +69,8 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			_receivingOrders = CreateReceivingOrders (restID, empID, purchaseOrders.FirstOrDefault().Id);
 
 		    _invitations = CreateInvitations();
+
+            //_crypto = new Cryptography ();
 		}
 			
 
@@ -148,7 +153,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 			};
 		}
 
-		static List<Employee> CreateEmployees(Guid restID, Guid townsendID, Guid qaID, Guid marketingID, Guid sleazyHomeID)
+		List<Employee> CreateEmployees(Guid restID, Guid townsendID, Guid qaID, Guid marketingID, Guid sleazyHomeID)
 		{
             //list for our generic test restaurant
 			var testRestaurantList = new Dictionary<Guid, IList<MiseAppTypes>>
@@ -167,7 +172,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                     {
                         {qaID, new[]{MiseAppTypes.StockboyMobile }}
                     },
-                    Password = new Password("tester"),
+                    Password = new Password("tester", _crypto),
                     PrimaryEmail = new EmailAddress("qa@misepos.com"),
                     Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 12}
                 },
@@ -182,7 +187,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                        {townsendID, new List<MiseAppTypes>{MiseAppTypes.StockboyMobile}},
                         {sleazyHomeID, new List<MiseAppTypes> {MiseAppTypes.StockboyMobile } }
                     },
-                    Password = new Password("honestgirl"),
+                    Password = new Password("honestgirl", _crypto),
                     PrimaryEmail = new EmailAddress("justin.elliott@thetownsendaustin.com"),
                     Emails = new List<EmailAddress>{new EmailAddress("justin.elliott@thetownsendaustin.com")},
                     Revision = new EventID{AppInstanceCode = FAKE_APP_CODE, OrderingID = 10}
@@ -192,7 +197,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
 					Name = new PersonName("Emily", "Perkins"),
 					CreatedDate = DateTime.UtcNow,
 					LastUpdatedDate = DateTime.UtcNow,
-					Password = new Password("shiftdrink"),
+					Password = new Password("shiftdrink", _crypto),
 					PrimaryEmail = new EmailAddress("emily@misepos.com"),
 					RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>{
 						{marketingID, new List<MiseAppTypes>{MiseAppTypes.StockboyMobile}}
@@ -217,14 +222,14 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                         { sleazyHomeID, new List<MiseAppTypes> {MiseAppTypes.StockboyMobile} }
 			        },
 					Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 100},
-					Password = new Password("dev"),
+					Password = new Password("dev", _crypto),
                     PrimaryEmail = new EmailAddress("dev@misepos.com"),
                     Emails = new[]{new EmailAddress("dev@misepos.com"), new EmailAddress("developer@misepos.com")  }
 				},
 				new Employee {
 					PrimaryEmail = new EmailAddress{Value = "test@misepos.com"},
 					Emails = new List<EmailAddress>{ new EmailAddress{Value = "test@misepos.com"} },
-					Password = new Password("test"),
+					Password = new Password("test", _crypto),
 					Id = Guid.NewGuid(),
                     Name = new PersonName("Testy", "McTesterson"),
 					RestaurantsAndAppsAllowed = testRestaurantList,
@@ -236,7 +241,7 @@ namespace Mise.Core.Common.Services.WebServices.FakeServices
                     CreatedDate = DateTime.UtcNow,
                     Revision = new EventID {AppInstanceCode = FAKE_APP_CODE, OrderingID = 102020},
                     PrimaryEmail = new EmailAddress("bobking4321@gmail.com"),
-                    Password = new Password("lillet"),
+                    Password = new Password("lillet", _crypto),
                     Name = new PersonName("Bob", "King"),
                     LastUpdatedDate = DateTime.UtcNow,
                     RestaurantsAndAppsAllowed = new Dictionary<Guid, IList<MiseAppTypes>>

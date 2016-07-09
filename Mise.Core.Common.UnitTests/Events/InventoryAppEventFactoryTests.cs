@@ -18,6 +18,7 @@ using Mise.Core.Entities.Vendors;
 using Mise.Core.Common.Entities.Vendors;
 using Mise.Core.Common.Services.Implementation;
 using Mise.Core.Entities.Vendors.Events;
+using Mise.Core.Common.UnitTests.Tools;
 
 namespace Mise.Core.Common.UnitTests.Events
 {
@@ -146,7 +147,7 @@ namespace Mise.Core.Common.UnitTests.Events
 
 		[Test]
 		public void CreateEmployee(){
-			var ev = _underTest.CreateEmployeeCreatedEvent (EmailAddress.TestEmail, Password.TestPassword, PersonName.TestName, MiseAppTypes.UnitTests);
+            var ev = _underTest.CreateEmployeeCreatedEvent (EmailAddress.TestEmail, new Password ("password", new TestCrypto()), PersonName.TestName, MiseAppTypes.UnitTests);
 
             Assert.AreNotEqual(Guid.Empty, ev.Id, "ID");
             Assert.AreNotEqual(Guid.Empty, ev.CausedById, "CausedByID");
