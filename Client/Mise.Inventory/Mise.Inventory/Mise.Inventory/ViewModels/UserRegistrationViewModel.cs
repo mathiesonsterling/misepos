@@ -19,12 +19,13 @@ namespace Mise.Inventory.ViewModels
     {
         readonly ILoginService _loginService;
         private readonly IInsightsService _insights;
+        private readonly ICryptography _crypto;
 		public UserRegistrationViewModel(ILoginService login, IAppNavigation navi, ILogger logger, 
-			IInsightsService insightsService) : base(navi, logger)
+			IInsightsService insightsService, ICryptography crypto) : base(navi, logger)
         {
             _loginService = login;
 		    _insights = insightsService;
-
+            _crypto = crypto;
 			RegisterRestaurant = true;
             SubmitCommand = new Command (Submit);
 
@@ -113,7 +114,7 @@ namespace Mise.Inventory.ViewModels
         public async void Submit()
         {
             var email = new EmailAddress { Value = Email };
-            var password = new Password(PasswordFirst);
+            var password = new Password(PasswordFirst, _crypto);
 
             try
             {

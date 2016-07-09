@@ -12,9 +12,12 @@ namespace Mise.Inventory.ViewModels
 	public class ChangePasswordViewModel : BaseViewModel
 	{
 		private readonly ILoginService _loginService;
-		public ChangePasswordViewModel (ILogger logger, IAppNavigation navi, ILoginService loginService) : base(navi, logger)
+        private readonly ICryptography _cryptoService;
+		public ChangePasswordViewModel (ILogger logger, IAppNavigation navi, ILoginService loginService, ICryptography crypto) 
+            : base(navi, logger)
 		{
 			_loginService = loginService;
+            _cryptoService = crypto;
 
 			PropertyChanged += (sender, e) => {
 				FormValid = CanChange;
@@ -44,8 +47,8 @@ namespace Mise.Inventory.ViewModels
 					throw new ArgumentException ("Form is not valid");
 				}
 				Processing = true;
-				var newPwd = new Password (NewPassword);
-				var oldPwd = new Password(OldPassword);
+				var newPwd = new Password (NewPassword, _cryptoService);
+				var oldPwd = new Password(OldPassword, _cryptoService);
 				await _loginService.ChangePasswordForCurrentEmployee(oldPwd, newPwd);
 				Processing = false;
 

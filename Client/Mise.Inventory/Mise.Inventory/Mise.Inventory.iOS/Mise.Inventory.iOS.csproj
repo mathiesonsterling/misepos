@@ -107,6 +107,7 @@
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork@2x" />
     <None Include="packages.config" />
+    <Compile Include="Services\AppleCryptography.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Mise.Core.Common\Mise.Core.Common.csproj">
@@ -199,12 +200,6 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Platform">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.0.107\lib\Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="PInvoke.NCrypt">
-      <HintPath>..\..\packages\PInvoke.NCrypt.0.3.2\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\PInvoke.NCrypt.dll</HintPath>
-    </Reference>
-    <Reference Include="PCLCrypto">
-      <HintPath>..\..\packages\PCLCrypto.2.0.147\lib\xamarinios10\PCLCrypto.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.SQLiteStore">
       <HintPath>..\..\packages\Microsoft.Azure.Mobile.Client.SQLiteStore.2.1.0\lib\portable-win+net45+wp8+wpa81+monotouch+monoandroid\Microsoft.WindowsAzure.Mobile.SQLiteStore.dll</HintPath>

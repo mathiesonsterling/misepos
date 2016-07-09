@@ -26,8 +26,6 @@ namespace Mise.Inventory.Droid
 		
 		public static void UpdateIdValues()
 		{
-			global::PCLCrypto.Resource.String.ApplicationName = global::Mise.Inventory.Droid.Resource.String.ApplicationName;
-			global::PCLCrypto.Resource.String.Hello = global::Mise.Inventory.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::Mise.Inventory.Droid.Resource.Attribute.actionBarSize;
 		}
 		

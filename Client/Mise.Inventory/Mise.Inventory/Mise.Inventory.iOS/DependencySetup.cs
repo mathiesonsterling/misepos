@@ -12,6 +12,7 @@ using Mise.Inventory.Services.Implementation.WebServiceClients.Azure.AzureStrong
 //using ModernHttpClient;
 using Mise.Core.Common.Services.Implementation.Serialization;
 using AVFoundation;
+using Mise.Core.Services.UtilityServices;
 
 namespace Mise.Inventory.iOS
 {
@@ -24,6 +25,7 @@ namespace Mise.Inventory.iOS
 			Logger = new IOSLogger ();
 
             cb.RegisterType<NoProcessorService> ().As<ICreditCardProcessorService> ().SingleInstance ();
+            cb.RegisterType<AppleCryptography> ().As<ICryptography>().SingleInstance ();
             try{
                 var initTask = Task.Run(async () => await InitWebService (cb));
 
@@ -69,7 +71,7 @@ namespace Mise.Inventory.iOS
                 //var webService = new AzureStrongTypedClient(Logger, mobileService, deviceConnection);
                 var webService = new AzureWeakTypeSharedClient (Logger, new JsonNetSerializer (), mobileService, deviceConnection);
                 try{
-                   // await webService.SynchWithServer().ConfigureAwait(false);
+                    await webService.SynchWithServer().ConfigureAwait(false);
                 } catch(Exception e)
                 {
                     //we've got to do something here!
