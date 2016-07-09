@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.mise.misestockboy" android:installLocation="auto" android:versionCode="1008" android:versionName="Stockboy 1.0.8">
-	<uses-sdk android:minSdkVersion="15" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.mise.misestockboy" android:installLocation="auto" android:versionCode="1009" android:versionName="Stockboy 1.0.9">
+	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="23" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />

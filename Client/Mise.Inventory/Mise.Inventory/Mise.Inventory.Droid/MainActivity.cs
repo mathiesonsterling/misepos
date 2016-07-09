@@ -9,14 +9,15 @@ using Android.OS;
 
 namespace Mise.Inventory.Droid
 {
-    [Activity(Label = "Mise Stockboy", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Mise Stockboy", MainLauncher = false, Icon = "@drawable/icon",
+              ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
+            base.OnCreate(savedInstanceState);
 
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App(new DependencySetup()));
         }
     }

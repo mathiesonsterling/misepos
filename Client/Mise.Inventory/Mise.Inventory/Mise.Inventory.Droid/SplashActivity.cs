@@ -5,7 +5,8 @@ using Android.OS;
 
 namespace Mise.Inventory.Droid
 {
-	[Activity (ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, Label = "Mise Stockboy", MainLauncher = true, NoHistory = true)]
+	[Activity (ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, 
+               Label = "Mise Stockboy", MainLauncher = true, NoHistory = true, Icon = "@drawable/icon")]
 	public class SplashActivity : Activity
 	{
 		protected override void OnCreate (Bundle savedInstanceState)
